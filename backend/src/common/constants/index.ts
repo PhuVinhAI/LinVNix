@@ -1,0 +1,22 @@
+export const SPACED_REPETITION_INTERVALS = [1, 3, 7, 14, 30]; // days
+
+export const MASTERY_THRESHOLDS = {
+  LEARNING: 0,
+  FAMILIAR: 3,
+  MASTERED: 10,
+};
+
+export const EXERCISE_TIME_LIMITS = {
+  MULTIPLE_CHOICE: 60, // seconds
+  FILL_BLANK: 90,
+  MATCHING: 120,
+  ORDERING: 90,
+  TRANSLATION: 180,
+  LISTENING: 120,
+};
+
+export const SCORE_WEIGHTS = {
+  EXERCISE: 0.6,
+  VOCABULARY: 0.2,
+  GRAMMAR: 0.2,
+};
