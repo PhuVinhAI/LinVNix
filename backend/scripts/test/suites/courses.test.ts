@@ -43,6 +43,27 @@ export async function runCoursesTests() {
     // Test 8: Get lesson by ID
     await testGetLessonById(authToken, lessonId);
 
+    // Test 9: Update course
+    await testUpdateCourse(authToken, courseId);
+
+    // Test 10: Update unit
+    await testUpdateUnit(authToken, unitId);
+
+    // Test 11: Get unit by ID
+    await testGetUnitById(authToken, unitId);
+
+    // Test 12: Update lesson
+    await testUpdateLesson(authToken, lessonId);
+
+    // Test 13: Delete lesson
+    await testDeleteLesson(authToken, lessonId);
+
+    // Test 14: Delete unit
+    await testDeleteUnit(authToken, unitId);
+
+    // Test 15: Delete course
+    await testDeleteCourse(authToken, courseId);
+
     console.log('✅ All Courses tests passed!\n');
   } catch (error) {
     console.error('❌ Courses test failed:', error);
@@ -201,4 +222,122 @@ if (require.main === module) {
   runCoursesTests()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));
+}
+
+/**
+ * Test update course
+ */
+async function testUpdateCourse(token: string, courseId: string) {
+  console.log('✏️ Test: Update course');
+
+  apiClient.setToken(token);
+  const updateData = {
+    title: 'Updated Course Title',
+    description: 'Updated description',
+  };
+  const response = await apiClient.patch(endpoints.courses.update(courseId), updateData);
+
+  TestAssertions.assertStatus(response.status, 200, 'Update course should return 200');
+  TestAssertions.assertHasData(response, 'Response should have data');
+  TestAssertions.assertEquals(response.data.title, updateData.title, 'Title should be updated');
+
+  console.log('  ✓ Course updated successfully');
+}
+
+/**
+ * Test update unit
+ */
+async function testUpdateUnit(token: string, unitId: string) {
+  console.log('✏️ Test: Update unit');
+
+  apiClient.setToken(token);
+  const updateData = {
+    title: 'Updated Unit Title',
+    description: 'Updated unit description',
+  };
+  const response = await apiClient.patch(`/units/${unitId}`, updateData);
+
+  TestAssertions.assertStatus(response.status, 200, 'Update unit should return 200');
+  TestAssertions.assertHasData(response, 'Response should have data');
+  TestAssertions.assertEquals(response.data.title, updateData.title, 'Title should be updated');
+
+  console.log('  ✓ Unit updated successfully');
+}
+
+/**
+ * Test get unit by ID
+ */
+async function testGetUnitById(token: string, unitId: string) {
+  console.log('🔍 Test: Get unit by ID');
+
+  apiClient.setToken(token);
+  const response = await apiClient.get(endpoints.units.detail(unitId));
+
+  TestAssertions.assertStatus(response.status, 200, 'Get unit should return 200');
+  TestAssertions.assertHasData(response, 'Response should have data');
+  TestAssertions.assertEquals(response.data.id, unitId, 'Unit ID should match');
+
+  console.log('  ✓ Unit retrieved successfully');
+}
+
+/**
+ * Test update lesson
+ */
+async function testUpdateLesson(token: string, lessonId: string) {
+  console.log('✏️ Test: Update lesson');
+
+  apiClient.setToken(token);
+  const updateData = {
+    title: 'Updated Lesson Title',
+    description: 'Updated lesson description',
+  };
+  const response = await apiClient.patch(`/lessons/${lessonId}`, updateData);
+
+  TestAssertions.assertStatus(response.status, 200, 'Update lesson should return 200');
+  TestAssertions.assertHasData(response, 'Response should have data');
+  TestAssertions.assertEquals(response.data.title, updateData.title, 'Title should be updated');
+
+  console.log('  ✓ Lesson updated successfully');
+}
+
+/**
+ * Test delete lesson
+ */
+async function testDeleteLesson(token: string, lessonId: string) {
+  console.log('🗑️ Test: Delete lesson');
+
+  apiClient.setToken(token);
+  const response = await apiClient.delete(`/lessons/${lessonId}`);
+
+  TestAssertions.assertStatus(response.status, 200, 'Delete lesson should return 200');
+
+  console.log('  ✓ Lesson deleted successfully');
+}
+
+/**
+ * Test delete unit
+ */
+async function testDeleteUnit(token: string, unitId: string) {
+  console.log('🗑️ Test: Delete unit');
+
+  apiClient.setToken(token);
+  const response = await apiClient.delete(`/units/${unitId}`);
+
+  TestAssertions.assertStatus(response.status, 200, 'Delete unit should return 200');
+
+  console.log('  ✓ Unit deleted successfully');
+}
+
+/**
+ * Test delete course
+ */
+async function testDeleteCourse(token: string, courseId: string) {
+  console.log('🗑️ Test: Delete course');
+
+  apiClient.setToken(token);
+  const response = await apiClient.delete(endpoints.courses.delete(courseId));
+
+  TestAssertions.assertStatus(response.status, 200, 'Delete course should return 200');
+
+  console.log('  ✓ Course deleted successfully');
 }
