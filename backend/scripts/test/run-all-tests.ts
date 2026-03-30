@@ -1,8 +1,11 @@
 #!/usr/bin/env bun
 
 import { runAuthTests } from './suites/auth.test';
+import { runUsersTests } from './suites/users.test';
 import { runCoursesTests } from './suites/courses.test';
+import { runContentsTests } from './suites/contents.test';
 import { runVocabulariesTests } from './suites/vocabularies.test';
+import { runGrammarTests } from './suites/grammar.test';
 import { runExercisesTests } from './suites/exercises.test';
 import { runProgressTests } from './suites/progress.test';
 
@@ -25,8 +28,11 @@ async function runAllTests() {
   // Test suites to run
   const testSuites = [
     { name: 'Auth', fn: runAuthTests },
+    { name: 'Users', fn: runUsersTests },
     { name: 'Courses', fn: runCoursesTests },
+    { name: 'Contents', fn: runContentsTests },
     { name: 'Vocabularies', fn: runVocabulariesTests },
+    { name: 'Grammar', fn: runGrammarTests },
     { name: 'Exercises', fn: runExercisesTests },
     { name: 'Progress', fn: runProgressTests },
   ];
