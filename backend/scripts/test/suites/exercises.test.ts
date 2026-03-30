@@ -42,6 +42,12 @@ export async function runExercisesTests() {
     // Test 7: Get my stats
     await testGetMyStats(authToken);
 
+    // Test 8: Update exercise
+    await testUpdateExercise(authToken, exerciseId);
+
+    // Test 9: Delete exercise
+    await testDeleteExercise(authToken, exerciseId);
+
     console.log('✅ All Exercises tests passed!\n');
   } catch (error) {
     console.error('❌ Exercises test failed:', error);
@@ -215,4 +221,36 @@ if (require.main === module) {
   runExercisesTests()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));
+}
+
+/**
+ * Test update exercise
+ */
+async function testUpdateExercise(token: string, exerciseId: string) {
+  console.log('✏️ Test: Update exercise');
+
+  apiClient.setToken(token);
+  const updateData = {
+    question: 'Updated: What does "xin chào" mean?',
+  };
+  const response = await apiClient.patch(`/exercises/${exerciseId}`, updateData);
+
+  TestAssertions.assertStatus(response.status, 200, 'Update exercise should return 200');
+  TestAssertions.assertHasData(response, 'Response should have data');
+
+  console.log('  ✓ Exercise updated successfully');
+}
+
+/**
+ * Test delete exercise
+ */
+async function testDeleteExercise(token: string, exerciseId: string) {
+  console.log('🗑️ Test: Delete exercise');
+
+  apiClient.setToken(token);
+  const response = await apiClient.delete(`/exercises/${exerciseId}`);
+
+  TestAssertions.assertStatus(response.status, 200, 'Delete exercise should return 200');
+
+  console.log('  ✓ Exercise deleted successfully');
 }

@@ -39,6 +39,15 @@ export async function runVocabulariesTests() {
     // Test 6: Get due for review
     await testGetDueForReview(authToken);
 
+    // Test 7: Create another vocabulary for update/delete tests
+    const vocabId2 = await testCreateVocabulary(authToken, lessonId);
+
+    // Test 8: Update vocabulary
+    await testUpdateVocabulary(authToken, vocabId2);
+
+    // Test 9: Delete vocabulary
+    await testDeleteVocabulary(authToken, vocabId2);
+
     console.log('✅ All Vocabularies tests passed!\n');
   } catch (error) {
     console.error('❌ Vocabularies test failed:', error);
@@ -191,4 +200,37 @@ if (require.main === module) {
   runVocabulariesTests()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));
+}
+
+/**
+ * Test update vocabulary
+ */
+async function testUpdateVocabulary(token: string, vocabId: string) {
+  console.log('✏️ Test: Update vocabulary');
+
+  apiClient.setToken(token);
+  const updateData = {
+    word: 'xin chào (updated)',
+    translation: 'hello (updated)',
+  };
+  const response = await apiClient.patch(`/vocabularies/${vocabId}`, updateData);
+
+  TestAssertions.assertStatus(response.status, 200, 'Update vocabulary should return 200');
+  TestAssertions.assertHasData(response, 'Response should have data');
+
+  console.log('  ✓ Vocabulary updated successfully');
+}
+
+/**
+ * Test delete vocabulary
+ */
+async function testDeleteVocabulary(token: string, vocabId: string) {
+  console.log('🗑️ Test: Delete vocabulary');
+
+  apiClient.setToken(token);
+  const response = await apiClient.delete(`/vocabularies/${vocabId}`);
+
+  TestAssertions.assertStatus(response.status, 200, 'Delete vocabulary should return 200');
+
+  console.log('  ✓ Vocabulary deleted successfully');
 }

@@ -8,6 +8,7 @@ import { runVocabulariesTests } from './suites/vocabularies.test';
 import { runGrammarTests } from './suites/grammar.test';
 import { runExercisesTests } from './suites/exercises.test';
 import { runProgressTests } from './suites/progress.test';
+import { runCacheTests } from './suites/cache.test';
 
 /**
  * Run all test suites
@@ -35,6 +36,7 @@ async function runAllTests() {
     { name: 'Grammar', fn: runGrammarTests },
     { name: 'Exercises', fn: runExercisesTests },
     { name: 'Progress', fn: runProgressTests },
+    { name: 'Cache', fn: runCacheTests },
   ];
 
   // Run each test suite
