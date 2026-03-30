@@ -3,10 +3,22 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { LoggingService } from './infrastructure/logging/logging.service';
+import { LoggingInterceptor } from './infrastructure/logging/logging.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+  
   const configService = app.get(ConfigService);
+  const loggingService = app.get(LoggingService);
+
+  // Use custom logger
+  app.useLogger(loggingService);
+
+  // Global logging interceptor
+  app.useGlobalInterceptors(new LoggingInterceptor(loggingService));
 
   // Global prefix
   const apiPrefix = configService.get<string>('app.apiPrefix');
@@ -37,7 +49,8 @@ async function bootstrap() {
 
   const port = configService.get<number>('app.port') || 3000;
   await app.listen(port);
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
+  
+  loggingService.log(`🚀 Application is running on: http://localhost:${port}`, 'Bootstrap');
+  loggingService.log(`📚 Swagger docs: http://localhost:${port}/api/docs`, 'Bootstrap');
 }
 bootstrap();

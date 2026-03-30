@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Get, Post, Param, Body, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { VocabulariesService } from '../application/vocabularies.service';
 import { UserVocabulariesService } from '../application/user-vocabularies.service';
+import { StorageService } from '../../../infrastructure/storage/storage.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/domain/user.entity';
@@ -13,6 +15,7 @@ export class VocabulariesController {
   constructor(
     private readonly vocabulariesService: VocabulariesService,
     private readonly userVocabulariesService: UserVocabulariesService,
+    private readonly storageService: StorageService,
   ) {}
 
   @Public()
@@ -63,5 +66,39 @@ export class VocabulariesController {
   @ApiOperation({ summary: 'Lấy từ vựng cần ôn tập' })
   async getDueForReview(@CurrentUser() user: User) {
     return this.userVocabulariesService.getDueForReview(user.id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('upload-audio')
+  @ApiOperation({ summary: 'Upload audio cho từ vựng' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAudio(@UploadedFile() file: Express.Multer.File) {
+    const uploaded = await this.storageService.uploadAudio(
+      file.buffer,
+      file.originalname,
+    );
+    return {
+      url: uploaded.url,
+      filename: uploaded.filename,
+    };
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('upload-image')
+  @ApiOperation({ summary: 'Upload hình ảnh cho từ vựng' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    const uploaded = await this.storageService.uploadImage(
+      file.buffer,
+      file.originalname,
+    );
+    return {
+      url: uploaded.url,
+      filename: uploaded.filename,
+    };
   }
 }

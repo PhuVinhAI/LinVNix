@@ -3,10 +3,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
+import redisConfig from './config/redis.config';
 
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -20,12 +23,15 @@ import { VocabulariesModule } from './modules/vocabularies/vocabularies.module';
 import { GrammarModule } from './modules/grammar/grammar.module';
 import { ExercisesModule } from './modules/exercises/exercises.module';
 import { ProgressModule } from './modules/progress/progress.module';
+import { CacheModule } from './infrastructure/cache/cache.module';
+import { StorageModule } from './infrastructure/storage/storage.module';
+import { LoggingModule } from './infrastructure/logging/logging.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, jwtConfig],
+      load: [appConfig, databaseConfig, jwtConfig, redisConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -38,12 +44,19 @@ import { ProgressModule } from './modules/progress/progress.module';
       },
       inject: [ConfigService],
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
         limit: 10,
       },
     ]),
+    CacheModule,
+    StorageModule,
+    LoggingModule,
     AuthModule,
     UsersModule,
     CoursesModule,
