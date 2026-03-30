@@ -4,6 +4,7 @@ export class TestAssertions {
    */
   static assertStatus(actual: number, expected: number, message?: string): void {
     if (actual !== expected) {
+      console.error(`❌ Status mismatch: Expected ${expected}, got ${actual}`);
       throw new Error(
         message || `Expected status ${expected}, got ${actual}`,
       );

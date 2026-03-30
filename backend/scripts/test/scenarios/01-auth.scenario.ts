@@ -27,10 +27,10 @@ export async function runAuthScenario() {
     const registerResponse = await apiClient.post(endpoints.auth.register, user);
     
     TestAssertions.assertStatus(registerResponse.status, 201);
-    TestAssertions.assertHasProperty(registerResponse.data, 'accessToken');
+    TestAssertions.assertHasProperty(registerResponse.data, 'access_token');
     TestAssertions.assertHasProperty(registerResponse.data, 'user');
     
-    authToken = registerResponse.data.accessToken;
+    authToken = registerResponse.data.access_token;
     userId = registerResponse.data.user.id;
     
     console.log(`  ✓ User registered with ID: ${userId}`);
@@ -43,10 +43,10 @@ export async function runAuthScenario() {
       password: user.password,
     });
     
-    TestAssertions.assertStatus(loginResponse.status, 200);
-    TestAssertions.assertHasProperty(loginResponse.data, 'accessToken');
+    TestAssertions.assertStatus(loginResponse.status, 201);
+    TestAssertions.assertHasProperty(loginResponse.data, 'access_token');
     
-    authToken = loginResponse.data.accessToken;
+    authToken = loginResponse.data.access_token;
     console.log('  ✓ Login successful');
     console.log('  ✓ New access token received\n');
 

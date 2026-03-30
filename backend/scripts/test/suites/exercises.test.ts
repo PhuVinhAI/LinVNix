@@ -56,7 +56,7 @@ async function setupCourseStructure() {
   // Register user
   const user = userFixtures.randomUser();
   const authResponse = await apiClient.post(endpoints.auth.register, user);
-  const token = authResponse.data.accessToken;
+  const token = authResponse.data.access_token;
 
   apiClient.setToken(token);
 

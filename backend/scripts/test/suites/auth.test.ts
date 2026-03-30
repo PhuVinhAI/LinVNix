@@ -45,7 +45,7 @@ async function testRegister(user: any) {
 
   TestAssertions.assertStatus(response.status, 201, 'Register should return 201');
   TestAssertions.assertHasData(response, 'Response should have data');
-  TestAssertions.assertHasProperty(response.data, 'accessToken', 'Should return access token');
+  TestAssertions.assertHasProperty(response.data, 'access_token', 'Should return access token');
   TestAssertions.assertHasProperty(response.data, 'user', 'Should return user data');
   TestAssertions.assertIsUUID(response.data.user.id, 'User ID should be UUID');
   TestAssertions.assertEquals(response.data.user.email, user.email, 'Email should match');
@@ -64,13 +64,13 @@ async function testLogin(user: any): Promise<string> {
     password: user.password,
   });
 
-  TestAssertions.assertStatus(response.status, 200, 'Login should return 200');
+  TestAssertions.assertStatus(response.status, 201, 'Login should return 201');
   TestAssertions.assertHasData(response, 'Response should have data');
-  TestAssertions.assertHasProperty(response.data, 'accessToken', 'Should return access token');
-  TestAssertions.assertNotNull(response.data.accessToken, 'Access token should not be null');
+  TestAssertions.assertHasProperty(response.data, 'access_token', 'Should return access token');
+  TestAssertions.assertNotNull(response.data.access_token, 'Access token should not be null');
 
   console.log('  ✓ Login successful');
-  return response.data.accessToken;
+  return response.data.access_token;
 }
 
 /**

@@ -33,7 +33,7 @@ export async function runProgressScenario() {
     console.log('Step 1: Student sets up their learning environment');
     const user = userFixtures.randomUser();
     const registerResponse = await apiClient.post(endpoints.auth.register, user);
-    authToken = registerResponse.data.accessToken;
+    authToken = registerResponse.data.access_token;
     apiClient.setToken(authToken);
 
     // Create course structure

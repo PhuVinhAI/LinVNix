@@ -56,7 +56,7 @@ export async function runCoursesTests() {
 async function setupAuth(): Promise<string> {
   const user = userFixtures.randomUser();
   const response = await apiClient.post(endpoints.auth.register, user);
-  return response.data.accessToken;
+  return response.data.access_token;
 }
 
 /**
