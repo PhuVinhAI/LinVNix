@@ -39,9 +39,12 @@ export class ApiClient {
       headers: this.getHeaders(),
     });
 
-    const data = await response.json();
+    const json = await response.json();
+    // Handle nested data from transform interceptor
+    const data = json.data || json;
+    
     return {
-      data: data.data || data,
+      data: data,
       status: response.status,
       headers: response.headers,
     };
@@ -54,9 +57,12 @@ export class ApiClient {
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    const data = await response.json();
+    const json = await response.json();
+    // Handle nested data from transform interceptor
+    const data = json.data || json;
+    
     return {
-      data: data.data || data,
+      data: data,
       status: response.status,
       headers: response.headers,
     };
@@ -69,9 +75,12 @@ export class ApiClient {
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    const data = await response.json();
+    const json = await response.json();
+    // Handle nested data from transform interceptor
+    const data = json.data || json;
+    
     return {
-      data: data.data || data,
+      data: data,
       status: response.status,
       headers: response.headers,
     };
@@ -83,9 +92,12 @@ export class ApiClient {
       headers: this.getHeaders(),
     });
 
-    const data = await response.json();
+    const json = await response.json();
+    // Handle nested data from transform interceptor
+    const data = json.data || json;
+    
     return {
-      data: data.data || data,
+      data: data,
       status: response.status,
       headers: response.headers,
     };
@@ -106,9 +118,12 @@ export class ApiClient {
       body: formData,
     });
 
-    const data = await response.json();
+    const json = await response.json();
+    // Handle nested data from transform interceptor
+    const data = json.data || json;
+    
     return {
-      data: data.data || data,
+      data: data,
       status: response.status,
       headers: response.headers,
     };

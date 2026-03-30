@@ -39,7 +39,7 @@ export async function runLearningScenario() {
     console.log('Step 1: Student registers and logs in');
     const user = userFixtures.beginnerUser;
     const registerResponse = await apiClient.post(endpoints.auth.register, user);
-    authToken = registerResponse.data.accessToken;
+    authToken = registerResponse.data.access_token;
     apiClient.setToken(authToken);
     console.log('  ✓ Student logged in as beginner (A1 level)\n');
 
