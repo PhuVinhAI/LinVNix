@@ -1,6 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { Lesson } from '../../courses/domain/lesson.entity';
 
 @Entity('grammar_rules')
 export class GrammarRule extends BaseEntity {
@@ -29,9 +28,7 @@ export class GrammarRule extends BaseEntity {
   @Column({ name: 'lesson_id' })
   lessonId: string;
 
-  @ManyToOne(() => Lesson, (lesson) => lesson.grammarRules, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne('Lesson', 'grammarRules', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'lesson_id' })
-  lesson: Lesson;
+  lesson: any;
 }

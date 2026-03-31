@@ -1,8 +1,6 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { PartOfSpeech, Dialect } from '../../../common/enums';
-import { Lesson } from '../../courses/domain/lesson.entity';
-import { UserVocabulary } from './user-vocabulary.entity';
 
 @Entity('vocabularies')
 export class Vocabulary extends BaseEntity {
@@ -60,12 +58,10 @@ export class Vocabulary extends BaseEntity {
   @Column({ name: 'lesson_id' })
   lessonId: string;
 
-  @ManyToOne(() => Lesson, (lesson) => lesson.vocabularies, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne('Lesson', 'vocabularies', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'lesson_id' })
-  lesson: Lesson;
+  lesson: any;
 
-  @OneToMany(() => UserVocabulary, (userVocab) => userVocab.vocabulary)
-  userVocabularies: UserVocabulary[];
+  @OneToMany('UserVocabulary', 'vocabulary')
+  userVocabularies: any[];
 }

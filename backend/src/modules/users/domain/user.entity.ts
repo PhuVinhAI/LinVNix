@@ -2,11 +2,7 @@ import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { UserLevel, Dialect } from '../../../common/enums';
-import { UserProgress } from '../../progress/domain/user-progress.entity';
-import { UserVocabulary } from '../../vocabularies/domain/user-vocabulary.entity';
-import { UserExerciseResult } from '../../exercises/domain/user-exercise-result.entity';
 import { Role } from '../../auth/domain/role.entity';
-import { RefreshToken } from '../../auth/domain/refresh-token.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -62,15 +58,15 @@ export class User extends BaseEntity {
   })
   roles: Role[];
 
-  @OneToMany(() => UserProgress, (progress) => progress.user)
-  progress: UserProgress[];
+  @OneToMany('UserProgress', 'user')
+  progress: any[];
 
-  @OneToMany(() => UserVocabulary, (vocabulary) => vocabulary.user)
-  vocabularies: UserVocabulary[];
+  @OneToMany('UserVocabulary', 'user')
+  vocabularies: any[];
 
-  @OneToMany(() => UserExerciseResult, (result) => result.user)
-  exerciseResults: UserExerciseResult[];
+  @OneToMany('UserExerciseResult', 'user')
+  exerciseResults: any[];
 
-  @OneToMany(() => RefreshToken, (token) => token.user)
-  refreshTokens: RefreshToken[];
+  @OneToMany('RefreshToken', 'user')
+  refreshTokens: any[];
 }

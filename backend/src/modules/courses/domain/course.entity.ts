@@ -1,7 +1,6 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { UserLevel } from '../../../common/enums';
-import { Unit } from './unit.entity';
 
 @Entity('courses')
 export class Course extends BaseEntity {
@@ -26,6 +25,6 @@ export class Course extends BaseEntity {
   @Column({ name: 'thumbnail_url', nullable: true })
   thumbnailUrl?: string;
 
-  @OneToMany(() => Unit, (unit) => unit.course)
-  units: Unit[];
+  @OneToMany('Unit', 'course')
+  units: any[];
 }

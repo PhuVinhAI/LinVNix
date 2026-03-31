@@ -1,12 +1,6 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { LessonType } from '../../../common/enums';
-import { Unit } from './unit.entity';
-import { LessonContent } from '../../contents/domain/lesson-content.entity';
-import { Vocabulary } from '../../vocabularies/domain/vocabulary.entity';
-import { GrammarRule } from '../../grammar/domain/grammar-rule.entity';
-import { Exercise } from '../../exercises/domain/exercise.entity';
-import { UserProgress } from '../../progress/domain/user-progress.entity';
 
 @Entity('lessons')
 export class Lesson extends BaseEntity {
@@ -32,22 +26,22 @@ export class Lesson extends BaseEntity {
   @Column({ name: 'unit_id' })
   unitId: string;
 
-  @ManyToOne(() => Unit, (unit) => unit.lessons, { onDelete: 'CASCADE' })
+  @ManyToOne('Unit', 'lessons', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'unit_id' })
-  unit: Unit;
+  unit: any;
 
-  @OneToMany(() => LessonContent, (content) => content.lesson)
-  contents: LessonContent[];
+  @OneToMany('LessonContent', 'lesson')
+  contents: any[];
 
-  @OneToMany(() => Vocabulary, (vocabulary) => vocabulary.lesson)
-  vocabularies: Vocabulary[];
+  @OneToMany('Vocabulary', 'lesson')
+  vocabularies: any[];
 
-  @OneToMany(() => GrammarRule, (grammar) => grammar.lesson)
-  grammarRules: GrammarRule[];
+  @OneToMany('GrammarRule', 'lesson')
+  grammarRules: any[];
 
-  @OneToMany(() => Exercise, (exercise) => exercise.lesson)
-  exercises: Exercise[];
+  @OneToMany('Exercise', 'lesson')
+  exercises: any[];
 
-  @OneToMany(() => UserProgress, (progress) => progress.lesson)
-  userProgress: UserProgress[];
+  @OneToMany('UserProgress', 'lesson')
+  userProgress: any[];
 }

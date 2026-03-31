@@ -1,7 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { User } from '../../users/domain/user.entity';
-import { Exercise } from './exercise.entity';
 
 @Entity('user_exercise_results')
 export class UserExerciseResult extends BaseEntity {
@@ -23,13 +21,11 @@ export class UserExerciseResult extends BaseEntity {
   @Column({ name: 'exercise_id' })
   exerciseId: string;
 
-  @ManyToOne(() => User, (user) => user.exerciseResults, { onDelete: 'CASCADE' })
+  @ManyToOne('User', 'exerciseResults', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: any;
 
-  @ManyToOne(() => Exercise, (exercise) => exercise.userResults, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne('Exercise', 'userResults', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'exercise_id' })
-  exercise: Exercise;
+  exercise: any;
 }

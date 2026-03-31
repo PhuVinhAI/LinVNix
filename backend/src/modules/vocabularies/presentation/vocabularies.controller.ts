@@ -5,6 +5,7 @@ import { VocabulariesService } from '../application/vocabularies.service';
 import { UserVocabulariesService } from '../application/user-vocabularies.service';
 import { StorageService } from '../../../infrastructure/storage/storage.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../../auth/guards/optional-jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/domain/user.entity';
 import { Public } from '../../../common/decorators';
@@ -46,6 +47,7 @@ export class VocabulariesController {
   }
 
   @Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Get('lesson/:lessonId')
   @ApiOperation({ 
     summary: 'Lấy từ vựng theo lesson',

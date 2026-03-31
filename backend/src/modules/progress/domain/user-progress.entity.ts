@@ -1,8 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { ProgressStatus } from '../../../common/enums';
-import { User } from '../../users/domain/user.entity';
-import { Lesson } from '../../courses/domain/lesson.entity';
 
 @Entity('user_progress')
 export class UserProgress extends BaseEntity {
@@ -31,13 +29,11 @@ export class UserProgress extends BaseEntity {
   @Column({ name: 'lesson_id' })
   lessonId: string;
 
-  @ManyToOne(() => User, (user) => user.progress, { onDelete: 'CASCADE' })
+  @ManyToOne('User', 'progress', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: any;
 
-  @ManyToOne(() => Lesson, (lesson) => lesson.userProgress, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne('Lesson', 'userProgress', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'lesson_id' })
-  lesson: Lesson;
+  lesson: any;
 }
