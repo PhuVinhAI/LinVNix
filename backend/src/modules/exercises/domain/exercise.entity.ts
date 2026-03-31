@@ -1,8 +1,6 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { ExerciseType } from '../../../common/enums';
-import { Lesson } from '../../courses/domain/lesson.entity';
-import { UserExerciseResult } from './user-exercise-result.entity';
 import type { ExerciseOptions, ExerciseAnswer } from './exercise-options.types';
 
 @Entity('exercises')
@@ -38,10 +36,10 @@ export class Exercise extends BaseEntity {
   @Column({ name: 'lesson_id' })
   lessonId: string;
 
-  @ManyToOne(() => Lesson, (lesson) => lesson.exercises, { onDelete: 'CASCADE' })
+  @ManyToOne('Lesson', 'exercises', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'lesson_id' })
-  lesson: Lesson;
+  lesson: any;
 
-  @OneToMany(() => UserExerciseResult, (result) => result.exercise)
-  userResults: UserExerciseResult[];
+  @OneToMany('UserExerciseResult', 'exercise')
+  userResults: any[];
 }

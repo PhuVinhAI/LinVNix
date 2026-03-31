@@ -8,11 +8,13 @@ import { VocabulariesRepository } from './application/repositories/vocabularies.
 import { UserVocabulariesRepository } from './application/repositories/user-vocabularies.repository';
 import { VocabulariesController } from './presentation/vocabularies.controller';
 import { ProgressModule } from '../progress/progress.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Vocabulary, UserVocabulary]),
     ProgressModule,
+    AuthModule,
   ],
   controllers: [VocabulariesController],
   providers: [

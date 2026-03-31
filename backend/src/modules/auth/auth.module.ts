@@ -7,6 +7,8 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from './guards/optional-jwt-auth.guard';
 import { UsersModule } from '../users/users.module';
 import { QueueModule } from '../../infrastructure/queue/queue.module';
 import { Role } from './domain/role.entity';
@@ -42,7 +44,7 @@ import { RbacService } from './application/rbac.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, RbacService],
-  exports: [AuthService, RbacService],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, RbacService, JwtAuthGuard, OptionalJwtAuthGuard],
+  exports: [AuthService, RbacService, JwtAuthGuard, OptionalJwtAuthGuard],
 })
 export class AuthModule {}

@@ -1,7 +1,5 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { Course } from './course.entity';
-import { Lesson } from './lesson.entity';
 
 @Entity('units')
 export class Unit extends BaseEntity {
@@ -17,10 +15,10 @@ export class Unit extends BaseEntity {
   @Column({ name: 'course_id' })
   courseId: string;
 
-  @ManyToOne(() => Course, (course) => course.units, { onDelete: 'CASCADE' })
+  @ManyToOne('Course', 'units', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'course_id' })
-  course: Course;
+  course: any;
 
-  @OneToMany(() => Lesson, (lesson) => lesson.unit)
-  lessons: Lesson[];
+  @OneToMany('Lesson', 'unit')
+  lessons: any[];
 }

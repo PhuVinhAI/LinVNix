@@ -1,7 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { ContentType } from '../../../common/enums';
-import { Lesson } from '../../courses/domain/lesson.entity';
 
 @Entity('lesson_contents')
 export class LessonContent extends BaseEntity {
@@ -39,7 +38,7 @@ export class LessonContent extends BaseEntity {
   @Column({ name: 'lesson_id' })
   lessonId: string;
 
-  @ManyToOne(() => Lesson, (lesson) => lesson.contents, { onDelete: 'CASCADE' })
+  @ManyToOne('Lesson', 'contents', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'lesson_id' })
-  lesson: Lesson;
+  lesson: any;
 }

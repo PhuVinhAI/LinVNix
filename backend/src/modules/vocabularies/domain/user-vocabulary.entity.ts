@@ -1,8 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { MasteryLevel } from '../../../common/enums';
-import { User } from '../../users/domain/user.entity';
-import { Vocabulary } from './vocabulary.entity';
 
 @Entity('user_vocabularies')
 export class UserVocabulary extends BaseEntity {
@@ -54,13 +52,11 @@ export class UserVocabulary extends BaseEntity {
   @Column({ name: 'vocabulary_id' })
   vocabularyId: string;
 
-  @ManyToOne(() => User, (user) => user.vocabularies, { onDelete: 'CASCADE' })
+  @ManyToOne('User', 'vocabularies', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: any;
 
-  @ManyToOne(() => Vocabulary, (vocabulary) => vocabulary.userVocabularies, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne('Vocabulary', 'userVocabularies', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'vocabulary_id' })
-  vocabulary: Vocabulary;
+  vocabulary: any;
 }
