@@ -24,6 +24,7 @@ import { VocabulariesModule } from './modules/vocabularies/vocabularies.module';
 import { GrammarModule } from './modules/grammar/grammar.module';
 import { ExercisesModule } from './modules/exercises/exercises.module';
 import { ProgressModule } from './modules/progress/progress.module';
+import { AdminModule } from './modules/admin/admin.module';
 import { CacheModule } from './infrastructure/cache/cache.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
 import { LoggingModule } from './infrastructure/logging/logging.module';
@@ -68,6 +69,7 @@ import { MailModule } from './infrastructure/mail/mail.module';
     GrammarModule,
     ExercisesModule,
     ProgressModule,
+    AdminModule,
   ],
   providers: [
     {

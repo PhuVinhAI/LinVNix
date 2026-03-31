@@ -122,4 +122,33 @@ export class UserVocabulariesService {
   async getDueForReview(userId: string): Promise<UserVocabulary[]> {
     return this.userVocabulariesRepository.findDueForReview(userId);
   }
+
+  async batchReview(
+    userId: string,
+    reviews: Array<{ vocabularyId: string; rating: number }>,
+    reviewDate?: Date,
+  ): Promise<UserVocabulary[]> {
+    const results: UserVocabulary[] = [];
+
+    // Process each review sequentially to maintain data consistency
+    for (const review of reviews) {
+      try {
+        const result = await this.reviewVocabulary(
+          userId,
+          review.vocabularyId,
+          review.rating,
+          reviewDate,
+        );
+        results.push(result);
+      } catch (error) {
+        // Log error but continue processing other reviews
+        console.error(
+          `Failed to review vocabulary ${review.vocabularyId}:`,
+          error,
+        );
+      }
+    }
+
+    return results;
+  }
 }

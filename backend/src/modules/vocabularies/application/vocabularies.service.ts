@@ -94,4 +94,11 @@ export class VocabulariesService {
     await this.findById(id);
     await this.vocabulariesRepository.delete(id);
   }
+
+  async search(query: string): Promise<Vocabulary[]> {
+    if (!query || query.trim().length === 0) {
+      return [];
+    }
+    return this.vocabulariesRepository.search(query.trim());
+  }
 }
