@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, UseInterceptors, UploadedFile, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VocabulariesService } from '../application/vocabularies.service';
@@ -9,6 +9,7 @@ import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/domain/user.entity';
 import { Public } from '../../../common/decorators';
 import { CreateVocabularyDto } from '../dto/create-vocabulary.dto';
+import { BatchReviewDto } from '../dto/batch-review.dto';
 
 @ApiTags('Vocabularies')
 @Controller('vocabularies')
@@ -18,6 +19,31 @@ export class VocabulariesController {
     private readonly userVocabulariesService: UserVocabulariesService,
     private readonly storageService: StorageService,
   ) {}
+
+  @Public()
+  @Get('search')
+  @ApiOperation({ 
+    summary: 'Tìm kiếm từ vựng',
+    description: 'Tìm kiếm từ vựng theo word, translation hoặc phonetic. Trả về tối đa 50 kết quả.'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Kết quả tìm kiếm',
+    schema: {
+      example: [
+        {
+          id: 'uuid-string',
+          word: 'xin chào',
+          translation: 'hello',
+          phonetic: 'sin chao',
+          partOfSpeech: 'PHRASE'
+        }
+      ]
+    }
+  })
+  async search(@Query('q') query: string) {
+    return this.vocabulariesService.search(query);
+  }
 
   @Public()
   @Get('lesson/:lessonId')
@@ -136,6 +162,53 @@ export class VocabulariesController {
     @Param('vocabularyId') vocabularyId: string,
   ) {
     return this.userVocabulariesService.addVocabulary(user.id, vocabularyId);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('review/batch')
+  @ApiOperation({ 
+    summary: 'Ôn tập nhiều từ vựng cùng lúc',
+    description: 'Submit kết quả ôn tập cho nhiều từ vựng trong một request. Giúp giảm số lượng API calls khi học flashcard hàng loạt.'
+  })
+  @ApiBody({ type: BatchReviewDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Kết quả batch review',
+    schema: {
+      example: {
+        success: 3,
+        failed: 0,
+        results: [
+          {
+            id: 'uuid-1',
+            vocabularyId: 'vocab-1',
+            masteryLevel: 'LEARNING',
+            nextReviewAt: '2024-01-03T00:00:00.000Z'
+          }
+        ]
+      }
+    }
+  })
+  async batchReview(
+    @CurrentUser() user: User,
+    @Body() batchReviewDto: BatchReviewDto,
+  ) {
+    const reviewDate = batchReviewDto.reviewDate 
+      ? new Date(batchReviewDto.reviewDate) 
+      : undefined;
+    
+    const results = await this.userVocabulariesService.batchReview(
+      user.id,
+      batchReviewDto.reviews,
+      reviewDate,
+    );
+
+    return {
+      success: results.length,
+      failed: batchReviewDto.reviews.length - results.length,
+      results,
+    };
   }
 
   @ApiBearerAuth()

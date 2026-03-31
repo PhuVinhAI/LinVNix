@@ -16,6 +16,7 @@ import { runTransactionTests } from './suites/transactions.test';
 import { runExerciseTypesTests } from './suites/exercise-types.test';
 import { runFSRSTests } from './suites/fsrs.test';
 import { runDialectTests } from './suites/dialect.test';
+import { runVocabularyEnhancementsTests } from './suites/vocabulary-enhancements.test';
 import { TestUsers } from './utils/test-users';
 
 /**
@@ -67,6 +68,7 @@ async function runAllTests() {
     { name: 'Courses', fn: runCoursesTests },
     { name: 'Contents', fn: runContentsTests },
     { name: 'Vocabularies', fn: runVocabulariesTests },
+    { name: 'Vocabulary Enhancements', fn: runVocabularyEnhancementsTests }, // NEW: Search, Batch Review, Admin Dashboard
     { name: 'Dialect & Classifier', fn: runDialectTests }, // NEW: Test dialect system
     { name: 'Grammar', fn: runGrammarTests },
     { name: 'Exercises', fn: runExercisesTests },
