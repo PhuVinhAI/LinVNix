@@ -11,16 +11,18 @@ export function createAppWindow(): void {
 
   // Create the main window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1280,
+    height: 800,
+    minWidth: 1024,
+    minHeight: 600,
     show: false,
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#fafafa',
     icon: appIcon,
     frame: false,
     titleBarStyle: 'hiddenInset',
-    title: 'Electron React App',
-    maximizable: false,
-    resizable: false,
+    title: 'LinVNix Admin',
+    maximizable: true,
+    resizable: true,
     webPreferences: {
       preload: join(__dirname, '../preload/preload.js'),
       sandbox: false,
