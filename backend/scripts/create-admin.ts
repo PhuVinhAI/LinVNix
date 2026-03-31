@@ -12,18 +12,6 @@ import { Repository } from 'typeorm';
 import { Role } from '../src/modules/auth/domain/role.entity';
 import { Role as RoleEnum } from '../src/common/enums';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import * as readline from 'readline';
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-function question(query: string): Promise<string> {
-  return new Promise((resolve) => {
-    rl.question(query, resolve);
-  });
-}
 
 async function bootstrap() {
   console.log('🚀 Creating Admin User...\n');
@@ -43,26 +31,22 @@ async function bootstrap() {
       process.exit(1);
     }
 
-    // Get user input
-    const email = await question('Email: ');
-    const password = await question('Password (min 8 chars): ');
-    const fullName = await question('Full Name: ');
-
-    if (!email || !password || !fullName) {
-      console.error('❌ All fields are required!');
-      process.exit(1);
-    }
-
-    if (password.length < 8) {
-      console.error('❌ Password must be at least 8 characters!');
-      process.exit(1);
-    }
+    // Fixed credentials for testing
+    const email = 'admin@linvnix.test';
+    const password = 'Admin123456!';
+    const fullName = 'Admin User';
 
     // Check if user exists
     const existingUser = await usersService.findByEmail(email);
     if (existingUser) {
-      console.error('❌ User with this email already exists!');
-      process.exit(1);
+      console.log('✅ Admin user already exists!');
+      console.log('\nUser Details:');
+      console.log(`  Email: ${email}`);
+      console.log(`  Name: ${fullName}`);
+      console.log(`  Role: ADMIN`);
+      console.log('\n🎉 You can now login with these credentials!');
+      await app.close();
+      return;
     }
 
     // Create admin user
@@ -77,11 +61,12 @@ async function bootstrap() {
     user.roles = [adminRole];
     user.emailVerified = true;
     user.emailVerifiedAt = new Date();
-    await usersService.update(user.id, user as any);
+    await usersService.save(user);
 
     console.log('\n✅ Admin user created successfully!');
     console.log('\nUser Details:');
     console.log(`  Email: ${email}`);
+    console.log(`  Password: ${password}`);
     console.log(`  Name: ${fullName}`);
     console.log(`  Role: ADMIN`);
     console.log(`  Email Verified: Yes`);
@@ -90,7 +75,6 @@ async function bootstrap() {
     console.error('❌ Error creating admin user:', error.message);
     process.exit(1);
   } finally {
-    rl.close();
     await app.close();
   }
 }

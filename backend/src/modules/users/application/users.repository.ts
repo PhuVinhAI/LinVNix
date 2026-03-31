@@ -16,11 +16,17 @@ export class UsersRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    return this.repository.findOne({ where: { id } });
+    return this.repository.findOne({ 
+      where: { id },
+      relations: ['roles', 'roles.permissions'],
+    });
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.repository.findOne({ where: { email } });
+    return this.repository.findOne({ 
+      where: { email },
+      relations: ['roles', 'roles.permissions'],
+    });
   }
 
   async update(id: string, data: Partial<User>): Promise<User> {
@@ -34,5 +40,9 @@ export class UsersRepository {
 
   async delete(id: string): Promise<void> {
     await this.repository.softDelete(id);
+  }
+
+  async save(user: User): Promise<User> {
+    return this.repository.save(user);
   }
 }

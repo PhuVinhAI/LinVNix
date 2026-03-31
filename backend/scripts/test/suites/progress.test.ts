@@ -1,7 +1,7 @@
 import { apiClient } from '../utils/api-client';
 import { TestAssertions } from '../utils/assertions';
 import { endpoints } from '../config/test.config';
-import { userFixtures } from '../fixtures/users.fixture';
+import { TestUsers } from '../utils/test-users';
 import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/courses.fixture';
 
 /**
@@ -10,30 +10,31 @@ import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/course
 export async function runProgressTests() {
   console.log('\n📊 Running Progress Tests...\n');
 
-  let authToken: string;
+  let adminToken: string;
+  let userToken: string;
   let lessonId: string;
 
   try {
-    // Setup: Create course structure (this will set token)
+    // Setup: Create course structure với admin, user để test progress
     const setup = await setupCourseStructure();
-    authToken = setup.token;
+    adminToken = setup.adminToken;
+    userToken = setup.userToken;
     lessonId = setup.lessonId;
-    // Token is already set in setupCourseStructure, no need to set again
 
-    // Test 1: Start lesson
-    await testStartLesson(authToken, lessonId);
+    // Test 1: Start lesson (user)
+    await testStartLesson(userToken, lessonId);
 
-    // Test 2: Get progress by lesson
-    await testGetProgressByLesson(authToken, lessonId);
+    // Test 2: Get progress by lesson (user)
+    await testGetProgressByLesson(userToken, lessonId);
 
-    // Test 3: Update time spent
-    await testUpdateTimeSpent(authToken, lessonId);
+    // Test 3: Update time spent (user)
+    await testUpdateTimeSpent(userToken, lessonId);
 
-    // Test 4: Complete lesson
-    await testCompleteLesson(authToken, lessonId);
+    // Test 4: Complete lesson (user)
+    await testCompleteLesson(userToken, lessonId);
 
-    // Test 5: Get all progress
-    await testGetAllProgress(authToken);
+    // Test 5: Get all progress (user)
+    await testGetAllProgress(userToken);
 
     console.log('✅ All Progress tests passed!\n');
   } catch (error) {
@@ -46,12 +47,9 @@ export async function runProgressTests() {
  * Setup course structure
  */
 async function setupCourseStructure() {
-  // Register user
-  const user = userFixtures.randomUser();
-  const authResponse = await apiClient.post(endpoints.auth.register, user);
-  const token = authResponse.data.access_token;
-
-  apiClient.setToken(token);
+  // Login admin để tạo course structure
+  const admin = await TestUsers.loginAdmin();
+  apiClient.setToken(admin.token);
 
   // Create course
   const course = courseFixtures.beginnerCourse;
@@ -68,7 +66,10 @@ async function setupCourseStructure() {
   const lessonResponse = await apiClient.post('/lessons', lesson);
   const lessonId = lessonResponse.data.id;
 
-  return { token, lessonId };
+  // Tạo normal user để test progress
+  const user = await TestUsers.createUser();
+
+  return { adminToken: admin.token, userToken: user.token, lessonId };
 }
 
 /**
@@ -77,7 +78,7 @@ async function setupCourseStructure() {
 async function testStartLesson(token: string, lessonId: string) {
   console.log('▶️ Test: Start lesson');
 
-  // Token already set in setup
+  apiClient.setToken(token);
   const response = await apiClient.post(endpoints.progress.start(lessonId));
 
   TestAssertions.assertStatus(response.status, 201, 'Start lesson should return 201');
@@ -98,7 +99,7 @@ async function testStartLesson(token: string, lessonId: string) {
 async function testGetProgressByLesson(token: string, lessonId: string) {
   console.log('🔍 Test: Get progress by lesson');
 
-  // Token already set in setup
+  apiClient.setToken(token);
   const response = await apiClient.get(endpoints.progress.byLesson(lessonId));
 
   TestAssertions.assertStatus(response.status, 200, 'Get progress should return 200');
@@ -115,7 +116,7 @@ async function testGetProgressByLesson(token: string, lessonId: string) {
 async function testUpdateTimeSpent(token: string, lessonId: string) {
   console.log('⏱️ Test: Update time spent');
 
-  // Token already set in setup
+  apiClient.setToken(token);
   const updateData = {
     timeSpent: 300, // 5 minutes
   };
@@ -137,7 +138,7 @@ async function testUpdateTimeSpent(token: string, lessonId: string) {
 async function testCompleteLesson(token: string, lessonId: string) {
   console.log('✅ Test: Complete lesson');
 
-  // Token already set in setup
+  apiClient.setToken(token);
   const completeData = {
     score: 85,
   };
@@ -165,7 +166,7 @@ async function testCompleteLesson(token: string, lessonId: string) {
 async function testGetAllProgress(token: string) {
   console.log('📚 Test: Get all progress');
 
-  // Token already set in setup
+  apiClient.setToken(token);
   const response = await apiClient.get(endpoints.progress.list);
 
   TestAssertions.assertStatus(response.status, 200, 'Get all progress should return 200');

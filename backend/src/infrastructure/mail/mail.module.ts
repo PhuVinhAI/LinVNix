@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.adapter';
 import { MailService } from './mail.service';
 import mailConfig from '../../config/mail.config';
-
-// Import HandlebarsAdapter dynamically to avoid type issues
-const HandlebarsAdapter = require('@nestjs-modules/mailer/dist/adapters/handlebars.adapter').HandlebarsAdapter;
 
 @Module({
   imports: [
