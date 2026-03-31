@@ -21,10 +21,10 @@ export function Header() {
   };
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6 dark:border-slate-700 dark:bg-slate-800">
+    <header className="flex h-16 items-center justify-between border-b border-border bg-card px-6">
       {/* Left - Breadcrumb hoặc Page Title */}
       <div>
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+        <h2 className="text-lg font-semibold text-card-foreground">
           {/* Page title sẽ được inject sau */}
         </h2>
       </div>
@@ -34,17 +34,17 @@ export function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
-                <User className="h-4 w-4" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                <User className="h-4 w-4 text-primary" />
               </div>
-              <span className="text-sm font-medium">{user?.fullName}</span>
+              <span className="text-sm font-medium text-foreground">{user?.fullName}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div>
-                <p className="text-sm font-medium">{user?.fullName}</p>
-                <p className="text-xs text-slate-500">{user?.email}</p>
+                <p className="text-sm font-medium text-foreground">{user?.fullName}</p>
+                <p className="text-xs text-muted-foreground">{user?.email}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -53,7 +53,7 @@ export function Header() {
               Cài đặt
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+            <DropdownMenuItem onClick={handleLogout} className="text-destructive">
               <LogOut className="mr-2 h-4 w-4" />
               Đăng xuất
             </DropdownMenuItem>

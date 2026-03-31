@@ -19,7 +19,6 @@ export class AuthService {
 
     // Validate response
     if (!response || !response.user) {
-      console.error('Invalid response structure:', response);
       throw AppError.badRequest('Invalid login response from server');
     }
 

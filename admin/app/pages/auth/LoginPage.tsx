@@ -24,25 +24,25 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/5 via-background to-primary/10">
       <div className="w-full max-w-md space-y-8 px-4">
         {/* Logo & Title */}
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-4xl font-bold text-foreground">
             LinVNix Admin
           </h1>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-2 text-sm text-muted-foreground">
             Đăng nhập vào trang quản trị
           </p>
         </div>
 
         {/* Login Form */}
-        <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-slate-800">
+        <div className="rounded-xl bg-card p-8 shadow-xl border border-border">
           <LoginForm onSuccess={handleLoginSuccess} />
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-center text-xs text-muted-foreground">
           © 2024 LinVNix. All rights reserved.
         </p>
       </div>
