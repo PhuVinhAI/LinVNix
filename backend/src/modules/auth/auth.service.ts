@@ -42,8 +42,9 @@ export class AuthService {
       });
       
       if (userRole) {
+        // Không dùng update, dùng save trực tiếp
         user.roles = [userRole];
-        await this.usersService.update(user.id, { roles: [userRole] } as any);
+        await this.usersService.save(user);
       }
 
       // Tạo verification token

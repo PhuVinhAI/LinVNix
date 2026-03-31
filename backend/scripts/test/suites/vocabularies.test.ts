@@ -1,7 +1,7 @@
 import { apiClient } from '../utils/api-client';
 import { TestAssertions } from '../utils/assertions';
 import { endpoints } from '../config/test.config';
-import { userFixtures } from '../fixtures/users.fixture';
+import { TestUsers } from '../utils/test-users';
 import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/courses.fixture';
 import { vocabularyFixtures } from '../fixtures/vocabularies.fixture';
 
@@ -11,42 +11,44 @@ import { vocabularyFixtures } from '../fixtures/vocabularies.fixture';
 export async function runVocabulariesTests() {
   console.log('\n📖 Running Vocabularies Tests...\n');
 
-  let authToken: string;
+  let adminToken: string;
+  let userToken: string;
   let lessonId: string;
   let vocabId: string;
 
   try {
-    // Setup: Create course structure
+    // Setup: Create course structure với admin token
     const setup = await setupCourseStructure();
-    authToken = setup.token;
+    adminToken = setup.adminToken;
+    userToken = setup.userToken;
     lessonId = setup.lessonId;
 
-    // Test 1: Create vocabulary
-    vocabId = await testCreateVocabulary(authToken, lessonId);
+    // Test 1: Create vocabulary (admin)
+    vocabId = await testCreateVocabulary(adminToken, lessonId);
 
-    // Test 2: Get vocabularies by lesson
-    await testGetVocabulariesByLesson(authToken, lessonId);
+    // Test 2: Get vocabularies by lesson (user)
+    await testGetVocabulariesByLesson(userToken, lessonId);
 
-    // Test 3: Learn vocabulary (first time)
-    await testLearnVocabulary(authToken, vocabId);
+    // Test 3: Learn vocabulary (user)
+    await testLearnVocabulary(userToken, vocabId);
 
-    // Test 4: Get my vocabularies
-    await testGetMyVocabularies(authToken);
+    // Test 4: Get my vocabularies (user)
+    await testGetMyVocabularies(userToken);
 
-    // Test 5: Review vocabulary
-    await testReviewVocabulary(authToken, vocabId);
+    // Test 5: Review vocabulary (user)
+    await testReviewVocabulary(userToken, vocabId);
 
-    // Test 6: Get due for review
-    await testGetDueForReview(authToken);
+    // Test 6: Get due for review (user)
+    await testGetDueForReview(userToken);
 
-    // Test 7: Create another vocabulary for update/delete tests
-    const vocabId2 = await testCreateVocabulary(authToken, lessonId);
+    // Test 7: Create another vocabulary for update/delete tests (admin)
+    const vocabId2 = await testCreateVocabulary(adminToken, lessonId);
 
-    // Test 8: Update vocabulary
-    await testUpdateVocabulary(authToken, vocabId2);
+    // Test 8: Update vocabulary (admin)
+    await testUpdateVocabulary(adminToken, vocabId2);
 
-    // Test 9: Delete vocabulary
-    await testDeleteVocabulary(authToken, vocabId2);
+    // Test 9: Delete vocabulary (admin)
+    await testDeleteVocabulary(adminToken, vocabId2);
 
     console.log('✅ All Vocabularies tests passed!\n');
   } catch (error) {
@@ -59,12 +61,9 @@ export async function runVocabulariesTests() {
  * Setup course structure
  */
 async function setupCourseStructure() {
-  // Register user
-  const user = userFixtures.randomUser();
-  const authResponse = await apiClient.post(endpoints.auth.register, user);
-  const token = authResponse.data.access_token;
-
-  apiClient.setToken(token);
+  // Login admin để tạo course structure
+  const admin = await TestUsers.loginAdmin();
+  apiClient.setToken(admin.token);
 
   // Create course
   const course = courseFixtures.beginnerCourse;
@@ -81,7 +80,10 @@ async function setupCourseStructure() {
   const lessonResponse = await apiClient.post('/lessons', lesson);
   const lessonId = lessonResponse.data.id;
 
-  return { token, lessonId };
+  // Tạo normal user để test user operations
+  const user = await TestUsers.createUser();
+
+  return { adminToken: admin.token, userToken: user.token, lessonId };
 }
 
 /**

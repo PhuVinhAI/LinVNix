@@ -112,4 +112,22 @@ export class TestAssertions {
       );
     }
   }
+
+  /**
+   * Assert true
+   */
+  static assertTrue(value: boolean, message?: string): void {
+    if (value !== true) {
+      throw new Error(message || `Expected true, got ${value}`);
+    }
+  }
+
+  /**
+   * Assert false
+   */
+  static assertFalse(value: boolean, message?: string): void {
+    if (value !== false) {
+      throw new Error(message || `Expected false, got ${value}`);
+    }
+  }
 }

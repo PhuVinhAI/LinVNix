@@ -1,7 +1,7 @@
 import { apiClient } from '../utils/api-client';
 import { TestAssertions } from '../utils/assertions';
 import { endpoints } from '../config/test.config';
-import { userFixtures } from '../fixtures/users.fixture';
+import { TestUsers } from '../utils/test-users';
 import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/courses.fixture';
 
 /**
@@ -16,8 +16,9 @@ export async function runCoursesTests() {
   let lessonId: string;
 
   try {
-    // Setup: Register and login
-    authToken = await setupAuth();
+    // Setup: Login admin (cần quyền admin để tạo courses)
+    const admin = await TestUsers.loginAdmin();
+    authToken = admin.token;
 
     // Test 1: Create course
     courseId = await testCreateCourse(authToken);
@@ -71,14 +72,7 @@ export async function runCoursesTests() {
   }
 }
 
-/**
- * Setup authentication
- */
-async function setupAuth(): Promise<string> {
-  const user = userFixtures.randomUser();
-  const response = await apiClient.post(endpoints.auth.register, user);
-  return response.data.access_token;
-}
+
 
 /**
  * Test create course

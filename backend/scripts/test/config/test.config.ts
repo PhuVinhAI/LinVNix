@@ -21,6 +21,10 @@ export const endpoints = {
   auth: {
     register: '/auth/register',
     login: '/auth/login',
+    verifyEmail: '/auth/verify-email',
+    forgotPassword: '/auth/forgot-password',
+    resetPassword: '/auth/reset-password',
+    resendVerification: '/auth/resend-verification',
   },
   users: {
     me: '/users/me',

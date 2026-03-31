@@ -1,7 +1,7 @@
 import { apiClient } from '../utils/api-client';
 import { TestAssertions } from '../utils/assertions';
 import { endpoints } from '../config/test.config';
-import { userFixtures } from '../fixtures/users.fixture';
+import { TestUsers } from '../utils/test-users';
 import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/courses.fixture';
 
 /**
@@ -10,30 +10,30 @@ import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/course
 export async function runContentsTests() {
   console.log('\n📄 Running Contents Tests...\n');
 
-  let authToken: string;
+  let adminToken: string;
   let lessonId: string;
   let contentId: string;
 
   try {
-    // Setup: Create course structure
+    // Setup: Create course structure với admin token
     const setup = await setupCourseStructure();
-    authToken = setup.token;
+    adminToken = setup.token;
     lessonId = setup.lessonId;
 
-    // Test 1: Create content
-    contentId = await testCreateContent(authToken, lessonId);
+    // Test 1: Create content (admin)
+    contentId = await testCreateContent(adminToken, lessonId);
 
-    // Test 2: Get contents by lesson
+    // Test 2: Get contents by lesson (public)
     await testGetContentsByLesson(lessonId);
 
-    // Test 3: Get content by ID
+    // Test 3: Get content by ID (public)
     await testGetContentById(contentId);
 
-    // Test 4: Update content
-    await testUpdateContent(authToken, contentId);
+    // Test 4: Update content (admin)
+    await testUpdateContent(adminToken, contentId);
 
-    // Test 5: Delete content
-    await testDeleteContent(authToken, contentId);
+    // Test 5: Delete content (admin)
+    await testDeleteContent(adminToken, contentId);
 
     console.log('✅ All Contents tests passed!\n');
   } catch (error) {
@@ -46,10 +46,9 @@ export async function runContentsTests() {
  * Setup course structure
  */
 async function setupCourseStructure() {
-  const user = userFixtures.randomUser();
-  const authResponse = await apiClient.post(endpoints.auth.register, user);
-  const token = authResponse.data.access_token;
-  apiClient.setToken(token);
+  // Login admin để tạo course structure
+  const admin = await TestUsers.loginAdmin();
+  apiClient.setToken(admin.token);
 
   const course = courseFixtures.beginnerCourse;
   const courseResponse = await apiClient.post(endpoints.courses.create, course);
@@ -63,7 +62,7 @@ async function setupCourseStructure() {
   const lessonResponse = await apiClient.post('/lessons', lesson);
   const lessonId = lessonResponse.data.id;
 
-  return { token, lessonId };
+  return { token: admin.token, lessonId };
 }
 
 /**

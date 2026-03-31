@@ -58,6 +58,17 @@ export class ApiClient {
     });
 
     const json = await response.json();
+    
+    // Throw error if response is not ok (status >= 400)
+    if (!response.ok) {
+      const error: any = new Error(`HTTP ${response.status}: ${json.message || 'Request failed'}`);
+      error.response = {
+        status: response.status,
+        data: json,
+      };
+      throw error;
+    }
+    
     // Handle nested data from transform interceptor
     const data = json.data || json;
     
@@ -93,6 +104,17 @@ export class ApiClient {
     });
 
     const json = await response.json();
+    
+    // Throw error if response is not ok (status >= 400)
+    if (!response.ok) {
+      const error: any = new Error(`HTTP ${response.status}: ${json.message || 'Request failed'}`);
+      error.response = {
+        status: response.status,
+        data: json,
+      };
+      throw error;
+    }
+    
     // Handle nested data from transform interceptor
     const data = json.data || json;
     

@@ -10,6 +10,28 @@ import { runExercisesTests } from './suites/exercises.test';
 import { runProgressTests } from './suites/progress.test';
 import { runCacheTests } from './suites/cache.test';
 import { runSecurityTests } from './suites/security.test';
+import { runRbacTests } from './suites/rbac.test';
+import { TestUsers } from './utils/test-users';
+
+/**
+ * Setup: Tạo admin user nếu chưa có
+ */
+async function setupAdminUser() {
+  console.log('🔧 Setting up test environment...\n');
+  
+  try {
+    await TestUsers.loginAdmin();
+    console.log('✅ Admin user ready\n');
+  } catch (error) {
+    console.error('❌ Admin user not found!');
+    console.log('\n📝 Please create admin user first:');
+    console.log('   npm run admin:create');
+    console.log('\n   Email: admin@linvnix.test');
+    console.log('   Password: Admin123456!');
+    console.log('   Full Name: Admin User\n');
+    process.exit(1);
+  }
+}
 
 /**
  * Run all test suites
@@ -22,6 +44,9 @@ async function runAllTests() {
   console.log('╚════════════════════════════════════════════════════════════╝');
   console.log('\n🚀 Starting integration tests...\n');
 
+  // Setup admin user
+  await setupAdminUser();
+
   const startTime = Date.now();
   let passedSuites = 0;
   let failedSuites = 0;
@@ -31,6 +56,7 @@ async function runAllTests() {
   const testSuites = [
     { name: 'Security', fn: runSecurityTests }, // CRITICAL: Chạy đầu tiên
     { name: 'Auth', fn: runAuthTests },
+    { name: 'RBAC', fn: runRbacTests }, // NEW: Test phân quyền
     { name: 'Users', fn: runUsersTests },
     { name: 'Courses', fn: runCoursesTests },
     { name: 'Contents', fn: runContentsTests },
