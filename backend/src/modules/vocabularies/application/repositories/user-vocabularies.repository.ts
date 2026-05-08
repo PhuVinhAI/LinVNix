@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { UserVocabulary } from '../../domain/user-vocabulary.entity';
+import { MasteryLevel } from '../../../../common/enums';
 
 @Injectable()
 export class UserVocabulariesRepository {
@@ -50,5 +51,18 @@ export class UserVocabulariesRepository {
       throw new Error('UserVocabulary not found after update');
     }
     return userVocab;
+  }
+
+  async updateMastery(
+    manager: EntityManager,
+    userId: string,
+    vocabularyId: string,
+    masteryLevel: MasteryLevel,
+  ): Promise<void> {
+    await manager.update(
+      UserVocabulary,
+      { userId, vocabularyId },
+      { masteryLevel },
+    );
   }
 }
