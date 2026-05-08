@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Exercise } from './domain/exercise.entity';
 import { UserExerciseResult } from './domain/user-exercise-result.entity';
 import { ExercisesService } from './application/exercises.service';
-import { ExerciseCheckerService } from './application/exercise-checker.service';
+import { AnswerAssessment } from './application/answer-assessment.service';
 import { ExercisesRepository } from './application/repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './application/repositories/user-exercise-results.repository';
 import { ExercisesController } from './presentation/exercises.controller';
@@ -13,7 +13,7 @@ import { ExercisesController } from './presentation/exercises.controller';
   controllers: [ExercisesController],
   providers: [
     ExercisesService,
-    ExerciseCheckerService,
+    AnswerAssessment,
     ExercisesRepository,
     UserExerciseResultsRepository,
   ],
