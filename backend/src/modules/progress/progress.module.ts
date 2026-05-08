@@ -32,6 +32,7 @@ import { UserVocabulariesRepository } from '../vocabularies/application/reposito
   ],
   exports: [
     ProgressService,
+    ProgressRepository,
     ProgressTransactionService,
     SpacedRepetitionService,
   ],

@@ -61,4 +61,57 @@ export class UserExerciseResultsRepository {
       ['userId', 'exerciseId'],
     );
   }
+
+  async getExercisesWithHighestErrorRate(
+    minAttempts: number,
+    limit: number,
+  ): Promise<
+    {
+      exerciseId: string;
+      question: string;
+      type: string;
+      totalAttempts: number;
+      incorrectCount: number;
+      errorRate: string;
+    }[]
+  > {
+    const stats: {
+      exerciseId: string;
+      exerciseQuestion: string;
+      exerciseType: string;
+      totalAttempts: string;
+      incorrectCount: string;
+      errorRate: string;
+    }[] = await this.repository
+      .createQueryBuilder('result')
+      .innerJoin('result.exercise', 'exercise')
+      .select('exercise.id', 'exerciseId')
+      .addSelect('exercise.question', 'exerciseQuestion')
+      .addSelect('exercise.exerciseType', 'exerciseType')
+      .addSelect('COUNT(*)', 'totalAttempts')
+      .addSelect(
+        'SUM(CASE WHEN result.isCorrect = false THEN 1 ELSE 0 END)',
+        'incorrectCount',
+      )
+      .addSelect(
+        'CAST(SUM(CASE WHEN result.isCorrect = false THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100',
+        'errorRate',
+      )
+      .groupBy('exercise.id')
+      .addGroupBy('exercise.question')
+      .addGroupBy('exercise.exerciseType')
+      .having('COUNT(*) >= :minAttempts', { minAttempts })
+      .orderBy('"errorRate"', 'DESC')
+      .limit(limit)
+      .getRawMany();
+
+    return stats.map((e) => ({
+      exerciseId: e.exerciseId,
+      question: e.exerciseQuestion,
+      type: e.exerciseType,
+      totalAttempts: parseInt(e.totalAttempts, 10),
+      incorrectCount: parseInt(e.incorrectCount, 10),
+      errorRate: parseFloat(e.errorRate).toFixed(2) + '%',
+    }));
+  }
 }
