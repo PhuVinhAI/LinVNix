@@ -1,5 +1,21 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { ContentsService } from '../application/contents.service';
 import { Public } from '../../../common/decorators';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
@@ -12,9 +28,10 @@ export class ContentsController {
 
   @Public()
   @Get('lesson/:lessonId')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy nội dung theo lesson',
-    description: 'Lấy tất cả nội dung học thuộc một lesson (text, audio, video, image)'
+    description:
+      'Lấy tất cả nội dung học thuộc một lesson (text, audio, video, image)',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -32,10 +49,10 @@ export class ContentsController {
           imageUrl: 'https://example.com/image.jpg',
           videoUrl: null,
           orderIndex: 1,
-          notes: 'Ghi chú thêm'
-        }
-      ]
-    }
+          notes: 'Ghi chú thêm',
+        },
+      ],
+    },
   })
   async findByLesson(@Param('lessonId') lessonId: string) {
     return this.contentsService.findByLessonId(lessonId);
@@ -43,9 +60,9 @@ export class ContentsController {
 
   @Public()
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy chi tiết nội dung',
-    description: 'Lấy thông tin chi tiết của một nội dung học'
+    description: 'Lấy thông tin chi tiết của một nội dung học',
   })
   @ApiParam({ name: 'id', description: 'ID của nội dung' })
   @ApiResponse({
@@ -59,9 +76,9 @@ export class ContentsController {
         translation: 'Hello! I am Minh.',
         phonetic: 'sin chao! toy la min',
         audioUrl: 'https://example.com/audio.mp3',
-        orderIndex: 1
-      }
-    }
+        orderIndex: 1,
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy nội dung' })
   async findOne(@Param('id') id: string) {
@@ -71,9 +88,9 @@ export class ContentsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Tạo nội dung mới',
-    description: 'Tạo nội dung học mới trong lesson - yêu cầu quyền Admin'
+    description: 'Tạo nội dung học mới trong lesson - yêu cầu quyền Admin',
   })
   @ApiBody({ type: CreateContentDto })
   @ApiResponse({ status: 201, description: 'Tạo nội dung thành công' })
@@ -85,30 +102,33 @@ export class ContentsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cập nhật nội dung',
-    description: 'Cập nhật thông tin nội dung - yêu cầu quyền Admin'
+    description: 'Cập nhật thông tin nội dung - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của nội dung' })
   @ApiBody({ type: CreateContentDto })
   @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy nội dung' })
-  async update(@Param('id') id: string, @Body() updateContentDto: Partial<CreateContentDto>) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateContentDto: Partial<CreateContentDto>,
+  ) {
     return this.contentsService.update(id, updateContentDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Xóa nội dung',
-    description: 'Xóa nội dung khỏi lesson - yêu cầu quyền Admin'
+    description: 'Xóa nội dung khỏi lesson - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của nội dung' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Xóa thành công',
-    schema: { example: { message: 'Content deleted successfully' } }
+    schema: { example: { message: 'Content deleted successfully' } },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy nội dung' })
   async remove(@Param('id') id: string) {

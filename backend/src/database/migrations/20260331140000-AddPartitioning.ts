@@ -4,7 +4,7 @@ export class AddPartitioning20260331140000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Note: PostgreSQL partitioning requires manual setup
     // This migration documents the partitioning strategy
-    
+
     // For user_exercise_results: Monthly partitioning
     await queryRunner.query(`
       -- Create partitioned table for user_exercise_results
@@ -64,9 +64,17 @@ export class AddPartitioning20260331140000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE IF EXISTS user_exercise_results_archive CASCADE`);
-    await queryRunner.query(`DROP TABLE IF EXISTS user_progress_archive CASCADE`);
-    await queryRunner.query(`DROP TABLE IF EXISTS user_exercise_results_partitioned CASCADE`);
-    await queryRunner.query(`DROP TABLE IF EXISTS user_progress_partitioned CASCADE`);
+    await queryRunner.query(
+      `DROP TABLE IF EXISTS user_exercise_results_archive CASCADE`,
+    );
+    await queryRunner.query(
+      `DROP TABLE IF EXISTS user_progress_archive CASCADE`,
+    );
+    await queryRunner.query(
+      `DROP TABLE IF EXISTS user_exercise_results_partitioned CASCADE`,
+    );
+    await queryRunner.query(
+      `DROP TABLE IF EXISTS user_progress_partitioned CASCADE`,
+    );
   }
 }

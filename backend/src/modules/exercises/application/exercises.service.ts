@@ -44,11 +44,11 @@ export class ExercisesService {
 
   /**
    * Submit answer for an exercise
-   * 
+   *
    * Wrapped in transaction to ensure atomicity:
    * - If saving result fails, nothing is committed
    * - Future: Can add vocabulary mastery update here
-   * 
+   *
    * @Transactional decorator ensures rollback on error
    */
   @Transactional()

@@ -23,11 +23,11 @@ export class UpdateUserDto {
   @IsOptional()
   avatarUrl?: string;
 
-  @ApiProperty({ 
-    enum: Dialect, 
+  @ApiProperty({
+    enum: Dialect,
     example: Dialect.NORTHERN,
     description: 'Preferred Vietnamese dialect for learning',
-    required: false 
+    required: false,
   })
   @IsEnum(Dialect)
   @IsOptional()

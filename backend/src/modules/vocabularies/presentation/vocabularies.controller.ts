@@ -1,8 +1,29 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, UseInterceptors, UploadedFile, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Query,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VocabulariesService } from '../application/vocabularies.service';
 import { UserVocabulariesService } from '../application/user-vocabularies.service';
+import { VocabularyReviewService } from '../application/vocabulary-review.service';
 import { StorageService } from '../../../infrastructure/storage/storage.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../../auth/guards/optional-jwt-auth.guard';
@@ -18,14 +39,16 @@ export class VocabulariesController {
   constructor(
     private readonly vocabulariesService: VocabulariesService,
     private readonly userVocabulariesService: UserVocabulariesService,
+    private readonly vocabularyReviewService: VocabularyReviewService,
     private readonly storageService: StorageService,
   ) {}
 
   @Public()
   @Get('search')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Tìm kiếm từ vựng',
-    description: 'Tìm kiếm từ vựng theo word, translation hoặc phonetic. Trả về tối đa 50 kết quả.'
+    description:
+      'Tìm kiếm từ vựng theo word, translation hoặc phonetic. Trả về tối đa 50 kết quả.',
   })
   @ApiResponse({
     status: 200,
@@ -37,10 +60,10 @@ export class VocabulariesController {
           word: 'xin chào',
           translation: 'hello',
           phonetic: 'sin chao',
-          partOfSpeech: 'PHRASE'
-        }
-      ]
-    }
+          partOfSpeech: 'PHRASE',
+        },
+      ],
+    },
   })
   async search(@Query('q') query: string) {
     return this.vocabulariesService.search(query);
@@ -49,9 +72,10 @@ export class VocabulariesController {
   @Public()
   @UseGuards(OptionalJwtAuthGuard)
   @Get('lesson/:lessonId')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy từ vựng theo lesson',
-    description: 'Lấy tất cả từ vựng thuộc một lesson. Nếu user đã đăng nhập, sẽ tự động áp dụng dialect preference của user.'
+    description:
+      'Lấy tất cả từ vựng thuộc một lesson. Nếu user đã đăng nhập, sẽ tự động áp dụng dialect preference của user.',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -71,10 +95,10 @@ export class VocabulariesController {
           imageUrl: 'https://example.com/image.jpg',
           difficultyLevel: 1,
           classifier: 'con',
-          region: 'SOUTHERN'
-        }
-      ]
-    }
+          region: 'SOUTHERN',
+        },
+      ],
+    },
   })
   async findByLesson(
     @Param('lessonId') lessonId: string,
@@ -93,9 +117,9 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Tạo từ vựng mới',
-    description: 'Tạo từ vựng mới trong lesson - yêu cầu quyền Admin'
+    description: 'Tạo từ vựng mới trong lesson - yêu cầu quyền Admin',
   })
   @ApiBody({ type: CreateVocabularyDto })
   @ApiResponse({ status: 201, description: 'Tạo từ vựng thành công' })
@@ -107,30 +131,33 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cập nhật từ vựng',
-    description: 'Cập nhật thông tin từ vựng - yêu cầu quyền Admin'
+    description: 'Cập nhật thông tin từ vựng - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của từ vựng' })
   @ApiBody({ type: CreateVocabularyDto })
   @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy từ vựng' })
-  async update(@Param('id') id: string, @Body() updateVocabularyDto: Partial<CreateVocabularyDto>) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateVocabularyDto: Partial<CreateVocabularyDto>,
+  ) {
     return this.vocabulariesService.update(id, updateVocabularyDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Xóa từ vựng',
-    description: 'Xóa từ vựng khỏi lesson - yêu cầu quyền Admin'
+    description: 'Xóa từ vựng khỏi lesson - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của từ vựng' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Xóa thành công',
-    schema: { example: { message: 'Vocabulary deleted successfully' } }
+    schema: { example: { message: 'Vocabulary deleted successfully' } },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy từ vựng' })
   async remove(@Param('id') id: string) {
@@ -140,9 +167,9 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':vocabularyId/learn')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Thêm từ vựng vào danh sách học',
-    description: 'Thêm từ vựng vào danh sách học của user để theo dõi tiến độ'
+    description: 'Thêm từ vựng vào danh sách học của user để theo dõi tiến độ',
   })
   @ApiParam({ name: 'vocabularyId', description: 'ID của từ vựng' })
   @ApiResponse({
@@ -155,23 +182,24 @@ export class VocabulariesController {
         userId: 'user-uuid',
         masteryLevel: 'NEW',
         reviewCount: 0,
-        nextReviewDate: '2024-01-02T00:00:00.000Z'
-      }
-    }
+        nextReviewDate: '2024-01-02T00:00:00.000Z',
+      },
+    },
   })
   async addToLearning(
     @CurrentUser() user: User,
     @Param('vocabularyId') vocabularyId: string,
   ) {
-    return this.userVocabulariesService.addVocabulary(user.id, vocabularyId);
+    return this.vocabularyReviewService.addVocabulary(user.id, vocabularyId);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('review/batch')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Ôn tập nhiều từ vựng cùng lúc',
-    description: 'Submit kết quả ôn tập cho nhiều từ vựng trong một request. Giúp giảm số lượng API calls khi học flashcard hàng loạt.'
+    description:
+      'Submit kết quả ôn tập cho nhiều từ vựng trong một request. Giúp giảm số lượng API calls khi học flashcard hàng loạt.',
   })
   @ApiBody({ type: BatchReviewDto })
   @ApiResponse({
@@ -186,21 +214,21 @@ export class VocabulariesController {
             id: 'uuid-1',
             vocabularyId: 'vocab-1',
             masteryLevel: 'LEARNING',
-            nextReviewAt: '2024-01-03T00:00:00.000Z'
-          }
-        ]
-      }
-    }
+            nextReviewAt: '2024-01-03T00:00:00.000Z',
+          },
+        ],
+      },
+    },
   })
   async batchReview(
     @CurrentUser() user: User,
     @Body() batchReviewDto: BatchReviewDto,
   ) {
-    const reviewDate = batchReviewDto.reviewDate 
-      ? new Date(batchReviewDto.reviewDate) 
+    const reviewDate = batchReviewDto.reviewDate
+      ? new Date(batchReviewDto.reviewDate)
       : undefined;
-    
-    const results = await this.userVocabulariesService.batchReview(
+
+    const results = await this.vocabularyReviewService.batchReview(
       user.id,
       batchReviewDto.reviews,
       reviewDate,
@@ -216,30 +244,32 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':vocabularyId/review')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Ôn tập từ vựng',
-    description: 'Ghi nhận kết quả ôn tập từ vựng và cập nhật lịch ôn tập theo thuật toán FSRS. Rating: 1=Again (quên hoàn toàn), 2=Hard (nhớ khó), 3=Good (nhớ đúng), 4=Easy (nhớ dễ dàng)'
+    description:
+      'Ghi nhận kết quả ôn tập từ vựng và cập nhật lịch ôn tập theo thuật toán FSRS. Rating: 1=Again (quên hoàn toàn), 2=Hard (nhớ khó), 3=Good (nhớ đúng), 4=Easy (nhớ dễ dàng)',
   })
   @ApiParam({ name: 'vocabularyId', description: 'ID của từ vựng' })
   @ApiBody({
     schema: {
       example: {
         rating: 3,
-        reviewDate: '2024-01-01T00:00:00.000Z'
+        reviewDate: '2024-01-01T00:00:00.000Z',
       },
       properties: {
         rating: {
           type: 'number',
           enum: [1, 2, 3, 4],
-          description: '1=Again (forgot), 2=Hard, 3=Good, 4=Easy'
+          description: '1=Again (forgot), 2=Hard, 3=Good, 4=Easy',
         },
         reviewDate: {
           type: 'string',
           format: 'date-time',
-          description: 'Optional: Custom review date for testing time-based scenarios'
-        }
-      }
-    }
+          description:
+            'Optional: Custom review date for testing time-based scenarios',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 200,
@@ -253,9 +283,9 @@ export class VocabulariesController {
         lastReviewedAt: '2024-01-01T00:00:00.000Z',
         stability: 2.5,
         difficulty: 5.2,
-        scheduledDays: 3
-      }
-    }
+        scheduledDays: 3,
+      },
+    },
   })
   async reviewVocabulary(
     @CurrentUser() user: User,
@@ -263,7 +293,7 @@ export class VocabulariesController {
     @Body() body: { rating: number; reviewDate?: string },
   ) {
     const reviewDate = body.reviewDate ? new Date(body.reviewDate) : undefined;
-    return this.userVocabulariesService.reviewVocabulary(
+    return this.vocabularyReviewService.reviewVocabulary(
       user.id,
       vocabularyId,
       body.rating,
@@ -274,9 +304,9 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('my-vocabularies')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy danh sách từ vựng đã học',
-    description: 'Lấy tất cả từ vựng mà user đã thêm vào danh sách học'
+    description: 'Lấy tất cả từ vựng mà user đã thêm vào danh sách học',
   })
   @ApiResponse({
     status: 200,
@@ -287,14 +317,14 @@ export class VocabulariesController {
           id: 'uuid-string',
           vocabulary: {
             word: 'xin chào',
-            translation: 'hello'
+            translation: 'hello',
           },
           masteryLevel: 'LEARNING',
           reviewCount: 3,
-          nextReviewDate: '2024-01-05T00:00:00.000Z'
-        }
-      ]
-    }
+          nextReviewDate: '2024-01-05T00:00:00.000Z',
+        },
+      ],
+    },
   })
   async getMyVocabularies(@CurrentUser() user: User) {
     return this.userVocabulariesService.getUserVocabularies(user.id);
@@ -303,9 +333,10 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('due-review')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy từ vựng cần ôn tập',
-    description: 'Lấy danh sách từ vựng đến hạn ôn tập theo lịch spaced repetition'
+    description:
+      'Lấy danh sách từ vựng đến hạn ôn tập theo lịch spaced repetition',
   })
   @ApiResponse({
     status: 200,
@@ -317,13 +348,13 @@ export class VocabulariesController {
           vocabulary: {
             word: 'xin chào',
             translation: 'hello',
-            audioUrl: 'https://example.com/audio.mp3'
+            audioUrl: 'https://example.com/audio.mp3',
           },
           masteryLevel: 'LEARNING',
-          nextReviewDate: '2024-01-01T00:00:00.000Z'
-        }
-      ]
-    }
+          nextReviewDate: '2024-01-01T00:00:00.000Z',
+        },
+      ],
+    },
   })
   async getDueForReview(@CurrentUser() user: User) {
     return this.userVocabulariesService.getDueForReview(user.id);
@@ -332,9 +363,9 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('upload-audio')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Upload audio cho từ vựng',
-    description: 'Upload file audio phát âm cho từ vựng'
+    description: 'Upload file audio phát âm cho từ vựng',
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -344,10 +375,10 @@ export class VocabulariesController {
         file: {
           type: 'string',
           format: 'binary',
-          description: 'File audio (mp3, wav, ogg)'
-        }
-      }
-    }
+          description: 'File audio (mp3, wav, ogg)',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 201,
@@ -355,9 +386,9 @@ export class VocabulariesController {
     schema: {
       example: {
         url: 'https://example.com/audio/filename.mp3',
-        filename: 'filename.mp3'
-      }
-    }
+        filename: 'filename.mp3',
+      },
+    },
   })
   @UseInterceptors(FileInterceptor('file'))
   async uploadAudio(@UploadedFile() file: Express.Multer.File) {
@@ -374,9 +405,9 @@ export class VocabulariesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('upload-image')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Upload hình ảnh cho từ vựng',
-    description: 'Upload file hình ảnh minh họa cho từ vựng'
+    description: 'Upload file hình ảnh minh họa cho từ vựng',
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -386,10 +417,10 @@ export class VocabulariesController {
         file: {
           type: 'string',
           format: 'binary',
-          description: 'File hình ảnh (jpg, png, webp)'
-        }
-      }
-    }
+          description: 'File hình ảnh (jpg, png, webp)',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 201,
@@ -397,9 +428,9 @@ export class VocabulariesController {
     schema: {
       example: {
         url: 'https://example.com/images/filename.jpg',
-        filename: 'filename.jpg'
-      }
-    }
+        filename: 'filename.jpg',
+      },
+    },
   })
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {

@@ -29,6 +29,8 @@ export class AddVocabularySearchIndex20260331102600 implements MigrationInterfac
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP INDEX IF EXISTS idx_vocabularies_search`);
     await queryRunner.query(`DROP INDEX IF EXISTS idx_vocabularies_word`);
-    await queryRunner.query(`DROP INDEX IF EXISTS idx_vocabularies_translation`);
+    await queryRunner.query(
+      `DROP INDEX IF EXISTS idx_vocabularies_translation`,
+    );
   }
 }

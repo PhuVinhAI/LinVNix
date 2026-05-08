@@ -71,10 +71,7 @@ export class StorageService {
    * @param originalName Original filename
    * @returns Uploaded file info
    */
-  async uploadAudio(
-    file: Buffer,
-    originalName: string,
-  ): Promise<UploadedFile> {
+  async uploadAudio(file: Buffer, originalName: string): Promise<UploadedFile> {
     const audioDir = path.join(this.uploadDir, 'audio');
     await fs.mkdir(audioDir, { recursive: true });
 
@@ -100,10 +97,7 @@ export class StorageService {
    * @param originalName Original filename
    * @returns Uploaded file info
    */
-  async uploadImage(
-    file: Buffer,
-    originalName: string,
-  ): Promise<UploadedFile> {
+  async uploadImage(file: Buffer, originalName: string): Promise<UploadedFile> {
     const imageDir = path.join(this.uploadDir, 'images');
     await fs.mkdir(imageDir, { recursive: true });
 
@@ -129,7 +123,7 @@ export class StorageService {
    */
   async deleteFile(filename: string): Promise<void> {
     const filePath = path.join(this.uploadDir, filename);
-    
+
     try {
       await fs.unlink(filePath);
       this.logger.log(`File deleted: ${filename}`);
@@ -146,7 +140,7 @@ export class StorageService {
    */
   async getFileInfo(filename: string): Promise<any> {
     const filePath = path.join(this.uploadDir, filename);
-    
+
     try {
       const stats = await fs.stat(filePath);
       return {
@@ -167,7 +161,7 @@ export class StorageService {
    */
   async fileExists(filename: string): Promise<boolean> {
     const filePath = path.join(this.uploadDir, filename);
-    
+
     try {
       await fs.access(filePath);
       return true;

@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -38,16 +43,20 @@ export class AuthService {
     private roleRepository: Repository<Role>,
   ) {}
 
-  async register(registerDto: RegisterDto, userAgent?: string, ipAddress?: string) {
+  async register(
+    registerDto: RegisterDto,
+    userAgent?: string,
+    ipAddress?: string,
+  ) {
     try {
       // Tạo user mới
       const user = await this.usersService.create(registerDto);
-      
+
       // Assign USER role mặc định
       const userRole = await this.roleRepository.findOne({
         where: { name: RoleEnum.USER },
       });
-      
+
       if (userRole) {
         // Không dùng update, dùng save trực tiếp
         user.roles = [userRole];
@@ -55,8 +64,10 @@ export class AuthService {
       }
 
       // Tạo verification token
-      const verificationToken = await this.createEmailVerificationToken(user.id);
-      
+      const verificationToken = await this.createEmailVerificationToken(
+        user.id,
+      );
+
       // Gửi email xác thực
       await this.emailQueueService.sendVerificationEmail(
         user.email,
@@ -64,19 +75,22 @@ export class AuthService {
         verificationToken.token,
       );
 
-      const tokens = await this.generateTokens(user.id, user.email, userAgent, ipAddress);
-      
-      this.loggingService.log(
-        `User registered: ${user.email}`,
-        'AuthService',
+      const tokens = await this.generateTokens(
+        user.id,
+        user.email,
+        userAgent,
+        ipAddress,
       );
-      
+
+      this.loggingService.log(`User registered: ${user.email}`, 'AuthService');
+
       return {
         user,
         access_token: tokens.accessToken,
         refresh_token: tokens.refreshToken,
         expires_in: 900, // 15 minutes in seconds
-        message: 'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.',
+        message:
+          'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.',
       };
     } catch (error) {
       this.loggingService.error(
@@ -112,13 +126,15 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      const tokens = await this.generateTokens(user.id, user.email, userAgent, ipAddress);
-      
-      this.loggingService.log(
-        `User logged in: ${user.email}`,
-        'AuthService',
+      const tokens = await this.generateTokens(
+        user.id,
+        user.email,
+        userAgent,
+        ipAddress,
       );
-      
+
+      this.loggingService.log(`User logged in: ${user.email}`, 'AuthService');
+
       return {
         user,
         access_token: tokens.accessToken,
@@ -140,10 +156,11 @@ export class AuthService {
   async verifyEmail(verifyEmailDto: VerifyEmailDto) {
     const { token } = verifyEmailDto;
 
-    const verificationToken = await this.emailVerificationTokenRepository.findOne({
-      where: { token, verifiedAt: null as any },
-      relations: ['user'],
-    });
+    const verificationToken =
+      await this.emailVerificationTokenRepository.findOne({
+        where: { token, verifiedAt: null as any },
+        relations: ['user'],
+      });
 
     if (!verificationToken) {
       throw new BadRequestException('Token không hợp lệ hoặc đã được sử dụng');
@@ -259,7 +276,7 @@ export class AuthService {
 
   async resendVerificationEmail(email: string) {
     const user = await this.usersService.findByEmail(email);
-    
+
     if (!user) {
       throw new NotFoundException('User không tồn tại');
     }
@@ -289,7 +306,9 @@ export class AuthService {
     };
   }
 
-  private async createEmailVerificationToken(userId: string): Promise<EmailVerificationToken> {
+  private async createEmailVerificationToken(
+    userId: string,
+  ): Promise<EmailVerificationToken> {
     const token = randomBytes(32).toString('hex');
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 24); // 24 giờ
@@ -303,7 +322,9 @@ export class AuthService {
     return this.emailVerificationTokenRepository.save(verificationToken);
   }
 
-  private async createPasswordResetToken(userId: string): Promise<PasswordResetToken> {
+  private async createPasswordResetToken(
+    userId: string,
+  ): Promise<PasswordResetToken> {
     const token = randomBytes(32).toString('hex');
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 1); // 1 giờ
@@ -331,15 +352,17 @@ export class AuthService {
     const payload = { sub: userId, email };
 
     // Generate access token (short-lived)
-    const expiresIn = this.configService.get<string>('jwt.accessTokenExpiresIn') || '15m';
+    const expiresIn =
+      this.configService.get<string>('jwt.accessTokenExpiresIn') || '15m';
     const accessToken = this.jwtService.sign(payload, {
       expiresIn,
     } as any);
 
     // Generate refresh token (long-lived)
     const refreshTokenValue = randomBytes(64).toString('hex');
-    const refreshTokenExpiresIn = this.configService.get<string>('jwt.refreshTokenExpiresIn') || '7d';
-    
+    const refreshTokenExpiresIn =
+      this.configService.get<string>('jwt.refreshTokenExpiresIn') || '7d';
+
     // Calculate expiration date
     const expiresAt = new Date();
     const days = parseInt(refreshTokenExpiresIn.replace('d', ''));
@@ -365,7 +388,7 @@ export class AuthService {
   // Cleanup expired tokens (có thể chạy bằng cron job)
   async cleanupExpiredTokens() {
     const now = new Date();
-    
+
     await this.emailVerificationTokenRepository.delete({
       expiresAt: LessThan(now),
     });
@@ -387,8 +410,10 @@ export class AuthService {
     const { googleId, email, fullName, avatarUrl, provider } = oauthUser;
 
     // Tìm user theo googleId hoặc email
-    let user = googleId ? await this.usersService.findByGoogleId(googleId) : null;
-    
+    let user = googleId
+      ? await this.usersService.findByGoogleId(googleId)
+      : null;
+
     if (!user) {
       user = await this.usersService.findByEmail(email);
     }
@@ -422,14 +447,17 @@ export class AuthService {
     const userRole = await this.roleRepository.findOne({
       where: { name: RoleEnum.USER },
     });
-    
+
     if (userRole) {
       newUser.roles = [userRole];
       await this.usersService.save(newUser);
     }
 
     // Gửi welcome email
-    await this.emailQueueService.sendWelcomeEmail(newUser.email, newUser.fullName);
+    await this.emailQueueService.sendWelcomeEmail(
+      newUser.email,
+      newUser.fullName,
+    );
 
     this.loggingService.log(
       `New OAuth user created: ${newUser.email}`,
@@ -441,12 +469,12 @@ export class AuthService {
 
   async loginWithGoogle(user: any) {
     const token = this.generateToken(user.id, user.email);
-    
+
     this.loggingService.log(
       `User logged in via Google: ${user.email}`,
       'AuthService',
     );
-    
+
     return {
       user,
       access_token: token,

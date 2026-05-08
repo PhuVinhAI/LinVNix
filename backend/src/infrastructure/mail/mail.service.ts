@@ -67,10 +67,7 @@ export class MailService {
         },
       });
 
-      this.loggingService.log(
-        `Welcome email sent to: ${email}`,
-        'MailService',
-      );
+      this.loggingService.log(`Welcome email sent to: ${email}`, 'MailService');
     } catch (error) {
       this.loggingService.error(
         `Failed to send welcome email to: ${email}`,

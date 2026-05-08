@@ -1,4 +1,11 @@
-import { IsString, IsEnum, IsNumber, IsBoolean, IsOptional, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsNumber,
+  IsBoolean,
+  IsOptional,
+  IsUrl,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserLevel } from '../../../../common/enums';
 
@@ -24,7 +31,10 @@ export class CreateCourseDto {
   @IsOptional()
   isPublished?: boolean;
 
-  @ApiProperty({ example: 'https://example.com/thumbnail.jpg', required: false })
+  @ApiProperty({
+    example: 'https://example.com/thumbnail.jpg',
+    required: false,
+  })
   @IsUrl()
   @IsOptional()
   thumbnailUrl?: string;

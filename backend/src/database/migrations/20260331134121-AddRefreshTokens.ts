@@ -1,4 +1,10 @@
-import { MigrationInterface, QueryRunner, Table, TableIndex, TableForeignKey } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableIndex,
+  TableForeignKey,
+} from 'typeorm';
 
 export class AddRefreshTokens20260331134121 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -115,8 +121,14 @@ export class AddRefreshTokens20260331134121 implements MigrationInterface {
     }
 
     // Drop indexes
-    await queryRunner.dropIndex('refresh_tokens', 'IDX_refresh_tokens_expires_at');
-    await queryRunner.dropIndex('refresh_tokens', 'IDX_refresh_tokens_user_revoked');
+    await queryRunner.dropIndex(
+      'refresh_tokens',
+      'IDX_refresh_tokens_expires_at',
+    );
+    await queryRunner.dropIndex(
+      'refresh_tokens',
+      'IDX_refresh_tokens_user_revoked',
+    );
     await queryRunner.dropIndex('refresh_tokens', 'IDX_refresh_tokens_token');
 
     // Drop table

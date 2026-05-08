@@ -10,9 +10,7 @@ export class UserExerciseResultsRepository {
     private readonly repository: Repository<UserExerciseResult>,
   ) {}
 
-  async create(
-    data: Partial<UserExerciseResult>,
-  ): Promise<UserExerciseResult> {
+  async create(data: Partial<UserExerciseResult>): Promise<UserExerciseResult> {
     const result = this.repository.create(data);
     return this.repository.save(result);
   }
@@ -44,7 +42,8 @@ export class UserExerciseResultsRepository {
     const totalExercises = results.length;
     const correctAnswers = results.filter((r) => r.isCorrect).length;
     const incorrectAnswers = totalExercises - correctAnswers;
-    const accuracy = totalExercises > 0 ? (correctAnswers / totalExercises) * 100 : 0;
+    const accuracy =
+      totalExercises > 0 ? (correctAnswers / totalExercises) * 100 : 0;
 
     return { totalExercises, correctAnswers, incorrectAnswers, accuracy };
   }

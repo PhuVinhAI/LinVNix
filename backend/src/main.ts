@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
-  
+
   const configService = app.get(ConfigService);
   const loggingService = app.get(LoggingService);
 
@@ -52,8 +52,14 @@ async function bootstrap() {
 
   const port = configService.get<number>('app.port') || 3000;
   await app.listen(port);
-  
-  loggingService.log(`🚀 Application is running on: http://localhost:${port}`, 'Bootstrap');
-  loggingService.log(`📚 Swagger docs: http://localhost:${port}/api/docs`, 'Bootstrap');
+
+  loggingService.log(
+    `🚀 Application is running on: http://localhost:${port}`,
+    'Bootstrap',
+  );
+  loggingService.log(
+    `📚 Swagger docs: http://localhost:${port}/api/docs`,
+    'Bootstrap',
+  );
 }
 bootstrap();

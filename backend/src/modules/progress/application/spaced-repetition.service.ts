@@ -3,13 +3,13 @@ import { FSRSService, Rating, Card, State } from './fsrs.service';
 
 /**
  * Spaced Repetition Service using FSRS Algorithm
- * 
+ *
  * FSRS (Free Spaced Repetition Scheduler) là thuật toán hiện đại được Anki sử dụng.
  * Ưu điểm:
  * - Cá nhân hóa cao dựa trên performance của từng user
  * - Tính toán retention probability chính xác
  * - Tối ưu hóa cho long-term memory retention
- * 
+ *
  * Thay thế fixed intervals cũ [1, 3, 7, 14, 30] bằng dynamic scheduling.
  */
 @Injectable()
@@ -33,7 +33,11 @@ export class SpacedRepetitionService {
    * @param reviewDate Date of review (for time simulation)
    * @returns Updated card with next review date
    */
-  calculateNextReviewWithDate(currentCard: Card, rating: Rating, reviewDate: Date): Card {
+  calculateNextReviewWithDate(
+    currentCard: Card,
+    rating: Rating,
+    reviewDate: Date,
+  ): Card {
     const schedulingInfo = this.fsrsService.repeat(currentCard, reviewDate);
     return schedulingInfo[rating].card;
   }
@@ -78,7 +82,7 @@ export class SpacedRepetitionService {
   getSchedulingOptions(currentCard: Card): Record<Rating, Card> {
     const now = new Date();
     const schedulingInfo = this.fsrsService.repeat(currentCard, now);
-    
+
     return {
       [Rating.Again]: schedulingInfo[Rating.Again].card,
       [Rating.Hard]: schedulingInfo[Rating.Hard].card,
@@ -95,7 +99,7 @@ export class SpacedRepetitionService {
     if (card.state === State.New || card.state === State.Learning) {
       return 'learning';
     }
-    
+
     // Relearning (forgot previously learned)
     if (card.state === State.Relearning) {
       return 'learning';
@@ -107,7 +111,7 @@ export class SpacedRepetitionService {
     } else if (card.stability >= 21) {
       return 'familiar'; // Stable memory (3+ weeks)
     }
-    
+
     return 'learning';
   }
 

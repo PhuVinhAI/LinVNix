@@ -26,7 +26,10 @@ export class ContentsRepository {
     return this.repository.findOne({ where: { id } });
   }
 
-  async update(id: string, data: Partial<LessonContent>): Promise<LessonContent> {
+  async update(
+    id: string,
+    data: Partial<LessonContent>,
+  ): Promise<LessonContent> {
     await this.repository.update(id, data);
     const content = await this.findById(id);
     if (!content) {

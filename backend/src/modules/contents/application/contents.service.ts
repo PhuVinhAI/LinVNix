@@ -22,7 +22,10 @@ export class ContentsService {
     return content;
   }
 
-  async update(id: string, data: Partial<LessonContent>): Promise<LessonContent> {
+  async update(
+    id: string,
+    data: Partial<LessonContent>,
+  ): Promise<LessonContent> {
     await this.findById(id);
     return this.contentsRepository.update(id, data);
   }

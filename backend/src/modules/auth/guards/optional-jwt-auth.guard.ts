@@ -5,14 +5,14 @@ import { IS_PUBLIC_KEY } from '../../../common/decorators';
 
 /**
  * Optional JWT Auth Guard
- * 
+ *
  * Cho phép request có hoặc không có token:
  * - Nếu có token hợp lệ → gán req.user
  * - Nếu không có token hoặc token invalid → req.user = undefined, không throw error
- * 
+ *
  * Use case: Endpoint public nhưng muốn customize response dựa trên user context
  * Ví dụ: GET /vocabularies/lesson/:id - trả về dialect preference nếu user đăng nhập
- * 
+ *
  * IMPORTANT: Endpoint sử dụng guard này PHẢI có @Public() decorator để skip global JwtAuthGuard
  */
 @Injectable()
@@ -30,7 +30,9 @@ export class OptionalJwtAuthGuard extends AuthGuard('jwt') {
 
     // This guard should only be used on @Public() endpoints
     if (!isPublic) {
-      console.warn('OptionalJwtAuthGuard used without @Public() decorator - this may cause issues');
+      console.warn(
+        'OptionalJwtAuthGuard used without @Public() decorator - this may cause issues',
+      );
     }
 
     try {

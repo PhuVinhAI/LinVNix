@@ -1,5 +1,21 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { GrammarService } from '../application/grammar.service';
 import { Public } from '../../../common/decorators';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
@@ -12,9 +28,9 @@ export class GrammarController {
 
   @Public()
   @Get('lesson/:lessonId')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy ngữ pháp theo lesson',
-    description: 'Lấy tất cả quy tắc ngữ pháp thuộc một lesson'
+    description: 'Lấy tất cả quy tắc ngữ pháp thuộc một lesson',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -29,13 +45,13 @@ export class GrammarController {
           structure: 'Chủ ngữ + là + Danh từ',
           examples: [
             { vi: 'Tôi là sinh viên', en: 'I am a student' },
-            { vi: 'Anh ấy là giáo viên', en: 'He is a teacher' }
+            { vi: 'Anh ấy là giáo viên', en: 'He is a teacher' },
           ],
           notes: 'Lưu ý đặc biệt',
-          difficultyLevel: 1
-        }
-      ]
-    }
+          difficultyLevel: 1,
+        },
+      ],
+    },
   })
   async findByLesson(@Param('lessonId') lessonId: string) {
     return this.grammarService.findByLessonId(lessonId);
@@ -43,9 +59,9 @@ export class GrammarController {
 
   @Public()
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy chi tiết ngữ pháp',
-    description: 'Lấy thông tin chi tiết của một quy tắc ngữ pháp'
+    description: 'Lấy thông tin chi tiết của một quy tắc ngữ pháp',
   })
   @ApiParam({ name: 'id', description: 'ID của ngữ pháp' })
   @ApiResponse({
@@ -58,12 +74,12 @@ export class GrammarController {
         explanation: '"Là" dùng để nối chủ ngữ với danh từ/tính từ',
         structure: 'Chủ ngữ + là + Danh từ',
         examples: [
-          { vi: 'Tôi là sinh viên', en: 'I am a student', note: 'Câu cơ bản' }
+          { vi: 'Tôi là sinh viên', en: 'I am a student', note: 'Câu cơ bản' },
         ],
         notes: 'Lưu ý đặc biệt',
-        difficultyLevel: 1
-      }
-    }
+        difficultyLevel: 1,
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy ngữ pháp' })
   async findOne(@Param('id') id: string) {
@@ -73,9 +89,9 @@ export class GrammarController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Tạo ngữ pháp mới',
-    description: 'Tạo quy tắc ngữ pháp mới trong lesson - yêu cầu quyền Admin'
+    description: 'Tạo quy tắc ngữ pháp mới trong lesson - yêu cầu quyền Admin',
   })
   @ApiBody({ type: CreateGrammarDto })
   @ApiResponse({ status: 201, description: 'Tạo ngữ pháp thành công' })
@@ -87,30 +103,33 @@ export class GrammarController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cập nhật ngữ pháp',
-    description: 'Cập nhật thông tin ngữ pháp - yêu cầu quyền Admin'
+    description: 'Cập nhật thông tin ngữ pháp - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của ngữ pháp' })
   @ApiBody({ type: CreateGrammarDto })
   @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy ngữ pháp' })
-  async update(@Param('id') id: string, @Body() updateGrammarDto: Partial<CreateGrammarDto>) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateGrammarDto: Partial<CreateGrammarDto>,
+  ) {
     return this.grammarService.update(id, updateGrammarDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Xóa ngữ pháp',
-    description: 'Xóa quy tắc ngữ pháp khỏi lesson - yêu cầu quyền Admin'
+    description: 'Xóa quy tắc ngữ pháp khỏi lesson - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của ngữ pháp' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Xóa thành công',
-    schema: { example: { message: 'Grammar deleted successfully' } }
+    schema: { example: { message: 'Grammar deleted successfully' } },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy ngữ pháp' })
   async remove(@Param('id') id: string) {
