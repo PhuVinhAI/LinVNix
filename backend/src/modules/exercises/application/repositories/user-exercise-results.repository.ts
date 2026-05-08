@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { UserExerciseResult } from '../../domain/user-exercise-result.entity';
 
 @Injectable()
@@ -46,5 +46,19 @@ export class UserExerciseResultsRepository {
       totalExercises > 0 ? (correctAnswers / totalExercises) * 100 : 0;
 
     return { totalExercises, correctAnswers, incorrectAnswers, accuracy };
+  }
+
+  async upsertResult(
+    manager: EntityManager,
+    userId: string,
+    exerciseId: string,
+    score: number,
+    isCorrect: boolean,
+  ): Promise<void> {
+    await manager.upsert(
+      UserExerciseResult,
+      { userId, exerciseId, score, isCorrect },
+      ['userId', 'exerciseId'],
+    );
   }
 }

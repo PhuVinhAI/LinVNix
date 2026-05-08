@@ -1,13 +1,17 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 
 @Entity('user_exercise_results')
+@Unique('UQ_user_exercise', ['userId', 'exerciseId'])
 export class UserExerciseResult extends BaseEntity {
-  @Column({ type: 'jsonb', name: 'user_answer' })
+  @Column({ type: 'jsonb', name: 'user_answer', nullable: true })
   userAnswer: any;
 
   @Column({ name: 'is_correct' })
   isCorrect: boolean;
+
+  @Column({ type: 'int', default: 0 })
+  score: number;
 
   @Column({ name: 'attempted_at' })
   attemptedAt: Date;
