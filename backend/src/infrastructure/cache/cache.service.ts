@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
@@ -6,7 +11,8 @@ import Redis from 'ioredis';
 export class CacheService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(CacheService.name);
   private redisClient: Redis;
-  private fallbackCache: Map<string, { value: any; expiry: number }> = new Map();
+  private fallbackCache: Map<string, { value: any; expiry: number }> =
+    new Map();
   private useRedis: boolean = false;
 
   constructor(private configService: ConfigService) {}
@@ -14,7 +20,7 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     try {
       const redisConfig = this.configService.get('redis');
-      
+
       this.redisClient = new Redis({
         host: redisConfig.host,
         port: redisConfig.port,
@@ -88,7 +94,7 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
     try {
       if (this.useRedis && this.redisClient) {
         const cached = await this.redisClient.get(key);
-        
+
         if (!cached) {
           this.logger.debug(`Redis cache miss: ${key}`);
           return null;
@@ -98,7 +104,7 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
         return JSON.parse(cached) as T;
       } else {
         const cached = this.fallbackCache.get(key);
-        
+
         if (!cached) {
           this.logger.debug(`Memory cache miss: ${key}`);
           return null;
@@ -166,12 +172,12 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
       } else {
         const cached = this.fallbackCache.get(key);
         if (!cached) return false;
-        
+
         if (Date.now() > cached.expiry) {
           this.fallbackCache.delete(key);
           return false;
         }
-        
+
         return true;
       }
     } catch (error) {
@@ -192,7 +198,7 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
     ttl: number = 3600,
   ): Promise<T> {
     const cached = await this.get<T>(key);
-    
+
     if (cached !== null) {
       return cached;
     }
@@ -212,7 +218,9 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
         const keys = await this.redisClient.keys(pattern);
         if (keys.length > 0) {
           await this.redisClient.del(...keys);
-          this.logger.log(`Redis invalidated ${keys.length} keys matching: ${pattern}`);
+          this.logger.log(
+            `Redis invalidated ${keys.length} keys matching: ${pattern}`,
+          );
         }
       } else {
         const regex = new RegExp(pattern.replace('*', '.*'));
@@ -225,7 +233,9 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
         }
 
         keysToDelete.forEach((key) => this.fallbackCache.delete(key));
-        this.logger.log(`Memory invalidated ${keysToDelete.length} keys matching: ${pattern}`);
+        this.logger.log(
+          `Memory invalidated ${keysToDelete.length} keys matching: ${pattern}`,
+        );
       }
     } catch (error) {
       this.logger.error(`Cache invalidate pattern error: ${error.message}`);

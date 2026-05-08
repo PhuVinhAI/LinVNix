@@ -1,5 +1,21 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { LessonsService } from '../application/lessons.service';
 import { Public } from '../../../common/decorators';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
@@ -12,9 +28,9 @@ export class LessonsController {
 
   @Public()
   @Get('unit/:unitId')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy danh sách lessons theo unit',
-    description: 'Lấy tất cả lessons thuộc một unit'
+    description: 'Lấy tất cả lessons thuộc một unit',
   })
   @ApiParam({ name: 'unitId', description: 'ID của unit' })
   @ApiResponse({
@@ -28,10 +44,10 @@ export class LessonsController {
           description: 'Học các từ vựng cơ bản về chào hỏi',
           lessonType: 'VOCABULARY',
           orderIndex: 1,
-          estimatedDuration: 30
-        }
-      ]
-    }
+          estimatedDuration: 30,
+        },
+      ],
+    },
   })
   async findByUnit(@Param('unitId') unitId: string) {
     return this.lessonsService.findByUnitId(unitId);
@@ -39,9 +55,10 @@ export class LessonsController {
 
   @Public()
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy chi tiết lesson với nội dung đầy đủ',
-    description: 'Lấy thông tin chi tiết lesson bao gồm contents, vocabularies, grammar, exercises'
+    description:
+      'Lấy thông tin chi tiết lesson bao gồm contents, vocabularies, grammar, exercises',
   })
   @ApiParam({ name: 'id', description: 'ID của lesson' })
   @ApiResponse({
@@ -58,9 +75,9 @@ export class LessonsController {
         contents: [],
         vocabularies: [],
         grammarRules: [],
-        exercises: []
-      }
-    }
+        exercises: [],
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy lesson' })
   async findOne(@Param('id') id: string) {
@@ -70,9 +87,9 @@ export class LessonsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Tạo lesson mới',
-    description: 'Tạo lesson mới trong unit - yêu cầu quyền Admin'
+    description: 'Tạo lesson mới trong unit - yêu cầu quyền Admin',
   })
   @ApiBody({ type: CreateLessonDto })
   @ApiResponse({ status: 201, description: 'Tạo lesson thành công' })
@@ -84,30 +101,33 @@ export class LessonsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cập nhật lesson',
-    description: 'Cập nhật thông tin lesson - yêu cầu quyền Admin'
+    description: 'Cập nhật thông tin lesson - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của lesson' })
   @ApiBody({ type: CreateLessonDto })
   @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy lesson' })
-  async update(@Param('id') id: string, @Body() updateLessonDto: Partial<CreateLessonDto>) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateLessonDto: Partial<CreateLessonDto>,
+  ) {
     return this.lessonsService.update(id, updateLessonDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Xóa lesson',
-    description: 'Xóa lesson khỏi unit - yêu cầu quyền Admin'
+    description: 'Xóa lesson khỏi unit - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của lesson' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Xóa thành công',
-    schema: { example: { message: 'Lesson deleted successfully' } }
+    schema: { example: { message: 'Lesson deleted successfully' } },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy lesson' })
   async remove(@Param('id') id: string) {

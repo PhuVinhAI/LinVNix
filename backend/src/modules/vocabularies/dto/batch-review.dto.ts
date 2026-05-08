@@ -1,4 +1,13 @@
-import { IsArray, ValidateNested, IsNumber, Min, Max, IsString, IsOptional, IsDateString } from 'class-validator';
+import {
+  IsArray,
+  ValidateNested,
+  IsNumber,
+  Min,
+  Max,
+  IsString,
+  IsOptional,
+  IsDateString,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -7,10 +16,10 @@ export class ReviewItemDto {
   @IsString()
   vocabularyId: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Đánh giá: 1=Again (quên), 2=Hard, 3=Good, 4=Easy',
     minimum: 1,
-    maximum: 4
+    maximum: 4,
   })
   @IsNumber()
   @Min(1)
@@ -19,18 +28,18 @@ export class ReviewItemDto {
 }
 
 export class BatchReviewDto {
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Danh sách các review',
-    type: [ReviewItemDto]
+    type: [ReviewItemDto],
   })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ReviewItemDto)
   reviews: ReviewItemDto[];
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Thời điểm review (optional, dùng cho testing)',
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsDateString()

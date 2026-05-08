@@ -33,8 +33,10 @@ import { RbacService } from './application/rbac.service';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        const secret = configService.get<string>('jwt.secret') || 'default-secret';
-        const expiresIn = configService.get<string>('jwt.accessTokenExpiresIn') || '15m';
+        const secret =
+          configService.get<string>('jwt.secret') || 'default-secret';
+        const expiresIn =
+          configService.get<string>('jwt.accessTokenExpiresIn') || '15m';
         return {
           secret,
           signOptions: { expiresIn } as any,
@@ -44,7 +46,14 @@ import { RbacService } from './application/rbac.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, RbacService, JwtAuthGuard, OptionalJwtAuthGuard],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    RbacService,
+    JwtAuthGuard,
+    OptionalJwtAuthGuard,
+  ],
   exports: [AuthService, RbacService, JwtAuthGuard, OptionalJwtAuthGuard],
 })
 export class AuthModule {}

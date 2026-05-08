@@ -1,4 +1,11 @@
-import { IsString, IsEnum, IsNumber, IsUUID, IsOptional, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsNumber,
+  IsUUID,
+  IsOptional,
+  IsUrl,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ContentType } from '../../../common/enums';
 

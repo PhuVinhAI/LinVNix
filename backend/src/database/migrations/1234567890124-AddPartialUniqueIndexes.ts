@@ -2,13 +2,11 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
  * Migration để fix vấn đề Soft Delete + Unique Constraint
- * 
+ *
  * Vấn đề: Khi user bị soft-delete, email vẫn bị unique constraint
  * Giải pháp: Dùng Partial Index - chỉ unique khi deleted_at IS NULL
  */
-export class AddPartialUniqueIndexes1234567890124
-  implements MigrationInterface
-{
+export class AddPartialUniqueIndexes1234567890124 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Drop existing unique constraints
     await queryRunner.query(
@@ -19,12 +17,8 @@ export class AddPartialUniqueIndexes1234567890124
     );
 
     // Drop existing unique indexes nếu có
-    await queryRunner.query(
-      `DROP INDEX IF EXISTS "IDX_users_email"`,
-    );
-    await queryRunner.query(
-      `DROP INDEX IF EXISTS "IDX_users_google_id"`,
-    );
+    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_users_email"`);
+    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_users_google_id"`);
 
     // Tạo Partial Unique Index cho email (chỉ unique khi chưa bị xóa)
     await queryRunner.query(

@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
 import { Permission } from '../enums';
@@ -18,14 +23,14 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const { user } = context.switchToHttp().getRequest();
-    
+
     if (!user) {
       throw new ForbiddenException('User not authenticated');
     }
 
     const userPermissions = this.getUserPermissions(user);
-    
-    const hasPermission = requiredPermissions.every(permission =>
+
+    const hasPermission = requiredPermissions.every((permission) =>
       userPermissions.includes(permission),
     );
 
@@ -44,7 +49,7 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const permissions = new Set<Permission>();
-    
+
     for (const role of user.roles) {
       if (role.permissions) {
         for (const permission of role.permissions) {

@@ -29,11 +29,14 @@ export class TokenService {
     return token;
   }
 
-  async verifyEmailToken(token: string): Promise<EmailVerificationToken | null> {
-    const verificationToken = await this.emailVerificationTokenRepository.findOne({
-      where: { token },
-      relations: ['user'],
-    });
+  async verifyEmailToken(
+    token: string,
+  ): Promise<EmailVerificationToken | null> {
+    const verificationToken =
+      await this.emailVerificationTokenRepository.findOne({
+        where: { token },
+        relations: ['user'],
+      });
 
     if (!verificationToken) {
       return null;
@@ -68,7 +71,9 @@ export class TokenService {
     return token;
   }
 
-  async verifyPasswordResetToken(token: string): Promise<PasswordResetToken | null> {
+  async verifyPasswordResetToken(
+    token: string,
+  ): Promise<PasswordResetToken | null> {
     const resetToken = await this.passwordResetTokenRepository.findOne({
       where: { token },
       relations: ['user'],

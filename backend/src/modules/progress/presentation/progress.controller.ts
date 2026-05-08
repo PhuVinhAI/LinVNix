@@ -1,5 +1,20 @@
-import { Controller, Get, Post, Patch, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { ProgressService } from '../application/progress.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators';
@@ -13,9 +28,10 @@ export class ProgressController {
   constructor(private readonly progressService: ProgressService) {}
 
   @Get()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy toàn bộ tiến độ học của user',
-    description: 'Lấy tổng quan tiến độ học tập của user bao gồm tất cả lessons đã học'
+    description:
+      'Lấy tổng quan tiến độ học tập của user bao gồm tất cả lessons đã học',
   })
   @ApiResponse({
     status: 200,
@@ -27,16 +43,16 @@ export class ProgressController {
           lessonId: 'lesson-uuid',
           lesson: {
             title: 'Bài 1: Từ vựng chào hỏi',
-            lessonType: 'VOCABULARY'
+            lessonType: 'VOCABULARY',
           },
           status: 'COMPLETED',
           score: 85,
           timeSpent: 1800,
           startedAt: '2024-01-01T00:00:00.000Z',
-          completedAt: '2024-01-01T00:30:00.000Z'
-        }
-      ]
-    }
+          completedAt: '2024-01-01T00:30:00.000Z',
+        },
+      ],
+    },
   })
   @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
   async getUserProgress(@CurrentUser() user: User) {
@@ -44,9 +60,9 @@ export class ProgressController {
   }
 
   @Get('lesson/:lessonId')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy tiến độ của 1 lesson',
-    description: 'Lấy thông tin chi tiết tiến độ học của một lesson cụ thể'
+    description: 'Lấy thông tin chi tiết tiến độ học của một lesson cụ thể',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -60,9 +76,9 @@ export class ProgressController {
         score: 0,
         timeSpent: 600,
         startedAt: '2024-01-01T00:00:00.000Z',
-        completedAt: null
-      }
-    }
+        completedAt: null,
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy tiến độ' })
   async getLessonProgress(
@@ -73,9 +89,9 @@ export class ProgressController {
   }
 
   @Post('lesson/:lessonId/start')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Bắt đầu học lesson',
-    description: 'Đánh dấu bắt đầu học một lesson mới'
+    description: 'Đánh dấu bắt đầu học một lesson mới',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -88,9 +104,9 @@ export class ProgressController {
         status: 'IN_PROGRESS',
         score: 0,
         timeSpent: 0,
-        startedAt: '2024-01-01T00:00:00.000Z'
-      }
-    }
+        startedAt: '2024-01-01T00:00:00.000Z',
+      },
+    },
   })
   async startLesson(
     @CurrentUser() user: User,
@@ -100,17 +116,17 @@ export class ProgressController {
   }
 
   @Post('lesson/:lessonId/complete')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Hoàn thành lesson',
-    description: 'Đánh dấu hoàn thành lesson và lưu điểm số'
+    description: 'Đánh dấu hoàn thành lesson và lưu điểm số',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiBody({
     schema: {
       example: {
-        score: 85
-      }
-    }
+        score: 85,
+      },
+    },
   })
   @ApiResponse({
     status: 200,
@@ -123,9 +139,9 @@ export class ProgressController {
         score: 85,
         timeSpent: 1800,
         startedAt: '2024-01-01T00:00:00.000Z',
-        completedAt: '2024-01-01T00:30:00.000Z'
-      }
-    }
+        completedAt: '2024-01-01T00:30:00.000Z',
+      },
+    },
   })
   async completeLesson(
     @CurrentUser() user: User,
@@ -136,17 +152,17 @@ export class ProgressController {
   }
 
   @Patch('lesson/:lessonId/time')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cập nhật thời gian học',
-    description: 'Cập nhật thời gian đã dành cho lesson (tính bằng giây)'
+    description: 'Cập nhật thời gian đã dành cho lesson (tính bằng giây)',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiBody({
     schema: {
       example: {
-        additionalTime: 300
-      }
-    }
+        additionalTime: 300,
+      },
+    },
   })
   @ApiResponse({
     status: 200,
@@ -154,9 +170,9 @@ export class ProgressController {
     schema: {
       example: {
         id: 'uuid-string',
-        timeSpent: 900
-      }
-    }
+        timeSpent: 900,
+      },
+    },
   })
   async updateTimeSpent(
     @CurrentUser() user: User,

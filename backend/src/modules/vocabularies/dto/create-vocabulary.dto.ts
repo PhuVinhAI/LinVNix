@@ -1,4 +1,12 @@
-import { IsString, IsEnum, IsNumber, IsUUID, IsOptional, IsUrl, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsNumber,
+  IsUUID,
+  IsOptional,
+  IsUrl,
+  IsObject,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { PartOfSpeech, Dialect } from '../../../common/enums';
 
@@ -40,41 +48,42 @@ export class CreateVocabularyDto {
   @IsOptional()
   imageUrl?: string;
 
-  @ApiProperty({ 
-    example: 'con', 
-    description: 'Classifier for nouns (e.g., "con" for animals, "cái" for objects)',
-    required: false 
+  @ApiProperty({
+    example: 'con',
+    description:
+      'Classifier for nouns (e.g., "con" for animals, "cái" for objects)',
+    required: false,
   })
   @IsString()
   @IsOptional()
   classifier?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: { SOUTHERN: 'heo', NORTHERN: 'lợn' },
     description: 'Regional dialect variants of the word',
-    required: false 
+    required: false,
   })
   @IsObject()
   @IsOptional()
   dialectVariants?: Record<Dialect, string>;
 
-  @ApiProperty({ 
-    example: { 
+  @ApiProperty({
+    example: {
       NORTHERN: 'https://example.com/audio-northern.mp3',
-      SOUTHERN: 'https://example.com/audio-southern.mp3'
+      SOUTHERN: 'https://example.com/audio-southern.mp3',
     },
     description: 'Audio URLs for different dialects',
-    required: false 
+    required: false,
   })
   @IsObject()
   @IsOptional()
   audioUrls?: Record<Dialect, string>;
 
-  @ApiProperty({ 
+  @ApiProperty({
     enum: Dialect,
     example: Dialect.SOUTHERN,
     description: 'Primary dialect/region for this vocabulary',
-    required: false 
+    required: false,
   })
   @IsEnum(Dialect)
   @IsOptional()

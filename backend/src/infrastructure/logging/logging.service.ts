@@ -44,21 +44,21 @@ export class LoggingService implements NestLoggerService {
   private formatLog(entry: LogEntry): string {
     const { timestamp, level, context, message, trace, metadata } = entry;
     let log = `[${timestamp}] [${level.toUpperCase()}]`;
-    
+
     if (context) {
       log += ` [${context}]`;
     }
-    
+
     log += ` ${message}`;
-    
+
     if (trace) {
       log += `\n${trace}`;
     }
-    
+
     if (metadata) {
       log += `\n${JSON.stringify(metadata, null, 2)}`;
     }
-    
+
     return log + '\n';
   }
 
@@ -68,7 +68,7 @@ export class LoggingService implements NestLoggerService {
   private writeToFile(logEntry: LogEntry, isError: boolean = false): void {
     const logText = this.formatLog(logEntry);
     const file = isError ? this.errorLogFile : this.logFile;
-    
+
     fs.appendFileSync(file, logText);
   }
 
@@ -150,7 +150,13 @@ export class LoggingService implements NestLoggerService {
     metadata: any,
     context?: string,
   ): void {
-    const entry = this.createLogEntry(level, message, context, undefined, metadata);
+    const entry = this.createLogEntry(
+      level,
+      message,
+      context,
+      undefined,
+      metadata,
+    );
     console.log(this.formatLog(entry));
     this.writeToFile(entry, level === LogLevel.ERROR);
   }
@@ -189,7 +195,7 @@ export class LoggingService implements NestLoggerService {
     files.forEach((file) => {
       const filePath = path.join(this.logsDir, file);
       const stats = fs.statSync(filePath);
-      
+
       if (now - stats.mtime.getTime() > maxAge) {
         fs.unlinkSync(filePath);
         this.log(`Deleted old log file: ${file}`, 'LoggingService');

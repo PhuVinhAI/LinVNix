@@ -24,7 +24,7 @@ export class AdminDashboardService {
     // Note: User entity doesn't have lastLoginAt field, so we'll count users who updated today
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const dauCount = await this.userRepository
       .createQueryBuilder('user')
       .where('user.updatedAt >= :today', { today })
@@ -54,7 +54,10 @@ export class AdminDashboardService {
       .addSelect('exercise.question', 'exerciseQuestion')
       .addSelect('exercise.exerciseType', 'exerciseType')
       .addSelect('COUNT(*)', 'totalAttempts')
-      .addSelect('SUM(CASE WHEN result.isCorrect = false THEN 1 ELSE 0 END)', 'incorrectCount')
+      .addSelect(
+        'SUM(CASE WHEN result.isCorrect = false THEN 1 ELSE 0 END)',
+        'incorrectCount',
+      )
       .addSelect(
         'CAST(SUM(CASE WHEN result.isCorrect = false THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100',
         'errorRate',

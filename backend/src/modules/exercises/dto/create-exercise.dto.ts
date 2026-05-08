@@ -1,8 +1,20 @@
-import { IsString, IsEnum, IsNumber, IsUUID, IsOptional, IsUrl, ValidateNested, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsNumber,
+  IsUUID,
+  IsOptional,
+  IsUrl,
+  ValidateNested,
+  IsObject,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { ExerciseType } from '../../../common/enums';
-import type { ExerciseOptions, ExerciseAnswer } from '../domain/exercise-options.types';
+import type {
+  ExerciseOptions,
+  ExerciseAnswer,
+} from '../domain/exercise-options.types';
 
 export class CreateExerciseDto {
   @ApiProperty({ enum: ExerciseType, example: ExerciseType.MULTIPLE_CHOICE })

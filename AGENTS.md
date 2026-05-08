@@ -74,3 +74,17 @@ bun run lint
 
 - Copy `backend/.env.example` → `backend/.env` (đầy đủ hơn root `.env.example` — gồm JWT, Redis, Mail, Google OAuth)
 - Admin: copy `admin/.env.example` → `admin/.env` (chỉ có `VITE_API_BASE_URL`)
+
+## Agent skills
+
+### Issue tracker
+
+Issues và PRDs sống trong `.scratch/` dưới dạng markdown. Xem `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Năm role triage dùng label mặc định (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). Xem `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context repo. Đọc `CONTEXT.md` (nếu có) ở root và `docs/adr/`. Xem `docs/agents/domain.md`.

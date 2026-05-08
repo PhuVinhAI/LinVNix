@@ -1,5 +1,21 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { ExercisesService } from '../application/exercises.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators';
@@ -15,9 +31,9 @@ export class ExercisesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('my-results')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy kết quả bài tập của user',
-    description: 'Lấy lịch sử làm bài tập của user hiện tại'
+    description: 'Lấy lịch sử làm bài tập của user hiện tại',
   })
   @ApiResponse({
     status: 200,
@@ -30,10 +46,10 @@ export class ExercisesController {
           userAnswer: 'Câu trả lời',
           isCorrect: true,
           timeSpent: 30,
-          completedAt: '2024-01-01T00:00:00.000Z'
-        }
-      ]
-    }
+          completedAt: '2024-01-01T00:00:00.000Z',
+        },
+      ],
+    },
   })
   async getMyResults(@CurrentUser() user: User) {
     return this.exercisesService.getUserResults(user.id);
@@ -42,9 +58,9 @@ export class ExercisesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('my-stats')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy thống kê bài tập',
-    description: 'Lấy thống kê tổng quan về bài tập của user'
+    description: 'Lấy thống kê tổng quan về bài tập của user',
   })
   @ApiResponse({
     status: 200,
@@ -55,9 +71,9 @@ export class ExercisesController {
         completedExercises: 75,
         correctAnswers: 60,
         accuracy: 80,
-        totalTimeSpent: 3600
-      }
-    }
+        totalTimeSpent: 3600,
+      },
+    },
   })
   async getMyStats(@CurrentUser() user: User) {
     return this.exercisesService.getUserStats(user.id);
@@ -65,9 +81,9 @@ export class ExercisesController {
 
   @Public()
   @Get('lesson/:lessonId')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy bài tập theo lesson',
-    description: 'Lấy tất cả bài tập thuộc một lesson'
+    description: 'Lấy tất cả bài tập thuộc một lesson',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -81,10 +97,10 @@ export class ExercisesController {
           question: '_____ là sinh viên.',
           options: ['Tôi', 'Bạn', 'Anh ấy', 'Cả 3 đều đúng'],
           orderIndex: 1,
-          difficultyLevel: 1
-        }
-      ]
-    }
+          difficultyLevel: 1,
+        },
+      ],
+    },
   })
   async findByLesson(@Param('lessonId') lessonId: string) {
     return this.exercisesService.findByLessonId(lessonId);
@@ -92,9 +108,9 @@ export class ExercisesController {
 
   @Public()
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Lấy chi tiết bài tập',
-    description: 'Lấy thông tin chi tiết của một bài tập'
+    description: 'Lấy thông tin chi tiết của một bài tập',
   })
   @ApiParam({ name: 'id', description: 'ID của bài tập' })
   @ApiResponse({
@@ -109,9 +125,9 @@ export class ExercisesController {
         options: ['Tôi', 'Bạn', 'Anh ấy', 'Cả 3 đều đúng'],
         explanation: 'Cả 3 đại từ đều có thể đứng trước "là sinh viên"',
         orderIndex: 1,
-        difficultyLevel: 1
-      }
-    }
+        difficultyLevel: 1,
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy bài tập' })
   async findOne(@Param('id') id: string) {
@@ -121,9 +137,9 @@ export class ExercisesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Tạo bài tập mới',
-    description: 'Tạo bài tập mới trong lesson - yêu cầu quyền Admin'
+    description: 'Tạo bài tập mới trong lesson - yêu cầu quyền Admin',
   })
   @ApiBody({ type: CreateExerciseDto })
   @ApiResponse({ status: 201, description: 'Tạo bài tập thành công' })
@@ -135,30 +151,33 @@ export class ExercisesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cập nhật bài tập',
-    description: 'Cập nhật thông tin bài tập - yêu cầu quyền Admin'
+    description: 'Cập nhật thông tin bài tập - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của bài tập' })
   @ApiBody({ type: CreateExerciseDto })
   @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy bài tập' })
-  async update(@Param('id') id: string, @Body() updateExerciseDto: Partial<CreateExerciseDto>) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateExerciseDto: Partial<CreateExerciseDto>,
+  ) {
     return this.exercisesService.update(id, updateExerciseDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Xóa bài tập',
-    description: 'Xóa bài tập khỏi lesson - yêu cầu quyền Admin'
+    description: 'Xóa bài tập khỏi lesson - yêu cầu quyền Admin',
   })
   @ApiParam({ name: 'id', description: 'ID của bài tập' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Xóa thành công',
-    schema: { example: { message: 'Exercise deleted successfully' } }
+    schema: { example: { message: 'Exercise deleted successfully' } },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy bài tập' })
   async remove(@Param('id') id: string) {
@@ -168,18 +187,18 @@ export class ExercisesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':id/submit')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Nộp bài tập',
-    description: 'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm'
+    description: 'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm',
   })
   @ApiParam({ name: 'id', description: 'ID của bài tập' })
   @ApiBody({
     schema: {
       example: {
         userAnswer: 'Cả 3 đều đúng',
-        timeSpent: 30
-      }
-    }
+        timeSpent: 30,
+      },
+    },
   })
   @ApiResponse({
     status: 200,
@@ -191,9 +210,9 @@ export class ExercisesController {
         explanation: 'Cả 3 đại từ đều có thể đứng trước "là sinh viên"',
         score: 10,
         userAnswer: 'Cả 3 đều đúng',
-        timeSpent: 30
-      }
-    }
+        timeSpent: 30,
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy bài tập' })
   async submitAnswer(

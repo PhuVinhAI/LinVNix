@@ -139,8 +139,7 @@ export class ExerciseCheckerService {
 
     return userItems.every(
       (item, index) =>
-        item.trim().toLowerCase() ===
-        correctItems[index].trim().toLowerCase(),
+        item.trim().toLowerCase() === correctItems[index].trim().toLowerCase(),
     );
   }
 

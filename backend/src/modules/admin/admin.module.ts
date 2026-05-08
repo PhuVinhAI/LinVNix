@@ -7,9 +7,7 @@ import { UserExerciseResult } from '../exercises/domain/user-exercise-result.ent
 import { UserProgress } from '../progress/domain/user-progress.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, UserExerciseResult, UserProgress]),
-  ],
+  imports: [TypeOrmModule.forFeature([User, UserExerciseResult, UserProgress])],
   controllers: [AdminController],
   providers: [AdminDashboardService],
   exports: [AdminDashboardService],

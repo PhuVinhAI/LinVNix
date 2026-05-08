@@ -12,11 +12,7 @@ export const Cacheable = (
   key: string | ((...args: any[]) => string),
   ttl: number = 3600,
 ) => {
-  return (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) => {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     SetMetadata(CACHE_KEY_METADATA, key)(target, propertyKey, descriptor);
     SetMetadata(CACHE_TTL_METADATA, ttl)(target, propertyKey, descriptor);
   };

@@ -25,25 +25,51 @@ export class UserVocabulary extends BaseEntity {
   nextReviewAt?: Date;
 
   // FSRS Algorithm fields
-  @Column({ type: 'float', default: 0, comment: 'FSRS: Memory stability in days' })
+  @Column({
+    type: 'float',
+    default: 0,
+    comment: 'FSRS: Memory stability in days',
+  })
   stability: number;
 
-  @Column({ type: 'float', default: 0, comment: 'FSRS: Item difficulty (1-10)' })
+  @Column({
+    type: 'float',
+    default: 0,
+    comment: 'FSRS: Item difficulty (1-10)',
+  })
   difficulty: number;
 
-  @Column({ type: 'int', default: 0, comment: 'FSRS: Card state (0=New, 1=Learning, 2=Review, 3=Relearning)' })
+  @Column({
+    type: 'int',
+    default: 0,
+    comment: 'FSRS: Card state (0=New, 1=Learning, 2=Review, 3=Relearning)',
+  })
   state: number;
 
-  @Column({ name: 'elapsed_days', type: 'int', default: 0, comment: 'FSRS: Days since last review' })
+  @Column({
+    name: 'elapsed_days',
+    type: 'int',
+    default: 0,
+    comment: 'FSRS: Days since last review',
+  })
   elapsedDays: number;
 
-  @Column({ name: 'scheduled_days', type: 'int', default: 0, comment: 'FSRS: Days scheduled for next review' })
+  @Column({
+    name: 'scheduled_days',
+    type: 'int',
+    default: 0,
+    comment: 'FSRS: Days scheduled for next review',
+  })
   scheduledDays: number;
 
   @Column({ type: 'int', default: 0, comment: 'FSRS: Number of repetitions' })
   reps: number;
 
-  @Column({ type: 'int', default: 0, comment: 'FSRS: Number of lapses (forgotten)' })
+  @Column({
+    type: 'int',
+    default: 0,
+    comment: 'FSRS: Number of lapses (forgotten)',
+  })
   lapses: number;
 
   @Column({ name: 'user_id' })

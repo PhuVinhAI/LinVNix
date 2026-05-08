@@ -38,7 +38,7 @@ export class AddGoogleOAuth1234567890123 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropColumn('users', 'google_id');
     await queryRunner.dropColumn('users', 'provider');
-    
+
     // Revert password to not nullable
     await queryRunner.changeColumn(
       'users',

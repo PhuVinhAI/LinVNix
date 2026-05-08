@@ -7,12 +7,12 @@ import { UserProgress } from '../domain/user-progress.entity';
 
 /**
  * Service xử lý các thao tác phức tạp cần transaction
- * 
+ *
  * Ví dụ: Khi user hoàn thành bài học, cần:
  * 1. Update progress
  * 2. Update exercise results
  * 3. Update vocabulary mastery
- * 
+ *
  * Nếu 1 trong 3 bước fail → rollback tất cả
  */
 @Injectable()
@@ -30,7 +30,11 @@ export class ProgressTransactionService {
   async completeLessonWithTransaction(
     userId: string,
     lessonId: string,
-    exerciseResults: Array<{ exerciseId: string; score: number; isCorrect: boolean }>,
+    exerciseResults: Array<{
+      exerciseId: string;
+      score: number;
+      isCorrect: boolean;
+    }>,
     vocabularyUpdates: Array<{ vocabularyId: string; masteryLevel: number }>,
   ): Promise<UserProgress> {
     // Sử dụng queryRunner từ decorator nếu có, nếu không dùng default

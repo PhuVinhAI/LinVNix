@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 /**
  * Decorator để wrap method trong database transaction
  * Tự động rollback nếu có lỗi, commit nếu thành công
- * 
+ *
  * Usage:
  * @Transactional()
  * async myMethod() { ... }
@@ -18,7 +18,7 @@ export function Transactional() {
 
     descriptor.value = async function (...args: any[]) {
       // Lấy DataSource từ instance (giả sử service có inject DataSource)
-      const dataSource: DataSource = (this as any).dataSource;
+      const dataSource: DataSource = this.dataSource;
 
       if (!dataSource) {
         throw new Error(
@@ -32,8 +32,8 @@ export function Transactional() {
 
       try {
         // Inject queryRunner vào context để các repository có thể dùng
-        const originalDataSource = (this as any).dataSource;
-        (this as any).queryRunner = queryRunner;
+        const originalDataSource = this.dataSource;
+        this.queryRunner = queryRunner;
 
         const result = await originalMethod.apply(this, args);
 
@@ -45,7 +45,7 @@ export function Transactional() {
       } finally {
         await queryRunner.release();
         // Cleanup
-        delete (this as any).queryRunner;
+        delete this.queryRunner;
       }
     };
 

@@ -2,21 +2,21 @@ import { Injectable } from '@nestjs/common';
 
 /**
  * FSRS (Free Spaced Repetition Scheduler) v4.5 Implementation
- * 
+ *
  * FSRS là thuật toán spaced repetition hiện đại, được Anki sử dụng từ 2023.
  * Ưu điểm so với SM-2:
  * - Dự đoán chính xác hơn dựa trên nghiên cứu khoa học mới
  * - Tính toán retention probability
  * - Tối ưu hóa cho long-term retention
- * 
+ *
  * Paper: https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm
  */
 
 export enum Rating {
-  Again = 1,  // Completely forgot
-  Hard = 2,   // Remembered with difficulty
-  Good = 3,   // Remembered correctly
-  Easy = 4,   // Remembered easily
+  Again = 1, // Completely forgot
+  Hard = 2, // Remembered with difficulty
+  Good = 3, // Remembered correctly
+  Easy = 4, // Remembered easily
 }
 
 export enum State {
@@ -27,9 +27,9 @@ export enum State {
 }
 
 export interface FSRSParameters {
-  requestRetention: number;  // Target retention (0.9 = 90%)
-  maximumInterval: number;   // Max days between reviews
-  w: number[];              // 17 weight parameters
+  requestRetention: number; // Target retention (0.9 = 90%)
+  maximumInterval: number; // Max days between reviews
+  w: number[]; // 17 weight parameters
 }
 
 export interface Card {
@@ -100,7 +100,7 @@ export class FSRSService {
    */
   repeat(card: Card, now: Date): Record<Rating, SchedulingInfo> {
     const newCard = { ...card };
-    
+
     if (newCard.state === State.New) {
       newCard.elapsedDays = 0;
     } else {
@@ -120,23 +120,26 @@ export class FSRSService {
       const hardInterval = 5;
       const goodInterval = this.nextInterval(s.good.stability);
       const easyInterval = this.nextInterval(s.easy.stability);
-      
+
       s.again.scheduledDays = againInterval;
       s.hard.scheduledDays = hardInterval;
       s.good.scheduledDays = goodInterval;
       s.easy.scheduledDays = easyInterval;
-      
+
       s.again.due = this.addDays(now, againInterval);
       s.hard.due = this.addDays(now, hardInterval);
       s.good.due = this.addDays(now, goodInterval);
       s.easy.due = this.addDays(now, easyInterval);
-    } else if (card.state === State.Learning || card.state === State.Relearning) {
+    } else if (
+      card.state === State.Learning ||
+      card.state === State.Relearning
+    ) {
       const lastD = card.difficulty;
       const lastS = card.stability;
       const retrievability = this.forgettingCurve(newCard.elapsedDays, lastS);
-      
+
       this.nextDS(s, lastD, lastS, retrievability);
-      
+
       const hardInterval = 0;
       const goodInterval = this.nextInterval(s.good.stability);
       const easyInterval = Math.max(
@@ -221,15 +224,19 @@ export class FSRSService {
   }
 
   private initDifficulty(r: Rating): number {
-    return Math.min(Math.max(this.parameters.w[4] - (r - 3) * this.parameters.w[5], 1), 10);
+    return Math.min(
+      Math.max(this.parameters.w[4] - (r - 3) * this.parameters.w[5], 1),
+      10,
+    );
   }
 
   private forgettingCurve(elapsedDays: number, stability: number): number {
-    return Math.pow(1 + (elapsedDays / (9 * stability)), -1);
+    return Math.pow(1 + elapsedDays / (9 * stability), -1);
   }
 
   private nextInterval(s: number): number {
-    const newInterval = s * (Math.log(this.parameters.requestRetention) / Math.log(0.9));
+    const newInterval =
+      s * (Math.log(this.parameters.requestRetention) / Math.log(0.9));
     return Math.min(
       Math.max(Math.round(newInterval), 1),
       this.parameters.maximumInterval,
@@ -238,7 +245,10 @@ export class FSRSService {
 
   private nextDifficulty(d: number, r: Rating): number {
     const nextD = d - this.parameters.w[6] * (r - 3);
-    return Math.min(Math.max(this.meanReversion(this.parameters.w[4], nextD), 1), 10);
+    return Math.min(
+      Math.max(this.meanReversion(this.parameters.w[4], nextD), 1),
+      10,
+    );
   }
 
   private meanReversion(init: number, current: number): number {
@@ -331,7 +341,12 @@ class SchedulingCards {
     }
   }
 
-  schedule(now: Date, hardInterval: number, goodInterval: number, easyInterval: number): void {
+  schedule(
+    now: Date,
+    hardInterval: number,
+    goodInterval: number,
+    easyInterval: number,
+  ): void {
     this.again.scheduledDays = 0;
     this.hard.scheduledDays = hardInterval;
     this.good.scheduledDays = goodInterval;
