@@ -234,10 +234,17 @@ export class VocabulariesController {
       reviewDate,
     );
 
+    const succeeded = results.filter((r) => r.success);
+    const failed = results.filter((r) => !r.success);
+
     return {
-      success: results.length,
-      failed: batchReviewDto.reviews.length - results.length,
-      results,
+      success: succeeded.length,
+      failed: failed.length,
+      results: succeeded.map((r) => r.result),
+      errors: failed.map((r) => ({
+        vocabularyId: r.vocabularyId,
+        error: r.error,
+      })),
     };
   }
 
@@ -357,7 +364,7 @@ export class VocabulariesController {
     },
   })
   async getDueForReview(@CurrentUser() user: User) {
-    return this.userVocabulariesService.getDueForReview(user.id);
+    return this.vocabularyReviewService.getDueForReview(user.id);
   }
 
   @ApiBearerAuth()

@@ -9,9 +9,14 @@ import { VocabulariesRepository } from './application/repositories/vocabularies.
 import { UserVocabulariesRepository } from './application/repositories/user-vocabularies.repository';
 import { VocabulariesController } from './presentation/vocabularies.controller';
 import { AuthModule } from '../auth/auth.module';
+import { LoggingModule } from '../../infrastructure/logging/logging.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Vocabulary, UserVocabulary]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([Vocabulary, UserVocabulary]),
+    AuthModule,
+    LoggingModule,
+  ],
   controllers: [VocabulariesController],
   providers: [
     VocabulariesService,

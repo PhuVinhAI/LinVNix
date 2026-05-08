@@ -7,11 +7,20 @@ import {
   Card,
   State,
 } from '../../progress/application/fsrs.service';
+import { LoggingService } from '../../../infrastructure/logging/logging.service';
+import { UserVocabulary } from '../domain/user-vocabulary.entity';
 
 export interface VocabularyReviewResult {
   id: string;
   nextReviewAt: Date;
   masteryLevel: MasteryLevel;
+}
+
+export interface BatchReviewItemResult {
+  vocabularyId: string;
+  success: boolean;
+  result?: VocabularyReviewResult;
+  error?: string;
 }
 
 @Injectable()
@@ -20,6 +29,7 @@ export class VocabularyReviewService {
 
   constructor(
     private readonly userVocabulariesRepository: UserVocabulariesRepository,
+    private readonly loggingService: LoggingService,
   ) {
     this.fsrsService = new FSRSService();
   }
@@ -125,8 +135,8 @@ export class VocabularyReviewService {
     userId: string,
     reviews: Array<{ vocabularyId: string; rating: number }>,
     reviewDate?: Date,
-  ): Promise<VocabularyReviewResult[]> {
-    const results: VocabularyReviewResult[] = [];
+  ): Promise<BatchReviewItemResult[]> {
+    const results: BatchReviewItemResult[] = [];
 
     for (const review of reviews) {
       try {
@@ -136,13 +146,31 @@ export class VocabularyReviewService {
           review.rating as Rating,
           reviewDate,
         );
-        results.push(result);
-      } catch {
-        // swallow per-item errors, matching existing behavior
+        results.push({
+          vocabularyId: review.vocabularyId,
+          success: true,
+          result,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        this.loggingService.error(
+          `batchReview failed for vocabulary ${review.vocabularyId}: ${message}`,
+          undefined,
+          'VocabularyReviewService',
+        );
+        results.push({
+          vocabularyId: review.vocabularyId,
+          success: false,
+          error: message,
+        });
       }
     }
 
     return results;
+  }
+
+  async getDueForReview(userId: string): Promise<UserVocabulary[]> {
+    return this.userVocabulariesRepository.findDueForReview(userId);
   }
 
   calculateMasteryLevel(state: State, stability: number): MasteryLevel {
