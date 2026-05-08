@@ -18,11 +18,11 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { OAuthUserDto } from './dto/oauth-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { EmailVerificationToken } from './domain/email-verification-token.entity';
 import { PasswordResetToken } from './domain/password-reset-token.entity';
 import { RefreshToken } from './domain/refresh-token.entity';
 import { Role } from './domain/role.entity';
 import { Role as RoleEnum } from '../../common/enums';
+import { TokenLifecycle } from './token-lifecycle/token-lifecycle.service';
 import { randomBytes } from 'crypto';
 
 @Injectable()
@@ -33,8 +33,7 @@ export class AuthService {
     private configService: ConfigService,
     private loggingService: LoggingService,
     private emailQueueService: EmailQueueService,
-    @InjectRepository(EmailVerificationToken)
-    private emailVerificationTokenRepository: Repository<EmailVerificationToken>,
+    private tokenLifecycle: TokenLifecycle,
     @InjectRepository(PasswordResetToken)
     private passwordResetTokenRepository: Repository<PasswordResetToken>,
     @InjectRepository(RefreshToken)
@@ -64,11 +63,9 @@ export class AuthService {
       }
 
       // Tạo verification token
-      const verificationToken = await this.createEmailVerificationToken(
-        user.id,
-      );
+      const verificationToken =
+        await this.tokenLifecycle.createVerificationToken(user.id);
 
-      // Gửi email xác thực
       await this.emailQueueService.sendVerificationEmail(
         user.email,
         user.fullName,
@@ -156,40 +153,23 @@ export class AuthService {
   async verifyEmail(verifyEmailDto: VerifyEmailDto) {
     const { token } = verifyEmailDto;
 
-    const verificationToken =
-      await this.emailVerificationTokenRepository.findOne({
-        where: { token, verifiedAt: null as any },
-        relations: ['user'],
-      });
+    const result = await this.tokenLifecycle.verifyEmailToken(token);
 
-    if (!verificationToken) {
-      throw new BadRequestException('Token không hợp lệ hoặc đã được sử dụng');
+    if (!result) {
+      throw new BadRequestException('Token không hợp lệ hoặc đã hết hạn');
     }
 
-    if (verificationToken.expiresAt < new Date()) {
-      throw new BadRequestException('Token đã hết hạn');
-    }
-
-    // Cập nhật user
-    await this.usersService.update(verificationToken.userId, {
+    await this.usersService.update(result.userId, {
       emailVerified: true,
       emailVerifiedAt: new Date(),
     } as any);
 
-    // Đánh dấu token đã sử dụng
-    verificationToken.verifiedAt = new Date();
-    await this.emailVerificationTokenRepository.save(verificationToken);
-
-    // Gửi welcome email
     await this.emailQueueService.sendWelcomeEmail(
-      verificationToken.user.email,
-      verificationToken.user.fullName,
+      result.email,
+      result.fullName,
     );
 
-    this.loggingService.log(
-      `Email verified: ${verificationToken.user.email}`,
-      'AuthService',
-    );
+    this.loggingService.log(`Email verified: ${result.email}`, 'AuthService');
 
     return {
       message: 'Email đã được xác thực thành công!',
@@ -285,16 +265,10 @@ export class AuthService {
       throw new BadRequestException('Email đã được xác thực');
     }
 
-    // Xóa token cũ
-    await this.emailVerificationTokenRepository.delete({
-      userId: user.id,
-      verifiedAt: null as any,
-    });
+    const verificationToken = await this.tokenLifecycle.createVerificationToken(
+      user.id,
+    );
 
-    // Tạo token mới
-    const verificationToken = await this.createEmailVerificationToken(user.id);
-
-    // Gửi lại email
     await this.emailQueueService.sendVerificationEmail(
       user.email,
       user.fullName,
@@ -304,22 +278,6 @@ export class AuthService {
     return {
       message: 'Email xác thực đã được gửi lại!',
     };
-  }
-
-  private async createEmailVerificationToken(
-    userId: string,
-  ): Promise<EmailVerificationToken> {
-    const token = randomBytes(32).toString('hex');
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24); // 24 giờ
-
-    const verificationToken = this.emailVerificationTokenRepository.create({
-      token,
-      userId,
-      expiresAt,
-    });
-
-    return this.emailVerificationTokenRepository.save(verificationToken);
   }
 
   private async createPasswordResetToken(
@@ -385,19 +343,15 @@ export class AuthService {
     };
   }
 
-  // Cleanup expired tokens (có thể chạy bằng cron job)
   async cleanupExpiredTokens() {
     const now = new Date();
 
-    await this.emailVerificationTokenRepository.delete({
-      expiresAt: LessThan(now),
-    });
+    await this.tokenLifecycle.cleanupExpired();
 
     await this.passwordResetTokenRepository.delete({
       expiresAt: LessThan(now),
     });
 
-    // Cleanup expired refresh tokens
     await this.refreshTokenRepository.delete({
       expiresAt: LessThan(now),
     });

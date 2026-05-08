@@ -11,9 +11,9 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from './guards/optional-jwt-auth.guard';
 import { UsersModule } from '../users/users.module';
 import { QueueModule } from '../../infrastructure/queue/queue.module';
+import { TokenLifecycleModule } from './token-lifecycle/token-lifecycle.module';
 import { Role } from './domain/role.entity';
 import { Permission } from './domain/permission.entity';
-import { EmailVerificationToken } from './domain/email-verification-token.entity';
 import { PasswordResetToken } from './domain/password-reset-token.entity';
 import { RefreshToken } from './domain/refresh-token.entity';
 import { RbacService } from './application/rbac.service';
@@ -22,11 +22,11 @@ import { RbacService } from './application/rbac.service';
   imports: [
     UsersModule,
     QueueModule,
+    TokenLifecycleModule,
     PassportModule,
     TypeOrmModule.forFeature([
       Role,
       Permission,
-      EmailVerificationToken,
       PasswordResetToken,
       RefreshToken,
     ]),
