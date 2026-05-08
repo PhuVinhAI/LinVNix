@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
-import { ExerciseCheckerService } from './exercise-checker.service';
+import { AnswerAssessment } from './answer-assessment.service';
 import { Transactional } from '../../../common/decorators';
 import { Exercise } from '../domain/exercise.entity';
 import { UserExerciseResult } from '../domain/user-exercise-result.entity';
@@ -13,7 +13,7 @@ export class ExercisesService {
     private readonly dataSource: DataSource,
     private readonly exercisesRepository: ExercisesRepository,
     private readonly userExerciseResultsRepository: UserExerciseResultsRepository,
-    private readonly exerciseCheckerService: ExerciseCheckerService,
+    private readonly answerAssessment: AnswerAssessment,
   ) {}
 
   async create(data: Partial<Exercise>): Promise<Exercise> {
@@ -60,7 +60,7 @@ export class ExercisesService {
   ): Promise<UserExerciseResult> {
     const exercise = await this.findById(exerciseId);
 
-    const isCorrect = this.exerciseCheckerService.checkAnswer(
+    const { isCorrect } = this.answerAssessment.assessAnswer(
       exercise.exerciseType,
       userAnswer,
       exercise.correctAnswer,
