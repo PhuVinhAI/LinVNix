@@ -4,21 +4,31 @@ import { UnitsRepository } from './repositories/units.repository';
 import { LessonsRepository } from './repositories/lessons.repository';
 import { ContentsRepository } from '../../contents/application/contents.repository';
 import { GrammarRepository } from '../../grammar/application/grammar.repository';
+import { ProgressRepository } from '../../progress/application/progress.repository';
 import { Course } from '../domain/course.entity';
 import { Unit } from '../domain/unit.entity';
 import { Lesson } from '../domain/lesson.entity';
 import { LessonContent } from '../../contents/domain/lesson-content.entity';
 import { GrammarRule } from '../../grammar/domain/grammar-rule.entity';
+import {
+  CourseStatsPort,
+  CourseStatsResult,
+} from '../../admin/application/ports/dashboard-stats.ports';
 
 @Injectable()
-export class CourseContentService {
+export class CourseContentService implements CourseStatsPort {
   constructor(
     private readonly coursesRepository: CoursesRepository,
     private readonly unitsRepository: UnitsRepository,
     private readonly lessonsRepository: LessonsRepository,
     private readonly contentsRepository: ContentsRepository,
     private readonly grammarRepository: GrammarRepository,
+    private readonly progressRepository: ProgressRepository,
   ) {}
+
+  async getTopCoursesByEnrollment(limit: number): Promise<CourseStatsResult[]> {
+    return this.progressRepository.getTopCoursesByEnrollment(limit);
+  }
 
   async getCourseStructure(courseId: string): Promise<Course> {
     const course = await this.coursesRepository.findById(courseId);

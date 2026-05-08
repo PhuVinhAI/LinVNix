@@ -1,11 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from '../domain/user.entity';
+import { UserStatsPort } from '../../admin/application/ports/dashboard-stats.ports';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements UserStatsPort {
   constructor(private readonly usersRepository: UsersRepository) {}
+
+  async getTotalUsers(): Promise<number> {
+    return this.usersRepository.count();
+  }
+
+  async getDAU(): Promise<number> {
+    return this.usersRepository.countDAU();
+  }
 
   async create(data: Partial<User>): Promise<User> {
     if (data.password) {

@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -18,13 +18,13 @@ Viết Jest *.spec.ts cho `AdminDashboardService` — dùng in-memory port adapt
 
 ## Acceptance criteria
 
-- [ ] 3 port interface tồn tại (`UserStatsPort`, `CourseStatsPort`, `ExerciseStatsPort`)
-- [ ] Mỗi port trả DTO riêng, không phơi entity
-- [ ] `AdminDashboardService` chỉ inject 3 port, không inject `Repository<>` chéo module
-- [ ] UsersService, CourseContentService, ExercisesService implement port tương ứng
-- [ ] Jest *.spec.ts cho AdminDashboardService pass (dùng in-memory port adapters)
-- [ ] Admin integration tests (`vocabulary-enhancements.test.ts` dashboard endpoint) vẫn pass
-- [ ] HTTP API contract không đổi
+- [x] 3 port interface tồn tại (`UserStatsPort`, `CourseStatsPort`, `ExerciseStatsPort`)
+- [x] Mỗi port trả DTO riêng, không phơi entity
+- [x] `AdminDashboardService` chỉ inject 3 port, không inject `Repository<>` chéo module
+- [x] UsersService, CourseContentService, ExercisesService implement port tương ứng
+- [x] Jest *.spec.ts cho AdminDashboardService pass (dùng in-memory port adapters)
+- [x] Admin integration tests (`vocabulary-enhancements.test.ts` dashboard endpoint) vẫn pass
+- [x] HTTP API contract không đổi
 
 ## Blocked by
 

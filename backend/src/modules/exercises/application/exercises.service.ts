@@ -7,9 +7,13 @@ import { AnswerNormalizer } from './answer-normalizer';
 import { Transactional } from '../../../common/decorators';
 import { Exercise } from '../domain/exercise.entity';
 import { UserExerciseResult } from '../domain/user-exercise-result.entity';
+import {
+  ExerciseStatsPort,
+  ExerciseStatsResult,
+} from '../../admin/application/ports/dashboard-stats.ports';
 
 @Injectable()
-export class ExercisesService {
+export class ExercisesService implements ExerciseStatsPort {
   constructor(
     private readonly dataSource: DataSource,
     private readonly exercisesRepository: ExercisesRepository,
@@ -17,6 +21,16 @@ export class ExercisesService {
     private readonly answerAssessment: AnswerAssessment,
     private readonly answerNormalizer: AnswerNormalizer,
   ) {}
+
+  async getExercisesWithHighestErrorRate(
+    minAttempts: number,
+    limit: number,
+  ): Promise<ExerciseStatsResult[]> {
+    return this.userExerciseResultsRepository.getExercisesWithHighestErrorRate(
+      minAttempts,
+      limit,
+    );
+  }
 
   async create(data: Partial<Exercise>): Promise<Exercise> {
     return this.exercisesRepository.create(data);

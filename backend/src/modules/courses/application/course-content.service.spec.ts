@@ -6,6 +6,7 @@ import { UnitsRepository } from './repositories/units.repository';
 import { LessonsRepository } from './repositories/lessons.repository';
 import { ContentsRepository } from '../../contents/application/contents.repository';
 import { GrammarRepository } from '../../grammar/application/grammar.repository';
+import { ProgressRepository } from '../../progress/application/progress.repository';
 
 describe('CourseContentService', () => {
   let service: CourseContentService;
@@ -48,6 +49,9 @@ describe('CourseContentService', () => {
       update: jest.fn(),
       delete: jest.fn(),
     };
+    const progressMock = {
+      getTopCoursesByEnrollment: jest.fn(),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -57,6 +61,7 @@ describe('CourseContentService', () => {
         { provide: LessonsRepository, useValue: lessonsMock },
         { provide: ContentsRepository, useValue: contentsMock },
         { provide: GrammarRepository, useValue: grammarMock },
+        { provide: ProgressRepository, useValue: progressMock },
       ],
     }).compile();
 

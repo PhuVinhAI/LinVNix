@@ -41,4 +41,32 @@ export class ProgressRepository {
     }
     return progress;
   }
+
+  async getTopCoursesByEnrollment(
+    limit: number,
+  ): Promise<{ courseId: string; courseTitle: string; userCount: number }[]> {
+    const results: {
+      courseId: string;
+      courseTitle: string;
+      userCount: string;
+    }[] = await this.repository
+      .createQueryBuilder('progress')
+      .innerJoin('progress.lesson', 'lesson')
+      .innerJoin('lesson.unit', 'unit')
+      .innerJoin('unit.course', 'course')
+      .select('course.id', 'courseId')
+      .addSelect('course.title', 'courseTitle')
+      .addSelect('COUNT(DISTINCT progress.userId)', 'userCount')
+      .groupBy('course.id')
+      .addGroupBy('course.title')
+      .orderBy('"userCount"', 'DESC')
+      .limit(limit)
+      .getRawMany();
+
+    return results.map((c) => ({
+      courseId: c.courseId,
+      courseTitle: c.courseTitle,
+      userCount: parseInt(c.userCount, 10),
+    }));
+  }
 }
