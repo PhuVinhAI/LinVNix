@@ -4,6 +4,7 @@ import { UserVocabulariesRepository } from './repositories/user-vocabularies.rep
 import { MasteryLevel } from '../../../common/enums';
 import { Rating, State } from '../../progress/application/fsrs.service';
 import { UserVocabulary } from '../domain/user-vocabulary.entity';
+import { LoggingService } from '../../../infrastructure/logging/logging.service';
 
 const mockUserVocabBase = {
   reviewCount: 0,
@@ -21,23 +22,35 @@ const mockUserVocabBase = {
 describe('VocabularyReviewService', () => {
   let service: VocabularyReviewService;
   let repository: jest.Mocked<UserVocabulariesRepository>;
+  let loggingService: jest.Mocked<LoggingService>;
 
   beforeEach(async () => {
     const repoMock = {
       findByUserAndVocabulary: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      findDueForReview: jest.fn(),
+    };
+
+    const loggingMock = {
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+      verbose: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         VocabularyReviewService,
         { provide: UserVocabulariesRepository, useValue: repoMock },
+        { provide: LoggingService, useValue: loggingMock },
       ],
     }).compile();
 
     service = module.get<VocabularyReviewService>(VocabularyReviewService);
     repository = module.get(UserVocabulariesRepository);
+    loggingService = module.get(LoggingService);
   });
 
   describe('addVocabulary', () => {
@@ -216,7 +229,7 @@ describe('VocabularyReviewService', () => {
   });
 
   describe('batchReview', () => {
-    it('returns results for each successful review', async () => {
+    it('returns per-item results with success=true for valid reviews', async () => {
       const userVocab = {
         id: 'uv-1',
         ...mockUserVocabBase,
@@ -242,16 +255,98 @@ describe('VocabularyReviewService', () => {
       );
 
       expect(result).toHaveLength(2);
-      expect(result[0]).toHaveProperty('nextReviewAt');
-      expect(result[0]).toHaveProperty('masteryLevel');
+      expect(result[0].vocabularyId).toBe('v1');
+      expect(result[0].success).toBe(true);
+      expect(result[0].result).toHaveProperty('nextReviewAt');
+      expect(result[0].result).toHaveProperty('masteryLevel');
+      expect(result[1].vocabularyId).toBe('v2');
+      expect(result[1].success).toBe(true);
     });
 
-    it('skips failed reviews without throwing', async () => {
+    it('returns per-item results with success=false for failed reviews, without throwing', async () => {
       repository.findByUserAndVocabulary.mockResolvedValue(null);
 
       const result = await service.batchReview('user-1', [
-        { vocabularyId: 'v1', rating: Rating.Good },
+        { vocabularyId: 'v-missing', rating: Rating.Good },
       ]);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].vocabularyId).toBe('v-missing');
+      expect(result[0].success).toBe(false);
+      expect(result[0].error).toBe('User vocabulary not found');
+      expect(result[0].result).toBeUndefined();
+    });
+
+    it('logs errors via LoggingService for failed items', async () => {
+      repository.findByUserAndVocabulary.mockResolvedValue(null);
+
+      await service.batchReview('user-1', [
+        { vocabularyId: 'v-missing', rating: Rating.Good },
+      ]);
+
+      expect(loggingService.error as jest.Mock).toHaveBeenCalledTimes(1);
+      expect((loggingService.error as jest.Mock).mock.calls[0]).toEqual([
+        expect.stringContaining('batchReview failed for vocabulary v-missing'),
+        undefined,
+        'VocabularyReviewService',
+      ]);
+    });
+
+    it('returns mixed results when some reviews succeed and some fail', async () => {
+      const userVocab = {
+        id: 'uv-1',
+        ...mockUserVocabBase,
+        nextReviewAt: new Date('2024-01-01'),
+        masteryLevel: MasteryLevel.LEARNING,
+      } as unknown as UserVocabulary;
+
+      repository.findByUserAndVocabulary
+        .mockResolvedValueOnce(userVocab)
+        .mockResolvedValueOnce(null);
+      repository.update.mockImplementation((_id, data) =>
+        Promise.resolve({
+          ...userVocab,
+          ...data,
+        } as UserVocabulary),
+      );
+
+      const result = await service.batchReview(
+        'user-1',
+        [
+          { vocabularyId: 'v1', rating: Rating.Good },
+          { vocabularyId: 'v-missing', rating: Rating.Good },
+        ],
+        new Date('2024-01-01'),
+      );
+
+      expect(result).toHaveLength(2);
+      expect(result[0].success).toBe(true);
+      expect(result[0].result).toBeDefined();
+      expect(result[1].success).toBe(false);
+      expect(result[1].error).toBeDefined();
+    });
+  });
+
+  describe('getDueForReview', () => {
+    it('returns due vocabularies from repository', async () => {
+      const dueVocabs = [
+        { id: 'uv-1', masteryLevel: MasteryLevel.LEARNING } as UserVocabulary,
+        { id: 'uv-2', masteryLevel: MasteryLevel.FAMILIAR } as UserVocabulary,
+      ];
+      repository.findDueForReview.mockResolvedValue(dueVocabs);
+
+      const result = await service.getDueForReview('user-1');
+
+      expect(result).toHaveLength(2);
+      expect(repository.findDueForReview as jest.Mock).toHaveBeenCalledWith(
+        'user-1',
+      );
+    });
+
+    it('returns empty array when no vocabularies are due', async () => {
+      repository.findDueForReview.mockResolvedValue([]);
+
+      const result = await service.getDueForReview('user-1');
 
       expect(result).toHaveLength(0);
     });

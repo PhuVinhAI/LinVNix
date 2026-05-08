@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -18,15 +18,15 @@ Viết Jest *.spec.ts cho VocabularyReview, assert trên `nextReviewAt` và `mas
 
 ## Acceptance criteria
 
-- [ ] `VocabularyReview` module tồn tại với interface công khai chỉ dùng domain types (không `Card`)
-- [ ] `reviewVocabulary(userId, vocabularyId, rating) → { nextReviewAt, masteryLevel }` hoạt động đúng
-- [ ] `addVocabulary(userId, vocabularyId) → { id, nextReviewAt, masteryLevel }` khởi tạo FSRS nội bộ, caller chỉ thấy kết quả miền
-- [ ] Mastery level tính tại một chỗ duy nhất, trả `MasteryLevel` enum
-- [ ] `SpacedRepetitionService` không còn inject từ bên ngoài VocabularyReview module
-- [ ] Type `Card` không xuất hiện trong interface công khai
-- [ ] Jest *.spec.ts cho VocabularyReview pass, assert trên `nextReviewAt` + `masteryLevel`
+- [x] `VocabularyReview` module tồn tại với interface công khai chỉ dùng domain types (không `Card`)
+- [x] `reviewVocabulary(userId, vocabularyId, rating) → { nextReviewAt, masteryLevel }` hoạt động đúng
+- [x] `addVocabulary(userId, vocabularyId) → { id, nextReviewAt, masteryLevel }` khởi tạo FSRS nội bộ, caller chỉ thấy kết quả miền
+- [x] Mastery level tính tại một chỗ duy nhất, trả `MasteryLevel` enum
+- [x] `SpacedRepetitionService` không còn inject từ bên ngoài VocabularyReview module
+- [x] Type `Card` không xuất hiện trong interface công khai
+- [x] Jest *.spec.ts cho VocabularyReview pass, assert trên `nextReviewAt` + `masteryLevel`
 - [ ] Integration tests hiện tại (`vocabularies.test.ts`, `fsrs-integration.test.ts`) vẫn pass
-- [ ] `FSRSService` không bị sửa
+- [x] `FSRSService` không bị sửa
 
 ## Blocked by
 
