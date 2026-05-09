@@ -15,7 +15,7 @@ interface TestContext {
   userToken: string;
   userId: string;
   courseId: string;
-  unitId: string;
+  moduleId: string;
   lessonId: string;
   vocabularyIds: {
     standard: string;
@@ -31,7 +31,7 @@ const ctx: TestContext = {
   userToken: '',
   userId: '',
   courseId: '',
-  unitId: '',
+  moduleId: '',
   lessonId: '',
   vocabularyIds: {
     standard: '',
@@ -71,20 +71,20 @@ async function setup() {
   });
   ctx.courseId = course.data.id;
 
-  const unit = await ctx.client.post(`/units`, {
-    title: 'Dialect Test Unit',
-    description: 'Unit for testing',
+  const module = await ctx.client.post(`/modules`, {
+    title: 'Dialect Test Module',
+    description: 'Module for testing',
     orderIndex: 1,
     courseId: ctx.courseId,
   });
-  ctx.unitId = unit.data.id;
+  ctx.moduleId = module.data.id;
 
   const lesson = await ctx.client.post(`/lessons`, {
     title: 'Dialect Test Lesson',
     description: 'Lesson for testing',
     lessonType: 'vocabulary',
     orderIndex: 1,
-    unitId: ctx.unitId,
+    moduleId: ctx.moduleId,
   });
   ctx.lessonId = lesson.data.id;
 

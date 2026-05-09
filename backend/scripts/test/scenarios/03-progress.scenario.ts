@@ -4,7 +4,7 @@ import { endpoints } from '../config/test.config';
 import { userFixtures } from '../fixtures/users.fixture';
 import {
   courseFixtures,
-  unitFixtures,
+  moduleFixtures,
   lessonFixtures,
 } from '../fixtures/courses.fixture';
 import { vocabularyFixtures } from '../fixtures/vocabularies.fixture';
@@ -40,10 +40,10 @@ export async function runProgressScenario() {
     const course = courseFixtures.beginnerCourse;
     const courseResponse = await apiClient.post(endpoints.courses.create, course);
     
-    const unit = unitFixtures.greetingsUnit(courseResponse.data.id);
-    const unitResponse = await apiClient.post('/units', unit);
+    const module = moduleFixtures.greetingsModule(courseResponse.data.id);
+    const moduleResponse = await apiClient.post('/modules', module);
     
-    const lesson = lessonFixtures.vocabularyLesson(unitResponse.data.id);
+    const lesson = lessonFixtures.vocabularyLesson(moduleResponse.data.id);
     const lessonResponse = await apiClient.post('/lessons', lesson);
     lessonId = lessonResponse.data.id;
     

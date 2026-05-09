@@ -19,14 +19,14 @@ export class CoursesRepository {
     return this.repository.find({
       where: { isPublished: true },
       order: { orderIndex: 'ASC' },
-      relations: ['units'],
+      relations: ['modules'],
     });
   }
 
   async findById(id: string): Promise<Course | null> {
     return this.repository.findOne({
       where: { id },
-      relations: ['units', 'units.lessons'],
+      relations: ['modules', 'modules.lessons'],
     });
   }
 

@@ -32,14 +32,14 @@ async function setupTestEnvironment() {
     language: 'Vietnamese',
   });
 
-  const unitResponse = await apiClient.post('/units', {
+  const moduleResponse = await apiClient.post('/modules', {
     courseId: courseResponse.data.id,
-    title: 'Test Unit',
+    title: 'Test Module',
     orderIndex: 1,
   });
 
   const lessonResponse = await apiClient.post('/lessons', {
-    unitId: unitResponse.data.id,
+    moduleId: moduleResponse.data.id,
     title: 'Test Lesson',
     lessonType: 'vocabulary',
     orderIndex: 1,

@@ -39,12 +39,12 @@ export const endpoints = {
     update: (id: string) => `/courses/${id}`,
     delete: (id: string) => `/courses/${id}`,
   },
-  units: {
-    byCourse: (courseId: string) => `/units/course/${courseId}`,
-    detail: (id: string) => `/units/${id}`,
+  modules: {
+    byCourse: (courseId: string) => `/modules/course/${courseId}`,
+    detail: (id: string) => `/modules/${id}`,
   },
   lessons: {
-    byUnit: (unitId: string) => `/lessons/unit/${unitId}`,
+    byModule: (moduleId: string) => `/lessons/module/${moduleId}`,
     detail: (id: string) => `/lessons/${id}`,
   },
   vocabularies: {

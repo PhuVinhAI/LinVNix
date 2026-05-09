@@ -39,20 +39,20 @@ export async function runFSRSIntegrationTests(): Promise<void> {
     });
     const courseId = courseResponse.data.id;
     
-    const unitResponse = await apiClient.post('/units', {
-      title: 'FSRS Test Unit',
-      description: 'Test unit',
+    const moduleResponse = await apiClient.post('/modules', {
+      title: 'FSRS Test Module',
+      description: 'Test module',
       orderIndex: 1,
       courseId,
     });
-    const unitId = unitResponse.data.id;
+    const moduleId = moduleResponse.data.id;
     
     const lessonResponse = await apiClient.post('/lessons', {
       title: 'FSRS Test Lesson',
       description: 'Test lesson',
       lessonType: 'vocabulary',
       orderIndex: 1,
-      unitId,
+      moduleId,
     });
     lessonId = lessonResponse.data.id;
     

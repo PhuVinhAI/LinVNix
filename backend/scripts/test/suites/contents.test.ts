@@ -2,7 +2,7 @@ import { apiClient } from '../utils/api-client';
 import { TestAssertions } from '../utils/assertions';
 import { endpoints } from '../config/test.config';
 import { TestUsers } from '../utils/test-users';
-import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/courses.fixture';
+import { courseFixtures, moduleFixtures, lessonFixtures } from '../fixtures/courses.fixture';
 
 /**
  * Contents Module Test Suite
@@ -54,11 +54,11 @@ async function setupCourseStructure() {
   const courseResponse = await apiClient.post(endpoints.courses.create, course);
   const courseId = courseResponse.data.id;
 
-  const unit = unitFixtures.greetingsUnit(courseId);
-  const unitResponse = await apiClient.post('/units', unit);
-  const unitId = unitResponse.data.id;
+  const module = moduleFixtures.greetingsModule(courseId);
+  const moduleResponse = await apiClient.post('/modules', module);
+  const moduleId = moduleResponse.data.id;
 
-  const lesson = lessonFixtures.vocabularyLesson(unitId);
+  const lesson = lessonFixtures.vocabularyLesson(moduleId);
   const lessonResponse = await apiClient.post('/lessons', lesson);
   const lessonId = lessonResponse.data.id;
 

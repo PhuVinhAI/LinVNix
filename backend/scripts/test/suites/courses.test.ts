@@ -2,7 +2,7 @@ import { apiClient } from '../utils/api-client';
 import { TestAssertions } from '../utils/assertions';
 import { endpoints } from '../config/test.config';
 import { TestUsers } from '../utils/test-users';
-import { courseFixtures, unitFixtures, lessonFixtures } from '../fixtures/courses.fixture';
+import { courseFixtures, moduleFixtures, lessonFixtures } from '../fixtures/courses.fixture';
 
 /**
  * Courses Module Test Suite
@@ -12,7 +12,7 @@ export async function runCoursesTests() {
 
   let authToken: string;
   let courseId: string;
-  let unitId: string;
+  let moduleId: string;
   let lessonId: string;
 
   try {
@@ -29,17 +29,17 @@ export async function runCoursesTests() {
     // Test 3: Get course by ID
     await testGetCourseById(authToken, courseId);
 
-    // Test 4: Create unit
-    unitId = await testCreateUnit(authToken, courseId);
+    // Test 4: Create module
+    moduleId = await testCreateModule(authToken, courseId);
 
-    // Test 5: Get units by course
-    await testGetUnitsByCourse(authToken, courseId);
+    // Test 5: Get modules by course
+    await testGetModulesByCourse(authToken, courseId);
 
     // Test 6: Create lesson
-    lessonId = await testCreateLesson(authToken, unitId);
+    lessonId = await testCreateLesson(authToken, moduleId);
 
-    // Test 7: Get lessons by unit
-    await testGetLessonsByUnit(authToken, unitId);
+    // Test 7: Get lessons by module
+    await testGetLessonsByModule(authToken, moduleId);
 
     // Test 8: Get lesson by ID
     await testGetLessonById(authToken, lessonId);
@@ -47,11 +47,11 @@ export async function runCoursesTests() {
     // Test 9: Update course
     await testUpdateCourse(authToken, courseId);
 
-    // Test 10: Update unit
-    await testUpdateUnit(authToken, unitId);
+    // Test 10: Update module
+    await testUpdateModule(authToken, moduleId);
 
-    // Test 11: Get unit by ID
-    await testGetUnitById(authToken, unitId);
+    // Test 11: Get module by ID
+    await testGetModuleById(authToken, moduleId);
 
     // Test 12: Update lesson
     await testUpdateLesson(authToken, lessonId);
@@ -59,8 +59,8 @@ export async function runCoursesTests() {
     // Test 13: Delete lesson
     await testDeleteLesson(authToken, lessonId);
 
-    // Test 14: Delete unit
-    await testDeleteUnit(authToken, unitId);
+    // Test 14: Delete module
+    await testDeleteModule(authToken, moduleId);
 
     // Test 15: Delete course
     await testDeleteCourse(authToken, courseId);
@@ -126,48 +126,48 @@ async function testGetCourseById(token: string, courseId: string) {
 }
 
 /**
- * Test create unit
+ * Test create module
  */
-async function testCreateUnit(token: string, courseId: string): Promise<string> {
-  console.log('📝 Test: Create unit');
+async function testCreateModule(token: string, courseId: string): Promise<string> {
+  console.log('📝 Test: Create module');
 
   apiClient.setToken(token);
-  const unit = unitFixtures.greetingsUnit(courseId);
-  const response = await apiClient.post('/units', unit);
+  const module = moduleFixtures.greetingsModule(courseId);
+  const response = await apiClient.post('/modules', module);
 
-  TestAssertions.assertStatus(response.status, 201, 'Create unit should return 201');
+  TestAssertions.assertStatus(response.status, 201, 'Create module should return 201');
   TestAssertions.assertHasData(response, 'Response should have data');
-  TestAssertions.assertIsUUID(response.data.id, 'Unit ID should be UUID');
-  TestAssertions.assertEquals(response.data.title, unit.title, 'Title should match');
+  TestAssertions.assertIsUUID(response.data.id, 'Module ID should be UUID');
+  TestAssertions.assertEquals(response.data.title, module.title, 'Title should match');
 
-  console.log('  ✓ Unit created successfully');
+  console.log('  ✓ Module created successfully');
   return response.data.id;
 }
 
 /**
- * Test get units by course
+ * Test get modules by course
  */
-async function testGetUnitsByCourse(token: string, courseId: string) {
-  console.log('📖 Test: Get units by course');
+async function testGetModulesByCourse(token: string, courseId: string) {
+  console.log('📖 Test: Get modules by course');
 
   apiClient.setToken(token);
-  const response = await apiClient.get(endpoints.units.byCourse(courseId));
+  const response = await apiClient.get(endpoints.modules.byCourse(courseId));
 
-  TestAssertions.assertStatus(response.status, 200, 'Get units should return 200');
+  TestAssertions.assertStatus(response.status, 200, 'Get modules should return 200');
   TestAssertions.assertHasData(response, 'Response should have data');
-  TestAssertions.assertArrayNotEmpty(response.data, 'Should have at least one unit');
+  TestAssertions.assertArrayNotEmpty(response.data, 'Should have at least one module');
 
-  console.log('  ✓ Units retrieved successfully');
+  console.log('  ✓ Modules retrieved successfully');
 }
 
 /**
  * Test create lesson
  */
-async function testCreateLesson(token: string, unitId: string): Promise<string> {
+async function testCreateLesson(token: string, moduleId: string): Promise<string> {
   console.log('📝 Test: Create lesson');
 
   apiClient.setToken(token);
-  const lesson = lessonFixtures.vocabularyLesson(unitId);
+  const lesson = lessonFixtures.vocabularyLesson(moduleId);
   const response = await apiClient.post('/lessons', lesson);
 
   TestAssertions.assertStatus(response.status, 201, 'Create lesson should return 201');
@@ -180,13 +180,13 @@ async function testCreateLesson(token: string, unitId: string): Promise<string> 
 }
 
 /**
- * Test get lessons by unit
+ * Test get lessons by module
  */
-async function testGetLessonsByUnit(token: string, unitId: string) {
-  console.log('📖 Test: Get lessons by unit');
+async function testGetLessonsByModule(token: string, moduleId: string) {
+  console.log('📖 Test: Get lessons by module');
 
   apiClient.setToken(token);
-  const response = await apiClient.get(endpoints.lessons.byUnit(unitId));
+  const response = await apiClient.get(endpoints.lessons.byModule(moduleId));
 
   TestAssertions.assertStatus(response.status, 200, 'Get lessons should return 200');
   TestAssertions.assertHasData(response, 'Response should have data');
@@ -239,39 +239,39 @@ async function testUpdateCourse(token: string, courseId: string) {
 }
 
 /**
- * Test update unit
+ * Test update module
  */
-async function testUpdateUnit(token: string, unitId: string) {
-  console.log('✏️ Test: Update unit');
+async function testUpdateModule(token: string, moduleId: string) {
+  console.log('✏️ Test: Update module');
 
   apiClient.setToken(token);
   const updateData = {
-    title: 'Updated Unit Title',
-    description: 'Updated unit description',
+    title: 'Updated Module Title',
+    description: 'Updated module description',
   };
-  const response = await apiClient.patch(`/units/${unitId}`, updateData);
+  const response = await apiClient.patch(`/modules/${moduleId}`, updateData);
 
-  TestAssertions.assertStatus(response.status, 200, 'Update unit should return 200');
+  TestAssertions.assertStatus(response.status, 200, 'Update module should return 200');
   TestAssertions.assertHasData(response, 'Response should have data');
   TestAssertions.assertEquals(response.data.title, updateData.title, 'Title should be updated');
 
-  console.log('  ✓ Unit updated successfully');
+  console.log('  ✓ Module updated successfully');
 }
 
 /**
- * Test get unit by ID
+ * Test get module by ID
  */
-async function testGetUnitById(token: string, unitId: string) {
-  console.log('🔍 Test: Get unit by ID');
+async function testGetModuleById(token: string, moduleId: string) {
+  console.log('🔍 Test: Get module by ID');
 
   apiClient.setToken(token);
-  const response = await apiClient.get(endpoints.units.detail(unitId));
+  const response = await apiClient.get(endpoints.modules.detail(moduleId));
 
-  TestAssertions.assertStatus(response.status, 200, 'Get unit should return 200');
+  TestAssertions.assertStatus(response.status, 200, 'Get module should return 200');
   TestAssertions.assertHasData(response, 'Response should have data');
-  TestAssertions.assertEquals(response.data.id, unitId, 'Unit ID should match');
+  TestAssertions.assertEquals(response.data.id, moduleId, 'Module ID should match');
 
-  console.log('  ✓ Unit retrieved successfully');
+  console.log('  ✓ Module retrieved successfully');
 }
 
 /**
@@ -309,17 +309,17 @@ async function testDeleteLesson(token: string, lessonId: string) {
 }
 
 /**
- * Test delete unit
+ * Test delete module
  */
-async function testDeleteUnit(token: string, unitId: string) {
-  console.log('🗑️ Test: Delete unit');
+async function testDeleteModule(token: string, moduleId: string) {
+  console.log('🗑️ Test: Delete module');
 
   apiClient.setToken(token);
-  const response = await apiClient.delete(`/units/${unitId}`);
+  const response = await apiClient.delete(`/modules/${moduleId}`);
 
-  TestAssertions.assertStatus(response.status, 200, 'Delete unit should return 200');
+  TestAssertions.assertStatus(response.status, 200, 'Delete module should return 200');
 
-  console.log('  ✓ Unit deleted successfully');
+  console.log('  ✓ Module deleted successfully');
 }
 
 /**

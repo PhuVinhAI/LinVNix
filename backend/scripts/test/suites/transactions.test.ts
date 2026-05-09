@@ -13,7 +13,7 @@ export async function runTransactionTests() {
   const testUser = userFixtures.randomUser();
   let authToken: string;
   let courseId: string;
-  let unitId: string;
+  let moduleId: string;
   let lessonId: string;
 
   try {
@@ -22,10 +22,10 @@ export async function runTransactionTests() {
     authToken = await loginUser(testUser);
     apiClient.setToken(authToken);
 
-    // Setup: Get a course/unit/lesson to test with
+    // Setup: Get a course/module/lesson to test with
     const setup = await setupTestData(authToken);
     courseId = setup.courseId;
-    unitId = setup.unitId;
+    moduleId = setup.moduleId;
     lessonId = setup.lessonId;
 
     // Test 1: Complete lesson (should update progress + exercises + vocabulary atomically)
@@ -67,11 +67,11 @@ async function loginUser(user: any): Promise<string> {
 }
 
 /**
- * Setup test data (create course/unit/lesson if not exists)
+ * Setup test data (create course/module/lesson if not exists)
  */
 async function setupTestData(token: string): Promise<{
   courseId: string;
-  unitId: string;
+  moduleId: string;
   lessonId: string;
 }> {
   console.log('🎯 Setup: Get or create test data');
@@ -95,25 +95,25 @@ async function setupTestData(token: string): Promise<{
     courseId = coursesResponse.data[0].id;
   }
 
-  // Get or create unit
-  let unitsResponse = await apiClient.get(endpoints.units.byCourse(courseId));
-  let unitId: string;
+  // Get or create module
+  let modulesResponse = await apiClient.get(endpoints.modules.byCourse(courseId));
+  let moduleId: string;
   
-  if (unitsResponse.data.length === 0) {
-    console.log('  Creating test unit...');
-    const unitResponse = await apiClient.post('/units', {
-      title: 'Transaction Test Unit',
-      description: 'Unit for transaction testing',
+  if (modulesResponse.data.length === 0) {
+    console.log('  Creating test module...');
+    const moduleResponse = await apiClient.post('/modules', {
+      title: 'Transaction Test Module',
+      description: 'Module for transaction testing',
       courseId: courseId,
       orderIndex: 1,
     });
-    unitId = unitResponse.data.id;
+    moduleId = moduleResponse.data.id;
   } else {
-    unitId = unitsResponse.data[0].id;
+    moduleId = modulesResponse.data[0].id;
   }
 
   // Get or create lesson
-  let lessonsResponse = await apiClient.get(endpoints.lessons.byUnit(unitId));
+  let lessonsResponse = await apiClient.get(endpoints.lessons.byModule(moduleId));
   let lessonId: string;
   
   if (lessonsResponse.data.length === 0) {
@@ -122,7 +122,7 @@ async function setupTestData(token: string): Promise<{
       title: 'Transaction Test Lesson',
       description: 'Lesson for transaction testing',
       lessonType: 'vocabulary',
-      unitId: unitId,
+      moduleId: moduleId,
       orderIndex: 1,
     });
     lessonId = lessonResponse.data.id;
@@ -132,7 +132,7 @@ async function setupTestData(token: string): Promise<{
 
   console.log(`  ✓ Test data ready (Course: ${courseId.substring(0, 8)}...)`);
 
-  return { courseId, unitId, lessonId };
+  return { courseId, moduleId, lessonId };
 }
 
 /**

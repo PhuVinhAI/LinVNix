@@ -72,11 +72,11 @@ export async function runVocabularyEnhancementsTests() {
     
     if (coursesResponse.data && coursesResponse.data.length > 0) {
       const firstCourse = coursesResponse.data[0];
-      const unitsResponse = await client.get(`/units/course/${firstCourse.id}`);
+      const modulesResponse = await client.get(`/modules/course/${firstCourse.id}`);
       
-      if (unitsResponse.data && unitsResponse.data.length > 0) {
-        const firstUnit = unitsResponse.data[0];
-        const lessonsResponse = await client.get(`/lessons/unit/${firstUnit.id}`);
+      if (modulesResponse.data && modulesResponse.data.length > 0) {
+        const firstModule = modulesResponse.data[0];
+        const lessonsResponse = await client.get(`/lessons/module/${firstModule.id}`);
         
         if (lessonsResponse.data && lessonsResponse.data.length > 0) {
           const firstLesson = lessonsResponse.data[0];
