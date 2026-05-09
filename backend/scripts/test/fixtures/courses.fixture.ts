@@ -52,97 +52,70 @@ export const courseFixtures = {
 /**
  * Unit fixtures for testing
  */
-export const unitFixtures = {
-  /**
-   * First unit - Greetings
-   */
-  greetingsUnit: (courseId: string) => ({
+export const moduleFixtures = {
+  greetingsModule: (courseId: string) => ({
     title: 'Greetings and Introductions',
     description: 'Learn how to greet people and introduce yourself',
     orderIndex: 1,
     courseId,
   }),
 
-  /**
-   * Second unit - Numbers
-   */
-  numbersUnit: (courseId: string) => ({
+  numbersModule: (courseId: string) => ({
     title: 'Numbers and Counting',
     description: 'Learn Vietnamese numbers from 0 to 100',
     orderIndex: 2,
     courseId,
   }),
 
-  /**
-   * Third unit - Family
-   */
-  familyUnit: (courseId: string) => ({
+  familyModule: (courseId: string) => ({
     title: 'Family Members',
     description: 'Learn vocabulary about family relationships',
     orderIndex: 3,
     courseId,
   }),
 
-  /**
-   * Generate random unit
-   */
-  randomUnit: (courseId: string) => TestDataBuilder.unit(courseId),
+  randomModule: (courseId: string) => TestDataBuilder.module(courseId),
 };
 
 /**
  * Lesson fixtures for testing
  */
 export const lessonFixtures = {
-  /**
-   * Vocabulary lesson
-   */
-  vocabularyLesson: (unitId: string) => ({
+  vocabularyLesson: (moduleId: string) => ({
     title: 'Basic Greetings Vocabulary',
     description: 'Learn essential greeting words',
     lessonType: 'vocabulary',
     orderIndex: 1,
     estimatedDuration: 15,
-    unitId,
+    moduleId,
   }),
 
-  /**
-   * Grammar lesson
-   */
-  grammarLesson: (unitId: string) => ({
+  grammarLesson: (moduleId: string) => ({
     title: 'Sentence Structure Basics',
     description: 'Learn basic Vietnamese sentence structure',
     lessonType: 'grammar',
     orderIndex: 2,
     estimatedDuration: 20,
-    unitId,
+    moduleId,
   }),
 
-  /**
-   * Reading lesson
-   */
-  readingLesson: (unitId: string) => ({
+  readingLesson: (moduleId: string) => ({
     title: 'Reading Practice',
     description: 'Practice reading simple Vietnamese texts',
     lessonType: 'reading',
     orderIndex: 3,
     estimatedDuration: 25,
-    unitId,
+    moduleId,
   }),
 
-  /**
-   * Listening lesson
-   */
-  listeningLesson: (unitId: string) => ({
+  listeningLesson: (moduleId: string) => ({
     title: 'Listening Practice',
     description: 'Practice listening to Vietnamese conversations',
     lessonType: 'listening',
     orderIndex: 4,
     estimatedDuration: 20,
-    unitId,
+    moduleId,
   }),
 
-  /**
-   * Generate random lesson
-   */
-  randomLesson: (unitId: string) => TestDataBuilder.lesson(unitId),
+  randomLesson: (moduleId: string) => TestDataBuilder.lesson(moduleId),
 };

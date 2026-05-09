@@ -44,29 +44,26 @@ export class TestDataBuilder {
   }
 
   /**
-   * Generate unit data
+   * Generate module data
    */
-  static unit(courseId: string, overrides?: any) {
+  static module(courseId: string, overrides?: any) {
     return {
-      title: `Unit ${this.randomString(5)}`,
-      description: `Test unit description ${this.randomString(10)}`,
+      title: `Module ${this.randomString(5)}`,
+      description: `Test module description ${this.randomString(10)}`,
       orderIndex: 1,
       courseId,
       ...overrides,
     };
   }
 
-  /**
-   * Generate lesson data
-   */
-  static lesson(unitId: string, overrides?: any) {
+  static lesson(moduleId: string, overrides?: any) {
     return {
       title: `Lesson ${this.randomString(5)}`,
       description: `Test lesson description ${this.randomString(10)}`,
       lessonType: 'vocabulary',
       orderIndex: 1,
       estimatedDuration: 30,
-      unitId,
+      moduleId,
       ...overrides,
     };
   }

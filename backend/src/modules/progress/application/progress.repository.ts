@@ -28,7 +28,7 @@ export class ProgressRepository {
   async findByUserId(userId: string): Promise<UserProgress[]> {
     return this.repository.find({
       where: { userId },
-      relations: ['lesson', 'lesson.unit', 'lesson.unit.course'],
+      relations: ['lesson', 'lesson.module', 'lesson.module.course'],
       order: { lastAccessedAt: 'DESC' },
     });
   }
@@ -52,8 +52,8 @@ export class ProgressRepository {
     }[] = await this.repository
       .createQueryBuilder('progress')
       .innerJoin('progress.lesson', 'lesson')
-      .innerJoin('lesson.unit', 'unit')
-      .innerJoin('unit.course', 'course')
+      .innerJoin('lesson.module', 'module')
+      .innerJoin('module.course', 'course')
       .select('course.id', 'courseId')
       .addSelect('course.title', 'courseTitle')
       .addSelect('COUNT(DISTINCT progress.userId)', 'userCount')

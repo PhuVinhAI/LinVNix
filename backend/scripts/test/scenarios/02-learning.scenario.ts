@@ -4,7 +4,7 @@ import { endpoints } from '../config/test.config';
 import { userFixtures } from '../fixtures/users.fixture';
 import {
   courseFixtures,
-  unitFixtures,
+  moduleFixtures,
   lessonFixtures,
 } from '../fixtures/courses.fixture';
 import {
@@ -29,7 +29,7 @@ export async function runLearningScenario() {
 
   let authToken: string;
   let courseId: string;
-  let unitId: string;
+  let moduleId: string;
   let lessonId: string;
   let vocabId: string;
   let exerciseId: string;
@@ -61,13 +61,13 @@ export async function runLearningScenario() {
     // Step 3: Start a course
     console.log('Step 3: Student starts the course');
     
-    // Create unit
-    const unit = unitFixtures.greetingsUnit(courseId);
-    const unitResponse = await apiClient.post('/units', unit);
-    unitId = unitResponse.data.id;
+    // Create module
+    const module = moduleFixtures.greetingsModule(courseId);
+    const moduleResponse = await apiClient.post('/modules', module);
+    moduleId = moduleResponse.data.id;
     
     // Create lesson
-    const lesson = lessonFixtures.vocabularyLesson(unitId);
+    const lesson = lessonFixtures.vocabularyLesson(moduleId);
     const lessonResponse = await apiClient.post('/lessons', lesson);
     lessonId = lessonResponse.data.id;
     
@@ -75,7 +75,7 @@ export async function runLearningScenario() {
     const startResponse = await apiClient.post(endpoints.progress.start(lessonId));
     TestAssertions.assertEquals(startResponse.data.status, 'in_progress');
     
-    console.log(`  ✓ Started unit: "${unit.title}"`);
+    console.log(`  ✓ Started module: "${module.title}"`);
     console.log(`  ✓ Started lesson: "${lesson.title}"`);
     console.log('  ✓ Progress tracking initiated\n');
 
