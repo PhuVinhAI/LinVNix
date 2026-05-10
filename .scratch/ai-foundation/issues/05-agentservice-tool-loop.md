@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -29,18 +29,18 @@ No concrete tools are built in this slice — the tool loop is verified with a t
 
 ## Acceptance criteria
 
-- [ ] `agent/` module created with DDD-like structure: service, module file
-- [ ] `AgentService` injects `IAiProvider` (via `@Inject('IAiProvider')` token) and `ConversationService`
-- [ ] `AgentModule.providers` lists `BaseTool` subclasses explicitly (manual registration, compile-safe)
-- [ ] `AgentService` injects all `BaseTool` instances, builds tool map by name
-- [ ] `runTurn(conversationId, userMessage)` implements the full tool loop from PRD
-- [ ] Lesson/vocabulary context injected into system prompt when `Conversation.lessonId` is set
-- [ ] Tool parameters validated via `schema.parse(params)` before `execute()`; invalid params throw appropriate error
-- [ ] `maxIterations` guard prevents infinite loops (separate constant `AI_TOOL_MAX_ITERATIONS = 10`, NOT `genai.maxRetries` which is for 429 retry)
-- [ ] All messages (user, assistant, tool calls, tool results) persisted via `ConversationService`
-- [ ] Token usage accumulated in Conversation after each AI call
-- [ ] Unit tests pass with mocked `IAiProvider`: tool loop with functionCalls then final text, max iterations guard, tool dispatch by name, prompt context injection for lessonId, parameter validation
-- [ ] Module registered in `AppModule`
+- [x] `agent/` module created with DDD-like structure: service, module file
+- [x] `AgentService` injects `IAiProvider` (via `@Inject('IAiProvider')` token) and `ConversationService`
+- [x] `AgentModule.providers` lists `BaseTool` subclasses explicitly (manual registration, compile-safe)
+- [x] `AgentService` injects all `BaseTool` instances, builds tool map by name
+- [x] `runTurn(conversationId, userMessage)` implements the full tool loop from PRD
+- [x] Lesson/vocabulary context injected into system prompt when `Conversation.lessonId` is set
+- [x] Tool parameters validated via `schema.parse(params)` before `execute()`; invalid params throw appropriate error
+- [x] `maxIterations` guard prevents infinite loops (separate constant `AI_TOOL_MAX_ITERATIONS = 10`, NOT `genai.maxRetries` which is for 429 retry)
+- [x] All messages (user, assistant, tool calls, tool results) persisted via `ConversationService`
+- [x] Token usage accumulated in Conversation after each AI call
+- [x] Unit tests pass with mocked `IAiProvider`: tool loop with functionCalls then final text, max iterations guard, tool dispatch by name, prompt context injection for lessonId, parameter validation
+- [x] Module registered in `AppModule`
 
 ## Blocked by
 

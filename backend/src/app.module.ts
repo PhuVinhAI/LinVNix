@@ -26,6 +26,7 @@ import { GrammarModule } from './modules/grammar/grammar.module';
 import { ExercisesModule } from './modules/exercises/exercises.module';
 import { ProgressModule } from './modules/progress/progress.module';
 import { ConversationsModule } from './modules/conversations/conversations.module';
+import { AgentModule } from './modules/agent/agent.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { CacheModule } from './infrastructure/cache/cache.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
@@ -87,6 +88,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     ExercisesModule,
     ProgressModule,
     ConversationsModule,
+    AgentModule,
     AdminModule,
   ],
   providers: [
