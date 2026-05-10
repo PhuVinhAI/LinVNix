@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -10,17 +10,31 @@ Build the online vocabulary review experience. Review tab shows due review count
 
 ## Acceptance criteria
 
-- [ ] Review tab shows due review count and start button
-- [ ] Flashcard front shows Vietnamese word + phonetic + audio button
-- [ ] Flashcard back shows translation, example, POS, classifier
-- [ ] 4 rating buttons (Again/Hard/Good/Easy) submit to FSRS endpoint
-- [ ] Mastery level (learning/familiar/mastered) displayed per word
-- [ ] Session continues until all due items reviewed
-- [ ] Session summary shown at completion
-- [ ] Vocabulary browser shows learned words with infinite scroll
-- [ ] Search works with query input and paginated results
-- [ ] Audio playback works for vocabulary pronunciation
-- [ ] Unit tests for ReviewEngine (FSRS rating→mastery mapping)
+- [x] Review tab shows due review count and start button
+- [x] Flashcard front shows Vietnamese word + phonetic + audio button
+- [x] Flashcard back shows translation, example, POS, classifier
+- [x] 4 rating buttons (Again/Hard/Good/Easy) submit to FSRS endpoint
+- [x] Mastery level (learning/familiar/mastered) displayed per word
+- [x] Session continues until all due items reviewed
+- [x] Session summary shown at completion
+- [x] Vocabulary browser shows learned words with infinite scroll
+- [x] Search works with query input and paginated results
+- [x] Audio playback works for vocabulary pronunciation
+- [x] Unit tests for ReviewEngine (FSRS rating→mastery mapping)
+
+## Implementation notes
+
+- Created domain models: Vocabulary, UserVocabulary, ReviewResult, DueReviewItem, SessionSummary
+- Implemented ReviewEngine with FSRS rating→mastery mapping (stability<21=learning, 21-99=familiar, 100+=mastered)
+- Added 15 unit tests for ReviewEngine covering all scenarios
+- Created VocabularyRepository and ReviewRepository for API calls
+- Added Riverpod providers for state management
+- Implemented ReviewScreen with flashcard UI and flip animation
+- Created RatingButtons widget with Again/Hard/Good/Easy options
+- Built VocabularyBrowserScreen with infinite scroll pagination
+- Added VocabularySearchDelegate for search functionality
+- Integrated audio playback via just_audio
+- Added route `/vocabulary` and updated HomeScreen with navigation
 
 ## Blocked by
 
