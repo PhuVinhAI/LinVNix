@@ -5,37 +5,43 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends ConsumerStatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
 
     try {
       final repository = ref.read(authRepositoryProvider);
-      final response = await repository.login(
+      final response = await repository.register(
         email: _emailController.text.trim(),
         password: _passwordController.text,
+        fullName: _nameController.text.trim(),
       );
 
       final storage = ref.read(secureStorageProvider);
@@ -45,6 +51,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
 
       ref.read(authStateProvider.notifier).setAuthenticated(true);
+
+      if (mounted) {
+        context.go('/verify-email');
+      }
     } on AppException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -68,6 +78,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Account'),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -75,21 +88,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    'LinVNix',
-                    style: Theme.of(context).textTheme.displaySmall,
-                    textAlign: TextAlign.center,
+                  TextFormField(
+                    controller: _nameController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      labelText: 'Full Name',
+                      prefixIcon: Icon(Icons.person_outlined),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Full name is required';
+                      }
+                      return null;
+                    },
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Vietnamese Language Learning',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -130,32 +145,63 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Password is required';
                       }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => context.push('/forgot-password'),
-                      child: const Text('Forgot password?'),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    obscureText: _obscureConfirmPassword,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      prefixIcon: const Icon(Icons.lock_outlined),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirmPassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                        ),
+                        onPressed: () {
+                          setState(() =>
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword);
+                        },
+                      ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please confirm your password';
+                      }
+                      if (value != _passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
                   FilledButton(
-                    onPressed: _isLoading ? null : _handleLogin,
+                    onPressed: _isLoading ? null : _handleRegister,
                     child: _isLoading
                         ? const SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Sign In'),
+                        : const Text('Create Account'),
                   ),
                   const SizedBox(height: 16),
-                  OutlinedButton(
-                    onPressed: () => context.push('/register'),
-                    child: const Text('Create Account'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Already have an account? '),
+                      TextButton(
+                        onPressed: () => context.pop(),
+                        child: const Text('Sign in'),
+                      ),
+                    ],
                   ),
                 ],
               ),

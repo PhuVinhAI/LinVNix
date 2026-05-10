@@ -3,6 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_state_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/register_screen.dart';
+import '../../features/auth/presentation/screens/email_verification_screen.dart';
+import '../../features/auth/presentation/screens/forgot_password_screen.dart';
+import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/courses/presentation/screens/courses_screen.dart';
 import '../../features/review/presentation/screens/review_screen.dart';
@@ -20,13 +24,17 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     redirect: (context, state) {
       final isAuthenticated = authState;
-      final isLoginRoute = state.matchedLocation == '/login';
+      final isAuthRoute = state.matchedLocation == '/login' ||
+          state.matchedLocation == '/register' ||
+          state.matchedLocation == '/verify-email' ||
+          state.matchedLocation == '/forgot-password' ||
+          state.matchedLocation == '/reset-password';
 
-      if (!isAuthenticated && !isLoginRoute) {
+      if (!isAuthenticated && !isAuthRoute) {
         return '/login';
       }
 
-      if (isAuthenticated && isLoginRoute) {
+      if (isAuthenticated && isAuthRoute) {
         return '/';
       }
 
@@ -36,6 +44,28 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/verify-email',
+        builder: (context, state) {
+          final token = state.uri.queryParameters['token'];
+          return EmailVerificationScreen(token: token);
+        },
+      ),
+      GoRoute(
+        path: '/forgot-password',
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/reset-password',
+        builder: (context, state) {
+          final token = state.uri.queryParameters['token'];
+          return ResetPasswordScreen(token: token);
+        },
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,

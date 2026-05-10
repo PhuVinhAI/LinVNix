@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../../storage/secure_storage_service.dart';
 
 class TokenRefreshInterceptor extends Interceptor {
-  TokenRefreshInterceptor(this._dio, this._storage);
+  TokenRefreshInterceptor(this._dio, this._storage, {this.onAuthFailure});
   final Dio _dio;
   final SecureStorageService _storage;
+  VoidCallback? onAuthFailure;
 
   bool _isRefreshing = false;
 
@@ -24,6 +26,7 @@ class TokenRefreshInterceptor extends Interceptor {
       final refreshToken = await _storage.getRefreshToken();
       if (refreshToken == null) {
         await _storage.clearTokens();
+        onAuthFailure?.call();
         return handler.next(err);
       }
 
@@ -32,9 +35,10 @@ class TokenRefreshInterceptor extends Interceptor {
         data: {'refreshToken': refreshToken},
       );
 
-      final data = response.data?['data'] as Map<String, dynamic>?;
+      final data = response.data;
       if (data == null) {
         await _storage.clearTokens();
+        onAuthFailure?.call();
         return handler.next(err);
       }
 
@@ -53,6 +57,7 @@ class TokenRefreshInterceptor extends Interceptor {
       handler.resolve(retryResponse);
     } catch (_) {
       await _storage.clearTokens();
+      onAuthFailure?.call();
       handler.next(err);
     } finally {
       _isRefreshing = false;
