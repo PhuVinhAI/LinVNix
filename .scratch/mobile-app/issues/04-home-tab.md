@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -10,14 +10,14 @@ Build the Home tab showing two primary cards: "Continue learning" and "Due revie
 
 ## Acceptance criteria
 
-- [ ] "Continue learning" card shows current course and lesson name
-- [ ] Tapping continue card navigates to the active lesson wizard
-- [ ] "Due reviews" card shows count of due vocabulary items
-- [ ] Tapping due reviews card navigates to review session
-- [ ] Cards show shimmer loading state while fetching
-- [ ] Error states show retry buttons
-- [ ] Empty states shown when no progress or no due reviews
-- [ ] Data refreshes on pull-to-refresh and on tab focus
+- [x] "Continue learning" card shows current course and lesson name
+- [x] Tapping continue card navigates to the active lesson wizard
+- [x] "Due reviews" card shows count of due vocabulary items
+- [x] Tapping due reviews card navigates to review session
+- [x] Cards show shimmer loading state while fetching
+- [x] Error states show retry buttons
+- [x] Empty states shown when no progress or no due reviews
+- [x] Data refreshes on pull-to-refresh and on tab focus
 
 ## Blocked by
 

@@ -18,6 +18,7 @@ import '../../features/review/presentation/screens/vocabulary_browser_screen.dar
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/data/profile_providers.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/lessons/presentation/screens/lesson_wizard_screen.dart';
 import '../presentation/shell_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -134,6 +135,17 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/vocabulary',
         builder: (context, state) => const VocabularyBrowserScreen(),
+      ),
+      GoRoute(
+        path: '/lessons/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return LessonWizardScreen(lessonId: id);
+        },
+      ),
+      GoRoute(
+        path: '/review/session',
+        builder: (context, state) => const ReviewScreen(),
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
