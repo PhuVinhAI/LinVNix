@@ -11,6 +11,11 @@ class AuthException extends AppException {
   const AuthException(super.message, {super.statusCode});
 }
 
+class EmailNotVerifiedException extends AuthException {
+  const EmailNotVerifiedException(super.message, {required this.email, super.statusCode});
+  final String email;
+}
+
 class NetworkException extends AppException {
   const NetworkException(super.message, {super.statusCode});
 }

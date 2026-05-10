@@ -45,6 +45,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
 
       ref.read(authStateProvider.notifier).setAuthenticated(true);
+    } on EmailNotVerifiedException catch (e) {
+      if (mounted) {
+        context.push('/verify-email?email=${Uri.encodeComponent(e.email)}');
+      }
     } on AppException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

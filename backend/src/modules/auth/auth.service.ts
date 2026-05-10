@@ -3,6 +3,8 @@ import {
   UnauthorizedException,
   BadRequestException,
   NotFoundException,
+  ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -41,6 +43,13 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     try {
+      const existingUser = await this.usersService.findByEmail(
+        registerDto.email,
+      );
+      if (existingUser) {
+        throw new ConflictException('Email đã được đăng ký');
+      }
+
       // Tạo user mới
       const user = await this.usersService.create(registerDto);
 
@@ -105,6 +114,18 @@ export class AuthService {
           'AuthService',
         );
         throw new UnauthorizedException('Invalid credentials');
+      }
+
+      if (!user.emailVerified) {
+        this.loggingService.warn(
+          `Login attempt with unverified email: ${loginDto.email}`,
+          'AuthService',
+        );
+        throw new ForbiddenException({
+          message: 'Email chưa được xác thực',
+          emailNotVerified: true,
+          email: user.email,
+        });
       }
 
       const tokens = await this.generateTokens(
