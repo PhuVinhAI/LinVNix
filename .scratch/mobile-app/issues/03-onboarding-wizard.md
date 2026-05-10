@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -10,15 +10,15 @@ Build a multi-step onboarding wizard shown after first registration (before land
 
 ## Acceptance criteria
 
-- [ ] Onboarding wizard appears after first registration
-- [ ] Step 1 shows A1–C2 level selector
-- [ ] Step 2 shows dialect selector (Standard/Northern/Central/Southern)
-- [ ] Step 3 shows optional daily goal input
-- [ ] Each step is skippable; defaults applied from registration values
-- [ ] Data is persisted via `PATCH /users/me` on completion
-- [ ] Onboarding completed flag stored in shared_preferences
-- [ ] Wizard does not appear on subsequent logins
-- [ ] Progress indicator shows current step
+- [x] Onboarding wizard appears after first registration
+- [x] Step 1 shows A1–C2 level selector
+- [x] Step 2 shows dialect selector (Standard/Northern/Central/Southern)
+- [x] Step 3 shows optional daily goal input
+- [x] Each step is skippable; defaults applied from registration values
+- [x] Data is persisted via `PATCH /users/me` on completion
+- [x] Onboarding completed flag stored in shared_preferences
+- [x] Wizard does not appear on subsequent logins
+- [x] Progress indicator shows current step
 
 ## Blocked by
 

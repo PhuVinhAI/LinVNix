@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_state_provider.dart';
+import '../providers/providers.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/email_verification_screen.dart';
@@ -12,6 +13,7 @@ import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/courses/presentation/screens/courses_screen.dart';
 import '../../features/review/presentation/screens/review_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../presentation/shell_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -19,6 +21,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
+  final onboardingCompleted = ref.watch(onboardingCompletedProvider);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -37,12 +40,23 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
+      // /onboarding is accessible when authenticated (regardless of onboarding status)
+      if (location == '/onboarding') {
+        if (!isAuthenticated) return '/login';
+        return null;
+      }
+
       if (!isAuthenticated && !isAuthRoute) {
         return '/login';
       }
 
       if (isAuthenticated && isAuthRoute) {
         return '/';
+      }
+
+      // If authenticated but onboarding not completed, redirect to onboarding
+      if (isAuthenticated && !onboardingCompleted && location != '/onboarding') {
+        return '/onboarding';
       }
 
       return null;
@@ -80,6 +94,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           final token = state.uri.queryParameters['token'];
           return ResetPasswordScreen(token: token);
         },
+      ),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
+import 'core/providers/providers.dart';
+import 'core/storage/preferences_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +14,16 @@ Future<void> main() async {
   } catch (_) {
     // .env file not found, use dart-define or defaults
   }
-  runApp(const ProviderScope(child: LinVNixApp()));
+
+  final prefs = await SharedPreferences.getInstance();
+  final preferencesService = PreferencesService(prefs);
+
+  runApp(ProviderScope(
+    overrides: [
+      preferencesProvider.overrideWithValue(AsyncData(preferencesService)),
+    ],
+    child: const LinVNixApp(),
+  ));
 }
 
 class LinVNixApp extends ConsumerWidget {
