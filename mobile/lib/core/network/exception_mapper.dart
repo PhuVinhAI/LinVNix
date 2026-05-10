@@ -31,6 +31,13 @@ AppException _mapBadResponse(DioException error) {
         statusCode: statusCode,
       );
     case 403:
+      if (data is Map<String, dynamic> && data['emailNotVerified'] == true) {
+        return EmailNotVerifiedException(
+          _extractMessage(data) ?? 'Email chưa được xác thực',
+          email: data['email'] as String? ?? '',
+          statusCode: statusCode,
+        );
+      }
       return AuthException(
         _extractMessage(data) ?? 'Access denied',
         statusCode: statusCode,
@@ -39,6 +46,11 @@ AppException _mapBadResponse(DioException error) {
       return ValidationException(
         _extractMessage(data) ?? 'Validation failed',
         errors: _extractErrors(data),
+        statusCode: statusCode,
+      );
+    case 409:
+      return ValidationException(
+        _extractMessage(data) ?? 'Conflict',
         statusCode: statusCode,
       );
     case final int s when s >= 500:
