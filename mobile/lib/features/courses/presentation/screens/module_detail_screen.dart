@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
@@ -157,6 +158,7 @@ class _LessonCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: ListTile(
+        onTap: () => context.push('/lessons/${lesson.id}'),
         leading: _LessonTypeIcon(lessonType: lesson.lessonType),
         title: Row(
           children: [
