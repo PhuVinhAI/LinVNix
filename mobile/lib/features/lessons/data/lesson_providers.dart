@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/providers.dart';
 import '../data/lesson_repository.dart';
 import '../domain/lesson_models.dart';
+import '../domain/exercise_models.dart';
 
 final lessonRepositoryProvider = Provider<LessonRepository>((ref) {
   return LessonRepository(ref.watch(dioProvider));
@@ -23,4 +24,10 @@ final lessonProgressProvider =
     FutureProvider.family<Map<String, dynamic>?, String>((ref, lessonId) async {
   final repo = ref.watch(lessonRepositoryProvider);
   return repo.getLessonProgress(lessonId);
+});
+
+final lessonExercisesProvider =
+    FutureProvider.family<List<Exercise>, String>((ref, lessonId) async {
+  final repo = ref.watch(lessonRepositoryProvider);
+  return repo.getExercisesByLesson(lessonId);
 });

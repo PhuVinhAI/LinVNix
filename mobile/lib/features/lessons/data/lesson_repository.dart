@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../../core/network/exception_mapper.dart';
 import '../domain/lesson_models.dart';
+import '../domain/exercise_models.dart';
 import '../../review/domain/review_models.dart';
 
 class LessonRepository {
@@ -12,6 +13,36 @@ class LessonRepository {
       final response =
           await _dio.get<Map<String, dynamic>>('/lessons/$lessonId');
       return LessonDetail.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<List<Exercise>> getExercisesByLesson(String lessonId) async {
+    try {
+      final response =
+          await _dio.get<List<dynamic>>('/exercises/lesson/$lessonId');
+      return (response.data as List<dynamic>)
+          .map((e) => Exercise.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<ExerciseSubmissionResult> submitExerciseAnswer(
+    String exerciseId,
+    Map<String, dynamic> answer, {
+    int? timeSpent,
+  }) async {
+    try {
+      final data = <String, dynamic>{'userAnswer': answer};
+      if (timeSpent != null) data['timeSpent'] = timeSpent;
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/exercises/$exerciseId/submit',
+        data: data,
+      );
+      return ExerciseSubmissionResult.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
