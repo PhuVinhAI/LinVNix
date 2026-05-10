@@ -1,5 +1,7 @@
 # AGENTS.md
 
+LUÔN LUÔN PHẢN HỒI BẰNG TIẾNG VIỆT!
+
 ## Cấu trúc Monorepo
 
 Ba app độc lập, mỗi app cài riêng:

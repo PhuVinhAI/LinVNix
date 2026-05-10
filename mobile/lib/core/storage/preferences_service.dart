@@ -13,6 +13,11 @@ class PreferencesService {
   Future<void> setOnboardingCompleted() =>
       _prefs.setBool(_onboardingCompletedKey, true);
 
+  Future<void> clearOnboardingState() async {
+    await _prefs.remove(_onboardingCompletedKey);
+    await _prefs.remove(_dailyGoalKey);
+  }
+
   int get dailyGoal => _prefs.getInt(_dailyGoalKey) ?? 20;
 
   Future<void> setDailyGoal(int goal) =>

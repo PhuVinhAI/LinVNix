@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
+import '../../../profile/data/profile_providers.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -66,7 +67,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     setState(() => _isSubmitting = true);
 
     try {
-      final updateData = <String, dynamic>{};
+      final updateData = <String, dynamic>{
+        'onboardingCompleted': true,
+      };
       if (_selectedLevel != null) {
         updateData['currentLevel'] = _selectedLevel;
       }
@@ -74,16 +77,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         updateData['preferredDialect'] = _selectedDialect;
       }
 
-      if (updateData.isNotEmpty) {
-        final repository = ref.read(userRepositoryProvider);
-        await repository.updateMe(updateData);
-      }
+      final repository = ref.read(userRepositoryProvider);
+      await repository.updateMe(updateData);
 
       final prefs = await ref.read(preferencesProvider.future);
       await prefs.setDailyGoal(_dailyGoal);
       await prefs.setOnboardingCompleted();
 
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
+
+      // Invalidate profile so router reads fresh onboardingCompleted from server
+      ref.invalidate(userProfileProvider);
 
       if (mounted) {
         context.go('/');

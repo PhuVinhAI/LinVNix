@@ -13,6 +13,7 @@ import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/courses/presentation/screens/courses_screen.dart';
 import '../../features/review/presentation/screens/review_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/profile/data/profile_providers.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../presentation/shell_screen.dart';
 
@@ -22,6 +23,16 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   final onboardingCompleted = ref.watch(onboardingCompletedProvider);
+  final profileAsync = ref.watch(userProfileProvider);
+
+  // Sync onboarding state from server when profile is available
+  final serverOnboarding = profileAsync.whenOrNull(
+    data: (profile) => profile.onboardingCompleted,
+  );
+
+  // Use server value when available, fall back to local state
+  final isOnboardingCompleted =
+      serverOnboarding ?? onboardingCompleted;
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -55,7 +66,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       // If authenticated but onboarding not completed, redirect to onboarding
-      if (isAuthenticated && !onboardingCompleted && location != '/onboarding') {
+      if (isAuthenticated && !isOnboardingCompleted && location != '/onboarding') {
         return '/onboarding';
       }
 
