@@ -9,7 +9,12 @@ export class MailService {
     private loggingService: LoggingService,
   ) {}
 
-  async sendVerificationEmail(email: string, fullName: string, token: string) {
+  async sendVerificationEmail(
+    email: string,
+    fullName: string,
+    token: string,
+    code?: string,
+  ) {
     // Skip sending email if configured (useful for testing)
     if (process.env.SKIP_MAIL_SENDING === 'true') {
       this.loggingService.log(
@@ -29,6 +34,7 @@ export class MailService {
         context: {
           fullName,
           verificationUrl,
+          code: code || '',
         },
       });
 

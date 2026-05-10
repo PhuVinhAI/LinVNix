@@ -21,7 +21,7 @@ void main() {
 
   group('AuthRepository', () {
     group('register', () {
-      test('returns AuthResponse on successful registration', () async {
+      test('returns MessageResponse on successful registration', () async {
         when(() => mockDio.post<Map<String, dynamic>>(
               '/auth/register',
               data: {
@@ -34,17 +34,8 @@ void main() {
             requestOptions: RequestOptions(path: '/auth/register'),
             statusCode: 201,
             data: {
-              'user': {
-                'id': '1',
-                'email': 'test@example.com',
-                'fullName': 'Test User',
-                'emailVerified': false,
-                'roles': <Map<String, dynamic>>[],
-              },
-              'access_token': 'access_token',
-              'refresh_token': 'refresh_token',
-              'expires_in': 900,
-              'message': 'Registration successful',
+              'message': 'Đăng ký thành công! Vui lòng kiểm tra email để nhận mã xác thực.',
+              'email': 'test@example.com',
             },
           ),
         );
@@ -55,10 +46,7 @@ void main() {
           fullName: 'Test User',
         );
 
-        expect(result.user.email, 'test@example.com');
-        expect(result.accessToken, 'access_token');
-        expect(result.refreshToken, 'refresh_token');
-        expect(result.expiresIn, 900);
+        expect(result.message, contains('Đăng ký thành công'));
       });
 
       test('throws ValidationException on 422 response', () async {

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
-import '../../../../core/providers/auth_state_provider.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -38,22 +37,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
     try {
       final repository = ref.read(authRepositoryProvider);
-      final response = await repository.register(
+      await repository.register(
         email: _emailController.text.trim(),
         password: _passwordController.text,
         fullName: _nameController.text.trim(),
       );
 
-      final storage = ref.read(secureStorageProvider);
-      await storage.saveTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
-
-      ref.read(authStateProvider.notifier).setAuthenticated(true);
-
       if (mounted) {
-        context.go('/verify-email');
+        context.go('/verify-email?email=${Uri.encodeComponent(_emailController.text.trim())}');
       }
     } on AppException catch (e) {
       if (mounted) {

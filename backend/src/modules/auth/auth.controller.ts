@@ -15,6 +15,7 @@ import { LoginDto } from './dto/login.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
+import { VerifyEmailCodeDto } from './dto/verify-email-code.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { Public, CurrentUser } from '../../common/decorators';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
@@ -37,30 +38,16 @@ export class AuthController {
     description: 'Đăng ký thành công',
     schema: {
       example: {
-        user: {
-          id: 'uuid-string',
-          email: 'user@example.com',
-          fullName: 'John Doe',
-          nativeLanguage: 'English',
-          currentLevel: 'A1',
-          emailVerified: false,
-          roles: [{ name: 'USER' }],
-          createdAt: '2024-01-01T00:00:00.000Z',
-        },
-        access_token: 'jwt-access-token',
-        refresh_token: 'refresh-token-string',
-        expires_in: 900,
         message:
-          'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.',
+          'Đăng ký thành công! Vui lòng kiểm tra email để nhận mã xác thực.',
+        email: 'user@example.com',
       },
     },
   })
   @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ' })
   @ApiResponse({ status: 409, description: 'Email đã tồn tại' })
-  async register(@Body() registerDto: RegisterDto, @Req() req: Request) {
-    const userAgent = req.headers['user-agent'];
-    const ipAddress = req.ip || req.socket.remoteAddress;
-    return this.authService.register(registerDto, userAgent, ipAddress);
+  async register(@Body() registerDto: RegisterDto) {
+    return this.authService.register(registerDto);
   }
 
   @Public()
@@ -118,6 +105,45 @@ export class AuthController {
   })
   async verifyEmail(@Body() verifyEmailDto: VerifyEmailDto) {
     return this.authService.verifyEmail(verifyEmailDto);
+  }
+
+  @Public()
+  @Post('verify-email-code')
+  @ApiOperation({
+    summary: 'Xác thực email bằng mã OTP',
+    description:
+      'Xác thực email bằng mã 6 chữ số nhận được từ email. Trả về JWT tokens sau khi xác thực thành công.',
+  })
+  @ApiBody({ type: VerifyEmailCodeDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Xác thực thành công',
+    schema: {
+      example: {
+        user: { id: 'uuid', email: 'user@example.com', fullName: 'John Doe' },
+        access_token: 'jwt-access-token',
+        refresh_token: 'refresh-token-string',
+        expires_in: 900,
+        message: 'Email đã được xác thực thành công!',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Mã xác thực không hợp lệ hoặc đã hết hạn',
+  })
+  async verifyEmailCode(
+    @Body() verifyEmailCodeDto: VerifyEmailCodeDto,
+    @Req() req: Request,
+  ) {
+    const userAgent = req.headers['user-agent'];
+    const ipAddress = req.ip || req.socket.remoteAddress;
+    return this.authService.verifyEmailCode(
+      verifyEmailCodeDto.email,
+      verifyEmailCodeDto.code,
+      userAgent,
+      ipAddress,
+    );
   }
 
   @Public()

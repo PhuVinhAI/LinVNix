@@ -39,11 +39,7 @@ export class AuthService {
     private roleRepository: Repository<Role>,
   ) {}
 
-  async register(
-    registerDto: RegisterDto,
-    userAgent?: string,
-    ipAddress?: string,
-  ) {
+  async register(registerDto: RegisterDto) {
     try {
       // Tạo user mới
       const user = await this.usersService.create(registerDto);
@@ -67,24 +63,15 @@ export class AuthService {
         user.email,
         user.fullName,
         verificationToken.token,
-      );
-
-      const tokens = await this.generateTokens(
-        user.id,
-        user.email,
-        userAgent,
-        ipAddress,
+        verificationToken.code,
       );
 
       this.loggingService.log(`User registered: ${user.email}`, 'AuthService');
 
       return {
-        user,
-        access_token: tokens.accessToken,
-        refresh_token: tokens.refreshToken,
-        expires_in: 900, // 15 minutes in seconds
         message:
-          'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.',
+          'Đăng ký thành công! Vui lòng kiểm tra email để nhận mã xác thực.',
+        email: user.email,
       };
     } catch (error) {
       this.loggingService.error(
@@ -173,6 +160,54 @@ export class AuthService {
     };
   }
 
+  async verifyEmailCode(
+    email: string,
+    code: string,
+    userAgent?: string,
+    ipAddress?: string,
+  ) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new BadRequestException('Email không tồn tại');
+    }
+
+    const result = await this.tokenLifecycle.verifyEmailCode(code, user.id);
+
+    if (!result) {
+      throw new BadRequestException('Mã xác thực không hợp lệ hoặc đã hết hạn');
+    }
+
+    await this.usersService.update(result.userId, {
+      emailVerified: true,
+      emailVerifiedAt: new Date(),
+    } as any);
+
+    const tokens = await this.generateTokens(
+      user.id,
+      user.email,
+      userAgent,
+      ipAddress,
+    );
+
+    await this.emailQueueService.sendWelcomeEmail(
+      result.email,
+      result.fullName,
+    );
+
+    this.loggingService.log(
+      `Email verified via code: ${result.email}`,
+      'AuthService',
+    );
+
+    return {
+      user,
+      access_token: tokens.accessToken,
+      refresh_token: tokens.refreshToken,
+      expires_in: 900,
+      message: 'Email đã được xác thực thành công!',
+    };
+  }
+
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
 
@@ -252,6 +287,7 @@ export class AuthService {
       user.email,
       user.fullName,
       verificationToken.token,
+      verificationToken.code,
     );
 
     return {

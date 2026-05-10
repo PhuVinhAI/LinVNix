@@ -7,7 +7,7 @@
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
     .header { background: #4CAF50; color: white; padding: 20px; text-align: center; }
     .content { padding: 30px; background: #f9f9f9; }
-    .button { display: inline-block; padding: 12px 30px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+    .code-box { display: inline-block; padding: 16px 32px; background: #333; color: #fff; font-size: 32px; font-weight: bold; letter-spacing: 8px; border-radius: 8px; margin: 20px 0; }
     .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
   </style>
 </head>
@@ -18,13 +18,11 @@
     </div>
     <div class="content">
       <p>Xin chào <strong>{{fullName}}</strong>,</p>
-      <p>Cảm ơn bạn đã đăng ký tài khoản! Vui lòng xác thực email của bạn bằng cách nhấn vào nút bên dưới:</p>
+      <p>Cảm ơn bạn đã đăng ký tài khoản! Vui lòng nhập mã xác thực bên dưới để hoàn tất đăng ký:</p>
       <div style="text-align: center;">
-        <a href="{{verificationUrl}}" class="button">Xác thực Email</a>
+        <div class="code-box">{{code}}</div>
       </div>
-      <p>Hoặc copy link sau vào trình duyệt:</p>
-      <p style="word-break: break-all; color: #666;">{{verificationUrl}}</p>
-      <p><strong>Lưu ý:</strong> Link này sẽ hết hạn sau 24 giờ.</p>
+      <p><strong>Lưu ý:</strong> Mã này sẽ hết hạn sau 24 giờ.</p>
     </div>
     <div class="footer">
       <p>Nếu bạn không đăng ký tài khoản này, vui lòng bỏ qua email này.</p>

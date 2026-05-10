@@ -2,6 +2,7 @@ import { ITokenRepository } from './interfaces';
 
 interface TokenRecord {
   token: string;
+  code: string;
   userId: string;
   expiresAt: Date;
   verifiedAt: Date | null;
@@ -26,10 +27,16 @@ export class InMemoryTokenRepository implements ITokenRepository {
     this.users.set(userId, { email, fullName });
   }
 
-  async save(token: string, userId: string, expiresAt: Date): Promise<void> {
+  async save(
+    token: string,
+    userId: string,
+    expiresAt: Date,
+    code: string,
+  ): Promise<void> {
     const user = this.users.get(userId) || { email: '', fullName: '' };
     this.tokens.set(token, {
       token,
+      code,
       userId,
       expiresAt,
       verifiedAt: null,
@@ -56,6 +63,45 @@ export class InMemoryTokenRepository implements ITokenRepository {
   async markVerified(token: string): Promise<void> {
     const entry = this.tokens.get(token);
     if (entry) entry.verifiedAt = new Date();
+  }
+
+  async findUnverifiedByCodeAndUser(
+    code: string,
+    userId: string,
+  ): Promise<{
+    userId: string;
+    expiresAt: Date;
+    email: string;
+    fullName: string;
+  } | null> {
+    for (const entry of this.tokens.values()) {
+      if (
+        entry.code === code &&
+        entry.userId === userId &&
+        entry.verifiedAt === null
+      ) {
+        return {
+          userId: entry.userId,
+          expiresAt: entry.expiresAt,
+          email: entry.email,
+          fullName: entry.fullName,
+        };
+      }
+    }
+    return null;
+  }
+
+  async markVerifiedByCodeAndUser(code: string, userId: string): Promise<void> {
+    for (const entry of this.tokens.values()) {
+      if (
+        entry.code === code &&
+        entry.userId === userId &&
+        entry.verifiedAt === null
+      ) {
+        entry.verifiedAt = new Date();
+        return;
+      }
+    }
   }
 
   async deleteUnverifiedByUserId(userId: string): Promise<void> {
