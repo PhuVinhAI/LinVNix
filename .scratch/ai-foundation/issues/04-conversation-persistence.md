@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -42,17 +42,17 @@ End-to-end: after this slice, `ConversationService` can create a conversation (w
 
 ## Acceptance criteria
 
-- [ ] `conversations/` module follows DDD structure: `domain/` (entities), `application/` (service, repository), `dto/`, module file
-- [ ] `Conversation` entity extends `BaseEntity`, has all fields from schema above, FK to User (required), Course (nullable), Lesson (nullable)
-- [ ] `ConversationMessage` entity extends `BaseEntity`, has all fields from schema above, FK to Conversation
-- [ ] `ConversationStatus` enum: `active`, `archived` (added to `common/enums/`)
-- [ ] `ConversationMessageRole` enum: `user`, `assistant`, `tool` (added to `common/enums/`)
-- [ ] `ConversationService` methods: `create(userId, dto)`, `findById(id)`, `findByUser(userId, pagination)`, `addMessage(conversationId, message)`, `accumulateTokens(conversationId, promptTokens, completionTokens)`, `archive(id)`, `softDelete(id)`
-- [ ] Token accumulation: `totalTokens += promptTokens + completionTokens`, `totalPromptTokens += promptTokens`, `totalCompletionTokens += completionTokens`
-- [ ] Soft-delete sets `deletedAt` and changes status to `archived`
-- [ ] Module registered in `AppModule`
-- [ ] TypeORM auto-creates tables (synchronize: true in dev)
-- [ ] Unit tests pass: CRUD operations, token accumulation, soft-delete, pagination, filtering by courseId/lessonId (use in-memory SQLite or mocked repository)
+- [x] `conversations/` module follows DDD structure: `domain/` (entities), `application/` (service, repository), `dto/`, module file
+- [x] `Conversation` entity extends `BaseEntity`, has all fields from schema above, FK to User (required), Course (nullable), Lesson (nullable)
+- [x] `ConversationMessage` entity extends `BaseEntity`, has all fields from schema above, FK to Conversation
+- [x] `ConversationStatus` enum: `active`, `archived` (added to `common/enums/`)
+- [x] `ConversationMessageRole` enum: `user`, `assistant`, `tool` (added to `common/enums/`)
+- [x] `ConversationService` methods: `create(userId, dto)`, `findById(id)`, `findByUser(userId, pagination)`, `addMessage(conversationId, message)`, `accumulateTokens(conversationId, promptTokens, completionTokens)`, `archive(id)`, `softDelete(id)`
+- [x] Token accumulation: `totalTokens += promptTokens + completionTokens`, `totalPromptTokens += promptTokens`, `totalCompletionTokens += completionTokens`
+- [x] Soft-delete sets `deletedAt` and changes status to `archived`
+- [x] Module registered in `AppModule`
+- [x] TypeORM auto-creates tables (synchronize: true in dev)
+- [x] Unit tests pass: CRUD operations, token accumulation, soft-delete, pagination, filtering by courseId/lessonId (use in-memory SQLite or mocked repository)
 
 ## Blocked by
 

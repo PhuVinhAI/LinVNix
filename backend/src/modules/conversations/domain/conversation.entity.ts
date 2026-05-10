@@ -1,0 +1,55 @@
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { BaseEntity } from '../../../database/base/base.entity';
+import { ConversationStatus } from '../../../common/enums';
+import { User } from '../../users/domain/user.entity';
+import { Course } from '../../courses/domain/course.entity';
+import { Lesson } from '../../courses/domain/lesson.entity';
+
+@Entity('conversations')
+export class Conversation extends BaseEntity {
+  @Column({ name: 'user_id' })
+  userId: string;
+
+  @ManyToOne('User', 'conversations', { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @Column({ name: 'course_id', nullable: true })
+  courseId?: string;
+
+  @ManyToOne('Course', { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'course_id' })
+  course?: Course;
+
+  @Column({ name: 'lesson_id', nullable: true })
+  lessonId?: string;
+
+  @ManyToOne('Lesson', { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'lesson_id' })
+  lesson?: Lesson;
+
+  @Column()
+  model: string;
+
+  @Column({ name: 'system_instruction', type: 'text', default: '' })
+  systemInstruction: string;
+
+  @Column({ name: 'total_tokens', default: 0 })
+  totalTokens: number;
+
+  @Column({ name: 'total_prompt_tokens', default: 0 })
+  totalPromptTokens: number;
+
+  @Column({ name: 'total_completion_tokens', default: 0 })
+  totalCompletionTokens: number;
+
+  @Column({
+    type: 'enum',
+    enum: ConversationStatus,
+    default: ConversationStatus.ACTIVE,
+  })
+  status: ConversationStatus;
+
+  @OneToMany('ConversationMessage', 'conversation')
+  messages: any[];
+}
