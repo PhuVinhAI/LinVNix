@@ -1,71 +1,132 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:linvnix/main.dart';
 import 'package:linvnix/core/providers/auth_state_provider.dart';
+import 'package:linvnix/core/providers/providers.dart';
+import 'package:linvnix/core/storage/preferences_service.dart';
 
 void main() {
-  testWidgets('App redirects to login when unauthenticated', (WidgetTester tester) async {
-    await tester.pumpWidget(const ProviderScope(child: LinVNixApp()));
-    await tester.pumpAndSettle();
-    expect(find.text('Sign In'), findsOneWidget);
-    expect(find.text('Create Account'), findsOneWidget);
+  setUpAll(() async {
+    try {
+      await dotenv.load(fileName: '.env');
+    } catch (_) {
+      // ignore
+    }
   });
 
-  testWidgets('App shows bottom navigation when authenticated', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
-        ],
-        child: const LinVNixApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
-    // Navigation labels appear in NavigationBar
-    expect(find.byType(NavigationBar), findsOneWidget);
-    expect(find.text('Courses'), findsWidgets);
-    expect(find.text('Review'), findsWidgets);
-    expect(find.text('Profile'), findsWidgets);
+  group('Unauthenticated', () {
+    late PreferencesService prefsService;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      prefsService = PreferencesService(prefs);
+    });
+
+    testWidgets('App redirects to login when unauthenticated', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+          ],
+          child: const LinVNixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Sign In'), findsOneWidget);
+      expect(find.text('Create Account'), findsOneWidget);
+    });
   });
 
-  testWidgets('Tapping tabs navigates to correct screens', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
-        ],
-        child: const LinVNixApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
+  group('Authenticated with onboarding completed', () {
+    late PreferencesService prefsService;
 
-    // Home tab is selected by default
-    expect(find.text('Continue Learning'), findsOneWidget);
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({'onboarding_completed': true});
+      final prefs = await SharedPreferences.getInstance();
+      prefsService = PreferencesService(prefs);
+    });
 
-    // Tap Courses tab
-    await tester.tap(find.descendant(
-      of: find.byType(NavigationBar),
-      matching: find.text('Courses'),
-    ));
-    await tester.pumpAndSettle();
-    expect(find.text('Courses coming soon'), findsOneWidget);
+    testWidgets('App shows bottom navigation when authenticated', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+            authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
+          ],
+          child: const LinVNixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(NavigationBar), findsOneWidget);
+      expect(find.text('Courses'), findsWidgets);
+      expect(find.text('Review'), findsWidgets);
+      expect(find.text('Profile'), findsWidgets);
+    });
 
-    // Tap Review tab
-    await tester.tap(find.descendant(
-      of: find.byType(NavigationBar),
-      matching: find.text('Review'),
-    ));
-    await tester.pumpAndSettle();
-    expect(find.text('Vocabulary review coming soon'), findsOneWidget);
+    testWidgets('Tapping tabs navigates to correct screens', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+            authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
+          ],
+          child: const LinVNixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    // Tap Profile tab
-    await tester.tap(find.descendant(
-      of: find.byType(NavigationBar),
-      matching: find.text('Profile'),
-    ));
-    await tester.pumpAndSettle();
-    expect(find.text('Profile settings coming soon'), findsOneWidget);
+      expect(find.text('Continue Learning'), findsOneWidget);
+
+      await tester.tap(find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Courses'),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.text('Courses coming soon'), findsOneWidget);
+
+      await tester.tap(find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Review'),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.text('Vocabulary review coming soon'), findsOneWidget);
+
+      await tester.tap(find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Profile'),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.text('Profile settings coming soon'), findsOneWidget);
+    });
+  });
+
+  group('Authenticated without onboarding', () {
+    late PreferencesService prefsService;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      prefsService = PreferencesService(prefs);
+    });
+
+    testWidgets('App redirects to onboarding when authenticated but not completed',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+            authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
+          ],
+          child: const LinVNixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text("What's your current level?"), findsOneWidget);
+    });
   });
 }
 
