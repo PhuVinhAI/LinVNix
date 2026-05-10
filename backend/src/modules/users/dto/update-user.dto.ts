@@ -1,4 +1,10 @@
-import { IsString, IsEnum, IsOptional, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsUrl,
+  IsBoolean,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserLevel, Dialect } from '../../../common/enums';
 
@@ -7,6 +13,11 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   fullName?: string;
+
+  @ApiProperty({ example: true, required: false })
+  @IsBoolean()
+  @IsOptional()
+  onboardingCompleted?: boolean;
 
   @ApiProperty({ example: 'English', required: false })
   @IsString()

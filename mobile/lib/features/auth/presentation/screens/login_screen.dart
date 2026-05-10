@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
+import '../../../profile/data/profile_providers.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -43,6 +44,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       );
+
+      // Invalidate cached providers so they re-fetch for the new user
+      ref.invalidate(userProfileProvider);
+      ref.invalidate(exerciseStatsProvider);
+
+      // Set onboarding state from server response
+      if (response.user.onboardingCompleted) {
+        ref.read(onboardingCompletedProvider.notifier).markCompleted();
+      } else {
+        ref.read(onboardingCompletedProvider.notifier).reset();
+      }
 
       ref.read(authStateProvider.notifier).setAuthenticated(true);
     } on EmailNotVerifiedException catch (e) {

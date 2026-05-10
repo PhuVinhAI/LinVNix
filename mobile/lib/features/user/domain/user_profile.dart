@@ -7,6 +7,7 @@ class UserProfile {
     this.currentLevel,
     this.preferredDialect,
     this.avatarUrl,
+    this.onboardingCompleted = false,
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
@@ -18,6 +19,7 @@ class UserProfile {
       currentLevel: json['currentLevel'] as String?,
       preferredDialect: json['preferredDialect'] as String?,
       avatarUrl: json['avatarUrl'] as String?,
+      onboardingCompleted: json['onboardingCompleted'] as bool? ?? false,
     );
   }
 
@@ -28,6 +30,7 @@ class UserProfile {
   final String? currentLevel;
   final String? preferredDialect;
   final String? avatarUrl;
+  final bool onboardingCompleted;
 
   Map<String, dynamic> toJson() {
     return {
@@ -38,6 +41,7 @@ class UserProfile {
       'currentLevel': currentLevel,
       'preferredDialect': preferredDialect,
       'avatarUrl': avatarUrl,
+      'onboardingCompleted': onboardingCompleted,
     };
   }
 }

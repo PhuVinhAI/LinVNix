@@ -44,4 +44,8 @@ class OnboardingCompletedNotifier extends Notifier<bool> {
   void markCompleted() {
     state = true;
   }
+
+  void reset() {
+    state = false;
+  }
 }

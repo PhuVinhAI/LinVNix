@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'providers.dart';
+import '../../features/profile/data/profile_providers.dart';
 
 class AuthNotifier extends Notifier<bool> {
   @override
@@ -60,6 +61,20 @@ class AuthNotifier extends Notifier<bool> {
     }
 
     await storage.clearTokens();
+
+    // Clear user-specific SharedPreferences (onboarding, daily goal)
+    try {
+      final prefs = await ref.read(preferencesProvider.future);
+      await prefs.clearOnboardingState();
+    } catch (_) {}
+
+    // Reset onboarding provider
+    ref.read(onboardingCompletedProvider.notifier).reset();
+
+    // Invalidate cached user data providers so they re-fetch for next login
+    ref.invalidate(userProfileProvider);
+    ref.invalidate(exerciseStatsProvider);
+
     state = false;
   }
 }

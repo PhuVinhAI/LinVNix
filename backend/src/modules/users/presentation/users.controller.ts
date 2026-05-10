@@ -10,6 +10,7 @@ import { UsersService } from '../application/users.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators';
 import { User } from '../domain/user.entity';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -74,7 +75,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
   async updateProfile(
     @CurrentUser() user: User,
-    @Body() updateData: Partial<User>,
+    @Body() updateData: UpdateUserDto,
   ) {
     return this.usersService.update(user.id, updateData);
   }

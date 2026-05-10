@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
+import '../../../profile/data/profile_providers.dart';
 
 class EmailVerificationScreen extends ConsumerStatefulWidget {
   const EmailVerificationScreen({super.key, this.email});
@@ -58,6 +59,10 @@ class _EmailVerificationScreenState
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       );
+
+      // Invalidate cached providers for the new user
+      ref.invalidate(userProfileProvider);
+      ref.invalidate(exerciseStatsProvider);
 
       ref.read(authStateProvider.notifier).setAuthenticated(true);
       setState(() => _isVerified = true);
