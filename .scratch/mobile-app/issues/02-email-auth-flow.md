@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -10,17 +10,17 @@ Implement the complete email/password authentication flow. Create the auth featu
 
 ## Acceptance criteria
 
-- [ ] User can register with email, password, and full name
-- [ ] User can verify email via token from email link
-- [ ] User can log in with email and password
-- [ ] User can request password reset and reset via email token
-- [ ] User can log out (revokes refresh token server-side)
-- [ ] Session persists across app restarts (auto-login if tokens valid)
-- [ ] Access token refreshes automatically on 401 without user noticing
-- [ ] User is redirected to login when both tokens are expired
-- [ ] Auth tokens are stored in flutter_secure_storage (encrypted)
-- [ ] AuthInterceptor attaches bearer token to all authenticated requests
-- [ ] Unit tests for AuthInfrastructure (token storage, refresh rotation, auto-logout)
+- [x] User can register with email, password, and full name
+- [x] User can verify email via token from email link
+- [x] User can log in with email and password
+- [x] User can request password reset and reset via email token
+- [x] User can log out (revokes refresh token server-side)
+- [x] Session persists across app restarts (auto-login if tokens valid)
+- [x] Access token refreshes automatically on 401 without user noticing
+- [x] User is redirected to login when both tokens are expired
+- [x] Auth tokens are stored in flutter_secure_storage (encrypted)
+- [x] AuthInterceptor attaches bearer token to all authenticated requests
+- [x] Unit tests for AuthInfrastructure (token storage, refresh rotation, auto-logout)
 
 ## Blocked by
 

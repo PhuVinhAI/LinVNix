@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/token_refresh_interceptor.dart';
@@ -21,17 +22,24 @@ class ApiClient {
       ),
     );
 
+    _tokenRefreshInterceptor = TokenRefreshInterceptor(_dio, _storage);
+
     _dio.interceptors.addAll([
       AuthInterceptor(_storage),
-      TokenRefreshInterceptor(_dio, _storage),
+      _tokenRefreshInterceptor,
       ResponseUnwrapInterceptor(),
     ]);
   }
 
   final SecureStorageService _storage;
   late final Dio _dio;
+  late final TokenRefreshInterceptor _tokenRefreshInterceptor;
 
   Dio get dio => _dio;
+
+  set onAuthFailure(VoidCallback? callback) {
+    _tokenRefreshInterceptor.onAuthFailure = callback;
+  }
 
   static String get _baseUrl {
     // --dart-define takes precedence
