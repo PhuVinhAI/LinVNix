@@ -61,7 +61,7 @@ class UserRole {
     return UserRole(
       name: json['name'] as String,
       permissions: (json['permissions'] as List<dynamic>?)
-              ?.map((e) => e as String)
+              ?.map((e) => e is String ? e : (e['name'] as String? ?? ''))
               .toList() ??
           const [],
     );

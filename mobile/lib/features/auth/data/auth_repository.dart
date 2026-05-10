@@ -6,7 +6,7 @@ class AuthRepository {
   AuthRepository(this._dio);
   final Dio _dio;
 
-  Future<AuthResponse> register({
+  Future<MessageResponse> register({
     required String email,
     required String password,
     required String fullName,
@@ -20,7 +20,7 @@ class AuthRepository {
           'fullName': fullName,
         },
       );
-      return AuthResponse.fromJson(response.data!);
+      return MessageResponse.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
@@ -51,6 +51,21 @@ class AuthRepository {
         data: {'token': token},
       );
       return MessageResponse.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<AuthResponse> verifyEmailCode({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/auth/verify-email-code',
+        data: {'email': email, 'code': code},
+      );
+      return AuthResponse.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }

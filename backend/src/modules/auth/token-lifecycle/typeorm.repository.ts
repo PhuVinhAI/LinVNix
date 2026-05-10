@@ -14,8 +14,13 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     private readonly passwordResetRepo: Repository<PasswordResetToken>,
   ) {}
 
-  async save(token: string, userId: string, expiresAt: Date): Promise<void> {
-    const entity = this.repo.create({ token, userId, expiresAt });
+  async save(
+    token: string,
+    userId: string,
+    expiresAt: Date,
+    code: string,
+  ): Promise<void> {
+    const entity = this.repo.create({ token, userId, expiresAt, code });
     await this.repo.save(entity);
   }
 
@@ -38,8 +43,40 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     };
   }
 
+  async findUnverifiedByCodeAndUser(
+    code: string,
+    userId: string,
+  ): Promise<{
+    userId: string;
+    expiresAt: Date;
+    email: string;
+    fullName: string;
+  } | null> {
+    const entity = await this.repo.findOne({
+      where: { code, userId, verifiedAt: null as any },
+      relations: ['user'],
+    });
+    if (!entity) return null;
+    return {
+      userId: entity.userId,
+      expiresAt: entity.expiresAt,
+      email: entity.user.email,
+      fullName: entity.user.fullName,
+    };
+  }
+
   async markVerified(token: string): Promise<void> {
     const entity = await this.repo.findOne({ where: { token } });
+    if (entity) {
+      entity.verifiedAt = new Date();
+      await this.repo.save(entity);
+    }
+  }
+
+  async markVerifiedByCodeAndUser(code: string, userId: string): Promise<void> {
+    const entity = await this.repo.findOne({
+      where: { code, userId, verifiedAt: null as any },
+    });
     if (entity) {
       entity.verifiedAt = new Date();
       await this.repo.save(entity);

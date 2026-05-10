@@ -23,12 +23,13 @@ export class TokenLifecycle {
     await this.repo.deleteUnverifiedByUserId(userId);
 
     const token = randomBytes(32).toString('hex');
+    const code = String(Math.floor(100000 + Math.random() * 900000));
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 24);
 
-    await this.repo.save(token, userId, expiresAt);
+    await this.repo.save(token, userId, expiresAt, code);
 
-    return { token, expiresAt };
+    return { token, code, expiresAt };
   }
 
   async verifyEmailToken(token: string): Promise<VerifiedEmailResult | null> {
@@ -37,6 +38,23 @@ export class TokenLifecycle {
     if (entry.expiresAt < new Date()) return null;
 
     await this.repo.markVerified(token);
+
+    return {
+      userId: entry.userId,
+      email: entry.email,
+      fullName: entry.fullName,
+    };
+  }
+
+  async verifyEmailCode(
+    code: string,
+    userId: string,
+  ): Promise<VerifiedEmailResult | null> {
+    const entry = await this.repo.findUnverifiedByCodeAndUser(code, userId);
+    if (!entry) return null;
+    if (entry.expiresAt < new Date()) return null;
+
+    await this.repo.markVerifiedByCodeAndUser(code, userId);
 
     return {
       userId: entry.userId,

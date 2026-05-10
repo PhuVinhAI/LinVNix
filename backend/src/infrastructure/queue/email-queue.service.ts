@@ -9,6 +9,7 @@ export interface EmailJob {
   data: {
     fullName: string;
     token?: string;
+    code?: string;
   };
 }
 
@@ -19,13 +20,18 @@ export class EmailQueueService {
     private loggingService: LoggingService,
   ) {}
 
-  async sendVerificationEmail(email: string, fullName: string, token: string) {
+  async sendVerificationEmail(
+    email: string,
+    fullName: string,
+    token: string,
+    code?: string,
+  ) {
     await this.emailQueue.add(
       'send-email',
       {
         type: 'verification',
         to: email,
-        data: { fullName, token },
+        data: { fullName, token, code },
       } as EmailJob,
       {
         attempts: 3,

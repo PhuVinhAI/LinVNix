@@ -1,5 +1,6 @@
 export interface VerificationTokenResult {
   token: string;
+  code: string;
   expiresAt: Date;
 }
 
@@ -26,14 +27,29 @@ export interface CleanupResult {
 }
 
 export interface ITokenRepository {
-  save(token: string, userId: string, expiresAt: Date): Promise<void>;
+  save(
+    token: string,
+    userId: string,
+    expiresAt: Date,
+    code: string,
+  ): Promise<void>;
   findUnverifiedByToken(token: string): Promise<{
     userId: string;
     expiresAt: Date;
     email: string;
     fullName: string;
   } | null>;
+  findUnverifiedByCodeAndUser(
+    code: string,
+    userId: string,
+  ): Promise<{
+    userId: string;
+    expiresAt: Date;
+    email: string;
+    fullName: string;
+  } | null>;
   markVerified(token: string): Promise<void>;
+  markVerifiedByCodeAndUser(code: string, userId: string): Promise<void>;
   deleteUnverifiedByUserId(userId: string): Promise<void>;
   deleteExpired(): Promise<number>;
 

@@ -24,11 +24,16 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     redirect: (context, state) {
       final isAuthenticated = authState;
-      final isAuthRoute = state.matchedLocation == '/login' ||
-          state.matchedLocation == '/register' ||
-          state.matchedLocation == '/verify-email' ||
-          state.matchedLocation == '/forgot-password' ||
-          state.matchedLocation == '/reset-password';
+      final location = state.matchedLocation;
+      final isAuthRoute = location == '/login' ||
+          location == '/register' ||
+          location == '/forgot-password' ||
+          location == '/reset-password';
+
+      // /verify-email is accessible regardless of auth state
+      if (location == '/verify-email') {
+        return null;
+      }
 
       if (!isAuthenticated && !isAuthRoute) {
         return '/login';
@@ -52,8 +57,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/verify-email',
         builder: (context, state) {
-          final token = state.uri.queryParameters['token'];
-          return EmailVerificationScreen(token: token);
+          final email = state.uri.queryParameters['email'];
+          return EmailVerificationScreen(email: email);
         },
       ),
       GoRoute(
