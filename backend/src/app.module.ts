@@ -28,6 +28,7 @@ import { ProgressModule } from './modules/progress/progress.module';
 import { ConversationsModule } from './modules/conversations/conversations.module';
 import { AgentModule } from './modules/agent/agent.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { AiModule } from './modules/ai/ai.module';
 import { CacheModule } from './infrastructure/cache/cache.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
 import { LoggingModule } from './infrastructure/logging/logging.module';
@@ -90,6 +91,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     ConversationsModule,
     AgentModule,
     AdminModule,
+    AiModule,
   ],
   providers: [
     {
