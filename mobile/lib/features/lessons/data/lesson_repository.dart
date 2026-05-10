@@ -61,11 +61,9 @@ class LessonRepository {
     }
   }
 
-  Future<UserVocabulary> learnVocabulary(String vocabularyId) async {
+  Future<void> learnVocabulary(String vocabularyId) async {
     try {
-      final response = await _dio
-          .post<Map<String, dynamic>>('/vocabularies/$vocabularyId/learn');
-      return UserVocabulary.fromJson(response.data!);
+      await _dio.post<Map<String, dynamic>>('/vocabularies/$vocabularyId/learn');
     } on DioException catch (e) {
       throw mapDioException(e);
     }

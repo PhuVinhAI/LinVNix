@@ -14,10 +14,12 @@ class ExerciseStepWidget extends ConsumerStatefulWidget {
     super.key,
     required this.exercise,
     required this.onScoreChanged,
+    this.onCompleted,
   });
 
   final Exercise exercise;
   final ValueChanged<int> onScoreChanged;
+  final VoidCallback? onCompleted;
 
   @override
   ConsumerState<ExerciseStepWidget> createState() =>
@@ -62,6 +64,8 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
       if (result.isCorrect) {
         widget.onScoreChanged(result.score);
       }
+
+      widget.onCompleted?.call();
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -72,8 +76,15 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
   }
 
   void _onTimeout() {
-    if (!_submitted) {
+    if (_submitted) return;
+    if (_isValid) {
       _submit();
+    } else {
+      setState(() {
+        _submitted = true;
+        _submitting = false;
+      });
+      widget.onCompleted?.call();
     }
   }
 

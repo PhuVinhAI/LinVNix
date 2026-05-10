@@ -7,6 +7,9 @@ import '../../data/lesson_repository.dart';
 import '../../domain/lesson_models.dart';
 import '../../domain/exercise_models.dart';
 import '../../../../core/providers/providers.dart';
+import '../../../courses/data/courses_providers.dart';
+import '../../../home/data/home_providers.dart';
+import '../../../review/data/review_providers.dart';
 import '../widgets/content_widgets.dart';
 import '../widgets/vocabulary_step.dart';
 import '../widgets/grammar_step.dart';
@@ -28,6 +31,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   String? _error;
   LessonDetail? _lesson;
   final Map<String, int> _exerciseScores = {};
+  final Set<String> _completedExercises = {};
+  final Set<String> _learnedVocabIds = {};
 
   @override
   void initState() {
@@ -66,6 +71,17 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
           label: 'Vocabulary',
           vocabularies: vocabs,
         ));
+
+        try {
+          final vocabRepo = ref.read(vocabularyRepositoryProvider);
+          final myVocabs = await vocabRepo.getMyVocabularies();
+          final lessonVocabIds = vocabs.map((v) => v.id).toSet();
+          for (final uv in myVocabs) {
+            if (lessonVocabIds.contains(uv.vocabulary.id)) {
+              _learnedVocabIds.add(uv.vocabulary.id);
+            }
+          }
+        } catch (_) {}
       }
 
       if (lesson.grammarRules.isNotEmpty) {
@@ -162,6 +178,12 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     });
   }
 
+  void _onExerciseCompleted(String exerciseId) {
+    setState(() {
+      _completedExercises.add(exerciseId);
+    });
+  }
+
   @override
   void dispose() {
     _pageController?.dispose();
@@ -205,6 +227,9 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     final isLastStep = _currentPage == _steps.length - 1;
     final currentStep = _steps[_currentPage];
     final isExerciseStep = currentStep.type == _StepType.exercise;
+    final isExerciseCompleted = isExerciseStep &&
+        currentStep.fullExercise != null &&
+        _completedExercises.contains(currentStep.fullExercise!.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -289,7 +314,17 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
                       },
                       child: const Text('Next'),
                     )
-                  else if (isLastStep)
+                  else if (isExerciseStep && isExerciseCompleted && !isLastStep)
+                    FilledButton(
+                      onPressed: () {
+                        _pageController?.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      child: const Text('Next'),
+                    )
+                  else if (isLastStep && (!isExerciseStep || isExerciseCompleted))
                     FilledButton(
                       onPressed: _completeLesson,
                       child: const Text('Complete'),
@@ -311,6 +346,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         return VocabularyStepWidget(
           vocabularies: step.vocabularies ?? [],
           lessonId: widget.lessonId,
+          learnedVocabIds: _learnedVocabIds,
+          onVocabLearned: (id) => setState(() => _learnedVocabIds.add(id)),
         );
       case _StepType.grammar:
         return GrammarStepWidget(grammarRules: step.grammarRules ?? []);
@@ -320,6 +357,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
           exercise: exercise,
           onScoreChanged: (score) =>
               _onExerciseScoreChanged(exercise.id, score),
+          onCompleted: () => _onExerciseCompleted(exercise.id),
         );
     }
   }
@@ -348,6 +386,11 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
           ? ((_totalScore / _maxScore) * 100).round()
           : 0;
       await repo.completeLesson(widget.lessonId, score: score);
+
+      ref.invalidate(userProgressProvider);
+      ref.invalidate(continueLearningProvider);
+      ref.invalidate(lessonProgressProvider(widget.lessonId));
+
       if (mounted) {
         _showCompletionDialog(score);
       }

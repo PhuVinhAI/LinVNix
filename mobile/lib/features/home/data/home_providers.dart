@@ -17,7 +17,7 @@ final continueLearningProvider = FutureProvider<ContinueLearning?>((ref) async {
       return bDate.compareTo(aDate);
     });
 
-  final inProgress = sorted.where((p) => p.status == 'IN_PROGRESS').firstOrNull;
+  final inProgress = sorted.where((p) => p.status == 'in_progress').firstOrNull;
   if (inProgress != null && inProgress.lesson != null) {
     return ContinueLearning(
       lessonId: inProgress.lessonId,
@@ -26,7 +26,7 @@ final continueLearningProvider = FutureProvider<ContinueLearning?>((ref) async {
     );
   }
 
-  final completed = sorted.where((p) => p.status == 'COMPLETED').firstOrNull;
+  final completed = sorted.where((p) => p.status == 'completed').firstOrNull;
   if (completed != null && completed.lesson != null) {
     return ContinueLearning(
       lessonId: completed.lessonId,

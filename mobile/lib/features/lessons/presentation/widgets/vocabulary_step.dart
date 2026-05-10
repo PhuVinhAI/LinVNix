@@ -3,55 +3,85 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/lesson_models.dart';
 import '../../data/lesson_providers.dart';
 
-class VocabularyStepWidget extends ConsumerWidget {
+class VocabularyStepWidget extends ConsumerStatefulWidget {
   const VocabularyStepWidget({
     super.key,
     required this.vocabularies,
     required this.lessonId,
+    required this.learnedVocabIds,
+    required this.onVocabLearned,
   });
   final List<LessonVocabulary> vocabularies;
   final String lessonId;
+  final Set<String> learnedVocabIds;
+  final ValueChanged<String> onVocabLearned;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    if (vocabularies.isEmpty) {
+  ConsumerState<VocabularyStepWidget> createState() =>
+      _VocabularyStepWidgetState();
+}
+
+class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
+  final Set<String> _pendingVocabIds = {};
+
+  Future<void> _learnWord(String vocabularyId) async {
+    if (widget.learnedVocabIds.contains(vocabularyId) ||
+        _pendingVocabIds.contains(vocabularyId)) return;
+
+    setState(() => _pendingVocabIds.add(vocabularyId));
+
+    try {
+      final repo = ref.read(lessonRepositoryProvider);
+      await repo.learnVocabulary(vocabularyId);
+      widget.onVocabLearned(vocabularyId);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _pendingVocabIds.remove(vocabularyId));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.vocabularies.isEmpty) {
       return const Center(child: Text('No vocabulary for this lesson'));
     }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: vocabularies.length,
+      itemCount: widget.vocabularies.length,
       itemBuilder: (context, index) {
+        final vocab = widget.vocabularies[index];
         return _VocabularyCard(
-          vocabulary: vocabularies[index],
-          onLearn: () => _learnWord(ref, vocabularies[index].id),
+          vocabulary: vocab,
+          learned: widget.learnedVocabIds.contains(vocab.id),
+          onLearn: () => _learnWord(vocab.id),
         );
       },
     );
   }
-
-  Future<void> _learnWord(WidgetRef ref, String vocabularyId) async {
-    final repo = ref.read(lessonRepositoryProvider);
-    await repo.learnVocabulary(vocabularyId);
-  }
 }
 
-class _VocabularyCard extends StatefulWidget {
-  const _VocabularyCard({required this.vocabulary, required this.onLearn});
+class _VocabularyCard extends StatelessWidget {
+  const _VocabularyCard({
+    required this.vocabulary,
+    required this.learned,
+    required this.onLearn,
+  });
   final LessonVocabulary vocabulary;
+  final bool learned;
   final VoidCallback onLearn;
-
-  @override
-  State<_VocabularyCard> createState() => _VocabularyCardState();
-}
-
-class _VocabularyCardState extends State<_VocabularyCard> {
-  bool _learned = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final vocab = widget.vocabulary;
+    final vocab = vocabulary;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -87,13 +117,8 @@ class _VocabularyCardState extends State<_VocabularyCard> {
                   ),
                 ),
                 FilledButton.tonal(
-                  onPressed: _learned
-                      ? null
-                      : () {
-                          widget.onLearn();
-                          setState(() => _learned = true);
-                        },
-                  child: Text(_learned ? 'Learned' : 'Learn'),
+                  onPressed: learned ? null : onLearn,
+                  child: Text(learned ? 'Learned' : 'Learn'),
                 ),
               ],
             ),
