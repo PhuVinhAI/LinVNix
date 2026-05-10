@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -10,13 +10,13 @@ Build the Profile tab. Fetch user profile via `GET /users/me`. Display and allow
 
 ## Acceptance criteria
 
-- [ ] Profile displays name, avatar, native language, dialect, level
-- [ ] All fields are editable and saved via `PATCH /users/me`
-- [ ] Dialect change affects vocabulary display in other tabs
-- [ ] Basic stats shown (lessons completed, words learned, exercises done)
-- [ ] Exercise statistics shown (accuracy, time)
-- [ ] Logout button works (revokes token, clears local state, redirects to login)
-- [ ] Error and loading states handled
+- [x] Profile displays name, avatar, native language, dialect, level
+- [x] All fields are editable and saved via `PATCH /users/me`
+- [x] Dialect change affects vocabulary display in other tabs
+- [x] Basic stats shown (lessons completed, words learned, exercises done)
+- [x] Exercise statistics shown (accuracy, time)
+- [x] Logout button works (revokes token, clears local state, redirects to login)
+- [x] Error and loading states handled
 
 ## Blocked by
 

@@ -25,4 +25,14 @@ class UserRepository {
       throw mapDioException(e);
     }
   }
+
+  Future<Map<String, dynamic>> getMyStats() async {
+    try {
+      final response =
+          await _dio.get<Map<String, dynamic>>('/exercises/my-stats');
+      return response.data!;
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
 }
