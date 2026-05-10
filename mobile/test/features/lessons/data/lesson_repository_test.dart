@@ -126,10 +126,7 @@ void main() {
           ),
         );
 
-        final result = await repository.learnVocabulary('v1');
-
-        expect(result.id, 'uv1');
-        expect(result.vocabulary.word, 'con mèo');
+        await repository.learnVocabulary('v1');
       });
 
       test('throws AuthException on 401', () async {

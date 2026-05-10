@@ -91,15 +91,35 @@ export class ExercisesService implements ExerciseStatsPort {
     const queryRunner = (this as any).queryRunner;
     const manager = queryRunner ? queryRunner.manager : this.dataSource.manager;
 
-    // Create exercise result within transaction
-    const result = await manager.save(UserExerciseResult, {
-      userId,
-      exerciseId,
-      userAnswer,
-      isCorrect,
-      attemptedAt: new Date(),
-      timeTaken,
+    const score = isCorrect ? 10 : 0;
+    const attemptedAt = new Date();
+
+    // Find existing result for this user+exercise pair
+    const existing = await manager.findOne(UserExerciseResult, {
+      where: { userId, exerciseId },
     });
+
+    let result: UserExerciseResult;
+    if (existing) {
+      // Update existing result (allow re-attempt)
+      existing.userAnswer = userAnswer;
+      existing.isCorrect = isCorrect;
+      existing.score = score;
+      existing.attemptedAt = attemptedAt;
+      existing.timeTaken = timeTaken;
+      result = await manager.save(UserExerciseResult, existing);
+    } else {
+      // Create new result
+      result = await manager.save(UserExerciseResult, {
+        userId,
+        exerciseId,
+        userAnswer,
+        isCorrect,
+        score,
+        attemptedAt,
+        timeTaken,
+      });
+    }
 
     // Future enhancement: Update vocabulary mastery here if needed
     // This will be atomic with the exercise result creation
