@@ -11,6 +11,8 @@ import '../../features/auth/presentation/screens/reset_password_otp_screen.dart'
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/courses/presentation/screens/courses_screen.dart';
+import '../../features/courses/presentation/screens/course_detail_screen.dart';
+import '../../features/courses/presentation/screens/module_detail_screen.dart';
 import '../../features/review/presentation/screens/review_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/data/profile_providers.dart';
@@ -46,8 +48,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           location == '/reset-password' ||
           location == '/reset-password-otp';
 
-      // /verify-email is accessible regardless of auth state
-      if (location == '/verify-email') {
+      // Public routes accessible without auth
+      final isPublicRoute = location == '/verify-email' ||
+          location.startsWith('/courses') ||
+          location.startsWith('/modules');
+
+      if (isPublicRoute) {
         return null;
       }
 
@@ -109,6 +115,20 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/courses/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return CourseDetailScreen(courseId: id);
+        },
+      ),
+      GoRoute(
+        path: '/modules/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return ModuleDetailScreen(moduleId: id);
+        },
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
