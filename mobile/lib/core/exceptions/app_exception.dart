@@ -1,0 +1,29 @@
+sealed class AppException implements Exception {
+  const AppException(this.message, {this.statusCode});
+  final String message;
+  final int? statusCode;
+
+  @override
+  String toString() => 'AppException: $message (status: $statusCode)';
+}
+
+class AuthException extends AppException {
+  const AuthException(super.message, {super.statusCode});
+}
+
+class NetworkException extends AppException {
+  const NetworkException(super.message, {super.statusCode});
+}
+
+class ServerException extends AppException {
+  const ServerException(super.message, {super.statusCode});
+}
+
+class ValidationException extends AppException {
+  const ValidationException(super.message, {this.errors, super.statusCode});
+  final Map<String, List<String>>? errors;
+}
+
+class CacheException extends AppException {
+  const CacheException(super.message, {super.statusCode});
+}

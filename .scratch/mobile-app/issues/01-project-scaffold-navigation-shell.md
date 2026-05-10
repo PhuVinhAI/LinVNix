@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -10,16 +10,25 @@ Replace the empty Flutter counter template with a full project scaffold. Configu
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` passes with zero errors
-- [ ] `dart run build_runner build` succeeds generating all code
-- [ ] App launches on iOS simulator and Android emulator showing bottom nav with 4 tabs
-- [ ] Tapping each tab navigates to its placeholder screen
-- [ ] Be Vietnam Pro font renders on Vietnamese text widgets
-- [ ] Dark mode toggles correctly via system setting
-- [ ] Auth redirect guard redirects to `/login` when no token is stored
-- [ ] Dio client sends requests to configured base URL with `/api/v1` prefix
-- [ ] All PRD-specified packages are in pubspec.yaml and resolve
+- [x] `flutter analyze` passes with zero errors
+- [x] `dart run build_runner build` succeeds generating all code
+- [x] App launches on iOS simulator and Android emulator showing bottom nav with 4 tabs
+- [x] Tapping each tab navigates to its placeholder screen
+- [x] Be Vietnam Pro font renders on Vietnamese text widgets
+- [x] Dark mode toggles correctly via system setting
+- [x] Auth redirect guard redirects to `/login` when no token is stored
+- [x] Dio client sends requests to configured base URL with `/api/v1` prefix
+- [x] All PRD-specified packages are in pubspec.yaml and resolve
 
 ## Blocked by
 
 None - can start immediately
+
+## Implementation notes
+
+- Used `google_fonts` package for Be Vietnam Pro (runtime loading) instead of bundled TTF files due to download constraints during development. Can be switched to bundled assets later.
+- Riverpod 3.x (latest) with `Notifier` pattern instead of deprecated `StateNotifier`
+- go_router 17.x with `ShellRoute` for bottom navigation
+- Dio 5.x with 3 interceptors as specified
+- Material 3 with `ColorScheme.fromSeed()` for both light/dark themes
+- 3 widget tests covering: auth redirect, bottom navigation, tab navigation
