@@ -5,10 +5,12 @@ import 'package:shimmer/shimmer.dart';
 import '../../data/lesson_providers.dart';
 import '../../data/lesson_repository.dart';
 import '../../domain/lesson_models.dart';
+import '../../domain/exercise_models.dart';
 import '../../../../core/providers/providers.dart';
 import '../widgets/content_widgets.dart';
 import '../widgets/vocabulary_step.dart';
 import '../widgets/grammar_step.dart';
+import '../widgets/exercise_step.dart';
 
 class LessonWizardScreen extends ConsumerStatefulWidget {
   const LessonWizardScreen({super.key, required this.lessonId});
@@ -25,6 +27,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   bool _loading = true;
   String? _error;
   LessonDetail? _lesson;
+  final Map<String, int> _exerciseScores = {};
 
   @override
   void initState() {
@@ -40,7 +43,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
 
       if (!mounted) return;
 
-      // Check for smart resume
       final progress = await repo.getLessonProgress(widget.lessonId);
       if (!mounted) return;
 
@@ -48,10 +50,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
           (progress['status'] == 'in_progress' ||
               progress['status'] == 'IN_PROGRESS');
 
-      // Build steps
       final steps = <_WizardStep>[];
 
-      // Content steps
       for (final content in lesson.contents) {
         steps.add(_WizardStep(
           type: _StepType.content,
@@ -60,7 +60,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         ));
       }
 
-      // Vocabulary step
       if (vocabs.isNotEmpty) {
         steps.add(_WizardStep(
           type: _StepType.vocabulary,
@@ -69,7 +68,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         ));
       }
 
-      // Grammar step
       if (lesson.grammarRules.isNotEmpty) {
         steps.add(_WizardStep(
           type: _StepType.grammar,
@@ -78,13 +76,15 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         ));
       }
 
-      // Exercise placeholder steps
       if (lesson.exercises.isNotEmpty) {
-        for (final exercise in lesson.exercises) {
+        final exercises = await repo.getExercisesByLesson(widget.lessonId);
+        if (!mounted) return;
+
+        for (final exercise in exercises) {
           steps.add(_WizardStep(
             type: _StepType.exercise,
             label: 'Exercise',
-            exercise: exercise,
+            fullExercise: exercise,
           ));
         }
       }
@@ -97,10 +97,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
 
       _pageController = PageController();
 
-      // Start progress tracking
       await repo.startLesson(widget.lessonId);
 
-      // Smart resume dialog
       if (isInProgress && mounted && lesson.exercises.isNotEmpty) {
         _showResumeDialog();
       }
@@ -149,6 +147,21 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     }
   }
 
+  int get _totalScore => _exerciseScores.values.fold(0, (a, b) => a + b);
+
+  int get _maxScore {
+    return _steps
+        .where((s) => s.type == _StepType.exercise && s.fullExercise != null)
+        .length *
+        10;
+  }
+
+  void _onExerciseScoreChanged(String exerciseId, int score) {
+    setState(() {
+      _exerciseScores[exerciseId] = score;
+    });
+  }
+
   @override
   void dispose() {
     _pageController?.dispose();
@@ -189,6 +202,10 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
       );
     }
 
+    final isLastStep = _currentPage == _steps.length - 1;
+    final currentStep = _steps[_currentPage];
+    final isExerciseStep = currentStep.type == _StepType.exercise;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_lesson?.title ?? 'Lesson'),
@@ -202,7 +219,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
       ),
       body: Column(
         children: [
-          // Step indicator
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -220,10 +236,19 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                if (_exerciseScores.isNotEmpty) ...[
+                  const Spacer(),
+                  Text(
+                    'Score: $_totalScore',
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
-          // Page view
           Expanded(
             child: PageView.builder(
               controller: _pageController,
@@ -236,7 +261,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
               },
             ),
           ),
-          // Navigation
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -255,7 +279,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
                   else
                     const SizedBox.shrink(),
                   const Spacer(),
-                  if (_currentPage < _steps.length - 1)
+                  if (!isLastStep && !isExerciseStep)
                     FilledButton(
                       onPressed: () {
                         _pageController?.nextPage(
@@ -265,7 +289,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
                       },
                       child: const Text('Next'),
                     )
-                  else
+                  else if (isLastStep)
                     FilledButton(
                       onPressed: _completeLesson,
                       child: const Text('Complete'),
@@ -291,7 +315,12 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
       case _StepType.grammar:
         return GrammarStepWidget(grammarRules: step.grammarRules ?? []);
       case _StepType.exercise:
-        return _ExercisePlaceholder(exercise: step.exercise!);
+        final exercise = step.fullExercise!;
+        return ExerciseStepWidget(
+          exercise: exercise,
+          onScoreChanged: (score) =>
+              _onExerciseScoreChanged(exercise.id, score),
+        );
     }
   }
 
@@ -315,12 +344,12 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   Future<void> _completeLesson() async {
     try {
       final repo = ref.read(lessonRepositoryProvider);
-      await repo.completeLesson(widget.lessonId, score: 0);
+      final score = _maxScore > 0
+          ? ((_totalScore / _maxScore) * 100).round()
+          : 0;
+      await repo.completeLesson(widget.lessonId, score: score);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Lesson completed!')),
-        );
-        context.pop();
+        _showCompletionDialog(score);
       }
     } catch (e) {
       if (mounted) {
@@ -329,6 +358,58 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         );
       }
     }
+  }
+
+  void _showCompletionDialog(int score) {
+    final theme = Theme.of(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.celebration, color: theme.colorScheme.primary),
+            const SizedBox(width: 8),
+            const Text('Lesson Complete!'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Your score',
+              style: theme.textTheme.bodyLarge,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '$score%',
+              style: theme.textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            if (_exerciseScores.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                '${_exerciseScores.values.where((s) => s > 0).length} of ${_exerciseScores.length} exercises correct',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.pop();
+            },
+            child: const Text('Done'),
+          ),
+        ],
+      ),
+    );
   }
 
   String _contentLabel(String contentType) {
@@ -352,7 +433,7 @@ class _WizardStep {
     this.content,
     this.vocabularies,
     this.grammarRules,
-    this.exercise,
+    this.fullExercise,
   });
 
   final _StepType type;
@@ -360,63 +441,7 @@ class _WizardStep {
   final LessonContent? content;
   final List<LessonVocabulary>? vocabularies;
   final List<GrammarRule>? grammarRules;
-  final ExerciseStub? exercise;
-}
-
-class _ExercisePlaceholder extends StatelessWidget {
-  const _ExercisePlaceholder({required this.exercise});
-  final ExerciseStub exercise;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.quiz,
-              size: 64,
-              color: theme.colorScheme.primary,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Exercise',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              exercise.exerciseType,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            if (exercise.question != null) ...[
-              const SizedBox(height: 16),
-              Text(
-                exercise.question!,
-                style: theme.textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-            ],
-            const SizedBox(height: 24),
-            Text(
-              'Exercise rendering coming soon',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  final Exercise? fullExercise;
 }
 
 class _LessonLoadingSkeleton extends StatelessWidget {
