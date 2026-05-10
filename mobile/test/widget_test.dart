@@ -1,30 +1,75 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:mobile/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:linvnix/main.dart';
+import 'package:linvnix/core/providers/auth_state_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('App redirects to login when unauthenticated', (WidgetTester tester) async {
+    await tester.pumpWidget(const ProviderScope(child: LinVNixApp()));
+    await tester.pumpAndSettle();
+    expect(find.text('Sign In'), findsOneWidget);
+    expect(find.text('Create Account'), findsOneWidget);
   });
+
+  testWidgets('App shows bottom navigation when authenticated', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
+        ],
+        child: const LinVNixApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    // Navigation labels appear in NavigationBar
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.text('Courses'), findsWidgets);
+    expect(find.text('Review'), findsWidgets);
+    expect(find.text('Profile'), findsWidgets);
+  });
+
+  testWidgets('Tapping tabs navigates to correct screens', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
+        ],
+        child: const LinVNixApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Home tab is selected by default
+    expect(find.text('Continue Learning'), findsOneWidget);
+
+    // Tap Courses tab
+    await tester.tap(find.descendant(
+      of: find.byType(NavigationBar),
+      matching: find.text('Courses'),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Courses coming soon'), findsOneWidget);
+
+    // Tap Review tab
+    await tester.tap(find.descendant(
+      of: find.byType(NavigationBar),
+      matching: find.text('Review'),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Vocabulary review coming soon'), findsOneWidget);
+
+    // Tap Profile tab
+    await tester.tap(find.descendant(
+      of: find.byType(NavigationBar),
+      matching: find.text('Profile'),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Profile settings coming soon'), findsOneWidget);
+  });
+}
+
+class _AuthenticatedAuthNotifier extends AuthNotifier {
+  @override
+  bool build() => true;
 }
