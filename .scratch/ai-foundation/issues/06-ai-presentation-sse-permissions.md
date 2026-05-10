@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -27,19 +27,19 @@ All endpoints protected by `JwtAuthGuard` (default global guard). `@CurrentUser(
 
 ## Acceptance criteria
 
-- [ ] `ai/` module created with controller, DTOs, module file; imports `GenaiModule`, `AgentModule`, `ConversationsModule`
-- [ ] `POST /api/v1/ai/chat` — creates message + starts AI turn, returns `{ conversationId }` for stream or full `AiChatResponse` for non-stream; protected by `@RequirePermissions(Permission.AI_CHAT_STREAM)` when streaming, `@RequirePermissions(Permission.AI_CHAT)` when non-stream
-- [ ] `GET /api/v1/ai/chat/:id/stream` — SSE endpoint using `@Sse()`, streams `AiChatChunk` events for conversation `:id`, protected by `@RequirePermissions(Permission.AI_CHAT_STREAM)`
-- [ ] `POST /api/v1/ai/chat/simple` — returns `AiChatResponse` (wrapped in `{ data }` by `TransformInterceptor`), protected by `@RequirePermissions(Permission.AI_CHAT)`
-- [ ] `GET /api/v1/ai/conversations` — paginated list of current user's conversations, protected by `@RequirePermissions(Permission.AI_VIEW_CONVERSATIONS)`
-- [ ] `GET /api/v1/ai/conversations/:id` — conversation detail with messages, ownership check (only own conversations), protected by `@RequirePermissions(Permission.AI_VIEW_CONVERSATIONS)`
-- [ ] `DELETE /api/v1/ai/conversations/:id` — soft-delete, ownership check, protected by `@RequirePermissions(Permission.AI_CHAT)`
-- [ ] `Permission` enum updated with 5 new AI permissions: `AI_CHAT`, `AI_CHAT_STREAM`, `AI_GENERATE_EXERCISE`, `AI_CORRECT_GRAMMAR`, `AI_VIEW_CONVERSATIONS`
-- [ ] DTOs for request/response validation (chat request DTO with `message` and optional `conversationId`, `lessonId`)
-- [ ] SSE response format: `data: ${JSON.stringify(chunk)}\n\n` per chunk, proper `Content-Type: text/event-stream`
-- [ ] All endpoints use `@CurrentUser()` for user identification
-- [ ] Module registered in `AppModule`
-- [ ] Unit tests pass with mocked services: endpoint routing, SSE response format, permission guards, DTO validation, ownership checks
+- [x] `ai/` module created with controller, DTOs, module file; imports `GenaiModule`, `AgentModule`, `ConversationsModule`
+- [x] `POST /api/v1/ai/chat` — creates message + starts AI turn, returns `{ conversationId }` for stream or full `AiChatResponse` for non-stream; protected by `@RequirePermissions(Permission.AI_CHAT_STREAM)` when streaming, `@RequirePermissions(Permission.AI_CHAT)` when non-stream
+- [x] `GET /api/v1/ai/chat/:id/stream` — SSE endpoint using `@Sse()`, streams `AiChatChunk` events for conversation `:id`, protected by `@RequirePermissions(Permission.AI_CHAT_STREAM)`
+- [x] `POST /api/v1/ai/chat/simple` — returns `AiChatResponse` (wrapped in `{ data }` by `TransformInterceptor`), protected by `@RequirePermissions(Permission.AI_CHAT)`
+- [x] `GET /api/v1/ai/conversations` — paginated list of current user's conversations, protected by `@RequirePermissions(Permission.AI_VIEW_CONVERSATIONS)`
+- [x] `GET /api/v1/ai/conversations/:id` — conversation detail with messages, ownership check (only own conversations), protected by `@RequirePermissions(Permission.AI_VIEW_CONVERSATIONS)`
+- [x] `DELETE /api/v1/ai/conversations/:id` — soft-delete, ownership check, protected by `@RequirePermissions(Permission.AI_CHAT)`
+- [x] `Permission` enum updated with 5 new AI permissions: `AI_CHAT`, `AI_CHAT_STREAM`, `AI_GENERATE_EXERCISE`, `AI_CORRECT_GRAMMAR`, `AI_VIEW_CONVERSATIONS`
+- [x] DTOs for request/response validation (chat request DTO with `message` and optional `conversationId`, `lessonId`)
+- [x] SSE response format: `data: ${JSON.stringify(chunk)}\n\n` per chunk, proper `Content-Type: text/event-stream`
+- [x] All endpoints use `@CurrentUser()` for user identification
+- [x] Module registered in `AppModule`
+- [x] Unit tests pass with mocked services: endpoint routing, SSE response format, permission guards, DTO validation, ownership checks
 
 ## Blocked by
 
