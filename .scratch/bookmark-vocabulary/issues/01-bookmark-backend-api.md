@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -30,16 +30,45 @@ Add bookmark toggle + list endpoints to the existing VocabulariesModule, plus en
 
 ## Acceptance criteria
 
-- [ ] Bookmark entity created with correct columns, FKs, and unique constraint
-- [ ] `POST /vocabularies/:vocabularyId/bookmark` toggles bookmark and returns `{ isBookmarked }`
-- [ ] `GET /vocabularies/bookmarks` returns paginated, searchable, sortable list with `bookmarkedAt`
-- [ ] `GET /vocabularies/search` includes `isBookmarked` for authenticated users
-- [ ] `GET /vocabularies/lesson/:lessonId` includes `isBookmarked` for authenticated users
-- [ ] Unauthenticated requests do not include `isBookmarked` (or it is `false`)
-- [ ] BookmarksService unit tests (toggle logic, list with pagination/search/sort, isBookmarked batch check)
-- [ ] BookmarksRepository unit tests (CRUD, search query building, sort ordering)
-- [ ] Controller tests for bookmark endpoints
+- [x] Bookmark entity created with correct columns, FKs, and unique constraint
+- [x] `POST /vocabularies/:vocabularyId/bookmark` toggles bookmark and returns `{ isBookmarked }`
+- [x] `GET /vocabularies/bookmarks` returns paginated, searchable, sortable list with `bookmarkedAt`
+- [x] `GET /vocabularies/search` includes `isBookmarked` for authenticated users
+- [x] `GET /vocabularies/lesson/:lessonId` includes `isBookmarked` for authenticated users
+- [x] Unauthenticated requests do not include `isBookmarked` (or it is `false`)
+- [x] BookmarksService unit tests (toggle logic, list with pagination/search/sort, isBookmarked batch check)
+- [x] BookmarksRepository unit tests (CRUD, search query building, sort ordering)
+- [x] Controller tests for bookmark endpoints
 
 ## Blocked by
 
 None — can start immediately
+
+## Implementation notes
+
+### Files created
+
+- `backend/src/modules/vocabularies/domain/bookmark.entity.ts` — Bookmark entity with userId/vocabularyId FKs, unique constraint, CASCADE deletes, extends BaseEntity
+- `backend/src/modules/vocabularies/dto/bookmark-query.dto.ts` — BookmarkQueryDto (page, limit, search, sort with BookmarkSort enum) + BookmarkSort enum
+- `backend/src/modules/vocabularies/application/repositories/bookmarks.repository.ts` — BookmarksRepository with CRUD, findByVocabularyIds batch check, findPaginated with search/sort/pagination using QueryBuilder
+- `backend/src/modules/vocabularies/application/repositories/bookmarks.repository.spec.ts` — Unit tests for create, findByUserAndVocabulary, delete, findByVocabularyIds, findPaginated (all 5 sort orders, search filter, pagination meta)
+- `backend/src/modules/vocabularies/application/bookmarks.service.ts` — BookmarksService with toggle (create/delete), list (paginated with bookmarkedAt), isBookmarked (batch check returning map)
+- `backend/src/modules/vocabularies/application/bookmarks.service.spec.ts` — Unit tests for toggle (create/delete paths), list (pagination/search/sort/bookmarkedAt), isBookmarked (batch map, empty, edge cases)
+- `backend/src/modules/vocabularies/presentation/vocabularies.controller.spec.ts` — Controller tests for toggle endpoint, bookmarks list endpoint, search/lesson isBookmarked enrichment (authenticated + unauthenticated)
+
+### Files modified
+
+- `backend/src/modules/vocabularies/domain/vocabulary.entity.ts` — Added `@OneToMany('Bookmark', 'vocabulary') bookmarks` relation
+- `backend/src/modules/vocabularies/application/vocabularies.service.ts` — Injected BookmarksService, added `enrichWithBookmarks()` method that batch-checks isBookmarked for vocabulary lists
+- `backend/src/modules/vocabularies/presentation/vocabularies.controller.ts` — Injected BookmarksService, added `POST :vocabularyId/bookmark` and `GET bookmarks` endpoints, enriched `search` and `findByLesson` responses with isBookmarked via OptionalJwtAuthGuard
+- `backend/src/modules/vocabularies/vocabularies.module.ts` — Registered Bookmark entity in TypeOrmModule, added BookmarksService + BookmarksRepository providers, exported BookmarksService
+
+### Files deleted
+
+None
+
+### Verification
+
+- lint: 0 errors (warnings only, consistent with existing codebase)
+- typecheck: pass
+- test: 20/20 suites, 252/252 tests pass

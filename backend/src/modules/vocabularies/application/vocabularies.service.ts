@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { VocabulariesRepository } from './repositories/vocabularies.repository';
+import { BookmarksService } from './bookmarks.service';
 import { Vocabulary } from '../domain/vocabulary.entity';
 import { Dialect } from '../../../common/enums';
 
@@ -7,6 +8,7 @@ import { Dialect } from '../../../common/enums';
 export class VocabulariesService {
   constructor(
     private readonly vocabulariesRepository: VocabulariesRepository,
+    private readonly bookmarksService: BookmarksService,
   ) {}
 
   async create(data: Partial<Vocabulary>): Promise<Vocabulary> {
@@ -100,5 +102,24 @@ export class VocabulariesService {
       return [];
     }
     return this.vocabulariesRepository.search(query.trim());
+  }
+
+  async enrichWithBookmarks(
+    vocabularies: Vocabulary[],
+    userId?: string,
+  ): Promise<any[]> {
+    if (!userId || vocabularies.length === 0) {
+      return vocabularies;
+    }
+
+    const bookmarkMap = await this.bookmarksService.isBookmarked(
+      userId,
+      vocabularies.map((v) => v.id),
+    );
+
+    return vocabularies.map((vocab) => ({
+      ...vocab,
+      isBookmarked: bookmarkMap[vocab.id] ?? false,
+    }));
   }
 }

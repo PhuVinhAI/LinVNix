@@ -1,0 +1,182 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { BookmarksService } from './bookmarks.service';
+import { BookmarksRepository } from './repositories/bookmarks.repository';
+import { Bookmark } from '../domain/bookmark.entity';
+import { BookmarkSort } from '../dto/bookmark-query.dto';
+
+describe('BookmarksService', () => {
+  let service: BookmarksService;
+  let repository: jest.Mocked<BookmarksRepository>;
+
+  beforeEach(async () => {
+    const repoMock = {
+      findByUserAndVocabulary: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      findByVocabularyIds: jest.fn(),
+      findPaginated: jest.fn(),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        BookmarksService,
+        { provide: BookmarksRepository, useValue: repoMock },
+      ],
+    }).compile();
+
+    service = module.get<BookmarksService>(BookmarksService);
+    repository = module.get(BookmarksRepository);
+  });
+
+  describe('toggle', () => {
+    it('creates bookmark when not bookmarked and returns { isBookmarked: true }', async () => {
+      repository.findByUserAndVocabulary.mockResolvedValue(null);
+      const created = { id: 'bm-1', userId: 'user-1', vocabularyId: 'vocab-1' };
+      repository.create.mockResolvedValue(created as Bookmark);
+
+      const result = await service.toggle('user-1', 'vocab-1');
+
+      expect(result).toEqual({ isBookmarked: true });
+      expect(repository.create).toHaveBeenCalledWith({
+        userId: 'user-1',
+        vocabularyId: 'vocab-1',
+      });
+    });
+
+    it('deletes bookmark when already bookmarked and returns { isBookmarked: false }', async () => {
+      const existing = {
+        id: 'bm-1',
+        userId: 'user-1',
+        vocabularyId: 'vocab-1',
+      };
+      repository.findByUserAndVocabulary.mockResolvedValue(
+        existing as Bookmark,
+      );
+      repository.delete.mockResolvedValue(undefined);
+
+      const result = await service.toggle('user-1', 'vocab-1');
+
+      expect(result).toEqual({ isBookmarked: false });
+      expect(repository.delete).toHaveBeenCalledWith('bm-1');
+    });
+  });
+
+  describe('list', () => {
+    it('returns paginated bookmarked vocabularies', async () => {
+      const paginatedResult = {
+        data: [
+          {
+            id: 'bm-1',
+            userId: 'user-1',
+            vocabularyId: 'vocab-1',
+            vocabulary: { word: 'xin chào' },
+          },
+        ],
+        meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
+      };
+      repository.findPaginated.mockResolvedValue(paginatedResult as any);
+
+      const result = await service.list('user-1', {
+        page: 1,
+        limit: 20,
+        sort: BookmarkSort.NEWEST,
+      });
+
+      expect(repository.findPaginated).toHaveBeenCalledWith({
+        userId: 'user-1',
+        page: 1,
+        limit: 20,
+        search: undefined,
+        sort: BookmarkSort.NEWEST,
+      });
+      expect(result.meta.total).toBe(1);
+    });
+
+    it('passes search and sort params to repository', async () => {
+      repository.findPaginated.mockResolvedValue({
+        data: [],
+        meta: { total: 0, page: 1, limit: 20, totalPages: 0 },
+      });
+
+      await service.list('user-1', {
+        page: 1,
+        limit: 20,
+        search: 'hello',
+        sort: BookmarkSort.AZ,
+      });
+
+      expect(repository.findPaginated).toHaveBeenCalledWith({
+        userId: 'user-1',
+        page: 1,
+        limit: 20,
+        search: 'hello',
+        sort: BookmarkSort.AZ,
+      });
+    });
+
+    it('returns bookmarkedAt from bookmark createdAt', async () => {
+      const bookmarkedAt = new Date('2024-01-15');
+      const paginatedResult = {
+        data: [
+          {
+            id: 'bm-1',
+            createdAt: bookmarkedAt,
+            vocabulary: { word: 'xin chào', translation: 'hello' },
+          },
+        ],
+        meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
+      };
+      repository.findPaginated.mockResolvedValue(paginatedResult as any);
+
+      const result = await service.list('user-1', {
+        page: 1,
+        limit: 20,
+        sort: BookmarkSort.NEWEST,
+      });
+
+      expect(result.data[0].bookmarkedAt).toEqual(bookmarkedAt);
+    });
+  });
+
+  describe('isBookmarked', () => {
+    it('returns map of vocabularyId → isBookmarked', async () => {
+      const bookmarks = [
+        { vocabularyId: 'vocab-1' },
+        { vocabularyId: 'vocab-3' },
+      ];
+      repository.findByVocabularyIds.mockResolvedValue(bookmarks as Bookmark[]);
+
+      const result = await service.isBookmarked('user-1', [
+        'vocab-1',
+        'vocab-2',
+        'vocab-3',
+      ]);
+
+      expect(result).toEqual({
+        'vocab-1': true,
+        'vocab-2': false,
+        'vocab-3': true,
+      });
+    });
+
+    it('returns all false when no bookmarks found', async () => {
+      repository.findByVocabularyIds.mockResolvedValue([]);
+
+      const result = await service.isBookmarked('user-1', [
+        'vocab-1',
+        'vocab-2',
+      ]);
+
+      expect(result).toEqual({
+        'vocab-1': false,
+        'vocab-2': false,
+      });
+    });
+
+    it('returns empty object when vocabularyIds is empty', async () => {
+      const result = await service.isBookmarked('user-1', []);
+
+      expect(result).toEqual({});
+    });
+  });
+});
