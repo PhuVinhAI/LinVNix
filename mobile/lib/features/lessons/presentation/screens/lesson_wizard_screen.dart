@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
 import '../../data/lesson_repository.dart';
 import '../../domain/lesson_models.dart';
@@ -31,6 +33,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   LessonDetail? _lesson;
   final Map<String, int> _exerciseScores = {};
   final Set<String> _completedExercises = {};
+  final Map<String, dynamic> _exerciseAnswers = {};
+  final Map<String, ExerciseSubmissionResult> _exerciseResults = {};
 
   @override
   void initState() {
@@ -115,23 +119,24 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   }
 
   void _showResumeDialog() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Continue lesson?'),
-        content: const Text(
-            'You have an in-progress lesson. Would you like to skip to the exercises?'),
+    AppDialog.show(
+      context,
+      builder: (ctx) => AppDialog(
+        title: 'Continue lesson?',
+        content:
+            'You have an in-progress lesson. Would you like to skip to the exercises?',
         actions: [
-          TextButton(
+          AppDialogAction(
+            label: 'Start from beginning',
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Start from beginning'),
           ),
-          FilledButton(
+          AppDialogAction(
+            label: 'Continue from exercises',
+            isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
               _jumpToExercises();
             },
-            child: const Text('Continue from exercises'),
           ),
         ],
       ),
@@ -154,8 +159,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
 
   int get _maxScore {
     return _steps
-        .where((s) => s.type == _StepType.exercise && s.fullExercise != null)
-        .length *
+            .where((s) => s.type == _StepType.exercise && s.fullExercise != null)
+            .length *
         10;
   }
 
@@ -171,6 +176,28 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     });
   }
 
+  void _onExerciseAnswerChanged(String exerciseId, dynamic answer) {
+    setState(() {
+      _exerciseAnswers[exerciseId] = answer;
+    });
+  }
+
+  void _onExerciseResultChanged(
+      String exerciseId, ExerciseSubmissionResult result) {
+    setState(() {
+      _exerciseResults[exerciseId] = result;
+    });
+  }
+
+  bool _canGoForwardFrom(int index) {
+    if (index >= _steps.length - 1) return false;
+    final step = _steps[index];
+    if (step.type == _StepType.exercise && step.fullExercise != null) {
+      return _completedExercises.contains(step.fullExercise!.id);
+    }
+    return true;
+  }
+
   @override
   void dispose() {
     _pageController?.dispose();
@@ -179,18 +206,19 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     if (_loading) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Lesson')),
+        appBar: const AppAppBar(title: Text('Lesson')),
         body: const _LessonLoadingSkeleton(),
       );
     }
 
     if (_error != null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Lesson')),
+        appBar: const AppAppBar(title: Text('Lesson')),
         body: _LessonError(
           message: _error!,
           onRetry: () {
@@ -206,7 +234,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
 
     if (_steps.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: Text(_lesson?.title ?? 'Lesson')),
+        appBar: AppAppBar(title: Text(_lesson?.title ?? 'Lesson')),
         body: const Center(child: Text('No content available')),
       );
     }
@@ -217,15 +245,17 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     final isExerciseCompleted = isExerciseStep &&
         currentStep.fullExercise != null &&
         _completedExercises.contains(currentStep.fullExercise!.id);
+    final canGoForward = _canGoForwardFrom(_currentPage);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppAppBar(
         title: Text(_lesson?.title ?? 'Lesson'),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4),
-          child: LinearProgressIndicator(
+          child: AppProgress(
             value: (_currentPage + 1) / _steps.length,
-            backgroundColor: theme.colorScheme.surfaceContainerHighest,
+            trackColor: c.muted,
+            height: 4,
           ),
         ),
       ),
@@ -238,7 +268,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
                 Text(
                   'Step ${_currentPage + 1} of ${_steps.length}',
                   style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: c.mutedForeground,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -254,7 +284,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
                     'Score: $_totalScore',
                     style: theme.textTheme.labelMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.primary,
+                      color: c.primary,
                     ),
                   ),
                 ],
@@ -267,6 +297,9 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
               onPageChanged: (index) {
                 setState(() => _currentPage = index);
               },
+              physics: canGoForward
+                  ? null
+                  : const NeverScrollableScrollPhysics(),
               itemCount: _steps.length,
               itemBuilder: (context, index) {
                 return _buildStep(_steps[index]);
@@ -282,54 +315,68 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
                     Semantics(
                       label: 'Go to previous step',
                       button: true,
-                      child: OutlinedButton(
+                      child: AppButton(
+                        label: 'Back',
+                        variant: AppButtonVariant.outline,
                         onPressed: () {
                           _pageController?.previousPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           );
                         },
-                        child: const Text('Back'),
                       ),
                     )
                   else
                     const SizedBox.shrink(),
                   const Spacer(),
-                  if (!isLastStep && !isExerciseStep)
+                  if (!isLastStep && canGoForward && !isExerciseStep)
                     Semantics(
                       label: 'Go to next step',
                       button: true,
-                      child: FilledButton(
+                      child: AppButton(
+                        label: 'Next',
+                        variant: AppButtonVariant.primary,
                         onPressed: () {
                           _pageController?.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           );
                         },
-                        child: const Text('Next'),
                       ),
                     )
                   else if (isExerciseStep && isExerciseCompleted && !isLastStep)
                     Semantics(
                       label: 'Go to next step',
                       button: true,
-                      child: FilledButton(
+                      child: AppButton(
+                        label: 'Next',
+                        variant: AppButtonVariant.primary,
                         onPressed: () {
                           _pageController?.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           );
                         },
-                        child: const Text('Next'),
                       ),
                     )
                   else if (isLastStep && (!isExerciseStep || isExerciseCompleted))
                     Semantics(
                       label: 'Complete lesson',
                       button: true,
-                      child: FilledButton(
+                      child: AppButton(
+                        label: 'Complete',
+                        variant: AppButtonVariant.primary,
                         onPressed: _completeLesson,
-                        child: const Text('Complete'),
+                      ),
+                    )
+                  else if (isExerciseStep && !isExerciseCompleted)
+                    Semantics(
+                      label: 'Answer required to continue',
+                      button: true,
+                      child: AppButton(
+                        label: 'Next',
+                        variant: AppButtonVariant.outline,
+                        onPressed: null,
                       ),
                     ),
                 ],
@@ -354,11 +401,19 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         return GrammarStepWidget(grammarRules: step.grammarRules ?? []);
       case _StepType.exercise:
         final exercise = step.fullExercise!;
+        final savedAnswer = _exerciseAnswers[exercise.id];
+        final savedResult = _exerciseResults[exercise.id];
         return ExerciseStepWidget(
           exercise: exercise,
+          initialAnswer: savedAnswer,
+          initialResult: savedResult,
           onScoreChanged: (score) =>
               _onExerciseScoreChanged(exercise.id, score),
           onCompleted: () => _onExerciseCompleted(exercise.id),
+          onAnswerChanged: (answer) =>
+              _onExerciseAnswerChanged(exercise.id, answer),
+          onResultChanged: (result) =>
+              _onExerciseResultChanged(exercise.id, result),
         );
     }
   }
@@ -397,27 +452,26 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error completing lesson: $e')),
-        );
+        AppToast.show(context, message: 'Error completing lesson: $e', type: AppToastType.error);
       }
     }
   }
 
   void _showCompletionDialog(int score) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    showDialog(
-      context: context,
+    AppDialog.show(
+      context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        title: Row(
+      builder: (ctx) => AppDialog(
+        titleWidget: Row(
           children: [
-            Icon(Icons.celebration, color: theme.colorScheme.primary),
+            Icon(Icons.celebration, color: c.primary),
             const SizedBox(width: 8),
             const Text('Lesson Complete!'),
           ],
         ),
-        content: Column(
+        contentWidget: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
@@ -429,7 +483,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
               '$score%',
               style: theme.textTheme.headlineLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: theme.colorScheme.primary,
+                color: c.primary,
               ),
             ),
             if (_exerciseScores.isNotEmpty) ...[
@@ -437,25 +491,26 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
               Text(
                 '${_exerciseScores.values.where((s) => s > 0).length} of ${_exerciseScores.length} exercises correct',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+                  color: c.mutedForeground,
                 ),
               ),
             ],
           ],
         ),
         actions: [
-          TextButton(
+          AppDialogAction(
+            label: 'Home',
             onPressed: () {
               Navigator.of(ctx).pop();
               context.go('/');
             },
-            child: const Text('Home'),
           ),
-          FilledButton(
+          AppDialogAction(
+            label: 'Review Lesson',
+            isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: const Text('Review Lesson'),
           ),
         ],
       ),
@@ -499,7 +554,7 @@ class _LessonLoadingSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final c = AppTheme.colors(context);
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -507,65 +562,65 @@ class _LessonLoadingSkeleton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Shimmer.fromColors(
-            baseColor: colorScheme.surfaceContainerHighest,
-            highlightColor: colorScheme.surfaceContainerHigh,
+            baseColor: c.muted,
+            highlightColor: c.card,
             child: Container(
               height: 16,
               width: 150,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: c.card,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
           ),
           const SizedBox(height: 24),
           Shimmer.fromColors(
-            baseColor: colorScheme.surfaceContainerHighest,
-            highlightColor: colorScheme.surfaceContainerHigh,
+            baseColor: c.muted,
+            highlightColor: c.card,
             child: Container(
               height: 24,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: c.card,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
           ),
           const SizedBox(height: 12),
           Shimmer.fromColors(
-            baseColor: colorScheme.surfaceContainerHighest,
-            highlightColor: colorScheme.surfaceContainerHigh,
+            baseColor: c.muted,
+            highlightColor: c.card,
             child: Container(
               height: 16,
               width: 250,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: c.card,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
           ),
           const SizedBox(height: 24),
           Shimmer.fromColors(
-            baseColor: colorScheme.surfaceContainerHighest,
-            highlightColor: colorScheme.surfaceContainerHigh,
+            baseColor: c.muted,
+            highlightColor: c.card,
             child: Container(
               height: 16,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: c.card,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
           ),
           const SizedBox(height: 8),
           Shimmer.fromColors(
-            baseColor: colorScheme.surfaceContainerHighest,
-            highlightColor: colorScheme.surfaceContainerHigh,
+            baseColor: c.muted,
+            highlightColor: c.card,
             child: Container(
               height: 16,
               width: 200,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: c.card,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -583,18 +638,21 @@ class _LessonError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: 64, color: Colors.grey),
+          Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
           const SizedBox(height: 16),
           const Text('Failed to load lesson'),
           const SizedBox(height: 8),
-          FilledButton.icon(
+          AppButton(
             onPressed: onRetry,
             icon: const Icon(Icons.refresh),
-            label: const Text('Retry'),
+            label: 'Retry',
+            variant: AppButtonVariant.primary,
           ),
         ],
       ),

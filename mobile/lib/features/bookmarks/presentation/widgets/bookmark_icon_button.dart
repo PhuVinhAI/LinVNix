@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class BookmarkIconButton extends StatelessWidget {
   const BookmarkIconButton({
@@ -14,13 +15,13 @@ class BookmarkIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
 
     return IconButton(
       onPressed: () => onToggle(vocabularyId),
       icon: Icon(
         isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-        color: isBookmarked ? theme.colorScheme.primary : null,
+        color: isBookmarked ? c.primary : c.mutedForeground,
       ),
     );
   }

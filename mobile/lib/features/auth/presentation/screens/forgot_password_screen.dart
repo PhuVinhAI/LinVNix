@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -37,18 +39,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       }
     } on AppException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message), backgroundColor: Colors.red),
-        );
+        AppToast.show(context, message: e.message, type: AppToastType.error);
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An unexpected error occurred'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -58,9 +53,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Forgot Password'),
-      ),
+      appBar: const AppAppBar(title: Text('Forgot Password')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -81,14 +74,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                TextFormField(
+                AppInput(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
+                  label: 'Email',
+                  prefixIcon: const Icon(Icons.email_outlined),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Email is required';
@@ -100,21 +91,18 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                FilledButton(
+                AppButton(
+                  variant: AppButtonVariant.primary,
+                  isFullWidth: true,
                   onPressed: _isLoading ? null : _handleSubmit,
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child:
-                              CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Send Reset Code'),
+                  isLoading: _isLoading,
+                  label: 'Send Reset Code',
                 ),
                 const SizedBox(height: 16),
-                TextButton(
+                AppButton(
+                  variant: AppButtonVariant.text,
                   onPressed: () => context.pop(),
-                  child: const Text('Back to Sign In'),
+                  label: 'Back to Sign In',
                 ),
               ],
             ),

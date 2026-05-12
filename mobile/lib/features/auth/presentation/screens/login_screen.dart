@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../../profile/data/profile_providers.dart';
 import '../widgets/google_sign_in_button.dart';
 
@@ -46,11 +48,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         refreshToken: response.refreshToken,
       );
 
-      // Invalidate cached providers so they re-fetch for the new user
       ref.invalidate(userProfileProvider);
       ref.invalidate(exerciseStatsProvider);
 
-      // Set onboarding state from server response
       if (response.user.onboardingCompleted) {
         ref.read(onboardingCompletedProvider.notifier).markCompleted();
       } else {
@@ -64,21 +64,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } on AppException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.message),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        AppToast.show(context, message: e.message, type: AppToastType.error);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('An unexpected error occurred. Please try again.'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        AppToast.show(context, message: 'An unexpected error occurred. Please try again.', type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -110,21 +100,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ref.read(authStateProvider.notifier).setAuthenticated(true);
     } on AppException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.message),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        AppToast.show(context, message: e.message, type: AppToastType.error);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('An unexpected error occurred. Please try again.'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        AppToast.show(context, message: 'An unexpected error occurred. Please try again.', type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -134,7 +114,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final c = AppTheme.colors(context);
 
     return Scaffold(
       body: SafeArea(
@@ -166,15 +146,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Semantics(
                     label: 'Email input field',
                     textField: true,
-                    child: TextFormField(
+                    child: AppInput(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
-                        helperText: 'Enter your email address',
-                      ),
+                      label: 'Email',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      hint: 'Enter your email address',
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Email is required';
@@ -190,28 +168,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Semantics(
                     label: 'Password input field',
                     textField: true,
-                    child: TextFormField(
+                    child: AppInput(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: const Icon(Icons.lock_outlined),
-                        suffixIcon: Semantics(
-                          label: _obscurePassword
-                              ? 'Show password'
-                              : 'Hide password',
-                          button: true,
-                          child: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                            ),
-                            onPressed: () {
-                              setState(
-                                  () => _obscurePassword = !_obscurePassword);
-                            },
+                      label: 'Password',
+                      prefixIcon: const Icon(Icons.lock_outlined),
+                      suffixIcon: Semantics(
+                        label: _obscurePassword
+                            ? 'Show password'
+                            : 'Hide password',
+                        button: true,
+                        child: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
                           ),
+                          onPressed: () {
+                            setState(
+                                () => _obscurePassword = !_obscurePassword);
+                          },
                         ),
                       ),
                       validator: (value) {
@@ -228,9 +204,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Semantics(
                       label: 'Forgot password',
                       button: true,
-                      child: TextButton(
+                      child: AppButton(
+                        variant: AppButtonVariant.text,
                         onPressed: () => context.push('/forgot-password'),
-                        child: const Text('Forgot password?'),
+                        label: 'Forgot password?',
                       ),
                     ),
                   ),
@@ -239,40 +216,39 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     label: 'Sign in to your account',
                     button: true,
                     enabled: !_isLoading,
-                    child: FilledButton(
+                    child: AppButton(
+                      variant: AppButtonVariant.primary,
+                      isFullWidth: true,
                       onPressed: _isLoading ? null : _handleLogin,
-                      child: _isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Text('Sign In'),
+                      isLoading: _isLoading,
+                      label: 'Sign In',
                     ),
                   ),
                   const SizedBox(height: 16),
                   Semantics(
                     label: 'Create a new account',
                     button: true,
-                    child: OutlinedButton(
+                    child: AppButton(
+                      variant: AppButtonVariant.outline,
+                      isFullWidth: true,
                       onPressed: () => context.push('/register'),
-                      child: const Text('Create Account'),
+                      label: 'Create Account',
                     ),
                   ),
                   const SizedBox(height: 24),
                   Row(
                     children: [
-                      const Expanded(child: Divider()),
+                      const Expanded(child: AppDivider()),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           'OR',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
+                            color: c.mutedForeground,
                           ),
                         ),
                       ),
-                      const Expanded(child: Divider()),
+                      const Expanded(child: AppDivider()),
                     ],
                   ),
                   const SizedBox(height: 24),

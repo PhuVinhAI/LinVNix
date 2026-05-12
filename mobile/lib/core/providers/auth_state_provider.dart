@@ -2,28 +2,46 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'providers.dart';
 import '../../features/profile/data/profile_providers.dart';
 
-class AuthNotifier extends Notifier<bool> {
+class AuthState {
+  const AuthState({
+    this.isAuthenticated = false,
+    this.isInitialized = false,
+  });
+
+  final bool isAuthenticated;
+  final bool isInitialized;
+
+  AuthState copyWith({
+    bool? isAuthenticated,
+    bool? isInitialized,
+  }) =>
+      AuthState(
+        isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+        isInitialized: isInitialized ?? this.isInitialized,
+      );
+}
+
+class AuthNotifier extends Notifier<AuthState> {
   @override
-  bool build() {
+  AuthState build() {
     final apiClient = ref.read(apiClientProvider);
     apiClient.onAuthFailure = () => setAuthenticated(false);
     _checkAuth();
-    return false;
+    return const AuthState();
   }
 
   Future<void> _checkAuth() async {
     final storage = ref.read(secureStorageProvider);
     final hasTokens = await storage.hasToken;
     if (!hasTokens) {
-      state = false;
+      state = state.copyWith(isInitialized: true, isAuthenticated: false);
       return;
     }
 
-    // Try to validate by refreshing tokens
     try {
       final refreshToken = await storage.getRefreshToken();
       if (refreshToken == null) {
-        state = false;
+        state = state.copyWith(isInitialized: true, isAuthenticated: false);
         return;
       }
 
@@ -35,50 +53,43 @@ class AuthNotifier extends Notifier<bool> {
         accessToken: tokenResponse.accessToken,
         refreshToken: tokenResponse.refreshToken,
       );
-      state = true;
+      state = state.copyWith(isInitialized: true, isAuthenticated: true);
     } catch (_) {
       await storage.clearTokens();
-      state = false;
+      state = state.copyWith(isInitialized: true, isAuthenticated: false);
     }
   }
 
   void setAuthenticated(bool value) {
-    state = value;
+    state = state.copyWith(isAuthenticated: value);
   }
 
   Future<void> logout() async {
     final storage = ref.read(secureStorageProvider);
     final refreshToken = await storage.getRefreshToken();
 
-    // Try to revoke refresh token server-side
     if (refreshToken != null) {
       try {
         final repository = ref.read(authRepositoryProvider);
         await repository.logout(refreshToken: refreshToken);
-      } catch (_) {
-        // Ignore server errors on logout - clear local tokens anyway
-      }
+      } catch (_) {}
     }
 
     await storage.clearTokens();
 
-    // Clear user-specific SharedPreferences (onboarding, daily goal)
     try {
       final prefs = await ref.read(preferencesProvider.future);
       await prefs.clearOnboardingState();
     } catch (_) {}
 
-    // Reset onboarding provider
     ref.read(onboardingCompletedProvider.notifier).reset();
-
-    // Invalidate cached user data providers so they re-fetch for next login
     ref.invalidate(userProfileProvider);
     ref.invalidate(exerciseStatsProvider);
 
-    state = false;
+    state = state.copyWith(isAuthenticated: false);
   }
 }
 
-final authStateProvider = NotifierProvider<AuthNotifier, bool>(
+final authStateProvider = NotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
 );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/home_providers.dart';
 
 class ContinueCard extends ConsumerWidget {
@@ -11,10 +12,11 @@ class ContinueCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final continueAsync = ref.watch(continueLearningProvider);
-    final accent = Theme.of(context).extension<VietnameseAccentTokens>()!;
 
-    return Card(
+    return AppCard(
+      variant: AppCardVariant.outlined,
       clipBehavior: Clip.antiAlias,
+      padding: EdgeInsets.zero,
       child: continueAsync.when(
         loading: () => const _ShimmerCard(),
         error: (error, _) => _ErrorCard(
@@ -22,11 +24,10 @@ class ContinueCard extends ConsumerWidget {
         ),
         data: (continueLearning) {
           if (continueLearning == null) {
-            return _EmptyCard(accent: accent);
+            return const _EmptyCard();
           }
           return _DataCard(
             continueLearning: continueLearning,
-            accent: accent,
           );
         },
       ),
@@ -39,11 +40,12 @@ class _ShimmerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     return Shimmer.fromColors(
-      baseColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-      highlightColor: Theme.of(context).colorScheme.surfaceContainerLow,
+      baseColor: c.muted,
+      highlightColor: c.card,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -52,28 +54,28 @@ class _ShimmerCard extends StatelessWidget {
               height: 14,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             Container(
               width: 200,
               height: 20,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             Container(
               width: 160,
               height: 14,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Container(
               width: 100,
               height: 36,
@@ -95,27 +97,31 @@ class _ErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Continue Learning',
-            style: Theme.of(context).textTheme.titleMedium,
+            style: theme.textTheme.titleMedium,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             'Unable to load progress',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: c.error,
+            ),
           ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
+          const SizedBox(height: AppSpacing.md),
+          AppButton(
+            variant: AppButtonVariant.outline,
             onPressed: onRetry,
             icon: const Icon(Icons.refresh),
-            label: const Text('Retry'),
+            label: 'Retry',
           ),
         ],
       ),
@@ -124,16 +130,15 @@ class _ErrorCard extends StatelessWidget {
 }
 
 class _EmptyCard extends StatelessWidget {
-  const _EmptyCard({required this.accent});
-  final VietnameseAccentTokens accent;
+  const _EmptyCard();
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -141,24 +146,22 @@ class _EmptyCard extends StatelessWidget {
             'Continue Learning',
             style: theme.textTheme.titleMedium,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             'Start a course to begin learning',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
+              color: c.mutedForeground,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Semantics(
             label: 'Browse available courses',
             button: true,
-            child: FilledButton.icon(
+            child: AppButton(
+              variant: AppButtonVariant.primary,
               onPressed: () => context.go('/courses'),
               icon: const Icon(Icons.school),
-              label: const Text('Browse Courses'),
-              style: FilledButton.styleFrom(
-                backgroundColor: accent.accentPrimary,
-              ),
+              label: 'Browse Courses',
             ),
           ),
         ],
@@ -170,21 +173,19 @@ class _EmptyCard extends StatelessWidget {
 class _DataCard extends StatelessWidget {
   const _DataCard({
     required this.continueLearning,
-    required this.accent,
   });
 
   final ContinueLearning continueLearning;
-  final VietnameseAccentTokens accent;
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final isInProgress =
         continueLearning.status == ContinueLearningStatus.inProgress;
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -193,40 +194,34 @@ class _DataCard extends StatelessWidget {
               Icon(
                 isInProgress ? Icons.play_circle : Icons.check_circle,
                 size: 16,
-                color: isInProgress
-                    ? accent.accentPrimary
-                    : colorScheme.outline,
+                color: isInProgress ? c.primary : c.border,
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: AppSpacing.xs),
               Text(
                 isInProgress ? 'In Progress' : 'Completed',
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: isInProgress
-                      ? accent.accentPrimary
-                      : colorScheme.outline,
+                  color: isInProgress ? c.primary : c.border,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             continueLearning.lessonTitle,
             style: theme.textTheme.titleMedium,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Semantics(
             label: isInProgress
                 ? 'Resume lesson: ${continueLearning.lessonTitle}'
                 : 'Review lesson: ${continueLearning.lessonTitle}',
             button: true,
-            child: FilledButton.icon(
+            child: AppButton(
+              variant: AppButtonVariant.primary,
               onPressed: () =>
                   context.push('/lessons/${continueLearning.lessonId}'),
               icon: Icon(isInProgress ? Icons.play_arrow : Icons.replay),
-              label: Text(isInProgress ? 'Resume' : 'Review'),
-              style: FilledButton.styleFrom(
-                backgroundColor: accent.accentPrimary,
-              ),
+              label: isInProgress ? 'Resume' : 'Review',
             ),
           ),
         ],

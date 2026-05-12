@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../exercise_models.dart';
 import '../exercise_renderer.dart';
 
@@ -100,22 +102,30 @@ class _OrderingInputState extends State<_OrderingInput> {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return ReorderableListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: _items.length,
       onReorder: _onReorder,
       itemBuilder: (context, index) {
-        return ListTile(
+        return Padding(
           key: ValueKey(_items[index]),
-          leading: Icon(
-            Icons.drag_handle,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-          title: Text(_items[index]),
-          tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+          padding: const EdgeInsets.only(bottom: 8),
+          child: AppCard(
+            variant: AppCardVariant.muted,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.drag_handle, color: c.mutedForeground),
+                const SizedBox(width: 12),
+                Expanded(child: Text(_items[index])),
+              ],
+            ),
           ),
         );
       },

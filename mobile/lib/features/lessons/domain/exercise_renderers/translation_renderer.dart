@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../exercise_models.dart';
 import '../exercise_renderer.dart';
 
@@ -35,11 +37,8 @@ class TranslationRenderer extends ExerciseRenderer {
     dynamic currentAnswer,
     ValueChanged<dynamic> onAnswerChanged,
   ) {
-    return TextField(
-      decoration: const InputDecoration(
-        labelText: 'Your translation',
-        border: OutlineInputBorder(),
-      ),
+    return AppInput(
+      label: 'Your translation',
       maxLines: 3,
       onChanged: onAnswerChanged,
     );

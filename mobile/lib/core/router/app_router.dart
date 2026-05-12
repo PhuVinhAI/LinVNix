@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_state_provider.dart';
 import '../providers/providers.dart';
+import '../presentation/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/email_verification_screen.dart';
@@ -24,63 +25,86 @@ import '../presentation/shell_screen.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+class _RouterListenable extends ChangeNotifier {
+  _RouterListenable(Ref ref) {
+    ref.listen(authStateProvider, (_, __) => notifyListeners());
+    ref.listen(onboardingCompletedProvider, (_, __) => notifyListeners());
+    ref.listen(userProfileProvider, (_, __) => notifyListeners());
+  }
+}
+
+final _routerListenableProvider = Provider<_RouterListenable>((ref) {
+  return _RouterListenable(ref);
+});
+
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateProvider);
-  final onboardingCompleted = ref.watch(onboardingCompletedProvider);
-  final profileAsync = ref.watch(userProfileProvider);
-
-  // Sync onboarding state from server when profile is available
-  final serverOnboarding = profileAsync.whenOrNull(
-    data: (profile) => profile.onboardingCompleted,
-  );
-
-  // Use server value when available, fall back to local state
-  final isOnboardingCompleted =
-      serverOnboarding ?? onboardingCompleted;
+  final listenable = ref.watch(_routerListenableProvider);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/',
+    initialLocation: '/splash',
+    refreshListenable: listenable,
     redirect: (context, state) {
-      final isAuthenticated = authState;
+      final authState = ref.read(authStateProvider);
+      final onboardingCompleted = ref.read(onboardingCompletedProvider);
+      final profileAsync = ref.read(userProfileProvider);
+
+      final serverOnboarding = profileAsync.whenOrNull(
+        data: (profile) => profile.onboardingCompleted,
+      );
+
+      final isOnboardingCompleted =
+          serverOnboarding ?? onboardingCompleted;
+
       final location = state.matchedLocation;
+
+      if (location == '/splash') {
+        if (!authState.isInitialized) return null;
+        if (!authState.isAuthenticated) return '/login';
+        if (!isOnboardingCompleted) return '/onboarding';
+        return '/';
+      }
+
+      if (!authState.isInitialized) return '/splash';
+
       final isAuthRoute = location == '/login' ||
           location == '/register' ||
           location == '/forgot-password' ||
           location == '/reset-password' ||
           location == '/reset-password-otp';
 
-      // Public routes accessible without auth
       final isPublicRoute = location == '/verify-email' ||
           location.startsWith('/courses') ||
           location.startsWith('/modules');
 
-      if (isPublicRoute) {
-        return null;
-      }
+      if (isPublicRoute) return null;
 
-      // /onboarding is accessible when authenticated (regardless of onboarding status)
       if (location == '/onboarding') {
-        if (!isAuthenticated) return '/login';
+        if (!authState.isAuthenticated) return '/login';
         return null;
       }
 
-      if (!isAuthenticated && !isAuthRoute) {
+      if (!authState.isAuthenticated && !isAuthRoute) {
         return '/login';
       }
 
-      if (isAuthenticated && isAuthRoute) {
+      if (authState.isAuthenticated && isAuthRoute) {
         return '/';
       }
 
-      // If authenticated but onboarding not completed, redirect to onboarding
-      if (isAuthenticated && !isOnboardingCompleted && location != '/onboarding') {
+      if (authState.isAuthenticated &&
+          !isOnboardingCompleted &&
+          location != '/onboarding') {
         return '/onboarding';
       }
 
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),

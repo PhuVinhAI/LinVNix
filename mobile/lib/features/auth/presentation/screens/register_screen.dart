@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../../profile/data/profile_providers.dart';
 import '../widgets/google_sign_in_button.dart';
 
@@ -51,18 +53,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       }
     } on AppException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message), backgroundColor: Colors.red),
-        );
+        AppToast.show(context, message: e.message, type: AppToastType.error);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An unexpected error occurred'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -94,18 +89,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       ref.read(authStateProvider.notifier).setAuthenticated(true);
     } on AppException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message), backgroundColor: Colors.red),
-        );
+        AppToast.show(context, message: e.message, type: AppToastType.error);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An unexpected error occurred'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -114,10 +102,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Account'),
-      ),
+      appBar: const AppAppBar(title: Text('Create Account')),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -127,13 +115,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TextFormField(
+                  AppInput(
                     controller: _nameController,
                     textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      labelText: 'Full Name',
-                      prefixIcon: Icon(Icons.person_outlined),
-                    ),
+                    label: 'Full Name',
+                    prefixIcon: const Icon(Icons.person_outlined),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Full name is required';
@@ -142,14 +128,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  AppInput(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email_outlined),
-                    ),
+                    label: 'Email',
+                    prefixIcon: const Icon(Icons.email_outlined),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Email is required';
@@ -161,22 +145,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  AppInput(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outlined),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() => _obscurePassword = !_obscurePassword);
-                        },
+                    label: 'Password',
+                    prefixIcon: const Icon(Icons.lock_outlined),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
                       ),
+                      onPressed: () {
+                        setState(() => _obscurePassword = !_obscurePassword);
+                      },
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -193,24 +175,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  AppInput(
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      prefixIcon: const Icon(Icons.lock_outlined),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureConfirmPassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() =>
-                              _obscureConfirmPassword =
-                                  !_obscureConfirmPassword);
-                        },
+                    label: 'Confirm Password',
+                    prefixIcon: const Icon(Icons.lock_outlined),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureConfirmPassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
                       ),
+                      onPressed: () {
+                        setState(() =>
+                            _obscureConfirmPassword =
+                                !_obscureConfirmPassword);
+                      },
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -223,28 +203,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 32),
-                  FilledButton(
+                  AppButton(
+                    variant: AppButtonVariant.primary,
+                    isFullWidth: true,
                     onPressed: _isLoading ? null : _handleRegister,
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text('Create Account'),
+                    isLoading: _isLoading,
+                    label: 'Create Account',
                   ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      const Expanded(child: Divider()),
+                      const Expanded(child: AppDivider()),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           'OR',
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: c.mutedForeground,
+                          ),
                         ),
                       ),
-                      const Expanded(child: Divider()),
+                      const Expanded(child: AppDivider()),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -256,10 +235,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Already have an account? '),
-                      TextButton(
+                      Text('Already have an account? ', style: TextStyle(color: c.foreground)),
+                      AppButton(
+                        variant: AppButtonVariant.text,
                         onPressed: () => context.pop(),
-                        child: const Text('Sign in'),
+                        label: 'Sign in',
                       ),
                     ],
                   ),

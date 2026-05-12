@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 
 class SubmitButton extends StatelessWidget {
   const SubmitButton({
@@ -14,18 +16,11 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: FilledButton(
-        onPressed: isEnabled && !isLoading ? onPressed : null,
-        child: isLoading
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            : const Text('Submit'),
-      ),
+    return AppButton(
+      label: 'Submit',
+      onPressed: isEnabled ? onPressed : null,
+      isLoading: isLoading,
+      isFullWidth: true,
     );
   }
 }
