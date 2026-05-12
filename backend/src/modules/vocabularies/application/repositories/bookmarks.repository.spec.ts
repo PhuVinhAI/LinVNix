@@ -14,13 +14,18 @@ describe('BookmarksRepository', () => {
     mockQueryBuilder = {
       where: jest.fn().mockReturnThis(),
       andWhere: jest.fn().mockReturnThis(),
+      leftJoin: jest.fn().mockReturnThis(),
       leftJoinAndSelect: jest.fn().mockReturnThis(),
+      select: jest.fn().mockReturnThis(),
+      addSelect: jest.fn().mockReturnThis(),
       orderBy: jest.fn().mockReturnThis(),
+      groupBy: jest.fn().mockReturnThis(),
       skip: jest.fn().mockReturnThis(),
       take: jest.fn().mockReturnThis(),
       getMany: jest.fn(),
       getCount: jest.fn(),
       getManyAndCount: jest.fn(),
+      getRawMany: jest.fn(),
     };
 
     mockRepo = {
@@ -136,6 +141,49 @@ describe('BookmarksRepository', () => {
 
       expect(result).toEqual([]);
       expect(mockRepo.createQueryBuilder).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getStats', () => {
+    it('returns total and breakdown by partOfSpeech', async () => {
+      const rawResults = [
+        { partOfSpeech: 'noun', count: '12' },
+        { partOfSpeech: 'verb', count: '8' },
+        { partOfSpeech: 'adjective', count: '5' },
+      ];
+      mockQueryBuilder.getRawMany.mockResolvedValue(rawResults);
+
+      const result = await repository.getStats('user-1');
+
+      expect(mockRepo.createQueryBuilder).toHaveBeenCalledWith('bookmark');
+      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledWith(
+        'bookmark.vocabulary',
+        'vocabulary',
+      );
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith(
+        'bookmark.userId = :userId',
+        { userId: 'user-1' },
+      );
+      expect(mockQueryBuilder.groupBy).toHaveBeenCalledWith(
+        'vocabulary.partOfSpeech',
+      );
+      expect(mockQueryBuilder.select).toHaveBeenCalled();
+      expect(result).toEqual({
+        total: 25,
+        byPartOfSpeech: {
+          noun: 12,
+          verb: 8,
+          adjective: 5,
+        },
+      });
+    });
+
+    it('returns zeros when user has no bookmarks', async () => {
+      mockQueryBuilder.getRawMany.mockResolvedValue([]);
+
+      const result = await repository.getStats('user-1');
+
+      expect(result).toEqual({ total: 0, byPartOfSpeech: {} });
     });
   });
 

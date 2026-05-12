@@ -29,6 +29,7 @@ describe('VocabulariesController - Bookmark endpoints', () => {
     const bookmarksServiceMock = {
       toggle: jest.fn(),
       list: jest.fn(),
+      getStats: jest.fn(),
     };
 
     const storageServiceMock = {
@@ -140,6 +141,33 @@ describe('VocabulariesController - Bookmark endpoints', () => {
         search: 'hello',
         sort: BookmarkSort.AZ,
       });
+    });
+  });
+
+  describe('GET /vocabularies/bookmarks/stats', () => {
+    it('returns bookmark stats for user', async () => {
+      const statsResult = {
+        total: 25,
+        byPartOfSpeech: { noun: 12, verb: 8, adjective: 5 },
+      };
+      bookmarksService.getStats.mockResolvedValue(statsResult);
+
+      const result = await controller.getBookmarkStats(mockUser as any);
+
+      expect(bookmarksService.getStats).toHaveBeenCalledWith('user-1');
+      expect(result).toEqual(statsResult);
+    });
+
+    it('returns empty stats when no bookmarks', async () => {
+      bookmarksService.getStats.mockResolvedValue({
+        total: 0,
+        byPartOfSpeech: {},
+      });
+
+      const result = await controller.getBookmarkStats(mockUser as any);
+
+      expect(result.total).toBe(0);
+      expect(result.byPartOfSpeech).toEqual({});
     });
   });
 

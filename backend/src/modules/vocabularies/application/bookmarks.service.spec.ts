@@ -15,6 +15,7 @@ describe('BookmarksService', () => {
       delete: jest.fn(),
       findByVocabularyIds: jest.fn(),
       findPaginated: jest.fn(),
+      getStats: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -135,6 +136,33 @@ describe('BookmarksService', () => {
       });
 
       expect(result.data[0].bookmarkedAt).toEqual(bookmarkedAt);
+    });
+  });
+
+  describe('getStats', () => {
+    it('returns total and byPartOfSpeech from repository', async () => {
+      const statsResult = {
+        total: 25,
+        byPartOfSpeech: { noun: 12, verb: 8, adjective: 5 },
+      };
+      repository.getStats.mockResolvedValue(statsResult);
+
+      const result = await service.getStats('user-1');
+
+      expect(repository.getStats).toHaveBeenCalledWith('user-1');
+      expect(result).toEqual(statsResult);
+    });
+
+    it('returns empty stats when user has no bookmarks', async () => {
+      repository.getStats.mockResolvedValue({
+        total: 0,
+        byPartOfSpeech: {},
+      });
+
+      const result = await service.getStats('user-1');
+
+      expect(result.total).toBe(0);
+      expect(result.byPartOfSpeech).toEqual({});
     });
   });
 

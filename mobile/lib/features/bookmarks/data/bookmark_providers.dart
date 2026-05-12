@@ -3,6 +3,11 @@ import '../../../core/providers/providers.dart';
 import '../data/bookmark_repository.dart';
 import '../domain/bookmark_models.dart';
 
+final bookmarkStatsProvider = FutureProvider<BookmarkStats>((ref) {
+  final repo = ref.watch(bookmarkRepositoryProvider);
+  return repo.getBookmarkStats();
+});
+
 final bookmarkRepositoryProvider = Provider<BookmarkRepository>((ref) {
   return BookmarkRepository(ref.watch(dioProvider));
 });
@@ -86,6 +91,7 @@ class BookmarksNotifier extends AsyncNotifier<BookmarksPage> {
   Future<bool> toggleBookmark(String vocabularyId) async {
     final repo = ref.read(bookmarkRepositoryProvider);
     final isBookmarked = await repo.toggleBookmark(vocabularyId);
+    ref.invalidate(bookmarkStatsProvider);
     if (!isBookmarked) {
       final current = state.value;
       if (current != null) {

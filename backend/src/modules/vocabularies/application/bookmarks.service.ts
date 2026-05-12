@@ -18,9 +18,18 @@ export interface BookmarkListResult {
   meta: PaginatedResult<Bookmark>['meta'];
 }
 
+export interface BookmarkStatsResult {
+  total: number;
+  byPartOfSpeech: Record<string, number>;
+}
+
 @Injectable()
 export class BookmarksService {
   constructor(private readonly bookmarksRepository: BookmarksRepository) {}
+
+  async getStats(userId: string): Promise<BookmarkStatsResult> {
+    return this.bookmarksRepository.getStats(userId);
+  }
 
   async toggle(
     userId: string,

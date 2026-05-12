@@ -6,6 +6,8 @@ import '../../../../core/theme/app_theme.dart';
 import '../../data/profile_providers.dart';
 import '../../domain/exercise_stats.dart';
 import '../../../user/domain/user_profile.dart';
+import '../../../bookmarks/data/bookmark_providers.dart';
+import '../../../bookmarks/domain/bookmark_models.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -58,6 +60,8 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             _StatsSection(statsAsync: statsAsync, accent: accent),
+            const SizedBox(height: 16),
+            _VocabStatsSection(accent: accent),
             const SizedBox(height: 16),
             _SavedWordsSection(accent: accent),
           ],
@@ -576,6 +580,151 @@ class _StatCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _VocabStatsSection extends ConsumerWidget {
+  const _VocabStatsSection({required this.accent});
+  final VietnameseAccentTokens accent;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final statsAsync = ref.watch(bookmarkStatsProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Thống kê từ vựng',
+          style: theme.textTheme.titleMedium,
+        ),
+        const SizedBox(height: 12),
+        statsAsync.when(
+          loading: () => const Card(
+            child: Padding(
+              padding: EdgeInsets.all(32),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+          error: (error, stack) => Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Icon(Icons.error_outline, color: theme.colorScheme.error),
+                  const SizedBox(width: 12),
+                  const Expanded(child: Text('Không thể tải thống kê')),
+                ],
+              ),
+            ),
+          ),
+          data: (stats) => _VocabStatsCard(stats: stats, accent: accent),
+        ),
+      ],
+    );
+  }
+}
+
+class _VocabStatsCard extends StatelessWidget {
+  const _VocabStatsCard({required this.stats, required this.accent});
+  final BookmarkStats stats;
+  final VietnameseAccentTokens accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    if (stats.total == 0) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Icon(Icons.bookmark_border, color: accent.accentPrimary),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '0',
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Từ đã lưu',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final breakdownItems = stats.byPartOfSpeech.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.bookmark, color: accent.accentPrimary),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${stats.total}',
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: accent.accentPrimary,
+                        ),
+                      ),
+                      Text(
+                        'Từ đã lưu',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (breakdownItems.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              const Divider(),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: breakdownItems.map((entry) {
+                  final viLabel = kPartOfSpeechViLabels[entry.key] ?? entry.key;
+                  return Chip(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                    label: Text('$viLabel: ${entry.value}'),
+                    labelStyle: theme.textTheme.bodySmall,
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
         ),
       ),
     );

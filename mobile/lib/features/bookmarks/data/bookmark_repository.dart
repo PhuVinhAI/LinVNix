@@ -6,6 +6,17 @@ class BookmarkRepository {
   BookmarkRepository(this._dio);
   final Dio _dio;
 
+  Future<BookmarkStats> getBookmarkStats() async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '/vocabularies/bookmarks/stats',
+      );
+      return BookmarkStats.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<bool> toggleBookmark(String vocabularyId) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(

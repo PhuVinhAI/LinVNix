@@ -49,6 +49,27 @@ export class VocabulariesController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @Get('bookmarks/stats')
+  @ApiOperation({
+    summary: 'Lấy thống kê từ vựng đã bookmark',
+    description: 'Trả về tổng số từ đã bookmark và phân bố theo partOfSpeech.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Thống kê từ vựng đã bookmark',
+    schema: {
+      example: {
+        total: 25,
+        byPartOfSpeech: { noun: 12, verb: 8, adjective: 5 },
+      },
+    },
+  })
+  async getBookmarkStats(@CurrentUser() user: User) {
+    return this.bookmarksService.getStats(user.id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get('bookmarks')
   @ApiOperation({
     summary: 'Lấy danh sách từ vựng đã bookmark',

@@ -47,6 +47,31 @@ export class BookmarksRepository {
       .getMany();
   }
 
+  async getStats(userId: string): Promise<{
+    total: number;
+    byPartOfSpeech: Record<string, number>;
+  }> {
+    const rawResults = await this.repository
+      .createQueryBuilder('bookmark')
+      .leftJoin('bookmark.vocabulary', 'vocabulary')
+      .select('vocabulary.partOfSpeech', 'partOfSpeech')
+      .addSelect('COUNT(*)', 'count')
+      .where('bookmark.userId = :userId', { userId })
+      .groupBy('vocabulary.partOfSpeech')
+      .getRawMany();
+
+    let total = 0;
+    const byPartOfSpeech: Record<string, number> = {};
+
+    for (const row of rawResults) {
+      const count = parseInt(row.count, 10);
+      byPartOfSpeech[row.partOfSpeech] = count;
+      total += count;
+    }
+
+    return { total, byPartOfSpeech };
+  }
+
   async findPaginated(params: {
     userId: string;
     page: number;
