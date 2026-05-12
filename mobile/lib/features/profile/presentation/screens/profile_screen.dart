@@ -58,6 +58,8 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             _StatsSection(statsAsync: statsAsync, accent: accent),
+            const SizedBox(height: 16),
+            _SavedWordsSection(accent: accent),
           ],
         ),
       ),
@@ -575,6 +577,30 @@ class _StatCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SavedWordsSection extends StatelessWidget {
+  const _SavedWordsSection({required this.accent});
+  final VietnameseAccentTokens accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      child: ListTile(
+        leading: Icon(Icons.bookmark, color: accent.accentPrimary),
+        title: Text(
+          'Từ đã lưu',
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => context.push('/bookmarks'),
       ),
     );
   }
