@@ -15,6 +15,7 @@ import '../../features/courses/presentation/screens/course_detail_screen.dart';
 import '../../features/courses/presentation/screens/module_detail_screen.dart';
 import '../../features/review/presentation/screens/review_screen.dart';
 import '../../features/review/presentation/screens/vocabulary_browser_screen.dart';
+import '../../features/bookmarks/presentation/screens/bookmarks_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/data/profile_providers.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -135,6 +136,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/vocabulary',
         builder: (context, state) => const VocabularyBrowserScreen(),
+      ),
+      GoRoute(
+        path: '/bookmarks',
+        builder: (context, state) => const BookmarksScreen(),
       ),
       GoRoute(
         path: '/lessons/:id',
