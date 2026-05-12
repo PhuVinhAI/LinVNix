@@ -9,7 +9,6 @@ import '../../domain/exercise_models.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../courses/data/courses_providers.dart';
 import '../../../home/data/home_providers.dart';
-import '../../../review/data/review_providers.dart';
 import '../widgets/content_widgets.dart';
 import '../widgets/vocabulary_step.dart';
 import '../widgets/grammar_step.dart';
@@ -32,7 +31,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   LessonDetail? _lesson;
   final Map<String, int> _exerciseScores = {};
   final Set<String> _completedExercises = {};
-  final Set<String> _learnedVocabIds = {};
 
   @override
   void initState() {
@@ -71,17 +69,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
           label: 'Vocabulary',
           vocabularies: vocabs,
         ));
-
-        try {
-          final vocabRepo = ref.read(vocabularyRepositoryProvider);
-          final myVocabs = await vocabRepo.getMyVocabularies();
-          final lessonVocabIds = vocabs.map((v) => v.id).toSet();
-          for (final uv in myVocabs) {
-            if (lessonVocabIds.contains(uv.vocabulary.id)) {
-              _learnedVocabIds.add(uv.vocabulary.id);
-            }
-          }
-        } catch (_) {}
       }
 
       if (lesson.grammarRules.isNotEmpty) {
@@ -362,8 +349,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         return VocabularyStepWidget(
           vocabularies: step.vocabularies ?? [],
           lessonId: widget.lessonId,
-          learnedVocabIds: _learnedVocabIds,
-          onVocabLearned: (id) => setState(() => _learnedVocabIds.add(id)),
         );
       case _StepType.grammar:
         return GrammarStepWidget(grammarRules: step.grammarRules ?? []);

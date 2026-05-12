@@ -113,6 +113,7 @@ class LessonVocabulary {
     this.dialectVariants,
     this.audioUrls,
     this.difficultyLevel,
+    this.isBookmarked = false,
   });
 
   factory LessonVocabulary.fromJson(Map<String, dynamic> json) {
@@ -132,6 +133,7 @@ class LessonVocabulary {
       audioUrls: (json['audioUrls'] as Map<String, dynamic>?)
           ?.map((k, v) => MapEntry(k, v as String)),
       difficultyLevel: json['difficultyLevel'] as int?,
+      isBookmarked: json['isBookmarked'] as bool? ?? false,
     );
   }
 
@@ -148,6 +150,7 @@ class LessonVocabulary {
   final Map<String, String>? dialectVariants;
   final Map<String, String>? audioUrls;
   final int? difficultyLevel;
+  final bool isBookmarked;
 }
 
 class GrammarRule {
