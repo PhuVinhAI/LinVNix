@@ -49,58 +49,17 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   Widget build(BuildContext context) {
     final isEnabled = widget.enabled && !_isLoading;
 
-    return SizedBox(
-      width: double.infinity,
-      height: 44,
-      child: Material(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        elevation: 0,
-        child: InkWell(
-          onTap: isEnabled ? _handleGoogleSignIn : null,
-          borderRadius: BorderRadius.circular(20),
-          highlightColor: const Color(0xFFE8E8E8),
-          splashColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isEnabled
-                    ? const Color(0xFF747775)
-                    : const Color(0xFFC7C7C7),
-                width: 1,
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Opacity(
-              opacity: _isLoading ? 0.5 : 1.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SvgPicture.asset(
-                    'assets/google_logo.svg',
-                    width: 20,
-                    height: 20,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Sign in with Google',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      color: isEnabled
-                          ? const Color(0xFF1F1F1F)
-                          : const Color(0xFF9E9E9E),
-                      fontFamily: 'Roboto',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+    return AppButton(
+      variant: AppButtonVariant.outline,
+      isFullWidth: true,
+      isLoading: _isLoading,
+      onPressed: isEnabled ? _handleGoogleSignIn : null,
+      icon: SvgPicture.asset(
+        'assets/google_logo.svg',
+        width: 20,
+        height: 20,
       ),
+      label: 'Sign in with Google',
     );
   }
 }
