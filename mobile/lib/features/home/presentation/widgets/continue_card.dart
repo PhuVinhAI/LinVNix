@@ -221,7 +221,7 @@ class _DataCard extends StatelessWidget {
             button: true,
             child: FilledButton.icon(
               onPressed: () =>
-                  context.go('/lessons/${continueLearning.lessonId}'),
+                  context.push('/lessons/${continueLearning.lessonId}'),
               icon: Icon(isInProgress ? Icons.play_arrow : Icons.replay),
               label: Text(isInProgress ? 'Resume' : 'Review'),
               style: FilledButton.styleFrom(

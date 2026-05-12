@@ -38,29 +38,81 @@ class OrderingRenderer extends ExerciseRenderer {
     ValueChanged<dynamic> onAnswerChanged,
   ) {
     final options = exercise.options as OrderingOptions;
-    final items = (currentAnswer is List<String> && currentAnswer.isNotEmpty)
-        ? currentAnswer
-        : List<String>.from(options.items)..shuffle();
+    return _OrderingInput(
+      options: options,
+      currentAnswer: currentAnswer,
+      onAnswerChanged: onAnswerChanged,
+    );
+  }
+}
 
+class _OrderingInput extends StatefulWidget {
+  const _OrderingInput({
+    required this.options,
+    required this.currentAnswer,
+    required this.onAnswerChanged,
+  });
+
+  final OrderingOptions options;
+  final dynamic currentAnswer;
+  final ValueChanged<dynamic> onAnswerChanged;
+
+  @override
+  State<_OrderingInput> createState() => _OrderingInputState();
+}
+
+class _OrderingInputState extends State<_OrderingInput> {
+  late List<String> _items;
+
+  @override
+  void initState() {
+    super.initState();
+    _initItems();
+  }
+
+  @override
+  void didUpdateWidget(covariant _OrderingInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.currentAnswer is List<String> &&
+        (widget.currentAnswer as List<String>).isNotEmpty &&
+        widget.currentAnswer != oldWidget.currentAnswer) {
+      _items = List<String>.from(widget.currentAnswer as List<String>);
+    }
+  }
+
+  void _initItems() {
+    if (widget.currentAnswer is List<String> &&
+        (widget.currentAnswer as List<String>).isNotEmpty) {
+      _items = List<String>.from(widget.currentAnswer as List<String>);
+    } else {
+      _items = List<String>.from(widget.options.items)..shuffle();
+    }
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) newIndex--;
+      final item = _items.removeAt(oldIndex);
+      _items.insert(newIndex, item);
+    });
+    widget.onAnswerChanged(List<String>.from(_items));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ReorderableListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: items.length,
-      onReorder: (oldIndex, newIndex) {
-        final updated = List<String>.from(items);
-        if (newIndex > oldIndex) newIndex--;
-        final item = updated.removeAt(oldIndex);
-        updated.insert(newIndex, item);
-        onAnswerChanged(updated);
-      },
+      itemCount: _items.length,
+      onReorder: _onReorder,
       itemBuilder: (context, index) {
         return ListTile(
-          key: ValueKey(items[index]),
+          key: ValueKey(_items[index]),
           leading: Icon(
             Icons.drag_handle,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          title: Text(items[index]),
+          title: Text(_items[index]),
           tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

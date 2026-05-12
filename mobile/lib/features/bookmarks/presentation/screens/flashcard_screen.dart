@@ -14,7 +14,7 @@ class FlashcardScreen extends ConsumerStatefulWidget {
 }
 
 class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final PageController _pageController = PageController();
   late AnimationController _flipController;
   int _currentIndex = 0;
@@ -146,7 +146,8 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
         return _Flashcard(
           item: item,
           isFlipped: index == _currentIndex && _isFlipped,
-          flipController: index == _currentIndex ? _flipController : AnimationController.unbounded(vsync: this),
+          flipController: _flipController,
+          isActive: index == _currentIndex,
           onFlip: _flip,
           onPlayAudio: item.audioUrl != null ? () => _playAudio(item.audioUrl!) : null,
         );
@@ -160,6 +161,7 @@ class _Flashcard extends StatelessWidget {
     required this.item,
     required this.isFlipped,
     required this.flipController,
+    required this.isActive,
     required this.onFlip,
     this.onPlayAudio,
   });
@@ -167,6 +169,7 @@ class _Flashcard extends StatelessWidget {
   final BookmarkWithVocabulary item;
   final bool isFlipped;
   final AnimationController flipController;
+  final bool isActive;
   final VoidCallback onFlip;
   final VoidCallback? onPlayAudio;
 
@@ -179,7 +182,7 @@ class _Flashcard extends StatelessWidget {
         child: AnimatedBuilder(
           animation: flipController,
           builder: (context, child) {
-            final angle = flipController.value * math.pi;
+            final angle = isActive ? flipController.value * math.pi : (isFlipped ? math.pi : 0.0);
             return Transform(
               alignment: Alignment.center,
               transform: Matrix4.identity()
@@ -268,7 +271,7 @@ class _Flashcard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Chip(
                   label: Text(
-                    kPartOfSpeechViLabels[item.partOfSpeech] ?? item.partOfSpeech!,
+                    kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ?? item.partOfSpeech!,
                   ),
                   backgroundColor: colorScheme.primaryContainer,
                   labelStyle: TextStyle(color: colorScheme.onPrimaryContainer),

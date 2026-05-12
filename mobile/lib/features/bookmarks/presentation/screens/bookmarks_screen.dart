@@ -266,7 +266,7 @@ class _BookmarkTile extends StatelessWidget {
             if (item.partOfSpeech != null)
               Chip(
                 label: Text(
-                  item.partOfSpeech!,
+                  kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ?? item.partOfSpeech!,
                   style: const TextStyle(fontSize: 12),
                 ),
                 backgroundColor: Colors.blue[100],
@@ -337,7 +337,7 @@ class _BookmarkDetailSheet extends StatelessWidget {
               if (item.partOfSpeech != null) ...[
                 const SizedBox(height: 8),
                 Chip(
-                  label: Text(item.partOfSpeech!),
+                  label: Text(kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ?? item.partOfSpeech!),
                   backgroundColor: Colors.blue[100],
                 ),
               ],
