@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../../profile/data/profile_providers.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -86,7 +88,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
 
-      // Invalidate profile so router reads fresh onboardingCompleted from server
       ref.invalidate(userProfileProvider);
 
       if (mounted) {
@@ -94,18 +95,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       }
     } on AppException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message), backgroundColor: Colors.red),
-        );
+        AppToast.show(context, message: e.message, type: AppToastType.error);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An unexpected error occurred'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
@@ -166,22 +160,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               padding: const EdgeInsets.all(24),
               child: Row(
                 children: [
-                  TextButton(
+                  AppButton(
+                    label: _currentStep < 2 ? 'Skip' : 'Skip All',
+                    variant: AppButtonVariant.text,
                     onPressed: _isSubmitting ? null : _skipStep,
-                    child: Text(_currentStep < 2 ? 'Skip' : 'Skip All'),
                   ),
                   const Spacer(),
-                  FilledButton(
-                    onPressed: (_canProceed && !_isSubmitting)
-                        ? _nextStep
-                        : null,
-                    child: _isSubmitting
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(_currentStep < 2 ? 'Next' : 'Get Started'),
+                  AppButton(
+                    label: _currentStep < 2 ? 'Next' : 'Get Started',
+                    variant: AppButtonVariant.primary,
+                    onPressed: _canProceed ? _nextStep : null,
+                    isLoading: _isSubmitting,
                   ),
                 ],
               ),
@@ -204,6 +193,8 @@ class _ProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Row(
       children: List.generate(totalSteps, (index) {
         final isActive = index <= currentStep;
@@ -212,9 +203,7 @@ class _ProgressIndicator extends StatelessWidget {
             height: 4,
             margin: EdgeInsets.only(right: index < totalSteps - 1 ? 8 : 0),
             decoration: BoxDecoration(
-              color: isActive
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.surfaceContainerHighest,
+              color: isActive ? c.primary : c.muted,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -237,6 +226,8 @@ class _LevelStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -250,7 +241,7 @@ class _LevelStep extends StatelessWidget {
           Text(
             'Select the level that best describes your Vietnamese proficiency.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: c.mutedForeground,
                 ),
           ),
           const SizedBox(height: 32),
@@ -306,6 +297,8 @@ class _DialectStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -319,7 +312,7 @@ class _DialectStep extends StatelessWidget {
           Text(
             'Choose the Vietnamese dialect you want to focus on.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: c.mutedForeground,
                 ),
           ),
           const SizedBox(height: 32),
@@ -353,6 +346,8 @@ class _DailyGoalStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -366,7 +361,7 @@ class _DailyGoalStep extends StatelessWidget {
           Text(
             'How many words do you want to review each day? You can change this later.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: c.mutedForeground,
                 ),
           ),
           const SizedBox(height: 48),
@@ -375,7 +370,7 @@ class _DailyGoalStep extends StatelessWidget {
               '$goal',
               style: Theme.of(context).textTheme.displayLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: c.primary,
                   ),
             ),
           ),
@@ -387,7 +382,7 @@ class _DailyGoalStep extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          Slider(
+          AppSlider(
             value: goal.toDouble(),
             min: 5,
             max: 50,
@@ -425,96 +420,66 @@ class _SelectableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Material(
-      color: isSelected
-          ? colorScheme.primaryContainer
-          : colorScheme.surfaceContainerHigh,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected
-                  ? colorScheme.primary
-                  : colorScheme.outlineVariant,
-              width: isSelected ? 2 : 1,
-            ),
-          ),
-          child: isWide
-              ? Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            label,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: isSelected
-                                      ? colorScheme.onPrimaryContainer
-                                      : colorScheme.onSurface,
-                                ),
-                          ),
-                          if (subtitle != null) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              subtitle!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: isSelected
-                                        ? colorScheme.onPrimaryContainer
-                                        : colorScheme.onSurfaceVariant,
-                                  ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    if (isSelected)
-                      Icon(
-                        Icons.check_circle,
-                        color: colorScheme.primary,
-                      ),
-                  ],
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      label,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isSelected
-                                ? colorScheme.onPrimaryContainer
-                                : colorScheme.onSurface,
-                          ),
-                    ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 4),
+    final c = AppTheme.colors(context);
+
+    return AppCard(
+      onTap: onTap,
+      variant: AppCardVariant.outlined,
+      color: isSelected ? c.muted : c.card,
+      borderColor: isSelected ? c.primary : c.border,
+      borderRadius: AppRadius.lg,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: isWide
+          ? Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        subtitle!,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isSelected
-                                  ? colorScheme.onPrimaryContainer
-                                  : colorScheme.onSurfaceVariant,
+                        label,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: isSelected ? c.primary : c.foreground,
                             ),
                       ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          subtitle!,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: isSelected ? c.primary : c.mutedForeground,
+                              ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-        ),
-      ),
+                if (isSelected)
+                  Icon(Icons.check_circle, color: c.primary),
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: isSelected ? c.primary : c.foreground,
+                      ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle!,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: isSelected ? c.primary : c.mutedForeground,
+                        ),
+                  ),
+                ],
+              ],
+            ),
     );
   }
 }

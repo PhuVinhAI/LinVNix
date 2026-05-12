@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/profile_providers.dart';
 import '../../domain/exercise_stats.dart';
 import '../../../user/domain/user_profile.dart';
@@ -14,11 +15,11 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accent = Theme.of(context).extension<VietnameseAccentTokens>()!;
+    final c = AppTheme.colors(context);
     final profileAsync = ref.watch(userProfileProvider);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppAppBar(
         title: const Text('Profile'),
         actions: [
           IconButton(
@@ -28,67 +29,67 @@ class ProfileScreen extends ConsumerWidget {
         ],
       ),
       body: profileAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          loading: () => const Center(child: AppSpinner(size: 20)),
+          error: (error, stack) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 48, color: c.error),
+                const SizedBox(height: 16),
+                Text('Failed to load profile',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                AppButton(
+                  onPressed: () => ref.invalidate(userProfileProvider),
+                  icon: const Icon(Icons.refresh),
+                  label: 'Retry',
+                  variant: AppButtonVariant.primary,
+                ),
+              ],
+            ),
+          ),
+          data: (profile) => ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              _ProfileHeader(profile: profile),
               const SizedBox(height: 16),
-              Text('Failed to load profile',
-                  style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              FilledButton.icon(
-                onPressed: () => ref.invalidate(userProfileProvider),
-                icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
-                style: FilledButton.styleFrom(
-                    backgroundColor: accent.accentPrimary),
+              _ProfileInfoCard(
+                profile: profile,
+                onEdit: () => _showEditDialog(context, ref, profile),
               ),
+              const SizedBox(height: 12),
+              _StatsSection(),
+              const SizedBox(height: 12),
+              _VocabStatsSection(),
+              const SizedBox(height: 12),
+              _SavedWordsSection(),
             ],
           ),
-        ),
-        data: (profile) => ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _ProfileHeader(profile: profile),
-            const SizedBox(height: 24),
-            _ProfileInfoCard(
-              profile: profile,
-              onEdit: () => _showEditDialog(context, ref, profile),
-            ),
-            const SizedBox(height: 16),
-            _StatsSection(accent: accent),
-            const SizedBox(height: 16),
-            _VocabStatsSection(accent: accent),
-            const SizedBox(height: 16),
-            _SavedWordsSection(accent: accent),
-          ],
-        ),
       ),
     );
   }
 
   void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+    AppDialog.show(
+      context,
+      builder: (ctx) => AppDialog(
+        title: 'Logout',
+        content: 'Are you sure you want to logout?',
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+          AppDialogAction(
+            label: 'Cancel',
+            onPressed: () => Navigator.pop(ctx),
           ),
-          FilledButton(
+          AppDialogAction(
+            label: 'Logout',
+            isPrimary: true,
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.pop(ctx);
               await ref.read(authStateProvider.notifier).logout();
-              if (context.mounted) {
+              if (ctx.mounted) {
                 context.go('/login');
               }
             },
-            child: const Text('Logout'),
           ),
         ],
       ),
@@ -117,21 +118,18 @@ class ProfileScreen extends ConsumerWidget {
 
     final dialects = ['STANDARD', 'NORTHERN', 'CENTRAL', 'SOUTHERN'];
 
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: const Text('Edit Profile'),
-          content: SingleChildScrollView(
+    AppDialog.show(
+      context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setState) => AppDialog(
+          title: 'Edit Profile',
+          contentWidget: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
+                AppInput(
                   controller: fullNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Full Name',
-                    border: OutlineInputBorder(),
-                  ),
+                  label: 'Full Name',
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
@@ -182,11 +180,13 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ),
           actions: [
-            TextButton(
+            AppDialogAction(
+              label: 'Cancel',
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
             ),
-            FilledButton(
+            AppDialogAction(
+              label: 'Save',
+              isPrimary: true,
               onPressed: () async {
                 Navigator.pop(context);
                 try {
@@ -197,25 +197,14 @@ class ProfileScreen extends ConsumerWidget {
                         preferredDialect: selectedDialect,
                       );
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Profile updated successfully'),
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                      ),
-                    );
+                    AppToast.show(context, message: 'Profile updated successfully', type: AppToastType.success);
                   }
                 } catch (e) {
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Failed to update profile: ${e.toString()}'),
-                        backgroundColor: Theme.of(context).colorScheme.error,
-                      ),
-                    );
+                    AppToast.show(context, message: 'Failed to update profile: ${e.toString()}', type: AppToastType.error);
                   }
                 }
               },
-              child: const Text('Save'),
             ),
           ],
         ),
@@ -245,9 +234,8 @@ class _ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final accent = theme.extension<VietnameseAccentTokens>()!;
 
     return Center(
       child: Column(
@@ -256,14 +244,14 @@ class _ProfileHeader extends StatelessWidget {
             label: profile.avatarUrl != null
                 ? 'Profile picture of ${profile.fullName}'
                 : 'Default profile picture',
-            child: CircleAvatar(
+            child: AppAvatar(
               radius: 50,
-              backgroundColor: accent.accentPrimary.withValues(alpha: 0.2),
+              backgroundColor: c.primary.withValues(alpha: 0.2),
               backgroundImage: profile.avatarUrl != null
                   ? NetworkImage(profile.avatarUrl!)
                   : null,
               child: profile.avatarUrl == null
-                  ? Icon(Icons.person, size: 50, color: accent.accentPrimary)
+                  ? Icon(Icons.person, size: 50, color: c.primary)
                   : null,
             ),
           ),
@@ -276,7 +264,7 @@ class _ProfileHeader extends StatelessWidget {
           Text(
             profile.email,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
+              color: c.mutedForeground,
             ),
           ),
         ],
@@ -292,45 +280,44 @@ class _ProfileInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Profile Information',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: onEdit,
-                ),
-              ],
-            ),
-            const Divider(),
-            _InfoRow(
-              icon: Icons.language,
-              label: 'Native Language',
-              value: profile.nativeLanguage ?? 'Not set',
-            ),
-            _InfoRow(
-              icon: Icons.trending_up,
-              label: 'Current Level',
-              value: profile.currentLevel ?? 'Not set',
-            ),
-            _InfoRow(
-              icon: Icons.record_voice_over,
-              label: 'Preferred Dialect',
-              value: profile.preferredDialect != null
-                  ? ProfileScreen._formatDialect(profile.preferredDialect!)
-                  : 'Not set',
-            ),
-          ],
-        ),
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Profile Information',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: onEdit,
+              ),
+            ],
+          ),
+          AppDivider(),
+          _InfoRow(
+            icon: Icons.language,
+            label: 'Native Language',
+            value: profile.nativeLanguage ?? 'Not set',
+          ),
+          _InfoRow(
+            icon: Icons.trending_up,
+            label: 'Current Level',
+            value: profile.currentLevel ?? 'Not set',
+          ),
+          _InfoRow(
+            icon: Icons.record_voice_over,
+            label: 'Preferred Dialect',
+            value: profile.preferredDialect != null
+                ? ProfileScreen._formatDialect(profile.preferredDialect!)
+                : 'Not set',
+          ),
+        ],
       ),
     );
   }
@@ -349,8 +336,8 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Semantics(
       label: '$label: $value',
@@ -358,7 +345,7 @@ class _InfoRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: colorScheme.onSurfaceVariant),
+            Icon(icon, size: 20, color: c.mutedForeground),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -367,7 +354,7 @@ class _InfoRow extends StatelessWidget {
                   Text(
                     label,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
+                      color: c.mutedForeground,
                     ),
                   ),
                   Text(
@@ -385,13 +372,13 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _StatsSection extends ConsumerWidget {
-  const _StatsSection({required this.accent});
-  final VietnameseAccentTokens accent;
+  const _StatsSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppTheme.colors(context);
+    final accent = AppTheme.accents(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final statsAsync = ref.watch(exerciseStatsProvider);
 
     return Column(
@@ -403,34 +390,31 @@ class _StatsSection extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         statsAsync.when(
-          loading: () => const Card(
-            child: Padding(
-              padding: EdgeInsets.all(32),
-              child: Center(child: CircularProgressIndicator()),
-            ),
+          loading: () => const AppCard(
+            variant: AppCardVariant.outlined,
+            child: Center(child: AppSpinner(size: 20)),
           ),
-          error: (error, stack) => Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Semantics(
-                    label: 'Error loading statistics',
-                    child: Icon(Icons.error_outline, color: colorScheme.error),
+          error: (error, stack) => AppCard(
+            variant: AppCardVariant.outlined,
+            child: Column(
+              children: [
+                Semantics(
+                  label: 'Error loading statistics',
+                  child: Icon(Icons.error_outline, color: c.error),
+                ),
+                const SizedBox(height: 8),
+                const Text('Failed to load statistics'),
+                const SizedBox(height: 8),
+                Semantics(
+                  label: 'Retry loading statistics',
+                  button: true,
+                  child: AppButton(
+                    label: 'Retry',
+                    variant: AppButtonVariant.outline,
+                    onPressed: () => ref.invalidate(exerciseStatsProvider),
                   ),
-                  const SizedBox(height: 8),
-                  const Text('Failed to load statistics'),
-                  const SizedBox(height: 8),
-                  Semantics(
-                    label: 'Retry loading statistics',
-                    button: true,
-                    child: OutlinedButton(
-                      onPressed: () => ref.invalidate(exerciseStatsProvider),
-                      child: const Text('Retry'),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           data: (stats) => Column(
@@ -442,7 +426,7 @@ class _StatsSection extends ConsumerWidget {
                       icon: Icons.check_circle,
                       label: 'Lessons Completed',
                       value: '${stats.completedExercises}',
-                      color: accent.accentPrimary,
+                      color: c.primary,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -451,7 +435,7 @@ class _StatsSection extends ConsumerWidget {
                       icon: Icons.menu_book,
                       label: 'Words Learned',
                       value: '${stats.correctAnswers}',
-                      color: accent.accentSecondary,
+                      color: c.secondary,
                     ),
                   ),
                 ],
@@ -481,43 +465,40 @@ class _StatsSection extends ConsumerWidget {
               const SizedBox(height: 12),
               Semantics(
                 label: 'Accuracy: ${stats.accuracy.toStringAsFixed(1)} percent',
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Icon(Icons.speed, color: accent.accentPrimary),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Accuracy',
-                                style: theme.textTheme.bodySmall,
+                child: AppCard(
+                  variant: AppCardVariant.outlined,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Row(
+                    children: [
+                      Icon(Icons.speed, color: c.primary),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Accuracy',
+                              style: theme.textTheme.bodySmall,
+                            ),
+                            Text(
+                              '${stats.accuracy.toStringAsFixed(1)}%',
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                color: c.primary,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text(
-                                '${stats.accuracy.toStringAsFixed(1)}%',
-                                style: theme.textTheme.headlineSmall?.copyWith(
-                                  color: accent.accentPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: CircularProgressIndicator(
-                            value: stats.accuracy / 100,
-                            backgroundColor: colorScheme.surfaceContainerHighest,
-                            color: accent.accentPrimary,
-                            strokeWidth: 6,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      AppProgress(
+                        value: stats.accuracy / 100,
+                        isCircular: true,
+                        color: c.primary,
+                        trackColor: c.muted,
+                        radius: 28,
+                        strokeWidth: 5,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -552,33 +533,37 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     return Semantics(
       label: '$label: $value',
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: color, size: 24),
-              const SizedBox(height: 8),
-              Text(
-                value,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+      child: AppCard(
+        variant: AppCardVariant.outlined,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: color, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  value,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: c.mutedForeground,
               ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -586,11 +571,11 @@ class _StatCard extends StatelessWidget {
 }
 
 class _VocabStatsSection extends ConsumerWidget {
-  const _VocabStatsSection({required this.accent});
-  final VietnameseAccentTokens accent;
+  const _VocabStatsSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
     final statsAsync = ref.watch(bookmarkStatsProvider);
 
@@ -603,25 +588,21 @@ class _VocabStatsSection extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         statsAsync.when(
-          loading: () => const Card(
-            child: Padding(
-              padding: EdgeInsets.all(32),
-              child: Center(child: CircularProgressIndicator()),
+          loading: () => const AppCard(
+            variant: AppCardVariant.outlined,
+            child: Center(child: AppSpinner(size: 20)),
+          ),
+          error: (error, stack) => AppCard(
+            variant: AppCardVariant.outlined,
+            child: Row(
+              children: [
+                Icon(Icons.error_outline, color: c.error),
+                const SizedBox(width: 12),
+                const Expanded(child: Text('Không thể tải thống kê')),
+              ],
             ),
           ),
-          error: (error, stack) => Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Icon(Icons.error_outline, color: theme.colorScheme.error),
-                  const SizedBox(width: 12),
-                  const Expanded(child: Text('Không thể tải thống kê')),
-                ],
-              ),
-            ),
-          ),
-          data: (stats) => _VocabStatsCard(stats: stats, accent: accent),
+          data: (stats) => _VocabStatsCard(stats: stats),
         ),
       ],
     );
@@ -629,43 +610,41 @@ class _VocabStatsSection extends ConsumerWidget {
 }
 
 class _VocabStatsCard extends StatelessWidget {
-  const _VocabStatsCard({required this.stats, required this.accent});
+  const _VocabStatsCard({required this.stats});
   final BookmarkStats stats;
-  final VietnameseAccentTokens accent;
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     if (stats.total == 0) {
-      return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Icon(Icons.bookmark_border, color: accent.accentPrimary),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '0',
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Từ đã lưu',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+      return AppCard(
+        variant: AppCardVariant.outlined,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.bookmark_border, color: c.primary, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  '0',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Từ đã lưu',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: c.mutedForeground,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
@@ -673,75 +652,66 @@ class _VocabStatsCard extends StatelessWidget {
     final breakdownItems = stats.byPartOfSpeech.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.bookmark, color: accent.accentPrimary),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${stats.total}',
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: accent.accentPrimary,
-                        ),
-                      ),
-                      Text(
-                        'Từ đã lưu',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.bookmark, color: c.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                '${stats.total}',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: c.primary,
                 ),
-              ],
-            ),
-            if (breakdownItems.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              const Divider(),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: breakdownItems.map((entry) {
-                  final viLabel = kPartOfSpeechViLabels[entry.key] ?? entry.key;
-                  return Chip(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: VisualDensity.compact,
-                    label: Text('$viLabel: ${entry.value}'),
-                    labelStyle: theme.textTheme.bodySmall,
-                  );
-                }).toList(),
+              ),
+              const Spacer(),
+              Text(
+                'Từ đã lưu',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: c.mutedForeground,
+                ),
               ),
             ],
+          ),
+          if (breakdownItems.isNotEmpty) ...[
+            AppDivider(),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: breakdownItems.map((entry) {
+                final viLabel = kPartOfSpeechViLabels[entry.key] ?? entry.key;
+                return AppChip(
+                  label: '$viLabel: ${entry.value}',
+                  fontSize: AppTypography.caption,
+                );
+              }).toList(),
+            ),
           ],
-        ),
+        ],
       ),
     );
   }
 }
 
 class _SavedWordsSection extends StatelessWidget {
-  const _SavedWordsSection({required this.accent});
-  final VietnameseAccentTokens accent;
+  const _SavedWordsSection();
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
-    return Card(
-      child: ListTile(
-        leading: Icon(Icons.bookmark, color: accent.accentPrimary),
-        title: Text(
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      child: AppListItem(
+        leading: Icon(Icons.bookmark, color: c.primary),
+        titleWidget: Text(
           'Từ đã lưu',
           style: theme.textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,

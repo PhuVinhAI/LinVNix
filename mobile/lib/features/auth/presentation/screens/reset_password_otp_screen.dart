@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 
 class ResetPasswordOtpScreen extends ConsumerStatefulWidget {
   const ResetPasswordOtpScreen({super.key, required this.email});
@@ -68,124 +71,175 @@ class _ResetPasswordOtpScreenState
       final repository = ref.read(authRepositoryProvider);
       await repository.forgotPassword(email: widget.email);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('A new reset code has been sent'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        AppToast.show(context, message: 'A new reset code has been sent', type: AppToastType.success);
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to resend code'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppToast.show(context, message: 'Failed to resend code', type: AppToastType.error);
       }
+    }
+  }
+
+  void _onChanged(String value, int index) {
+    if (value.isNotEmpty && index < 5) {
+      _focusNodes[index + 1].requestFocus();
+    }
+    if (_code.length == 6) {
+      _verifyCode();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reset Password'),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (_isVerifying) ...[
-                const CircularProgressIndicator(),
-                const SizedBox(height: 24),
-                const Text('Verifying code...'),
-              ] else ...[
-                const Icon(
-                  Icons.lock_reset_outlined,
-                  size: 64,
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Enter reset code',
-                  style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'We sent a 6-digit code to ${widget.email}',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                ),
-                const SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(6, (index) {
-                    return Container(
-                      width: 48,
-                      height: 56,
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      child: TextField(
-                        controller: _codeControllers[index],
-                        focusNode: _focusNodes[index],
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        maxLength: 1,
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                        decoration: InputDecoration(
-                          counterText: '',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          if (value.isNotEmpty && index < 5) {
-                            _focusNodes[index + 1].requestFocus();
-                          }
-                          if (value.isEmpty && index > 0) {
-                            _focusNodes[index - 1].requestFocus();
-                          }
-                          if (_code.length == 6) {
-                            _verifyCode();
-                          }
-                        },
-                      ),
-                    );
-                  }),
-                ),
-                if (_errorMessage != null) ...[
-                  const SizedBox(height: 16),
+      appBar: const AppAppBar(title: Text('Reset Password')),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_isVerifying) ...[
+                  const AppSpinner(size: 24),
+                  const SizedBox(height: 24),
+                  const Text('Verifying code...'),
+                ] else ...[
+                  const Icon(
+                    Icons.lock_reset_outlined,
+                    size: 64,
+                  ),
+                  const SizedBox(height: 24),
                   Text(
-                    _errorMessage!,
-                    style: const TextStyle(color: Colors.red),
+                    'Enter reset code',
+                    style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'We sent a 6-digit code to ${widget.email}',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: c.mutedForeground,
+                        ),
+                  ),
+                  const SizedBox(height: 32),
+                  _OtpInputRow(
+                    controllers: _codeControllers,
+                    focusNodes: _focusNodes,
+                    onChanged: _onChanged,
+                  ),
+                  if (_errorMessage != null) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      _errorMessage!,
+                      style: TextStyle(color: c.error),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  const SizedBox(height: 24),
+                  AppButton(
+                    variant: AppButtonVariant.primary,
+                    isFullWidth: true,
+                    onPressed: _code.length == 6 ? _verifyCode : null,
+                    label: 'Verify',
+                  ),
+                  const SizedBox(height: 16),
+                  AppButton(
+                    variant: AppButtonVariant.text,
+                    onPressed: _resendCode,
+                    label: 'Resend code',
+                  ),
+                  AppButton(
+                    variant: AppButtonVariant.text,
+                    onPressed: () => context.go('/login'),
+                    label: 'Back to Sign In',
+                  ),
                 ],
-                const SizedBox(height: 24),
-                FilledButton(
-                  onPressed: _code.length == 6 ? _verifyCode : null,
-                  child: const Text('Verify'),
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: _resendCode,
-                  child: const Text('Resend code'),
-                ),
-                TextButton(
-                  onPressed: () => context.go('/login'),
-                  child: const Text('Back to Sign In'),
-                ),
               ],
-            ],
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _OtpInputRow extends StatelessWidget {
+  const _OtpInputRow({
+    required this.controllers,
+    required this.focusNodes,
+    required this.onChanged,
+  });
+
+  final List<TextEditingController> controllers;
+  final List<FocusNode> focusNodes;
+  final void Function(String value, int index) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(6, (index) {
+        return Flexible(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: SizedBox(
+              height: 52,
+              child: KeyboardListener(
+                focusNode: FocusNode(),
+                onKeyEvent: (event) {
+                  if (event is KeyDownEvent &&
+                      event.logicalKey == LogicalKeyboardKey.backspace) {
+                    if (controllers[index].text.isEmpty && index > 0) {
+                      controllers[index - 1].clear();
+                      focusNodes[index - 1].requestFocus();
+                    }
+                  }
+                },
+                child: TextField(
+                  controller: controllers[index],
+                  focusNode: focusNodes[index],
+                  textAlign: TextAlign.center,
+                  textAlignVertical: TextAlignVertical.center,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(1),
+                  ],
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        height: 1.0,
+                      ),
+                  decoration: InputDecoration(
+                    counterText: '',
+                    contentPadding: EdgeInsets.zero,
+                    filled: true,
+                    fillColor: c.card,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderSide: BorderSide(color: c.border),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderSide: BorderSide(color: c.border),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderSide: BorderSide(color: c.primary, width: 2),
+                    ),
+                  ),
+                  onChanged: (value) => onChanged(value, index),
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

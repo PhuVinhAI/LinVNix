@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 
 class TimerBar extends StatefulWidget {
   const TimerBar({
@@ -60,7 +62,7 @@ class _TimerBarState extends State<TimerBar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
     final progress = _remainingSeconds / widget.totalSeconds;
     final isLow = _remainingSeconds <= 10;
     final minutes = _remainingSeconds ~/ 60;
@@ -73,28 +75,24 @@ class _TimerBarState extends State<TimerBar> {
             Icon(
               Icons.timer,
               size: 16,
-              color: isLow
-                  ? theme.colorScheme.error
-                  : theme.colorScheme.onSurfaceVariant,
+              color: isLow ? c.error : c.mutedForeground,
             ),
             const SizedBox(width: 4),
             Text(
               '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: isLow
-                    ? theme.colorScheme.error
-                    : theme.colorScheme.onSurfaceVariant,
-                fontWeight: isLow ? FontWeight.w600 : FontWeight.normal,
-              ),
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: isLow ? c.error : c.mutedForeground,
+                    fontWeight: isLow ? FontWeight.w600 : FontWeight.normal,
+                  ),
             ),
           ],
         ),
         const SizedBox(height: 4),
-        LinearProgressIndicator(
+        AppProgress(
           value: progress,
-          backgroundColor: theme.colorScheme.surfaceContainerHighest,
-          color: isLow ? theme.colorScheme.error : theme.colorScheme.primary,
-          minHeight: 4,
+          color: isLow ? c.error : c.primary,
+          trackColor: c.muted,
+          height: 4,
         ),
       ],
     );

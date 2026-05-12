@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
+
+Color _getLevelColor(String level, AppColors c) {
+  return switch (level) {
+    'A1' => const Color(0xFF4CAF50),
+    'A2' => const Color(0xFF8BC34A),
+    'B1' => const Color(0xFFFFC107),
+    'B2' => const Color(0xFFFF9800),
+    'C1' => const Color(0xFFFF5722),
+    'C2' => const Color(0xFFF44336),
+    _ => c.mutedForeground,
+  };
+}
 
 class CourseDetailScreen extends ConsumerWidget {
   const CourseDetailScreen({super.key, required this.courseId});
@@ -32,69 +45,61 @@ class _CourseDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          expandedHeight: 240,
           pinned: true,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text(
-              course.title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                shadows: [
-                  Shadow(
-                    offset: Offset(0, 1),
-                    blurRadius: 3,
-                    color: Colors.black54,
-                  ),
-                ],
-              ),
-            ),
-            background: _CourseHeaderBackground(thumbnailUrl: course.thumbnailUrl),
+          title: Text(
+            course.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    _LevelBadge(level: course.level),
-                    const SizedBox(width: 12),
+                    AppBadge(
+                      label: course.level,
+                      color: _getLevelColor(course.level, c),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
                     if (course.estimatedHours != null) ...[
                       Icon(
                         Icons.access_time,
                         size: 16,
-                        color: theme.colorScheme.onSurfaceVariant,
+                        color: c.mutedForeground,
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: AppSpacing.xs),
                       Text(
                         '${course.estimatedHours}h',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
+                          color: c.mutedForeground,
                         ),
                       ),
                     ],
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.md),
                 Text(
                   course.description,
                   style: theme.textTheme.bodyMedium,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.xl),
                 Text(
                   'Modules',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
               ],
             ),
           ),
@@ -112,49 +117,8 @@ class _CourseDetailContent extends StatelessWidget {
             childCount: course.modules.length,
           ),
         ),
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
       ],
-    );
-  }
-}
-
-class _CourseHeaderBackground extends StatelessWidget {
-  const _CourseHeaderBackground({this.thumbnailUrl});
-  final String? thumbnailUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    if (thumbnailUrl == null || thumbnailUrl!.isEmpty) {
-      return Container(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        child: Center(
-          child: Icon(
-            Icons.school,
-            size: 80,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
-        ),
-      );
-    }
-
-    return CachedNetworkImage(
-      imageUrl: thumbnailUrl!,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        highlightColor: Theme.of(context).colorScheme.surfaceContainerHigh,
-        child: Container(color: Colors.white),
-      ),
-      errorWidget: (context, url, error) => Container(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        child: Center(
-          child: Icon(
-            Icons.broken_image,
-            size: 64,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
-        ),
-      ),
     );
   }
 }
@@ -171,44 +135,50 @@ class _ModuleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: theme.colorScheme.primaryContainer,
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
+      padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
+      child: AppListItem(
+        onTap: onTap,
+        leading: AppAvatar(
+          backgroundColor: c.muted,
           child: Text(
             '${index + 1}',
             style: TextStyle(
-              color: theme.colorScheme.onPrimaryContainer,
+              color: c.foreground,
               fontWeight: FontWeight.w600,
             ),
           ),
         ),
-        title: Text(
+        titleWidget: Text(
           module.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
-        subtitle: Column(
+        subtitleWidget: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (module.topic != null) ...[
-              const SizedBox(height: 2),
               Text(
                 module.topic!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.primary,
+                  color: c.primary,
                 ),
               ),
             ],
-            const SizedBox(height: 2),
             Text(
               module.description,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+                color: c.mutedForeground,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -222,65 +192,25 @@ class _ModuleCard extends StatelessWidget {
               Icon(
                 Icons.access_time,
                 size: 14,
-                color: theme.colorScheme.onSurfaceVariant,
+                color: c.mutedForeground,
               ),
-              const SizedBox(width: 2),
+              const SizedBox(width: AppSpacing.xs),
               Text(
                 '${module.estimatedHours}h',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+                  color: c.mutedForeground,
                 ),
               ),
             ],
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSpacing.sm),
             Icon(
               Icons.chevron_right,
-              color: theme.colorScheme.onSurfaceVariant,
+              color: c.mutedForeground,
             ),
           ],
         ),
-        onTap: onTap,
       ),
     );
-  }
-}
-
-class _LevelBadge extends StatelessWidget {
-  const _LevelBadge({required this.level});
-  final String level;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _getLevelColor(level);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
-      child: Text(
-        level,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
-      ),
-    );
-  }
-
-  Color _getLevelColor(String level) {
-    return switch (level) {
-      'A1' => const Color(0xFF4CAF50),
-      'A2' => const Color(0xFF8BC34A),
-      'B1' => const Color(0xFFFFC107),
-      'B2' => const Color(0xFFFF9800),
-      'C1' => const Color(0xFFFF5722),
-      'C2' => const Color(0xFFF44336),
-      _ => const Color(0xFF9E9E9E),
-    };
   }
 }
 
@@ -289,75 +219,79 @@ class _CourseDetailLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final c = AppTheme.colors(context);
 
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          expandedHeight: 240,
           pinned: true,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Shimmer.fromColors(
-              baseColor: colorScheme.surfaceContainerHighest,
-              highlightColor: colorScheme.surfaceContainerHigh,
-              child: Container(color: Colors.white),
+          title: Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Container(
+              height: 20,
+              width: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
             ),
           ),
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Shimmer.fromColors(
-                  baseColor: colorScheme.surfaceContainerHighest,
-                  highlightColor: colorScheme.surfaceContainerHigh,
+                  baseColor: c.muted,
+                  highlightColor: c.card,
                   child: Container(
                     height: 24,
                     width: 100,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.md),
                 Shimmer.fromColors(
-                  baseColor: colorScheme.surfaceContainerHighest,
-                  highlightColor: colorScheme.surfaceContainerHigh,
+                  baseColor: c.muted,
+                  highlightColor: c.card,
                   child: Container(
                     height: 16,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Shimmer.fromColors(
-                  baseColor: colorScheme.surfaceContainerHighest,
-                  highlightColor: colorScheme.surfaceContainerHigh,
+                  baseColor: c.muted,
+                  highlightColor: c.card,
                   child: Container(
                     height: 16,
                     width: 250,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.xl),
                 Shimmer.fromColors(
-                  baseColor: colorScheme.surfaceContainerHighest,
-                  highlightColor: colorScheme.surfaceContainerHigh,
+                  baseColor: c.muted,
+                  highlightColor: c.card,
                   child: Container(
                     height: 24,
                     width: 120,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ),
@@ -368,35 +302,37 @@ class _CourseDetailLoading extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: ListTile(
+              return AppCard(
+                variant: AppCardVariant.outlined,
+                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
+                padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
+                child: AppListItem(
                   leading: Shimmer.fromColors(
-                    baseColor: colorScheme.surfaceContainerHighest,
-                    highlightColor: colorScheme.surfaceContainerHigh,
-                    child: const CircleAvatar(backgroundColor: Colors.white),
+                    baseColor: c.muted,
+                    highlightColor: c.card,
+                    child: AppAvatar(backgroundColor: Colors.white),
                   ),
-                  title: Shimmer.fromColors(
-                    baseColor: colorScheme.surfaceContainerHighest,
-                    highlightColor: colorScheme.surfaceContainerHigh,
+                  titleWidget: Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
                     child: Container(
                       height: 16,
                       width: 150,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                       ),
                     ),
                   ),
-                  subtitle: Shimmer.fromColors(
-                    baseColor: colorScheme.surfaceContainerHighest,
-                    highlightColor: colorScheme.surfaceContainerHigh,
+                  subtitleWidget: Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
                     child: Container(
                       height: 12,
                       width: 200,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                       ),
                     ),
                   ),
@@ -417,20 +353,23 @@ class _CourseDetailError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Course')),
+      appBar: AppAppBar(title: const Text('Course')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.grey),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
+            const SizedBox(height: AppSpacing.lg),
             const Text('Failed to load course'),
-            const SizedBox(height: 8),
-            FilledButton.icon(
+            const SizedBox(height: AppSpacing.sm),
+            AppButton(
+              variant: AppButtonVariant.primary,
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: 'Retry',
             ),
           ],
         ),

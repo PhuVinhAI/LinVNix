@@ -3,8 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
+
+Color _getLevelColor(String level, AppColors c) {
+  return switch (level) {
+    'A1' => const Color(0xFF4CAF50),
+    'A2' => const Color(0xFF8BC34A),
+    'B1' => const Color(0xFFFFC107),
+    'B2' => const Color(0xFFFF9800),
+    'C1' => const Color(0xFFFF5722),
+    'C2' => const Color(0xFFF44336),
+    _ => c.border,
+  };
+}
 
 class CoursesScreen extends ConsumerWidget {
   const CoursesScreen({super.key});
@@ -14,7 +28,7 @@ class CoursesScreen extends ConsumerWidget {
     final coursesAsync = ref.watch(coursesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Courses')),
+      appBar: AppAppBar(title: const Text('Courses')),
       body: coursesAsync.when(
         loading: () => const _CoursesLoading(),
         error: (error, stack) => _CoursesError(
@@ -32,8 +46,8 @@ class _CoursesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     if (courses.isEmpty) {
       return Center(
@@ -45,14 +59,14 @@ class _CoursesList extends StatelessWidget {
               child: Icon(
                 Icons.school_outlined,
                 size: 64,
-                color: colorScheme.onSurfaceVariant,
+                color: c.mutedForeground,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'No courses available',
               style: theme.textTheme.titleMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+                color: c.mutedForeground,
               ),
             ),
           ],
@@ -61,7 +75,7 @@ class _CoursesList extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       itemCount: courses.length,
       itemBuilder: (context, index) {
         final course = courses[index];
@@ -81,84 +95,88 @@ class _CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      margin: const EdgeInsets.only(bottom: AppSpacing.md),
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _CourseThumbnail(thumbnailUrl: course.thumbnailUrl),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          course.title,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+      padding: EdgeInsets.zero,
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _CourseThumbnail(thumbnailUrl: course.thumbnailUrl),
+          Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        course.title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(width: 8),
-                      _LevelBadge(level: course.level),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    course.description,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    const SizedBox(width: AppSpacing.sm),
+                    AppBadge(
+                      label: course.level,
+                      color: _getLevelColor(course.level, c),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  course.description,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: c.mutedForeground,
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.access_time,
-                        size: 16,
-                        color: theme.colorScheme.onSurfaceVariant,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 16,
+                      color: c.mutedForeground,
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    Text(
+                      course.estimatedHours != null
+                          ? '${course.estimatedHours}h'
+                          : 'N/A',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: c.mutedForeground,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        course.estimatedHours != null
-                            ? '${course.estimatedHours}h'
-                            : 'N/A',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
+                    ),
+                    const SizedBox(width: AppSpacing.lg),
+                    Icon(
+                      Icons.menu_book,
+                      size: 16,
+                      color: c.mutedForeground,
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    Text(
+                      '${course.modules.length} modules',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: c.mutedForeground,
                       ),
-                      const SizedBox(width: 16),
-                      Icon(
-                        Icons.menu_book,
-                        size: 16,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${course.modules.length} modules',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -185,9 +203,10 @@ class _CourseThumbnail extends StatelessWidget {
   }
 
   Widget _buildShimmerPlaceholder(BuildContext context) {
+    final c = AppTheme.colors(context);
     return Shimmer.fromColors(
-      baseColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-      highlightColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+      baseColor: c.muted,
+      highlightColor: c.card,
       child: Container(
         height: 160,
         width: double.infinity,
@@ -197,59 +216,17 @@ class _CourseThumbnail extends StatelessWidget {
   }
 
   Widget _buildPlaceholder(BuildContext context) {
+    final c = AppTheme.colors(context);
     return Container(
       height: 160,
       width: double.infinity,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      color: c.muted,
       child: Icon(
         Icons.school,
         size: 64,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
+        color: c.mutedForeground,
       ),
     );
-  }
-}
-
-class _LevelBadge extends StatelessWidget {
-  const _LevelBadge({required this.level});
-  final String level;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final color = _getLevelColor(level, colorScheme);
-
-    return Semantics(
-      label: 'Course level: $level',
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Text(
-          level,
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Color _getLevelColor(String level, ColorScheme colorScheme) {
-    return switch (level) {
-      'A1' => const Color(0xFF4CAF50),
-      'A2' => const Color(0xFF8BC34A),
-      'B1' => const Color(0xFFFFC107),
-      'B2' => const Color(0xFFFF9800),
-      'C1' => const Color(0xFFFF5722),
-      'C2' => const Color(0xFFF44336),
-      _ => colorScheme.outline,
-    };
   }
 }
 
@@ -258,21 +235,22 @@ class _CoursesLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final c = AppTheme.colors(context);
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       itemCount: 3,
       itemBuilder: (context, index) {
-        return Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          clipBehavior: Clip.antiAlias,
+        return AppCard(
+          variant: AppCardVariant.outlined,
+          margin: const EdgeInsets.only(bottom: AppSpacing.md),
+          padding: EdgeInsets.zero,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Shimmer.fromColors(
-                baseColor: colorScheme.surfaceContainerHighest,
-                highlightColor: colorScheme.surfaceContainerHigh,
+                baseColor: c.muted,
+                highlightColor: c.card,
                 child: Container(
                   height: 160,
                   width: double.infinity,
@@ -280,45 +258,45 @@ class _CoursesLoading extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSpacing.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Shimmer.fromColors(
-                      baseColor: colorScheme.surfaceContainerHighest,
-                      highlightColor: colorScheme.surfaceContainerHigh,
+                      baseColor: c.muted,
+                      highlightColor: c.card,
                       child: Container(
                         height: 20,
                         width: 200,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.sm),
                     Shimmer.fromColors(
-                      baseColor: colorScheme.surfaceContainerHighest,
-                      highlightColor: colorScheme.surfaceContainerHigh,
+                      baseColor: c.muted,
+                      highlightColor: c.card,
                       child: Container(
                         height: 16,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.md),
                     Shimmer.fromColors(
-                      baseColor: colorScheme.surfaceContainerHighest,
-                      highlightColor: colorScheme.surfaceContainerHigh,
+                      baseColor: c.muted,
+                      highlightColor: c.card,
                       child: Container(
                         height: 14,
                         width: 120,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
                         ),
                       ),
                     ),
@@ -339,8 +317,8 @@ class _CoursesError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Center(
       child: Column(
@@ -348,21 +326,22 @@ class _CoursesError extends StatelessWidget {
         children: [
           Semantics(
             label: 'Error loading courses',
-            child: Icon(Icons.error_outline, size: 64, color: colorScheme.error),
+            child: Icon(Icons.error_outline, size: 64, color: c.error),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             'Failed to load courses',
             style: theme.textTheme.titleMedium,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Semantics(
             label: 'Retry loading courses',
             button: true,
-            child: FilledButton.icon(
+            child: AppButton(
+              variant: AppButtonVariant.primary,
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: 'Retry',
             ),
           ),
         ],

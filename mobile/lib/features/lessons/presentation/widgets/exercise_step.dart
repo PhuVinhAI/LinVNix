@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
 import '../../domain/exercise_models.dart';
 import '../../domain/exercise_renderer.dart';
@@ -15,11 +17,19 @@ class ExerciseStepWidget extends ConsumerStatefulWidget {
     required this.exercise,
     required this.onScoreChanged,
     this.onCompleted,
+    this.initialAnswer,
+    this.initialResult,
+    this.onAnswerChanged,
+    this.onResultChanged,
   });
 
   final Exercise exercise;
   final ValueChanged<int> onScoreChanged;
   final VoidCallback? onCompleted;
+  final dynamic initialAnswer;
+  final ExerciseSubmissionResult? initialResult;
+  final ValueChanged<dynamic>? onAnswerChanged;
+  final ValueChanged<ExerciseSubmissionResult>? onResultChanged;
 
   @override
   ConsumerState<ExerciseStepWidget> createState() =>
@@ -27,8 +37,8 @@ class ExerciseStepWidget extends ConsumerStatefulWidget {
 }
 
 class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
-  dynamic _currentAnswer;
-  bool _submitted = false;
+  late dynamic _currentAnswer;
+  late bool _submitted;
   bool _submitting = false;
   ExerciseSubmissionResult? _result;
   String? _error;
@@ -36,6 +46,24 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
   ExerciseRenderer get _renderer => getRenderer(widget.exercise.exerciseType);
 
   bool get _isValid => _renderer.validateAnswer(widget.exercise, _currentAnswer);
+
+  @override
+  void initState() {
+    super.initState();
+    _currentAnswer = widget.initialAnswer;
+    _submitted = widget.initialResult != null;
+    _result = widget.initialResult;
+  }
+
+  @override
+  void didUpdateWidget(covariant ExerciseStepWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.exercise.id != widget.exercise.id) {
+      _currentAnswer = widget.initialAnswer;
+      _submitted = widget.initialResult != null;
+      _result = widget.initialResult;
+    }
+  }
 
   Future<void> _submit() async {
     if (!_isValid || _submitted || _submitting) return;
@@ -60,6 +88,8 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
         _submitted = true;
         _submitting = false;
       });
+
+      widget.onResultChanged?.call(result);
 
       if (result.isCorrect) {
         widget.onScoreChanged(result.score);
@@ -88,19 +118,27 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
     }
   }
 
+  void _handleAnswerChanged(dynamic answer) {
+    setState(() => _currentAnswer = answer);
+    widget.onAnswerChanged?.call(answer);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TimerBar(
-            totalSeconds: widget.exercise.exerciseType.timerSeconds,
-            onTimeout: _onTimeout,
-          ),
+          if (!_submitted)
+            TimerBar(
+              totalSeconds: widget.exercise.exerciseType.timerSeconds,
+              onTimeout: _onTimeout,
+            )
+          else
+            const SizedBox(height: 8),
           const SizedBox(height: 24),
           QuestionHeader(
             exercise: widget.exercise,
@@ -112,19 +150,26 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
               widget.exercise,
               context,
               _currentAnswer,
-              (answer) => setState(() => _currentAnswer = answer),
+              _handleAnswerChanged,
+            )
+          else ...[
+            _renderer.buildInput(
+              widget.exercise,
+              context,
+              _currentAnswer,
+              (_) {},
             ),
+          ],
           const SizedBox(height: 24),
           if (_error != null) ...[
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.errorContainer,
-                borderRadius: BorderRadius.circular(8),
-              ),
+            AppCard(
+              variant: AppCardVariant.filled,
+              color: c.error,
+              borderRadius: AppRadius.md,
+              padding: const EdgeInsets.all(AppSpacing.md),
               child: Text(
                 _error!,
-                style: TextStyle(color: theme.colorScheme.onErrorContainer),
+                style: TextStyle(color: c.errorForeground),
               ),
             ),
             const SizedBox(height: 16),

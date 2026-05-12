@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../exercise_models.dart';
 import '../exercise_renderer.dart';
 
@@ -47,11 +49,8 @@ class FillBlankRenderer extends ExerciseRenderer {
       children: List.generate(options.blanks, (index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: TextField(
-            decoration: InputDecoration(
-              labelText: 'Blank ${index + 1}',
-              border: const OutlineInputBorder(),
-            ),
+          child: AppInput(
+            label: 'Blank ${index + 1}',
             onChanged: (value) {
               final updated = List<String>.from(answers);
               updated[index] = value;

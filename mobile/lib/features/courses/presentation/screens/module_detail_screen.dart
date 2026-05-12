@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
 
@@ -51,6 +53,7 @@ class _ModuleDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     return CustomScrollView(
@@ -61,70 +64,67 @@ class _ModuleDetailContent extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (module.topic != null) ...[
-                  Chip(
-                    label: Text(module.topic!),
-                    backgroundColor: theme.colorScheme.primaryContainer,
-                    labelStyle: TextStyle(
-                      color: theme.colorScheme.onPrimaryContainer,
-                    ),
+                  AppChip(
+                    label: module.topic!,
+                    color: c.primary,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.sm),
                 ],
                 Text(
                   module.description,
                   style: theme.textTheme.bodyMedium,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 if (module.estimatedHours != null) ...[
                   Row(
                     children: [
                       Icon(
                         Icons.access_time,
                         size: 16,
-                        color: theme.colorScheme.onSurfaceVariant,
+                        color: c.mutedForeground,
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: AppSpacing.xs),
                       Text(
                         '${module.estimatedHours}h estimated',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
+                          color: c.mutedForeground,
                         ),
                       ),
                     ],
                   ),
                 ],
                 if (module.course != null) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.sm),
                   Row(
                     children: [
                       Icon(
                         Icons.school,
                         size: 16,
-                        color: theme.colorScheme.onSurfaceVariant,
+                        color: c.mutedForeground,
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: AppSpacing.xs),
                       Text(
                         module.course!.title,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
+                          color: c.mutedForeground,
                         ),
                       ),
                     ],
                   ),
                 ],
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.xl),
                 Text(
                   'Lessons',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
               ],
             ),
           ),
@@ -139,7 +139,7 @@ class _ModuleDetailContent extends StatelessWidget {
             childCount: module.lessons.length,
           ),
         ),
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
       ],
     );
   }
@@ -152,19 +152,24 @@ class _LessonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final statusColor = _getStatusColor(progress?.status);
+    final statusColor = _getStatusColor(progress?.status, c);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: ListTile(
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
+      padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
+      child: AppListItem(
         onTap: () => context.push('/lessons/${lesson.id}'),
         leading: _LessonTypeIcon(lessonType: lesson.lessonType),
-        title: Row(
+        titleWidget: Row(
           children: [
             Expanded(
               child: Text(
                 lesson.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -174,57 +179,56 @@ class _LessonCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.tertiaryContainer,
-                  borderRadius: BorderRadius.circular(4),
+                  color: c.muted,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
                 child: Text(
                   'Quiz',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onTertiaryContainer,
+                    color: c.foreground,
                   ),
                 ),
               ),
           ],
         ),
-        subtitle: Column(
+        subtitleWidget: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 2),
             Text(
               lesson.description,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+                color: c.mutedForeground,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.xs),
             Row(
               children: [
                 if (lesson.estimatedDuration != null) ...[
                   Icon(
                     Icons.access_time,
                     size: 12,
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: c.mutedForeground,
                   ),
-                  const SizedBox(width: 2),
+                  const SizedBox(width: AppSpacing.xs),
                   Text(
                     _formatDuration(lesson.estimatedDuration!),
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                      color: c.mutedForeground,
                       fontSize: 11,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.md),
                 ],
                 Icon(
                   _getStatusIcon(progress?.status),
                   size: 14,
                   color: statusColor,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: AppSpacing.xs),
                 Text(
                   _getStatusLabel(progress?.status),
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -248,11 +252,11 @@ class _LessonCard extends StatelessWidget {
     return m > 0 ? '${h}h ${m}m' : '${h}h';
   }
 
-  Color _getStatusColor(String? status) {
+  Color _getStatusColor(String? status, AppColors c) {
     return switch (status) {
-      'completed' => const Color(0xFF4CAF50),
-      'in_progress' => const Color(0xFFFFC107),
-      _ => const Color(0xFF9E9E9E),
+      'completed' => c.success,
+      'in_progress' => c.warning,
+      _ => c.mutedForeground,
     };
   }
 
@@ -279,17 +283,15 @@ class _LessonTypeIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = theme.colorScheme.primaryContainer;
-    final onColor = theme.colorScheme.onPrimaryContainer;
+    final c = AppTheme.colors(context);
 
-    return CircleAvatar(
-      backgroundColor: color,
+    return AppAvatar(
+      backgroundColor: c.muted,
       radius: 20,
       child: Icon(
         _getIcon(),
         size: 20,
-        color: onColor,
+        color: c.foreground,
       ),
     );
   }
@@ -314,66 +316,66 @@ class _ModuleDetailLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final c = AppTheme.colors(context);
 
     return CustomScrollView(
       slivers: [
         SliverAppBar(
           pinned: true,
           title: Shimmer.fromColors(
-            baseColor: colorScheme.surfaceContainerHighest,
-            highlightColor: colorScheme.surfaceContainerHigh,
+            baseColor: c.muted,
+            highlightColor: c.card,
             child: Container(
               height: 20,
               width: 200,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
             ),
           ),
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Shimmer.fromColors(
-                  baseColor: colorScheme.surfaceContainerHighest,
-                  highlightColor: colorScheme.surfaceContainerHigh,
+                  baseColor: c.muted,
+                  highlightColor: c.card,
                   child: Container(
                     height: 16,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Shimmer.fromColors(
-                  baseColor: colorScheme.surfaceContainerHighest,
-                  highlightColor: colorScheme.surfaceContainerHigh,
+                  baseColor: c.muted,
+                  highlightColor: c.card,
                   child: Container(
                     height: 16,
                     width: 250,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.xl),
                 Shimmer.fromColors(
-                  baseColor: colorScheme.surfaceContainerHighest,
-                  highlightColor: colorScheme.surfaceContainerHigh,
+                  baseColor: c.muted,
+                  highlightColor: c.card,
                   child: Container(
                     height: 24,
                     width: 100,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ),
@@ -384,35 +386,37 @@ class _ModuleDetailLoading extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: ListTile(
+              return AppCard(
+                variant: AppCardVariant.outlined,
+                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
+                padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
+                child: AppListItem(
                   leading: Shimmer.fromColors(
-                    baseColor: colorScheme.surfaceContainerHighest,
-                    highlightColor: colorScheme.surfaceContainerHigh,
-                    child: const CircleAvatar(backgroundColor: Colors.white),
+                    baseColor: c.muted,
+                    highlightColor: c.card,
+                    child: AppAvatar(backgroundColor: Colors.white),
                   ),
-                  title: Shimmer.fromColors(
-                    baseColor: colorScheme.surfaceContainerHighest,
-                    highlightColor: colorScheme.surfaceContainerHigh,
+                  titleWidget: Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
                     child: Container(
                       height: 16,
                       width: 150,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                       ),
                     ),
                   ),
-                  subtitle: Shimmer.fromColors(
-                    baseColor: colorScheme.surfaceContainerHighest,
-                    highlightColor: colorScheme.surfaceContainerHigh,
+                  subtitleWidget: Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
                     child: Container(
                       height: 12,
                       width: 200,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                       ),
                     ),
                   ),
@@ -433,20 +437,23 @@ class _ModuleDetailError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Module')),
+      appBar: AppAppBar(title: const Text('Module')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.grey),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
+            const SizedBox(height: AppSpacing.lg),
             const Text('Failed to load module'),
-            const SizedBox(height: 8),
-            FilledButton.icon(
+            const SizedBox(height: AppSpacing.sm),
+            AppButton(
+              variant: AppButtonVariant.primary,
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: 'Retry',
             ),
           ],
         ),

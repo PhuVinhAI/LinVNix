@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/bookmark_providers.dart';
 import '../../domain/bookmark_models.dart';
 import '../../../../core/services/audio_player_service.dart';
@@ -65,10 +67,11 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final bookmarksAsync = ref.watch(flashcardBookmarksProvider);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppAppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
@@ -78,12 +81,11 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
           _items.isNotEmpty ? '${_currentIndex + 1}/${_items.length}' : '',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        centerTitle: true,
       ),
       body: bookmarksAsync.when(
         data: (items) {
           if (items.isEmpty) {
-            return _buildEmpty();
+            return _buildEmpty(c);
           }
           _items = items;
           if (_currentIndex >= items.length) {
@@ -91,18 +93,19 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
           }
           return _buildCardStack(items);
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: AppSpinner()),
         error: (e, _) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              Icon(Icons.error_outline, size: 48, color: c.error),
               const SizedBox(height: 16),
               Text(e.toString(), textAlign: TextAlign.center),
               const SizedBox(height: 16),
-              ElevatedButton(
+              AppButton(
+                label: 'Thử lại',
+                variant: AppButtonVariant.primary,
                 onPressed: () => ref.invalidate(flashcardBookmarksProvider),
-                child: const Text('Thử lại'),
               ),
             ],
           ),
@@ -111,24 +114,24 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
     );
   }
 
-  Widget _buildEmpty() {
+  Widget _buildEmpty(AppColors c) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.bookmark_border, size: 64, color: Colors.grey[400]),
+          Icon(Icons.bookmark_border, size: 64, color: c.mutedForeground),
           const SizedBox(height: 16),
           Text(
             'Chưa lưu từ nào',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.grey[600],
+                  color: c.mutedForeground,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
             'Lưu từ yêu thích để học bằng flashcard',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[500],
+                  color: c.mutedForeground,
                 ),
           ),
         ],
@@ -203,121 +206,112 @@ class _Flashcard extends StatelessWidget {
   }
 
   Widget _buildFront(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
-    return Card(
-      elevation: 8,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            item.word,
+            style: theme.textTheme.headlineLarge,
+            textAlign: TextAlign.center,
+          ),
+          if (item.phonetic != null) ...[
+            const SizedBox(height: 8),
             Text(
-              item.word,
-              style: theme.textTheme.headlineLarge,
+              '/${item.phonetic}/',
+              style: theme.textTheme.titleMedium?.copyWith(
+                    color: c.mutedForeground,
+                  ),
               textAlign: TextAlign.center,
             ),
-            if (item.phonetic != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                '/${item.phonetic}/',
-                style: theme.textTheme.titleMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-            if (onPlayAudio != null) ...[
-              const SizedBox(height: 16),
-              IconButton(
-                icon: Icon(Icons.volume_up, size: 32, color: colorScheme.primary),
-                onPressed: onPlayAudio,
-                tooltip: 'Nghe phát âm',
-              ),
-            ],
-            const SizedBox(height: 24),
-            Text(
-              'Chạm để lật',
-              style: theme.textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+          ],
+          if (onPlayAudio != null) ...[
+            const SizedBox(height: 16),
+            IconButton(
+              icon: Icon(Icons.volume_up, size: 32, color: c.primary),
+              onPressed: onPlayAudio,
+              tooltip: 'Nghe phát âm',
             ),
           ],
-        ),
+          const SizedBox(height: 24),
+          Text(
+            'Chạm để lật',
+            style: theme.textTheme.bodySmall?.copyWith(
+                  color: c.mutedForeground,
+                ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildBack(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
-    return Card(
-      elevation: 8,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(32),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                item.translation,
-                style: theme.textTheme.headlineSmall,
-              ),
-              if (item.partOfSpeech != null) ...[
-                const SizedBox(height: 8),
-                Chip(
-                  label: Text(
-                    kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ?? item.partOfSpeech!,
-                  ),
-                  backgroundColor: colorScheme.primaryContainer,
-                  labelStyle: TextStyle(color: colorScheme.onPrimaryContainer),
-                ),
-              ],
-              if (item.classifier != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  'Lượng từ: ${item.classifier}',
-                  style: theme.textTheme.bodyMedium,
-                ),
-              ],
-              if (item.exampleSentence != null) ...[
-                const SizedBox(height: 16),
-                Text(
-                  'Ví dụ:',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  item.exampleSentence!,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                        fontStyle: FontStyle.italic,
-                      ),
-                ),
-                if (item.exampleTranslation != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    item.exampleTranslation!,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                  ),
-                ],
-              ],
-              const SizedBox(height: 24),
-              Text(
-                'Chạm để lật lại',
-                style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      padding: const EdgeInsets.all(32),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              item.translation,
+              style: theme.textTheme.headlineSmall,
+            ),
+            if (item.partOfSpeech != null) ...[
+              const SizedBox(height: 8),
+              AppChip(
+                label: kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ?? item.partOfSpeech!,
+                color: c.info,
               ),
             ],
-          ),
+            if (item.classifier != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Lượng từ: ${item.classifier}',
+                style: theme.textTheme.bodyMedium,
+              ),
+            ],
+            if (item.exampleSentence != null) ...[
+              const SizedBox(height: 16),
+              Text(
+                'Ví dụ:',
+                style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                item.exampleSentence!,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                      fontStyle: FontStyle.italic,
+                    ),
+              ),
+              if (item.exampleTranslation != null) ...[
+                const SizedBox(height: 4),
+                Text(
+                  item.exampleTranslation!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                        color: c.mutedForeground,
+                      ),
+                ),
+              ],
+            ],
+            const SizedBox(height: 24),
+            Text(
+              'Chạm để lật lại',
+              style: theme.textTheme.bodySmall?.copyWith(
+                    color: c.mutedForeground,
+                  ),
+            ),
+          ],
         ),
       ),
     );

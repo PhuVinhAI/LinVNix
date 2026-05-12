@@ -124,5 +124,5 @@ void main() {
 
 class _AuthenticatedAuthNotifier extends AuthNotifier {
   @override
-  bool build() => true;
+  AuthState build() => const AuthState(isAuthenticated: true, isInitialized: true);
 }

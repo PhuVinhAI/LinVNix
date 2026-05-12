@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../exercise_models.dart';
 import '../exercise_renderer.dart';
 
@@ -96,8 +98,6 @@ class _MatchingInputState extends State<_MatchingInput> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Column(
       children: [
         Row(
@@ -112,23 +112,14 @@ class _MatchingInputState extends State<_MatchingInput> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: SizedBox(
                       width: double.infinity,
-                      child: OutlinedButton(
+                      child: AppButton(
+                        variant: isSelected ? AppButtonVariant.primary : AppButtonVariant.outline,
+                        label: item,
                         onPressed: isMatched
                             ? null
                             : () {
                                 setState(() => _selectedLeft = item);
                               },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: isSelected
-                              ? theme.colorScheme.primaryContainer
-                              : isMatched
-                                  ? theme.colorScheme.surfaceContainerHighest
-                                  : null,
-                          foregroundColor: isSelected
-                              ? theme.colorScheme.onPrimaryContainer
-                              : null,
-                        ),
-                        child: Text(item),
                       ),
                     ),
                   );
@@ -144,19 +135,15 @@ class _MatchingInputState extends State<_MatchingInput> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: SizedBox(
                       width: double.infinity,
-                      child: OutlinedButton(
+                      child: AppButton(
+                        variant: AppButtonVariant.outline,
+                        label: item,
                         onPressed: (isMatched || _selectedLeft == null)
                             ? null
                             : () {
                                 widget.onMatchAdded(_selectedLeft!, item);
                                 setState(() => _selectedLeft = null);
                               },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: isMatched
-                              ? theme.colorScheme.surfaceContainerHighest
-                              : null,
-                        ),
-                        child: Text(item),
                       ),
                     ),
                   );
@@ -171,9 +158,10 @@ class _MatchingInputState extends State<_MatchingInput> {
             spacing: 8,
             runSpacing: 8,
             children: widget.matches.map((pair) {
-              return Chip(
-                label: Text('${pair.left} → ${pair.right}'),
-                onDeleted: () => widget.onMatchRemoved(pair),
+              return AppChip(
+                label: '${pair.left} → ${pair.right}',
+                isSelected: true,
+                onTap: () => widget.onMatchRemoved(pair),
               );
             }).toList(),
           ),

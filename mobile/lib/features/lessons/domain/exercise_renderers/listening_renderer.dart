@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../exercise_models.dart';
 import '../exercise_renderer.dart';
 
@@ -82,20 +84,18 @@ class _ListeningInputState extends State<_ListeningInput> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-          ),
+        AppCard(
+          variant: AppCardVariant.muted,
           child: Row(
             children: [
-              IconButton(
+              AppButton(
+                variant: AppButtonVariant.text,
+                icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
                 onPressed: () async {
                   if (_isPlaying) {
                     await _player?.pause();
@@ -106,27 +106,22 @@ class _ListeningInputState extends State<_ListeningInput> {
                     setState(() => _isPlaying = !_isPlaying);
                   }
                 },
-                icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                iconSize: 32,
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   'Listen and type what you hear',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: c.mutedForeground,
+                      ),
                 ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 16),
-        TextField(
-          decoration: const InputDecoration(
-            labelText: 'Your transcription',
-            border: OutlineInputBorder(),
-          ),
+        AppInput(
+          label: 'Your transcription',
           maxLines: 3,
           onChanged: widget.onAnswerChanged,
         ),

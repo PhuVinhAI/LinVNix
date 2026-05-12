@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 
 class ExplanationPanel extends StatelessWidget {
   const ExplanationPanel({
@@ -16,17 +18,14 @@ class ExplanationPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
+    final bgColor = isCorrect ? c.success : c.error;
+    final fgColor = isCorrect ? c.successForeground : c.errorForeground;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isCorrect
-            ? theme.colorScheme.primaryContainer
-            : theme.colorScheme.errorContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
+    return AppCard(
+      variant: AppCardVariant.filled,
+      color: bgColor,
+      borderRadius: AppRadius.lg,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,30 +33,24 @@ class ExplanationPanel extends StatelessWidget {
             children: [
               Icon(
                 isCorrect ? Icons.check_circle : Icons.cancel,
-                color: isCorrect
-                    ? theme.colorScheme.onPrimaryContainer
-                    : theme.colorScheme.onErrorContainer,
+                color: fgColor,
               ),
               const SizedBox(width: 8),
               Text(
                 isCorrect ? 'Correct!' : 'Incorrect',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: isCorrect
-                      ? theme.colorScheme.onPrimaryContainer
-                      : theme.colorScheme.onErrorContainer,
-                ),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: fgColor,
+                    ),
               ),
               if (score != null) ...[
                 const Spacer(),
                 Text(
                   '+$score pts',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isCorrect
-                        ? theme.colorScheme.onPrimaryContainer
-                        : theme.colorScheme.onErrorContainer,
-                  ),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: fgColor,
+                      ),
                 ),
               ],
             ],
@@ -66,21 +59,19 @@ class ExplanationPanel extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Correct answer: $correctAnswer',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onErrorContainer,
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: fgColor,
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
           ],
           if (explanation != null && explanation!.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(
               explanation!,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: isCorrect
-                    ? theme.colorScheme.onPrimaryContainer
-                    : theme.colorScheme.onErrorContainer,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: fgColor,
+                  ),
             ),
           ],
         ],
