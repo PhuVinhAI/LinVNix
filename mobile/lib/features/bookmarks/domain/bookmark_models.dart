@@ -1,3 +1,15 @@
+const kPartOfSpeechViLabels = <String, String>{
+  'noun': 'Danh từ',
+  'verb': 'Động từ',
+  'adjective': 'Tính từ',
+  'adverb': 'Phó từ',
+  'pronoun': 'Đại từ',
+  'preposition': 'Giới từ',
+  'conjunction': 'Liên từ',
+  'phrase': 'Cụm từ',
+  'interjection': 'Thán từ',
+};
+
 enum BookmarkSort {
   newest('newest'),
   oldest('oldest'),
@@ -99,6 +111,24 @@ class BookmarksPage {
       limit: json['limit'] as int,
       totalPages: json['totalPages'] as int,
       totalItems: json['totalItems'] as int,
+    );
+  }
+}
+
+class BookmarkStats {
+  BookmarkStats({
+    required this.total,
+    required this.byPartOfSpeech,
+  });
+
+  final int total;
+  final Map<String, int> byPartOfSpeech;
+
+  factory BookmarkStats.fromJson(Map<String, dynamic> json) {
+    return BookmarkStats(
+      total: json['total'] as int,
+      byPartOfSpeech: (json['byPartOfSpeech'] as Map<String, dynamic>)
+          .map((k, v) => MapEntry(k, v as int)),
     );
   }
 }
