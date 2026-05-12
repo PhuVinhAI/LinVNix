@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/review_providers.dart';
 import '../../data/vocabulary_repository.dart';
 import '../../domain/review_models.dart';
+import '../../../bookmarks/data/bookmark_providers.dart';
+import '../../../bookmarks/presentation/widgets/bookmark_icon_button.dart';
 
 final vocabularyBrowserProvider = AsyncNotifierProvider<VocabularyBrowserNotifier, List<UserVocabulary>>(
   VocabularyBrowserNotifier.new,
@@ -400,6 +402,34 @@ class VocabularySearchDelegate extends SearchDelegate<String> {
     );
   }
 
+  Future<void> _toggleBookmark(
+    String vocabularyId,
+    int index,
+    List<Vocabulary> results,
+    StateSetter setState,
+  ) async {
+    try {
+      final repo = ref.read(bookmarkRepositoryProvider);
+      final isNowBookmarked = await repo.toggleBookmark(vocabularyId);
+      setState(() {
+        results[index] = Vocabulary(
+          id: results[index].id,
+          word: results[index].word,
+          translation: results[index].translation,
+          phonetic: results[index].phonetic,
+          partOfSpeech: results[index].partOfSpeech,
+          exampleSentence: results[index].exampleSentence,
+          exampleTranslation: results[index].exampleTranslation,
+          audioUrl: results[index].audioUrl,
+          imageUrl: results[index].imageUrl,
+          classifier: results[index].classifier,
+          difficultyLevel: results[index].difficultyLevel,
+          isBookmarked: isNowBookmarked,
+        );
+      });
+    } catch (_) {}
+  }
+
   @override
   Widget buildResults(BuildContext context) {
     if (query.length < 2) {
@@ -431,32 +461,47 @@ class VocabularySearchDelegate extends SearchDelegate<String> {
           );
         }
 
-        return ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: results.length,
-          itemBuilder: (context, index) {
-            final vocab = results[index];
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-              child: ListTile(
-                title: Text(
-                  vocab.word,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(vocab.translation),
-                trailing: vocab.partOfSpeech != null
-                    ? Chip(
-                        label: Text(
-                          vocab.partOfSpeech!,
-                          style: const TextStyle(fontSize: 12),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: results.length,
+              itemBuilder: (context, index) {
+                final vocab = results[index];
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  child: ListTile(
+                    title: Text(
+                      vocab.word,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(vocab.translation),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BookmarkIconButton(
+                          vocabularyId: vocab.id,
+                          isBookmarked: vocab.isBookmarked,
+                          onToggle: (_) => _toggleBookmark(
+                              vocab.id, index, results, setState),
                         ),
-                        backgroundColor: Colors.blue[100],
-                        padding: EdgeInsets.zero,
-                        materialTapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap,
-                      )
-                    : null,
-              ),
+                        if (vocab.partOfSpeech != null)
+                          Chip(
+                            label: Text(
+                              vocab.partOfSpeech!,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            backgroundColor: Colors.blue[100],
+                            padding: EdgeInsets.zero,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             );
           },
         );

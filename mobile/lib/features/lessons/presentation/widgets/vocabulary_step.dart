@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/lesson_models.dart';
-import '../../data/lesson_providers.dart';
+import '../../../bookmarks/data/bookmark_providers.dart';
+import '../../../bookmarks/presentation/widgets/bookmark_icon_button.dart';
 
 class VocabularyStepWidget extends ConsumerStatefulWidget {
   const VocabularyStepWidget({
     super.key,
     required this.vocabularies,
     required this.lessonId,
-    required this.learnedVocabIds,
-    required this.onVocabLearned,
   });
   final List<LessonVocabulary> vocabularies;
   final String lessonId;
-  final Set<String> learnedVocabIds;
-  final ValueChanged<String> onVocabLearned;
 
   @override
   ConsumerState<VocabularyStepWidget> createState() =>
@@ -22,27 +19,59 @@ class VocabularyStepWidget extends ConsumerStatefulWidget {
 }
 
 class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
-  final Set<String> _pendingVocabIds = {};
+  final Set<String> _pendingToggleIds = {};
+  late final Set<String> _bookmarkedIds;
 
-  Future<void> _learnWord(String vocabularyId) async {
-    if (widget.learnedVocabIds.contains(vocabularyId) ||
-        _pendingVocabIds.contains(vocabularyId)) return;
+  @override
+  void initState() {
+    super.initState();
+    _bookmarkedIds = widget.vocabularies
+        .where((v) => v.isBookmarked)
+        .map((v) => v.id)
+        .toSet();
+  }
 
-    setState(() => _pendingVocabIds.add(vocabularyId));
+  Future<void> _toggleBookmark(String vocabularyId) async {
+    if (_pendingToggleIds.contains(vocabularyId)) return;
+
+    final wasBookmarked = _bookmarkedIds.contains(vocabularyId);
+    setState(() {
+      _pendingToggleIds.add(vocabularyId);
+      if (wasBookmarked) {
+        _bookmarkedIds.remove(vocabularyId);
+      } else {
+        _bookmarkedIds.add(vocabularyId);
+      }
+    });
 
     try {
-      final repo = ref.read(lessonRepositoryProvider);
-      await repo.learnVocabulary(vocabularyId);
-      widget.onVocabLearned(vocabularyId);
+      final repo = ref.read(bookmarkRepositoryProvider);
+      final isNowBookmarked = await repo.toggleBookmark(vocabularyId);
+      if (mounted) {
+        setState(() {
+          if (isNowBookmarked) {
+            _bookmarkedIds.add(vocabularyId);
+          } else {
+            _bookmarkedIds.remove(vocabularyId);
+          }
+        });
+      }
     } catch (e) {
       if (mounted) {
+        setState(() {
+          if (wasBookmarked) {
+            _bookmarkedIds.add(vocabularyId);
+          } else {
+            _bookmarkedIds.remove(vocabularyId);
+          }
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
         );
       }
     } finally {
       if (mounted) {
-        setState(() => _pendingVocabIds.remove(vocabularyId));
+        setState(() => _pendingToggleIds.remove(vocabularyId));
       }
     }
   }
@@ -60,8 +89,9 @@ class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
         final vocab = widget.vocabularies[index];
         return _VocabularyCard(
           vocabulary: vocab,
-          learned: widget.learnedVocabIds.contains(vocab.id),
-          onLearn: () => _learnWord(vocab.id),
+          isBookmarked: _bookmarkedIds.contains(vocab.id),
+          isPending: _pendingToggleIds.contains(vocab.id),
+          onToggle: _toggleBookmark,
         );
       },
     );
@@ -71,12 +101,14 @@ class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
 class _VocabularyCard extends StatelessWidget {
   const _VocabularyCard({
     required this.vocabulary,
-    required this.learned,
-    required this.onLearn,
+    required this.isBookmarked,
+    required this.isPending,
+    required this.onToggle,
   });
   final LessonVocabulary vocabulary;
-  final bool learned;
-  final VoidCallback onLearn;
+  final bool isBookmarked;
+  final bool isPending;
+  final ValueChanged<String> onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -116,10 +148,23 @@ class _VocabularyCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                FilledButton.tonal(
-                  onPressed: learned ? null : onLearn,
-                  child: Text(learned ? 'Learned' : 'Learn'),
-                ),
+                isPending
+                    ? const SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                      )
+                    : BookmarkIconButton(
+                        vocabularyId: vocab.id,
+                        isBookmarked: isBookmarked,
+                        onToggle: onToggle,
+                      ),
               ],
             ),
             const SizedBox(height: 8),

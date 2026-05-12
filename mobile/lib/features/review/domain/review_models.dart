@@ -71,6 +71,7 @@ class Vocabulary {
     this.imageUrl,
     this.classifier,
     this.difficultyLevel,
+    this.isBookmarked = false,
   });
 
   final String id;
@@ -84,6 +85,7 @@ class Vocabulary {
   final String? imageUrl;
   final String? classifier;
   final int? difficultyLevel;
+  final bool isBookmarked;
 
   factory Vocabulary.fromJson(Map<String, dynamic> json) {
     return Vocabulary(
@@ -98,6 +100,7 @@ class Vocabulary {
       imageUrl: json['imageUrl'] as String?,
       classifier: json['classifier'] as String?,
       difficultyLevel: json['difficultyLevel'] as int?,
+      isBookmarked: json['isBookmarked'] as bool? ?? false,
     );
   }
 }
