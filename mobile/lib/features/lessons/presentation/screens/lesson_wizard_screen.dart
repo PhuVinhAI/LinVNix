@@ -444,12 +444,18 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
           ],
         ),
         actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.go('/');
+            },
+            child: const Text('Home'),
+          ),
           FilledButton(
             onPressed: () {
               Navigator.of(ctx).pop();
-              context.pop();
             },
-            child: const Text('Done'),
+            child: const Text('Review Lesson'),
           ),
         ],
       ),

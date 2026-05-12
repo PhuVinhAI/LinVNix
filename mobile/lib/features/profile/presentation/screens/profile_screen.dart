@@ -16,7 +16,6 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final accent = Theme.of(context).extension<VietnameseAccentTokens>()!;
     final profileAsync = ref.watch(userProfileProvider);
-    final statsAsync = ref.watch(exerciseStatsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +58,7 @@ class ProfileScreen extends ConsumerWidget {
               onEdit: () => _showEditDialog(context, ref, profile),
             ),
             const SizedBox(height: 16),
-            _StatsSection(statsAsync: statsAsync, accent: accent),
+            _StatsSection(accent: accent),
             const SizedBox(height: 16),
             _VocabStatsSection(accent: accent),
             const SizedBox(height: 16),
@@ -385,15 +384,15 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-class _StatsSection extends StatelessWidget {
-  const _StatsSection({required this.statsAsync, required this.accent});
-  final AsyncValue<ExerciseStats> statsAsync;
+class _StatsSection extends ConsumerWidget {
+  const _StatsSection({required this.accent});
   final VietnameseAccentTokens accent;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final statsAsync = ref.watch(exerciseStatsProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,7 +425,7 @@ class _StatsSection extends StatelessWidget {
                     label: 'Retry loading statistics',
                     button: true,
                     child: OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () => ref.invalidate(exerciseStatsProvider),
                       child: const Text('Retry'),
                     ),
                   ),

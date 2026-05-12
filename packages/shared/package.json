@@ -2,11 +2,12 @@
   "name": "@linvnix/shared",
   "version": "0.0.1",
   "description": "Shared AI abstractions for LinVNix monorepo",
-  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "main": "./dist/index.js",

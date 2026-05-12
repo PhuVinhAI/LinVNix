@@ -10,7 +10,7 @@ export abstract class BaseTool<TParams, TResult> {
   abstract execute(params: TParams): Promise<TResult>;
 
   toDeclaration(): ToolDeclaration {
-    const jsonSchema = zodToJsonSchema(this.parameters) as Record<string, any>;
+    const jsonSchema = zodToJsonSchema(this.parameters as any) as Record<string, any>;
     return {
       name: this.name,
       description: this.description,

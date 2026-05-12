@@ -26,19 +26,23 @@ void main() {
           requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
           statusCode: 200,
           data: {
-            'items': [
+            'data': [
               {
-                'id': 'b1',
-                'vocabularyId': 'v1',
-                'word': 'con mèo',
-                'translation': 'cat',
                 'bookmarkedAt': '2026-01-01T00:00:00.000Z',
+                'vocabulary': {
+                  'id': 'v1',
+                  'word': 'con mèo',
+                  'translation': 'cat',
+                  'partOfSpeech': 'NOUN',
+                },
               },
             ],
-            'page': 1,
-            'limit': 20,
-            'totalPages': 1,
-            'totalItems': 1,
+            'meta': {
+              'total': 1,
+              'page': 1,
+              'limit': 20,
+              'totalPages': 1,
+            },
           },
         ),
       );
@@ -64,26 +68,32 @@ void main() {
           requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
           statusCode: 200,
           data: {
-            'items': [
+            'data': [
               {
-                'id': 'b1',
-                'vocabularyId': 'v1',
-                'word': 'con mèo',
-                'translation': 'cat',
                 'bookmarkedAt': '2026-01-01T00:00:00.000Z',
+                'vocabulary': {
+                  'id': 'v1',
+                  'word': 'con mèo',
+                  'translation': 'cat',
+                  'partOfSpeech': 'NOUN',
+                },
               },
               {
-                'id': 'b2',
-                'vocabularyId': 'v2',
-                'word': 'con chó',
-                'translation': 'dog',
                 'bookmarkedAt': '2026-01-02T00:00:00.000Z',
+                'vocabulary': {
+                  'id': 'v2',
+                  'word': 'con chó',
+                  'translation': 'dog',
+                  'partOfSpeech': 'NOUN',
+                },
               },
             ],
-            'page': 1,
-            'limit': 20,
-            'totalPages': 1,
-            'totalItems': 2,
+            'meta': {
+              'total': 2,
+              'page': 1,
+              'limit': 20,
+              'totalPages': 1,
+            },
           },
         ),
       );
@@ -124,19 +134,23 @@ void main() {
           requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
           statusCode: 200,
           data: {
-            'items': [
+            'data': [
               {
-                'id': 'b1',
-                'vocabularyId': 'v1',
-                'word': 'con mèo',
-                'translation': 'cat',
                 'bookmarkedAt': '2026-01-01T00:00:00.000Z',
+                'vocabulary': {
+                  'id': 'v1',
+                  'word': 'con mèo',
+                  'translation': 'cat',
+                  'partOfSpeech': 'NOUN',
+                },
               },
             ],
-            'page': 1,
-            'limit': 20,
-            'totalPages': 1,
-            'totalItems': 1,
+            'meta': {
+              'total': 1,
+              'page': 1,
+              'limit': 20,
+              'totalPages': 1,
+            },
           },
         ),
       );
@@ -177,19 +191,23 @@ void main() {
           requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
           statusCode: 200,
           data: {
-            'items': [
+            'data': [
               {
-                'id': 'b1',
-                'vocabularyId': 'v1',
-                'word': 'con mèo $callCount',
-                'translation': 'cat',
                 'bookmarkedAt': '2026-01-01T00:00:00.000Z',
+                'vocabulary': {
+                  'id': 'v1',
+                  'word': 'con mèo $callCount',
+                  'translation': 'cat',
+                  'partOfSpeech': 'NOUN',
+                },
               },
             ],
-            'page': 1,
-            'limit': 20,
-            'totalPages': 1,
-            'totalItems': 1,
+            'meta': {
+              'total': 1,
+              'page': 1,
+              'limit': 20,
+              'totalPages': 1,
+            },
           },
         );
       });
