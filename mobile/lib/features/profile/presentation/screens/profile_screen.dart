@@ -379,7 +379,6 @@ class _ThemeSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
     final currentMode = ref.watch(themeModeProvider);
 
@@ -397,56 +396,88 @@ class _ThemeSection extends ConsumerWidget {
         const SizedBox(height: 12),
         AppCard(
           variant: AppCardVariant.outlined,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
+          padding: const EdgeInsets.all(16),
+          child: Row(
             children: [
-              AppListItem(
-                leading: Icon(Icons.brightness_auto, color: c.foreground),
-                title: 'Theo hệ thống',
-                subtitle: 'Tự động theo thiết lập thiết bị',
-                trailing: Icon(
-                  currentMode == ThemeMode.system
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: currentMode == ThemeMode.system
-                      ? c.primary
-                      : c.mutedForeground,
-                  size: 20,
-                ),
+              _ThemeBlock(
+                icon: Icons.brightness_auto,
+                label: 'Hệ thống',
+                isSelected: currentMode == ThemeMode.system,
                 onTap: () => setMode(ThemeMode.system),
               ),
-              AppListItem(
-                leading: Icon(Icons.light_mode, color: c.foreground),
-                title: 'Sáng',
-                trailing: Icon(
-                  currentMode == ThemeMode.light
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: currentMode == ThemeMode.light
-                      ? c.primary
-                      : c.mutedForeground,
-                  size: 20,
-                ),
+              const SizedBox(width: 12),
+              _ThemeBlock(
+                icon: Icons.light_mode,
+                label: 'Sáng',
+                isSelected: currentMode == ThemeMode.light,
                 onTap: () => setMode(ThemeMode.light),
               ),
-              AppListItem(
-                leading: Icon(Icons.dark_mode, color: c.foreground),
-                title: 'Tối',
-                trailing: Icon(
-                  currentMode == ThemeMode.dark
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: currentMode == ThemeMode.dark
-                      ? c.primary
-                      : c.mutedForeground,
-                  size: 20,
-                ),
+              const SizedBox(width: 12),
+              _ThemeBlock(
+                icon: Icons.dark_mode,
+                label: 'Tối',
+                isSelected: currentMode == ThemeMode.dark,
                 onTap: () => setMode(ThemeMode.dark),
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ThemeBlock extends StatelessWidget {
+  const _ThemeBlock({
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            color: isSelected ? c.primary.withValues(alpha: 0.12) : c.muted,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(
+              color: isSelected ? c.primary : c.border,
+              width: isSelected ? 1.5 : 1,
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            children: [
+              Icon(
+                icon,
+                size: 28,
+                color: isSelected ? c.primary : c.mutedForeground,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: AppTypography.bodySmall,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  color: isSelected ? c.primary : c.foreground,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
