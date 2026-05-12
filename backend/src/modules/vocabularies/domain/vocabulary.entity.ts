@@ -64,4 +64,7 @@ export class Vocabulary extends BaseEntity {
 
   @OneToMany('UserVocabulary', 'vocabulary')
   userVocabularies: any[];
+
+  @OneToMany('Bookmark', 'vocabulary')
+  bookmarks: any[];
 }

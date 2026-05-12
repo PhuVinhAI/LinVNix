@@ -24,6 +24,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { VocabulariesService } from '../application/vocabularies.service';
 import { UserVocabulariesService } from '../application/user-vocabularies.service';
 import { VocabularyReviewService } from '../application/vocabulary-review.service';
+import { BookmarksService } from '../application/bookmarks.service';
 import { StorageService } from '../../../infrastructure/storage/storage.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../../auth/guards/optional-jwt-auth.guard';
@@ -32,6 +33,8 @@ import { User } from '../../users/domain/user.entity';
 import { Public } from '../../../common/decorators';
 import { CreateVocabularyDto } from '../dto/create-vocabulary.dto';
 import { BatchReviewDto } from '../dto/batch-review.dto';
+import { BookmarkQueryDto, BookmarkSort } from '../dto/bookmark-query.dto';
+import { Vocabulary } from '../domain/vocabulary.entity';
 
 @ApiTags('Vocabularies')
 @Controller('vocabularies')
@@ -40,15 +43,79 @@ export class VocabulariesController {
     private readonly vocabulariesService: VocabulariesService,
     private readonly userVocabulariesService: UserVocabulariesService,
     private readonly vocabularyReviewService: VocabularyReviewService,
+    private readonly bookmarksService: BookmarksService,
     private readonly storageService: StorageService,
   ) {}
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('bookmarks')
+  @ApiOperation({
+    summary: 'Lấy danh sách từ vựng đã bookmark',
+    description:
+      'Lấy danh sách từ vựng đã bookmark của user, hỗ trợ phân trang, tìm kiếm và sắp xếp.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Danh sách từ vựng đã bookmark',
+    schema: {
+      example: {
+        data: [
+          {
+            bookmarkedAt: '2024-01-15T00:00:00.000Z',
+            vocabulary: {
+              id: 'uuid-string',
+              word: 'xin chào',
+              translation: 'hello',
+              phonetic: 'sin chao',
+              partOfSpeech: 'PHRASE',
+            },
+          },
+        ],
+        meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
+      },
+    },
+  })
+  async getBookmarks(
+    @CurrentUser() user: User,
+    @Query() query: BookmarkQueryDto,
+  ) {
+    return this.bookmarksService.list(user.id, {
+      page: query.page ?? 1,
+      limit: query.limit ?? 20,
+      search: query.search,
+      sort: query.sort ?? BookmarkSort.NEWEST,
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post(':vocabularyId/bookmark')
+  @ApiOperation({
+    summary: 'Toggle bookmark từ vựng',
+    description:
+      'Đánh dấu hoặc bỏ đánh dấu từ vựng. Nếu chưa bookmark → tạo; nếu đã bookmark → xoá.',
+  })
+  @ApiParam({ name: 'vocabularyId', description: 'ID của từ vựng' })
+  @ApiResponse({
+    status: 200,
+    description: 'Kết quả toggle bookmark',
+    schema: { example: { isBookmarked: true } },
+  })
+  async toggleBookmark(
+    @CurrentUser() user: User,
+    @Param('vocabularyId') vocabularyId: string,
+  ) {
+    return this.bookmarksService.toggle(user.id, vocabularyId);
+  }
+
   @Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Get('search')
   @ApiOperation({
     summary: 'Tìm kiếm từ vựng',
     description:
-      'Tìm kiếm từ vựng theo word, translation hoặc phonetic. Trả về tối đa 50 kết quả.',
+      'Tìm kiếm từ vựng theo word, translation hoặc phonetic. Trả về tối đa 50 kết quả. Nếu user đã đăng nhập, mỗi kết quả bao gồm isBookmarked.',
   })
   @ApiResponse({
     status: 200,
@@ -61,12 +128,14 @@ export class VocabulariesController {
           translation: 'hello',
           phonetic: 'sin chao',
           partOfSpeech: 'PHRASE',
+          isBookmarked: false,
         },
       ],
     },
   })
-  async search(@Query('q') query: string) {
-    return this.vocabulariesService.search(query);
+  async search(@Query('q') query: string, @CurrentUser() user?: User) {
+    const vocabularies = await this.vocabulariesService.search(query);
+    return this.vocabulariesService.enrichWithBookmarks(vocabularies, user?.id);
   }
 
   @Public()
@@ -104,14 +173,16 @@ export class VocabulariesController {
     @Param('lessonId') lessonId: string,
     @CurrentUser() user?: User,
   ) {
-    // If user is logged in, apply their dialect preference
+    let vocabularies: Vocabulary[];
     if (user?.preferredDialect) {
-      return this.vocabulariesService.findByLessonIdWithDialect(
+      vocabularies = await this.vocabulariesService.findByLessonIdWithDialect(
         lessonId,
         user.preferredDialect,
       );
+    } else {
+      vocabularies = await this.vocabulariesService.findByLessonId(lessonId);
     }
-    return this.vocabulariesService.findByLessonId(lessonId);
+    return this.vocabulariesService.enrichWithBookmarks(vocabularies, user?.id);
   }
 
   @ApiBearerAuth()
