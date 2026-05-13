@@ -20,6 +20,7 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
   ExerciseTier? _generatingTier;
   String? _generationError;
   bool _isCreatingCustom = false;
+  String? _busyCustomSetId;
   String? _customError;
 
   @override
@@ -93,12 +94,14 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                 isUnlocked: summary.customPracticeUnlocked,
                 customSets: summary.customSets,
                 isCreating: _isCreatingCustom,
+                busySetId: _busyCustomSetId,
                 error: _customError,
                 onCreate: () => _showCustomConfigForm(context, summary),
                 onPlaySet: (setId) => context.push(
                   '/lessons/${widget.lessonId}/exercises/play/custom/$setId',
                 ),
                 onRegenerate: (setId) => _handleRegenerateCustom(setId),
+                onDelete: (setId) => _confirmDeleteCustomSet(context, setId),
               ),
             ],
           );
@@ -143,7 +146,7 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
 
   Future<void> _handleRegenerateCustom(String setId) async {
     setState(() {
-      _isCreatingCustom = true;
+      _busyCustomSetId = setId;
       _customError = null;
     });
 
@@ -152,23 +155,73 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
       await repo.regenerateExercises(setId);
       if (mounted) {
         setState(() {
-          _isCreatingCustom = false;
+          _busyCustomSetId = null;
         });
         ref.invalidate(exerciseSetsProvider(widget.lessonId));
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _isCreatingCustom = false;
+          _busyCustomSetId = null;
           _customError = e.toString();
         });
       }
     }
   }
 
+  Future<void> _handleDeleteCustom(String setId) async {
+    setState(() {
+      _busyCustomSetId = setId;
+      _customError = null;
+    });
+
+    try {
+      final repo = ref.read(lessonRepositoryProvider);
+      await repo.deleteCustomExerciseSet(setId);
+      if (mounted) {
+        setState(() {
+          _busyCustomSetId = null;
+        });
+        ref.invalidate(exerciseSetsProvider(widget.lessonId));
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _busyCustomSetId = null;
+          _customError = e.toString();
+        });
+      }
+    }
+  }
+
+  void _confirmDeleteCustomSet(BuildContext context, String setId) {
+    AppDialog.show(
+      context,
+      builder: (dialogCtx) => AppDialog(
+        title: 'Delete custom set?',
+        content:
+            'This set will be removed from your list. You can create a new one anytime.',
+        actions: [
+          AppDialogAction(
+            label: 'Cancel',
+            onPressed: () => Navigator.pop(dialogCtx),
+          ),
+          AppDialogAction(
+            label: 'Delete',
+            isPrimary: true,
+            onPressed: () {
+              Navigator.pop(dialogCtx);
+              _handleDeleteCustom(setId);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showCustomConfigForm(BuildContext context, LessonTierSummary summary) {
-    showModalBottomSheet(
-      context: context,
+    AppBottomSheet.show(
+      context,
       isScrollControlled: true,
       builder: (ctx) => _CustomConfigForm(
         lessonId: widget.lessonId,
@@ -208,19 +261,23 @@ class _CustomPracticeSection extends StatelessWidget {
     required this.isUnlocked,
     required this.customSets,
     this.isCreating = false,
+    this.busySetId,
     this.error,
     this.onCreate,
     this.onPlaySet,
     this.onRegenerate,
+    this.onDelete,
   });
 
   final bool isUnlocked;
   final List<TierProgress> customSets;
   final bool isCreating;
+  final String? busySetId;
   final String? error;
   final VoidCallback? onCreate;
   final void Function(String setId)? onPlaySet;
   final void Function(String setId)? onRegenerate;
+  final void Function(String setId)? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -235,14 +292,14 @@ class _CustomPracticeSection extends StatelessWidget {
             Icon(Icons.tune, color: c.primary, size: 20),
             const SizedBox(width: 8),
             Text(
-              'Luyện tập tự do',
+              'Custom practice',
               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
         const SizedBox(height: 8),
         Text(
-          'Tự cấu hình bài tập AI theo ý muốn',
+          'Configure AI-generated exercises your way',
           style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
         ),
         const SizedBox(height: 16),
@@ -255,7 +312,7 @@ class _CustomPracticeSection extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Hoàn thành Basic tier để mở khóa',
+                    'Complete the Basic tier to unlock',
                     style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
                   ),
                 ),
@@ -266,7 +323,7 @@ class _CustomPracticeSection extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: AppButton(
-              label: isCreating ? 'Đang tạo...' : 'Tạo bài tập tự do',
+              label: isCreating ? 'Creating...' : 'Create custom set',
               variant: AppButtonVariant.primary,
               onPressed: isCreating ? null : onCreate,
               icon: isCreating ? null : const Icon(Icons.add),
@@ -279,8 +336,10 @@ class _CustomPracticeSection extends StatelessWidget {
           const SizedBox(height: 12),
           ...customSets.map((cs) => _CustomSetCard(
             progress: cs,
+            isBusy: busySetId == cs.setId,
             onTap: cs.totalExercises > 0 ? () => onPlaySet?.call(cs.setId) : null,
             onRegenerate: onRegenerate,
+            onDelete: onDelete,
           )),
         ],
       ],
@@ -291,13 +350,92 @@ class _CustomPracticeSection extends StatelessWidget {
 class _CustomSetCard extends StatelessWidget {
   const _CustomSetCard({
     required this.progress,
+    this.isBusy = false,
     this.onTap,
     this.onRegenerate,
+    this.onDelete,
   });
 
   final TierProgress progress;
+  final bool isBusy;
   final VoidCallback? onTap;
   final void Function(String)? onRegenerate;
+  final void Function(String)? onDelete;
+
+  void _openActionsMenu(BuildContext context) {
+    final c = AppTheme.colors(context);
+    AppBottomSheet.show(
+      context,
+      builder: (sheetCtx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppSpacing.md,
+                  AppSpacing.sm,
+                  AppSpacing.sm,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Actions',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: c.foreground,
+                            ),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Close',
+                      onPressed: () => Navigator.pop(sheetCtx),
+                      icon: Icon(Icons.close, color: c.mutedForeground),
+                      style: IconButton.styleFrom(
+                        foregroundColor: c.mutedForeground,
+                        minimumSize: const Size(48, 48),
+                        fixedSize: const Size(48, 48),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(height: 1, color: c.border),
+              AppListItem(
+                leading: Icon(Icons.auto_awesome, color: c.primary, size: 22),
+                title: 'Regenerate exercises',
+                subtitle: 'Replace all questions with new AI content',
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.md,
+                ),
+                onTap: () {
+                  Navigator.pop(sheetCtx);
+                  onRegenerate?.call(progress.setId);
+                },
+              ),
+              AppListItem(
+                leading: Icon(Icons.delete_outline, color: c.error, size: 22),
+                title: 'Delete set',
+                subtitle: 'Remove from custom practice list',
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.md,
+                ),
+                onTap: () {
+                  Navigator.pop(sheetCtx);
+                  onDelete?.call(progress.setId);
+                },
+              ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -308,61 +446,84 @@ class _CustomSetCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: AppCard(
-        onTap: onTap,
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.zero,
         child: Row(
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(Icons.edit_note, color: color, size: 22),
-            ),
-            const SizedBox(width: 12),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    progress.title,
-                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onTap,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: color.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(Icons.edit_note, color: color, size: 22),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                progress.title,
+                                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                progress.isCompleted
+                                    ? '${progress.percentCorrect.round()}%'
+                                    : progress.isInProgress
+                                        ? '${progress.percentComplete.round()}%'
+                                        : progress.totalExercises > 0
+                                            ? '${progress.totalExercises} questions'
+                                            : 'No exercises yet',
+                                style: theme.textTheme.bodySmall?.copyWith(color: c.mutedForeground),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (progress.isCompleted)
+                          Icon(Icons.check_circle, color: color, size: 22),
+                        if (progress.isInProgress)
+                          SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: AppProgress(
+                              value: progress.percentComplete / 100,
+                              color: color,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    progress.isCompleted
-                        ? '${progress.percentCorrect.round()}%'
-                        : progress.isInProgress
-                            ? '${progress.percentComplete.round()}%'
-                            : progress.totalExercises > 0
-                                ? '${progress.totalExercises} câu'
-                                : 'Chưa có bài',
-                    style: theme.textTheme.bodySmall?.copyWith(color: c.mutedForeground),
-                  ),
-                ],
-              ),
-            ),
-            if (progress.isCompleted)
-              Icon(Icons.check_circle, color: color, size: 22),
-            if (progress.isInProgress)
-              SizedBox(
-                width: 24,
-                height: 24,
-                child: AppProgress(
-                  value: progress.percentComplete / 100,
-                  color: color,
                 ),
               ),
-            PopupMenuButton<String>(
-              icon: Icon(Icons.more_vert, color: c.mutedForeground, size: 20),
-              onSelected: (value) {
-                if (value == 'regenerate') onRegenerate?.call(progress.setId);
-              },
-              itemBuilder: (_) => [
-                const PopupMenuItem(value: 'regenerate', child: Text('Tạo lại')),
-              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: isBusy
+                  ? const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: AppSpinner(),
+                      ),
+                    )
+                  : IconButton(
+                      icon: Icon(Icons.keyboard_arrow_down_rounded, color: c.mutedForeground, size: 26),
+                      tooltip: 'Actions',
+                      onPressed: () => _openActionsMenu(context),
+                    ),
             ),
           ],
         ),
@@ -394,94 +555,143 @@ class _CustomConfigFormState extends State<_CustomConfigForm> {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Cấu hình bài tập tự do',
-            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-
-          Text('Số câu hỏi: ${_questionCount.round()}', style: theme.textTheme.bodyMedium),
-          Slider(
-            value: _questionCount,
-            min: 1,
-            max: 30,
-            divisions: 29,
-            label: _questionCount.round().toString(),
-            onChanged: (v) => setState(() => _questionCount = v),
-          ),
-          const SizedBox(height: 12),
-
-          Text('Loại bài tập', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            children: _allExerciseTypes.map((type) {
-              final selected = _selectedTypes.contains(type.value);
-              return FilterChip(
-                label: Text(_typeDisplayName(type)),
-                selected: selected,
-                onSelected: (sel) {
-                  setState(() {
-                    if (sel) {
-                      _selectedTypes.add(type.value);
-                    } else if (_selectedTypes.length > 1) {
-                      _selectedTypes.remove(type.value);
-                    }
-                  });
-                },
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 16),
-
-          Text('Trọng tâm', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-          const SizedBox(height: 8),
-          SegmentedButton<FocusArea>(
-            segments: FocusArea.values
-                .map((fa) => ButtonSegment(value: fa, label: Text(fa.displayName)))
-                .toList(),
-            selected: {_focusArea},
-            onSelectionChanged: (s) => setState(() => _focusArea = s.first),
-          ),
-          const SizedBox(height: 24),
-
-          SizedBox(
-            width: double.infinity,
-            child: AppButton(
-              label: _isSubmitting ? 'Đang tạo...' : 'Tạo bài tập',
-              variant: AppButtonVariant.primary,
-              onPressed: _selectedTypes.isEmpty || _isSubmitting ? null : _handleSubmit,
-              icon: const Icon(Icons.auto_awesome),
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.sm,
+                AppSpacing.sm,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Configure custom practice',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: c.foreground,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Close',
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close, color: c.mutedForeground),
+                    style: IconButton.styleFrom(
+                      foregroundColor: c.mutedForeground,
+                      minimumSize: const Size(48, 48),
+                      fixedSize: const Size(48, 48),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-        ],
+            Divider(height: 1, color: c.border),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.md,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Number of questions: ${_questionCount.round()}',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppSlider(
+                    value: _questionCount,
+                    min: 1,
+                    max: 30,
+                    divisions: 29,
+                    label: _questionCount.round().toString(),
+                    onChanged: (v) => setState(() => _questionCount = v),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(
+                    'Exercise types',
+                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: _allExerciseTypes.map((type) {
+                      final selected = _selectedTypes.contains(type.value);
+                      return AppChip(
+                        label: _typeDisplayName(type),
+                        isSelected: selected,
+                        onTap: () {
+                          setState(() {
+                            if (!selected) {
+                              _selectedTypes.add(type.value);
+                            } else if (_selectedTypes.length > 1) {
+                              _selectedTypes.remove(type.value);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(
+                    'Focus',
+                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: FocusArea.values.map((fa) {
+                      final selected = _focusArea == fa;
+                      return AppChip(
+                        label: fa.displayName,
+                        isSelected: selected,
+                        color: c.accent,
+                        onTap: () => setState(() => _focusArea = fa),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                  AppButton(
+                    label: _isSubmitting ? 'Creating...' : 'Create exercises',
+                    variant: AppButtonVariant.primary,
+                    onPressed: _selectedTypes.isEmpty || _isSubmitting ? null : _handleSubmit,
+                    icon: const Icon(Icons.auto_awesome),
+                    isFullWidth: true,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   String _typeDisplayName(ExerciseType type) {
     return switch (type) {
-      ExerciseType.multipleChoice => 'Trắc nghiệm',
-      ExerciseType.fillBlank => 'Điền từ',
-      ExerciseType.matching => 'Nối cặp',
-      ExerciseType.ordering => 'Sắp xếp',
-      ExerciseType.translation => 'Dịch',
-      ExerciseType.listening => 'Nghe',
+      ExerciseType.multipleChoice => 'Multiple choice',
+      ExerciseType.fillBlank => 'Fill in the blank',
+      ExerciseType.matching => 'Matching',
+      ExerciseType.ordering => 'Ordering',
+      ExerciseType.translation => 'Translation',
+      ExerciseType.listening => 'Listening',
     };
   }
 

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Param, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  UseGuards,
+  Body,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -185,6 +193,26 @@ export class ExerciseSetController {
   })
   async regenerate(@Param('id') id: string, @CurrentUser() user: User) {
     return this.exerciseSetService.regenerate(id, user.id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id/custom')
+  @ApiOperation({
+    summary: 'Xóa bộ bài tập custom',
+    description:
+      'Soft-delete exercise set custom và các exercise thuộc set. Chỉ áp dụng khi set có isCustom=true.',
+  })
+  @ApiParam({ name: 'id', description: 'ID của exercise set' })
+  @ApiResponse({ status: 200, description: 'Đã xóa' })
+  @ApiResponse({
+    status: 400,
+    description: 'Set không phải custom',
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy exercise set' })
+  async deleteCustom(@Param('id') id: string) {
+    await this.exerciseSetService.deleteCustom(id);
+    return { success: true };
   }
 
   @ApiBearerAuth()

@@ -43,9 +43,9 @@ enum FocusArea {
 
   String get displayName {
     return switch (this) {
-      FocusArea.vocabulary => 'Từ vựng',
-      FocusArea.grammar => 'Ngữ pháp',
-      FocusArea.both => 'Cả hai',
+      FocusArea.vocabulary => 'Vocabulary',
+      FocusArea.grammar => 'Grammar',
+      FocusArea.both => 'Both',
     };
   }
 }
