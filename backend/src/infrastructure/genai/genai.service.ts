@@ -1,6 +1,8 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GoogleGenAI, Interactions } from '@google/genai';
+import { GoogleGenAI, Interactions, Type } from '@google/genai';
+
+export { Type };
 import * as fs from 'fs';
 import * as path from 'path';
 import {
@@ -20,6 +22,13 @@ interface AiChatRequest {
     description: string;
     parameters: Record<string, any>;
   }>;
+  model?: string;
+}
+
+interface AiChatStructuredRequest {
+  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
+  systemInstruction?: string;
+  responseSchema: Record<string, any>;
   model?: string;
 }
 
@@ -260,6 +269,32 @@ export class GenaiService implements IAiProvider, OnModuleInit {
     }
   }
 
+  async chatStructured(req: AiChatStructuredRequest): Promise<AiChatResponse> {
+    const model = req.model || this.config.models.chat;
+    const contents = this.mapMessagesToContents(req.messages);
+
+    return this.executeWithRetry(async (client) => {
+      const response = await client.models.generateContent({
+        model,
+        contents,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: req.responseSchema,
+          systemInstruction: req.systemInstruction,
+        },
+      });
+
+      return {
+        text: response.text ?? '',
+        usageMetadata: {
+          promptTokenCount: response.usageMetadata?.promptTokenCount,
+          candidatesTokenCount: response.usageMetadata?.candidatesTokenCount,
+          totalTokenCount: response.usageMetadata?.totalTokenCount,
+        },
+      };
+    });
+  }
+
   async embed(_texts: string[]): Promise<AiEmbedding[]> {
     throw new AiInvalidRequestException('embed() is not yet implemented');
   }
@@ -358,6 +393,15 @@ export class GenaiService implements IAiProvider, OnModuleInit {
           text: msg.content,
         },
       ],
+    }));
+  }
+
+  private mapMessagesToContents(
+    messages: AiChatRequest['messages'],
+  ): Array<{ role: string; parts: Array<{ text: string }> }> {
+    return messages.map((msg) => ({
+      role: msg.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: msg.content }],
     }));
   }
 

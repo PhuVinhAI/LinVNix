@@ -112,6 +112,21 @@ export class ExercisesController {
   }
 
   @Public()
+  @Get('set/:setId')
+  @ApiOperation({
+    summary: 'Lấy bài tập theo exercise set',
+    description: 'Lấy tất cả bài tập thuộc một exercise set',
+  })
+  @ApiParam({ name: 'setId', description: 'ID của exercise set' })
+  @ApiResponse({
+    status: 200,
+    description: 'Danh sách bài tập của set',
+  })
+  async findBySet(@Param('setId') setId: string) {
+    return this.exercisesService.findBySetId(setId);
+  }
+
+  @Public()
   @Get(':id')
   @ApiOperation({
     summary: 'Lấy chi tiết bài tập',

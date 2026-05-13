@@ -1,7 +1,10 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { z } from 'zod';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import {
+  GenaiService,
+  Type,
+} from '../../../infrastructure/genai/genai.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseTier, ExerciseType } from '../../../common/enums';
@@ -115,6 +118,182 @@ const GeneratedExerciseSchema = z.object({
 const GenerationResponseSchema = z.object({
   exercises: z.array(GeneratedExerciseSchema).min(1),
 });
+
+const EXERCISE_RESPONSE_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    exercises: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          exerciseType: {
+            type: Type.STRING,
+            description:
+              'One of: multiple_choice, fill_blank, matching, ordering, translation, listening',
+            nullable: false,
+          },
+          question: {
+            type: Type.STRING,
+            description: 'The question or instruction text',
+            nullable: false,
+          },
+          options: {
+            type: Type.OBJECT,
+            description:
+              'Exercise-type-specific options. Include only the fields relevant to the exerciseType.',
+            nullable: true,
+            properties: {
+              choices: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING, nullable: false },
+                description: 'multiple_choice: list of answer choice strings',
+                nullable: true,
+              },
+              blanks: {
+                type: Type.NUMBER,
+                description: 'fill_blank: number of blanks',
+                nullable: true,
+              },
+              acceptedAnswers: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.ARRAY,
+                  items: { type: Type.STRING, nullable: false },
+                },
+                description:
+                  'fill_blank: array of arrays of accepted answers per blank',
+                nullable: true,
+              },
+              pairs: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    left: {
+                      type: Type.STRING,
+                      description: 'Vietnamese side',
+                      nullable: false,
+                    },
+                    right: {
+                      type: Type.STRING,
+                      description: 'English side',
+                      nullable: false,
+                    },
+                  },
+                  required: ['left', 'right'],
+                },
+                description: 'matching: array of left-right pair objects',
+                nullable: true,
+              },
+              items: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING, nullable: false },
+                description: 'ordering: items in shuffled order',
+                nullable: true,
+              },
+              sourceLanguage: {
+                type: Type.STRING,
+                description: 'translation: source language code (vi or en)',
+                nullable: true,
+              },
+              targetLanguage: {
+                type: Type.STRING,
+                description: 'translation: target language code (vi or en)',
+                nullable: true,
+              },
+              acceptedTranslations: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING, nullable: false },
+                description: 'translation: list of acceptable translations',
+                nullable: true,
+              },
+              audioUrl: {
+                type: Type.STRING,
+                description: 'listening: audio URL (empty string if no audio)',
+                nullable: true,
+              },
+              transcriptType: {
+                type: Type.STRING,
+                description: 'listening: "exact" or "keyword"',
+                nullable: true,
+              },
+              keywords: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING, nullable: false },
+                description: 'listening: key words to listen for',
+                nullable: true,
+              },
+            },
+          },
+          correctAnswer: {
+            type: Type.OBJECT,
+            description:
+              'Exercise-type-specific answer. Include only the fields relevant to the exerciseType.',
+            nullable: false,
+            properties: {
+              selectedChoice: {
+                type: Type.STRING,
+                description: 'multiple_choice: the correct choice string',
+                nullable: true,
+              },
+              answers: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING, nullable: false },
+                description: 'fill_blank: correct answers for each blank',
+                nullable: true,
+              },
+              matches: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    left: {
+                      type: Type.STRING,
+                      description: 'Vietnamese side',
+                      nullable: false,
+                    },
+                    right: {
+                      type: Type.STRING,
+                      description: 'English side',
+                      nullable: false,
+                    },
+                  },
+                  required: ['left', 'right'],
+                },
+                description: 'matching: correct left-right match pairs',
+                nullable: true,
+              },
+              orderedItems: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING, nullable: false },
+                description: 'ordering: items in correct order',
+                nullable: true,
+              },
+              translation: {
+                type: Type.STRING,
+                description: 'translation: the correct translation',
+                nullable: true,
+              },
+              transcript: {
+                type: Type.STRING,
+                description: 'listening: full transcript text',
+                nullable: true,
+              },
+            },
+          },
+          explanation: {
+            type: Type.STRING,
+            description: 'Optional explanation of the answer',
+            nullable: true,
+          },
+        },
+        required: ['exerciseType', 'question', 'correctAnswer'],
+      },
+    },
+  },
+  required: ['exercises'],
+};
 
 @Injectable()
 export class ExerciseGenerationService {
@@ -272,9 +451,10 @@ export class ExerciseGenerationService {
     const prompt = this.buildPrompt(context, guidelines, tierLabel);
     const systemInstruction = this.buildSystemInstruction();
 
-    const response = await this.genaiService.chat({
+    const response = await this.genaiService.chatStructured({
       messages: [{ role: 'user', content: prompt }],
       systemInstruction,
+      responseSchema: EXERCISE_RESPONSE_SCHEMA,
     });
 
     const generated = this.parseResponse(response.text);
@@ -376,19 +556,6 @@ Each exercise must:
   - fill_blank / multiple_choice / ordering: Vietnamese questions
   - listening: Vietnamese audio (provide transcript, set audioUrl to empty string)
 
-Return ONLY valid JSON matching this schema — no markdown fences, no commentary:
-{
-  "exercises": [
-    {
-      "exerciseType": "matching" | "multiple_choice" | "fill_blank" | "ordering" | "translation" | "listening",
-      "question": "string — the question text",
-      "options": { ... exercise-type-specific options ... },
-      "correctAnswer": { ... exercise-type-specific answer ... },
-      "explanation": "optional string explaining the answer"
-    }
-  ]
-}
-
 Exercise-type option/answer shapes:
 - multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}
 - fill_blank: options={blanks:1,acceptedAnswers:[["answer1","answer2"]]}, correctAnswer={answers:["answer1"]}
@@ -401,22 +568,12 @@ Exercise-type option/answer shapes:
   parseResponse(
     responseText: string,
   ): z.infer<typeof GenerationResponseSchema> {
-    let text = responseText.trim();
-
-    if (text.startsWith('```')) {
-      const firstNewline = text.indexOf('\n');
-      const lastBacktick = text.lastIndexOf('```');
-      if (firstNewline > 0 && lastBacktick > firstNewline) {
-        text = text.slice(firstNewline + 1, lastBacktick).trim();
-      }
-    }
-
     let parsed: any;
     try {
-      parsed = JSON.parse(text);
+      parsed = JSON.parse(responseText.trim());
     } catch {
       this.logger.error('Failed to parse AI response as JSON');
-      this.logger.debug('Response text:', text.slice(0, 500));
+      this.logger.debug('Response text:', responseText.slice(0, 500));
       throw new BadRequestException(
         'AI response is not valid JSON. Please try again.',
       );
@@ -435,7 +592,7 @@ Exercise-type option/answer shapes:
   }
 
   private buildSystemInstruction(): string {
-    return `You are a Vietnamese language exercise generator. You MUST respond with ONLY valid JSON — no markdown code fences, no explanation text, no commentary. The JSON must conform to the schema provided in the user prompt. Generate exercises that are pedagogically sound, culturally appropriate, and test the specific vocabulary and grammar from the lesson context provided.`;
+    return `You are a Vietnamese language exercise generator. Generate exercises that are pedagogically sound, culturally appropriate, and test the specific vocabulary and grammar from the lesson context provided. Your response will be automatically structured as JSON — focus on the quality and variety of exercises.`;
   }
 
   private formatContext(context: LessonContext): string {

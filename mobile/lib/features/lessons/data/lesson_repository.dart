@@ -29,6 +29,18 @@ class LessonRepository {
     }
   }
 
+  Future<List<Exercise>> getExercisesBySet(String setId) async {
+    try {
+      final response =
+          await _dio.get<List<dynamic>>('/exercises/set/$setId');
+      return (response.data as List<dynamic>)
+          .map((e) => Exercise.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<ExerciseSubmissionResult> submitExerciseAnswer(
     String exerciseId,
     Map<String, dynamic> answer, {

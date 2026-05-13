@@ -80,7 +80,7 @@ describe('ExerciseGenerationService', () => {
 
   beforeEach(async () => {
     genaiService = {
-      chat: jest.fn(),
+      chatStructured: jest.fn(),
     } as any;
 
     exerciseSetsRepo = {
@@ -185,7 +185,7 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -312,7 +312,7 @@ describe('ExerciseGenerationService', () => {
       expect(prompt).not.toContain('DO NOT duplicate');
     });
 
-    it('includes JSON schema specification', () => {
+    it('includes exercise type shapes specification', () => {
       const guidelines = {
         questionCount: 8,
         preferredTypes: [ExerciseType.MATCHING],
@@ -325,27 +325,19 @@ describe('ExerciseGenerationService', () => {
         ExerciseTier.EASY,
       );
 
-      expect(prompt).toContain('"exercises"');
-      expect(prompt).toContain('exerciseType');
+      expect(prompt).toContain('multiple_choice');
+      expect(prompt).toContain('matching');
       expect(prompt).toContain('correctAnswer');
     });
   });
 
   describe('parseResponse', () => {
-    it('parses valid JSON response', () => {
+    it('parses clean JSON from structured output', () => {
       const result = service.parseResponse(validAiResponse);
 
       expect(result.exercises).toHaveLength(1);
       expect(result.exercises[0].exerciseType).toBe('matching');
       expect(result.exercises[0].question).toContain('Match');
-    });
-
-    it('strips markdown code fences before parsing', () => {
-      const fenced = '```json\n' + validAiResponse + '\n```';
-
-      const result = service.parseResponse(fenced);
-
-      expect(result.exercises).toHaveLength(1);
     });
 
     it('throws for non-JSON response', () => {
@@ -384,14 +376,6 @@ describe('ExerciseGenerationService', () => {
       expect(() => service.parseResponse(invalidType)).toThrow(
         BadRequestException,
       );
-    });
-
-    it('handles response with markdown fences and no language tag', () => {
-      const fenced = '```\n' + validAiResponse + '\n```';
-
-      const result = service.parseResponse(fenced);
-
-      expect(result.exercises).toHaveLength(1);
     });
   });
 
@@ -491,7 +475,7 @@ describe('ExerciseGenerationService', () => {
         orderIndex: 2,
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -514,7 +498,7 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
         orderIndex: 2,
       } as any);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -565,7 +549,7 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -587,7 +571,7 @@ describe('ExerciseGenerationService', () => {
         tier: ExerciseTier.HARD,
         lessonId: 'lesson-1',
       } as any);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -626,7 +610,7 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -648,7 +632,7 @@ describe('ExerciseGenerationService', () => {
         tier: ExerciseTier.EXPERT,
         lessonId: 'lesson-1',
       } as any);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -727,7 +711,7 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({
+      genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
         usageMetadata: {},
       });
@@ -746,7 +730,7 @@ describe('ExerciseGenerationService', () => {
       const result = await service.generateCustom('custom-set-1', 'user-1');
 
       expect(result).toHaveLength(1);
-      expect(genaiService.chat).toHaveBeenCalledWith(
+      expect(genaiService.chatStructured).toHaveBeenCalledWith(
         expect.objectContaining({
           messages: [
             expect.objectContaining({

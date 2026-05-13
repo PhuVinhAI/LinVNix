@@ -72,7 +72,11 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                 isGenerating: _generatingTier == tier,
                 generationError: _generatingTier == tier ? _generationError : null,
                 onTap: _canPlayTier(summary, tier)
-                    ? () => context.push('/lessons/${widget.lessonId}/exercises/play/${tier.value}')
+                    ? () {
+                        final progress = summary.progressForTier(tier);
+                        final setId = progress?.setId ?? '';
+                        context.push('/lessons/${widget.lessonId}/exercises/play/${tier.value}/$setId');
+                      }
                     : null,
                 onGenerate: summary.isTierUnlocked(tier) && tier != ExerciseTier.basic
                     ? () => _handleGenerate(tier)

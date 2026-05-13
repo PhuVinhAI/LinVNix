@@ -14,8 +14,18 @@ jest.mock('@google/genai', () => ({
     interactions: {
       create: jest.fn(),
     },
+    models: {
+      generateContent: jest.fn(),
+    },
   })),
   Interactions: {},
+  Type: {
+    STRING: 'STRING',
+    NUMBER: 'NUMBER',
+    BOOLEAN: 'BOOLEAN',
+    ARRAY: 'ARRAY',
+    OBJECT: 'OBJECT',
+  },
 }));
 
 jest.mock('fs', () => ({
@@ -68,6 +78,9 @@ describe('GenaiService', () => {
     mockClient = {
       interactions: {
         create: jest.fn(),
+      },
+      models: {
+        generateContent: jest.fn(),
       },
     };
     mockKeyPool = createMockKeyPool(mockClient);
@@ -183,6 +196,104 @@ describe('GenaiService', () => {
       expect(mockClient.interactions.create).toHaveBeenCalledWith(
         expect.objectContaining({ stream: true }),
       );
+    });
+  });
+
+  describe('chatStructured()', () => {
+    const testSchema = {
+      type: 'OBJECT',
+      properties: {
+        name: { type: 'STRING', nullable: false },
+      },
+      required: ['name'],
+    };
+
+    it('calls models.generateContent with responseMimeType and responseSchema', async () => {
+      mockClient.models.generateContent.mockResolvedValue({
+        text: '{"name":"Alice"}',
+        usageMetadata: {
+          promptTokenCount: 5,
+          candidatesTokenCount: 3,
+          totalTokenCount: 8,
+        },
+      });
+
+      const result = await service.chatStructured({
+        messages: [{ role: 'user', content: 'Give me a name' }],
+        responseSchema: testSchema,
+      });
+
+      expect(mockClient.models.generateContent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          model: 'gemini-2.5-flash',
+          contents: [{ role: 'user', parts: [{ text: 'Give me a name' }] }],
+          config: expect.objectContaining({
+            responseMimeType: 'application/json',
+            responseSchema: testSchema,
+          }),
+        }),
+      );
+      expect(result.text).toBe('{"name":"Alice"}');
+      expect(result.usageMetadata.totalTokenCount).toBe(8);
+    });
+
+    it('passes system instruction via config', async () => {
+      mockClient.models.generateContent.mockResolvedValue({
+        text: '{"name":"Bob"}',
+        usageMetadata: {},
+      });
+
+      await service.chatStructured({
+        messages: [{ role: 'user', content: 'test' }],
+        responseSchema: testSchema,
+        systemInstruction: 'You are a namer',
+      });
+
+      expect(mockClient.models.generateContent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          config: expect.objectContaining({
+            systemInstruction: 'You are a namer',
+          }),
+        }),
+      );
+    });
+
+    it('uses custom model when specified', async () => {
+      mockClient.models.generateContent.mockResolvedValue({
+        text: '{"name":"X"}',
+        usageMetadata: {},
+      });
+
+      await service.chatStructured({
+        messages: [{ role: 'user', content: 'test' }],
+        responseSchema: testSchema,
+        model: 'gemini-2.0-flash',
+      });
+
+      expect(mockClient.models.generateContent).toHaveBeenCalledWith(
+        expect.objectContaining({ model: 'gemini-2.0-flash' }),
+      );
+    });
+
+    it('retries on 429 error', async () => {
+      const error = Object.assign(new Error('Rate limited'), {
+        status: 429,
+        statusCode: 429,
+      });
+      mockClient.models.generateContent
+        .mockRejectedValueOnce(error)
+        .mockResolvedValueOnce({
+          text: '{"name":"Retry"}',
+          usageMetadata: {},
+        });
+
+      const result = await service.chatStructured({
+        messages: [{ role: 'user', content: 'test' }],
+        responseSchema: testSchema,
+      });
+
+      expect(mockClient.models.generateContent).toHaveBeenCalledTimes(2);
+      expect(result.text).toBe('{"name":"Retry"}');
     });
   });
 

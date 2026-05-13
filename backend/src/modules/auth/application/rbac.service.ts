@@ -268,6 +268,33 @@ export class RbacService implements OnModuleInit {
         category: 'content',
       },
 
+      // AI permissions
+      {
+        name: PermissionEnum.AI_CHAT,
+        description: 'Chat với AI',
+        category: 'ai',
+      },
+      {
+        name: PermissionEnum.AI_CHAT_STREAM,
+        description: 'Chat với AI (streaming)',
+        category: 'ai',
+      },
+      {
+        name: PermissionEnum.AI_GENERATE_EXERCISE,
+        description: 'Sinh bài tập bằng AI',
+        category: 'ai',
+      },
+      {
+        name: PermissionEnum.AI_CORRECT_GRAMMAR,
+        description: 'Sửa lỗi ngữ pháp bằng AI',
+        category: 'ai',
+      },
+      {
+        name: PermissionEnum.AI_VIEW_CONVERSATIONS,
+        description: 'Xem lịch sử chat AI',
+        category: 'ai',
+      },
+
       // System permissions
       {
         name: PermissionEnum.SYSTEM_SETTINGS,
@@ -282,6 +309,11 @@ export class RbacService implements OnModuleInit {
       {
         name: PermissionEnum.CACHE_MANAGE,
         description: 'Quản lý cache',
+        category: 'system',
+      },
+      {
+        name: PermissionEnum.ADMIN_ACCESS,
+        description: 'Truy cập admin panel',
         category: 'system',
       },
     ];
@@ -316,6 +348,11 @@ export class RbacService implements OnModuleInit {
       PermissionEnum.PROGRESS_READ,
       PermissionEnum.PROGRESS_UPDATE,
       PermissionEnum.CONTENT_READ,
+      PermissionEnum.AI_CHAT,
+      PermissionEnum.AI_CHAT_STREAM,
+      PermissionEnum.AI_GENERATE_EXERCISE,
+      PermissionEnum.AI_CORRECT_GRAMMAR,
+      PermissionEnum.AI_VIEW_CONVERSATIONS,
     ]
       .map((p) => permissionMap.get(p))
       .filter((p): p is Permission => p !== undefined);

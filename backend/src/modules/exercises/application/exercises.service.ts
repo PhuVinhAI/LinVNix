@@ -50,6 +50,10 @@ export class ExercisesService implements ExerciseStatsPort {
     return this.exercisesRepository.findByLessonId(lessonId);
   }
 
+  async findBySetId(setId: string): Promise<Exercise[]> {
+    return this.exercisesRepository.findBySetId(setId);
+  }
+
   async findById(id: string): Promise<Exercise> {
     const exercise = await this.exercisesRepository.findById(id);
     if (!exercise) {
