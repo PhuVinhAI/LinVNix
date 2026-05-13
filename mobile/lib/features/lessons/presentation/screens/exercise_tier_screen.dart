@@ -33,17 +33,20 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
       body: tierAsync.when(
         loading: () => const Center(child: AppSpinner()),
         error: (e, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Failed to load exercises', style: theme.textTheme.bodyLarge),
-              const SizedBox(height: 8),
-              AppButton(
-                label: 'Retry',
-                variant: AppButtonVariant.primary,
-                onPressed: () => ref.invalidate(exerciseSetsProvider(widget.lessonId)),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Failed to load exercises', style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                AppButton(
+                  label: 'Retry',
+                  variant: AppButtonVariant.primary,
+                  onPressed: () => ref.invalidate(exerciseSetsProvider(widget.lessonId)),
+                ),
+              ],
+            ),
           ),
         ),
         data: (summary) {
@@ -69,7 +72,7 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                 isGenerating: _generatingTier == tier,
                 generationError: _generatingTier == tier ? _generationError : null,
                 onTap: _canPlayTier(summary, tier)
-                    ? () => context.go('/lessons/${widget.lessonId}/exercises/play/${tier.value}')
+                    ? () => context.push('/lessons/${widget.lessonId}/exercises/play/${tier.value}')
                     : null,
                 onGenerate: summary.isTierUnlocked(tier) && tier != ExerciseTier.basic
                     ? () => _handleGenerate(tier)
@@ -88,7 +91,7 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                 isCreating: _isCreatingCustom,
                 error: _customError,
                 onCreate: () => _showCustomConfigForm(context, summary),
-                onPlaySet: (setId) => context.go(
+                onPlaySet: (setId) => context.push(
                   '/lessons/${widget.lessonId}/exercises/play/custom/$setId',
                 ),
                 onRegenerate: (setId) => _handleRegenerateCustom(setId),
@@ -102,6 +105,7 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
 
   bool _canPlayTier(LessonTierSummary summary, ExerciseTier tier) {
     if (!summary.isTierUnlocked(tier)) return false;
+    if (tier == ExerciseTier.basic) return true;
     final progress = summary.progressForTier(tier);
     if (progress == null) return false;
     return progress.totalExercises > 0;
@@ -325,7 +329,7 @@ class _CustomSetCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     progress.isCompleted
-                        ? '✓ ${progress.percentCorrect.round()}%'
+                        ? '${progress.percentCorrect.round()}%'
                         : progress.isInProgress
                             ? '${progress.percentComplete.round()}%'
                             : progress.totalExercises > 0
@@ -589,12 +593,12 @@ class _TierCardState extends State<_TierCard> with SingleTickerProviderStateMixi
   }
 
   String _statusText() {
-    if (!widget.isUnlocked) return '🔒';
+    if (!widget.isUnlocked) return 'Locked';
     if (widget.isGenerating) return 'Generating...';
     if (widget.generationError != null) return 'Generation failed';
     if (_needsGeneration) return 'Ready to generate';
-    if (widget.progress == null) return '🔒';
-    if (widget.progress!.isCompleted) return '✓';
+    if (widget.progress == null) return 'Locked';
+    if (widget.progress!.isCompleted) return 'Completed';
     if (widget.progress!.isInProgress) return '${widget.progress!.percentComplete.round()}%';
     return '0%';
   }
@@ -721,9 +725,10 @@ class _TierCardState extends State<_TierCard> with SingleTickerProviderStateMixi
                     scale: _scaleAnimation.value,
                     child: Opacity(
                       opacity: _fadeInAnimation.value,
-                      child: const Text(
-                        '🎉',
-                        style: TextStyle(fontSize: 32),
+                      child: Icon(
+                        Icons.celebration,
+                        color: c.primary,
+                        size: 32,
                       ),
                     ),
                   ),

@@ -358,20 +358,23 @@ class _CourseDetailError extends StatelessWidget {
     return Scaffold(
       appBar: AppAppBar(title: const Text('Course')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
-            const SizedBox(height: AppSpacing.lg),
-            const Text('Failed to load course'),
-            const SizedBox(height: AppSpacing.sm),
-            AppButton(
-              variant: AppButtonVariant.primary,
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
-              label: 'Retry',
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 48),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
+              const SizedBox(height: AppSpacing.lg),
+              const Text('Failed to load course', textAlign: TextAlign.center),
+              const SizedBox(height: AppSpacing.sm),
+              AppButton(
+                variant: AppButtonVariant.primary,
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh),
+                label: 'Retry',
+              ),
+            ],
+          ),
         ),
       ),
     );

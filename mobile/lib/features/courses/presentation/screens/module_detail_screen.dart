@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -154,22 +155,71 @@ class _ModuleDetailContent extends StatelessWidget {
 
 class _LessonCard extends StatelessWidget {
   const _LessonCard({required this.lesson, this.progress, this.tierSummary});
+
   final Lesson lesson;
   final UserProgress? progress;
   final TierSummary? tierSummary;
+
+  Color _tierColor(AppColors c, ExerciseTier tier) {
+    return switch (tier) {
+      ExerciseTier.basic => c.primary,
+      ExerciseTier.easy => c.success,
+      ExerciseTier.medium => c.warning,
+      ExerciseTier.hard => c.error,
+      ExerciseTier.expert => c.secondary,
+    };
+  }
+
+  IconData _tierIcon(ExerciseTier tier) {
+    return switch (tier) {
+      ExerciseTier.basic => Icons.looks_one,
+      ExerciseTier.easy => Icons.looks_two,
+      ExerciseTier.medium => Icons.looks_3,
+      ExerciseTier.hard => Icons.looks_4,
+      ExerciseTier.expert => Icons.looks_5,
+    };
+  }
+
+  Color _statusColor(String? status, AppColors c) {
+    return switch (status) {
+      'completed' => c.success,
+      'in_progress' => c.warning,
+      _ => c.mutedForeground,
+    };
+  }
+
+  IconData _statusIcon(String? status) {
+    return switch (status) {
+      'completed' => Icons.check_circle,
+      'in_progress' => Icons.play_circle,
+      _ => Icons.radio_button_unchecked,
+    };
+  }
+
+  String _statusLabel(String? status) {
+    return switch (status) {
+      'completed' => 'Completed',
+      'in_progress' => 'In Progress',
+      _ => 'Not Started',
+    };
+  }
+
+  String _formatDuration(int minutes) {
+    if (minutes < 60) return '${minutes}m';
+    final h = minutes ~/ 60;
+    final m = minutes % 60;
+    return m > 0 ? '${h}h ${m}m' : '${h}h';
+  }
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final theme = Theme.of(context);
-    final statusColor = _getStatusColor(progress?.status, c);
-    final tierBorderColor = tierSummary != null
-        ? _tierColor(tierSummary!.currentTier, c)
-        : null;
+    final statusColor = _statusColor(progress?.status, c);
+    final currentTier = tierSummary?.currentTier;
 
     return AppCard(
       variant: AppCardVariant.outlined,
-      borderColor: tierBorderColor,
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
       padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
       child: AppListItem(
@@ -216,19 +266,40 @@ class _LessonCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            if (tierSummary != null) ...[
-              const SizedBox(height: 4),
-              _TierTimeline(tierSummary: tierSummary!),
-            ],
-            const SizedBox(height: AppSpacing.xs),
+            const SizedBox(height: 6),
             Row(
               children: [
-                if (lesson.estimatedDuration != null) ...[
-                  Icon(
-                    Icons.access_time,
-                    size: 12,
-                    color: c.mutedForeground,
+                if (currentTier != null) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: _tierColor(c, currentTier).withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+                      border: Border.all(
+                        color: _tierColor(c, currentTier).withValues(alpha: 0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(_tierIcon(currentTier), size: 11, color: _tierColor(c, currentTier)),
+                        const SizedBox(width: 3),
+                        Text(
+                          currentTier.displayName,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: _tierColor(c, currentTier),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: AppSpacing.sm),
+                ],
+                if (lesson.estimatedDuration != null) ...[
+                  Icon(Icons.access_time, size: 12, color: c.mutedForeground),
                   const SizedBox(width: AppSpacing.xs),
                   Text(
                     _formatDuration(lesson.estimatedDuration!),
@@ -239,14 +310,10 @@ class _LessonCard extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.md),
                 ],
-                Icon(
-                  _getStatusIcon(progress?.status),
-                  size: 14,
-                  color: statusColor,
-                ),
+                Icon(_statusIcon(progress?.status), size: 14, color: statusColor),
                 const SizedBox(width: AppSpacing.xs),
                 Text(
-                  _getStatusLabel(progress?.status),
+                  _statusLabel(progress?.status),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: statusColor,
                     fontSize: 11,
@@ -258,83 +325,6 @@ class _LessonCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Color _tierColor(ExerciseTier tier, AppColors c) {
-    return switch (tier) {
-      ExerciseTier.basic => c.primary,
-      ExerciseTier.easy => const Color(0xFF4CAF50),
-      ExerciseTier.medium => const Color(0xFFFF9800),
-      ExerciseTier.hard => const Color(0xFFF44336),
-      ExerciseTier.expert => const Color(0xFF9C27B0),
-    };
-  }
-
-  String _formatDuration(int minutes) {
-    if (minutes < 60) return '${minutes}m';
-    final h = minutes ~/ 60;
-    final m = minutes % 60;
-    return m > 0 ? '${h}h ${m}m' : '${h}h';
-  }
-
-  Color _getStatusColor(String? status, AppColors c) {
-    return switch (status) {
-      'completed' => c.success,
-      'in_progress' => c.warning,
-      _ => c.mutedForeground,
-    };
-  }
-
-  IconData _getStatusIcon(String? status) {
-    return switch (status) {
-      'completed' => Icons.check_circle,
-      'in_progress' => Icons.play_circle,
-      _ => Icons.radio_button_unchecked,
-    };
-  }
-
-  String _getStatusLabel(String? status) {
-    return switch (status) {
-      'completed' => 'Completed',
-      'in_progress' => 'In Progress',
-      _ => 'Not Started',
-    };
-  }
-}
-
-class _TierTimeline extends StatelessWidget {
-  const _TierTimeline({required this.tierSummary});
-  final TierSummary tierSummary;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final parts = <String>[];
-
-    for (final item in tierSummary.tiers) {
-      switch (item.status) {
-        case TierStatus.completed:
-          parts.add('${item.tier.displayName} ✓');
-        case TierStatus.inProgress:
-          if (item.percentCorrect > 0) {
-            parts.add('${item.tier.displayName} ${item.percentCorrect.round()}%');
-          } else {
-            parts.add(item.tier.displayName);
-          }
-        case TierStatus.locked:
-          parts.add('🔒');
-      }
-    }
-
-    return Text(
-      parts.join(' · '),
-      style: theme.textTheme.bodySmall?.copyWith(
-        fontSize: 10,
-        color: theme.colorScheme.outline,
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
     );
   }
 }
@@ -504,20 +494,23 @@ class _ModuleDetailError extends StatelessWidget {
     return Scaffold(
       appBar: AppAppBar(title: const Text('Module')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
-            const SizedBox(height: AppSpacing.lg),
-            const Text('Failed to load module'),
-            const SizedBox(height: AppSpacing.sm),
-            AppButton(
-              variant: AppButtonVariant.primary,
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
-              label: 'Retry',
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 48),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
+              const SizedBox(height: AppSpacing.lg),
+              const Text('Failed to load module', textAlign: TextAlign.center),
+              const SizedBox(height: AppSpacing.sm),
+              AppButton(
+                variant: AppButtonVariant.primary,
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh),
+                label: 'Retry',
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -518,22 +518,28 @@ class _SelectableCard extends StatelessWidget {
             )
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  label,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isSelected ? c.primary : c.foreground,
+                FittedBox(
+                  child: Text(
+                    label,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isSelected ? c.primary : c.foreground,
+                    ),
                   ),
                 ),
                 if (subtitle != null) ...[
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    subtitle!,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: isSelected ? c.primary : c.mutedForeground,
+                  const SizedBox(height: 2),
+                  FittedBox(
+                    child: Text(
+                      subtitle!,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontSize: AppTypography.caption,
+                        color: isSelected ? c.primary : c.mutedForeground,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ],
               ],

@@ -5,11 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
-import '../../data/lesson_repository.dart';
 import '../../domain/lesson_models.dart';
-import '../../../../core/providers/providers.dart';
 import '../../../courses/data/courses_providers.dart';
-import '../../../home/data/home_providers.dart';
 import '../widgets/content_widgets.dart';
 import '../widgets/vocabulary_step.dart';
 import '../widgets/grammar_step.dart';
@@ -126,29 +123,33 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   }
 
   void _navigateToExerciseTiers() {
-    context.go('/lessons/${widget.lessonId}/exercises');
+    context.push('/lessons/${widget.lessonId}/exercises');
   }
 
   void _showExercisePrompt() {
     if (_promptShown) return;
     _promptShown = true;
 
+    ref.read(lessonRepositoryProvider).markContentReviewed(widget.lessonId);
+
     AppDialog.show(
       context,
       barrierDismissible: false,
       builder: (ctx) => AppDialog(
-        title: 'Bắt đầu bài tập?',
-        content: 'Bạn đã xem xong nội dung bài học. Bạn có muốn làm bài tập không?',
+        title: 'Start exercises?',
+        content:
+            'You have finished the lesson content. Would you like to practice with exercises?',
         actions: [
           AppDialogAction(
-            label: 'Không',
+            label: 'Not now',
             onPressed: () {
               Navigator.of(ctx).pop();
-              _completeLesson();
+              ref.invalidate(userProgressProvider);
+              if (mounted) context.pop();
             },
           ),
           AppDialogAction(
-            label: 'Có',
+            label: 'Let\'s practice',
             isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
@@ -343,25 +344,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     }
   }
 
-  Future<void> _completeLesson() async {
-    try {
-      final repo = ref.read(lessonRepositoryProvider);
-      await repo.completeLesson(widget.lessonId);
-
-      ref.invalidate(userProgressProvider);
-      ref.invalidate(continueLearningProvider);
-      ref.invalidate(lessonProgressProvider(widget.lessonId));
-
-      if (mounted) {
-        context.go('/');
-      }
-    } catch (e) {
-      if (mounted) {
-        AppToast.show(context, message: 'Error completing lesson: $e', type: AppToastType.error);
-      }
-    }
-  }
-
   String _contentLabel(String contentType) {
     return switch (contentType) {
       'text' => 'Reading',
@@ -484,20 +466,23 @@ class _LessonError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
-          const SizedBox(height: 16),
-          const Text('Failed to load lesson'),
-          const SizedBox(height: 8),
-          AppButton(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh),
-            label: 'Retry',
-            variant: AppButtonVariant.primary,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
+            const SizedBox(height: 16),
+            const Text('Failed to load lesson', textAlign: TextAlign.center),
+            const SizedBox(height: 8),
+            AppButton(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh),
+              label: 'Retry',
+              variant: AppButtonVariant.primary,
+            ),
+          ],
+        ),
       ),
     );
   }

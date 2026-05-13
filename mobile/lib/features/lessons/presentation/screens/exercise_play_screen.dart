@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../courses/data/courses_providers.dart';
 import '../../data/lesson_providers.dart';
 import '../../data/lesson_repository.dart';
 import '../../domain/exercise_models.dart';
@@ -120,7 +121,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       for (final s in response.sets) {
         if (s.tier == tier) {
           return ExerciseSetModel(
-            id: s.tier.value,
+            id: s.tier?.value ?? '',
             lessonId: lessonId,
             tier: s.tier,
             title: s.title,
@@ -222,7 +223,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
               color: nextTier != null ? Colors.amber : c.primary,
             ),
             const SizedBox(width: 8),
-            Text(nextTier != null ? '🎉 Next Tier Unlocked!' : 'Exercise Complete!'),
+            Text(nextTier != null ? 'Next Tier Unlocked!' : 'Exercise Complete!'),
           ],
         ),
         contentWidget: Column(
@@ -266,7 +267,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Row(
                     children: [
-                      Icon(Icons.close, size: 16, color: c.destructive),
+                      Icon(Icons.close, size: 16, color: c.error),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -287,10 +288,16 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
           AppDialogAction(
             label: 'Return to tier selector',
             isPrimary: true,
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(ctx).pop();
+              try {
+                final repo = ref.read(lessonRepositoryProvider);
+                await repo.markContentReviewed(widget.lessonId);
+                await repo.completeLesson(widget.lessonId);
+              } catch (_) {}
               ref.invalidate(exerciseSetsProvider(widget.lessonId));
-              context.go('/lessons/${widget.lessonId}/exercises');
+              ref.invalidate(userProgressProvider);
+              if (mounted) context.pop();
             },
           ),
         ],
@@ -314,17 +321,20 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       return Scaffold(
         appBar: const AppAppBar(title: Text('Exercise')),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(_error!, style: theme.textTheme.bodyLarge),
-              const SizedBox(height: 16),
-              AppButton(
-                label: 'Go back',
-                variant: AppButtonVariant.primary,
-                onPressed: () => context.go('/lessons/${widget.lessonId}/exercises'),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_error!, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                AppButton(
+                  label: 'Go back',
+                  variant: AppButtonVariant.primary,
+                  onPressed: () => context.pop(),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -334,17 +344,20 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       return Scaffold(
         appBar: const AppAppBar(title: Text('Exercise')),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('No exercises available for this tier'),
-              const SizedBox(height: 16),
-              AppButton(
-                label: 'Go back',
-                variant: AppButtonVariant.primary,
-                onPressed: () => context.go('/lessons/${widget.lessonId}/exercises'),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('No exercises available for this tier', textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                AppButton(
+                  label: 'Go back',
+                  variant: AppButtonVariant.primary,
+                  onPressed: () => context.pop(),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -394,12 +407,12 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
-                    Icon(Icons.error_outline, color: c.destructive, size: 20),
+                    Icon(Icons.error_outline, color: c.error, size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         _submitError!,
-                        style: theme.textTheme.bodySmall?.copyWith(color: c.destructive),
+                        style: theme.textTheme.bodySmall?.copyWith(color: c.error),
                       ),
                     ),
                   ],
@@ -455,7 +468,6 @@ class QuestionHeader extends StatelessWidget {
       children: [
         AppChip(
           label: exercise.exerciseType.name,
-          variant: AppChipVariant.outline,
         ),
         const SizedBox(height: 12),
         Text(
@@ -497,7 +509,7 @@ class ExplanationPanel extends StatelessWidget {
             children: [
               Icon(
                 isCorrect ? Icons.check_circle : Icons.cancel,
-                color: isCorrect ? Colors.green : c.destructive,
+                color: isCorrect ? Colors.green : c.error,
                 size: 24,
               ),
               const SizedBox(width: 8),
@@ -505,7 +517,7 @@ class ExplanationPanel extends StatelessWidget {
                 isCorrect ? 'Correct!' : 'Incorrect',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: isCorrect ? Colors.green : c.destructive,
+                  color: isCorrect ? Colors.green : c.error,
                 ),
               ),
               const Spacer(),

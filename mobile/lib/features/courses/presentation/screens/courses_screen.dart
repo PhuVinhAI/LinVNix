@@ -264,30 +264,34 @@ class _CoursesError extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Semantics(
-            label: 'Error loading courses',
-            child: Icon(Icons.error_outline, size: 64, color: c.error),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          Text(
-            'Failed to load courses',
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Semantics(
-            label: 'Retry loading courses',
-            button: true,
-            child: AppButton(
-              variant: AppButtonVariant.primary,
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
-              label: 'Retry',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Semantics(
+              label: 'Error loading courses',
+              child: Icon(Icons.error_outline, size: 64, color: c.error),
             ),
-          ),
-        ],
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              'Failed to load courses',
+              style: theme.textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Semantics(
+              label: 'Retry loading courses',
+              button: true,
+              child: AppButton(
+                variant: AppButtonVariant.primary,
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh),
+                label: 'Retry',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
