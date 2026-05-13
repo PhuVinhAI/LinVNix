@@ -14,10 +14,12 @@ class ExercisePlayScreen extends ConsumerStatefulWidget {
     super.key,
     required this.lessonId,
     required this.tierValue,
+    this.customSetId,
   });
 
   final String lessonId;
   final String tierValue;
+  final String? customSetId;
 
   @override
   ConsumerState<ExercisePlayScreen> createState() => _ExercisePlayScreenState();
@@ -48,6 +50,23 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   Future<void> _loadExercises() async {
     try {
       final repo = ref.read(lessonRepositoryProvider);
+
+      if (widget.customSetId != null) {
+        final setModel = await repo.getExerciseSet(widget.customSetId!);
+        final exercises = setModel != null
+            ? await repo.getExercisesByLesson(widget.lessonId)
+            : <Exercise>[];
+
+        if (!mounted) return;
+        setState(() {
+          _exercises = exercises;
+          _exerciseSet = setModel;
+          _loading = false;
+        });
+        _loadCurrentAnswer();
+        return;
+      }
+
       final tierSummary = await repo.getExerciseSetsByLesson(widget.lessonId);
       final tier = ExerciseTier.fromString(widget.tierValue);
       final progress = tierSummary.progressForTier(tier);

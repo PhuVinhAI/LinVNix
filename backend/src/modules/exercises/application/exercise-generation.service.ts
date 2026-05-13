@@ -145,6 +145,10 @@ export class ExerciseGenerationService {
       );
     }
 
+    if (set.isCustom) {
+      return this.doGenerate(set, userId);
+    }
+
     return this.doGenerate(set, userId);
   }
 
@@ -196,15 +200,47 @@ export class ExerciseGenerationService {
     await this.exerciseSetsRepository.softDelete(setId);
     await this.exercisesRepository.softDeleteBySetId(setId);
 
-    const newSet = await this.exerciseSetsRepository.create({
+    const newSetData: Partial<
+      import('../domain/exercise-set.entity').ExerciseSet
+    > = {
       lessonId: set.lessonId,
-      tier: set.tier,
       isAIGenerated: false,
-      title: `AI Generated - ${set.tier}`,
+      title: set.isCustom ? 'Custom Practice' : `AI Generated - ${set.tier}`,
       orderIndex: set.orderIndex,
-    });
+    };
+
+    if (set.isCustom) {
+      (newSetData as any).isCustom = true;
+      (newSetData as any).customConfig = set.customConfig;
+      (newSetData as any).tier = null;
+    } else {
+      (newSetData as any).tier = set.tier;
+    }
+
+    const newSet = await this.exerciseSetsRepository.create(newSetData);
 
     return this.doGenerate(newSet, userId);
+  }
+
+  async generateCustom(setId: string, userId: string): Promise<Exercise[]> {
+    const set = await this.exerciseSetsRepository.findById(setId);
+    if (!set) {
+      throw new BadRequestException(`ExerciseSet ${setId} not found`);
+    }
+    if (!set.isCustom) {
+      throw new BadRequestException(
+        'Use generate() for tier-based sets, not generateCustom()',
+      );
+    }
+
+    const existing = await this.exercisesRepository.findBySetId(setId);
+    if (existing.length > 0) {
+      throw new BadRequestException(
+        'Set already has exercises. Use regenerate instead.',
+      );
+    }
+
+    return this.doGenerate(set, userId);
   }
 
   private async doGenerate(
@@ -212,8 +248,28 @@ export class ExerciseGenerationService {
     userId: string,
   ): Promise<Exercise[]> {
     const context = await this.loadLessonContext(set.lessonId);
-    const guidelines = TIER_GUIDELINES[set.tier];
-    const prompt = this.buildPrompt(context, guidelines, set.tier);
+
+    let guidelines: {
+      questionCount: number;
+      preferredTypes: ExerciseType[];
+      description: string;
+    };
+    let tierLabel: string;
+
+    if (set.isCustom && set.customConfig) {
+      const config = set.customConfig;
+      tierLabel = `Custom (${config.focusArea})`;
+      guidelines = {
+        questionCount: config.questionCount,
+        preferredTypes: config.exerciseTypes,
+        description: this.getFocusAreaDescription(config.focusArea),
+      };
+    } else {
+      tierLabel = set.tier ?? 'Custom';
+      guidelines = TIER_GUIDELINES[set.tier as ExerciseTier];
+    }
+
+    const prompt = this.buildPrompt(context, guidelines, tierLabel);
     const systemInstruction = this.buildSystemInstruction();
 
     const response = await this.genaiService.chat({
@@ -232,7 +288,7 @@ export class ExerciseGenerationService {
     });
 
     this.logger.log(
-      `Generated ${exercises.length} exercises for set ${set.id} (tier: ${set.tier})`,
+      `Generated ${exercises.length} exercises for set ${set.id} (tier: ${tierLabel})`,
     );
 
     return exercises;
@@ -298,7 +354,7 @@ export class ExerciseGenerationService {
   buildPrompt(
     context: LessonContext,
     guidelines: (typeof TIER_GUIDELINES)[ExerciseTier],
-    tier: ExerciseTier,
+    tier: string,
   ): string {
     const contextSection = this.formatContext(context);
     const avoidSection = this.formatBasicExercises(context.basicExercises);
@@ -458,7 +514,8 @@ Exercise-type option/answer shapes:
     return exercises;
   }
 
-  private tierToDifficulty(tier: ExerciseTier): number {
+  private tierToDifficulty(tier: ExerciseTier | null): number {
+    if (!tier) return 3;
     switch (tier) {
       case ExerciseTier.BASIC:
         return 1;
@@ -472,6 +529,18 @@ Exercise-type option/answer shapes:
         return 5;
       default:
         return 1;
+    }
+  }
+
+  private getFocusAreaDescription(focusArea: string): string {
+    switch (focusArea) {
+      case 'vocabulary':
+        return 'Focus on vocabulary — emphasize matching, multiple choice, and translation exercises that test word recognition and recall';
+      case 'grammar':
+        return 'Focus on grammar — emphasize fill-blank, ordering, and translation exercises that test grammar structure and sentence construction';
+      case 'both':
+      default:
+        return 'Mix of vocabulary and grammar — use a balanced variety of exercise types covering both word knowledge and grammar structure';
     }
   }
 

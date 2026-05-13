@@ -1,10 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { TierProgressService } from './tier-progress.service';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
 import { ExerciseGenerationService } from './exercise-generation.service';
 import { ExerciseTier } from '../../../common/enums';
+import {
+  ExerciseSet,
+  type CustomSetConfig,
+} from '../domain/exercise-set.entity';
 
 export interface ResumeInfo {
   canResume: boolean;
@@ -83,6 +91,44 @@ export class ExerciseSetService {
       tier,
       userId,
     );
+  }
+
+  async createCustom(
+    lessonId: string,
+    config: CustomSetConfig,
+    userId: string,
+  ) {
+    if (!ExerciseSet.isValidCustomConfig(config)) {
+      throw new BadRequestException('Invalid custom set config');
+    }
+
+    const summary = await this.tierProgressService.getLessonTierSummary(
+      lessonId,
+      userId,
+    );
+
+    if (!summary.customPracticeUnlocked) {
+      throw new BadRequestException(
+        'Custom practice is locked. Complete basic tier first.',
+      );
+    }
+
+    const set = await this.exerciseSetsRepository.create({
+      lessonId,
+      tier: null,
+      isCustom: true,
+      customConfig: config,
+      isAIGenerated: false,
+      title: 'Custom Practice',
+      orderIndex: 100,
+    });
+
+    const exercises = await this.exerciseGenerationService.generateCustom(
+      set.id,
+      userId,
+    );
+
+    return { set, exercises };
   }
 
   async getResumeInfo(setId: string, userId: string): Promise<ResumeInfo> {

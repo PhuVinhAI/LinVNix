@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Param, UseGuards, Body } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -13,11 +13,44 @@ import { CurrentUser } from '../../../common/decorators';
 import { RequirePermissions } from '../../../common/decorators';
 import { Permission } from '../../../common/enums';
 import { User } from '../../users/domain/user.entity';
+import { CreateCustomSetDto } from '../dto/create-custom-set.dto';
 
 @ApiTags('Exercise Sets')
 @Controller('exercise-sets')
 export class ExerciseSetController {
   constructor(private readonly exerciseSetService: ExerciseSetService) {}
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions(Permission.AI_GENERATE_EXERCISE)
+  @Post('custom')
+  @ApiOperation({
+    summary: 'Create custom practice set with AI generation',
+    description:
+      'Create a custom exercise set with user-defined config (questionCount, exerciseTypes, focusArea). Requires AI_GENERATE_EXERCISE permission. Custom practice unlocks after completing basic tier.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Custom exercise set created with AI-generated exercises',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid config or custom practice locked',
+  })
+  async createCustom(
+    @Body() dto: CreateCustomSetDto,
+    @CurrentUser() user: User,
+  ) {
+    return this.exerciseSetService.createCustom(
+      dto.lessonId,
+      {
+        questionCount: dto.config.questionCount,
+        exerciseTypes: dto.config.exerciseTypes,
+        focusArea: dto.config.focusArea,
+      },
+      user.id,
+    );
+  }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, PermissionsGuard)

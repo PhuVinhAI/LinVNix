@@ -5,6 +5,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
 import '../../domain/exercise_set_models.dart';
+import '../../domain/exercise_models.dart';
 
 class ExerciseTierScreen extends ConsumerStatefulWidget {
   const ExerciseTierScreen({super.key, required this.lessonId});
@@ -18,6 +19,8 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
   ExerciseTier? _newlyUnlockedTier;
   ExerciseTier? _generatingTier;
   String? _generationError;
+  bool _isCreatingCustom = false;
+  String? _customError;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +81,18 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                     ? () => setState(() => _newlyUnlockedTier = null)
                     : null,
               )),
+              const SizedBox(height: 32),
+              _CustomPracticeSection(
+                isUnlocked: summary.customPracticeUnlocked,
+                customSets: summary.customSets,
+                isCreating: _isCreatingCustom,
+                error: _customError,
+                onCreate: () => _showCustomConfigForm(context, summary),
+                onPlaySet: (setId) => context.go(
+                  '/lessons/${widget.lessonId}/exercises/play/custom/$setId',
+                ),
+                onRegenerate: (setId) => _handleRegenerateCustom(setId),
+              ),
             ],
           );
         },
@@ -118,8 +133,359 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
     }
   }
 
+  Future<void> _handleRegenerateCustom(String setId) async {
+    setState(() {
+      _isCreatingCustom = true;
+      _customError = null;
+    });
+
+    try {
+      final repo = ref.read(lessonRepositoryProvider);
+      await repo.regenerateExercises(setId);
+      if (mounted) {
+        setState(() {
+          _isCreatingCustom = false;
+        });
+        ref.invalidate(exerciseSetsProvider(widget.lessonId));
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isCreatingCustom = false;
+          _customError = e.toString();
+        });
+      }
+    }
+  }
+
+  void _showCustomConfigForm(BuildContext context, LessonTierSummary summary) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => _CustomConfigForm(
+        lessonId: widget.lessonId,
+        onSubmit: (config) async {
+          Navigator.of(ctx).pop();
+          setState(() {
+            _isCreatingCustom = true;
+            _customError = null;
+          });
+          try {
+            final repo = ref.read(lessonRepositoryProvider);
+            await repo.createCustomSet(widget.lessonId, config);
+            if (mounted) {
+              setState(() => _isCreatingCustom = false);
+              ref.invalidate(exerciseSetsProvider(widget.lessonId));
+            }
+          } catch (e) {
+            if (mounted) {
+              setState(() {
+                _isCreatingCustom = false;
+                _customError = e.toString();
+              });
+            }
+          }
+        },
+      ),
+    );
+  }
+
   void showUnlockAnimation(ExerciseTier tier) {
     setState(() => _newlyUnlockedTier = tier);
+  }
+}
+
+class _CustomPracticeSection extends StatelessWidget {
+  const _CustomPracticeSection({
+    required this.isUnlocked,
+    required this.customSets,
+    this.isCreating = false,
+    this.error,
+    this.onCreate,
+    this.onPlaySet,
+    this.onRegenerate,
+  });
+
+  final bool isUnlocked;
+  final List<TierProgress> customSets;
+  final bool isCreating;
+  final String? error;
+  final VoidCallback? onCreate;
+  final void Function(String setId)? onPlaySet;
+  final void Function(String setId)? onRegenerate;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.tune, color: c.primary, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              'Luyện tập tự do',
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Tự cấu hình bài tập AI theo ý muốn',
+          style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
+        ),
+        const SizedBox(height: 16),
+        if (!isUnlocked)
+          AppCard(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Icon(Icons.lock, color: c.muted, size: 24),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Hoàn thành Basic tier để mở khóa',
+                    style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (isUnlocked) ...[
+          SizedBox(
+            width: double.infinity,
+            child: AppButton(
+              label: isCreating ? 'Đang tạo...' : 'Tạo bài tập tự do',
+              variant: AppButtonVariant.primary,
+              onPressed: isCreating ? null : onCreate,
+              icon: isCreating ? null : const Icon(Icons.add),
+            ),
+          ),
+          if (error != null) ...[
+            const SizedBox(height: 8),
+            Text(error!, style: theme.textTheme.bodySmall?.copyWith(color: c.error)),
+          ],
+          const SizedBox(height: 12),
+          ...customSets.map((cs) => _CustomSetCard(
+            progress: cs,
+            onTap: cs.totalExercises > 0 ? () => onPlaySet?.call(cs.setId) : null,
+            onRegenerate: onRegenerate,
+          )),
+        ],
+      ],
+    );
+  }
+}
+
+class _CustomSetCard extends StatelessWidget {
+  const _CustomSetCard({
+    required this.progress,
+    this.onTap,
+    this.onRegenerate,
+  });
+
+  final TierProgress progress;
+  final VoidCallback? onTap;
+  final void Function(String)? onRegenerate;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+    final color = c.primary;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: AppCard(
+        onTap: onTap,
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(Icons.edit_note, color: color, size: 22),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    progress.title,
+                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    progress.isCompleted
+                        ? '✓ ${progress.percentCorrect.round()}%'
+                        : progress.isInProgress
+                            ? '${progress.percentComplete.round()}%'
+                            : progress.totalExercises > 0
+                                ? '${progress.totalExercises} câu'
+                                : 'Chưa có bài',
+                    style: theme.textTheme.bodySmall?.copyWith(color: c.mutedForeground),
+                  ),
+                ],
+              ),
+            ),
+            if (progress.isCompleted)
+              Icon(Icons.check_circle, color: color, size: 22),
+            if (progress.isInProgress)
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: AppProgress(
+                  value: progress.percentComplete / 100,
+                  color: color,
+                ),
+              ),
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_vert, color: c.mutedForeground, size: 20),
+              onSelected: (value) {
+                if (value == 'regenerate') onRegenerate?.call(progress.setId);
+              },
+              itemBuilder: (_) => [
+                const PopupMenuItem(value: 'regenerate', child: Text('Tạo lại')),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CustomConfigForm extends StatefulWidget {
+  const _CustomConfigForm({
+    required this.lessonId,
+    required this.onSubmit,
+  });
+
+  final String lessonId;
+  final Future<void> Function(CustomSetConfig config) onSubmit;
+
+  @override
+  State<_CustomConfigForm> createState() => _CustomConfigFormState();
+}
+
+class _CustomConfigFormState extends State<_CustomConfigForm> {
+  double _questionCount = 10;
+  final Set<String> _selectedTypes = {ExerciseType.multipleChoice.value, ExerciseType.matching.value};
+  FocusArea _focusArea = FocusArea.both;
+  bool _isSubmitting = false;
+
+  static const _allExerciseTypes = ExerciseType.values;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Cấu hình bài tập tự do',
+            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+
+          Text('Số câu hỏi: ${_questionCount.round()}', style: theme.textTheme.bodyMedium),
+          Slider(
+            value: _questionCount,
+            min: 1,
+            max: 30,
+            divisions: 29,
+            label: _questionCount.round().toString(),
+            onChanged: (v) => setState(() => _questionCount = v),
+          ),
+          const SizedBox(height: 12),
+
+          Text('Loại bài tập', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: _allExerciseTypes.map((type) {
+              final selected = _selectedTypes.contains(type.value);
+              return FilterChip(
+                label: Text(_typeDisplayName(type)),
+                selected: selected,
+                onSelected: (sel) {
+                  setState(() {
+                    if (sel) {
+                      _selectedTypes.add(type.value);
+                    } else if (_selectedTypes.length > 1) {
+                      _selectedTypes.remove(type.value);
+                    }
+                  });
+                },
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+
+          Text('Trọng tâm', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+          const SizedBox(height: 8),
+          SegmentedButton<FocusArea>(
+            segments: FocusArea.values
+                .map((fa) => ButtonSegment(value: fa, label: Text(fa.displayName)))
+                .toList(),
+            selected: {_focusArea},
+            onSelectionChanged: (s) => setState(() => _focusArea = s.first),
+          ),
+          const SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            child: AppButton(
+              label: _isSubmitting ? 'Đang tạo...' : 'Tạo bài tập',
+              variant: AppButtonVariant.primary,
+              onPressed: _selectedTypes.isEmpty || _isSubmitting ? null : _handleSubmit,
+              icon: const Icon(Icons.auto_awesome),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  String _typeDisplayName(ExerciseType type) {
+    return switch (type) {
+      ExerciseType.multipleChoice => 'Trắc nghiệm',
+      ExerciseType.fillBlank => 'Điền từ',
+      ExerciseType.matching => 'Nối cặp',
+      ExerciseType.ordering => 'Sắp xếp',
+      ExerciseType.translation => 'Dịch',
+      ExerciseType.listening => 'Nghe',
+    };
+  }
+
+  Future<void> _handleSubmit() async {
+    setState(() => _isSubmitting = true);
+    final config = CustomSetConfig(
+      questionCount: _questionCount.round(),
+      exerciseTypes: _selectedTypes.toList(),
+      focusArea: _focusArea,
+    );
+    await widget.onSubmit(config);
+    if (mounted) setState(() => _isSubmitting = false);
   }
 }
 

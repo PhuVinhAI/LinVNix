@@ -468,6 +468,125 @@ describe('TierProgressService', () => {
       expect(summary.unlockedTiers).toContain(ExerciseTier.MEDIUM);
       expect(summary.unlockedTiers).not.toContain(ExerciseTier.HARD);
     });
+
+    it('customPracticeUnlocked is true when basic tier is completed', async () => {
+      const mockSets = [
+        {
+          id: 'set-basic',
+          lessonId: 'lesson-1',
+          tier: ExerciseTier.BASIC,
+          title: 'Basic',
+          isCustom: false,
+          isAIGenerated: false,
+          orderIndex: 0,
+        },
+      ];
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue(mockSets as any);
+
+      const exercises = Array.from({ length: 10 }, (_, i) => ({
+        id: `ex-${i}`,
+      }));
+      exercisesRepo.findBySetId.mockResolvedValue(exercises as any);
+
+      const results = Array.from({ length: 10 }, (_, i) => ({
+        isCorrect: i < 8,
+      }));
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue(results as any);
+
+      const summary = await service.getLessonTierSummary('lesson-1', 'user-1');
+
+      expect(summary.customPracticeUnlocked).toBe(true);
+    });
+
+    it('customPracticeUnlocked is false when basic not completed', async () => {
+      const mockSets = [
+        {
+          id: 'set-basic',
+          lessonId: 'lesson-1',
+          tier: ExerciseTier.BASIC,
+          title: 'Basic',
+          isCustom: false,
+          isAIGenerated: false,
+          orderIndex: 0,
+        },
+      ];
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue(mockSets as any);
+
+      const exercises = Array.from({ length: 10 }, (_, i) => ({
+        id: `ex-${i}`,
+      }));
+      exercisesRepo.findBySetId.mockResolvedValue(exercises as any);
+
+      const results = Array.from({ length: 10 }, (_, i) => ({
+        isCorrect: i < 7,
+      }));
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue(results as any);
+
+      const summary = await service.getLessonTierSummary('lesson-1', 'user-1');
+
+      expect(summary.customPracticeUnlocked).toBe(false);
+    });
+
+    it('separates custom sets from tier sets', async () => {
+      const mockSets = [
+        {
+          id: 'set-basic',
+          lessonId: 'lesson-1',
+          tier: ExerciseTier.BASIC,
+          title: 'Basic',
+          isCustom: false,
+          isAIGenerated: false,
+          orderIndex: 0,
+        },
+        {
+          id: 'custom-set-1',
+          lessonId: 'lesson-1',
+          tier: null,
+          title: 'Custom Practice',
+          isCustom: true,
+          isAIGenerated: true,
+          customConfig: {
+            questionCount: 5,
+            exerciseTypes: ['multiple_choice'],
+            focusArea: 'both',
+          },
+          orderIndex: 100,
+        },
+      ];
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue(mockSets as any);
+
+      exercisesRepo.findBySetId.mockImplementation(async (setId: string) => {
+        if (setId === 'set-basic') {
+          return Array.from({ length: 10 }, (_, i) => ({
+            id: `ex-basic-${i}`,
+          })) as any;
+        }
+        return Array.from({ length: 5 }, (_, i) => ({
+          id: `ex-custom-${i}`,
+        })) as any;
+      });
+
+      resultsRepo.findByUserAndExerciseIds.mockImplementation(
+        async (_userId: string, exerciseIds: string[]) => {
+          if (exerciseIds[0]?.startsWith('ex-basic')) {
+            return Array.from({ length: 10 }, (_, i) => ({
+              isCorrect: i < 9,
+            })) as any;
+          }
+          return Array.from({ length: 5 }, (_, i) => ({
+            isCorrect: i < 4,
+          })) as any;
+        },
+      );
+
+      const summary = await service.getLessonTierSummary('lesson-1', 'user-1');
+
+      expect(summary.sets).toHaveLength(1);
+      expect(summary.sets[0].tier).toBe(ExerciseTier.BASIC);
+      expect(summary.customSets).toHaveLength(1);
+      expect(summary.customSets[0].isCustom).toBe(true);
+      expect(summary.customSets[0].tier).toBeNull();
+    });
   });
 
   describe('getCompactTierSummary', () => {

@@ -6,7 +6,7 @@ import { ExerciseTier } from '../../../common/enums';
 
 export interface TierProgress {
   setId: string;
-  tier: ExerciseTier;
+  tier: ExerciseTier | null;
   title: string;
   isCustom: boolean;
   isAIGenerated: boolean;
@@ -28,7 +28,9 @@ export interface SetProgressDetail {
 
 export interface LessonTierSummary {
   sets: TierProgress[];
+  customSets: TierProgress[];
   unlockedTiers: ExerciseTier[];
+  customPracticeUnlocked: boolean;
 }
 
 export interface TierSummaryItem {
@@ -97,7 +99,7 @@ export class TierProgressService {
     const percentCorrect = attempted > 0 ? (correct / attempted) * 100 : 0;
 
     const nextTierUnlocked =
-      percentComplete === 100 && percentCorrect >= 80
+      percentComplete === 100 && percentCorrect >= 80 && set.tier
         ? this.getNextTier(set.tier)
         : null;
 
@@ -128,6 +130,7 @@ export class TierProgressService {
     const sets =
       await this.exerciseSetsRepository.findActiveByLessonId(lessonId);
     const tierProgresses: TierProgress[] = [];
+    const customProgresses: TierProgress[] = [];
 
     for (const set of sets) {
       const exercises = await this.exercisesRepository.findBySetId(set.id);
@@ -151,9 +154,9 @@ export class TierProgressService {
         totalExercises > 0 ? (attempted / totalExercises) * 100 : 0;
       const percentCorrect = attempted > 0 ? (correct / attempted) * 100 : 0;
 
-      tierProgresses.push({
+      const progress: TierProgress = {
         setId: set.id,
-        tier: set.tier,
+        tier: set.isCustom ? null : set.tier,
         title: set.title,
         isCustom: set.isCustom,
         isAIGenerated: set.isAIGenerated,
@@ -162,14 +165,24 @@ export class TierProgressService {
         correct,
         percentComplete: Math.round(percentComplete * 100) / 100,
         percentCorrect: Math.round(percentCorrect * 100) / 100,
-      });
+      };
+
+      if (set.isCustom) {
+        customProgresses.push(progress);
+      } else {
+        tierProgresses.push(progress);
+      }
     }
 
     const unlockedTiers = this.computeUnlockedTiers(tierProgresses);
+    const customPracticeUnlocked =
+      unlockedTiers.length > 1 && unlockedTiers.includes(ExerciseTier.EASY);
 
     return {
       sets: tierProgresses,
+      customSets: customProgresses,
       unlockedTiers,
+      customPracticeUnlocked,
     };
   }
 
