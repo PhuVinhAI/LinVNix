@@ -131,3 +131,34 @@ class LessonTierSummary {
     return idx >= 0 ? sets[idx] : null;
   }
 }
+
+class SetProgressDetail {
+  const SetProgressDetail({
+    this.totalExercises = 0,
+    this.attempted = 0,
+    this.correct = 0,
+    this.percentCorrect = 0,
+    this.percentComplete = 0,
+    this.nextTierUnlocked,
+  });
+
+  factory SetProgressDetail.fromJson(Map<String, dynamic> json) {
+    return SetProgressDetail(
+      totalExercises: (json['totalExercises'] as num?)?.toInt() ?? 0,
+      attempted: (json['attempted'] as num?)?.toInt() ?? 0,
+      correct: (json['correct'] as num?)?.toInt() ?? 0,
+      percentCorrect: (json['percentCorrect'] as num?)?.toDouble() ?? 0,
+      percentComplete: (json['percentComplete'] as num?)?.toDouble() ?? 0,
+      nextTierUnlocked: json['nextTierUnlocked'] != null
+          ? ExerciseTier.fromString(json['nextTierUnlocked'] as String)
+          : null,
+    );
+  }
+
+  final int totalExercises;
+  final int attempted;
+  final int correct;
+  final double percentCorrect;
+  final double percentComplete;
+  final ExerciseTier? nextTierUnlocked;
+}

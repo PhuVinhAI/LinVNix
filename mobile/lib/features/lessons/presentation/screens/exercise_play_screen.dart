@@ -189,20 +189,36 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     final correct = _totalCorrect;
     final percent = total > 0 ? ((correct / total) * 100).round() : 0;
 
+    final lastResult = _results[_exercises.length - 1];
+    final nextTier = lastResult?.nextTierUnlocked;
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AppDialog(
         titleWidget: Row(
           children: [
-            Icon(Icons.celebration, color: c.primary),
+            Icon(
+              nextTier != null ? Icons.celebration : Icons.check_circle,
+              color: nextTier != null ? Colors.amber : c.primary,
+            ),
             const SizedBox(width: 8),
-            const Text('Exercise Complete!'),
+            Text(nextTier != null ? '🎉 Next Tier Unlocked!' : 'Exercise Complete!'),
           ],
         ),
         contentWidget: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (nextTier != null) ...[
+              Text(
+                '${ExerciseTier.fromString(nextTier).displayName} tier is now available!',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: c.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
             Text('Your score', style: theme.textTheme.bodyLarge),
             const SizedBox(height: 8),
             Text(
@@ -254,6 +270,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
             isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
+              ref.invalidate(exerciseSetsProvider(widget.lessonId));
               context.go('/lessons/${widget.lessonId}/exercises');
             },
           ),

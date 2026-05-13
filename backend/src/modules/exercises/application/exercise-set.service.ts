@@ -13,6 +13,14 @@ export class ExerciseSetService {
     return this.tierProgressService.getLessonTierSummary(lessonId, userId);
   }
 
+  async getSetProgress(setId: string, userId: string) {
+    const set = await this.exerciseSetsRepository.findById(setId);
+    if (!set) {
+      throw new NotFoundException(`ExerciseSet with ID ${setId} not found`);
+    }
+    return this.tierProgressService.getSetProgress(setId, userId);
+  }
+
   async findById(id: string) {
     const set = await this.exerciseSetsRepository.findByIdWithExercises(id);
     if (!set) {

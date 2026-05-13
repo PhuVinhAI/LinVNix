@@ -110,4 +110,14 @@ class LessonRepository {
       throw mapDioException(e);
     }
   }
+
+  Future<SetProgressDetail> getSetProgress(String setId) async {
+    try {
+      final response =
+          await _dio.get<Map<String, dynamic>>('/exercise-sets/$setId/progress');
+      return SetProgressDetail.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
 }

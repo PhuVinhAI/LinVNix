@@ -14,10 +14,12 @@ describe('ExerciseSetService', () => {
     exerciseSetsRepo = {
       create: jest.fn(),
       findByIdWithExercises: jest.fn(),
+      findById: jest.fn(),
     } as any;
 
     tierProgressService = {
       getLessonTierSummary: jest.fn(),
+      getSetProgress: jest.fn(),
     } as any;
 
     const module: TestingModule = await Test.createTestingModule({
@@ -80,6 +82,41 @@ describe('ExerciseSetService', () => {
       expect(tierProgressService.getLessonTierSummary).toHaveBeenCalledWith(
         'lesson-1',
         'user-1',
+      );
+    });
+  });
+
+  describe('getSetProgress', () => {
+    it('delegates to tierProgressService when set exists', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        tier: ExerciseTier.BASIC,
+      } as any);
+
+      const mockProgress = {
+        totalExercises: 10,
+        attempted: 10,
+        correct: 8,
+        percentCorrect: 80,
+        percentComplete: 100,
+        nextTierUnlocked: ExerciseTier.EASY,
+      };
+      tierProgressService.getSetProgress.mockResolvedValue(mockProgress);
+
+      const result = await service.getSetProgress('set-1', 'user-1');
+
+      expect(result).toEqual(mockProgress);
+      expect(tierProgressService.getSetProgress).toHaveBeenCalledWith(
+        'set-1',
+        'user-1',
+      );
+    });
+
+    it('throws NotFoundException when set not found', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue(null);
+
+      await expect(service.getSetProgress('missing', 'user-1')).rejects.toThrow(
+        NotFoundException,
       );
     });
   });

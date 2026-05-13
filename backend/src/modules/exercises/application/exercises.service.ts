@@ -12,6 +12,16 @@ import {
   ExerciseStatsResult,
 } from '../../admin/application/ports/dashboard-stats.ports';
 
+export interface SubmitAnswerResult {
+  id: string;
+  isCorrect: boolean;
+  score: number;
+  userAnswer: any;
+  timeTaken?: number;
+  attemptedAt: Date;
+  nextTierUnlocked?: string;
+}
+
 @Injectable()
 export class ExercisesService implements ExerciseStatsPort {
   constructor(
@@ -58,15 +68,6 @@ export class ExercisesService implements ExerciseStatsPort {
     await this.exercisesRepository.delete(id);
   }
 
-  /**
-   * Submit answer for an exercise
-   *
-   * Wrapped in transaction to ensure atomicity:
-   * - If saving result fails, nothing is committed
-   * - Future: Can add vocabulary mastery update here
-   *
-   * @Transactional decorator ensures rollback on error
-   */
   @Transactional()
   async submitAnswer(
     userId: string,
@@ -87,21 +88,18 @@ export class ExercisesService implements ExerciseStatsPort {
       exercise.correctAnswer,
     );
 
-    // Use queryRunner from @Transactional decorator if available
     const queryRunner = (this as any).queryRunner;
     const manager = queryRunner ? queryRunner.manager : this.dataSource.manager;
 
     const score = isCorrect ? 10 : 0;
     const attemptedAt = new Date();
 
-    // Find existing result for this user+exercise pair
     const existing = await manager.findOne(UserExerciseResult, {
       where: { userId, exerciseId },
     });
 
     let result: UserExerciseResult;
     if (existing) {
-      // Update existing result (allow re-attempt)
       existing.userAnswer = userAnswer;
       existing.isCorrect = isCorrect;
       existing.score = score;
@@ -109,7 +107,6 @@ export class ExercisesService implements ExerciseStatsPort {
       existing.timeTaken = timeTaken;
       result = await manager.save(UserExerciseResult, existing);
     } else {
-      // Create new result
       result = await manager.save(UserExerciseResult, {
         userId,
         exerciseId,
@@ -120,9 +117,6 @@ export class ExercisesService implements ExerciseStatsPort {
         timeTaken,
       });
     }
-
-    // Future enhancement: Update vocabulary mastery here if needed
-    // This will be atomic with the exercise result creation
 
     return result;
   }
