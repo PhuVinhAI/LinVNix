@@ -17,41 +17,53 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { CourseContentService } from '../application/course-content.service';
+import { TierProgressService } from '../../exercises/application/tier-progress.service';
 import { Public } from '../../../common/decorators';
+import { CurrentUser } from '../../../common/decorators';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { User } from '../../users/domain/user.entity';
 import { CreateLessonDto } from '../dto/lessons/create-lesson.dto';
 
 @ApiTags('Lessons')
 @Controller('lessons')
 export class LessonsController {
-  constructor(private readonly courseContentService: CourseContentService) {}
+  constructor(
+    private readonly courseContentService: CourseContentService,
+    private readonly tierProgressService: TierProgressService,
+  ) {}
 
-  @Public()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get('module/:moduleId')
   @ApiOperation({
-    summary: 'Lấy danh sách lessons theo module',
-    description: 'Lấy tất cả lessons thuộc một module',
+    summary: 'Lấy danh sách lessons theo module kèm tier summary',
+    description:
+      'Lấy tất cả lessons thuộc một module, bao gồm tierSummary cho user đã đăng nhập',
   })
   @ApiParam({ name: 'moduleId', description: 'ID của module' })
   @ApiResponse({
     status: 200,
-    description: 'Danh sách lessons',
-    schema: {
-      example: [
-        {
-          id: 'uuid-string',
-          title: 'Bài 1: Từ vựng chào hỏi',
-          description: 'Học các từ vựng cơ bản về chào hỏi',
-          lessonType: 'vocabulary',
-          orderIndex: 1,
-          estimatedDuration: 30,
-          isAssessment: false,
-        },
-      ],
-    },
+    description: 'Danh sách lessons với tierSummary',
   })
-  async findByModule(@Param('moduleId') moduleId: string) {
-    return this.courseContentService.getLessonsByModule(moduleId);
+  async findByModule(
+    @Param('moduleId') moduleId: string,
+    @CurrentUser() user: User,
+  ) {
+    const lessons =
+      await this.courseContentService.getLessonsByModule(moduleId);
+
+    const lessonsWithTiers = await Promise.all(
+      lessons.map(async (lesson) => {
+        const tierSummary =
+          await this.tierProgressService.getCompactTierSummary(
+            lesson.id,
+            user.id,
+          );
+        return { ...lesson, tierSummary };
+      }),
+    );
+
+    return lessonsWithTiers;
   }
 
   @Public()

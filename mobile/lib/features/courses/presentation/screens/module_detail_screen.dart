@@ -6,6 +6,8 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
+import '../../../lessons/data/lesson_providers.dart';
+import '../../../lessons/domain/exercise_set_models.dart';
 
 class ModuleDetailScreen extends ConsumerWidget {
   const ModuleDetailScreen({super.key, required this.moduleId});
@@ -15,6 +17,7 @@ class ModuleDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final moduleAsync = ref.watch(moduleDetailProvider(moduleId));
     final progressAsync = ref.watch(userProgressProvider);
+    final tierSummariesAsync = ref.watch(moduleTierSummariesProvider(moduleId));
 
     return Scaffold(
       body: moduleAsync.when(
@@ -25,6 +28,7 @@ class ModuleDetailScreen extends ConsumerWidget {
         data: (module) => _ModuleDetailContent(
           module: module,
           progressMap: _buildProgressMap(progressAsync),
+          tierSummariesMap: tierSummariesAsync.whenOrNull(data: (d) => d) ?? {},
         ),
       ),
     );
@@ -47,9 +51,11 @@ class _ModuleDetailContent extends StatelessWidget {
   const _ModuleDetailContent({
     required this.module,
     required this.progressMap,
+    required this.tierSummariesMap,
   });
   final CourseModule module;
   final Map<String, UserProgress> progressMap;
+  final Map<String, TierSummary> tierSummariesMap;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +140,8 @@ class _ModuleDetailContent extends StatelessWidget {
             (context, index) {
               final lesson = module.lessons[index];
               final progress = progressMap[lesson.id];
-              return _LessonCard(lesson: lesson, progress: progress);
+              final tierSummary = tierSummariesMap[lesson.id];
+              return _LessonCard(lesson: lesson, progress: progress, tierSummary: tierSummary);
             },
             childCount: module.lessons.length,
           ),
@@ -146,18 +153,23 @@ class _ModuleDetailContent extends StatelessWidget {
 }
 
 class _LessonCard extends StatelessWidget {
-  const _LessonCard({required this.lesson, this.progress});
+  const _LessonCard({required this.lesson, this.progress, this.tierSummary});
   final Lesson lesson;
   final UserProgress? progress;
+  final TierSummary? tierSummary;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final theme = Theme.of(context);
     final statusColor = _getStatusColor(progress?.status, c);
+    final tierBorderColor = tierSummary != null
+        ? _tierColor(tierSummary!.currentTier, c)
+        : null;
 
     return AppCard(
       variant: AppCardVariant.outlined,
+      borderColor: tierBorderColor,
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
       padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
       child: AppListItem(
@@ -204,6 +216,10 @@ class _LessonCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            if (tierSummary != null) ...[
+              const SizedBox(height: 4),
+              _TierTimeline(tierSummary: tierSummary!),
+            ],
             const SizedBox(height: AppSpacing.xs),
             Row(
               children: [
@@ -245,6 +261,16 @@ class _LessonCard extends StatelessWidget {
     );
   }
 
+  Color _tierColor(ExerciseTier tier, AppColors c) {
+    return switch (tier) {
+      ExerciseTier.basic => c.primary,
+      ExerciseTier.easy => const Color(0xFF4CAF50),
+      ExerciseTier.medium => const Color(0xFFFF9800),
+      ExerciseTier.hard => const Color(0xFFF44336),
+      ExerciseTier.expert => const Color(0xFF9C27B0),
+    };
+  }
+
   String _formatDuration(int minutes) {
     if (minutes < 60) return '${minutes}m';
     final h = minutes ~/ 60;
@@ -274,6 +300,42 @@ class _LessonCard extends StatelessWidget {
       'in_progress' => 'In Progress',
       _ => 'Not Started',
     };
+  }
+}
+
+class _TierTimeline extends StatelessWidget {
+  const _TierTimeline({required this.tierSummary});
+  final TierSummary tierSummary;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final parts = <String>[];
+
+    for (final item in tierSummary.tiers) {
+      switch (item.status) {
+        case TierStatus.completed:
+          parts.add('${item.tier.displayName} ✓');
+        case TierStatus.inProgress:
+          if (item.percentCorrect > 0) {
+            parts.add('${item.tier.displayName} ${item.percentCorrect.round()}%');
+          } else {
+            parts.add(item.tier.displayName);
+          }
+        case TierStatus.locked:
+          parts.add('🔒');
+      }
+    }
+
+    return Text(
+      parts.join(' · '),
+      style: theme.textTheme.bodySmall?.copyWith(
+        fontSize: 10,
+        color: theme.colorScheme.outline,
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }
 

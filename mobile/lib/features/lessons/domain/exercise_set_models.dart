@@ -162,3 +162,57 @@ class SetProgressDetail {
   final double percentComplete;
   final ExerciseTier? nextTierUnlocked;
 }
+
+enum TierStatus { completed, inProgress, locked }
+
+class TierSummaryItem {
+  const TierSummaryItem({
+    required this.tier,
+    required this.status,
+    required this.percentCorrect,
+  });
+
+  factory TierSummaryItem.fromJson(Map<String, dynamic> json) {
+    return TierSummaryItem(
+      tier: ExerciseTier.fromString(json['tier'] as String),
+      status: _parseStatus(json['status'] as String),
+      percentCorrect: (json['percentCorrect'] as num?)?.toDouble() ?? 0,
+    );
+  }
+
+  final ExerciseTier tier;
+  final TierStatus status;
+  final double percentCorrect;
+
+  static TierStatus _parseStatus(String value) {
+    return switch (value) {
+      'completed' => TierStatus.completed,
+      'in_progress' => TierStatus.inProgress,
+      _ => TierStatus.locked,
+    };
+  }
+}
+
+class TierSummary {
+  const TierSummary({
+    required this.currentTier,
+    required this.unlockedTiers,
+    required this.tiers,
+  });
+
+  factory TierSummary.fromJson(Map<String, dynamic> json) {
+    return TierSummary(
+      currentTier: ExerciseTier.fromString(json['currentTier'] as String),
+      unlockedTiers: (json['unlockedTiers'] as List<dynamic>)
+          .map((e) => ExerciseTier.fromString(e as String))
+          .toList(),
+      tiers: (json['tiers'] as List<dynamic>)
+          .map((e) => TierSummaryItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  final ExerciseTier currentTier;
+  final List<ExerciseTier> unlockedTiers;
+  final List<TierSummaryItem> tiers;
+}
