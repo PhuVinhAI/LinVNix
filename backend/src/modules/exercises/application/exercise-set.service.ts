@@ -73,6 +73,10 @@ export class ExerciseSetService {
     return this.exerciseGenerationService.generate(setId, userId);
   }
 
+  async regenerate(setId: string, userId: string) {
+    return this.exerciseGenerationService.regenerate(setId, userId);
+  }
+
   async generateForTier(lessonId: string, tier: ExerciseTier, userId: string) {
     return this.exerciseGenerationService.generateForTier(
       lessonId,

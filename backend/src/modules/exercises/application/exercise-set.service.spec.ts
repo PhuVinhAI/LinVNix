@@ -39,6 +39,7 @@ describe('ExerciseSetService', () => {
 
     generationService = {
       generate: jest.fn(),
+      regenerate: jest.fn(),
     } as any;
 
     const module: TestingModule = await Test.createTestingModule({
@@ -178,6 +179,21 @@ describe('ExerciseSetService', () => {
 
       expect(result).toEqual(mockExercises);
       expect(generationService.generate).toHaveBeenCalledWith(
+        'set-1',
+        'user-1',
+      );
+    });
+  });
+
+  describe('regenerate', () => {
+    it('delegates to exerciseGenerationService', async () => {
+      const mockExercises = [{ id: 'ex-1', exerciseType: 'translation' }];
+      generationService.regenerate.mockResolvedValue(mockExercises as any);
+
+      const result = await service.regenerate('set-1', 'user-1');
+
+      expect(result).toEqual(mockExercises);
+      expect(generationService.regenerate).toHaveBeenCalledWith(
         'set-1',
         'user-1',
       );

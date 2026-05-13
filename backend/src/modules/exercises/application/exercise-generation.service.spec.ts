@@ -1,7 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { ExerciseGenerationService } from './exercise-generation.service';
+import {
+  ExerciseGenerationService,
+  TIER_GUIDELINES,
+} from './exercise-generation.service';
 import { GenaiService } from '../../../infrastructure/genai/genai.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
@@ -84,11 +87,14 @@ describe('ExerciseGenerationService', () => {
       findById: jest.fn(),
       findActiveByLessonAndTier: jest.fn(),
       update: jest.fn(),
+      softDelete: jest.fn(),
+      create: jest.fn(),
     } as any;
 
     exercisesRepo = {
       findBySetId: jest.fn(),
       create: jest.fn(),
+      softDeleteBySetId: jest.fn(),
     } as any;
 
     dataSource = {
@@ -179,11 +185,17 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({ text: validAiResponse, usageMetadata: {} });
-      exercisesRepo.create.mockImplementation(async (data) => ({
-        id: `gen-${data.orderIndex}`,
-        ...data,
-      } as any));
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
       exerciseSetsRepo.update.mockResolvedValue({ id: 'set-1' } as any);
       exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
         id: 'basic-set',
@@ -380,6 +392,266 @@ describe('ExerciseGenerationService', () => {
       const result = service.parseResponse(fenced);
 
       expect(result.exercises).toHaveLength(1);
+    });
+  });
+
+  describe('TIER_GUIDELINES', () => {
+    it('MEDIUM has ~12 questions with fill-blank and translation', () => {
+      expect(TIER_GUIDELINES[ExerciseTier.MEDIUM].questionCount).toBe(12);
+      expect(TIER_GUIDELINES[ExerciseTier.MEDIUM].preferredTypes).toContain(
+        ExerciseType.FILL_BLANK,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.MEDIUM].preferredTypes).toContain(
+        ExerciseType.TRANSLATION,
+      );
+    });
+
+    it('HARD has ~15 questions with complex grammar emphasis', () => {
+      expect(TIER_GUIDELINES[ExerciseTier.HARD].questionCount).toBe(15);
+      expect(TIER_GUIDELINES[ExerciseTier.HARD].preferredTypes).toContain(
+        ExerciseType.TRANSLATION,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.HARD].preferredTypes).toContain(
+        ExerciseType.ORDERING,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.HARD].preferredTypes).toContain(
+        ExerciseType.MATCHING,
+      );
+    });
+
+    it('EXPERT has ~18 questions with all exercise types', () => {
+      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].questionCount).toBe(18);
+      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
+        ExerciseType.TRANSLATION,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
+        ExerciseType.FILL_BLANK,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
+        ExerciseType.ORDERING,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
+        ExerciseType.MATCHING,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
+        ExerciseType.MULTIPLE_CHOICE,
+      );
+      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
+        ExerciseType.LISTENING,
+      );
+    });
+
+    it('higher tiers have more questions than lower tiers', () => {
+      expect(
+        TIER_GUIDELINES[ExerciseTier.MEDIUM].questionCount,
+      ).toBeGreaterThan(TIER_GUIDELINES[ExerciseTier.EASY].questionCount);
+      expect(TIER_GUIDELINES[ExerciseTier.HARD].questionCount).toBeGreaterThan(
+        TIER_GUIDELINES[ExerciseTier.MEDIUM].questionCount,
+      );
+      expect(
+        TIER_GUIDELINES[ExerciseTier.EXPERT].questionCount,
+      ).toBeGreaterThan(TIER_GUIDELINES[ExerciseTier.HARD].questionCount);
+    });
+  });
+
+  describe('regenerate', () => {
+    it('throws for BASIC tier', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        tier: ExerciseTier.BASIC,
+        lessonId: 'lesson-1',
+      } as any);
+
+      await expect(service.regenerate('set-1', 'user-1')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('throws when set not found', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue(null);
+
+      await expect(service.regenerate('missing', 'user-1')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('soft-deletes old set and exercises, then generates new set', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'old-set',
+        tier: ExerciseTier.MEDIUM,
+        lessonId: 'lesson-1',
+        orderIndex: 2,
+      } as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
+      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'new-set',
+        tier: ExerciseTier.MEDIUM,
+        lessonId: 'lesson-1',
+        orderIndex: 2,
+      } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      genaiService.chat.mockResolvedValue({ text: validAiResponse, usageMetadata: {} });
+      exercisesRepo.create.mockImplementation(async (data) => ({
+        id: `gen-${data.orderIndex}`,
+        ...data,
+      } as any));
+      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-set' } as any);
+      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
+        id: 'basic-set',
+      } as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
+      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'new-set',
+        tier: ExerciseTier.MEDIUM,
+        lessonId: 'lesson-1',
+        orderIndex: 2,
+      } as any);
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
+      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-set' } as any);
+      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
+        id: 'basic-set',
+      } as any);
+
+      const result = await service.regenerate('old-set', 'user-1');
+
+      expect(exerciseSetsRepo.softDelete).toHaveBeenCalledWith('old-set');
+      expect(exercisesRepo.softDeleteBySetId).toHaveBeenCalledWith('old-set');
+      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          lessonId: 'lesson-1',
+          tier: ExerciseTier.MEDIUM,
+          orderIndex: 2,
+        }),
+      );
+      expect(result).toHaveLength(1);
+      expect(exercisesRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          setId: 'new-set',
+          lessonId: 'lesson-1',
+        }),
+      );
+    });
+
+    it('generates for HARD tier', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'old-hard',
+        tier: ExerciseTier.HARD,
+        lessonId: 'lesson-1',
+        orderIndex: 3,
+      } as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
+      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'new-hard',
+        tier: ExerciseTier.HARD,
+        lessonId: 'lesson-1',
+      } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      genaiService.chat.mockResolvedValue({ text: validAiResponse, usageMetadata: {} });
+      exercisesRepo.create.mockImplementation(async (data) => ({
+        id: `gen-${data.orderIndex}`,
+        ...data,
+      } as any));
+      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-hard' } as any);
+      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
+        id: 'basic-set',
+      } as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
+      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'new-hard',
+        tier: ExerciseTier.HARD,
+        lessonId: 'lesson-1',
+      } as any);
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
+      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-hard' } as any);
+      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
+        id: 'basic-set',
+      } as any);
+
+      const result = await service.regenerate('old-hard', 'user-1');
+
+      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({ tier: ExerciseTier.HARD }),
+      );
+      expect(result).toHaveLength(1);
+    });
+
+    it('generates for EXPERT tier', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'old-expert',
+        tier: ExerciseTier.EXPERT,
+        lessonId: 'lesson-1',
+        orderIndex: 4,
+      } as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
+      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'new-expert',
+        tier: ExerciseTier.EXPERT,
+        lessonId: 'lesson-1',
+      } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      genaiService.chat.mockResolvedValue({ text: validAiResponse, usageMetadata: {} });
+      exercisesRepo.create.mockImplementation(async (data) => ({
+        id: `gen-${data.orderIndex}`,
+        ...data,
+      } as any));
+      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-expert' } as any);
+      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
+        id: 'basic-set',
+      } as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
+      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'new-expert',
+        tier: ExerciseTier.EXPERT,
+        lessonId: 'lesson-1',
+      } as any);
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
+      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-expert' } as any);
+      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
+        id: 'basic-set',
+      } as any);
+
+      const result = await service.regenerate('old-expert', 'user-1');
+
+      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({ tier: ExerciseTier.EXPERT }),
+      );
+      expect(result).toHaveLength(1);
     });
   });
 });

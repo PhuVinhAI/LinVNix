@@ -133,6 +133,28 @@ export class ExerciseSetController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions(Permission.AI_GENERATE_EXERCISE)
+  @Post(':id/regenerate')
+  @ApiOperation({
+    summary: 'Regenerate AI exercises for an exercise set',
+    description:
+      'Soft-delete existing exercises and generate new ones. Requires AI_GENERATE_EXERCISE permission.',
+  })
+  @ApiParam({ name: 'id', description: 'ID của exercise set' })
+  @ApiResponse({
+    status: 201,
+    description: 'Exercises regenerated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Set is basic tier or not found',
+  })
+  async regenerate(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.exerciseSetService.regenerate(id, user.id);
+  }
+
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':id/reset')
   @ApiOperation({

@@ -45,4 +45,12 @@ export class ExercisesRepository {
   async delete(id: string): Promise<void> {
     await this.repository.softDelete(id);
   }
+
+  async softDeleteBySetId(setId: string): Promise<void> {
+    await this.repository
+      .createQueryBuilder()
+      .softDelete()
+      .where('setId = :setId', { setId })
+      .execute();
+  }
 }
