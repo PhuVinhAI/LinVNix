@@ -15,6 +15,8 @@ class ExerciseTierScreen extends ConsumerStatefulWidget {
 }
 
 class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
+  ExerciseTier? _newlyUnlockedTier;
+
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
@@ -58,8 +60,12 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                 tier: tier,
                 progress: summary.progressForTier(tier),
                 isUnlocked: summary.isTierUnlocked(tier),
+                isNewlyUnlocked: _newlyUnlockedTier == tier,
                 onTap: summary.isTierUnlocked(tier) && summary.progressForTier(tier) != null
                     ? () => context.go('/lessons/${widget.lessonId}/exercises/play/${summary.progressForTier(tier)!.tier.value}')
+                    : null,
+                onUnlockAnimationDone: _newlyUnlockedTier == tier
+                    ? () => setState(() => _newlyUnlockedTier = null)
                     : null,
               )),
             ],
@@ -68,24 +74,78 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
       ),
     );
   }
+
+  void showUnlockAnimation(ExerciseTier tier) {
+    setState(() => _newlyUnlockedTier = tier);
+  }
 }
 
-class _TierCard extends StatelessWidget {
+class _TierCard extends StatefulWidget {
   const _TierCard({
     required this.tier,
     this.progress,
     required this.isUnlocked,
+    this.isNewlyUnlocked = false,
     this.onTap,
+    this.onUnlockAnimationDone,
   });
 
   final ExerciseTier tier;
   final TierProgress? progress;
   final bool isUnlocked;
+  final bool isNewlyUnlocked;
   final VoidCallback? onTap;
+  final VoidCallback? onUnlockAnimationDone;
+
+  @override
+  State<_TierCard> createState() => _TierCardState();
+}
+
+class _TierCardState extends State<_TierCard> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _fadeInAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    );
+    _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    if (widget.isNewlyUnlocked) {
+      _controller.forward().then((_) {
+        widget.onUnlockAnimationDone?.call();
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _TierCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.isNewlyUnlocked && widget.isNewlyUnlocked) {
+      _controller.forward().then((_) {
+        widget.onUnlockAnimationDone?.call();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Color _tierColor(AppColors c) {
-    if (!isUnlocked) return c.muted;
-    return switch (tier) {
+    if (!widget.isUnlocked) return c.muted;
+    return switch (widget.tier) {
       ExerciseTier.basic => c.primary,
       ExerciseTier.easy => const Color(0xFF4CAF50),
       ExerciseTier.medium => const Color(0xFFFF9800),
@@ -95,7 +155,7 @@ class _TierCard extends StatelessWidget {
   }
 
   IconData _tierIcon() {
-    return switch (tier) {
+    return switch (widget.tier) {
       ExerciseTier.basic => Icons.looks_one,
       ExerciseTier.easy => Icons.looks_two,
       ExerciseTier.medium => Icons.looks_3,
@@ -105,11 +165,11 @@ class _TierCard extends StatelessWidget {
   }
 
   String _statusText() {
-    if (!isUnlocked) return 'Locked';
-    if (progress == null) return 'Not available';
-    if (progress!.isCompleted) return 'Completed';
-    if (progress!.isInProgress) return '${progress!.percentComplete.round()}% complete';
-    return 'Not started';
+    if (!widget.isUnlocked) return '🔒';
+    if (widget.progress == null) return '🔒';
+    if (widget.progress!.isCompleted) return '✓';
+    if (widget.progress!.isInProgress) return '${widget.progress!.percentComplete.round()}%';
+    return '0%';
   }
 
   @override
@@ -118,10 +178,10 @@ class _TierCard extends StatelessWidget {
     final theme = Theme.of(context);
     final color = _tierColor(c);
 
-    return Padding(
+    Widget card = Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: AppCard(
-        onTap: onTap,
+        onTap: widget.onTap,
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
@@ -132,9 +192,9 @@ class _TierCard extends StatelessWidget {
                 color: color.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: isUnlocked
+              child: widget.isUnlocked
                   ? Icon(_tierIcon(), color: color, size: 24)
-                  : Icon(Icons.lock, color: c.mutedForeground, size: 24),
+                  : const Icon(Icons.lock, size: 24, color: Colors.grey),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -142,36 +202,69 @@ class _TierCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tier.displayName,
+                    widget.tier.displayName,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: isUnlocked ? c.foreground : c.mutedForeground,
+                      color: widget.isUnlocked ? c.foreground : c.mutedForeground,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     _statusText(),
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: isUnlocked ? c.mutedForeground : c.muted,
+                      color: widget.isUnlocked ? c.mutedForeground : c.muted,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
-            if (isUnlocked && progress != null && progress!.isInProgress)
+            if (widget.isUnlocked && widget.progress != null && widget.progress!.isInProgress)
               SizedBox(
                 width: 32,
                 height: 32,
                 child: AppProgress(
-                  value: progress!.percentComplete / 100,
+                  value: widget.progress!.percentComplete / 100,
                   color: color,
                 ),
               ),
-            if (isUnlocked && progress != null && progress!.isCompleted)
+            if (widget.isUnlocked && widget.progress != null && widget.progress!.isCompleted)
               Icon(Icons.check_circle, color: color, size: 28),
           ],
         ),
       ),
     );
+
+    if (widget.isNewlyUnlocked) {
+      card = AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              child!,
+              if (_fadeInAnimation.value > 0)
+                Positioned(
+                  top: 0,
+                  right: 16,
+                  child: Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Opacity(
+                      opacity: _fadeInAnimation.value,
+                      child: const Text(
+                        '🎉',
+                        style: TextStyle(fontSize: 32),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+        child: card,
+      );
+    }
+
+    return card;
   }
 }

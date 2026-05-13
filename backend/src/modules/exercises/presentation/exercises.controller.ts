@@ -22,11 +22,16 @@ import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/domain/user.entity';
 import { Public } from '../../../common/decorators';
 import { CreateExerciseDto } from '../dto/create-exercise.dto';
+import { TierProgressService } from '../application/tier-progress.service';
+import { SubmitAnswerResult } from '../application/exercises.service';
 
 @ApiTags('Exercises')
 @Controller('exercises')
 export class ExercisesController {
-  constructor(private readonly exercisesService: ExercisesService) {}
+  constructor(
+    private readonly exercisesService: ExercisesService,
+    private readonly tierProgressService: TierProgressService,
+  ) {}
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -189,7 +194,8 @@ export class ExercisesController {
   @Post(':id/submit')
   @ApiOperation({
     summary: 'Nộp bài tập',
-    description: 'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm',
+    description:
+      'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm. Bao gồm nextTierUnlocked nếu lần nộp này mở khóa tier mới.',
   })
   @ApiParam({ name: 'id', description: 'ID của bài tập' })
   @ApiBody({
@@ -211,6 +217,7 @@ export class ExercisesController {
         score: 10,
         userAnswer: 'Cả 3 đều đúng',
         timeSpent: 30,
+        nextTierUnlocked: 'EASY',
       },
     },
   })
@@ -219,12 +226,45 @@ export class ExercisesController {
     @CurrentUser() user: User,
     @Param('id') exerciseId: string,
     @Body() body: { userAnswer: any; timeSpent?: number },
-  ) {
-    return this.exercisesService.submitAnswer(
+  ): Promise<SubmitAnswerResult> {
+    const exercise = await this.exercisesService.findById(exerciseId);
+
+    let beforeUnlockedCount = 0;
+    if (exercise.lessonId) {
+      const beforeSummary = await this.tierProgressService.getLessonTierSummary(
+        exercise.lessonId,
+        user.id,
+      );
+      beforeUnlockedCount = beforeSummary.unlockedTiers.length;
+    }
+
+    const result = await this.exercisesService.submitAnswer(
       user.id,
       exerciseId,
       body.userAnswer,
       body.timeSpent,
     );
+
+    let nextTierUnlocked: string | undefined;
+    if (exercise.lessonId) {
+      const afterSummary = await this.tierProgressService.getLessonTierSummary(
+        exercise.lessonId,
+        user.id,
+      );
+      if (afterSummary.unlockedTiers.length > beforeUnlockedCount) {
+        nextTierUnlocked =
+          afterSummary.unlockedTiers[afterSummary.unlockedTiers.length - 1];
+      }
+    }
+
+    return {
+      id: result.id,
+      isCorrect: result.isCorrect,
+      score: result.score,
+      userAnswer: result.userAnswer,
+      timeTaken: result.timeTaken,
+      attemptedAt: result.attemptedAt,
+      nextTierUnlocked,
+    };
   }
 }

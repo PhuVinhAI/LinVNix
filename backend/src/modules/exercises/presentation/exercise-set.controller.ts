@@ -38,6 +38,23 @@ export class ExerciseSetController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @Get(':id/progress')
+  @ApiOperation({
+    summary: 'Lấy tiến độ chi tiết của exercise set',
+    description:
+      'Lấy tiến độ chi tiết bao gồm totalExercises, attempted, correct, percentCorrect, percentComplete, nextTierUnlocked',
+  })
+  @ApiParam({ name: 'id', description: 'ID của exercise set' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tiến độ chi tiết của exercise set',
+  })
+  async getProgress(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.exerciseSetService.getSetProgress(id, user.id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({
     summary: 'Lấy chi tiết exercise set',
