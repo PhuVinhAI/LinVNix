@@ -208,4 +208,14 @@ class LessonRepository {
       throw mapDioException(e);
     }
   }
+
+  Future<void> deleteCustomExerciseSet(String setId) async {
+    try {
+      await _dio.delete<Map<String, dynamic>>(
+        '/exercise-sets/$setId/custom',
+      );
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
 }

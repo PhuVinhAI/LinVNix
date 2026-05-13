@@ -21,6 +21,7 @@ describe('ExerciseSetService', () => {
       create: jest.fn(),
       findByIdWithExercises: jest.fn(),
       findById: jest.fn(),
+      softDelete: jest.fn(),
     } as any;
 
     tierProgressService = {
@@ -30,6 +31,7 @@ describe('ExerciseSetService', () => {
 
     exercisesRepo = {
       findBySetId: jest.fn(),
+      softDeleteBySetId: jest.fn(),
     } as any;
 
     resultsRepo = {
@@ -283,6 +285,41 @@ describe('ExerciseSetService', () => {
       await expect(
         service.createCustom('lesson-1', overMaxConfig, 'user-1'),
       ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('deleteCustom', () => {
+    it('soft-deletes exercises and set when custom', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        isCustom: true,
+      } as any);
+
+      await service.deleteCustom('set-1');
+
+      expect(exercisesRepo.softDeleteBySetId).toHaveBeenCalledWith('set-1');
+      expect(exerciseSetsRepo.softDelete).toHaveBeenCalledWith('set-1');
+    });
+
+    it('throws NotFoundException when set missing', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue(null);
+
+      await expect(service.deleteCustom('missing')).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(exercisesRepo.softDeleteBySetId).not.toHaveBeenCalled();
+    });
+
+    it('throws BadRequestException when set is not custom', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        isCustom: false,
+      } as any);
+
+      await expect(service.deleteCustom('set-1')).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(exercisesRepo.softDeleteBySetId).not.toHaveBeenCalled();
     });
   });
 });

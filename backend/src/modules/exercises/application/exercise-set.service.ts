@@ -131,6 +131,21 @@ export class ExerciseSetService {
     return { set, exercises };
   }
 
+  async deleteCustom(setId: string): Promise<void> {
+    const set = await this.exerciseSetsRepository.findById(setId);
+    if (!set) {
+      throw new NotFoundException(`ExerciseSet with ID ${setId} not found`);
+    }
+    if (!set.isCustom) {
+      throw new BadRequestException(
+        'Only custom practice sets can be deleted via this endpoint',
+      );
+    }
+
+    await this.exercisesRepository.softDeleteBySetId(setId);
+    await this.exerciseSetsRepository.softDelete(setId);
+  }
+
   async getResumeInfo(setId: string, userId: string): Promise<ResumeInfo> {
     const set = await this.exerciseSetsRepository.findById(setId);
     if (!set) {
