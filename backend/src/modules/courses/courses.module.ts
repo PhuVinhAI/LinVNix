@@ -18,6 +18,7 @@ import { LessonsController } from './presentation/lessons.controller';
 import { ContentsModule } from '../contents/contents.module';
 import { GrammarModule } from '../grammar/grammar.module';
 import { ProgressModule } from '../progress/progress.module';
+import { ExercisesModule } from '../exercises/exercises.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ProgressModule } from '../progress/progress.module';
     forwardRef(() => ContentsModule),
     GrammarModule,
     ProgressModule,
+    ExercisesModule,
   ],
   controllers: [CoursesController, ModulesController, LessonsController],
   providers: [

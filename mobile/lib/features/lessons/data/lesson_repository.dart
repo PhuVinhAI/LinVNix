@@ -120,4 +120,20 @@ class LessonRepository {
       throw mapDioException(e);
     }
   }
+
+  Future<Map<String, TierSummary>> getModuleTierSummaries(
+      String moduleId) async {
+    try {
+      final response =
+          await _dio.get<List<dynamic>>('/lessons/module/$moduleId');
+      final lessons = response.data as List<dynamic>;
+      return {
+        for (final lesson in lessons)
+          (lesson as Map<String, dynamic>)['id'] as String:
+              TierSummary.fromJson(lesson['tierSummary'] as Map<String, dynamic>),
+      };
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
 }

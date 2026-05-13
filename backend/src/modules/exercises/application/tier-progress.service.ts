@@ -31,6 +31,18 @@ export interface LessonTierSummary {
   unlockedTiers: ExerciseTier[];
 }
 
+export interface TierSummaryItem {
+  tier: ExerciseTier;
+  status: 'completed' | 'in_progress' | 'locked';
+  percentCorrect: number;
+}
+
+export interface TierSummary {
+  currentTier: ExerciseTier;
+  unlockedTiers: ExerciseTier[];
+  tiers: TierSummaryItem[];
+}
+
 const TIER_ORDER: ExerciseTier[] = [
   ExerciseTier.BASIC,
   ExerciseTier.EASY,
@@ -159,6 +171,49 @@ export class TierProgressService {
       sets: tierProgresses,
       unlockedTiers,
     };
+  }
+
+  async getCompactTierSummary(
+    lessonId: string,
+    userId: string,
+  ): Promise<TierSummary> {
+    const { sets, unlockedTiers } = await this.getLessonTierSummary(
+      lessonId,
+      userId,
+    );
+
+    const tiers: TierSummaryItem[] = TIER_ORDER.map((tier) => {
+      const isUnlocked = unlockedTiers.includes(tier);
+      const progress = sets.find((s) => s.tier === tier);
+
+      if (!isUnlocked) {
+        return { tier, status: 'locked' as const, percentCorrect: 0 };
+      }
+
+      const isCompleted =
+        progress &&
+        progress.percentComplete === 100 &&
+        progress.percentCorrect >= 80;
+
+      if (isCompleted) {
+        return {
+          tier,
+          status: 'completed' as const,
+          percentCorrect: progress.percentCorrect,
+        };
+      }
+
+      return {
+        tier,
+        status: 'in_progress' as const,
+        percentCorrect: progress?.percentCorrect ?? 0,
+      };
+    });
+
+    const currentTier =
+      unlockedTiers[unlockedTiers.length - 1] ?? ExerciseTier.BASIC;
+
+    return { currentTier, unlockedTiers, tiers };
   }
 
   computeUnlockedTiers(tierProgresses: TierProgress[]): ExerciseTier[] {

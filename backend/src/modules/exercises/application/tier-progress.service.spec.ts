@@ -268,7 +268,7 @@ describe('TierProgressService', () => {
     });
 
     it('EXPERT completion does not unlock beyond EXPERT', () => {
-      const progresses = TIER_ORDER.map((tier, idx) => ({
+      const progresses = TIER_ORDER.map((tier) => ({
         setId: `set-${tier}`,
         tier,
         title: tier,
@@ -467,6 +467,100 @@ describe('TierProgressService', () => {
       expect(summary.unlockedTiers).toContain(ExerciseTier.EASY);
       expect(summary.unlockedTiers).toContain(ExerciseTier.MEDIUM);
       expect(summary.unlockedTiers).not.toContain(ExerciseTier.HARD);
+    });
+  });
+
+  describe('getCompactTierSummary', () => {
+    it('returns compact summary with all 5 tiers, BASIC completed unlocks EASY', async () => {
+      const mockSets = [
+        {
+          id: 'set-basic',
+          lessonId: 'lesson-1',
+          tier: ExerciseTier.BASIC,
+          title: 'Basic Exercises',
+          isCustom: false,
+          isAIGenerated: false,
+          orderIndex: 0,
+        },
+      ];
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue(mockSets as any);
+
+      const exercises = Array.from({ length: 10 }, (_, i) => ({
+        id: `ex-${i}`,
+      }));
+      exercisesRepo.findBySetId.mockResolvedValue(exercises as any);
+
+      const results = Array.from({ length: 10 }, (_, i) => ({
+        isCorrect: i < 8,
+      }));
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue(results as any);
+
+      const summary = await service.getCompactTierSummary('lesson-1', 'user-1');
+
+      expect(summary.currentTier).toBe(ExerciseTier.EASY);
+      expect(summary.unlockedTiers).toEqual([
+        ExerciseTier.BASIC,
+        ExerciseTier.EASY,
+      ]);
+      expect(summary.tiers).toHaveLength(5);
+      expect(summary.tiers[0]).toEqual({
+        tier: ExerciseTier.BASIC,
+        status: 'completed',
+        percentCorrect: 80,
+      });
+      expect(summary.tiers[1]).toEqual({
+        tier: ExerciseTier.EASY,
+        status: 'in_progress',
+        percentCorrect: 0,
+      });
+      expect(summary.tiers[2]).toEqual({
+        tier: ExerciseTier.MEDIUM,
+        status: 'locked',
+        percentCorrect: 0,
+      });
+    });
+
+    it('shows in_progress for unlocked tier with partial attempt', async () => {
+      const mockSets = [
+        {
+          id: 'set-basic',
+          lessonId: 'lesson-1',
+          tier: ExerciseTier.BASIC,
+          title: 'Basic',
+          isCustom: false,
+          isAIGenerated: false,
+          orderIndex: 0,
+        },
+      ];
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue(mockSets as any);
+
+      const exercises = Array.from({ length: 10 }, (_, i) => ({
+        id: `ex-${i}`,
+      }));
+      exercisesRepo.findBySetId.mockResolvedValue(exercises as any);
+
+      const results = Array.from({ length: 5 }, (_, i) => ({
+        isCorrect: i < 4,
+      }));
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue(results as any);
+
+      const summary = await service.getCompactTierSummary('lesson-1', 'user-1');
+
+      expect(summary.currentTier).toBe(ExerciseTier.BASIC);
+      expect(summary.tiers[0].status).toBe('in_progress');
+      expect(summary.tiers[0].percentCorrect).toBe(80);
+    });
+
+    it('handles lesson with no exercise sets', async () => {
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+
+      const summary = await service.getCompactTierSummary('lesson-1', 'user-1');
+
+      expect(summary.currentTier).toBe(ExerciseTier.BASIC);
+      expect(summary.unlockedTiers).toEqual([ExerciseTier.BASIC]);
+      expect(summary.tiers).toHaveLength(5);
+      expect(summary.tiers[0].status).toBe('in_progress');
+      expect(summary.tiers[1].status).toBe('locked');
     });
   });
 

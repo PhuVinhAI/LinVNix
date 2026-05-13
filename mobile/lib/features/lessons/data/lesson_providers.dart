@@ -38,3 +38,8 @@ final exerciseSetsProvider =
   final repo = ref.watch(lessonRepositoryProvider);
   return repo.getExerciseSetsByLesson(lessonId);
 });
+
+final moduleTierSummariesProvider = FutureProvider.family<Map<String, TierSummary>, String>((ref, moduleId) async {
+  final repo = ref.watch(lessonRepositoryProvider);
+  return repo.getModuleTierSummaries(moduleId);
+});
