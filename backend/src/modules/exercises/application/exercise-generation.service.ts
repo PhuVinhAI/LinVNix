@@ -40,7 +40,7 @@ interface LessonContext {
   }>;
 }
 
-const TIER_GUIDELINES: Record<
+export const TIER_GUIDELINES: Record<
   ExerciseTier,
   {
     questionCount: number;
@@ -61,33 +61,39 @@ const TIER_GUIDELINES: Record<
       'Easy level — prefer matching and multiple choice, use vocabulary and grammar from lesson',
   },
   [ExerciseTier.MEDIUM]: {
-    questionCount: 10,
+    questionCount: 12,
     preferredTypes: [
       ExerciseType.FILL_BLANK,
+      ExerciseType.TRANSLATION,
       ExerciseType.MULTIPLE_CHOICE,
       ExerciseType.MATCHING,
     ],
-    description: 'Medium level — add fill-in-the-blank, mix exercise types',
+    description:
+      'Medium level — more fill-blank and translation, increasing complexity',
   },
   [ExerciseTier.HARD]: {
-    questionCount: 12,
+    questionCount: 15,
     preferredTypes: [
       ExerciseType.TRANSLATION,
       ExerciseType.FILL_BLANK,
       ExerciseType.ORDERING,
+      ExerciseType.MATCHING,
     ],
     description:
-      'Hard level — emphasize translation and ordering, complex grammar',
+      'Hard level — complex grammar, harder vocabulary, emphasize translation',
   },
   [ExerciseTier.EXPERT]: {
-    questionCount: 15,
+    questionCount: 18,
     preferredTypes: [
       ExerciseType.TRANSLATION,
+      ExerciseType.FILL_BLANK,
       ExerciseType.ORDERING,
+      ExerciseType.MATCHING,
+      ExerciseType.MULTIPLE_CHOICE,
       ExerciseType.LISTENING,
     ],
     description:
-      'Expert level — all exercise types, advanced vocabulary and grammar',
+      'Expert level — all exercise types at max complexity, advanced vocabulary and grammar',
   },
 };
 
@@ -176,6 +182,29 @@ export class ExerciseGenerationService {
     }
 
     return this.doGenerate(set, userId);
+  }
+
+  async regenerate(setId: string, userId: string): Promise<Exercise[]> {
+    const set = await this.exerciseSetsRepository.findById(setId);
+    if (!set) {
+      throw new BadRequestException(`ExerciseSet ${setId} not found`);
+    }
+    if (set.tier === ExerciseTier.BASIC) {
+      throw new BadRequestException('Cannot regenerate BASIC tier exercises');
+    }
+
+    await this.exerciseSetsRepository.softDelete(setId);
+    await this.exercisesRepository.softDeleteBySetId(setId);
+
+    const newSet = await this.exerciseSetsRepository.create({
+      lessonId: set.lessonId,
+      tier: set.tier,
+      isAIGenerated: false,
+      title: `AI Generated - ${set.tier}`,
+      orderIndex: set.orderIndex,
+    });
+
+    return this.doGenerate(newSet, userId);
   }
 
   private async doGenerate(
