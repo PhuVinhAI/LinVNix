@@ -5,6 +5,7 @@ import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseTier } from '../../../common/enums';
 
 export interface TierProgress {
+  setId: string;
   tier: ExerciseTier;
   title: string;
   isCustom: boolean;
@@ -139,6 +140,7 @@ export class TierProgressService {
       const percentCorrect = attempted > 0 ? (correct / attempted) * 100 : 0;
 
       tierProgresses.push({
+        setId: set.id,
         tier: set.tier,
         title: set.title,
         isCustom: set.isCustom,

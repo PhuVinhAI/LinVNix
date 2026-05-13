@@ -3,12 +3,16 @@ import { NotFoundException } from '@nestjs/common';
 import { ExerciseSetService } from './exercise-set.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { TierProgressService } from './tier-progress.service';
+import { ExercisesRepository } from './repositories/exercises.repository';
+import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
 import { ExerciseTier } from '../../../common/enums';
 
 describe('ExerciseSetService', () => {
   let service: ExerciseSetService;
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
   let tierProgressService: jest.Mocked<TierProgressService>;
+  let exercisesRepo: jest.Mocked<ExercisesRepository>;
+  let resultsRepo: jest.Mocked<UserExerciseResultsRepository>;
 
   beforeEach(async () => {
     exerciseSetsRepo = {
@@ -22,6 +26,15 @@ describe('ExerciseSetService', () => {
       getSetProgress: jest.fn(),
     } as any;
 
+    exercisesRepo = {
+      findBySetId: jest.fn(),
+    } as any;
+
+    resultsRepo = {
+      findByUserAndExerciseIds: jest.fn(),
+      deleteByUserAndExerciseIds: jest.fn(),
+    } as any;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ExerciseSetService,
@@ -32,6 +45,14 @@ describe('ExerciseSetService', () => {
         {
           provide: TierProgressService,
           useValue: tierProgressService,
+        },
+        {
+          provide: ExercisesRepository,
+          useValue: exercisesRepo,
+        },
+        {
+          provide: UserExerciseResultsRepository,
+          useValue: resultsRepo,
         },
       ],
     }).compile();

@@ -23,6 +23,9 @@ export class UserProgress extends BaseEntity {
   @Column({ name: 'time_spent', default: 0 })
   timeSpent: number;
 
+  @Column({ name: 'content_viewed', default: false })
+  contentViewed: boolean;
+
   @Column({ name: 'user_id' })
   userId: string;
 
