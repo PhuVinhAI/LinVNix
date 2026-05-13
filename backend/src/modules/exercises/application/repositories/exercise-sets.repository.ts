@@ -50,6 +50,14 @@ export class ExerciseSetsRepository {
     });
   }
 
+  async update(
+    id: string,
+    data: Partial<ExerciseSet>,
+  ): Promise<ExerciseSet | null> {
+    await this.repository.update(id, data);
+    return this.findById(id);
+  }
+
   async softDelete(id: string): Promise<void> {
     await this.repository.softDelete(id);
   }

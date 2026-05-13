@@ -1,0 +1,7 @@
+# Exercise Generation Prompt Template
+# Used by ExerciseGenerationService to generate AI exercises per tier
+# Variables: {{tier}}, {{questionCount}}, {{preferredTypes}}, {{tierDescription}}, {{lessonContext}}
+
+exercise_generation:
+  description: "Generate Vietnamese language exercises for a specific tier based on lesson content"
+  template: "Generate {{questionCount}} Vietnamese language exercises for the {{tier}} tier ({{tierDescription}}). Preferred exercise types: {{preferredTypes}}. Use the following lesson context to create relevant, non-duplicate exercises. Mix Vietnamese and English naturally per exercise type (matching: Vietnamese-English pairs, translation: either direction, listening: hear Vietnamese). Each exercise must have a unique question that tests different vocabulary or grammar from the lesson. Return ONLY valid JSON matching the schema — no markdown, no commentary."

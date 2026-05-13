@@ -8,13 +8,50 @@ import {
 } from '@nestjs/swagger';
 import { ExerciseSetService } from '../application/exercise-set.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from '../../../common/guards/permissions.guard';
 import { CurrentUser } from '../../../common/decorators';
+import { RequirePermissions } from '../../../common/decorators';
+import { Permission } from '../../../common/enums';
 import { User } from '../../users/domain/user.entity';
 
 @ApiTags('Exercise Sets')
 @Controller('exercise-sets')
 export class ExerciseSetController {
   constructor(private readonly exerciseSetService: ExerciseSetService) {}
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions(Permission.AI_GENERATE_EXERCISE)
+  @Post('lesson/:lessonId/tier/:tier/generate')
+  @ApiOperation({
+    summary: 'AI generate exercises for a lesson tier',
+    description:
+      'Generate AI exercises for a lesson tier (creates set if needed). Requires AI_GENERATE_EXERCISE permission.',
+  })
+  @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
+  @ApiParam({
+    name: 'tier',
+    description: 'Tier name (EASY, MEDIUM, HARD, EXPERT)',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Exercises generated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'BASIC tier or set already has exercises',
+  })
+  async generateForTier(
+    @Param('lessonId') lessonId: string,
+    @Param('tier') tier: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.exerciseSetService.generateForTier(
+      lessonId,
+      tier as any,
+      user.id,
+    );
+  }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -71,6 +108,28 @@ export class ExerciseSetController {
   })
   async getResumeInfo(@Param('id') id: string, @CurrentUser() user: User) {
     return this.exerciseSetService.getResumeInfo(id, user.id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions(Permission.AI_GENERATE_EXERCISE)
+  @Post(':id/generate')
+  @ApiOperation({
+    summary: 'AI generate exercises for an empty non-basic set',
+    description:
+      'Generate AI exercises for an empty exercise set (non-basic tier). Requires AI_GENERATE_EXERCISE permission.',
+  })
+  @ApiParam({ name: 'id', description: 'ID của exercise set' })
+  @ApiResponse({
+    status: 201,
+    description: 'Exercises generated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Set is basic tier or already has exercises',
+  })
+  async generate(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.exerciseSetService.generate(id, user.id);
   }
 
   @ApiBearerAuth()

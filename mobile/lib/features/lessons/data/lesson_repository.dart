@@ -136,4 +136,29 @@ class LessonRepository {
       throw mapDioException(e);
     }
   }
+
+  Future<List<dynamic>> generateExercises(String setId) async {
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/exercise-sets/$setId/generate',
+      );
+      final data = response.data!;
+      return (data['exercises'] as List<dynamic>? ?? []) as List<dynamic>;
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<List<dynamic>> generateExercisesForTier(
+      String lessonId, String tier) async {
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/exercise-sets/lesson/$lessonId/tier/$tier/generate',
+      );
+      final data = response.data!;
+      return (data as List<dynamic>? ?? []) as List<dynamic>;
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
 }

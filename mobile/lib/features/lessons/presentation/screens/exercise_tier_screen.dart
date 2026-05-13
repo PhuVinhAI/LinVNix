@@ -16,6 +16,8 @@ class ExerciseTierScreen extends ConsumerStatefulWidget {
 
 class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
   ExerciseTier? _newlyUnlockedTier;
+  ExerciseTier? _generatingTier;
+  String? _generationError;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +63,16 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                 progress: summary.progressForTier(tier),
                 isUnlocked: summary.isTierUnlocked(tier),
                 isNewlyUnlocked: _newlyUnlockedTier == tier,
-                onTap: summary.isTierUnlocked(tier) && summary.progressForTier(tier) != null
-                    ? () => context.go('/lessons/${widget.lessonId}/exercises/play/${summary.progressForTier(tier)!.tier.value}')
+                isGenerating: _generatingTier == tier,
+                generationError: _generatingTier == tier ? _generationError : null,
+                onTap: _canPlayTier(summary, tier)
+                    ? () => context.go('/lessons/${widget.lessonId}/exercises/play/${tier.value}')
+                    : null,
+                onGenerate: summary.isTierUnlocked(tier) && tier != ExerciseTier.basic
+                    ? () => _handleGenerate(tier)
+                    : null,
+                onRetryGenerate: _generatingTier == tier && _generationError != null
+                    ? () => _handleGenerate(tier)
                     : null,
                 onUnlockAnimationDone: _newlyUnlockedTier == tier
                     ? () => setState(() => _newlyUnlockedTier = null)
@@ -73,6 +83,39 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
         },
       ),
     );
+  }
+
+  bool _canPlayTier(LessonTierSummary summary, ExerciseTier tier) {
+    if (!summary.isTierUnlocked(tier)) return false;
+    final progress = summary.progressForTier(tier);
+    if (progress == null) return false;
+    return progress.totalExercises > 0;
+  }
+
+  Future<void> _handleGenerate(ExerciseTier tier) async {
+    setState(() {
+      _generatingTier = tier;
+      _generationError = null;
+    });
+
+    try {
+      final repo = ref.read(lessonRepositoryProvider);
+      await repo.generateExercisesForTier(widget.lessonId, tier.value);
+      if (mounted) {
+        setState(() {
+          _generatingTier = null;
+          _generationError = null;
+        });
+        ref.invalidate(exerciseSetsProvider(widget.lessonId));
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _generatingTier = null;
+          _generationError = e.toString();
+        });
+      }
+    }
   }
 
   void showUnlockAnimation(ExerciseTier tier) {
@@ -86,7 +129,11 @@ class _TierCard extends StatefulWidget {
     this.progress,
     required this.isUnlocked,
     this.isNewlyUnlocked = false,
+    this.isGenerating = false,
+    this.generationError,
     this.onTap,
+    this.onGenerate,
+    this.onRetryGenerate,
     this.onUnlockAnimationDone,
   });
 
@@ -94,7 +141,11 @@ class _TierCard extends StatefulWidget {
   final TierProgress? progress;
   final bool isUnlocked;
   final bool isNewlyUnlocked;
+  final bool isGenerating;
+  final String? generationError;
   final VoidCallback? onTap;
+  final VoidCallback? onGenerate;
+  final VoidCallback? onRetryGenerate;
   final VoidCallback? onUnlockAnimationDone;
 
   @override
@@ -143,6 +194,13 @@ class _TierCardState extends State<_TierCard> with SingleTickerProviderStateMixi
     super.dispose();
   }
 
+  bool get _needsGeneration {
+    if (!widget.isUnlocked) return false;
+    if (widget.tier == ExerciseTier.basic) return false;
+    final progress = widget.progress;
+    return progress == null || progress.totalExercises == 0;
+  }
+
   Color _tierColor(AppColors c) {
     if (!widget.isUnlocked) return c.muted;
     return switch (widget.tier) {
@@ -166,6 +224,9 @@ class _TierCardState extends State<_TierCard> with SingleTickerProviderStateMixi
 
   String _statusText() {
     if (!widget.isUnlocked) return '🔒';
+    if (widget.isGenerating) return 'Generating...';
+    if (widget.generationError != null) return 'Generation failed';
+    if (_needsGeneration) return 'Ready to generate';
     if (widget.progress == null) return '🔒';
     if (widget.progress!.isCompleted) return '✓';
     if (widget.progress!.isInProgress) return '${widget.progress!.percentComplete.round()}%';
@@ -183,53 +244,96 @@ class _TierCardState extends State<_TierCard> with SingleTickerProviderStateMixi
       child: AppCard(
         onTap: widget.onTap,
         padding: const EdgeInsets.all(16),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: widget.isUnlocked
-                  ? Icon(_tierIcon(), color: color, size: 24)
-                  : const Icon(Icons.lock, size: 24, color: Colors.grey),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.tier.displayName,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: widget.isUnlocked ? c.foreground : c.mutedForeground,
+            Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: widget.isUnlocked
+                      ? Icon(_tierIcon(), color: color, size: 24)
+                      : const Icon(Icons.lock, size: 24, color: Colors.grey),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.tier.displayName,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: widget.isUnlocked ? c.foreground : c.mutedForeground,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _statusText(),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: widget.isUnlocked ? c.mutedForeground : c.muted,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (widget.isUnlocked && widget.progress != null && widget.progress!.isInProgress)
+                  SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: AppProgress(
+                      value: widget.progress!.percentComplete / 100,
+                      color: color,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _statusText(),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: widget.isUnlocked ? c.mutedForeground : c.muted,
-                      fontWeight: FontWeight.w600,
+                if (widget.isUnlocked && widget.progress != null && widget.progress!.isCompleted)
+                  Icon(Icons.check_circle, color: color, size: 28),
+              ],
+            ),
+            if (widget.isGenerating) ...[
+              const SizedBox(height: 12),
+              Center(child: AppSpinner()),
+            ],
+            if (widget.generationError != null) ...[
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Icon(Icons.error_outline, color: c.error, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      widget.generationError!,
+                      style: theme.textTheme.bodySmall?.copyWith(color: c.error),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
-            ),
-            if (widget.isUnlocked && widget.progress != null && widget.progress!.isInProgress)
+              const SizedBox(height: 8),
+              AppButton(
+                label: 'Retry',
+                variant: AppButtonVariant.outline,
+                onPressed: widget.onRetryGenerate,
+              ),
+            ],
+            if (_needsGeneration && !widget.isGenerating && widget.generationError == null) ...[
+              const SizedBox(height: 12),
               SizedBox(
-                width: 32,
-                height: 32,
-                child: AppProgress(
-                  value: widget.progress!.percentComplete / 100,
-                  color: color,
+                width: double.infinity,
+                child: AppButton(
+                  label: 'Generate Exercises',
+                  variant: AppButtonVariant.primary,
+                  onPressed: widget.onGenerate,
                 ),
               ),
-            if (widget.isUnlocked && widget.progress != null && widget.progress!.isCompleted)
-              Icon(Icons.check_circle, color: color, size: 28),
+            ],
           ],
         ),
       ),
