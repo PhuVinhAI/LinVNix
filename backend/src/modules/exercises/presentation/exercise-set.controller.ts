@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -51,6 +51,81 @@ export class ExerciseSetController {
   })
   async getProgress(@Param('id') id: string, @CurrentUser() user: User) {
     return this.exerciseSetService.getSetProgress(id, user.id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get(':id/resume')
+  @ApiOperation({
+    summary: 'Lấy thông tin resume cho exercise set',
+    description:
+      'Kiểm tra xem user có thể tiếp tục làm dở không. Trả về canResume, attempted, totalExercises.',
+  })
+  @ApiParam({ name: 'id', description: 'ID của exercise set' })
+  @ApiResponse({
+    status: 200,
+    description: 'Thông tin resume',
+    schema: {
+      example: { canResume: true, attempted: 5, totalExercises: 10 },
+    },
+  })
+  async getResumeInfo(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.exerciseSetService.getResumeInfo(id, user.id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/reset')
+  @ApiOperation({
+    summary: 'Reset tiến độ exercise set',
+    description:
+      'Xoá toàn bộ kết quả làm bài của user cho exercise set này (start over)',
+  })
+  @ApiParam({ name: 'id', description: 'ID của exercise set' })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset thành công',
+  })
+  async resetProgress(@Param('id') id: string, @CurrentUser() user: User) {
+    await this.exerciseSetService.resetProgress(id, user.id);
+    return { success: true };
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get(':id/summary')
+  @ApiOperation({
+    summary: 'Lấy tóm tắt kết quả exercise set',
+    description:
+      'Trả về thống kê tổng quan, danh sách câu sai với đáp án đúng, và thông báo unlock tier mới nếu có',
+  })
+  @ApiParam({ name: 'id', description: 'ID của exercise set' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tóm tắt kết quả',
+    schema: {
+      example: {
+        stats: {
+          totalExercises: 10,
+          attempted: 10,
+          correct: 8,
+          percentCorrect: 80,
+          percentComplete: 100,
+        },
+        wrongQuestions: [
+          {
+            exerciseId: 'uuid',
+            question: 'Q?',
+            correctAnswer: { value: 'A' },
+            explanation: 'Exp',
+          },
+        ],
+        nextTierUnlocked: 'EASY',
+      },
+    },
+  })
+  async getSummary(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.exerciseSetService.getSummary(id, user.id);
   }
 
   @ApiBearerAuth()

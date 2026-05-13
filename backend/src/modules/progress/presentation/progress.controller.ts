@@ -88,6 +88,34 @@ export class ProgressController {
     return this.progressService.getLessonProgress(user.id, lessonId);
   }
 
+  @Get('lesson/:lessonId/exercise-status')
+  @ApiOperation({
+    summary: 'Lấy trạng thái exercise của lesson cho revisit flow',
+    description:
+      'Trả về contentViewed, hasIncompleteSet, incompleteSetId, unlockedTiers — dùng cho mobile quyết định "Review content" hoặc "Do exercises" khi quay lại lesson',
+  })
+  @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
+  @ApiResponse({
+    status: 200,
+    description: 'Trạng thái exercise',
+    schema: {
+      example: {
+        contentViewed: true,
+        hasIncompleteSet: true,
+        incompleteSetId: 'uuid',
+        incompleteSetAttempted: 5,
+        incompleteSetTotal: 10,
+        unlockedTiers: ['BASIC', 'EASY'],
+      },
+    },
+  })
+  async getLessonExerciseStatus(
+    @CurrentUser() user: User,
+    @Param('lessonId') lessonId: string,
+  ) {
+    return this.progressService.getLessonExerciseStatus(user.id, lessonId);
+  }
+
   @Post('lesson/:lessonId/start')
   @ApiOperation({
     summary: 'Bắt đầu học lesson',
@@ -113,6 +141,32 @@ export class ProgressController {
     @Param('lessonId') lessonId: string,
   ) {
     return this.progressService.startLesson(user.id, lessonId);
+  }
+
+  @Post('lesson/:lessonId/content-viewed')
+  @ApiOperation({
+    summary: 'Đánh dấu đã xem nội dung lesson',
+    description:
+      'Đánh dấu contentViewed=true khi user đến trang cuối wizard. Dùng để track việc user đã xem nội dung bài học.',
+  })
+  @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
+  @ApiResponse({
+    status: 200,
+    description: 'Đánh dấu thành công',
+    schema: {
+      example: {
+        id: 'uuid-string',
+        lessonId: 'lesson-uuid',
+        contentViewed: true,
+        status: 'IN_PROGRESS',
+      },
+    },
+  })
+  async markContentReviewed(
+    @CurrentUser() user: User,
+    @Param('lessonId') lessonId: string,
+  ) {
+    return this.progressService.markContentReviewed(user.id, lessonId);
   }
 
   @Post('lesson/:lessonId/complete')

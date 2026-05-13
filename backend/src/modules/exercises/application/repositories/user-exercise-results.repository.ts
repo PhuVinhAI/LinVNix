@@ -44,6 +44,19 @@ export class UserExerciseResultsRepository {
       .getMany();
   }
 
+  async deleteByUserAndExerciseIds(
+    userId: string,
+    exerciseIds: string[],
+  ): Promise<void> {
+    if (exerciseIds.length === 0) return;
+    await this.repository
+      .createQueryBuilder()
+      .delete()
+      .where('userId = :userId', { userId })
+      .andWhere('exerciseId IN (:...exerciseIds)', { exerciseIds })
+      .execute();
+  }
+
   async getStatsByUser(userId: string): Promise<{
     totalExercises: number;
     correctAnswers: number;

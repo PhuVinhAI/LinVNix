@@ -29,6 +29,12 @@ import { ExerciseSetController } from './presentation/exercise-set.controller';
     ExerciseSetsRepository,
     UserExerciseResultsRepository,
   ],
-  exports: [ExercisesService, ExerciseSetService, TierProgressService],
+  exports: [
+    ExercisesService,
+    ExerciseSetService,
+    TierProgressService,
+    ExercisesRepository,
+    UserExerciseResultsRepository,
+  ],
 })
 export class ExercisesModule {}

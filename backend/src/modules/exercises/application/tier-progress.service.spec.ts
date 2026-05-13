@@ -40,6 +40,7 @@ describe('TierProgressService', () => {
     it('unlocks EASY when BASIC completed with >=80% correct', () => {
       const progresses = [
         {
+          setId: 'set-basic',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -58,6 +59,7 @@ describe('TierProgressService', () => {
     it('does NOT unlock EASY when BASIC <80% correct', () => {
       const progresses = [
         {
+          setId: 'set-basic',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -76,6 +78,7 @@ describe('TierProgressService', () => {
     it('does NOT unlock EASY when BASIC not fully attempted', () => {
       const progresses = [
         {
+          setId: 'set-basic',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -94,6 +97,7 @@ describe('TierProgressService', () => {
     it('unlocks sequentially through all tiers', () => {
       const progresses = [
         {
+          setId: 'set-basic',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -105,6 +109,7 @@ describe('TierProgressService', () => {
           percentCorrect: 90,
         },
         {
+          setId: 'set-easy',
           tier: ExerciseTier.EASY,
           title: 'Easy',
           isCustom: false,
@@ -116,6 +121,7 @@ describe('TierProgressService', () => {
           percentCorrect: 80,
         },
         {
+          setId: 'set-medium',
           tier: ExerciseTier.MEDIUM,
           title: 'Medium',
           isCustom: false,
@@ -127,6 +133,7 @@ describe('TierProgressService', () => {
           percentCorrect: 100,
         },
         {
+          setId: 'set-hard',
           tier: ExerciseTier.HARD,
           title: 'Hard',
           isCustom: false,
@@ -151,6 +158,7 @@ describe('TierProgressService', () => {
     it('stops unlock chain at incomplete tier', () => {
       const progresses = [
         {
+          setId: 'set-basic',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -162,6 +170,7 @@ describe('TierProgressService', () => {
           percentCorrect: 90,
         },
         {
+          setId: 'set-easy',
           tier: ExerciseTier.EASY,
           title: 'Easy',
           isCustom: false,
@@ -173,6 +182,7 @@ describe('TierProgressService', () => {
           percentCorrect: 100,
         },
         {
+          setId: 'set-medium',
           tier: ExerciseTier.MEDIUM,
           title: 'Medium',
           isCustom: false,
@@ -191,6 +201,7 @@ describe('TierProgressService', () => {
     it('boundary: 79% correct does NOT unlock next tier', () => {
       const progresses = [
         {
+          setId: 'set-basic-100',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -209,6 +220,7 @@ describe('TierProgressService', () => {
     it('boundary: 80% correct DOES unlock next tier', () => {
       const progresses = [
         {
+          setId: 'set-basic-100',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -227,6 +239,7 @@ describe('TierProgressService', () => {
     it('cannot skip tiers even if higher tier is complete', () => {
       const progresses = [
         {
+          setId: 'set-basic',
           tier: ExerciseTier.BASIC,
           title: 'Basic',
           isCustom: false,
@@ -238,6 +251,7 @@ describe('TierProgressService', () => {
           percentCorrect: 100,
         },
         {
+          setId: 'set-medium',
           tier: ExerciseTier.MEDIUM,
           title: 'Medium',
           isCustom: false,
@@ -254,7 +268,8 @@ describe('TierProgressService', () => {
     });
 
     it('EXPERT completion does not unlock beyond EXPERT', () => {
-      const progresses = TIER_ORDER.map((tier) => ({
+      const progresses = TIER_ORDER.map((tier, idx) => ({
+        setId: `set-${tier}`,
         tier,
         title: tier,
         isCustom: false,
@@ -351,6 +366,7 @@ describe('TierProgressService', () => {
         {
           id: 'set-easy',
           lessonId: 'lesson-1',
+          setId: 'set-easy',
           tier: ExerciseTier.EASY,
           title: 'Easy',
           isCustom: false,
@@ -358,9 +374,7 @@ describe('TierProgressService', () => {
           orderIndex: 1,
         },
       ];
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue(
-        mockSets as any,
-      );
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue(mockSets as any);
 
       exercisesRepo.findBySetId.mockImplementation(async (setId: string) => {
         if (setId === 'set-basic') {
@@ -394,7 +408,9 @@ describe('TierProgressService', () => {
         ExerciseTier.MEDIUM,
       ]);
 
-      expect(summary.sets.find((s) => s.tier === ExerciseTier.EASY)!.percentCorrect).toBe(87.5);
+      expect(
+        summary.sets.find((s) => s.tier === ExerciseTier.EASY)!.percentCorrect,
+      ).toBe(87.5);
     });
 
     it('at tier N, all tiers <= N are accessible', async () => {
@@ -411,6 +427,7 @@ describe('TierProgressService', () => {
         {
           id: 'set-easy',
           lessonId: 'lesson-1',
+          setId: 'set-easy',
           tier: ExerciseTier.EASY,
           title: 'Easy',
           isCustom: false,
