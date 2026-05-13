@@ -188,19 +188,22 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
       },
       loading: () => const Center(child: AppSpinner()),
       error: (error, stack) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 48, color: c.error),
-            const SizedBox(height: 16),
-            Text(error.toString(), textAlign: TextAlign.center),
-            const SizedBox(height: 16),
-            AppButton(
-              label: 'Retry',
-              variant: AppButtonVariant.primary,
-              onPressed: _onRefresh,
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 48),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 48, color: c.error),
+              const SizedBox(height: 16),
+              Text(error.toString(), textAlign: TextAlign.center),
+              const SizedBox(height: 16),
+              AppButton(
+                label: 'Retry',
+                variant: AppButtonVariant.primary,
+                onPressed: _onRefresh,
+              ),
+            ],
+          ),
         ),
       ),
     );

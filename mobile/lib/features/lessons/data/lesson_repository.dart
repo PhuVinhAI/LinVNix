@@ -68,6 +68,14 @@ class LessonRepository {
     }
   }
 
+  Future<void> markContentReviewed(String lessonId) async {
+    try {
+      await _dio.post<Map<String, dynamic>>('/progress/lesson/$lessonId/content-viewed');
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<void> completeLesson(String lessonId, {int score = 0}) async {
     try {
       await _dio.post<Map<String, dynamic>>(

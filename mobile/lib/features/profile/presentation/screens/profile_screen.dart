@@ -31,21 +31,24 @@ class ProfileScreen extends ConsumerWidget {
       body: profileAsync.when(
           loading: () => const Center(child: AppSpinner(size: 20)),
           error: (error, stack) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 48, color: c.error),
-                const SizedBox(height: 16),
-                Text('Failed to load profile',
-                    style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 8),
-                AppButton(
-                  onPressed: () => ref.invalidate(userProfileProvider),
-                  icon: const Icon(Icons.refresh),
-                  label: 'Retry',
-                  variant: AppButtonVariant.primary,
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 48, color: c.error),
+                  const SizedBox(height: 16),
+                  Text('Failed to load profile',
+                      style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
+                  const SizedBox(height: 8),
+                  AppButton(
+                    onPressed: () => ref.invalidate(userProfileProvider),
+                    icon: const Icon(Icons.refresh),
+                    label: 'Retry',
+                    variant: AppButtonVariant.primary,
+                  ),
+                ],
+              ),
             ),
           ),
           data: (profile) => ListView(
@@ -499,7 +502,7 @@ class _StatsSection extends ConsumerWidget {
                   child: Icon(Icons.error_outline, color: c.error),
                 ),
                 const SizedBox(height: 8),
-                const Text('Failed to load statistics'),
+                const Text('Failed to load statistics', textAlign: TextAlign.center),
                 const SizedBox(height: 8),
                 Semantics(
                   label: 'Retry loading statistics',
