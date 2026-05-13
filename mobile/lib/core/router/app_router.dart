@@ -188,6 +188,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           return ExercisePlayScreen(lessonId: id, tierValue: tier);
         },
       ),
+      GoRoute(
+        path: '/lessons/:id/exercises/play/custom/:setId',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final setId = state.pathParameters['setId']!;
+          return ExercisePlayScreen(lessonId: id, tierValue: 'custom', customSetId: setId);
+        },
+      ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) => ShellScreen(child: child),

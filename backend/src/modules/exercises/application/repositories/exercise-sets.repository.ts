@@ -61,4 +61,11 @@ export class ExerciseSetsRepository {
   async softDelete(id: string): Promise<void> {
     await this.repository.softDelete(id);
   }
+
+  async findActiveCustomSetsByLesson(lessonId: string): Promise<ExerciseSet[]> {
+    return this.repository.find({
+      where: { lessonId, isCustom: true, deletedAt: undefined as any },
+      order: { createdAt: 'DESC' },
+    });
+  }
 }

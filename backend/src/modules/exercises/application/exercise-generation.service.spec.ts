@@ -491,11 +491,17 @@ describe('ExerciseGenerationService', () => {
         orderIndex: 2,
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({ text: validAiResponse, usageMetadata: {} });
-      exercisesRepo.create.mockImplementation(async (data) => ({
-        id: `gen-${data.orderIndex}`,
-        ...data,
-      } as any));
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
       exerciseSetsRepo.update.mockResolvedValue({ id: 'new-set' } as any);
       exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
         id: 'basic-set',
@@ -559,11 +565,17 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({ text: validAiResponse, usageMetadata: {} });
-      exercisesRepo.create.mockImplementation(async (data) => ({
-        id: `gen-${data.orderIndex}`,
-        ...data,
-      } as any));
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
       exerciseSetsRepo.update.mockResolvedValue({ id: 'new-hard' } as any);
       exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
         id: 'basic-set',
@@ -614,11 +626,17 @@ describe('ExerciseGenerationService', () => {
         lessonId: 'lesson-1',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chat.mockResolvedValue({ text: validAiResponse, usageMetadata: {} });
-      exercisesRepo.create.mockImplementation(async (data) => ({
-        id: `gen-${data.orderIndex}`,
-        ...data,
-      } as any));
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
       exerciseSetsRepo.update.mockResolvedValue({ id: 'new-expert' } as any);
       exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
         id: 'basic-set',
@@ -652,6 +670,113 @@ describe('ExerciseGenerationService', () => {
         expect.objectContaining({ tier: ExerciseTier.EXPERT }),
       );
       expect(result).toHaveLength(1);
+    });
+  });
+
+  describe('generateCustom', () => {
+    it('throws when set not found', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue(null);
+
+      await expect(service.generateCustom('missing', 'user-1')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('throws when set is not custom', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        tier: ExerciseTier.EASY,
+        isCustom: false,
+        lessonId: 'lesson-1',
+      } as any);
+
+      await expect(service.generateCustom('set-1', 'user-1')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('throws when set already has exercises', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 10,
+          exerciseTypes: [ExerciseType.MULTIPLE_CHOICE],
+          focusArea: 'both',
+        },
+        lessonId: 'lesson-1',
+      } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' } as any]);
+
+      await expect(service.generateCustom('set-1', 'user-1')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('generates exercises using custom config', async () => {
+      const customConfig = {
+        questionCount: 5,
+        exerciseTypes: [ExerciseType.FILL_BLANK, ExerciseType.TRANSLATION],
+        focusArea: 'grammar',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'custom-set-1',
+        isCustom: true,
+        customConfig,
+        tier: null,
+        lessonId: 'lesson-1',
+      } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      genaiService.chat.mockResolvedValue({
+        text: validAiResponse,
+        usageMetadata: {},
+      });
+      exercisesRepo.create.mockImplementation(
+        async (data) =>
+          ({
+            id: `gen-${data.orderIndex}`,
+            ...data,
+          }) as any,
+      );
+      exerciseSetsRepo.update.mockResolvedValue({ id: 'custom-set-1' } as any);
+      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
+        id: 'basic-set',
+      } as any);
+
+      const result = await service.generateCustom('custom-set-1', 'user-1');
+
+      expect(result).toHaveLength(1);
+      expect(genaiService.chat).toHaveBeenCalledWith(
+        expect.objectContaining({
+          messages: [
+            expect.objectContaining({
+              content: expect.stringContaining('5'),
+            }),
+          ],
+        }),
+      );
+    });
+  });
+
+  describe('buildPrompt with custom config', () => {
+    it('includes custom question count and focus area', () => {
+      const customGuidelines = {
+        questionCount: 12,
+        preferredTypes: [ExerciseType.FILL_BLANK, ExerciseType.TRANSLATION],
+        description:
+          'Focus on grammar — emphasize fill-blank, ordering, and translation exercises',
+      };
+
+      const prompt = service.buildPrompt(
+        mockLessonContext,
+        customGuidelines,
+        'Custom (grammar)',
+      );
+
+      expect(prompt).toContain('12');
+      expect(prompt).toContain('Custom (grammar)');
+      expect(prompt).toContain('fill_blank');
+      expect(prompt).toContain('translation');
     });
   });
 });

@@ -26,6 +26,59 @@ enum ExerciseTier {
   }
 }
 
+enum FocusArea {
+  vocabulary('vocabulary'),
+  grammar('grammar'),
+  both('both');
+
+  const FocusArea(this.value);
+  final String value;
+
+  static FocusArea fromString(String value) {
+    return FocusArea.values.firstWhere(
+      (f) => f.value == value,
+      orElse: () => FocusArea.both,
+    );
+  }
+
+  String get displayName {
+    return switch (this) {
+      FocusArea.vocabulary => 'Từ vựng',
+      FocusArea.grammar => 'Ngữ pháp',
+      FocusArea.both => 'Cả hai',
+    };
+  }
+}
+
+class CustomSetConfig {
+  const CustomSetConfig({
+    required this.questionCount,
+    required this.exerciseTypes,
+    required this.focusArea,
+  });
+
+  factory CustomSetConfig.fromJson(Map<String, dynamic> json) {
+    return CustomSetConfig(
+      questionCount: (json['questionCount'] as num?)?.toInt() ?? 10,
+      exerciseTypes: (json['exerciseTypes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      focusArea: FocusArea.fromString(json['focusArea'] as String? ?? 'both'),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'questionCount': questionCount,
+        'exerciseTypes': exerciseTypes,
+        'focusArea': focusArea.value,
+      };
+
+  final int questionCount;
+  final List<String> exerciseTypes;
+  final FocusArea focusArea;
+}
+
 class ExerciseSetModel {
   const ExerciseSetModel({
     required this.id,
@@ -35,27 +88,35 @@ class ExerciseSetModel {
     this.isCustom = false,
     this.isAIGenerated = false,
     this.orderIndex = 0,
+    this.customConfig,
   });
 
   factory ExerciseSetModel.fromJson(Map<String, dynamic> json) {
     return ExerciseSetModel(
       id: json['id'] as String,
       lessonId: json['lessonId'] as String,
-      tier: ExerciseTier.fromString(json['tier'] as String),
+      tier: json['tier'] != null
+          ? ExerciseTier.fromString(json['tier'] as String)
+          : null,
       title: json['title'] as String,
       isCustom: json['isCustom'] as bool? ?? false,
       isAIGenerated: json['isAIGenerated'] as bool? ?? false,
       orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
+      customConfig: json['customConfig'] != null
+          ? CustomSetConfig.fromJson(
+              json['customConfig'] as Map<String, dynamic>)
+          : null,
     );
   }
 
   final String id;
   final String lessonId;
-  final ExerciseTier tier;
+  final ExerciseTier? tier;
   final String title;
   final bool isCustom;
   final bool isAIGenerated;
   final int orderIndex;
+  final CustomSetConfig? customConfig;
 }
 
 class TierProgress {
@@ -69,11 +130,14 @@ class TierProgress {
     this.correct = 0,
     this.percentComplete = 0,
     this.percentCorrect = 0,
+    this.setId = '',
   });
 
   factory TierProgress.fromJson(Map<String, dynamic> json) {
     return TierProgress(
-      tier: ExerciseTier.fromString(json['tier'] as String),
+      tier: json['tier'] != null
+          ? ExerciseTier.fromString(json['tier'] as String)
+          : null,
       title: json['title'] as String,
       isCustom: json['isCustom'] as bool? ?? false,
       isAIGenerated: json['isAIGenerated'] as bool? ?? false,
@@ -82,10 +146,11 @@ class TierProgress {
       correct: (json['correct'] as num?)?.toInt() ?? 0,
       percentComplete: (json['percentComplete'] as num?)?.toDouble() ?? 0,
       percentCorrect: (json['percentCorrect'] as num?)?.toDouble() ?? 0,
+      setId: json['setId'] as String? ?? '',
     );
   }
 
-  final ExerciseTier tier;
+  final ExerciseTier? tier;
   final String title;
   final bool isCustom;
   final bool isAIGenerated;
@@ -94,6 +159,7 @@ class TierProgress {
   final int correct;
   final double percentComplete;
   final double percentCorrect;
+  final String setId;
 
   bool get isCompleted => percentComplete == 100 && percentCorrect >= 80;
   bool get isInProgress => attempted > 0 && !isCompleted;
@@ -104,6 +170,8 @@ class LessonTierSummary {
   const LessonTierSummary({
     required this.sets,
     required this.unlockedTiers,
+    this.customSets = const [],
+    this.customPracticeUnlocked = false,
   });
 
   factory LessonTierSummary.fromJson(Map<String, dynamic> json) {
@@ -116,11 +184,19 @@ class LessonTierSummary {
               ?.map((e) => ExerciseTier.fromString(e as String))
               .toList() ??
           const [ExerciseTier.basic],
+      customSets: (json['customSets'] as List<dynamic>?)
+              ?.map((e) => TierProgress.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      customPracticeUnlocked:
+          json['customPracticeUnlocked'] as bool? ?? false,
     );
   }
 
   final List<TierProgress> sets;
   final List<ExerciseTier> unlockedTiers;
+  final List<TierProgress> customSets;
+  final bool customPracticeUnlocked;
 
   bool isTierUnlocked(ExerciseTier tier) {
     return unlockedTiers.contains(tier);

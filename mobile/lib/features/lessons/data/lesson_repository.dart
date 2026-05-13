@@ -3,7 +3,6 @@ import '../../../core/network/exception_mapper.dart';
 import '../domain/lesson_models.dart';
 import '../domain/exercise_models.dart';
 import '../domain/exercise_set_models.dart';
-
 class LessonRepository {
   LessonRepository(this._dio);
   final Dio _dio;
@@ -157,6 +156,34 @@ class LessonRepository {
       );
       final data = response.data!;
       return (data as List<dynamic>? ?? []) as List<dynamic>;
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> createCustomSet(
+    String lessonId,
+    CustomSetConfig config,
+  ) async {
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/exercise-sets/custom',
+        data: {
+          'lessonId': lessonId,
+          'config': config.toJson(),
+        },
+      );
+      return response.data!;
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<void> regenerateExercises(String setId) async {
+    try {
+      await _dio.post<Map<String, dynamic>>(
+        '/exercise-sets/$setId/regenerate',
+      );
     } on DioException catch (e) {
       throw mapDioException(e);
     }
