@@ -181,19 +181,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/lessons/:id/exercises/play/:tier',
+        path: '/lessons/:id/exercises/play/:tier/:setId',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           final tier = state.pathParameters['tier']!;
-          return ExercisePlayScreen(lessonId: id, tierValue: tier);
-        },
-      ),
-      GoRoute(
-        path: '/lessons/:id/exercises/play/custom/:setId',
-        builder: (context, state) {
-          final id = state.pathParameters['id']!;
           final setId = state.pathParameters['setId']!;
-          return ExercisePlayScreen(lessonId: id, tierValue: 'custom', customSetId: setId);
+          return ExercisePlayScreen(lessonId: id, tierValue: tier, setId: setId);
         },
       ),
       ShellRoute(

@@ -15,12 +15,12 @@ class ExercisePlayScreen extends ConsumerStatefulWidget {
     super.key,
     required this.lessonId,
     required this.tierValue,
-    this.customSetId,
+    this.setId,
   });
 
   final String lessonId;
   final String tierValue;
-  final String? customSetId;
+  final String? setId;
 
   @override
   ConsumerState<ExercisePlayScreen> createState() => _ExercisePlayScreenState();
@@ -31,7 +31,6 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   int _currentIndex = 0;
   bool _loading = true;
   String? _error;
-  ExerciseSetModel? _exerciseSet;
 
   dynamic _currentAnswer;
   bool _submitted = false;
@@ -51,17 +50,14 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   Future<void> _loadExercises() async {
     try {
       final repo = ref.read(lessonRepositoryProvider);
+      final setId = widget.setId;
 
-      if (widget.customSetId != null) {
-        final setModel = await repo.getExerciseSet(widget.customSetId!);
-        final exercises = setModel != null
-            ? await repo.getExercisesByLesson(widget.lessonId)
-            : <Exercise>[];
+      if (setId != null) {
+        final exercises = await repo.getExercisesBySet(setId);
 
         if (!mounted) return;
         setState(() {
           _exercises = exercises;
-          _exerciseSet = setModel;
           _loading = false;
         });
         _loadCurrentAnswer();
@@ -72,7 +68,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       final tier = ExerciseTier.fromString(widget.tierValue);
       final progress = tierSummary.progressForTier(tier);
 
-      if (progress == null) {
+      if (progress == null || progress.setId.isEmpty) {
         if (!mounted) return;
         setState(() {
           _loading = false;
@@ -81,22 +77,11 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         return;
       }
 
-      final sets = tierSummary.sets;
-      final setId = sets.isNotEmpty ? sets.first : null;
-      ExerciseSetModel? setModel;
-      if (setId != null) {
-        final allSets = await _findSetForTier(repo, widget.lessonId, tier);
-        if (allSets != null) {
-          setModel = allSets;
-        }
-      }
-
-      final exercises = await repo.getExercisesByLesson(widget.lessonId);
+      final exercises = await repo.getExercisesBySet(progress.setId);
 
       if (!mounted) return;
       setState(() {
         _exercises = exercises;
-        _exerciseSet = setModel;
         _loading = false;
       });
 
@@ -107,30 +92,6 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         _error = e.toString();
         _loading = false;
       });
-    }
-  }
-
-  Future<ExerciseSetModel?> _findSetForTier(
-    LessonRepository repo,
-    String lessonId,
-    ExerciseTier tier,
-  ) async {
-    try {
-      final response =
-          await repo.getExerciseSetsByLesson(lessonId);
-      for (final s in response.sets) {
-        if (s.tier == tier) {
-          return ExerciseSetModel(
-            id: s.tier?.value ?? '',
-            lessonId: lessonId,
-            tier: s.tier,
-            title: s.title,
-          );
-        }
-      }
-      return null;
-    } catch (_) {
-      return null;
     }
   }
 
@@ -460,7 +421,6 @@ class QuestionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     return Column(
