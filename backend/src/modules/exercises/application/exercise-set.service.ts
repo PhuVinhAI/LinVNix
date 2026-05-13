@@ -3,6 +3,7 @@ import { ExerciseSetsRepository } from './repositories/exercise-sets.repository'
 import { TierProgressService } from './tier-progress.service';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
+import { ExerciseGenerationService } from './exercise-generation.service';
 import { ExerciseTier } from '../../../common/enums';
 
 export interface ResumeInfo {
@@ -39,6 +40,7 @@ export class ExerciseSetService {
     private readonly tierProgressService: TierProgressService,
     private readonly exercisesRepository: ExercisesRepository,
     private readonly userExerciseResultsRepository: UserExerciseResultsRepository,
+    private readonly exerciseGenerationService: ExerciseGenerationService,
   ) {}
 
   async findByLessonId(lessonId: string, userId: string) {
@@ -65,6 +67,18 @@ export class ExerciseSetService {
     data: Partial<import('../domain/exercise-set.entity').ExerciseSet>,
   ) {
     return this.exerciseSetsRepository.create(data);
+  }
+
+  async generate(setId: string, userId: string) {
+    return this.exerciseGenerationService.generate(setId, userId);
+  }
+
+  async generateForTier(lessonId: string, tier: ExerciseTier, userId: string) {
+    return this.exerciseGenerationService.generateForTier(
+      lessonId,
+      tier,
+      userId,
+    );
   }
 
   async getResumeInfo(setId: string, userId: string): Promise<ResumeInfo> {

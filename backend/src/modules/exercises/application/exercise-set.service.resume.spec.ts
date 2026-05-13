@@ -38,6 +38,7 @@ describe('ExerciseSetService - Resume & Reset', () => {
       tierProgressService,
       exercisesRepo,
       resultsRepo,
+      { generate: jest.fn(), generateForTier: jest.fn() } as any,
     );
   });
 

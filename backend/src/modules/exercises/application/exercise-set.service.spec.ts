@@ -5,6 +5,7 @@ import { ExerciseSetsRepository } from './repositories/exercise-sets.repository'
 import { TierProgressService } from './tier-progress.service';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
+import { ExerciseGenerationService } from './exercise-generation.service';
 import { ExerciseTier } from '../../../common/enums';
 
 describe('ExerciseSetService', () => {
@@ -13,6 +14,7 @@ describe('ExerciseSetService', () => {
   let tierProgressService: jest.Mocked<TierProgressService>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let resultsRepo: jest.Mocked<UserExerciseResultsRepository>;
+  let generationService: jest.Mocked<ExerciseGenerationService>;
 
   beforeEach(async () => {
     exerciseSetsRepo = {
@@ -35,6 +37,10 @@ describe('ExerciseSetService', () => {
       deleteByUserAndExerciseIds: jest.fn(),
     } as any;
 
+    generationService = {
+      generate: jest.fn(),
+    } as any;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ExerciseSetService,
@@ -53,6 +59,10 @@ describe('ExerciseSetService', () => {
         {
           provide: UserExerciseResultsRepository,
           useValue: resultsRepo,
+        },
+        {
+          provide: ExerciseGenerationService,
+          useValue: generationService,
         },
       ],
     }).compile();
@@ -156,6 +166,21 @@ describe('ExerciseSetService', () => {
 
       expect(result.id).toBe('set-1');
       expect(exerciseSetsRepo.create).toHaveBeenCalledWith(data);
+    });
+  });
+
+  describe('generate', () => {
+    it('delegates to exerciseGenerationService', async () => {
+      const mockExercises = [{ id: 'ex-1', exerciseType: 'matching' }];
+      generationService.generate.mockResolvedValue(mockExercises as any);
+
+      const result = await service.generate('set-1', 'user-1');
+
+      expect(result).toEqual(mockExercises);
+      expect(generationService.generate).toHaveBeenCalledWith(
+        'set-1',
+        'user-1',
+      );
     });
   });
 });
