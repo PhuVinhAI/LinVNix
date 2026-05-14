@@ -6,6 +6,10 @@ import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
 import { ExerciseGenerationService } from './exercise-generation.service';
 import { ExerciseType } from '../../../common/enums';
+import { ProgressRepository } from '../../progress/application/progress.repository';
+import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
+import { ModulesRepository } from '../../courses/application/repositories/modules.repository';
+import { CoursesRepository } from '../../courses/application/repositories/courses.repository';
 
 describe('ExerciseSetService', () => {
   let service: ExerciseSetService;
@@ -13,6 +17,10 @@ describe('ExerciseSetService', () => {
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let resultsRepo: jest.Mocked<UserExerciseResultsRepository>;
   let generationService: jest.Mocked<ExerciseGenerationService>;
+  let progressRepo: jest.Mocked<ProgressRepository>;
+  let moduleProgressRepo: jest.Mocked<ModuleProgressRepository>;
+  let modulesRepo: jest.Mocked<ModulesRepository>;
+  let coursesRepo: jest.Mocked<CoursesRepository>;
 
   beforeEach(async () => {
     exerciseSetsRepo = {
@@ -21,6 +29,7 @@ describe('ExerciseSetService', () => {
       findById: jest.fn(),
       softDelete: jest.fn(),
       findActiveByLessonId: jest.fn(),
+      findActiveCustomSetsByModule: jest.fn(),
     } as any;
 
     exercisesRepo = {
@@ -38,6 +47,22 @@ describe('ExerciseSetService', () => {
       createRegeneratedSet: jest.fn(),
       finalizeRegeneration: jest.fn(),
       generateCustom: jest.fn(),
+    } as any;
+
+    progressRepo = {
+      findCompletedByUserInLessons: jest.fn(),
+    } as any;
+
+    moduleProgressRepo = {
+      findCompletedByUserInModules: jest.fn(),
+    } as any;
+
+    modulesRepo = {
+      findById: jest.fn(),
+    } as any;
+
+    coursesRepo = {
+      findById: jest.fn(),
     } as any;
 
     const module: TestingModule = await Test.createTestingModule({
@@ -58,6 +83,22 @@ describe('ExerciseSetService', () => {
         {
           provide: ExerciseGenerationService,
           useValue: generationService,
+        },
+        {
+          provide: ProgressRepository,
+          useValue: progressRepo,
+        },
+        {
+          provide: ModuleProgressRepository,
+          useValue: moduleProgressRepo,
+        },
+        {
+          provide: ModulesRepository,
+          useValue: modulesRepo,
+        },
+        {
+          provide: CoursesRepository,
+          useValue: coursesRepo,
         },
       ],
     }).compile();
@@ -243,7 +284,7 @@ describe('ExerciseSetService', () => {
       } as any);
 
       const result = await service.createCustom(
-        'lesson-1',
+        { lessonId: 'lesson-1' },
         validConfig,
         'user-1',
       );
@@ -271,7 +312,7 @@ describe('ExerciseSetService', () => {
       } as any);
 
       await service.createCustom(
-        'lesson-1',
+        { lessonId: 'lesson-1' },
         validConfig,
         'user-1',
         'Focus on greetings',
@@ -292,7 +333,7 @@ describe('ExerciseSetService', () => {
       };
 
       await expect(
-        service.createCustom('lesson-1', invalidConfig, 'user-1'),
+        service.createCustom({ lessonId: 'lesson-1' }, invalidConfig, 'user-1'),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -304,8 +345,131 @@ describe('ExerciseSetService', () => {
       };
 
       await expect(
-        service.createCustom('lesson-1', overMaxConfig, 'user-1'),
+        service.createCustom({ lessonId: 'lesson-1' }, overMaxConfig, 'user-1'),
       ).rejects.toThrow(BadRequestException);
+    });
+
+    it('throws when no scope provided (XOR violation)', async () => {
+      await expect(
+        service.createCustom({}, validConfig, 'user-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('throws when multiple scopes provided (XOR violation)', async () => {
+      await expect(
+        service.createCustom(
+          { lessonId: 'lesson-1', moduleId: 'module-1' },
+          validConfig,
+          'user-1',
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('creates custom set with moduleId when eligible', async () => {
+      modulesRepo.findById.mockResolvedValue({
+        id: 'module-1',
+        title: 'Module 1',
+        lessons: [{ id: 'lesson-1' }, { id: 'lesson-2' }],
+      } as any);
+      progressRepo.findCompletedByUserInLessons.mockResolvedValue([
+        { lessonId: 'lesson-1' },
+      ] as any);
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'custom-set-1',
+        moduleId: 'module-1',
+        isCustom: true,
+        customConfig: validConfig,
+      } as any);
+
+      const result = await service.createCustom(
+        { moduleId: 'module-1' },
+        validConfig,
+        'user-1',
+      );
+
+      expect(modulesRepo.findById).toHaveBeenCalledWith('module-1');
+      expect(progressRepo.findCompletedByUserInLessons).toHaveBeenCalledWith(
+        'user-1',
+        ['lesson-1', 'lesson-2'],
+      );
+      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          moduleId: 'module-1',
+        }),
+      );
+      expect(result.set.id).toBe('custom-set-1');
+    });
+
+    it('throws 400 when no completed lessons in module', async () => {
+      modulesRepo.findById.mockResolvedValue({
+        id: 'module-1',
+        title: 'Module 1',
+        lessons: [{ id: 'lesson-1' }],
+      } as any);
+      progressRepo.findCompletedByUserInLessons.mockResolvedValue([]);
+
+      await expect(
+        service.createCustom({ moduleId: 'module-1' }, validConfig, 'user-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('findByModuleId', () => {
+    it('returns eligible=false when no completed lessons', async () => {
+      modulesRepo.findById.mockResolvedValue({
+        id: 'module-1',
+        lessons: [{ id: 'lesson-1' }, { id: 'lesson-2' }],
+      } as any);
+      progressRepo.findCompletedByUserInLessons.mockResolvedValue([]);
+      exerciseSetsRepo.findActiveCustomSetsByModule.mockResolvedValue([]);
+
+      const result = await service.findByModuleId('module-1', 'user-1');
+
+      expect(result.eligible).toBe(false);
+      expect(result.completedLessonsCount).toBe(0);
+      expect(result.totalLessonsCount).toBe(2);
+      expect(result.moduleSets).toHaveLength(0);
+    });
+
+    it('returns eligible=true and sets when completed lessons exist', async () => {
+      modulesRepo.findById.mockResolvedValue({
+        id: 'module-1',
+        lessons: [{ id: 'lesson-1' }, { id: 'lesson-2' }],
+      } as any);
+      progressRepo.findCompletedByUserInLessons.mockResolvedValue([
+        { lessonId: 'lesson-1' },
+      ] as any);
+      exerciseSetsRepo.findActiveCustomSetsByModule.mockResolvedValue([
+        {
+          id: 'set-1',
+          title: 'Module Review',
+          isCustom: true,
+          isAIGenerated: true,
+        },
+      ] as any);
+      exercisesRepo.findBySetId.mockResolvedValue([
+        { id: 'ex-1' },
+        { id: 'ex-2' },
+      ] as any);
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue([
+        { exerciseId: 'ex-1', isCorrect: true },
+      ] as any);
+
+      const result = await service.findByModuleId('module-1', 'user-1');
+
+      expect(result.eligible).toBe(true);
+      expect(result.completedLessonsCount).toBe(1);
+      expect(result.totalLessonsCount).toBe(2);
+      expect(result.moduleSets).toHaveLength(1);
+      expect(result.moduleSets[0].totalExercises).toBe(2);
+    });
+
+    it('throws NotFoundException when module not found', async () => {
+      modulesRepo.findById.mockResolvedValue(null);
+
+      await expect(service.findByModuleId('missing', 'user-1')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 

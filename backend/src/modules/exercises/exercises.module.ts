@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Exercise } from './domain/exercise.entity';
 import { ExerciseSet } from './domain/exercise-set.entity';
@@ -15,10 +15,14 @@ import { ExerciseSetsRepository } from './application/repositories/exercise-sets
 import { UserExerciseResultsRepository } from './application/repositories/user-exercise-results.repository';
 import { ExercisesController } from './presentation/exercises.controller';
 import { ExerciseSetController } from './presentation/exercise-set.controller';
+import { ProgressModule } from '../progress/progress.module';
+import { CoursesModule } from '../courses/courses.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Exercise, ExerciseSet, UserExerciseResult]),
+    forwardRef(() => ProgressModule),
+    forwardRef(() => CoursesModule),
   ],
   controllers: [ExercisesController, ExerciseSetController],
   providers: [

@@ -7,13 +7,16 @@ import {
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseContextLoader } from './exercise-context-loader';
-import type { LessonContext } from './exercise-context-loader';
+import type { LessonContext, MergedContext } from './exercise-context-loader';
 import { ExerciseType } from '../../../common/enums';
 import { Exercise } from '../domain/exercise.entity';
 import type {
   ExerciseOptions,
   ExerciseAnswer,
 } from '../domain/exercise-options.types';
+import { ProgressRepository } from '../../progress/application/progress.repository';
+import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
+import { ModulesRepository } from '../../courses/application/repositories/modules.repository';
 
 const DEFAULT_GUIDELINES = {
   questionCount: 10,
@@ -245,6 +248,9 @@ export class ExerciseGenerationService {
     private readonly exerciseSetsRepository: ExerciseSetsRepository,
     private readonly exercisesRepository: ExercisesRepository,
     private readonly exerciseContextLoader: ExerciseContextLoader,
+    private readonly progressRepository: ProgressRepository,
+    private readonly moduleProgressRepository: ModuleProgressRepository,
+    private readonly modulesRepository: ModulesRepository,
   ) {}
 
   async generate(
@@ -367,10 +373,6 @@ export class ExerciseGenerationService {
     userId: string,
     userPromptOverride?: string,
   ): Promise<Exercise[]> {
-    const context = await this.exerciseContextLoader.loadLessonContext(
-      set.lessonId!,
-    );
-
     let guidelines: {
       questionCount: number;
       preferredTypes: ExerciseType[];
@@ -398,24 +400,65 @@ export class ExerciseGenerationService {
       ? `\n### User Request\n${effectiveUserPrompt}\n`
       : '';
 
-    const lessonContext = this.formatContext(context);
-    const existingExercises = this.formatExistingExercises(
-      context.existingExercises,
-    );
+    let prompt: string;
+    let lessonContextForExercises: LessonContext | null = null;
+    let mergedContextForExercises: MergedContext | null = null;
 
-    const prompt = this.genaiService.renderPrompt(
-      'exercise-generation-lesson',
-      {
+    if (set.moduleId) {
+      const module = await this.modulesRepository.findById(set.moduleId);
+      if (!module) {
+        throw new BadRequestException(`Module ${set.moduleId} not found`);
+      }
+
+      const lessonIds = (module.lessons || []).map((l: any) => l.id);
+      const completedProgress =
+        await this.progressRepository.findCompletedByUserInLessons(
+          userId,
+          lessonIds,
+        );
+      const completedLessonIds = completedProgress.map((p: any) => p.lessonId);
+
+      mergedContextForExercises =
+        await this.exerciseContextLoader.loadModuleContext(completedLessonIds);
+
+      const lessonContextsStr = this.formatMergedContext(
+        mergedContextForExercises,
+      );
+
+      prompt = this.genaiService.renderPrompt('exercise-generation-module', {
         questionCount: String(guidelines.questionCount),
         label,
         focusAreaDescription: guidelines.description,
         preferredTypes: guidelines.preferredTypes.join(', '),
-        lessonTitle: context.lessonTitle,
+        moduleTitle: module.title,
+        lessonCount: String(completedLessonIds.length),
+        lessonContexts: lessonContextsStr,
+        userPromptSection,
+      });
+    } else if (set.lessonId) {
+      lessonContextForExercises =
+        await this.exerciseContextLoader.loadLessonContext(set.lessonId);
+
+      const lessonContext = this.formatContext(lessonContextForExercises);
+      const existingExercises = this.formatExistingExercises(
+        lessonContextForExercises.existingExercises,
+      );
+
+      prompt = this.genaiService.renderPrompt('exercise-generation-lesson', {
+        questionCount: String(guidelines.questionCount),
+        label,
+        focusAreaDescription: guidelines.description,
+        preferredTypes: guidelines.preferredTypes.join(', '),
+        lessonTitle: lessonContextForExercises.lessonTitle,
         lessonContext,
         existingExercises,
         userPromptSection,
-      },
-    );
+      });
+    } else {
+      throw new BadRequestException(
+        'ExerciseSet must have either lessonId or moduleId for generation',
+      );
+    }
 
     const systemInstruction = this.buildSystemInstruction();
 
@@ -472,6 +515,33 @@ export class ExerciseGenerationService {
 
   private buildSystemInstruction(): string {
     return `You are a Vietnamese language exercise generator. Generate exercises that are pedagogically sound, culturally appropriate, and test the specific vocabulary and grammar from the lesson context provided. Your response will be automatically structured as JSON — focus on the quality and variety of exercises.`;
+  }
+
+  private formatMergedContext(context: MergedContext): string {
+    const parts: string[] = [];
+
+    if (context.vocabularies.length > 0) {
+      parts.push('### Vocabulary (from all completed lessons)');
+      for (const v of context.vocabularies) {
+        parts.push(
+          `- ${v.word} (${v.partOfSpeech}) = ${v.translation}${v.phonetic ? ` [${v.phonetic}]` : ''}${v.exampleSentence ? ` — "${v.exampleSentence}"` : ''}`,
+        );
+      }
+    }
+
+    if (context.grammarRules.length > 0) {
+      parts.push('\n### Grammar Rules (from all completed lessons)');
+      for (const g of context.grammarRules) {
+        parts.push(
+          `- ${g.title}: ${g.explanation}${g.structure ? ` [${g.structure}]` : ''}`,
+        );
+        for (const ex of g.examples) {
+          parts.push(`    Example: ${ex.vi} = ${ex.en}`);
+        }
+      }
+    }
+
+    return parts.join('\n');
   }
 
   private formatContext(context: LessonContext): string {

@@ -10,6 +10,7 @@ import {
   ArrayMinSize,
   ValidateNested,
   MaxLength,
+  ValidateBy,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ExerciseType } from '../../../common/enums';
@@ -42,10 +43,58 @@ class CustomSetConfigDto {
   focusArea: 'vocabulary' | 'grammar' | 'both';
 }
 
+function IsXorScope() {
+  return ValidateBy({
+    name: 'isXorScope',
+    validator: {
+      validate(_: any, args: any) {
+        if (!args?.object) return false;
+        const { lessonId, moduleId, courseId } = args.object;
+        const provided = [lessonId, moduleId, courseId].filter(
+          (v) => v !== undefined && v !== null,
+        );
+        return provided.length === 1;
+      },
+      defaultMessage() {
+        return 'Exactly one of lessonId, moduleId, or courseId must be provided';
+      },
+    },
+  });
+}
+
 export class CreateCustomSetDto {
-  @ApiProperty({ example: 'uuid-of-lesson' })
+  @ApiProperty({
+    example: 'uuid-of-lesson',
+    description:
+      'Lesson ID (provide exactly one of lessonId, moduleId, or courseId)',
+    required: false,
+  })
+  @IsOptional()
   @IsUUID()
-  lessonId: string;
+  lessonId?: string;
+
+  @ApiProperty({
+    example: 'uuid-of-module',
+    description:
+      'Module ID (provide exactly one of lessonId, moduleId, or courseId)',
+    required: false,
+  })
+  @IsOptional()
+  @IsUUID()
+  moduleId?: string;
+
+  @ApiProperty({
+    example: 'uuid-of-course',
+    description:
+      'Course ID (provide exactly one of lessonId, moduleId, or courseId)',
+    required: false,
+  })
+  @IsOptional()
+  @IsUUID()
+  courseId?: string;
+
+  @IsXorScope()
+  xorScope: unknown;
 
   @ApiProperty({ type: CustomSetConfigDto })
   @ValidateNested()

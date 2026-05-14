@@ -36,7 +36,7 @@ export class ExerciseSetController {
   @ApiOperation({
     summary: 'Create custom practice set with AI generation',
     description:
-      'Create a custom exercise set with user-defined config (questionCount, exerciseTypes, focusArea). Requires AI_GENERATE_EXERCISE permission.',
+      'Create a custom exercise set with user-defined config (questionCount, exerciseTypes, focusArea). Exactly one of lessonId, moduleId, or courseId must be provided. Requires AI_GENERATE_EXERCISE permission.',
   })
   @ApiResponse({
     status: 201,
@@ -45,14 +45,18 @@ export class ExerciseSetController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Invalid config',
+    description: 'Invalid config or XOR validation failed',
   })
   async createCustom(
     @Body() dto: CreateCustomSetDto,
     @CurrentUser() user: User,
   ) {
     return this.exerciseSetService.createCustom(
-      dto.lessonId,
+      {
+        lessonId: dto.lessonId,
+        moduleId: dto.moduleId,
+        courseId: dto.courseId,
+      },
       {
         questionCount: dto.config.questionCount,
         exerciseTypes: dto.config.exerciseTypes,
@@ -61,6 +65,34 @@ export class ExerciseSetController {
       user.id,
       dto.userPrompt,
     );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('module/:moduleId')
+  @ApiOperation({
+    summary: 'Get custom practice sets for a module',
+    description:
+      'Returns eligibility (≥1 completed lesson), lesson counts, and custom practice sets for the module',
+  })
+  @ApiParam({ name: 'moduleId', description: 'ID của module' })
+  @ApiResponse({
+    status: 200,
+    description: 'Module custom practice info',
+    schema: {
+      example: {
+        eligible: true,
+        completedLessonsCount: 3,
+        totalLessonsCount: 5,
+        moduleSets: [],
+      },
+    },
+  })
+  async findByModule(
+    @Param('moduleId') moduleId: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.exerciseSetService.findByModuleId(moduleId, user.id);
   }
 
   @ApiBearerAuth()
