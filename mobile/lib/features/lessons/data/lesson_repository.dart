@@ -3,9 +3,17 @@ import '../../../core/network/exception_mapper.dart';
 import '../domain/lesson_models.dart';
 import '../domain/exercise_models.dart';
 import '../domain/exercise_set_models.dart';
+
 class LessonRepository {
   LessonRepository(this._dio);
   final Dio _dio;
+
+  /// Backend gọi AI sinh bài có thể rất lâu — tắt connect/receive/send timeout mặc định của Dio.
+  static final Options _aiGenerationRequestOptions = Options(
+    connectTimeout: Duration.zero,
+    receiveTimeout: Duration.zero,
+    sendTimeout: Duration.zero,
+  );
 
   Future<LessonDetail> getLessonDetail(String lessonId) async {
     try {
@@ -156,26 +164,34 @@ class LessonRepository {
     }
   }
 
-  Future<List<dynamic>> generateExercises(String setId) async {
+  Future<List<dynamic>> generateExercises(
+    String setId, {
+    CancelToken? cancelToken,
+  }) async {
     try {
-      final response = await _dio.post<Map<String, dynamic>>(
+      final response = await _dio.post<dynamic>(
         '/exercise-sets/$setId/generate',
+        options: _aiGenerationRequestOptions,
+        cancelToken: cancelToken,
       );
-      final data = response.data!;
-      return (data['exercises'] as List<dynamic>? ?? []) as List<dynamic>;
+      return _unwrapExerciseList(response.data);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
   Future<List<dynamic>> generateExercisesForTier(
-      String lessonId, String tier) async {
+    String lessonId,
+    String tier, {
+    CancelToken? cancelToken,
+  }) async {
     try {
-      final response = await _dio.post<Map<String, dynamic>>(
+      final response = await _dio.post<dynamic>(
         '/exercise-sets/lesson/$lessonId/tier/$tier/generate',
+        options: _aiGenerationRequestOptions,
+        cancelToken: cancelToken,
       );
-      final data = response.data!;
-      return (data as List<dynamic>? ?? []) as List<dynamic>;
+      return _unwrapExerciseList(response.data);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
@@ -183,8 +199,9 @@ class LessonRepository {
 
   Future<Map<String, dynamic>> createCustomSet(
     String lessonId,
-    CustomSetConfig config,
-  ) async {
+    CustomSetConfig config, {
+    CancelToken? cancelToken,
+  }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         '/exercise-sets/custom',
@@ -192,6 +209,8 @@ class LessonRepository {
           'lessonId': lessonId,
           'config': config.toJson(),
         },
+        options: _aiGenerationRequestOptions,
+        cancelToken: cancelToken,
       );
       return response.data!;
     } on DioException catch (e) {
@@ -199,14 +218,29 @@ class LessonRepository {
     }
   }
 
-  Future<void> regenerateExercises(String setId) async {
+  Future<void> regenerateExercises(
+    String setId, {
+    CancelToken? cancelToken,
+  }) async {
     try {
       await _dio.post<Map<String, dynamic>>(
         '/exercise-sets/$setId/regenerate',
+        options: _aiGenerationRequestOptions,
+        cancelToken: cancelToken,
       );
     } on DioException catch (e) {
       throw mapDioException(e);
     }
+  }
+
+  /// API sinh bài có thể trả mảng exercise trực tiếp hoặc `{ exercises: [...] }`.
+  List<dynamic> _unwrapExerciseList(Object? data) {
+    if (data is List<dynamic>) return data;
+    if (data is Map<String, dynamic>) {
+      final list = data['exercises'];
+      if (list is List<dynamic>) return list;
+    }
+    return [];
   }
 
   Future<void> deleteCustomExerciseSet(String setId) async {

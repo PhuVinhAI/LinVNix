@@ -12,7 +12,7 @@ AppException mapDioException(DioException error) {
     case DioExceptionType.badResponse:
       return _mapBadResponse(error);
     case DioExceptionType.cancel:
-      return const NetworkException('Request was cancelled');
+      return const RequestCancelledException();
     case DioExceptionType.unknown:
       return NetworkException(error.message ?? 'Unknown network error');
     default:

@@ -20,6 +20,11 @@ class NetworkException extends AppException {
   const NetworkException(super.message, {super.statusCode});
 }
 
+/// User hoặc widget huỷ request (ví dụ [CancelToken], điều hướng khỏi màn hình).
+class RequestCancelledException extends AppException {
+  const RequestCancelledException() : super('Request was cancelled');
+}
+
 class ServerException extends AppException {
   const ServerException(super.message, {super.statusCode});
 }

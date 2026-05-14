@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/sync/sync.dart';
 import '../../../core/providers/providers.dart';
@@ -186,15 +187,15 @@ class ExerciseSetsNotifier extends CachedRepository<LessonTierSummary>
     return super.build();
   }
 
-  Future<void> generateTier(String tier) async {
+  Future<void> generateTier(String tier, {CancelToken? cancelToken}) async {
     final repo = ref.read(lessonRepositoryProvider);
-    await repo.generateExercisesForTier(lessonId, tier);
+    await repo.generateExercisesForTier(lessonId, tier, cancelToken: cancelToken);
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
   }
 
-  Future<void> regenerateSet(String setId) async {
+  Future<void> regenerateSet(String setId, {CancelToken? cancelToken}) async {
     final repo = ref.read(lessonRepositoryProvider);
-    await repo.regenerateExercises(setId);
+    await repo.regenerateExercises(setId, cancelToken: cancelToken);
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
   }
 
@@ -204,9 +205,9 @@ class ExerciseSetsNotifier extends CachedRepository<LessonTierSummary>
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
   }
 
-  Future<void> createCustomSet(CustomSetConfig config) async {
+  Future<void> createCustomSet(CustomSetConfig config, {CancelToken? cancelToken}) async {
     final repo = ref.read(lessonRepositoryProvider);
-    await repo.createCustomSet(lessonId, config);
+    await repo.createCustomSet(lessonId, config, cancelToken: cancelToken);
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
   }
 }
