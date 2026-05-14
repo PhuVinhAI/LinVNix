@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { UserProgress } from '../domain/user-progress.entity';
+import { ProgressStatus } from '../../../common/enums';
 
 @Injectable()
 export class ProgressRepository {
@@ -68,5 +69,18 @@ export class ProgressRepository {
       courseTitle: c.courseTitle,
       userCount: parseInt(c.userCount, 10),
     }));
+  }
+
+  async findCompletedByUserInLessons(
+    userId: string,
+    lessonIds: string[],
+  ): Promise<UserProgress[]> {
+    return this.repository.find({
+      where: {
+        userId,
+        lessonId: In(lessonIds),
+        status: ProgressStatus.COMPLETED,
+      },
+    });
   }
 }

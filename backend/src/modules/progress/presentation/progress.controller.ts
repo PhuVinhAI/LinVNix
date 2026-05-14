@@ -238,4 +238,62 @@ export class ProgressController {
       body.additionalTime,
     );
   }
+
+  @Get('module/:moduleId')
+  @ApiOperation({
+    summary: 'Lấy tiến độ module',
+    description: 'Lấy tiến độ học của một module cho user đã xác thực',
+  })
+  @ApiParam({ name: 'moduleId', description: 'ID của module' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tiến độ module',
+    schema: {
+      example: {
+        id: 'uuid-string',
+        moduleId: 'module-uuid',
+        status: 'COMPLETED',
+        score: 85,
+        completedLessonsCount: 3,
+        totalLessonsCount: 3,
+        completedAt: '2024-01-01T00:30:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy tiến độ module' })
+  async getModuleProgress(
+    @CurrentUser() user: User,
+    @Param('moduleId') moduleId: string,
+  ) {
+    return this.progressService.getModuleProgress(user.id, moduleId);
+  }
+
+  @Get('course/:courseId')
+  @ApiOperation({
+    summary: 'Lấy tiến độ course',
+    description: 'Lấy tiến độ học của một course cho user đã xác thực',
+  })
+  @ApiParam({ name: 'courseId', description: 'ID của course' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tiến độ course',
+    schema: {
+      example: {
+        id: 'uuid-string',
+        courseId: 'course-uuid',
+        status: 'COMPLETED',
+        score: 85,
+        completedModulesCount: 2,
+        totalModulesCount: 2,
+        completedAt: '2024-01-01T01:00:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy tiến độ course' })
+  async getCourseProgress(
+    @CurrentUser() user: User,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.progressService.getCourseProgress(user.id, courseId);
+  }
 }

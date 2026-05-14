@@ -1,12 +1,26 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProgressRepository } from './progress.repository';
+import { ModuleProgressRepository } from './module-progress.repository';
+import { CourseProgressRepository } from './course-progress.repository';
+import { ModulesRepository } from '../../courses/application/repositories/modules.repository';
+import { CoursesRepository } from '../../courses/application/repositories/courses.repository';
 import { UserProgress } from '../domain/user-progress.entity';
+import { ModuleProgress } from '../domain/module-progress.entity';
+import { CourseProgress } from '../domain/course-progress.entity';
 import { ProgressStatus } from '../../../common/enums';
 
 @Injectable()
 export class ProgressService {
   constructor(
     private readonly progressRepository: ProgressRepository,
+    private readonly moduleProgressRepository: ModuleProgressRepository,
+    private readonly courseProgressRepository: CourseProgressRepository,
+    private readonly modulesRepository: ModulesRepository,
+    private readonly coursesRepository: CoursesRepository,
   ) {}
 
   async startLesson(userId: string, lessonId: string): Promise<UserProgress> {
@@ -75,12 +89,118 @@ export class ProgressService {
       );
     }
 
-    return this.progressRepository.update(progress.id, {
+    const updated = await this.progressRepository.update(progress.id, {
       status: ProgressStatus.COMPLETED,
       score,
       completedAt: new Date(),
       lastAccessedAt: new Date(),
     });
+
+    const moduleId = (progress as any).lesson?.moduleId;
+    if (moduleId) {
+      await this.checkModuleCompletion(userId, moduleId);
+    }
+
+    return updated;
+  }
+
+  private async checkModuleCompletion(
+    userId: string,
+    moduleId: string,
+  ): Promise<void> {
+    const module = await this.modulesRepository.findById(moduleId);
+    if (!module?.lessons?.length) return;
+
+    const lessonIds = module.lessons.map((l: any) => l.id);
+    const completedProgress =
+      await this.progressRepository.findCompletedByUserInLessons(
+        userId,
+        lessonIds,
+      );
+
+    const completedLessonsCount = completedProgress.length;
+    const totalLessonsCount = lessonIds.length;
+
+    if (completedLessonsCount < totalLessonsCount) return;
+
+    const avgScore =
+      completedProgress.reduce((sum, p) => sum + (p.score ?? 0), 0) /
+      completedLessonsCount;
+
+    const existingModuleProgress =
+      await this.moduleProgressRepository.findByUserAndModule(userId, moduleId);
+
+    if (existingModuleProgress) {
+      await this.moduleProgressRepository.update(existingModuleProgress.id, {
+        status: ProgressStatus.COMPLETED,
+        score: avgScore,
+        completedAt: new Date(),
+        completedLessonsCount,
+        totalLessonsCount,
+      });
+    } else {
+      await this.moduleProgressRepository.create({
+        userId,
+        moduleId,
+        status: ProgressStatus.COMPLETED,
+        score: avgScore,
+        completedAt: new Date(),
+        completedLessonsCount,
+        totalLessonsCount,
+      });
+    }
+
+    const courseId = module.courseId;
+    if (courseId) {
+      await this.checkCourseCompletion(userId, courseId);
+    }
+  }
+
+  private async checkCourseCompletion(
+    userId: string,
+    courseId: string,
+  ): Promise<void> {
+    const course = await this.coursesRepository.findById(courseId);
+    if (!course?.modules?.length) return;
+
+    const moduleIds = course.modules.map((m: any) => m.id);
+    const completedModuleProgress =
+      await this.moduleProgressRepository.findCompletedByUserInModules(
+        userId,
+        moduleIds,
+      );
+
+    const completedModulesCount = completedModuleProgress.length;
+    const totalModulesCount = moduleIds.length;
+
+    if (completedModulesCount < totalModulesCount) return;
+
+    const avgScore =
+      completedModuleProgress.reduce((sum, p) => sum + (p.score ?? 0), 0) /
+      completedModulesCount;
+
+    const existingCourseProgress =
+      await this.courseProgressRepository.findByUserAndCourse(userId, courseId);
+
+    if (existingCourseProgress) {
+      await this.courseProgressRepository.update(existingCourseProgress.id, {
+        status: ProgressStatus.COMPLETED,
+        score: avgScore,
+        completedAt: new Date(),
+        completedModulesCount,
+        totalModulesCount,
+      });
+    } else {
+      await this.courseProgressRepository.create({
+        userId,
+        courseId,
+        status: ProgressStatus.COMPLETED,
+        score: avgScore,
+        completedAt: new Date(),
+        completedModulesCount,
+        totalModulesCount,
+      });
+    }
   }
 
   async updateTimeSpent(
@@ -115,6 +235,34 @@ export class ProgressService {
     lessonId: string,
   ): Promise<UserProgress | null> {
     return this.progressRepository.findByUserAndLesson(userId, lessonId);
+  }
+
+  async getModuleProgress(
+    userId: string,
+    moduleId: string,
+  ): Promise<ModuleProgress> {
+    const progress = await this.moduleProgressRepository.findByUserAndModule(
+      userId,
+      moduleId,
+    );
+    if (!progress) {
+      throw new NotFoundException('Module progress not found');
+    }
+    return progress;
+  }
+
+  async getCourseProgress(
+    userId: string,
+    courseId: string,
+  ): Promise<CourseProgress> {
+    const progress = await this.courseProgressRepository.findByUserAndCourse(
+      userId,
+      courseId,
+    );
+    if (!progress) {
+      throw new NotFoundException('Course progress not found');
+    }
+    return progress;
   }
 
   async getLessonExerciseStatus(
