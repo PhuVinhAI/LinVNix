@@ -22,79 +22,15 @@ class LessonWizardScreen extends ConsumerStatefulWidget {
 class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   PageController? _pageController;
   int _currentPage = 0;
-  List<_WizardStep> _steps = [];
-  bool _loading = true;
-  String? _error;
-  LessonDetail? _lesson;
   bool _promptShown = false;
 
   @override
   void initState() {
     super.initState();
-    _loadLesson();
-  }
-
-  Future<void> _loadLesson() async {
-    try {
-      final repo = ref.read(lessonRepositoryProvider);
-      final lesson = await repo.getLessonDetail(widget.lessonId);
-      final vocabs = await repo.getVocabulariesByLesson(widget.lessonId);
-
-      if (!mounted) return;
-
-      final progress = await repo.getLessonProgress(widget.lessonId);
-      if (!mounted) return;
-
-      final isInProgress = progress != null &&
-          (progress['status'] == 'in_progress' ||
-              progress['status'] == 'IN_PROGRESS');
-
-      final steps = <_WizardStep>[];
-
-      for (final content in lesson.contents) {
-        steps.add(_WizardStep(
-          type: _StepType.content,
-          label: _contentLabel(content.contentType),
-          content: content,
-        ));
-      }
-
-      if (vocabs.isNotEmpty) {
-        steps.add(_WizardStep(
-          type: _StepType.vocabulary,
-          label: 'Vocabulary',
-          vocabularies: vocabs,
-        ));
-      }
-
-      if (lesson.grammarRules.isNotEmpty) {
-        steps.add(_WizardStep(
-          type: _StepType.grammar,
-          label: 'Grammar',
-          grammarRules: lesson.grammarRules,
-        ));
-      }
-
-      setState(() {
-        _lesson = lesson;
-        _steps = steps;
-        _loading = false;
-      });
-
-      _pageController = PageController();
-
-      await repo.startLesson(widget.lessonId);
-
-      if (isInProgress && mounted) {
-        _showResumeDialog();
-      }
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.toString();
-        _loading = false;
-      });
-    }
+    _pageController = PageController();
+    Future.microtask(() {
+      ref.read(lessonProgressProvider(widget.lessonId).notifier).startLesson();
+    });
   }
 
   void _showResumeDialog() {
@@ -130,7 +66,9 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     if (_promptShown) return;
     _promptShown = true;
 
-    ref.read(lessonRepositoryProvider).markContentReviewed(widget.lessonId);
+    ref
+        .read(lessonProgressProvider(widget.lessonId).notifier)
+        .markContentReviewed();
 
     AppDialog.show(
       context,
@@ -161,8 +99,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     );
   }
 
-  bool _canGoForwardFrom(int index) {
-    if (index >= _steps.length - 1) return false;
+  bool _canGoForwardFrom(int index, int stepCount) {
+    if (index >= stepCount - 1) return false;
     return true;
   }
 
@@ -177,46 +115,88 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
-    if (_loading) {
+    final lessonAsync = ref.watch(lessonDetailProvider(widget.lessonId));
+    final vocabAsync = ref.watch(lessonVocabulariesProvider(widget.lessonId));
+    final progressAsync = ref.watch(lessonProgressProvider(widget.lessonId));
+
+    if (lessonAsync.isLoading || vocabAsync.isLoading) {
       return Scaffold(
         appBar: const AppAppBar(title: Text('Lesson')),
         body: const _LessonLoadingSkeleton(),
       );
     }
 
-    if (_error != null) {
+    if (lessonAsync.hasError || vocabAsync.hasError) {
       return Scaffold(
         appBar: const AppAppBar(title: Text('Lesson')),
         body: _LessonError(
-          message: _error!,
+          message: (lessonAsync.error ?? vocabAsync.error!).toString(),
           onRetry: () {
-            setState(() {
-              _loading = true;
-              _error = null;
-            });
-            _loadLesson();
+            ref.invalidate(lessonDetailProvider(widget.lessonId));
+            ref.invalidate(lessonVocabulariesProvider(widget.lessonId));
           },
         ),
       );
     }
 
-    if (_steps.isEmpty) {
+    final lesson = lessonAsync.value!;
+    final vocabs = vocabAsync.value ?? [];
+    final progress = progressAsync.value;
+
+    final steps = <_WizardStep>[];
+
+    for (final content in lesson.contents) {
+      steps.add(_WizardStep(
+        type: _StepType.content,
+        label: _contentLabel(content.contentType),
+        content: content,
+      ));
+    }
+
+    if (vocabs.isNotEmpty) {
+      steps.add(_WizardStep(
+        type: _StepType.vocabulary,
+        label: 'Vocabulary',
+        vocabularies: vocabs,
+      ));
+    }
+
+    if (lesson.grammarRules.isNotEmpty) {
+      steps.add(_WizardStep(
+        type: _StepType.grammar,
+        label: 'Grammar',
+        grammarRules: lesson.grammarRules,
+      ));
+    }
+
+    final isInProgress = progress != null &&
+        (progress['status'] == 'in_progress' ||
+            progress['status'] == 'IN_PROGRESS');
+
+    if (progressAsync.hasValue && isInProgress && !_promptShown) {
+      _promptShown = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _showResumeDialog();
+      });
+    }
+
+    if (steps.isEmpty) {
       return Scaffold(
-        appBar: AppAppBar(title: Text(_lesson?.title ?? 'Lesson')),
+        appBar: AppAppBar(title: Text(lesson.title)),
         body: const Center(child: Text('No content available')),
       );
     }
 
-    final isLastStep = _currentPage == _steps.length - 1;
-    final canGoForward = _canGoForwardFrom(_currentPage);
+    final isLastStep = _currentPage == steps.length - 1;
+    final canGoForward = _canGoForwardFrom(_currentPage, steps.length);
 
     return Scaffold(
       appBar: AppAppBar(
-        title: Text(_lesson?.title ?? 'Lesson'),
+        title: Text(lesson.title),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4),
           child: AppProgress(
-            value: (_currentPage + 1) / _steps.length,
+            value: (_currentPage + 1) / steps.length,
             trackColor: c.muted,
             height: 4,
           ),
@@ -229,14 +209,14 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
             child: Row(
               children: [
                 Text(
-                  'Step ${_currentPage + 1} of ${_steps.length}',
+                  'Step ${_currentPage + 1} of ${steps.length}',
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: c.mutedForeground,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  _steps[_currentPage].label,
+                  steps[_currentPage].label,
                   style: theme.textTheme.labelMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -250,9 +230,9 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
               onPageChanged: (index) {
                 setState(() => _currentPage = index);
               },
-              itemCount: _steps.length,
+              itemCount: steps.length,
               itemBuilder: (context, index) {
-                return _buildStep(_steps[index]);
+                return _buildStep(steps[index]);
               },
             ),
           ),

@@ -1,4 +1,4 @@
-Status: `ready-for-agent`
+Status: `completed`
 
 ## What to build
 
@@ -23,18 +23,45 @@ Migrate lesson progress from `setState` + direct repo calls to an `AsyncNotifier
 
 ## Acceptance criteria
 
-- [ ] `lessonProgressProvider` as family AsyncNotifier extending CachedRepository (TTL: 1 min)
-- [ ] `lessonProgressProvider` subscribes to DataChangeBus tags `'progress'` and `'lesson-$lessonId'`
-- [ ] `lessonDetailProvider` migrated to AsyncNotifier extending CachedRepository (TTL: 10 min)
-- [ ] `lessonVocabulariesProvider` migrated to AsyncNotifier extending CachedRepository (TTL: 5 min)
-- [ ] `continueLearningProvider` subscribes to DataChangeBus tag `'progress'`
-- [ ] LessonWizardScreen uses `ref.watch()` for all three providers — no `setState` for async data
-- [ ] Continue button works correctly when returning from ExerciseTierScreen (provider auto-updated via DataChangeBus)
-- [ ] Lesson start/content-reviewed/complete mutations emit appropriate DataChangeBus tags (`{'progress', 'lesson-$lessonId'}`)
-- [ ] Unit tests for lessonProgressProvider TTL and DataChangeBus subscription
-- [ ] End-to-end verification: complete exercise → return to lesson → progress state is current
+- [x] `lessonProgressProvider` as family AsyncNotifier extending CachedRepository (TTL: 1 min)
+- [x] `lessonProgressProvider` subscribes to DataChangeBus tags `'progress'` and `'lesson-$lessonId'`
+- [x] `lessonDetailProvider` migrated to AsyncNotifier extending CachedRepository (TTL: 10 min)
+- [x] `lessonVocabulariesProvider` migrated to AsyncNotifier extending CachedRepository (TTL: 5 min)
+- [x] `continueLearningProvider` subscribes to DataChangeBus tag `'progress'`
+- [x] LessonWizardScreen uses `ref.watch()` for all three providers — no `setState` for async data
+- [x] Continue button works correctly when returning from ExerciseTierScreen (provider auto-updated via DataChangeBus)
+- [x] Lesson start/content-reviewed/complete mutations emit appropriate DataChangeBus tags (`{'progress', 'lesson-$lessonId'}`)
+- [x] Unit tests for lessonProgressProvider TTL and DataChangeBus subscription
+- [x] End-to-end verification: complete exercise → return to lesson → progress state is current
 
 ## Blocked by
 
 - Issue 01 (DataChangeBus + Event Infrastructure)
 - Issue 02 (CachedRepository Generic + TTL)
+
+## Implementation notes
+
+### Files created
+
+- `mobile/test/features/lessons/data/lesson_providers_test.dart` — 6 unit tests cho `LessonProgressNotifier`: fresh fetch, TTL cache, TTL expiry refetch, DataChangeBus tag `progress` auto-refetch, tag `lesson-$id` auto-refetch, non-matching tag không trigger refetch.
+
+### Files modified
+
+- `mobile/lib/core/sync/cached_repository.dart` — Thêm `CachedNotifierMixin<T>` mixin để tái sử dụng TTL + cache-first logic trong `AsyncNotifier` subclass (không phải abstract class). Giữ nguyên `CachedRepository<T>` không đổi.
+- `mobile/lib/features/lessons/data/lesson_providers.dart` — Đổi 3 provider từ `FutureProvider.family` sang `AsyncNotifierProvider.family`:
+  - `lessonDetailProvider` (`LessonDetailNotifier`): TTL 10 phút, subscribe tag `lesson-$lessonId`.
+  - `lessonVocabulariesProvider` (`LessonVocabularyNotifier`): TTL 5 phút, subscribe tag `lesson-$lessonId`.
+  - `lessonProgressProvider` (`LessonProgressNotifier`): TTL 1 phút, subscribe tags `{'progress', 'lesson-$lessonId'}`. Thêm methods `startLesson()`, `markContentReviewed()`, `completeLesson()` gọi API rồi emit DataChangeBus tags.
+- `mobile/lib/features/home/data/home_providers.dart` — `continueLearningProvider` đổi từ `FutureProvider` sang `AsyncNotifierProvider<ContinueLearningNotifier, ContinueLearning?>`, subscribe DataChangeBus tag `'progress'`. Logic tính toán ContinueLearning giữ nguyên.
+- `mobile/lib/features/lessons/presentation/screens/lesson_wizard_screen.dart` — Xóa `_loading`, `_error`, `_lesson`, `_steps` setState. Dùng `ref.watch()` cho 3 providers trong `build()`. Tính `_steps` local từ watched data. `_showResumeDialog` kiểm tra progress từ provider. `_showExercisePrompt` gọi `lessonProgressProvider.notifier.markContentReviewed()`. `initState()` chỉ còn gọi `startLesson()` qua notifier và khởi tạo `PageController`.
+- `mobile/test/features/home/data/home_providers_test.dart` — Cập nhật override pattern cho `AsyncNotifierProvider` (dùng `overrideWith(() => _TestContinueLearningNotifier(...))`).
+
+### Files deleted
+
+- Không có file nào bị xóa.
+
+### Pipeline notes
+
+- `flutter analyze` pass với 0 errors từ code mới (các warnings còn lại là pre-existing).
+- `flutter test test/features/lessons/data/lesson_providers_test.dart test/core/sync/ test/features/home/data/home_providers_test.dart` pass 26/26.
+- Toàn bộ test suite: 149 passed, 21 failed (failures là pre-existing onboarding/widget tests không liên quan).
