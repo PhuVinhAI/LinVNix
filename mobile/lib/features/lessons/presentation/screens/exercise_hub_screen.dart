@@ -17,10 +17,16 @@ class ExerciseHubScreen extends ConsumerStatefulWidget {
   ConsumerState<ExerciseHubScreen> createState() => _ExerciseHubScreenState();
 }
 
-class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
+enum _BusyAction { none, regenerate, delete, reset, create }
+
+class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
+    with WidgetsBindingObserver {
   String? _busySetId;
+  _BusyAction _busyAction = _BusyAction.none;
   String? _error;
   bool _isCreatingCustom = false;
+  String? _creatingSetId;
+  String? _regeneratingNewSetId;
   CancelToken? _aiCancelToken;
 
   CancelToken _newAiCancelToken() {
@@ -31,9 +37,35 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _aiCancelToken?.cancel();
+    _cleanupIncompleteSet();
     super.dispose();
+  }
+
+  void _cleanupIncompleteSet() {
+    final repo = ref.read(lessonRepositoryProvider);
+    if (_creatingSetId != null) {
+      repo.deleteCustomExerciseSet(_creatingSetId!).catchError((_) {});
+    }
+    if (_regeneratingNewSetId != null) {
+      repo.deleteCustomExerciseSet(_regeneratingNewSetId!).catchError((_) {});
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _cleanupIncompleteSet();
+    }
   }
 
   Future<void> _pushExercisePlay(String setId) async {
@@ -45,23 +77,44 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
   Future<void> _handleRegenerate(String setId) async {
     setState(() {
       _busySetId = setId;
+      _busyAction = _BusyAction.regenerate;
       _error = null;
+      _regeneratingNewSetId = null;
     });
+    String? newSetId;
     try {
-      final token = _newAiCancelToken();
       final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      await notifier.regenerateSet(setId, cancelToken: token);
+      newSetId = await notifier.regenerateSet(setId);
+      _regeneratingNewSetId = newSetId;
+
+      final token = _newAiCancelToken();
+      await notifier.generateSet(newSetId, cancelToken: token);
+      _regeneratingNewSetId = null;
       if (mounted) {
-        setState(() => _busySetId = null);
+        setState(() {
+          _busySetId = null;
+          _busyAction = _BusyAction.none;
+        });
       }
     } catch (e) {
       if (!mounted) return;
+
+      if (newSetId != null) {
+        final repo = ref.read(lessonRepositoryProvider);
+        await repo.deleteCustomExerciseSet(newSetId).catchError((_) {});
+      }
+      _regeneratingNewSetId = null;
+
       if (e is RequestCancelledException) {
-        setState(() => _busySetId = null);
+        setState(() {
+          _busySetId = null;
+          _busyAction = _BusyAction.none;
+        });
         return;
       }
       setState(() {
         _busySetId = null;
+        _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
@@ -70,18 +123,23 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
   Future<void> _handleDelete(String setId) async {
     setState(() {
       _busySetId = setId;
+      _busyAction = _BusyAction.delete;
       _error = null;
     });
     try {
       final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
       await notifier.deleteSet(setId);
       if (mounted) {
-        setState(() => _busySetId = null);
+        setState(() {
+          _busySetId = null;
+          _busyAction = _BusyAction.none;
+        });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _busySetId = null;
+        _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
@@ -90,18 +148,24 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
   Future<void> _handleReset(String setId) async {
     setState(() {
       _busySetId = setId;
+      _busyAction = _BusyAction.reset;
       _error = null;
     });
     try {
       final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
       await notifier.resetSetProgress(setId);
+      await ref.read(exerciseSessionServiceProvider).delete(setId);
       if (mounted) {
-        setState(() => _busySetId = null);
+        setState(() {
+          _busySetId = null;
+          _busyAction = _BusyAction.none;
+        });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _busySetId = null;
+        _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
@@ -110,23 +174,49 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
   Future<void> _handleCreateCustom(CustomSetConfig config) async {
     setState(() {
       _isCreatingCustom = true;
+      _busyAction = _BusyAction.create;
       _error = null;
     });
+    String? setId;
     try {
-      final token = _newAiCancelToken();
       final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      await notifier.createCustomSet(config, cancelToken: token);
+      final set = await notifier.createCustomSet(config);
+      setId = set.id;
+      _creatingSetId = setId;
+
+      final token = _newAiCancelToken();
+      await notifier.generateSet(setId, cancelToken: token);
+      _creatingSetId = null;
       if (mounted) {
-        setState(() => _isCreatingCustom = false);
+        setState(() {
+          _isCreatingCustom = false;
+          _busyAction = _BusyAction.none;
+        });
       }
     } catch (e) {
       if (!mounted) return;
+
       if (e is RequestCancelledException) {
-        setState(() => _isCreatingCustom = false);
+        if (setId != null) {
+          final repo = ref.read(lessonRepositoryProvider);
+          await repo.deleteCustomExerciseSet(setId).catchError((_) {});
+        }
+        _creatingSetId = null;
+        setState(() {
+          _isCreatingCustom = false;
+          _busyAction = _BusyAction.none;
+        });
         return;
       }
+
+      if (setId != null) {
+        final repo = ref.read(lessonRepositoryProvider);
+        await repo.deleteCustomExerciseSet(setId).catchError((_) {});
+      }
+      _creatingSetId = null;
       setState(() {
         _isCreatingCustom = false;
+        _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
@@ -265,15 +355,40 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
                 style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
               ),
               const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: AppButton(
-                  label: _isCreatingCustom ? 'Creating...' : 'Create custom set',
-                  variant: AppButtonVariant.primary,
-                  onPressed: _isCreatingCustom ? null : _showCustomConfigForm,
-                  icon: _isCreatingCustom ? null : const Icon(Icons.add),
+              if (_isCreatingCustom) ...[
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: AppButton(
+                    label: 'Generating exercises...',
+                    variant: AppButtonVariant.secondary,
+                    onPressed: null,
+                    icon: const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: AppButton(
+                    label: 'Cancel',
+                    variant: AppButtonVariant.outline,
+                    onPressed: () => _aiCancelToken?.cancel(),
+                  ),
+                ),
+              ] else
+                SizedBox(
+                  width: double.infinity,
+                  child: AppButton(
+                    label: 'Create custom set',
+                    variant: AppButtonVariant.primary,
+                    onPressed: _showCustomConfigForm,
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
               if (_error != null) ...[
                 const SizedBox(height: 8),
                 Text(_error!, style: theme.textTheme.bodySmall?.copyWith(color: c.error)),
@@ -286,6 +401,10 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen> {
                 onReset: () => _confirmReset(set.setId, set.title),
                 onRegenerate: () => _handleRegenerate(set.setId),
                 onDelete: () => _confirmDelete(set.setId),
+                onCancel: (_busySetId == set.setId &&
+                        _busyAction == _BusyAction.regenerate)
+                    ? () => _aiCancelToken?.cancel()
+                    : null,
                 isCustom: true,
               )),
               if (customSets.isEmpty && defaultSets.isEmpty)
@@ -315,6 +434,7 @@ class _SetCard extends StatelessWidget {
     this.onReset,
     this.onRegenerate,
     this.onDelete,
+    this.onCancel,
     this.isCustom = false,
   });
 
@@ -324,6 +444,7 @@ class _SetCard extends StatelessWidget {
   final VoidCallback? onReset;
   final VoidCallback? onRegenerate;
   final VoidCallback? onDelete;
+  final VoidCallback? onCancel;
   final bool isCustom;
 
   void _openActionsMenu(BuildContext context) {
@@ -496,17 +617,35 @@ class _SetCard extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
+            SizedBox(
+              width: isBusy && onCancel != null ? 72 : 48,
+              height: 48,
               child: isBusy
-                  ? const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: AppSpinner(),
-                      ),
-                    )
+                  ? (onCancel != null
+                      ? Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: onCancel,
+                            borderRadius: BorderRadius.circular(12),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const AppSpinner(size: 20, strokeWidth: 2),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'Cancel',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: c.mutedForeground,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const Center(
+                          child: AppSpinner(size: 22),
+                        ))
                   : IconButton(
                       icon: Icon(Icons.keyboard_arrow_down_rounded,
                           color: c.mutedForeground, size: 26),

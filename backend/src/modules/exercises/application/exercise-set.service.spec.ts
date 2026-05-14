@@ -35,7 +35,8 @@ describe('ExerciseSetService', () => {
 
     generationService = {
       generate: jest.fn(),
-      regenerate: jest.fn(),
+      createRegeneratedSet: jest.fn(),
+      finalizeRegeneration: jest.fn(),
       generateCustom: jest.fn(),
     } as any;
 
@@ -185,16 +186,15 @@ describe('ExerciseSetService', () => {
   });
 
   describe('regenerate', () => {
-    it('delegates to exerciseGenerationService', async () => {
-      const mockExercises = [{ id: 'ex-1', exerciseType: 'translation' }];
-      generationService.regenerate.mockResolvedValue(mockExercises as any);
+    it('creates a new regenerated set', async () => {
+      const mockSet = { id: 'new-set-1', lessonId: 'lesson-1' };
+      generationService.createRegeneratedSet.mockResolvedValue(mockSet as any);
 
       const result = await service.regenerate('set-1', 'user-1');
 
-      expect(result).toEqual(mockExercises);
-      expect(generationService.regenerate).toHaveBeenCalledWith(
+      expect(result.id).toBe('new-set-1');
+      expect(generationService.createRegeneratedSet).toHaveBeenCalledWith(
         'set-1',
-        'user-1',
       );
     });
   });
@@ -206,16 +206,13 @@ describe('ExerciseSetService', () => {
       focusArea: 'both' as const,
     };
 
-    it('creates custom set and generates exercises', async () => {
+    it('creates empty custom set without generating', async () => {
       exerciseSetsRepo.create.mockResolvedValue({
         id: 'custom-set-1',
         lessonId: 'lesson-1',
         isCustom: true,
         customConfig: validConfig,
       } as any);
-      generationService.generateCustom.mockResolvedValue([
-        { id: 'ex-1' },
-      ] as any);
 
       const result = await service.createCustom(
         'lesson-1',
@@ -231,12 +228,8 @@ describe('ExerciseSetService', () => {
           title: 'Custom Practice',
         }),
       );
-      expect(generationService.generateCustom).toHaveBeenCalledWith(
-        'custom-set-1',
-        'user-1',
-      );
+      expect(generationService.generateCustom).not.toHaveBeenCalled();
       expect(result.set.id).toBe('custom-set-1');
-      expect(result.exercises).toHaveLength(1);
     });
 
     it('throws when config is invalid', async () => {

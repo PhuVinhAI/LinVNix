@@ -134,6 +134,12 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         _applySessionFromHive(session);
       } else if (choice == false) {
         await service.delete(setId);
+        try {
+          final repo = ref.read(lessonRepositoryProvider);
+          await repo.resetExerciseSetProgress(setId);
+        } catch (_) {
+          // best-effort: don't block UI if backend reset fails
+        }
         if (!mounted) return;
         setState(() {
           _currentIndex = 0;

@@ -232,11 +232,10 @@ describe('ExerciseGenerationService', () => {
         text: validAiResponse,
       } as any);
 
-      const result = await service.regenerate('set-1', 'user-1');
+      const result = await service.createRegeneratedSet('set-1');
 
-      expect(exerciseSetsRepo.softDelete).toHaveBeenCalledWith('set-1');
-      expect(exercisesRepo.softDeleteBySetId).toHaveBeenCalledWith('set-1');
-      expect(result).toHaveLength(1);
+      expect(result.lessonId).toBe('lesson-1');
+      expect(exerciseSetsRepo.create).toHaveBeenCalled();
     });
   });
 

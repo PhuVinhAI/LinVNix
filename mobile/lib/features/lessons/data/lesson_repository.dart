@@ -164,7 +164,7 @@ class LessonRepository {
     }
   }
 
-  Future<Map<String, dynamic>> createCustomSet(
+  Future<ExerciseSetModel> createCustomSet(
     String lessonId,
     CustomSetConfig config, {
     CancelToken? cancelToken,
@@ -176,25 +176,27 @@ class LessonRepository {
           'lessonId': lessonId,
           'config': config.toJson(),
         },
-        options: _aiGenerationRequestOptions,
         cancelToken: cancelToken,
       );
-      return response.data!;
+      final data = response.data!;
+      final setMap = data['set'] as Map<String, dynamic>;
+      return ExerciseSetModel.fromJson(setMap);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<void> regenerateExercises(
+  Future<String> regenerateExercises(
     String setId, {
     CancelToken? cancelToken,
   }) async {
     try {
-      await _dio.post<Map<String, dynamic>>(
+      final response = await _dio.post<Map<String, dynamic>>(
         '/exercise-sets/$setId/regenerate',
         options: _aiGenerationRequestOptions,
         cancelToken: cancelToken,
       );
+      return response.data!['newSetId'] as String;
     } on DioException catch (e) {
       throw mapDioException(e);
     }
