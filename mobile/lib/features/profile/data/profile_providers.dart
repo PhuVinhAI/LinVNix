@@ -4,9 +4,11 @@ import '../../../core/providers/providers.dart';
 import '../../user/domain/user_profile.dart';
 import '../domain/exercise_stats.dart';
 
-class UserProfileNotifier extends AsyncNotifier<UserProfile> {
+class UserProfileNotifier extends AsyncNotifier<UserProfile>
+    with CachedNotifierMixin<UserProfile>, DataChangeBusSubscriber<UserProfile> {
   @override
   Future<UserProfile> build() async {
+    watchTags({'auth'});
     final repository = ref.read(userRepositoryProvider);
     final data = await repository.getMe();
     return UserProfile.fromJson(data);
@@ -37,22 +39,14 @@ final userProfileProvider =
   UserProfileNotifier.new,
 );
 
-class ExerciseStatsNotifier extends CachedRepository<ExerciseStats>
-    with DataChangeBusSubscriber<ExerciseStats> {
-  @override
-  Duration get ttl => Duration.zero;
-
-  @override
-  Future<ExerciseStats> fetchFromApi() async {
-    final repository = ref.read(userRepositoryProvider);
-    final data = await repository.getMyStats();
-    return ExerciseStats.fromJson(data);
-  }
-
+class ExerciseStatsNotifier extends AsyncNotifier<ExerciseStats>
+    with CachedNotifierMixin<ExerciseStats>, DataChangeBusSubscriber<ExerciseStats> {
   @override
   Future<ExerciseStats> build() async {
     watchTags({'exercise'});
-    return super.build();
+    final repository = ref.read(userRepositoryProvider);
+    final data = await repository.getMyStats();
+    return ExerciseStats.fromJson(data);
   }
 }
 

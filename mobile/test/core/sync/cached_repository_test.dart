@@ -61,6 +61,21 @@ void main() {
     });
   });
 
+  group('CachedRepository refresh', () {
+    test('refresh forces refetch regardless of TTL', () async {
+      final container = ProviderContainer();
+      final repo = container.read(_testCachedRepoProvider.notifier);
+
+      await container.read(_testCachedRepoProvider.future);
+      expect(repo.fetchCallCount, 1);
+
+      repo.refresh();
+      await container.read(_testCachedRepoProvider.future);
+
+      expect(repo.fetchCallCount, 2);
+    });
+  });
+
   group('CachedRepository mutate', () {
     test('optimistic write updates state immediately', () async {
       final container = ProviderContainer();

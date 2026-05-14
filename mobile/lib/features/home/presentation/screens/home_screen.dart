@@ -16,21 +16,9 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      if (mounted) {
-        ref.invalidate(continueLearningProvider);
-        ref.invalidate(coursesProvider);
-      }
-    });
-  }
-
   Future<void> _onRefresh() async {
-    ref.invalidate(continueLearningProvider);
-    ref.invalidate(coursesProvider);
-    await ref.read(continueLearningProvider.future);
+    ref.read(coursesProvider.notifier).refresh();
+    ref.read(continueLearningProvider.notifier).refresh();
   }
 
   String _getGreeting() {

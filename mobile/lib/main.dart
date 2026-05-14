@@ -26,7 +26,7 @@ Future<void> main() async {
 
   runApp(ProviderScope(
     overrides: [
-      preferencesProvider.overrideWithValue(AsyncData(preferencesService)),
+      preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(preferencesService)),
     ],
     child: const LinVNixApp(),
   ));

@@ -54,7 +54,8 @@ abstract class CachedRepository<T> extends AsyncNotifier<T> {
     _lastFetchedAt = null;
   }
 
-  void refresh() {
+  Future<void> refresh() async {
+    forceExpire();
     ref.invalidateSelf();
   }
 }
@@ -107,7 +108,8 @@ mixin CachedNotifierMixin<T> on AsyncNotifier<T> {
     _lastFetchedAt = null;
   }
 
-  void refresh() {
+  Future<void> refresh() async {
+    forceExpire();
     ref.invalidateSelf();
   }
 }

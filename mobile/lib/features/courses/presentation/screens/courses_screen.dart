@@ -31,7 +31,7 @@ class CoursesScreen extends ConsumerWidget {
       body: coursesAsync.when(
         loading: () => const _CoursesLoading(),
         error: (error, stack) => _CoursesError(
-          onRetry: () => ref.invalidate(coursesProvider),
+          onRetry: () => ref.read(coursesProvider.notifier).refresh(),
         ),
         data: (courses) => _CoursesList(courses: courses),
       ),

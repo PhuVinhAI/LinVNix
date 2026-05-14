@@ -46,6 +46,10 @@ class ContinueLearningNotifier extends AsyncNotifier<ContinueLearning?>
 
     return null;
   }
+
+  void refresh() {
+    ref.invalidateSelf();
+  }
 }
 
 enum ContinueLearningStatus { inProgress, completed }
