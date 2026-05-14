@@ -1,4 +1,4 @@
-Status: `ready-for-agent`
+Status: `completed`
 
 ## What to build
 
@@ -18,15 +18,50 @@ Also set up the code generation pipeline (build_runner, analysis_options config 
 
 ## Acceptance criteria
 
-- [ ] `DataChanged` freezed model with `tags` field (`Set<String>`)
-- [ ] `DataChangeBus` notifier with `emit(tags)` method, exposed via `@riverpod` provider
-- [ ] Tag subscription utility that any AsyncNotifier can use to auto-invalidate on matching events
-- [ ] Unit tests: emit event with tags → only matching subscribers invalidate
-- [ ] Unit tests: emit event with no matching tags → no subscriber reacts
-- [ ] Unit tests: multiple emissions → all processed
-- [ ] build_runner pipeline configured and running without errors
-- [ ] All generated files (`.g.dart`, `.freezed.dart`) compile cleanly
+- [x] `DataChanged` freezed model with `tags` field (`Set<String>`)
+- [x] `DataChangeBus` notifier with `emit(tags)` method, exposed via `@riverpod` provider
+- [x] Tag subscription utility that any AsyncNotifier can use to auto-invalidate on matching events
+- [x] Unit tests: emit event with tags → only matching subscribers invalidate
+- [x] Unit tests: emit event with no matching tags → no subscriber reacts
+- [x] Unit tests: multiple emissions → all processed
+- [x] build_runner pipeline configured and running without errors
+- [x] All generated files (`.g.dart`, `.freezed.dart`) compile cleanly
 
 ## Blocked by
 
 None — can start immediately
+
+## Implementation notes
+
+### Files created
+
+- `mobile/lib/core/sync/data_changed.dart` — Freezed model `DataChanged` với field `tags: Set<String>`. Dùng `@freezed` annotation; generated file: `data_changed.freezed.dart`.
+- `mobile/lib/core/sync/data_change_bus.dart` — `DataChangeBus` extends `_$DataChangeBus` (generated Notifier base) với `@Riverpod(keepAlive: true)`. Cung cấp method `emit(Set<String> tags)` để cập nhật state. Generated file: `data_change_bus.g.dart`.
+- `mobile/lib/core/sync/tag_subscription.dart` — Chứa:
+  - `DataChangeBusSubscriber<T>` mixin: dùng `ref.listen(dataChangeBusProvider, ...)` và gọi `ref.invalidateSelf()` khi tags giao nhau.
+  - `RefTagSubscription` extension trên `Ref`: `watchDataChangeTags(Set<String> tags, VoidCallback onMatch)` để bất kỳ provider nào cũng có thể subscribe.
+- `mobile/lib/core/sync/sync.dart` — Barrel file export cả 3 file trên.
+- `mobile/test/core/sync/data_change_bus_test.dart` — 8 unit tests cover:
+  - Initial state null
+  - Emit cập nhật state
+  - Emit overwrite previous state
+  - Matching tag trigger rebuild
+  - Non-matching tag không trigger rebuild
+  - Multiple emissions đều processed
+  - `RefTagSubscription` calls `onMatch` khi tags intersect
+  - `RefTagSubscription` không call `onMatch` khi tags không intersect
+
+### Files modified
+
+- `mobile/lib/core/sync/data_changed.dart` — Đổi `class` thành `abstract class` để tương thích với freezed 3.x generated mixin.
+
+### Files deleted
+
+- Không có file nào bị xóa.
+
+### Pipeline notes
+
+- `build_runner` đã được cấu hình sẵn trong `pubspec.yaml` (`build_runner`, `freezed`, `riverpod_generator`, `riverpod_lint`). Không cần thay đổi config thêm.
+- `flutter analyze` pass với 0 lỗi từ code mới (các warnings còn lại là pre-existing).
+- `flutter test` pass 124/124 unit tests (widget tests pre-existing fail không liên quan đến thay đổi này).
+- Generated code compile cleanly.
