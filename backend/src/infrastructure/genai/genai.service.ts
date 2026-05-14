@@ -172,30 +172,75 @@ export class GenaiService implements IAiProvider, OnModuleInit {
     const lines = content.split('\n');
     let currentTemplate: Partial<PromptTemplate> | null = null;
     let currentName = '';
+    let collectingMultiLine = false;
+    let multiLineKey = '';
+    let multiLineBuffer: string[] = [];
+    let multiLineIndent = -1;
 
-    for (const line of lines) {
+    const flushMultiLine = () => {
+      if (!collectingMultiLine || !currentTemplate) return;
+      const value = multiLineBuffer.join('\n').trimEnd();
+      if (multiLineKey === 'template') {
+        currentTemplate.template = value;
+      } else if (multiLineKey === 'description') {
+        currentTemplate.description = value;
+      }
+      collectingMultiLine = false;
+      multiLineBuffer = [];
+      multiLineIndent = -1;
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
       const trimmed = line.trim();
+      const lineIndent = line.length - line.trimStart().length;
+
+      if (collectingMultiLine) {
+        if (trimmed === '' || lineIndent > multiLineIndent) {
+          multiLineBuffer.push(trimmed);
+          continue;
+        }
+        flushMultiLine();
+      }
+
       if (!trimmed || trimmed.startsWith('#')) continue;
 
-      if (trimmed.endsWith(':') && !trimmed.startsWith(' ')) {
+      if (trimmed.endsWith(':') && lineIndent === 0) {
         if (currentTemplate && currentName) {
+          flushMultiLine();
           templates[currentName] = currentTemplate as PromptTemplate;
         }
         currentName = trimmed.slice(0, -1).trim();
         currentTemplate = { name: currentName, template: '', variables: [] };
       } else if (currentTemplate) {
         if (trimmed.startsWith('template:')) {
-          currentTemplate.template = trimmed
-            .slice('template:'.length)
-            .trim()
-            .replace(/^["']|["']$/g, '');
+          const raw = trimmed.slice('template:'.length).trim();
+          if (raw === '|' || raw === '|-' || raw === '>' || raw === '>-') {
+            collectingMultiLine = true;
+            multiLineKey = 'template';
+            const nextLine = lines[i + 1] || '';
+            multiLineIndent = nextLine.length - nextLine.trimStart().length;
+            multiLineBuffer = [];
+          } else {
+            currentTemplate.template = raw.replace(/^["']|["']$/g, '');
+          }
         } else if (trimmed.startsWith('description:')) {
-          currentTemplate.description = trimmed
-            .slice('description:'.length)
-            .trim()
-            .replace(/^["']|["']$/g, '');
+          const raw = trimmed.slice('description:'.length).trim();
+          if (raw === '|' || raw === '|-' || raw === '>' || raw === '>-') {
+            collectingMultiLine = true;
+            multiLineKey = 'description';
+            const nextLine = lines[i + 1] || '';
+            multiLineIndent = nextLine.length - nextLine.trimStart().length;
+            multiLineBuffer = [];
+          } else {
+            currentTemplate.description = raw.replace(/^["']|["']$/g, '');
+          }
         }
       }
+    }
+
+    if (collectingMultiLine) {
+      flushMultiLine();
     }
 
     if (currentTemplate && currentName) {

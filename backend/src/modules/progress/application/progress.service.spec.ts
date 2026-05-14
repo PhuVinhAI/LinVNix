@@ -6,10 +6,7 @@ import { ModulesRepository } from '../../courses/application/repositories/module
 import { CoursesRepository } from '../../courses/application/repositories/courses.repository';
 import { ProgressTransactionService } from './progress-transaction.service';
 import { ProgressStatus, UserLevel } from '../../../common/enums';
-import {
-  NotFoundException,
-  ForbiddenException,
-} from '@nestjs/common';
+import { NotFoundException, ForbiddenException } from '@nestjs/common';
 
 describe('ProgressService', () => {
   let service: ProgressService;

@@ -4,10 +4,12 @@ import {
   IsNumber,
   IsUUID,
   IsArray,
+  IsOptional,
   Min,
   Max,
   ArrayMinSize,
   ValidateNested,
+  MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ExerciseType } from '../../../common/enums';
@@ -49,4 +51,14 @@ export class CreateCustomSetDto {
   @ValidateNested()
   @Type(() => CustomSetConfigDto)
   config: CustomSetConfigDto;
+
+  @ApiProperty({
+    example: 'Focus on greetings and basic phrases',
+    description: 'Optional user prompt to guide AI generation (max 500 chars)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  userPrompt?: string;
 }
