@@ -43,12 +43,26 @@ const GeneratedExerciseSchema = z.object({
 });
 
 const GenerationResponseSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().optional(),
   exercises: z.array(GeneratedExerciseSchema).min(1),
 });
 
 const EXERCISE_RESPONSE_SCHEMA = {
   type: Type.OBJECT,
   properties: {
+    title: {
+      type: Type.STRING,
+      description:
+        'A short descriptive title for this exercise set (5-8 words)',
+      nullable: false,
+    },
+    description: {
+      type: Type.STRING,
+      description:
+        'An optional brief description (1-2 sentences) summarizing what the exercise set covers',
+      nullable: true,
+    },
     exercises: {
       type: Type.ARRAY,
       items: {
@@ -219,7 +233,7 @@ const EXERCISE_RESPONSE_SCHEMA = {
       },
     },
   },
-  required: ['exercises'],
+  required: ['title', 'exercises'],
 };
 
 @Injectable()
@@ -233,7 +247,11 @@ export class ExerciseGenerationService {
     private readonly exerciseContextLoader: ExerciseContextLoader,
   ) {}
 
-  async generate(setId: string, userId: string): Promise<Exercise[]> {
+  async generate(
+    setId: string,
+    userId: string,
+    userPromptOverride?: string,
+  ): Promise<Exercise[]> {
     const set = await this.exerciseSetsRepository.findById(setId);
     if (!set) {
       throw new BadRequestException(`ExerciseSet ${setId} not found`);
@@ -250,7 +268,7 @@ export class ExerciseGenerationService {
       generationStatus: 'generating' as any,
     });
     try {
-      const exercises = await this.doGenerate(set, userId);
+      const exercises = await this.doGenerate(set, userId, userPromptOverride);
       await this.exerciseSetsRepository.update(setId, {
         generationStatus: 'ready' as any,
       });
@@ -266,11 +284,15 @@ export class ExerciseGenerationService {
 
   async createRegeneratedSet(
     setId: string,
+    userPromptOverride?: string,
   ): Promise<import('../domain/exercise-set.entity').ExerciseSet> {
     const set = await this.exerciseSetsRepository.findById(setId);
     if (!set) {
       throw new BadRequestException(`ExerciseSet ${setId} not found`);
     }
+
+    const effectiveUserPrompt =
+      userPromptOverride !== undefined ? userPromptOverride : set.userPrompt;
 
     const newSetData: Partial<
       import('../domain/exercise-set.entity').ExerciseSet
@@ -281,9 +303,9 @@ export class ExerciseGenerationService {
       isCustom: set.isCustom,
       customConfig: set.customConfig,
       isAIGenerated: false,
-      title: set.isCustom ? 'Custom Practice' : set.title,
+      title: 'Custom Practice',
       description: set.description,
-      userPrompt: set.userPrompt,
+      userPrompt: effectiveUserPrompt,
       orderIndex: set.orderIndex,
       generationStatus: 'generating' as any,
       replacesSetId: setId,
@@ -294,13 +316,17 @@ export class ExerciseGenerationService {
 
   async finalizeRegeneration(
     oldSetId: string,
-    newSetId: string,
+    _newSetId: string,
   ): Promise<void> {
     await this.exerciseSetsRepository.softDelete(oldSetId);
     await this.exercisesRepository.softDeleteBySetId(oldSetId);
   }
 
-  async generateCustom(setId: string, userId: string): Promise<Exercise[]> {
+  async generateCustom(
+    setId: string,
+    userId: string,
+    userPromptOverride?: string,
+  ): Promise<Exercise[]> {
     const set = await this.exerciseSetsRepository.findById(setId);
     if (!set) {
       throw new BadRequestException(`ExerciseSet ${setId} not found`);
@@ -322,7 +348,7 @@ export class ExerciseGenerationService {
       generationStatus: 'generating' as any,
     });
     try {
-      const exercises = await this.doGenerate(set, userId);
+      const exercises = await this.doGenerate(set, userId, userPromptOverride);
       await this.exerciseSetsRepository.update(setId, {
         generationStatus: 'ready' as any,
       });
@@ -339,6 +365,7 @@ export class ExerciseGenerationService {
   private async doGenerate(
     set: import('../domain/exercise-set.entity').ExerciseSet,
     userId: string,
+    userPromptOverride?: string,
   ): Promise<Exercise[]> {
     const context = await this.exerciseContextLoader.loadLessonContext(
       set.lessonId!,
@@ -364,7 +391,32 @@ export class ExerciseGenerationService {
       guidelines = DEFAULT_GUIDELINES;
     }
 
-    const prompt = this.buildPrompt(context, guidelines, label);
+    const effectiveUserPrompt =
+      userPromptOverride !== undefined ? userPromptOverride : set.userPrompt;
+
+    const userPromptSection = effectiveUserPrompt
+      ? `\n### User Request\n${effectiveUserPrompt}\n`
+      : '';
+
+    const lessonContext = this.formatContext(context);
+    const existingExercises = this.formatExistingExercises(
+      context.existingExercises,
+    );
+
+    const prompt = this.genaiService.renderPrompt(
+      'exercise-generation-lesson',
+      {
+        questionCount: String(guidelines.questionCount),
+        label,
+        focusAreaDescription: guidelines.description,
+        preferredTypes: guidelines.preferredTypes.join(', '),
+        lessonTitle: context.lessonTitle,
+        lessonContext,
+        existingExercises,
+        userPromptSection,
+      },
+    );
+
     const systemInstruction = this.buildSystemInstruction();
 
     const response = await this.genaiService.chatStructured({
@@ -375,12 +427,14 @@ export class ExerciseGenerationService {
 
     const generated = this.parseResponse(response.text);
 
-    const exercises = await this.persistExercises(generated, set, prompt);
+    const exercises = await this.persistExercises(generated, set);
 
     await this.exerciseSetsRepository.update(set.id, {
       isAIGenerated: true,
       generatedById: userId,
       promptUsed: prompt,
+      title: generated.title,
+      description: generated.description ?? undefined,
     });
 
     this.logger.log(
@@ -388,46 +442,6 @@ export class ExerciseGenerationService {
     );
 
     return exercises;
-  }
-
-  buildPrompt(
-    context: LessonContext,
-    guidelines: {
-      questionCount: number;
-      preferredTypes: ExerciseType[];
-      description: string;
-    },
-    label: string,
-  ): string {
-    const contextSection = this.formatContext(context);
-    const avoidSection = this.formatExistingExercises(
-      context.existingExercises,
-    );
-
-    return `Generate ${guidelines.questionCount} Vietnamese language exercises for ${label} (${guidelines.description}).
-Preferred exercise types: ${guidelines.preferredTypes.join(', ')}.
-
-## Lesson: ${context.lessonTitle}
-
-${contextSection}
-${avoidSection}
-
-Each exercise must:
-- Test different vocabulary or grammar from the lesson
-- Be unique (not duplicating existing exercises above)
-- Mix Vietnamese and English naturally per exercise type
-  - matching: Vietnamese↔English pairs
-  - translation: either direction (Vietnamese→English or English→Vietnamese)
-  - fill_blank / multiple_choice / ordering: Vietnamese questions
-  - listening: Vietnamese audio (provide transcript, set audioUrl to empty string)
-
-Exercise-type option/answer shapes:
-- multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}
-- fill_blank: options={blanks:1,acceptedAnswers:[["answer1","answer2"]]}, correctAnswer={answers:["answer1"]}
-- matching: options={pairs:[{left:"Vi",right:"En"}]}, correctAnswer={matches:[{left:"Vi",right:"En"}]}
-- ordering: options={items:["C","A","B"]}, correctAnswer={orderedItems:["A","B","C"]}
-- translation: options={sourceLanguage:"vi",targetLanguage:"en",acceptedTranslations:["Hello"]}, correctAnswer={translation:"Hello"}
-- listening: options={audioUrl:"",transcriptType:"exact",keywords:["keyword"]}, correctAnswer={transcript:"text"}`;
   }
 
   parseResponse(
@@ -511,7 +525,6 @@ Exercise-type option/answer shapes:
   private async persistExercises(
     generated: z.infer<typeof GenerationResponseSchema>,
     set: import('../domain/exercise-set.entity').ExerciseSet,
-    _prompt: string,
   ): Promise<Exercise[]> {
     const exercises: Exercise[] = [];
 

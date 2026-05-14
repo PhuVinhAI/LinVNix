@@ -22,6 +22,7 @@ import { RequirePermissions } from '../../../common/decorators';
 import { Permission } from '../../../common/enums';
 import { User } from '../../users/domain/user.entity';
 import { CreateCustomSetDto } from '../dto/create-custom-set.dto';
+import { GenerateDto } from '../dto/generate.dto';
 
 @ApiTags('Exercise Sets')
 @Controller('exercise-sets')
@@ -58,6 +59,7 @@ export class ExerciseSetController {
         focusArea: dto.config.focusArea,
       },
       user.id,
+      dto.userPrompt,
     );
   }
 
@@ -124,7 +126,7 @@ export class ExerciseSetController {
   @ApiOperation({
     summary: 'AI generate exercises for an empty set',
     description:
-      'Generate AI exercises for an empty exercise set. Requires AI_GENERATE_EXERCISE permission.',
+      'Generate AI exercises for an empty exercise set. Accepts optional userPrompt to override the stored one. Requires AI_GENERATE_EXERCISE permission.',
   })
   @ApiParam({ name: 'id', description: 'ID của exercise set' })
   @ApiResponse({
@@ -135,8 +137,12 @@ export class ExerciseSetController {
     status: 400,
     description: 'Set already has exercises',
   })
-  async generate(@Param('id') id: string, @CurrentUser() user: User) {
-    return this.exerciseSetService.generate(id, user.id);
+  async generate(
+    @Param('id') id: string,
+    @CurrentUser() user: User,
+    @Body() dto?: GenerateDto,
+  ) {
+    return this.exerciseSetService.generate(id, user.id, dto?.userPrompt);
   }
 
   @ApiBearerAuth()
@@ -146,7 +152,7 @@ export class ExerciseSetController {
   @ApiOperation({
     summary: 'Create a new set for regeneration',
     description:
-      'Create a new empty set cloned from the old set config. Call POST /exercise-sets/:newSetId/generate next. Requires AI_GENERATE_EXERCISE permission.',
+      'Create a new empty set cloned from the old set config. Accepts optional userPrompt to override for the new set. Call POST /exercise-sets/:newSetId/generate next. Requires AI_GENERATE_EXERCISE permission.',
   })
   @ApiParam({ name: 'id', description: 'ID của exercise set' })
   @ApiResponse({
@@ -160,8 +166,16 @@ export class ExerciseSetController {
     status: 400,
     description: 'Set not found',
   })
-  async regenerate(@Param('id') id: string, @CurrentUser() user: User) {
-    const newSet = await this.exerciseSetService.regenerate(id, user.id);
+  async regenerate(
+    @Param('id') id: string,
+    @CurrentUser() user: User,
+    @Body() dto?: GenerateDto,
+  ) {
+    const newSet = await this.exerciseSetService.regenerate(
+      id,
+      user.id,
+      dto?.userPrompt,
+    );
     return { newSetId: newSet.id };
   }
 

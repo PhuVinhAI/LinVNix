@@ -15,6 +15,8 @@ describe('ExerciseGenerationService', () => {
   let contextLoader: jest.Mocked<ExerciseContextLoader>;
 
   const validAiResponse = JSON.stringify({
+    title: 'Greetings Practice',
+    description: 'Basic Vietnamese greeting exercises',
     exercises: [
       {
         exerciseType: 'matching',
@@ -49,6 +51,7 @@ describe('ExerciseGenerationService', () => {
   beforeEach(async () => {
     genaiService = {
       chatStructured: jest.fn(),
+      renderPrompt: jest.fn().mockReturnValue('rendered prompt'),
     } as any;
 
     exerciseSetsRepo = {
@@ -113,7 +116,11 @@ describe('ExerciseGenerationService', () => {
       expect(exercisesRepo.create).toHaveBeenCalled();
       expect(exerciseSetsRepo.update).toHaveBeenCalledWith(
         'set-1',
-        expect.objectContaining({ isAIGenerated: true }),
+        expect.objectContaining({
+          isAIGenerated: true,
+          title: 'Greetings Practice',
+          description: 'Basic Vietnamese greeting exercises',
+        }),
       );
     });
 
@@ -179,6 +186,37 @@ describe('ExerciseGenerationService', () => {
         BadRequestException,
       );
     });
+
+    it('passes userPrompt override to doGenerate', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'both',
+        },
+        userPrompt: 'stored prompt',
+      } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      await service.generate('set-1', 'user-1', 'override prompt');
+
+      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+        'exercise-generation-lesson',
+        expect.objectContaining({
+          userPromptSection: '\n### User Request\noverride prompt\n',
+        }),
+      );
+    });
   });
 
   describe('regenerate', () => {
@@ -194,7 +232,7 @@ describe('ExerciseGenerationService', () => {
           exerciseTypes: [ExerciseType.MATCHING],
           focusArea: 'vocabulary',
         },
-        title: 'Custom Practice',
+        title: 'Greetings Practice',
         description: 'A practice set',
         userPrompt: 'Focus on greetings',
         orderIndex: 1,
@@ -218,63 +256,246 @@ describe('ExerciseGenerationService', () => {
         }),
       );
     });
-  });
 
-  describe('buildPrompt', () => {
-    it('includes lesson context and guidelines', () => {
-      const context = {
-        lessonTitle: 'Greetings',
-        contents: [],
-        vocabularies: [],
-        grammarRules: [],
-        existingExercises: [],
+    it('overrides userPrompt when provided', async () => {
+      const originalSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        moduleId: null,
+        courseId: null,
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
+        },
+        title: 'Greetings Practice',
+        description: 'A practice set',
+        userPrompt: 'Focus on greetings',
+        orderIndex: 1,
       };
-      const guidelines = {
-        questionCount: 5,
-        preferredTypes: [ExerciseType.MATCHING],
-        description: 'Test description',
-      };
+      const newSet = { ...originalSet, id: 'set-2' };
 
-      const prompt = service.buildPrompt(context, guidelines, 'Custom');
+      exerciseSetsRepo.findById.mockResolvedValue(originalSet as any);
+      exerciseSetsRepo.create.mockResolvedValue(newSet as any);
 
-      expect(prompt).toContain('Generate 5 Vietnamese language exercises');
-      expect(prompt).toContain('Test description');
-      expect(prompt).toContain('matching');
+      await service.createRegeneratedSet('set-1', 'new override prompt');
+
+      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userPrompt: 'new override prompt',
+        }),
+      );
     });
 
-    it('lists existing exercises to avoid duplication', () => {
-      const context = {
-        lessonTitle: 'Greetings',
-        contents: [],
-        vocabularies: [],
-        grammarRules: [],
-        existingExercises: [
+    it('keeps original userPrompt when override is undefined', async () => {
+      const originalSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        moduleId: null,
+        courseId: null,
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
+        },
+        title: 'Greetings Practice',
+        description: null,
+        userPrompt: 'original prompt',
+        orderIndex: 1,
+      };
+      const newSet = { ...originalSet, id: 'set-2' };
+
+      exerciseSetsRepo.findById.mockResolvedValue(originalSet as any);
+      exerciseSetsRepo.create.mockResolvedValue(newSet as any);
+
+      await service.createRegeneratedSet('set-1');
+
+      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userPrompt: 'original prompt',
+        }),
+      );
+    });
+  });
+
+  describe('renderPrompt usage', () => {
+    it('uses GenaiService.renderPrompt with exercise-generation-lesson template', async () => {
+      const customSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
+        },
+        title: 'Custom Practice',
+        userPrompt: 'Focus on greetings',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(customSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      await service.generateCustom('set-1', 'user-1');
+
+      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+        'exercise-generation-lesson',
+        expect.objectContaining({
+          questionCount: '5',
+          label: 'Custom (vocabulary)',
+          lessonTitle: 'Greetings',
+          userPromptSection: '\n### User Request\nFocus on greetings\n',
+        }),
+      );
+    });
+
+    it('omits userPromptSection when no userPrompt on set', async () => {
+      const customSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
+        },
+        title: 'Custom Practice',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(customSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      await service.generateCustom('set-1', 'user-1');
+
+      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+        'exercise-generation-lesson',
+        expect.objectContaining({
+          userPromptSection: '',
+        }),
+      );
+    });
+  });
+
+  describe('AI title and description persistence', () => {
+    it('persists AI-generated title and description to ExerciseSet', async () => {
+      const customSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'both',
+        },
+        title: 'Custom Practice',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(customSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      await service.generateCustom('set-1', 'user-1');
+
+      expect(exerciseSetsRepo.update).toHaveBeenCalledWith(
+        'set-1',
+        expect.objectContaining({
+          title: 'Greetings Practice',
+          description: 'Basic Vietnamese greeting exercises',
+        }),
+      );
+    });
+
+    it('persists null description when AI omits it', async () => {
+      const customSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'both',
+        },
+        title: 'Custom Practice',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(customSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
+
+      const responseNoDesc = JSON.stringify({
+        title: 'Vocabulary Drill',
+        exercises: [
+          {
+            exerciseType: 'matching',
+            question: 'Match words',
+            correctAnswer: { matches: [] },
+          },
+        ],
+      });
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: responseNoDesc,
+      } as any);
+
+      await service.generateCustom('set-1', 'user-1');
+
+      expect(exerciseSetsRepo.update).toHaveBeenCalledWith(
+        'set-1',
+        expect.objectContaining({
+          title: 'Vocabulary Drill',
+          description: undefined,
+        }),
+      );
+    });
+  });
+
+  describe('parseResponse', () => {
+    it('parses valid JSON response with title and description', () => {
+      const result = service.parseResponse(validAiResponse);
+
+      expect(result.title).toBe('Greetings Practice');
+      expect(result.description).toBe('Basic Vietnamese greeting exercises');
+      expect(result.exercises).toHaveLength(1);
+      expect(result.exercises[0].exerciseType).toBe('matching');
+    });
+
+    it('parses response without optional description', () => {
+      const responseNoDesc = JSON.stringify({
+        title: 'Vocabulary Drill',
+        exercises: [
           {
             exerciseType: 'multiple_choice',
             question: 'What does "Xin chào" mean?',
             correctAnswer: { selectedChoice: 'Hello' },
           },
         ],
-      };
-      const guidelines = {
-        questionCount: 3,
-        preferredTypes: [ExerciseType.MATCHING],
-        description: 'Test',
-      };
+      });
 
-      const prompt = service.buildPrompt(context, guidelines, 'Custom');
+      const result = service.parseResponse(responseNoDesc);
 
-      expect(prompt).toContain('Existing Exercises (DO NOT duplicate these)');
-      expect(prompt).toContain('What does "Xin chào" mean?');
-    });
-  });
-
-  describe('parseResponse', () => {
-    it('parses valid JSON response', () => {
-      const result = service.parseResponse(validAiResponse);
-
+      expect(result.title).toBe('Vocabulary Drill');
+      expect(result.description).toBeUndefined();
       expect(result.exercises).toHaveLength(1);
-      expect(result.exercises[0].exerciseType).toBe('matching');
     });
 
     it('throws when response is not valid JSON', () => {
@@ -283,8 +504,25 @@ describe('ExerciseGenerationService', () => {
       );
     });
 
-    it('throws when schema validation fails', () => {
-      const invalid = JSON.stringify({ exercises: [] });
+    it('throws when schema validation fails - missing title', () => {
+      const invalid = JSON.stringify({
+        exercises: [
+          {
+            exerciseType: 'matching',
+            question: 'Q',
+            correctAnswer: {},
+          },
+        ],
+      });
+
+      expect(() => service.parseResponse(invalid)).toThrow(BadRequestException);
+    });
+
+    it('throws when exercises array is empty', () => {
+      const invalid = JSON.stringify({
+        title: 'Empty',
+        exercises: [],
+      });
 
       expect(() => service.parseResponse(invalid)).toThrow(BadRequestException);
     });

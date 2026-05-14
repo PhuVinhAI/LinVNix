@@ -164,10 +164,15 @@ export class ExerciseSetService {
     return this.exerciseSetsRepository.create(data);
   }
 
-  async generate(setId: string, userId: string): Promise<Exercise[]> {
+  async generate(
+    setId: string,
+    userId: string,
+    userPromptOverride?: string,
+  ): Promise<Exercise[]> {
     const exercises = await this.exerciseGenerationService.generate(
       setId,
       userId,
+      userPromptOverride,
     );
     const set = await this.exerciseSetsRepository.findById(setId);
     if (set?.replacesSetId) {
@@ -177,14 +182,22 @@ export class ExerciseSetService {
     return exercises;
   }
 
-  async regenerate(setId: string, _userId: string) {
-    return this.exerciseGenerationService.createRegeneratedSet(setId);
+  async regenerate(
+    setId: string,
+    _userId: string,
+    userPromptOverride?: string,
+  ) {
+    return this.exerciseGenerationService.createRegeneratedSet(
+      setId,
+      userPromptOverride,
+    );
   }
 
   async createCustom(
     lessonId: string,
     config: CustomSetConfig,
     _userId: string,
+    userPrompt?: string,
   ) {
     if (!ExerciseSet.isValidCustomConfig(config)) {
       throw new BadRequestException('Invalid custom set config');
@@ -197,6 +210,7 @@ export class ExerciseSetService {
       isAIGenerated: false,
       title: 'Custom Practice',
       orderIndex: 100,
+      userPrompt: userPrompt || undefined,
     });
 
     return { set };

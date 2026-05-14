@@ -1,0 +1,34 @@
+# Exercise Generation Lesson Prompt Template
+# Migrated from inline buildPrompt() in ExerciseGenerationService
+# Variables: {{questionCount}}, {{label}}, {{focusAreaDescription}}, {{preferredTypes}},
+#            {{lessonTitle}}, {{lessonContext}}, {{existingExercises}}, {{userPromptSection}}
+
+exercise-generation-lesson:
+  description: "Generate Vietnamese language exercises for lesson-level custom practice with AI-generated title and description"
+  template: |
+    Generate {{questionCount}} Vietnamese language exercises for {{label}} ({{focusAreaDescription}}).
+    Preferred exercise types: {{preferredTypes}}.
+
+    ## Lesson: {{lessonTitle}}
+
+    {{lessonContext}}
+    {{existingExercises}}
+    {{userPromptSection}}
+    Each exercise must:
+    - Test different vocabulary or grammar from the lesson
+    - Be unique (not duplicating existing exercises above)
+    - Mix Vietnamese and English naturally per exercise type
+      - matching: Vietnamese↔English pairs
+      - translation: either direction (Vietnamese→English or English→Vietnamese)
+      - fill_blank / multiple_choice / ordering: Vietnamese questions
+      - listening: Vietnamese audio (provide transcript, set audioUrl to empty string)
+
+    Also provide a short descriptive title (5-8 words) for this exercise set, and an optional brief description (1-2 sentences) summarizing what it covers.
+
+    Exercise-type option/answer shapes:
+    - multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}
+    - fill_blank: options={blanks:1,acceptedAnswers:[["answer1","answer2"]]}, correctAnswer={answers:["answer1"]}
+    - matching: options={pairs:[{left:"Vi",right:"En"}]}, correctAnswer={matches:[{left:"Vi",right:"En"}]}
+    - ordering: options={items:["C","A","B"]}, correctAnswer={orderedItems:["A","B","C"]}
+    - translation: options={sourceLanguage:"vi",targetLanguage:"en",acceptedTranslations:["Hello"]}, correctAnswer={translation:"Hello"}
+    - listening: options={audioUrl:"",transcriptType:"exact",keywords:["keyword"]}, correctAnswer={transcript:"text"}

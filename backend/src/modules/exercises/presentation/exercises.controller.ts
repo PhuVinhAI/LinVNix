@@ -236,7 +236,7 @@ export class ExercisesController {
     @Param('id') exerciseId: string,
     @Body() body: { userAnswer: any; timeSpent?: number },
   ): Promise<SubmitAnswerResult> {
-    const exercise = await this.exercisesService.findById(exerciseId);
+    await this.exercisesService.findById(exerciseId);
 
     const result = await this.exercisesService.submitAnswer(
       user.id,

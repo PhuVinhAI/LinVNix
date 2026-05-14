@@ -181,6 +181,21 @@ describe('ExerciseSetService', () => {
       expect(generationService.generate).toHaveBeenCalledWith(
         'set-1',
         'user-1',
+        undefined,
+      );
+    });
+
+    it('passes userPrompt override to generationService', async () => {
+      const mockExercises = [{ id: 'ex-1', exerciseType: 'matching' }];
+      generationService.generate.mockResolvedValue(mockExercises as any);
+      exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
+
+      await service.generate('set-1', 'user-1', 'my override prompt');
+
+      expect(generationService.generate).toHaveBeenCalledWith(
+        'set-1',
+        'user-1',
+        'my override prompt',
       );
     });
   });
@@ -195,6 +210,19 @@ describe('ExerciseSetService', () => {
       expect(result.id).toBe('new-set-1');
       expect(generationService.createRegeneratedSet).toHaveBeenCalledWith(
         'set-1',
+        undefined,
+      );
+    });
+
+    it('passes userPrompt override to createRegeneratedSet', async () => {
+      const mockSet = { id: 'new-set-1', lessonId: 'lesson-1' };
+      generationService.createRegeneratedSet.mockResolvedValue(mockSet as any);
+
+      await service.regenerate('set-1', 'user-1', 'new prompt');
+
+      expect(generationService.createRegeneratedSet).toHaveBeenCalledWith(
+        'set-1',
+        'new prompt',
       );
     });
   });
@@ -226,10 +254,34 @@ describe('ExerciseSetService', () => {
           isCustom: true,
           customConfig: validConfig,
           title: 'Custom Practice',
+          userPrompt: undefined,
         }),
       );
       expect(generationService.generateCustom).not.toHaveBeenCalled();
       expect(result.set.id).toBe('custom-set-1');
+    });
+
+    it('creates custom set with userPrompt', async () => {
+      exerciseSetsRepo.create.mockResolvedValue({
+        id: 'custom-set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: validConfig,
+        userPrompt: 'Focus on greetings',
+      } as any);
+
+      await service.createCustom(
+        'lesson-1',
+        validConfig,
+        'user-1',
+        'Focus on greetings',
+      );
+
+      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userPrompt: 'Focus on greetings',
+        }),
+      );
     });
 
     it('throws when config is invalid', async () => {
