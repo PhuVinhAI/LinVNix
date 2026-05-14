@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_state_provider.dart';
+import '../providers/providers.dart';
 import '../presentation/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
@@ -15,6 +16,9 @@ import '../../features/courses/presentation/screens/course_detail_screen.dart';
 import '../../features/courses/presentation/screens/module_detail_screen.dart';
 import '../../features/bookmarks/presentation/screens/bookmarks_screen.dart';
 import '../../features/bookmarks/presentation/screens/flashcard_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/profile/data/profile_providers.dart';
+import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/lessons/presentation/screens/lesson_wizard_screen.dart';
 import '../../features/lessons/presentation/screens/exercise_hub_screen.dart';
 import '../../features/lessons/presentation/screens/exercise_play_screen.dart';
@@ -26,6 +30,8 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 class _RouterListenable extends ChangeNotifier {
   _RouterListenable(Ref ref) {
     ref.listen(authStateProvider, (_, __) => notifyListeners());
+    ref.listen(onboardingCompletedProvider, (_, __) => notifyListeners());
+    ref.listen(userProfileProvider, (_, __) => notifyListeners());
   }
 }
 
@@ -42,11 +48,22 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: listenable,
     redirect: (context, state) {
       final authState = ref.read(authStateProvider);
+      final onboardingCompleted = ref.read(onboardingCompletedProvider);
+      final profileAsync = ref.read(userProfileProvider);
+
+      final serverOnboarding = profileAsync.whenOrNull(
+        data: (profile) => profile.onboardingCompleted,
+      );
+
+      final isOnboardingCompleted =
+          serverOnboarding ?? onboardingCompleted;
+
       final location = state.matchedLocation;
 
       if (location == '/splash') {
         if (!authState.isInitialized) return null;
         if (!authState.isAuthenticated) return '/login';
+        if (!isOnboardingCompleted) return '/onboarding';
         return '/';
       }
 
@@ -64,12 +81,23 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (isPublicRoute) return null;
 
+      if (location == '/onboarding') {
+        if (!authState.isAuthenticated) return '/login';
+        return null;
+      }
+
       if (!authState.isAuthenticated && !isAuthRoute) {
         return '/login';
       }
 
       if (authState.isAuthenticated && isAuthRoute) {
         return '/';
+      }
+
+      if (authState.isAuthenticated &&
+          !isOnboardingCompleted &&
+          location != '/onboarding') {
+        return '/onboarding';
       }
 
       return null;
@@ -111,6 +139,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           final token = state.uri.queryParameters['token'];
           return ResetPasswordScreen(token: token);
         },
+      ),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
         path: '/courses/:id',
@@ -170,6 +202,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/courses',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: CoursesScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/profile',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: ProfileScreen(),
             ),
           ),
         ],

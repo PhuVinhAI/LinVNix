@@ -5,6 +5,7 @@ import '../network/api_client.dart';
 import '../storage/secure_storage_service.dart';
 import '../storage/preferences_service.dart';
 import '../../features/auth/data/auth_repository.dart';
+import '../../features/user/data/user_repository.dart';
 
 final secureStorageProvider = Provider<SecureStorageService>((ref) {
   return SecureStorageService(const FlutterSecureStorage());
@@ -18,6 +19,10 @@ final dioProvider = Provider((ref) => ref.watch(apiClientProvider).dio);
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(ref.watch(dioProvider));
+});
+
+final userRepositoryProvider = Provider<UserRepository>((ref) {
+  return UserRepository(ref.watch(dioProvider));
 });
 
 class PreferencesNotifier extends AsyncNotifier<PreferencesService> {
@@ -39,3 +44,23 @@ class PreloadedPreferencesNotifier extends PreferencesNotifier {
 final preferencesProvider = AsyncNotifierProvider<PreferencesNotifier, PreferencesService>(
   PreferencesNotifier.new,
 );
+
+final onboardingCompletedProvider = NotifierProvider<OnboardingCompletedNotifier, bool>(
+  OnboardingCompletedNotifier.new,
+);
+
+class OnboardingCompletedNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    final prefsAsync = ref.watch(preferencesProvider);
+    return prefsAsync.whenOrNull(data: (prefs) => prefs.isOnboardingCompleted) ?? false;
+  }
+
+  void markCompleted() {
+    state = true;
+  }
+
+  void reset() {
+    state = false;
+  }
+}

@@ -14,6 +14,11 @@ export class UpdateUserDto {
   @IsOptional()
   fullName?: string;
 
+  @ApiProperty({ example: true, required: false })
+  @IsBoolean()
+  @IsOptional()
+  onboardingCompleted?: boolean;
+
   @ApiProperty({ example: 'English', required: false })
   @IsString()
   @IsOptional()

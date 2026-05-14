@@ -76,6 +76,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         refreshToken: response.refreshToken,
       );
 
+      if (response.user.onboardingCompleted) {
+        ref.read(onboardingCompletedProvider.notifier).markCompleted();
+      } else {
+        ref.read(onboardingCompletedProvider.notifier).reset();
+      }
+
       ref.read(authStateProvider.notifier).notifyAuthenticated(true);
     } on AppException catch (e) {
       if (mounted) {
