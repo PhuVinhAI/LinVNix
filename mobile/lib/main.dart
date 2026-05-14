@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/providers.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/storage/preferences_service.dart';
+import 'features/lessons/data/exercise_session_service.dart';
+import 'features/lessons/data/lesson_providers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +19,10 @@ Future<void> main() async {
   } catch (_) {
     // .env file not found, use dart-define or defaults
   }
+
+  await Hive.initFlutter();
+  final exerciseSessionBox =
+      await Hive.openBox<Map<dynamic, dynamic>>('exercise_sessions');
 
   await GoogleSignIn.instance.initialize(
     serverClientId: dotenv.env['GOOGLE_CLIENT_ID'],
@@ -27,6 +34,9 @@ Future<void> main() async {
   runApp(ProviderScope(
     overrides: [
       preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(preferencesService)),
+      exerciseSessionServiceProvider.overrideWithValue(
+        ExerciseSessionService(exerciseSessionBox),
+      ),
     ],
     child: const LinVNixApp(),
   ));
