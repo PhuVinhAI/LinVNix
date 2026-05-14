@@ -86,9 +86,10 @@ class AuthNotifier extends Notifier<AuthState> {
 
     try {
       final prefs = await ref.read(preferencesProvider.future);
-      await prefs.clearAll();
+      await prefs.clearOnboardingState();
     } catch (_) {}
 
+    ref.read(onboardingCompletedProvider.notifier).reset();
     ref.read(dataChangeBusProvider.notifier).emit({'auth'});
 
     state = state.copyWith(isAuthenticated: false);

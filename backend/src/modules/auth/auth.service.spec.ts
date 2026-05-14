@@ -128,6 +128,7 @@ describe('AuthService.loginWithGoogleToken', () => {
       email: 'test@gmail.com',
       fullName: 'Test User',
       googleId: 'google-123',
+      onboardingCompleted: false,
     };
     mockUsersService.findByGoogleId.mockResolvedValueOnce(existingUser);
 
@@ -166,6 +167,7 @@ describe('AuthService.loginWithGoogleToken', () => {
       email: 'new@gmail.com',
       fullName: 'New User',
       googleId: 'google-new',
+      onboardingCompleted: false,
     };
     mockUsersService.createOAuthUser.mockResolvedValueOnce(newUser);
     mockUsersService.save.mockResolvedValueOnce(newUser);
@@ -201,6 +203,7 @@ describe('AuthService.loginWithGoogleToken', () => {
       email: 'existing@gmail.com',
       fullName: 'Existing User',
       googleId: null,
+      onboardingCompleted: true,
     };
     mockUsersService.findByEmail.mockResolvedValueOnce(existingEmailUser);
 
