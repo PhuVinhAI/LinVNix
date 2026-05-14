@@ -7,6 +7,9 @@ import { LessonsRepository } from './repositories/lessons.repository';
 import { ContentsRepository } from '../../contents/application/contents.repository';
 import { GrammarRepository } from '../../grammar/application/grammar.repository';
 import { ProgressRepository } from '../../progress/application/progress.repository';
+import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
+import { CourseProgressRepository } from '../../progress/application/course-progress.repository';
+import { ProgressStatus } from '../../../common/enums';
 
 describe('CourseContentService', () => {
   let service: CourseContentService;
@@ -15,6 +18,8 @@ describe('CourseContentService', () => {
   let lessonsRepo: jest.Mocked<LessonsRepository>;
   let contentsRepo: jest.Mocked<ContentsRepository>;
   let grammarRepo: jest.Mocked<GrammarRepository>;
+  let moduleProgressRepo: jest.Mocked<ModuleProgressRepository>;
+  let courseProgressRepo: jest.Mocked<CourseProgressRepository>;
 
   beforeEach(async () => {
     const coursesMock = {
@@ -52,6 +57,14 @@ describe('CourseContentService', () => {
     const progressMock = {
       getTopCoursesByEnrollment: jest.fn(),
     };
+    const moduleProgressMock = {
+      findCompletedByModule: jest.fn().mockResolvedValue([]),
+      update: jest.fn(),
+    };
+    const courseProgressMock = {
+      findCompletedByCourse: jest.fn().mockResolvedValue([]),
+      update: jest.fn(),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -62,6 +75,8 @@ describe('CourseContentService', () => {
         { provide: ContentsRepository, useValue: contentsMock },
         { provide: GrammarRepository, useValue: grammarMock },
         { provide: ProgressRepository, useValue: progressMock },
+        { provide: ModuleProgressRepository, useValue: moduleProgressMock },
+        { provide: CourseProgressRepository, useValue: courseProgressMock },
       ],
     }).compile();
 
@@ -71,6 +86,8 @@ describe('CourseContentService', () => {
     lessonsRepo = module.get(LessonsRepository);
     contentsRepo = module.get(ContentsRepository);
     grammarRepo = module.get(GrammarRepository);
+    moduleProgressRepo = module.get(ModuleProgressRepository);
+    courseProgressRepo = module.get(CourseProgressRepository);
   });
 
   describe('getCourseStructure', () => {
@@ -244,6 +261,200 @@ describe('CourseContentService', () => {
       await expect(service.getGrammarDetail('missing')).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('content invalidation', () => {
+    describe('createLesson — module progress invalidation', () => {
+      it('transitions completed ModuleProgress to IN_PROGRESS when lesson added', async () => {
+        const data = { title: 'Lesson 3', moduleId: 'm1' };
+        const created = { id: 'l3', ...data };
+        lessonsRepo.create.mockResolvedValue(created as any);
+        const completedProgress = {
+          id: 'mp1',
+          moduleId: 'm1',
+          userId: 'u1',
+          status: ProgressStatus.COMPLETED,
+          score: 85,
+          completedAt: new Date(),
+        };
+        moduleProgressRepo.findCompletedByModule.mockResolvedValue([
+          completedProgress as any,
+        ]);
+        moduleProgressRepo.update.mockResolvedValue({
+          ...completedProgress,
+          status: ProgressStatus.IN_PROGRESS,
+        } as any);
+
+        const result = await service.createLesson(data);
+
+        expect(result.id).toBe('l3');
+        expect(moduleProgressRepo.findCompletedByModule).toHaveBeenCalledWith(
+          'm1',
+        );
+        expect(moduleProgressRepo.update).toHaveBeenCalledWith('mp1', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+      });
+
+      it('has no effect when module has no completed progress', async () => {
+        const data = { title: 'Lesson 3', moduleId: 'm1' };
+        const created = { id: 'l3', ...data };
+        lessonsRepo.create.mockResolvedValue(created as any);
+        moduleProgressRepo.findCompletedByModule.mockResolvedValue([]);
+
+        await service.createLesson(data);
+
+        expect(moduleProgressRepo.findCompletedByModule).toHaveBeenCalledWith(
+          'm1',
+        );
+        expect(moduleProgressRepo.update).not.toHaveBeenCalled();
+      });
+
+      it('preserves score and completedAt when invalidating', async () => {
+        const data = { title: 'Lesson 3', moduleId: 'm1' };
+        const created = { id: 'l3', ...data };
+        const completedAt = new Date('2025-01-01');
+        lessonsRepo.create.mockResolvedValue(created as any);
+        const completedProgress = {
+          id: 'mp1',
+          status: ProgressStatus.COMPLETED,
+          score: 90,
+          completedAt,
+        };
+        moduleProgressRepo.findCompletedByModule.mockResolvedValue([
+          completedProgress as any,
+        ]);
+        moduleProgressRepo.update.mockResolvedValue({
+          ...completedProgress,
+          status: ProgressStatus.IN_PROGRESS,
+        } as any);
+
+        await service.createLesson(data);
+
+        expect(moduleProgressRepo.update).toHaveBeenCalledWith('mp1', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+      });
+
+      it('invalidates multiple completed ModuleProgress records', async () => {
+        const data = { title: 'Lesson 3', moduleId: 'm1' };
+        const created = { id: 'l3', ...data };
+        lessonsRepo.create.mockResolvedValue(created as any);
+        const mp1 = { id: 'mp1', status: ProgressStatus.COMPLETED };
+        const mp2 = { id: 'mp2', status: ProgressStatus.COMPLETED };
+        moduleProgressRepo.findCompletedByModule.mockResolvedValue([
+          mp1 as any,
+          mp2 as any,
+        ]);
+        moduleProgressRepo.update.mockResolvedValue({} as any);
+
+        await service.createLesson(data);
+
+        expect(moduleProgressRepo.update).toHaveBeenCalledTimes(2);
+        expect(moduleProgressRepo.update).toHaveBeenCalledWith('mp1', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+        expect(moduleProgressRepo.update).toHaveBeenCalledWith('mp2', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+      });
+    });
+
+    describe('createModule — course progress invalidation', () => {
+      it('transitions completed CourseProgress to IN_PROGRESS when module added', async () => {
+        const data = { title: 'Module 2', courseId: 'c1' };
+        const created = { id: 'm2', ...data };
+        modulesRepo.create.mockResolvedValue(created as any);
+        const completedProgress = {
+          id: 'cp1',
+          courseId: 'c1',
+          userId: 'u1',
+          status: ProgressStatus.COMPLETED,
+          score: 80,
+          completedAt: new Date(),
+        };
+        courseProgressRepo.findCompletedByCourse.mockResolvedValue([
+          completedProgress as any,
+        ]);
+        courseProgressRepo.update.mockResolvedValue({
+          ...completedProgress,
+          status: ProgressStatus.IN_PROGRESS,
+        } as any);
+
+        const result = await service.createModule(data);
+
+        expect(result.id).toBe('m2');
+        expect(courseProgressRepo.findCompletedByCourse).toHaveBeenCalledWith(
+          'c1',
+        );
+        expect(courseProgressRepo.update).toHaveBeenCalledWith('cp1', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+      });
+
+      it('has no effect when course has no completed progress', async () => {
+        const data = { title: 'Module 2', courseId: 'c1' };
+        const created = { id: 'm2', ...data };
+        modulesRepo.create.mockResolvedValue(created as any);
+        courseProgressRepo.findCompletedByCourse.mockResolvedValue([]);
+
+        await service.createModule(data);
+
+        expect(courseProgressRepo.findCompletedByCourse).toHaveBeenCalledWith(
+          'c1',
+        );
+        expect(courseProgressRepo.update).not.toHaveBeenCalled();
+      });
+
+      it('preserves score and completedAt when invalidating', async () => {
+        const data = { title: 'Module 2', courseId: 'c1' };
+        const created = { id: 'm2', ...data };
+        const completedAt = new Date('2025-03-15');
+        modulesRepo.create.mockResolvedValue(created as any);
+        const completedProgress = {
+          id: 'cp1',
+          status: ProgressStatus.COMPLETED,
+          score: 75,
+          completedAt,
+        };
+        courseProgressRepo.findCompletedByCourse.mockResolvedValue([
+          completedProgress as any,
+        ]);
+        courseProgressRepo.update.mockResolvedValue({
+          ...completedProgress,
+          status: ProgressStatus.IN_PROGRESS,
+        } as any);
+
+        await service.createModule(data);
+
+        expect(courseProgressRepo.update).toHaveBeenCalledWith('cp1', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+      });
+
+      it('invalidates multiple completed CourseProgress records', async () => {
+        const data = { title: 'Module 2', courseId: 'c1' };
+        const created = { id: 'm2', ...data };
+        modulesRepo.create.mockResolvedValue(created as any);
+        const cp1 = { id: 'cp1', status: ProgressStatus.COMPLETED };
+        const cp2 = { id: 'cp2', status: ProgressStatus.COMPLETED };
+        courseProgressRepo.findCompletedByCourse.mockResolvedValue([
+          cp1 as any,
+          cp2 as any,
+        ]);
+        courseProgressRepo.update.mockResolvedValue({} as any);
+
+        await service.createModule(data);
+
+        expect(courseProgressRepo.update).toHaveBeenCalledTimes(2);
+        expect(courseProgressRepo.update).toHaveBeenCalledWith('cp1', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+        expect(courseProgressRepo.update).toHaveBeenCalledWith('cp2', {
+          status: ProgressStatus.IN_PROGRESS,
+        });
+      });
     });
   });
 

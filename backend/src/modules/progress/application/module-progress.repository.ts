@@ -48,4 +48,13 @@ export class ModuleProgressRepository {
       },
     });
   }
+
+  async findCompletedByModule(moduleId: string): Promise<ModuleProgress[]> {
+    return this.repository.find({
+      where: {
+        moduleId,
+        status: 'completed' as any,
+      },
+    });
+  }
 }
