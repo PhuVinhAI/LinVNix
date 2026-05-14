@@ -186,9 +186,9 @@ async function main() {
 
         if (lessonData.exercises.length > 0) {
           const setRes = await client.query(
-            `INSERT INTO exercise_sets (lesson_id, tier, is_custom, is_ai_generated, title, order_index)
-             VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-            [lessonId, 'BASIC', false, false, 'Basic Exercises', 0],
+            `INSERT INTO exercise_sets (lesson_id, is_custom, is_ai_generated, title, order_index)
+             VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+            [lessonId, false, false, 'Basic Exercises', 0],
           );
           const setId = setRes.rows[0].id;
           await client.query(
