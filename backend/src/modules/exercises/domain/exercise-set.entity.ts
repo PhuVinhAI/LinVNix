@@ -60,6 +60,9 @@ export class ExerciseSet extends BaseEntity {
   @Column({ name: 'order_index', default: 0 })
   orderIndex: number;
 
+  @Column({ name: 'generation_status', type: 'varchar', length: 20, nullable: true })
+  generationStatus?: 'generating' | 'ready' | 'failed' | null;
+
   @OneToMany('Exercise', 'exerciseSet')
   exercises: any[];
 }

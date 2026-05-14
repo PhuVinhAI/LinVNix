@@ -39,7 +39,7 @@ export class ExerciseSetController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Custom exercise set created with AI-generated exercises',
+    description: 'Custom exercise set created. Call POST /exercise-sets/:id/generate to generate exercises.',
   })
   @ApiResponse({
     status: 400,
@@ -144,21 +144,25 @@ export class ExerciseSetController {
   @RequirePermissions(Permission.AI_GENERATE_EXERCISE)
   @Post(':id/regenerate')
   @ApiOperation({
-    summary: 'Regenerate AI exercises for an exercise set',
+    summary: 'Create a new set for regeneration',
     description:
-      'Soft-delete existing exercises and generate new ones. Requires AI_GENERATE_EXERCISE permission.',
+      'Create a new empty set cloned from the old set config. Call POST /exercise-sets/:newSetId/generate next. Requires AI_GENERATE_EXERCISE permission.',
   })
   @ApiParam({ name: 'id', description: 'ID của exercise set' })
   @ApiResponse({
     status: 201,
-    description: 'Exercises regenerated successfully',
+    description: 'New set created for regeneration',
+    schema: {
+      example: { newSetId: 'uuid' },
+    },
   })
   @ApiResponse({
     status: 400,
     description: 'Set not found',
   })
   async regenerate(@Param('id') id: string, @CurrentUser() user: User) {
-    return this.exerciseSetService.regenerate(id, user.id);
+    const newSet = await this.exerciseSetService.regenerate(id, user.id);
+    return { newSetId: newSet.id };
   }
 
   @ApiBearerAuth()

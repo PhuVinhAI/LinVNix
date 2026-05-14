@@ -89,6 +89,10 @@ export class ExerciseSetService {
         correct = results.filter((r) => r.isCorrect).length;
       }
 
+      if (set.isCustom && totalExercises === 0) {
+        continue;
+      }
+
       const percentComplete =
         totalExercises > 0 ? (attempted / totalExercises) * 100 : 0;
       const percentCorrect = attempted > 0 ? (correct / attempted) * 100 : 0;
@@ -163,14 +167,14 @@ export class ExerciseSetService {
     return this.exerciseGenerationService.generate(setId, userId);
   }
 
-  async regenerate(setId: string, userId: string) {
-    return this.exerciseGenerationService.regenerate(setId, userId);
+  async regenerate(setId: string, _userId: string) {
+    return this.exerciseGenerationService.createRegeneratedSet(setId);
   }
 
   async createCustom(
     lessonId: string,
     config: CustomSetConfig,
-    userId: string,
+    _userId: string,
   ) {
     if (!ExerciseSet.isValidCustomConfig(config)) {
       throw new BadRequestException('Invalid custom set config');
@@ -185,12 +189,7 @@ export class ExerciseSetService {
       orderIndex: 100,
     });
 
-    const exercises = await this.exerciseGenerationService.generateCustom(
-      set.id,
-      userId,
-    );
-
-    return { set, exercises };
+    return { set };
   }
 
   async deleteCustom(setId: string): Promise<void> {

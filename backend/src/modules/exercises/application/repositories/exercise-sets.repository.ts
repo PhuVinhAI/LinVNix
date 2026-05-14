@@ -24,10 +24,14 @@ export class ExerciseSetsRepository {
   }
 
   async findActiveByLessonId(lessonId: string): Promise<ExerciseSet[]> {
-    return this.repository.find({
-      where: { lessonId, deletedAt: undefined as any },
+    const sets = await this.repository.find({
+      where: {
+        lessonId,
+        deletedAt: undefined as any,
+      },
       order: { orderIndex: 'ASC' },
     });
+    return sets.filter((s) => s.generationStatus !== 'generating');
   }
 
   async findById(id: string): Promise<ExerciseSet | null> {

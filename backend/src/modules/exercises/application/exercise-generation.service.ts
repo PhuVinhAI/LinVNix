@@ -274,17 +274,31 @@ export class ExerciseGenerationService {
       );
     }
 
-    return this.doGenerate(set, userId);
+    await this.exerciseSetsRepository.update(setId, {
+      generationStatus: 'generating' as any,
+    });
+    try {
+      const exercises = await this.doGenerate(set, userId);
+      await this.exerciseSetsRepository.update(setId, {
+        generationStatus: 'ready' as any,
+      });
+      return exercises;
+    } catch (e) {
+      await this.exerciseSetsRepository
+        .update(setId, { generationStatus: 'failed' as any })
+        .catch(() => {});
+      await this.exerciseSetsRepository.softDelete(set.id).catch(() => {});
+      throw e;
+    }
   }
 
-  async regenerate(setId: string, userId: string): Promise<Exercise[]> {
+  async createRegeneratedSet(
+    setId: string,
+  ): Promise<import('../domain/exercise-set.entity').ExerciseSet> {
     const set = await this.exerciseSetsRepository.findById(setId);
     if (!set) {
       throw new BadRequestException(`ExerciseSet ${setId} not found`);
     }
-
-    await this.exerciseSetsRepository.softDelete(setId);
-    await this.exercisesRepository.softDeleteBySetId(setId);
 
     const newSetData: Partial<
       import('../domain/exercise-set.entity').ExerciseSet
@@ -295,11 +309,18 @@ export class ExerciseGenerationService {
       isAIGenerated: false,
       title: set.isCustom ? 'Custom Practice' : set.title,
       orderIndex: set.orderIndex,
+      generationStatus: 'generating' as any,
     };
 
-    const newSet = await this.exerciseSetsRepository.create(newSetData);
+    return this.exerciseSetsRepository.create(newSetData);
+  }
 
-    return this.doGenerate(newSet, userId);
+  async finalizeRegeneration(
+    oldSetId: string,
+    newSetId: string,
+  ): Promise<void> {
+    await this.exerciseSetsRepository.softDelete(oldSetId);
+    await this.exercisesRepository.softDeleteBySetId(oldSetId);
   }
 
   async generateCustom(setId: string, userId: string): Promise<Exercise[]> {
@@ -320,7 +341,22 @@ export class ExerciseGenerationService {
       );
     }
 
-    return this.doGenerate(set, userId);
+    await this.exerciseSetsRepository.update(setId, {
+      generationStatus: 'generating' as any,
+    });
+    try {
+      const exercises = await this.doGenerate(set, userId);
+      await this.exerciseSetsRepository.update(setId, {
+        generationStatus: 'ready' as any,
+      });
+      return exercises;
+    } catch (e) {
+      await this.exerciseSetsRepository
+        .update(setId, { generationStatus: 'failed' as any })
+        .catch(() => {});
+      await this.exerciseSetsRepository.softDelete(set.id).catch(() => {});
+      throw e;
+    }
   }
 
   private async doGenerate(

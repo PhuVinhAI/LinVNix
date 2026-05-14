@@ -54,6 +54,31 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
   }
 
   Future<void> _onToggleBookmark(String vocabularyId) async {
+    final bookmarkIdsValue = ref.read(bookmarkIdsProvider).value;
+    final isCurrentlyBookmarked = bookmarkIdsValue?.contains(vocabularyId) ?? false;
+
+    if (isCurrentlyBookmarked) {
+      final confirmed = await AppDialog.show<bool>(
+        context,
+        builder: (ctx) => AppDialog(
+          title: 'Remove Saved Word',
+          content: 'Are you sure you want to remove this word from your saved words?',
+          actions: [
+            AppDialogAction(
+              label: 'Cancel',
+              onPressed: () => Navigator.pop(ctx, false),
+            ),
+            AppDialogAction(
+              label: 'Remove',
+              isPrimary: true,
+              onPressed: () => Navigator.pop(ctx, true),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+    }
+
     await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
     final isBookmarked =
         ref.read(bookmarkIdsProvider).value?.contains(vocabularyId) ?? false;

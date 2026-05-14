@@ -177,10 +177,11 @@ class ExerciseSetsNotifier extends CachedRepository<LessonExerciseSummary>
     return super.build();
   }
 
-  Future<void> regenerateSet(String setId, {CancelToken? cancelToken}) async {
+  Future<String> regenerateSet(String setId, {CancelToken? cancelToken}) async {
     final repo = ref.read(lessonRepositoryProvider);
-    await repo.regenerateExercises(setId, cancelToken: cancelToken);
+    final newSetId = await repo.regenerateExercises(setId, cancelToken: cancelToken);
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
+    return newSetId;
   }
 
   Future<void> deleteSet(String setId) async {
@@ -189,9 +190,15 @@ class ExerciseSetsNotifier extends CachedRepository<LessonExerciseSummary>
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
   }
 
-  Future<void> createCustomSet(CustomSetConfig config, {CancelToken? cancelToken}) async {
+  Future<ExerciseSetModel> createCustomSet(CustomSetConfig config, {CancelToken? cancelToken}) async {
     final repo = ref.read(lessonRepositoryProvider);
-    await repo.createCustomSet(lessonId, config, cancelToken: cancelToken);
+    final set = await repo.createCustomSet(lessonId, config, cancelToken: cancelToken);
+    return set;
+  }
+
+  Future<void> generateSet(String setId, {CancelToken? cancelToken}) async {
+    final repo = ref.read(lessonRepositoryProvider);
+    await repo.generateExercises(setId, cancelToken: cancelToken);
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
   }
 
