@@ -35,4 +35,13 @@ export class CourseProgressRepository {
     }
     return progress;
   }
+
+  async findCompletedByCourse(courseId: string): Promise<CourseProgress[]> {
+    return this.repository.find({
+      where: {
+        courseId,
+        status: 'completed' as any,
+      },
+    });
+  }
 }

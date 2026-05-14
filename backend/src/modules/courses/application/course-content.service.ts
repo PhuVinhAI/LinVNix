@@ -5,6 +5,9 @@ import { LessonsRepository } from './repositories/lessons.repository';
 import { ContentsRepository } from '../../contents/application/contents.repository';
 import { GrammarRepository } from '../../grammar/application/grammar.repository';
 import { ProgressRepository } from '../../progress/application/progress.repository';
+import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
+import { CourseProgressRepository } from '../../progress/application/course-progress.repository';
+import { ProgressStatus } from '../../../common/enums';
 import { Course } from '../domain/course.entity';
 import { Module } from '../domain/module.entity';
 import { Lesson } from '../domain/lesson.entity';
@@ -24,6 +27,8 @@ export class CourseContentService implements CourseStatsPort {
     private readonly contentsRepository: ContentsRepository,
     private readonly grammarRepository: GrammarRepository,
     private readonly progressRepository: ProgressRepository,
+    private readonly moduleProgressRepository: ModuleProgressRepository,
+    private readonly courseProgressRepository: CourseProgressRepository,
   ) {}
 
   async getTopCoursesByEnrollment(limit: number): Promise<CourseStatsResult[]> {
@@ -92,7 +97,11 @@ export class CourseContentService implements CourseStatsPort {
   }
 
   async createModule(data: Partial<Module>): Promise<Module> {
-    return this.modulesRepository.create(data);
+    const module = await this.modulesRepository.create(data);
+    if (data.courseId) {
+      await this.invalidateCourseProgress(data.courseId);
+    }
+    return module;
   }
 
   async updateModule(id: string, data: Partial<Module>): Promise<Module> {
@@ -106,7 +115,11 @@ export class CourseContentService implements CourseStatsPort {
   }
 
   async createLesson(data: Partial<Lesson>): Promise<Lesson> {
-    return this.lessonsRepository.create(data);
+    const lesson = await this.lessonsRepository.create(data);
+    if (data.moduleId) {
+      await this.invalidateModuleProgress(data.moduleId);
+    }
+    return lesson;
   }
 
   async updateLesson(id: string, data: Partial<Lesson>): Promise<Lesson> {
@@ -151,6 +164,26 @@ export class CourseContentService implements CourseStatsPort {
   async deleteGrammarRule(id: string): Promise<void> {
     await this.findGrammarById(id);
     await this.grammarRepository.delete(id);
+  }
+
+  private async invalidateModuleProgress(moduleId: string): Promise<void> {
+    const completedProgresses =
+      await this.moduleProgressRepository.findCompletedByModule(moduleId);
+    for (const progress of completedProgresses) {
+      await this.moduleProgressRepository.update(progress.id, {
+        status: ProgressStatus.IN_PROGRESS,
+      });
+    }
+  }
+
+  private async invalidateCourseProgress(courseId: string): Promise<void> {
+    const completedProgresses =
+      await this.courseProgressRepository.findCompletedByCourse(courseId);
+    for (const progress of completedProgresses) {
+      await this.courseProgressRepository.update(progress.id, {
+        status: ProgressStatus.IN_PROGRESS,
+      });
+    }
   }
 
   private async findModuleById(id: string): Promise<Module> {
