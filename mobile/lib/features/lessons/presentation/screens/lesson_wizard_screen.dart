@@ -6,7 +6,6 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
 import '../../domain/lesson_models.dart';
-import '../../../courses/data/courses_providers.dart';
 import '../widgets/content_widgets.dart';
 import '../widgets/vocabulary_step.dart';
 import '../widgets/grammar_step.dart';
@@ -82,7 +81,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
             label: 'Not now',
             onPressed: () {
               Navigator.of(ctx).pop();
-              ref.invalidate(userProgressProvider);
               if (mounted) context.pop();
             },
           ),

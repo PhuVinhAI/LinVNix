@@ -22,7 +22,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Future.microtask(() {
       if (mounted) {
         ref.invalidate(continueLearningProvider);
-        ref.invalidate(userProgressProvider);
         ref.invalidate(coursesProvider);
       }
     });
@@ -30,7 +29,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> _onRefresh() async {
     ref.invalidate(continueLearningProvider);
-    ref.invalidate(userProgressProvider);
     ref.invalidate(coursesProvider);
     await ref.read(continueLearningProvider.future);
   }

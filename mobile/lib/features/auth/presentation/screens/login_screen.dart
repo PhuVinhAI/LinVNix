@@ -49,7 +49,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
 
       ref.invalidate(userProfileProvider);
-      ref.invalidate(exerciseStatsProvider);
 
       if (response.user.onboardingCompleted) {
         ref.read(onboardingCompletedProvider.notifier).markCompleted();
@@ -89,7 +88,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
 
       ref.invalidate(userProfileProvider);
-      ref.invalidate(exerciseStatsProvider);
 
       if (response.user.onboardingCompleted) {
         ref.read(onboardingCompletedProvider.notifier).markCompleted();

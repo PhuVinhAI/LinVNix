@@ -64,7 +64,6 @@ class _EmailVerificationScreenState
       );
 
       ref.invalidate(userProfileProvider);
-      ref.invalidate(exerciseStatsProvider);
 
       ref.read(authStateProvider.notifier).setAuthenticated(true);
       setState(() => _isVerified = true);

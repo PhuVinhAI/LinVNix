@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:linvnix/core/sync/sync.dart';
 import 'package:linvnix/features/lessons/data/lesson_providers.dart';
+import 'package:linvnix/features/lessons/domain/exercise_models.dart';
 import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
 
 class _TestLessonProgressNotifier extends LessonProgressNotifier {
@@ -46,6 +47,25 @@ class _TestExerciseSetsNotifier extends ExerciseSetsNotifier {
 final _testExerciseSetsProvider =
     AsyncNotifierProvider.family<_TestExerciseSetsNotifier, LessonTierSummary, String>(
   (arg) => _TestExerciseSetsNotifier(arg),
+);
+
+class _TestLessonExercisesNotifier extends LessonExercisesNotifier {
+  int fetchCallCount = 0;
+
+  _TestLessonExercisesNotifier(super.args);
+
+  @override
+  Future<List<Exercise>> build() async {
+    watchTags({'exercise', 'lesson-${args.lessonId}'});
+    fetchCallCount++;
+    return const [];
+  }
+}
+
+final _testLessonExercisesProvider =
+    AsyncNotifierProvider.family<_TestLessonExercisesNotifier,
+        List<Exercise>, LessonExercisesArgs>(
+  (arg) => _TestLessonExercisesNotifier(arg),
 );
 
 void main() {
@@ -219,6 +239,81 @@ void main() {
 
       final secondRead = await container.read(
         _testExerciseSetsProvider('lesson-1').future,
+      );
+      expect(secondRead, isNotNull);
+      expect(notifier.fetchCallCount, 1);
+    });
+  });
+
+  group('LessonExercisesNotifier', () {
+    test('subscribes to DataChangeBus tag exercise and auto-refetches',
+        () async {
+      final container = ProviderContainer();
+      final args = LessonExercisesArgs(
+        lessonId: 'lesson-1',
+        tierValue: 'BASIC',
+      );
+      final notifier = container.read(
+        _testLessonExercisesProvider(args).notifier,
+      );
+
+      await container.read(_testLessonExercisesProvider(args).future);
+      expect(notifier.fetchCallCount, 1);
+
+      container.read(dataChangeBusProvider.notifier).emit({'exercise'});
+      await Future.delayed(Duration.zero);
+
+      final secondRead = await container.read(
+        _testLessonExercisesProvider(args).future,
+      );
+      expect(secondRead, isNotNull);
+      expect(notifier.fetchCallCount, 2);
+    });
+
+    test('subscribes to DataChangeBus tag lesson-id and auto-refetches',
+        () async {
+      final container = ProviderContainer();
+      final args = LessonExercisesArgs(
+        lessonId: 'lesson-1',
+        tierValue: 'BASIC',
+      );
+      final notifier = container.read(
+        _testLessonExercisesProvider(args).notifier,
+      );
+
+      await container.read(_testLessonExercisesProvider(args).future);
+      expect(notifier.fetchCallCount, 1);
+
+      container
+          .read(dataChangeBusProvider.notifier)
+          .emit({'lesson-lesson-1'});
+      await Future.delayed(Duration.zero);
+
+      final secondRead = await container.read(
+        _testLessonExercisesProvider(args).future,
+      );
+      expect(secondRead, isNotNull);
+      expect(notifier.fetchCallCount, 2);
+    });
+
+    test('non-matching DataChangeBus tag does not trigger refetch', () async {
+      final container = ProviderContainer();
+      final args = LessonExercisesArgs(
+        lessonId: 'lesson-1',
+        tierValue: 'BASIC',
+      );
+      final notifier = container.read(
+        _testLessonExercisesProvider(args).notifier,
+      );
+
+      await container.read(_testLessonExercisesProvider(args).future);
+      expect(notifier.fetchCallCount, 1);
+
+      container.read(dataChangeBusProvider.notifier).emit({'lesson-other'});
+      await Future.delayed(Duration.zero);
+
+      final secondRead = await container.read(
+        _testLessonExercisesProvider(args).future,
       );
       expect(secondRead, isNotNull);
       expect(notifier.fetchCallCount, 1);

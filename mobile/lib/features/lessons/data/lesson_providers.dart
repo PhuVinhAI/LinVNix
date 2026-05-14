@@ -99,11 +99,67 @@ final lessonProgressProvider = AsyncNotifierProvider.family<
   (arg) => LessonProgressNotifier(arg),
 );
 
+class LessonExercisesArgs {
+  const LessonExercisesArgs({
+    required this.lessonId,
+    required this.tierValue,
+    this.setId,
+  });
+
+  final String lessonId;
+  final String tierValue;
+  final String? setId;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LessonExercisesArgs &&
+          runtimeType == other.runtimeType &&
+          lessonId == other.lessonId &&
+          tierValue == other.tierValue &&
+          setId == other.setId;
+
+  @override
+  int get hashCode => Object.hash(lessonId, tierValue, setId);
+}
+
+class LessonExercisesNotifier extends CachedRepository<List<Exercise>>
+    with DataChangeBusSubscriber<List<Exercise>> {
+  LessonExercisesNotifier(this.args);
+
+  final LessonExercisesArgs args;
+
+  @override
+  Duration get ttl => Duration.zero;
+
+  @override
+  Future<List<Exercise>> fetchFromApi() async {
+    final repo = ref.read(lessonRepositoryProvider);
+    final setId = args.setId;
+    if (setId != null) {
+      return repo.getExercisesBySet(setId);
+    }
+    final tierSummary = await repo.getExerciseSetsByLesson(args.lessonId);
+    final tier = ExerciseTier.fromString(args.tierValue);
+    final progress = tierSummary.progressForTier(tier);
+    if (progress == null || progress.setId.isEmpty) {
+      throw Exception('No exercises found for this tier');
+    }
+    return repo.getExercisesBySet(progress.setId);
+  }
+
+  @override
+  Future<List<Exercise>> build() async {
+    watchTags({'exercise', 'lesson-${args.lessonId}'});
+    return super.build();
+  }
+}
+
 final lessonExercisesProvider =
-    FutureProvider.family<List<Exercise>, String>((ref, lessonId) async {
-  final repo = ref.watch(lessonRepositoryProvider);
-  return repo.getExercisesByLesson(lessonId);
-});
+    AsyncNotifierProvider.family<LessonExercisesNotifier, List<Exercise>,
+        LessonExercisesArgs>(
+  (arg) => LessonExercisesNotifier(arg),
+);
 
 class ExerciseSetsNotifier extends CachedRepository<LessonTierSummary>
     with DataChangeBusSubscriber<LessonTierSummary> {
