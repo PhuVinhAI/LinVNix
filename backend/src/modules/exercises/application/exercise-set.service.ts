@@ -197,7 +197,12 @@ export class ExerciseSetService {
     if (!set) {
       throw new NotFoundException(`ExerciseSet with ID ${setId} not found`);
     }
-    if (!set.isCustom) {
+
+    const isIncomplete =
+      set.generationStatus === 'generating' ||
+      set.generationStatus === 'failed';
+
+    if (!set.isCustom && !isIncomplete) {
       throw new BadRequestException(
         'Only custom practice sets can be deleted via this endpoint',
       );

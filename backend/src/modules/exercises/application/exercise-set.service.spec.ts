@@ -279,10 +279,24 @@ describe('ExerciseSetService', () => {
       expect(exercisesRepo.softDeleteBySetId).not.toHaveBeenCalled();
     });
 
-    it('throws BadRequestException when set is not custom', async () => {
+    it('allows deleting non-custom set when generation failed', async () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         isCustom: false,
+        generationStatus: 'failed',
+      } as any);
+
+      await service.deleteCustom('set-1');
+
+      expect(exercisesRepo.softDeleteBySetId).toHaveBeenCalledWith('set-1');
+      expect(exerciseSetsRepo.softDelete).toHaveBeenCalledWith('set-1');
+    });
+
+    it('throws BadRequestException when set is not custom and complete', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        isCustom: false,
+        generationStatus: 'ready',
       } as any);
 
       await expect(service.deleteCustom('set-1')).rejects.toThrow(
