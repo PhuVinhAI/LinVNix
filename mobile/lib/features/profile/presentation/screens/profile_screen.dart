@@ -510,7 +510,7 @@ class _StatsSection extends ConsumerWidget {
                   child: AppButton(
                     label: 'Retry',
                     variant: AppButtonVariant.outline,
-                    onPressed: () => ref.invalidate(exerciseStatsProvider),
+                    onPressed: () => ref.read(exerciseStatsProvider.notifier).refresh(),
                   ),
                 ),
               ],

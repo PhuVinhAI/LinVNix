@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
-import '../../../courses/data/courses_providers.dart';
 import '../../data/lesson_providers.dart';
-import '../../data/lesson_repository.dart';
 import '../../domain/exercise_models.dart';
 import '../../domain/exercise_set_models.dart';
 import '../../domain/exercise_renderer_registry.dart';
@@ -29,8 +28,6 @@ class ExercisePlayScreen extends ConsumerStatefulWidget {
 class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   List<Exercise> _exercises = [];
   int _currentIndex = 0;
-  bool _loading = true;
-  String? _error;
 
   dynamic _currentAnswer;
   bool _submitted = false;
@@ -41,59 +38,11 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   final Map<int, dynamic> _answers = {};
   final Map<int, ExerciseSubmissionResult> _results = {};
 
-  @override
-  void initState() {
-    super.initState();
-    _loadExercises();
-  }
-
-  Future<void> _loadExercises() async {
-    try {
-      final repo = ref.read(lessonRepositoryProvider);
-      final setId = widget.setId;
-
-      if (setId != null) {
-        final exercises = await repo.getExercisesBySet(setId);
-
-        if (!mounted) return;
-        setState(() {
-          _exercises = exercises;
-          _loading = false;
-        });
-        _loadCurrentAnswer();
-        return;
-      }
-
-      final tierSummary = await repo.getExerciseSetsByLesson(widget.lessonId);
-      final tier = ExerciseTier.fromString(widget.tierValue);
-      final progress = tierSummary.progressForTier(tier);
-
-      if (progress == null || progress.setId.isEmpty) {
-        if (!mounted) return;
-        setState(() {
-          _loading = false;
-          _error = 'No exercises found for this tier';
-        });
-        return;
-      }
-
-      final exercises = await repo.getExercisesBySet(progress.setId);
-
-      if (!mounted) return;
-      setState(() {
-        _exercises = exercises;
-        _loading = false;
-      });
-
-      _loadCurrentAnswer();
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.toString();
-        _loading = false;
-      });
-    }
-  }
+  LessonExercisesArgs get _args => LessonExercisesArgs(
+        lessonId: widget.lessonId,
+        tierValue: widget.tierValue,
+        setId: widget.setId,
+      );
 
   void _loadCurrentAnswer() {
     if (_results.containsKey(_currentIndex)) {
@@ -138,6 +87,10 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
       _answers[_currentIndex] = _currentAnswer;
       _results[_currentIndex] = result;
+
+      ref.read(dataChangeBusProvider.notifier).emit(
+        {'exercise', 'lesson-${widget.lessonId}'},
+      );
 
       setState(() {
         _result = result;
@@ -256,8 +209,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 await repo.markContentReviewed(widget.lessonId);
                 await repo.completeLesson(widget.lessonId);
               } catch (_) {}
-              ref.invalidate(exerciseSetsProvider(widget.lessonId));
-              ref.invalidate(userProgressProvider);
+              ref.read(dataChangeBusProvider.notifier).emit(
+                {'progress', 'exercise', 'exercise-set', 'lesson-${widget.lessonId}'},
+              );
               if (mounted) context.pop();
             },
           ),
@@ -271,15 +225,14 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
-    if (_loading) {
-      return Scaffold(
+    final exercisesAsync = ref.watch(lessonExercisesProvider(_args));
+
+    return exercisesAsync.when(
+      loading: () => Scaffold(
         appBar: const AppAppBar(title: Text('Exercise')),
         body: const Center(child: AppSpinner()),
-      );
-    }
-
-    if (_error != null) {
-      return Scaffold(
+      ),
+      error: (error, _) => Scaffold(
         appBar: const AppAppBar(title: Text('Exercise')),
         body: Center(
           child: Padding(
@@ -287,7 +240,11 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(_error!, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
+                Text(
+                  error.toString(),
+                  style: theme.textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 16),
                 AppButton(
                   label: 'Go back',
@@ -296,121 +253,128 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 ),
               ],
             ),
-          ),
-        ),
-      );
-    }
-
-    if (_exercises.isEmpty) {
-      return Scaffold(
-        appBar: const AppAppBar(title: Text('Exercise')),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('No exercises available for this tier', textAlign: TextAlign.center),
-                const SizedBox(height: 16),
-                AppButton(
-                  label: 'Go back',
-                  variant: AppButtonVariant.primary,
-                  onPressed: () => context.pop(),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    final exercise = _currentExercise!;
-    final renderer = getRenderer(exercise.exerciseType);
-    final progress = (_currentIndex + 1) / _exercises.length;
-
-    return Scaffold(
-      appBar: AppAppBar(
-        title: Text(ExerciseTier.fromString(widget.tierValue).displayName),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4),
-          child: AppProgress(
-            value: progress,
-            trackColor: c.muted,
-            height: 4,
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Question ${_currentIndex + 1} of ${_exercises.length}',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
-            const SizedBox(height: 16),
-            QuestionHeader(exercise: exercise),
-            const SizedBox(height: 16),
-            renderer.buildInput(
-              exercise,
-              context,
-              _currentAnswer,
-              (answer) {
-                setState(() => _currentAnswer = answer);
-              },
-            ),
-            if (_submitError != null) ...[
-              const SizedBox(height: 16),
-              AppCard(
-                padding: const EdgeInsets.all(12),
-                child: Row(
+      data: (exercises) {
+        if (exercises.isEmpty) {
+          return Scaffold(
+            appBar: const AppAppBar(title: Text('Exercise')),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 48),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.error_outline, color: c.error, size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        _submitError!,
-                        style: theme.textTheme.bodySmall?.copyWith(color: c.error),
-                      ),
+                    const Text(
+                      'No exercises available for this tier',
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    AppButton(
+                      label: 'Go back',
+                      variant: AppButtonVariant.primary,
+                      onPressed: () => context.pop(),
                     ),
                   ],
                 ),
               ),
-            ],
-            const SizedBox(height: 24),
-            if (!_submitted)
-              AppButton(
-                label: _submitting ? 'Submitting...' : 'Submit',
-                variant: AppButtonVariant.primary,
-                onPressed: _isValid && !_submitting ? _submit : null,
+            ),
+          );
+        }
+
+        _exercises = exercises;
+        _loadCurrentAnswer();
+
+        final exercise = _currentExercise!;
+        final renderer = getRenderer(exercise.exerciseType);
+        final progress = (_currentIndex + 1) / _exercises.length;
+
+        return Scaffold(
+          appBar: AppAppBar(
+            title: Text(ExerciseTier.fromString(widget.tierValue).displayName),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(4),
+              child: AppProgress(
+                value: progress,
+                trackColor: c.muted,
+                height: 4,
               ),
-            if (_submitted && _result != null) ...[
-              ExplanationPanel(
-                isCorrect: _result!.isCorrect,
-                correctAnswer: exercise.correctAnswer,
-                explanation: exercise.explanation,
-                score: _result!.score,
-              ),
-              const SizedBox(height: 16),
-              if (_isLastQuestion)
-                AppButton(
-                  label: 'See Summary',
-                  variant: AppButtonVariant.primary,
-                  onPressed: _showSummary,
-                )
-              else
-                AppButton(
-                  label: 'Next Question',
-                  variant: AppButtonVariant.primary,
-                  onPressed: _nextQuestion,
+            ),
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Question ${_currentIndex + 1} of ${_exercises.length}',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: c.mutedForeground,
+                  ),
                 ),
-            ],
-          ],
-        ),
-      ),
+                const SizedBox(height: 16),
+                QuestionHeader(exercise: exercise),
+                const SizedBox(height: 16),
+                renderer.buildInput(
+                  exercise,
+                  context,
+                  _currentAnswer,
+                  (answer) {
+                    setState(() => _currentAnswer = answer);
+                  },
+                ),
+                if (_submitError != null) ...[
+                  const SizedBox(height: 16),
+                  AppCard(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        Icon(Icons.error_outline, color: c.error, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _submitError!,
+                            style: theme.textTheme.bodySmall?.copyWith(color: c.error),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 24),
+                if (!_submitted)
+                  AppButton(
+                    label: _submitting ? 'Submitting...' : 'Submit',
+                    variant: AppButtonVariant.primary,
+                    onPressed: _isValid && !_submitting ? _submit : null,
+                  ),
+                if (_submitted && _result != null) ...[
+                  ExplanationPanel(
+                    isCorrect: _result!.isCorrect,
+                    correctAnswer: exercise.correctAnswer,
+                    explanation: exercise.explanation,
+                    score: _result!.score,
+                  ),
+                  const SizedBox(height: 16),
+                  if (_isLastQuestion)
+                    AppButton(
+                      label: 'See Summary',
+                      variant: AppButtonVariant.primary,
+                      onPressed: _showSummary,
+                    )
+                  else
+                    AppButton(
+                      label: 'Next Question',
+                      variant: AppButtonVariant.primary,
+                      onPressed: _nextQuestion,
+                    ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

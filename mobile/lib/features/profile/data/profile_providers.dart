@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/sync/sync.dart';
 import '../../../core/providers/providers.dart';
 import '../../user/domain/user_profile.dart';
 import '../domain/exercise_stats.dart';
@@ -36,12 +37,22 @@ final userProfileProvider =
   UserProfileNotifier.new,
 );
 
-class ExerciseStatsNotifier extends AsyncNotifier<ExerciseStats> {
+class ExerciseStatsNotifier extends CachedRepository<ExerciseStats>
+    with DataChangeBusSubscriber<ExerciseStats> {
   @override
-  Future<ExerciseStats> build() async {
+  Duration get ttl => Duration.zero;
+
+  @override
+  Future<ExerciseStats> fetchFromApi() async {
     final repository = ref.read(userRepositoryProvider);
     final data = await repository.getMyStats();
     return ExerciseStats.fromJson(data);
+  }
+
+  @override
+  Future<ExerciseStats> build() async {
+    watchTags({'exercise'});
+    return super.build();
   }
 }
 

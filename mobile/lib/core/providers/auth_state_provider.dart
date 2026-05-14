@@ -84,7 +84,6 @@ class AuthNotifier extends Notifier<AuthState> {
 
     ref.read(onboardingCompletedProvider.notifier).reset();
     ref.invalidate(userProfileProvider);
-    ref.invalidate(exerciseStatsProvider);
 
     state = state.copyWith(isAuthenticated: false);
   }

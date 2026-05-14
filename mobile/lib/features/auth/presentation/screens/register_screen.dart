@@ -78,7 +78,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       );
 
       ref.invalidate(userProfileProvider);
-      ref.invalidate(exerciseStatsProvider);
 
       if (response.user.onboardingCompleted) {
         ref.read(onboardingCompletedProvider.notifier).markCompleted();
