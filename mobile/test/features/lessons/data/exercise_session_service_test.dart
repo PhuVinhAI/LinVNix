@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
+import 'package:linvnix/features/lessons/domain/exercise_models.dart';
 import 'package:linvnix/features/lessons/domain/exercise_session.dart';
 import 'package:linvnix/features/lessons/data/exercise_session_service.dart';
 
@@ -213,6 +214,49 @@ void main() {
     test('load non-existent session returns null', () async {
       final loaded = await service.load('non-existent');
       expect(loaded, isNull);
+    });
+
+    test('matching answers survive toMap/fromMap (Hive-safe)', () async {
+      final exerciseJson = {
+        'id': 'ex-1',
+        'exerciseType': 'matching',
+        'question': 'Match',
+        'questionAudioUrl': null,
+        'options': {
+          'pairs': [
+            {'left': 'A', 'right': '1'},
+          ],
+        },
+        'correctAnswer': {
+          'matches': [
+            {'left': 'A', 'right': '1'},
+          ],
+        },
+        'explanation': null,
+        'orderIndex': 0,
+        'difficultyLevel': 1,
+      };
+      final session = ExerciseSession(
+        setId: 'set-match',
+        lessonId: 'lesson-1',
+        tier: 'BASIC',
+        currentIndex: 0,
+        answers: {
+          0: [const MatchPair(left: 'A', right: '1')],
+        },
+        results: {},
+        exercises: [exerciseJson],
+      );
+
+      await service.save(session);
+      final loaded = await service.load('set-match');
+
+      expect(loaded, isNotNull);
+      final a0 = loaded!.answers[0] as List<dynamic>;
+      expect(a0.length, 1);
+      expect(a0.first, isA<MatchPair>());
+      expect((a0.first as MatchPair).left, 'A');
+      expect((a0.first as MatchPair).right, '1');
     });
 
     test('save overwrites existing session', () async {

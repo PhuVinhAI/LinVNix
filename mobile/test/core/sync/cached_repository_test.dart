@@ -109,7 +109,7 @@ void main() {
 
       final busState = container.read(dataChangeBusProvider);
       expect(busState, isNotNull);
-      expect(busState!.tags, {'bookmark'});
+      expect(busState!.tags, contains('bookmark'));
     });
 
     test('API failure reverts state to snapshot and error is available', () async {

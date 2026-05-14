@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'exercise_session_codec.dart';
+
 class ExerciseSession {
   const ExerciseSession({
     required this.setId,
@@ -18,27 +22,27 @@ class ExerciseSession {
     int parseKey(dynamic k) {
       if (k is int) return k;
       if (k is num) return k.toInt();
-      if (k is String) return int.parse(k);
+      if (k is String) return int.tryParse(k) ?? 0;
       return 0;
     }
+
+    final exercises = (map['exercises'] as List<dynamic>?)
+            ?.map((e) => Map<String, dynamic>.from(e as Map<dynamic, dynamic>))
+            .toList() ??
+        const <Map<String, dynamic>>[];
 
     return ExerciseSession(
       setId: map['setId'] as String,
       lessonId: map['lessonId'] as String,
       tier: map['tier'] as String,
       currentIndex: (map['currentIndex'] as num?)?.toInt() ?? 0,
-      answers: answersRaw?.map((k, v) => MapEntry<int, dynamic>(
-            parseKey(k),
-            v,
-          )) ??
-          const {},
+      answers: ExerciseSessionCodec.decodeAnswers(answersRaw, exercises),
       results: resultsRaw?.map((k, v) => MapEntry<int, Map<String, dynamic>>(
             parseKey(k),
             Map<String, dynamic>.from(v as Map<dynamic, dynamic>),
           )) ??
           const {},
-      exercises: (map['exercises'] as List<dynamic>?)?.cast<Map<String, dynamic>>() ??
-          const [],
+      exercises: exercises,
       createdAt: map['createdAt'] != null
           ? DateTime.tryParse(map['createdAt'] as String)
           : null,
@@ -59,17 +63,21 @@ class ExerciseSession {
   final DateTime? updatedAt;
 
   Map<String, dynamic> toMap() {
-    return {
+    final encodedAnswers = ExerciseSessionCodec.encodeAnswers(answers, exercises);
+    final root = <String, dynamic>{
       'setId': setId,
       'lessonId': lessonId,
       'tier': tier,
       'currentIndex': currentIndex,
-      'answers': answers.map((k, v) => MapEntry<String, dynamic>(k.toString(), v)),
+      'answers': encodedAnswers,
       'results': results.map((k, v) => MapEntry<String, dynamic>(k.toString(), v)),
       'exercises': exercises,
       'createdAt': (createdAt ?? DateTime.now()).toIso8601String(),
       'updatedAt': DateTime.now().toIso8601String(),
     };
+    return Map<String, dynamic>.from(
+      jsonDecode(jsonEncode(root)) as Map,
+    );
   }
 
   ExerciseSession copyWith({

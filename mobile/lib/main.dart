@@ -21,6 +21,7 @@ Future<void> main() async {
   }
 
   await Hive.initFlutter();
+  // Exercise sessions store JSON-serialized maps (no TypeAdapter for MatchPair, etc.)
   final exerciseSessionBox =
       await Hive.openBox<Map<dynamic, dynamic>>('exercise_sessions');
 
