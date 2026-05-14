@@ -39,7 +39,8 @@ export class ExerciseSetController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Custom exercise set created. Call POST /exercise-sets/:id/generate to generate exercises.',
+    description:
+      'Custom exercise set created. Call POST /exercise-sets/:id/generate to generate exercises.',
   })
   @ApiResponse({
     status: 400,
@@ -65,8 +66,7 @@ export class ExerciseSetController {
   @Get('lesson/:lessonId')
   @ApiOperation({
     summary: 'Lấy exercise sets theo lesson',
-    description:
-      'Lấy danh sách active exercise sets với progress stats',
+    description: 'Lấy danh sách active exercise sets với progress stats',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({

@@ -27,7 +27,11 @@ describe('ExerciseSetService - Summary', () => {
       exerciseSetsRepo,
       exercisesRepo,
       resultsRepo,
-      { generate: jest.fn(), regenerate: jest.fn(), generateCustom: jest.fn() } as any,
+      {
+        generate: jest.fn(),
+        regenerate: jest.fn(),
+        generateCustom: jest.fn(),
+      } as any,
     );
   });
 

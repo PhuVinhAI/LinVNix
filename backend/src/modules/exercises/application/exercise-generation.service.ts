@@ -426,7 +426,7 @@ export class ExerciseGenerationService {
     const existingSets =
       await this.exerciseSetsRepository.findActiveByLessonId(lessonId);
 
-    let existingExercises: Array<{
+    const existingExercises: Array<{
       exerciseType: string;
       question: string;
       correctAnswer: any;
@@ -479,7 +479,9 @@ export class ExerciseGenerationService {
     label: string,
   ): string {
     const contextSection = this.formatContext(context);
-    const avoidSection = this.formatExistingExercises(context.existingExercises);
+    const avoidSection = this.formatExistingExercises(
+      context.existingExercises,
+    );
 
     return `Generate ${guidelines.questionCount} Vietnamese language exercises for ${label} (${guidelines.description}).
 Preferred exercise types: ${guidelines.preferredTypes.join(', ')}.
@@ -578,9 +580,7 @@ Exercise-type option/answer shapes:
   ): string {
     if (existingExercises.length === 0) return '';
 
-    const lines = [
-      '\n### Existing Exercises (DO NOT duplicate these)',
-    ];
+    const lines = ['\n### Existing Exercises (DO NOT duplicate these)'];
     for (const e of existingExercises) {
       lines.push(`- [${e.exerciseType}] ${e.question}`);
     }

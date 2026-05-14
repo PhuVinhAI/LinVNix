@@ -165,7 +165,10 @@ export class ExerciseSetService {
   }
 
   async generate(setId: string, userId: string): Promise<Exercise[]> {
-    const exercises = await this.exerciseGenerationService.generate(setId, userId);
+    const exercises = await this.exerciseGenerationService.generate(
+      setId,
+      userId,
+    );
     const set = await this.exerciseSetsRepository.findById(setId);
     if (set?.replacesSetId) {
       await this.exercisesRepository.softDeleteBySetId(set.replacesSetId);

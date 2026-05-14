@@ -205,8 +205,7 @@ export class ExercisesController {
   @Post(':id/submit')
   @ApiOperation({
     summary: 'Nộp bài tập',
-    description:
-      'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm.',
+    description: 'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm.',
   })
   @ApiParam({ name: 'id', description: 'ID của bài tập' })
   @ApiBody({

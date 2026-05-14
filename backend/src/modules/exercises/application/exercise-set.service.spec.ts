@@ -326,9 +326,7 @@ describe('ExerciseSetService', () => {
 
     it('returns canResume=false when not started', async () => {
       exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
-      exercisesRepo.findBySetId.mockResolvedValue([
-        { id: 'ex-1' },
-      ] as any);
+      exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' }] as any);
       resultsRepo.findByUserAndExerciseIds.mockResolvedValue([] as any);
 
       const result = await service.getResumeInfo('set-1', 'user-1');
@@ -379,11 +377,27 @@ describe('ExerciseSetService', () => {
     it('returns stats and wrong questions', async () => {
       exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
       exercisesRepo.findBySetId.mockResolvedValue([
-        { id: 'ex-1', question: 'Q1', exerciseType: 'multiple_choice', correctAnswer: { selectedChoice: 'A' }, explanation: 'E1' },
-        { id: 'ex-2', question: 'Q2', exerciseType: 'matching', correctAnswer: { matches: [] }, explanation: 'E2' },
+        {
+          id: 'ex-1',
+          question: 'Q1',
+          exerciseType: 'multiple_choice',
+          correctAnswer: { selectedChoice: 'A' },
+          explanation: 'E1',
+        },
+        {
+          id: 'ex-2',
+          question: 'Q2',
+          exerciseType: 'matching',
+          correctAnswer: { matches: [] },
+          explanation: 'E2',
+        },
       ] as any);
       resultsRepo.findByUserAndExerciseIds.mockResolvedValue([
-        { exerciseId: 'ex-1', isCorrect: true, userAnswer: { selectedChoice: 'A' } },
+        {
+          exerciseId: 'ex-1',
+          isCorrect: true,
+          userAnswer: { selectedChoice: 'A' },
+        },
         { exerciseId: 'ex-2', isCorrect: false, userAnswer: { matches: [] } },
       ] as any);
 
