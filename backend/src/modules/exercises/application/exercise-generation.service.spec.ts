@@ -6,6 +6,9 @@ import { ExerciseSetsRepository } from './repositories/exercise-sets.repository'
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseContextLoader } from './exercise-context-loader';
 import { ExerciseType } from '../../../common/enums';
+import { ProgressRepository } from '../../progress/application/progress.repository';
+import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
+import { ModulesRepository } from '../../courses/application/repositories/modules.repository';
 
 describe('ExerciseGenerationService', () => {
   let service: ExerciseGenerationService;
@@ -13,6 +16,9 @@ describe('ExerciseGenerationService', () => {
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let contextLoader: jest.Mocked<ExerciseContextLoader>;
+  let progressRepo: jest.Mocked<ProgressRepository>;
+  let moduleProgressRepo: jest.Mocked<ModuleProgressRepository>;
+  let modulesRepo: jest.Mocked<ModulesRepository>;
 
   const validAiResponse = JSON.stringify({
     title: 'Greetings Practice',
@@ -74,6 +80,18 @@ describe('ExerciseGenerationService', () => {
       loadCourseContext: jest.fn(),
     } as any;
 
+    progressRepo = {
+      findCompletedByUserInLessons: jest.fn(),
+    } as any;
+
+    moduleProgressRepo = {
+      findCompletedByUserInModules: jest.fn(),
+    } as any;
+
+    modulesRepo = {
+      findById: jest.fn(),
+    } as any;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ExerciseGenerationService,
@@ -81,6 +99,9 @@ describe('ExerciseGenerationService', () => {
         { provide: ExerciseSetsRepository, useValue: exerciseSetsRepo },
         { provide: ExercisesRepository, useValue: exercisesRepo },
         { provide: ExerciseContextLoader, useValue: contextLoader },
+        { provide: ProgressRepository, useValue: progressRepo },
+        { provide: ModuleProgressRepository, useValue: moduleProgressRepo },
+        { provide: ModulesRepository, useValue: modulesRepo },
       ],
     }).compile();
 
@@ -386,6 +407,97 @@ describe('ExerciseGenerationService', () => {
         expect.objectContaining({
           userPromptSection: '',
         }),
+      );
+    });
+  });
+
+  describe('module-level generation', () => {
+    const mockMergedContext = {
+      vocabularies: [
+        {
+          word: 'Xin chào',
+          translation: 'Hello',
+          partOfSpeech: 'interjection',
+        },
+      ],
+      grammarRules: [
+        {
+          title: 'Basic greetings',
+          explanation: 'How to greet',
+          examples: [{ vi: 'Xin chào', en: 'Hello' }],
+        },
+      ],
+    };
+
+    it('uses loadModuleContext for module-level set', async () => {
+      const moduleSet = {
+        id: 'set-1',
+        moduleId: 'module-1',
+        lessonId: null,
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'both',
+        },
+        title: 'Custom Practice',
+        userPrompt: 'Cross-lesson review',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(moduleSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+
+      modulesRepo.findById.mockResolvedValue({
+        id: 'module-1',
+        title: 'Greetings Module',
+        lessons: [{ id: 'lesson-1' }, { id: 'lesson-2' }],
+      } as any);
+      progressRepo.findCompletedByUserInLessons.mockResolvedValue([
+        { lessonId: 'lesson-1' },
+      ] as any);
+      contextLoader.loadModuleContext.mockResolvedValue(mockMergedContext);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      await service.generateCustom('set-1', 'user-1');
+
+      expect(contextLoader.loadModuleContext).toHaveBeenCalledWith([
+        'lesson-1',
+      ]);
+      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+        'exercise-generation-module',
+        expect.objectContaining({
+          moduleTitle: 'Greetings Module',
+          lessonCount: '1',
+          userPromptSection: '\n### User Request\nCross-lesson review\n',
+        }),
+      );
+    });
+
+    it('throws when moduleId set has no module found', async () => {
+      const moduleSet = {
+        id: 'set-1',
+        moduleId: 'module-1',
+        lessonId: null,
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'both',
+        },
+        title: 'Custom Practice',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(moduleSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      modulesRepo.findById.mockResolvedValue(null);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined as any);
+
+      await expect(service.generateCustom('set-1', 'user-1')).rejects.toThrow(
+        BadRequestException,
       );
     });
   });

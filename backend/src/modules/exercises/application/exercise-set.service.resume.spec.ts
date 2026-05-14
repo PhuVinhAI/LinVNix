@@ -33,6 +33,10 @@ describe('ExerciseSetService - Resume & Reset', () => {
         regenerate: jest.fn(),
         generateCustom: jest.fn(),
       } as any,
+      { findCompletedByUserInLessons: jest.fn() } as any,
+      { findCompletedByUserInModules: jest.fn() } as any,
+      { findById: jest.fn() } as any,
+      { findById: jest.fn() } as any,
     );
   });
 
