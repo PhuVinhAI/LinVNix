@@ -26,17 +26,14 @@ import { CreateLessonDto } from '../dto/lessons/create-lesson.dto';
 @ApiTags('Lessons')
 @Controller('lessons')
 export class LessonsController {
-  constructor(
-    private readonly courseContentService: CourseContentService,
-  ) {}
+  constructor(private readonly courseContentService: CourseContentService) {}
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('module/:moduleId')
   @ApiOperation({
     summary: 'Lấy danh sách lessons theo module',
-    description:
-      'Lấy tất cả lessons thuộc một module',
+    description: 'Lấy tất cả lessons thuộc một module',
   })
   @ApiParam({ name: 'moduleId', description: 'ID của module' })
   @ApiResponse({

@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ExerciseSet } from '../../domain/exercise-set.entity';
 
-
 @Injectable()
 export class ExerciseSetsRepository {
   constructor(

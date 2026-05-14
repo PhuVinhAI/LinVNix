@@ -124,9 +124,9 @@ describe('ExerciseGenerationService', () => {
         isCustom: false,
       } as any);
 
-      await expect(
-        service.generateCustom('set-1', 'user-1'),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.generateCustom('set-1', 'user-1')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('throws when set already has exercises', async () => {
@@ -141,9 +141,9 @@ describe('ExerciseGenerationService', () => {
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' }] as any);
 
-      await expect(
-        service.generateCustom('set-1', 'user-1'),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.generateCustom('set-1', 'user-1')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -403,9 +403,7 @@ describe('ExerciseGenerationService', () => {
     it('throws when schema validation fails', () => {
       const invalid = JSON.stringify({ exercises: [] });
 
-      expect(() => service.parseResponse(invalid)).toThrow(
-        BadRequestException,
-      );
+      expect(() => service.parseResponse(invalid)).toThrow(BadRequestException);
     });
   });
 });
