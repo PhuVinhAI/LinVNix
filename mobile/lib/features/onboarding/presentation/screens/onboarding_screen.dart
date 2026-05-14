@@ -5,6 +5,7 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../features/profile/data/profile_providers.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -80,6 +81,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
       final repository = ref.read(userRepositoryProvider);
       await repository.updateMe(updateData);
+      ref.invalidate(userProfileProvider);
 
       final prefs = await ref.read(preferencesProvider.future);
       await prefs.setDailyGoal(_dailyGoal);

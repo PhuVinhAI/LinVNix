@@ -227,7 +227,6 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       ref.read(dataChangeBusProvider.notifier).emit({
         'exercise',
         'exercise-set',
-        'lesson-${widget.lessonId}',
       });
 
       setState(() {
@@ -332,7 +331,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 await repo.completeLesson(widget.lessonId);
               } catch (_) {}
               ref.read(dataChangeBusProvider.notifier).emit(
-                {'progress', 'exercise', 'exercise-set', 'lesson-${widget.lessonId}'},
+                {'progress', 'exercise', 'exercise-set'},
               );
               if (mounted) context.pop();
             },
