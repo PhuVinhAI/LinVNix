@@ -137,7 +137,9 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     final vocabAsync = ref.watch(lessonVocabulariesProvider(widget.lessonId));
     final progressAsync = ref.watch(lessonProgressProvider(widget.lessonId));
 
-    if (lessonAsync.isLoading || vocabAsync.isLoading) {
+    final isInitialLoading = (lessonAsync.isLoading && lessonAsync.value == null) ||
+                             (vocabAsync.isLoading && vocabAsync.value == null);
+    if (isInitialLoading) {
       return Scaffold(
         appBar: const AppAppBar(title: Text('Lesson')),
         body: const _LessonLoadingSkeleton(),

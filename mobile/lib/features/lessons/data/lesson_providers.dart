@@ -80,19 +80,19 @@ class LessonProgressNotifier extends AsyncNotifier<Map<String, dynamic>?>
   Future<void> startLesson() async {
     final repo = ref.read(lessonRepositoryProvider);
     await repo.startLesson(lessonId);
-    ref.read(dataChangeBusProvider.notifier).emit({'progress', 'lesson-$lessonId'});
+    ref.read(dataChangeBusProvider.notifier).emit({'progress'});
   }
 
   Future<void> markContentReviewed() async {
     final repo = ref.read(lessonRepositoryProvider);
     await repo.markContentReviewed(lessonId);
-    ref.read(dataChangeBusProvider.notifier).emit({'progress', 'lesson-$lessonId'});
+    ref.read(dataChangeBusProvider.notifier).emit({'progress'});
   }
 
   Future<void> completeLesson({int score = 0}) async {
     final repo = ref.read(lessonRepositoryProvider);
     await repo.completeLesson(lessonId, score: score);
-    ref.read(dataChangeBusProvider.notifier).emit({'progress', 'lesson-$lessonId'});
+    ref.read(dataChangeBusProvider.notifier).emit({'progress'});
   }
 }
 
@@ -180,25 +180,25 @@ class ExerciseSetsNotifier extends CachedRepository<LessonExerciseSummary>
   Future<void> regenerateSet(String setId, {CancelToken? cancelToken}) async {
     final repo = ref.read(lessonRepositoryProvider);
     await repo.regenerateExercises(setId, cancelToken: cancelToken);
-    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
   }
 
   Future<void> deleteSet(String setId) async {
     final repo = ref.read(lessonRepositoryProvider);
     await repo.deleteCustomExerciseSet(setId);
-    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
   }
 
   Future<void> createCustomSet(CustomSetConfig config, {CancelToken? cancelToken}) async {
     final repo = ref.read(lessonRepositoryProvider);
     await repo.createCustomSet(lessonId, config, cancelToken: cancelToken);
-    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
   }
 
   Future<void> resetSetProgress(String setId) async {
     final repo = ref.read(lessonRepositoryProvider);
     await repo.resetExerciseSetProgress(setId);
-    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
   }
 }
 
