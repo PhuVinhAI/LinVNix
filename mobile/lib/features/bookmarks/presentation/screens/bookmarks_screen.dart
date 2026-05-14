@@ -43,12 +43,10 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
     ref.read(bookmarkSearchProvider.notifier).setSearch(
           trimmed.isEmpty ? null : trimmed,
         );
-    ref.invalidate(bookmarksProvider);
   }
 
   void _onSortChanged(BookmarkSort sort) {
     ref.read(bookmarkSortProvider.notifier).setSort(sort);
-    ref.invalidate(bookmarksProvider);
   }
 
   Future<void> _onRefresh() async {
@@ -56,8 +54,9 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
   }
 
   Future<void> _onToggleBookmark(String vocabularyId) async {
+    await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
     final isBookmarked =
-        await ref.read(bookmarksProvider.notifier).toggleBookmark(vocabularyId);
+        ref.read(bookmarkIdsProvider).value?.contains(vocabularyId) ?? false;
     if (!isBookmarked && mounted) {
       AppToast.show(context, message: 'Word removed', type: AppToastType.info);
     }
@@ -75,6 +74,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
   Widget build(BuildContext context) {
     final bookmarksAsync = ref.watch(bookmarksProvider);
     final currentSort = ref.watch(bookmarkSortProvider);
+    final bookmarkIds = ref.watch(bookmarkIdsProvider).value;
 
     return Scaffold(
       appBar: AppAppBar(
@@ -125,13 +125,13 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
               },
             ),
           ),
-          Expanded(child: _buildBody(bookmarksAsync)),
+          Expanded(child: _buildBody(bookmarksAsync, bookmarkIds)),
         ],
       ),
     );
   }
 
-  Widget _buildBody(AsyncValue<BookmarksPage> asyncPage) {
+  Widget _buildBody(AsyncValue<BookmarksPage> asyncPage, Set<String>? bookmarkIds) {
     final c = AppTheme.colors(context);
     return asyncPage.when(
       data: (page) {
@@ -179,6 +179,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
               final item = page.items[index];
               return _BookmarkTile(
                 item: item,
+                isBookmarked: bookmarkIds?.contains(item.vocabularyId) ?? true,
                 onToggle: _onToggleBookmark,
                 onTap: () => _showDetail(item),
               );
@@ -213,11 +214,13 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
 class _BookmarkTile extends StatelessWidget {
   const _BookmarkTile({
     required this.item,
+    required this.isBookmarked,
     required this.onToggle,
     required this.onTap,
   });
 
   final BookmarkWithVocabulary item;
+  final bool isBookmarked;
   final Future<void> Function(String vocabularyId) onToggle;
   final VoidCallback onTap;
 
@@ -266,7 +269,7 @@ class _BookmarkTile extends StatelessWidget {
           ),
           BookmarkIconButton(
             vocabularyId: item.vocabularyId,
-            isBookmarked: true,
+            isBookmarked: isBookmarked,
             onToggle: (_) => onToggle(item.vocabularyId),
           ),
         ],
