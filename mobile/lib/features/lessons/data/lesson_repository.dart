@@ -118,11 +118,11 @@ class LessonRepository {
     }
   }
 
-  Future<LessonTierSummary> getExerciseSetsByLesson(String lessonId) async {
+  Future<LessonExerciseSummary> getExerciseSetsByLesson(String lessonId) async {
     try {
       final response =
           await _dio.get<Map<String, dynamic>>('/exercise-sets/lesson/$lessonId');
-      return LessonTierSummary.fromJson(response.data!);
+      return LessonExerciseSummary.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
@@ -148,22 +148,6 @@ class LessonRepository {
     }
   }
 
-  Future<Map<String, TierSummary>> getModuleTierSummaries(
-      String moduleId) async {
-    try {
-      final response =
-          await _dio.get<List<dynamic>>('/lessons/module/$moduleId');
-      final lessons = response.data as List<dynamic>;
-      return {
-        for (final lesson in lessons)
-          (lesson as Map<String, dynamic>)['id'] as String:
-              TierSummary.fromJson(lesson['tierSummary'] as Map<String, dynamic>),
-      };
-    } on DioException catch (e) {
-      throw mapDioException(e);
-    }
-  }
-
   Future<List<dynamic>> generateExercises(
     String setId, {
     CancelToken? cancelToken,
@@ -171,23 +155,6 @@ class LessonRepository {
     try {
       final response = await _dio.post<dynamic>(
         '/exercise-sets/$setId/generate',
-        options: _aiGenerationRequestOptions,
-        cancelToken: cancelToken,
-      );
-      return _unwrapExerciseList(response.data);
-    } on DioException catch (e) {
-      throw mapDioException(e);
-    }
-  }
-
-  Future<List<dynamic>> generateExercisesForTier(
-    String lessonId,
-    String tier, {
-    CancelToken? cancelToken,
-  }) async {
-    try {
-      final response = await _dio.post<dynamic>(
-        '/exercise-sets/lesson/$lessonId/tier/$tier/generate',
         options: _aiGenerationRequestOptions,
         cancelToken: cancelToken,
       );
@@ -247,6 +214,16 @@ class LessonRepository {
     try {
       await _dio.delete<Map<String, dynamic>>(
         '/exercise-sets/$setId/custom',
+      );
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<void> resetExerciseSetProgress(String setId) async {
+    try {
+      await _dio.post<Map<String, dynamic>>(
+        '/exercise-sets/$setId/reset',
       );
     } on DioException catch (e) {
       throw mapDioException(e);

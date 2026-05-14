@@ -92,7 +92,7 @@ export class ProgressController {
   @ApiOperation({
     summary: 'Lấy trạng thái exercise của lesson cho revisit flow',
     description:
-      'Trả về contentViewed, hasIncompleteSet, incompleteSetId, unlockedTiers — dùng cho mobile quyết định "Review content" hoặc "Do exercises" khi quay lại lesson',
+      'Trả về contentViewed, hasIncompleteSet, incompleteSetId — dùng cho mobile quyết định "Review content" hoặc "Do exercises" khi quay lại lesson',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -105,7 +105,6 @@ export class ProgressController {
         incompleteSetId: 'uuid',
         incompleteSetAttempted: 5,
         incompleteSetTotal: 10,
-        unlockedTiers: ['BASIC', 'EASY'],
       },
     },
   })

@@ -34,18 +34,17 @@ class _TestExerciseSetsNotifier extends ExerciseSetsNotifier {
   _TestExerciseSetsNotifier(super.lessonId);
 
   @override
-  Future<LessonTierSummary> build() async {
+  Future<LessonExerciseSummary> build() async {
     watchTags({'exercise-set', 'lesson-$lessonId'});
     fetchCallCount++;
-    return const LessonTierSummary(
+    return const LessonExerciseSummary(
       sets: [],
-      unlockedTiers: [ExerciseTier.basic],
     );
   }
 }
 
 final _testExerciseSetsProvider =
-    AsyncNotifierProvider.family<_TestExerciseSetsNotifier, LessonTierSummary, String>(
+    AsyncNotifierProvider.family<_TestExerciseSetsNotifier, LessonExerciseSummary, String>(
   (arg) => _TestExerciseSetsNotifier(arg),
 );
 
@@ -251,7 +250,7 @@ void main() {
       final container = ProviderContainer();
       final args = LessonExercisesArgs(
         lessonId: 'lesson-1',
-        tierValue: 'BASIC',
+        setId: 'set-1',
       );
       final notifier = container.read(
         _testLessonExercisesProvider(args).notifier,
@@ -275,7 +274,7 @@ void main() {
       final container = ProviderContainer();
       final args = LessonExercisesArgs(
         lessonId: 'lesson-1',
-        tierValue: 'BASIC',
+        setId: 'set-1',
       );
       final notifier = container.read(
         _testLessonExercisesProvider(args).notifier,
@@ -300,7 +299,7 @@ void main() {
       final container = ProviderContainer();
       final args = LessonExercisesArgs(
         lessonId: 'lesson-1',
-        tierValue: 'BASIC',
+        setId: 'set-1',
       );
       final notifier = container.read(
         _testLessonExercisesProvider(args).notifier,

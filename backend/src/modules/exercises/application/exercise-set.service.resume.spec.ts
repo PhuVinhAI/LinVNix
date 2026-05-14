@@ -1,27 +1,18 @@
 import { ExerciseSetService } from './exercise-set.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
-import { TierProgressService } from './tier-progress.service';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
-import { ExerciseTier } from '../../../common/enums';
+import { NotFoundException } from '@nestjs/common';
 
 describe('ExerciseSetService - Resume & Reset', () => {
   let service: ExerciseSetService;
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
-  let tierProgressService: jest.Mocked<TierProgressService>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let resultsRepo: jest.Mocked<UserExerciseResultsRepository>;
 
   beforeEach(() => {
     exerciseSetsRepo = {
       findById: jest.fn(),
-      findByIdWithExercises: jest.fn(),
-      findActiveByLessonId: jest.fn(),
-    } as any;
-
-    tierProgressService = {
-      getSetProgress: jest.fn(),
-      getLessonTierSummary: jest.fn(),
     } as any;
 
     exercisesRepo = {
@@ -35,10 +26,9 @@ describe('ExerciseSetService - Resume & Reset', () => {
 
     service = new ExerciseSetService(
       exerciseSetsRepo,
-      tierProgressService,
       exercisesRepo,
       resultsRepo,
-      { generate: jest.fn(), generateForTier: jest.fn() } as any,
+      { generate: jest.fn(), regenerate: jest.fn(), generateCustom: jest.fn() } as any,
     );
   });
 
@@ -47,7 +37,6 @@ describe('ExerciseSetService - Resume & Reset', () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic',
       } as any);
 
@@ -70,7 +59,6 @@ describe('ExerciseSetService - Resume & Reset', () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic',
       } as any);
 
@@ -92,7 +80,6 @@ describe('ExerciseSetService - Resume & Reset', () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic',
       } as any);
 
@@ -113,7 +100,7 @@ describe('ExerciseSetService - Resume & Reset', () => {
       exerciseSetsRepo.findById.mockResolvedValue(null);
 
       await expect(service.getResumeInfo('missing', 'user-1')).rejects.toThrow(
-        'ExerciseSet with ID missing not found',
+        NotFoundException,
       );
     });
   });
@@ -123,7 +110,6 @@ describe('ExerciseSetService - Resume & Reset', () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic',
       } as any);
 
@@ -142,7 +128,6 @@ describe('ExerciseSetService - Resume & Reset', () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
@@ -159,7 +144,7 @@ describe('ExerciseSetService - Resume & Reset', () => {
       exerciseSetsRepo.findById.mockResolvedValue(null);
 
       await expect(service.resetProgress('missing', 'user-1')).rejects.toThrow(
-        'ExerciseSet with ID missing not found',
+        NotFoundException,
       );
     });
   });

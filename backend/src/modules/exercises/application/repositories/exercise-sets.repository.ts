@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ExerciseSet } from '../../domain/exercise-set.entity';
-import { ExerciseTier } from '../../../../common/enums';
+
 
 @Injectable()
 export class ExerciseSetsRepository {
@@ -38,15 +38,6 @@ export class ExerciseSetsRepository {
     return this.repository.findOne({
       where: { id },
       relations: ['exercises'],
-    });
-  }
-
-  async findActiveByLessonAndTier(
-    lessonId: string,
-    tier: ExerciseTier,
-  ): Promise<ExerciseSet | null> {
-    return this.repository.findOne({
-      where: { lessonId, tier, deletedAt: undefined as any },
     });
   }
 

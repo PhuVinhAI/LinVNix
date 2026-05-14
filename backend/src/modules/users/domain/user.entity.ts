@@ -50,9 +50,6 @@ export class User extends BaseEntity {
   @Column({ name: 'email_verified_at', type: 'timestamp', nullable: true })
   emailVerifiedAt: Date;
 
-  @Column({ name: 'onboarding_completed', default: false })
-  onboardingCompleted: boolean;
-
   @ManyToMany(() => Role, { eager: true })
   @JoinTable({
     name: 'user_roles',

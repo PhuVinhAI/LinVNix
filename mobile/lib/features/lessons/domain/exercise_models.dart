@@ -380,7 +380,6 @@ class ExerciseSubmissionResult {
     this.userAnswer,
     this.timeTaken,
     this.attemptedAt,
-    this.nextTierUnlocked,
   });
 
   factory ExerciseSubmissionResult.fromJson(Map<String, dynamic> json) {
@@ -393,7 +392,6 @@ class ExerciseSubmissionResult {
       attemptedAt: json['attemptedAt'] != null
           ? DateTime.tryParse(json['attemptedAt'] as String)
           : null,
-      nextTierUnlocked: json['nextTierUnlocked'] as String?,
     );
   }
 
@@ -403,7 +401,6 @@ class ExerciseSubmissionResult {
   final dynamic userAnswer;
   final int? timeTaken;
   final DateTime? attemptedAt;
-  final String? nextTierUnlocked;
 
   Map<String, dynamic> toJson() {
     return {
@@ -413,7 +410,6 @@ class ExerciseSubmissionResult {
       'userAnswer': userAnswer,
       'timeTaken': timeTaken,
       'attemptedAt': attemptedAt?.toIso8601String(),
-      'nextTierUnlocked': nextTierUnlocked,
     };
   }
 }

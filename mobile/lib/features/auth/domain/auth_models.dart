@@ -6,7 +6,6 @@ class AuthUser {
     this.nativeLanguage,
     this.currentLevel,
     this.emailVerified = false,
-    this.onboardingCompleted = false,
     this.roles = const [],
     this.createdAt,
   });
@@ -19,7 +18,6 @@ class AuthUser {
       nativeLanguage: json['nativeLanguage'] as String?,
       currentLevel: json['currentLevel'] as String?,
       emailVerified: json['emailVerified'] as bool? ?? false,
-      onboardingCompleted: json['onboardingCompleted'] as bool? ?? false,
       roles: (json['roles'] as List<dynamic>?)
               ?.map((e) => UserRole.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -36,7 +34,6 @@ class AuthUser {
   final String? nativeLanguage;
   final String? currentLevel;
   final bool emailVerified;
-  final bool onboardingCompleted;
   final List<UserRole> roles;
   final DateTime? createdAt;
 
@@ -48,7 +45,6 @@ class AuthUser {
       'nativeLanguage': nativeLanguage,
       'currentLevel': currentLevel,
       'emailVerified': emailVerified,
-      'onboardingCompleted': onboardingCompleted,
       'roles': roles.map((e) => e.toJson()).toList(),
       'createdAt': createdAt?.toIso8601String(),
     };

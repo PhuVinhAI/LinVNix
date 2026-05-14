@@ -1,14 +1,12 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { ProgressRepository } from './progress.repository';
-import { TierProgressService } from '../../exercises/application/tier-progress.service';
 import { UserProgress } from '../domain/user-progress.entity';
-import { ProgressStatus, ExerciseTier } from '../../../common/enums';
+import { ProgressStatus } from '../../../common/enums';
 
 @Injectable()
 export class ProgressService {
   constructor(
     private readonly progressRepository: ProgressRepository,
-    private readonly tierProgressService: TierProgressService,
   ) {}
 
   async startLesson(userId: string, lessonId: string): Promise<UserProgress> {
@@ -77,21 +75,6 @@ export class ProgressService {
       );
     }
 
-    const summary = await this.tierProgressService.getLessonTierSummary(
-      lessonId,
-      userId,
-    );
-
-    const hasExercises = summary.sets.length > 0;
-    if (hasExercises) {
-      const basicSet = summary.sets.find((s) => s.tier === ExerciseTier.BASIC);
-      if (!basicSet || basicSet.percentComplete < 100) {
-        throw new BadRequestException(
-          'Basic tier must be completed before completing lesson',
-        );
-      }
-    }
-
     return this.progressRepository.update(progress.id, {
       status: ProgressStatus.COMPLETED,
       score,
@@ -143,7 +126,6 @@ export class ProgressService {
     incompleteSetId: string | null;
     incompleteSetAttempted: number;
     incompleteSetTotal: number;
-    unlockedTiers: ExerciseTier[];
   }> {
     const progress = await this.progressRepository.findByUserAndLesson(
       userId,
@@ -152,22 +134,12 @@ export class ProgressService {
 
     const contentViewed = progress?.contentViewed ?? false;
 
-    const summary = await this.tierProgressService.getLessonTierSummary(
-      lessonId,
-      userId,
-    );
-
-    const incompleteSet = summary.sets.find(
-      (s) => s.attempted > 0 && s.attempted < s.totalExercises,
-    );
-
     return {
       contentViewed,
-      hasIncompleteSet: !!incompleteSet,
-      incompleteSetId: incompleteSet?.setId ?? null,
-      incompleteSetAttempted: incompleteSet?.attempted ?? 0,
-      incompleteSetTotal: incompleteSet?.totalExercises ?? 0,
-      unlockedTiers: summary.unlockedTiers,
+      hasIncompleteSet: false,
+      incompleteSetId: null,
+      incompleteSetAttempted: 0,
+      incompleteSetTotal: 0,
     };
   }
 }

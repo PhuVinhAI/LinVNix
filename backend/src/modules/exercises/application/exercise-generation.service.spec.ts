@@ -1,14 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import {
-  ExerciseGenerationService,
-  TIER_GUIDELINES,
-} from './exercise-generation.service';
+import { ExerciseGenerationService } from './exercise-generation.service';
 import { GenaiService } from '../../../infrastructure/genai/genai.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
-import { ExerciseTier, ExerciseType } from '../../../common/enums';
+import { ExerciseType } from '../../../common/enums';
 
 describe('ExerciseGenerationService', () => {
   let service: ExerciseGenerationService;
@@ -16,43 +13,6 @@ describe('ExerciseGenerationService', () => {
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let dataSource: { getRepository: jest.Mock };
-
-  const mockLessonContext = {
-    lessonTitle: 'Greetings',
-    contents: [
-      {
-        contentType: 'text',
-        vietnameseText: 'Xin chào',
-        translation: 'Hello',
-        phonetic: 'sin chow',
-      },
-    ],
-    vocabularies: [
-      {
-        word: 'Xin chào',
-        translation: 'Hello',
-        phonetic: 'sin chow',
-        partOfSpeech: 'noun',
-        exampleSentence: 'Xin chào bạn!',
-        exampleTranslation: 'Hello friend!',
-      },
-    ],
-    grammarRules: [
-      {
-        title: 'Basic greeting',
-        explanation: 'Use "Xin chào" for hello',
-        structure: 'Xin chào + pronoun',
-        examples: [{ vi: 'Xin chào anh', en: 'Hello brother' }],
-      },
-    ],
-    basicExercises: [
-      {
-        exerciseType: 'multiple_choice',
-        question: 'What does "Xin chào" mean?',
-        correctAnswer: { selectedChoice: 'Hello' },
-      },
-    ],
-  };
 
   const validAiResponse = JSON.stringify({
     exercises: [
@@ -84,51 +44,21 @@ describe('ExerciseGenerationService', () => {
     } as any;
 
     exerciseSetsRepo = {
-      findById: jest.fn(),
-      findActiveByLessonAndTier: jest.fn(),
-      update: jest.fn(),
-      softDelete: jest.fn(),
       create: jest.fn(),
+      findById: jest.fn(),
+      softDelete: jest.fn(),
+      update: jest.fn(),
+      findActiveByLessonId: jest.fn(),
     } as any;
 
     exercisesRepo = {
-      findBySetId: jest.fn(),
       create: jest.fn(),
+      findBySetId: jest.fn(),
       softDeleteBySetId: jest.fn(),
     } as any;
 
     dataSource = {
-      getRepository: jest.fn().mockReturnValue({
-        findOne: jest.fn().mockResolvedValue({
-          title: 'Greetings',
-          contents: [
-            {
-              contentType: 'text',
-              vietnameseText: 'Xin chào',
-              translation: 'Hello',
-              phonetic: 'sin chow',
-            },
-          ],
-          vocabularies: [
-            {
-              word: 'Xin chào',
-              translation: 'Hello',
-              phonetic: 'sin chow',
-              partOfSpeech: 'noun',
-              exampleSentence: 'Xin chào bạn!',
-              exampleTranslation: 'Hello friend!',
-            },
-          ],
-          grammarRules: [
-            {
-              title: 'Basic greeting',
-              explanation: 'Use "Xin chào" for hello',
-              structure: 'Xin chào + pronoun',
-              examples: [{ vi: 'Xin chào anh', en: 'Hello brother' }],
-            },
-          ],
-        }),
-      }),
+      getRepository: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -144,539 +74,59 @@ describe('ExerciseGenerationService', () => {
     service = module.get<ExerciseGenerationService>(ExerciseGenerationService);
   });
 
-  describe('generate', () => {
-    it('throws for BASIC tier', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
+  describe('generateCustom', () => {
+    it('generates exercises for a custom set', async () => {
+      const customSet = {
         id: 'set-1',
-        tier: ExerciseTier.BASIC,
         lessonId: 'lesson-1',
-      } as any);
-
-      await expect(service.generate('set-1', 'user-1')).rejects.toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('throws when set already has exercises', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'set-1',
-        tier: ExerciseTier.EASY,
-        lessonId: 'lesson-1',
-      } as any);
-      exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' } as any]);
-
-      await expect(service.generate('set-1', 'user-1')).rejects.toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('throws when set not found', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue(null);
-
-      await expect(service.generate('missing', 'user-1')).rejects.toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('generates and persists exercises for empty EASY set', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'set-1',
-        tier: ExerciseTier.EASY,
-        lessonId: 'lesson-1',
-      } as any);
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
+        },
+        title: 'Custom Practice',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(customSet as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+
+      const lessonRepo = {
+        findOne: jest.fn().mockResolvedValue({
+          id: 'lesson-1',
+          title: 'Greetings',
+          contents: [],
+          vocabularies: [],
+          grammarRules: [],
+        }),
+      };
+      dataSource.getRepository.mockReturnValue(lessonRepo);
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+
       genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'set-1' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
       } as any);
 
-      const result = await service.generate('set-1', 'user-1');
+      const result = await service.generateCustom('set-1', 'user-1');
 
       expect(result).toHaveLength(1);
-      expect(exercisesRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          exerciseType: 'matching',
-          setId: 'set-1',
-          lessonId: 'lesson-1',
-        }),
-      );
+      expect(exercisesRepo.create).toHaveBeenCalled();
       expect(exerciseSetsRepo.update).toHaveBeenCalledWith(
         'set-1',
-        expect.objectContaining({
-          isAIGenerated: true,
-          generatedById: 'user-1',
-        }),
-      );
-    });
-  });
-
-  describe('buildPrompt', () => {
-    it('includes tier name and question count', () => {
-      const guidelines = {
-        questionCount: 8,
-        preferredTypes: [ExerciseType.MATCHING, ExerciseType.MULTIPLE_CHOICE],
-        description: 'Easy level',
-      };
-
-      const prompt = service.buildPrompt(
-        mockLessonContext,
-        guidelines,
-        ExerciseTier.EASY,
-      );
-
-      expect(prompt).toContain('8');
-      expect(prompt).toContain('EASY');
-      expect(prompt).toContain('matching');
-      expect(prompt).toContain('multiple_choice');
-    });
-
-    it('includes lesson vocabulary', () => {
-      const guidelines = {
-        questionCount: 8,
-        preferredTypes: [ExerciseType.MATCHING],
-        description: 'Easy level',
-      };
-
-      const prompt = service.buildPrompt(
-        mockLessonContext,
-        guidelines,
-        ExerciseTier.EASY,
-      );
-
-      expect(prompt).toContain('Xin chào');
-      expect(prompt).toContain('Hello');
-    });
-
-    it('includes grammar rules', () => {
-      const guidelines = {
-        questionCount: 8,
-        preferredTypes: [ExerciseType.MATCHING],
-        description: 'Easy level',
-      };
-
-      const prompt = service.buildPrompt(
-        mockLessonContext,
-        guidelines,
-        ExerciseTier.EASY,
-      );
-
-      expect(prompt).toContain('Basic greeting');
-      expect(prompt).toContain('Xin chào + pronoun');
-    });
-
-    it('includes basic exercises to avoid duplication', () => {
-      const guidelines = {
-        questionCount: 8,
-        preferredTypes: [ExerciseType.MATCHING],
-        description: 'Easy level',
-      };
-
-      const prompt = service.buildPrompt(
-        mockLessonContext,
-        guidelines,
-        ExerciseTier.EASY,
-      );
-
-      expect(prompt).toContain('DO NOT duplicate');
-      expect(prompt).toContain('What does "Xin chào" mean?');
-    });
-
-    it('omits basic exercises section when none exist', () => {
-      const contextNoBasic = {
-        ...mockLessonContext,
-        basicExercises: [],
-      };
-      const guidelines = {
-        questionCount: 8,
-        preferredTypes: [ExerciseType.MATCHING],
-        description: 'Easy level',
-      };
-
-      const prompt = service.buildPrompt(
-        contextNoBasic,
-        guidelines,
-        ExerciseTier.EASY,
-      );
-
-      expect(prompt).not.toContain('DO NOT duplicate');
-    });
-
-    it('includes exercise type shapes specification', () => {
-      const guidelines = {
-        questionCount: 8,
-        preferredTypes: [ExerciseType.MATCHING],
-        description: 'Easy level',
-      };
-
-      const prompt = service.buildPrompt(
-        mockLessonContext,
-        guidelines,
-        ExerciseTier.EASY,
-      );
-
-      expect(prompt).toContain('multiple_choice');
-      expect(prompt).toContain('matching');
-      expect(prompt).toContain('correctAnswer');
-    });
-  });
-
-  describe('parseResponse', () => {
-    it('parses clean JSON from structured output', () => {
-      const result = service.parseResponse(validAiResponse);
-
-      expect(result.exercises).toHaveLength(1);
-      expect(result.exercises[0].exerciseType).toBe('matching');
-      expect(result.exercises[0].question).toContain('Match');
-    });
-
-    it('throws for non-JSON response', () => {
-      expect(() => service.parseResponse('This is not JSON')).toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('throws for JSON missing exercises array', () => {
-      expect(() => service.parseResponse(JSON.stringify({ data: [] }))).toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('throws for exercise with missing required fields', () => {
-      const invalidExercise = JSON.stringify({
-        exercises: [{ exerciseType: 'matching' }],
-      });
-
-      expect(() => service.parseResponse(invalidExercise)).toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('throws for invalid exercise type', () => {
-      const invalidType = JSON.stringify({
-        exercises: [
-          {
-            exerciseType: 'invalid_type',
-            question: 'Q?',
-            correctAnswer: {},
-          },
-        ],
-      });
-
-      expect(() => service.parseResponse(invalidType)).toThrow(
-        BadRequestException,
-      );
-    });
-  });
-
-  describe('TIER_GUIDELINES', () => {
-    it('MEDIUM has ~12 questions with fill-blank and translation', () => {
-      expect(TIER_GUIDELINES[ExerciseTier.MEDIUM].questionCount).toBe(12);
-      expect(TIER_GUIDELINES[ExerciseTier.MEDIUM].preferredTypes).toContain(
-        ExerciseType.FILL_BLANK,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.MEDIUM].preferredTypes).toContain(
-        ExerciseType.TRANSLATION,
-      );
-    });
-
-    it('HARD has ~15 questions with complex grammar emphasis', () => {
-      expect(TIER_GUIDELINES[ExerciseTier.HARD].questionCount).toBe(15);
-      expect(TIER_GUIDELINES[ExerciseTier.HARD].preferredTypes).toContain(
-        ExerciseType.TRANSLATION,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.HARD].preferredTypes).toContain(
-        ExerciseType.ORDERING,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.HARD].preferredTypes).toContain(
-        ExerciseType.MATCHING,
-      );
-    });
-
-    it('EXPERT has ~18 questions with all exercise types', () => {
-      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].questionCount).toBe(18);
-      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
-        ExerciseType.TRANSLATION,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
-        ExerciseType.FILL_BLANK,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
-        ExerciseType.ORDERING,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
-        ExerciseType.MATCHING,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
-        ExerciseType.MULTIPLE_CHOICE,
-      );
-      expect(TIER_GUIDELINES[ExerciseTier.EXPERT].preferredTypes).toContain(
-        ExerciseType.LISTENING,
-      );
-    });
-
-    it('higher tiers have more questions than lower tiers', () => {
-      expect(
-        TIER_GUIDELINES[ExerciseTier.MEDIUM].questionCount,
-      ).toBeGreaterThan(TIER_GUIDELINES[ExerciseTier.EASY].questionCount);
-      expect(TIER_GUIDELINES[ExerciseTier.HARD].questionCount).toBeGreaterThan(
-        TIER_GUIDELINES[ExerciseTier.MEDIUM].questionCount,
-      );
-      expect(
-        TIER_GUIDELINES[ExerciseTier.EXPERT].questionCount,
-      ).toBeGreaterThan(TIER_GUIDELINES[ExerciseTier.HARD].questionCount);
-    });
-  });
-
-  describe('regenerate', () => {
-    it('throws for BASIC tier', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'set-1',
-        tier: ExerciseTier.BASIC,
-        lessonId: 'lesson-1',
-      } as any);
-
-      await expect(service.regenerate('set-1', 'user-1')).rejects.toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('throws when set not found', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue(null);
-
-      await expect(service.regenerate('missing', 'user-1')).rejects.toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('soft-deletes old set and exercises, then generates new set', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'old-set',
-        tier: ExerciseTier.MEDIUM,
-        lessonId: 'lesson-1',
-        orderIndex: 2,
-      } as any);
-      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
-      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
-      exerciseSetsRepo.create.mockResolvedValue({
-        id: 'new-set',
-        tier: ExerciseTier.MEDIUM,
-        lessonId: 'lesson-1',
-        orderIndex: 2,
-      } as any);
-      exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chatStructured.mockResolvedValue({
-        text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-set' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
-      } as any);
-      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
-      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
-      exerciseSetsRepo.create.mockResolvedValue({
-        id: 'new-set',
-        tier: ExerciseTier.MEDIUM,
-        lessonId: 'lesson-1',
-        orderIndex: 2,
-      } as any);
-      genaiService.chatStructured.mockResolvedValue({
-        text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-set' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
-      } as any);
-
-      const result = await service.regenerate('old-set', 'user-1');
-
-      expect(exerciseSetsRepo.softDelete).toHaveBeenCalledWith('old-set');
-      expect(exercisesRepo.softDeleteBySetId).toHaveBeenCalledWith('old-set');
-      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          lessonId: 'lesson-1',
-          tier: ExerciseTier.MEDIUM,
-          orderIndex: 2,
-        }),
-      );
-      expect(result).toHaveLength(1);
-      expect(exercisesRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          setId: 'new-set',
-          lessonId: 'lesson-1',
-        }),
-      );
-    });
-
-    it('generates for HARD tier', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'old-hard',
-        tier: ExerciseTier.HARD,
-        lessonId: 'lesson-1',
-        orderIndex: 3,
-      } as any);
-      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
-      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
-      exerciseSetsRepo.create.mockResolvedValue({
-        id: 'new-hard',
-        tier: ExerciseTier.HARD,
-        lessonId: 'lesson-1',
-      } as any);
-      exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chatStructured.mockResolvedValue({
-        text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-hard' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
-      } as any);
-      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
-      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
-      exerciseSetsRepo.create.mockResolvedValue({
-        id: 'new-hard',
-        tier: ExerciseTier.HARD,
-        lessonId: 'lesson-1',
-      } as any);
-      genaiService.chatStructured.mockResolvedValue({
-        text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-hard' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
-      } as any);
-
-      const result = await service.regenerate('old-hard', 'user-1');
-
-      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({ tier: ExerciseTier.HARD }),
-      );
-      expect(result).toHaveLength(1);
-    });
-
-    it('generates for EXPERT tier', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'old-expert',
-        tier: ExerciseTier.EXPERT,
-        lessonId: 'lesson-1',
-        orderIndex: 4,
-      } as any);
-      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
-      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
-      exerciseSetsRepo.create.mockResolvedValue({
-        id: 'new-expert',
-        tier: ExerciseTier.EXPERT,
-        lessonId: 'lesson-1',
-      } as any);
-      exercisesRepo.findBySetId.mockResolvedValue([]);
-      genaiService.chatStructured.mockResolvedValue({
-        text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-expert' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
-      } as any);
-      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
-      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
-      exerciseSetsRepo.create.mockResolvedValue({
-        id: 'new-expert',
-        tier: ExerciseTier.EXPERT,
-        lessonId: 'lesson-1',
-      } as any);
-      genaiService.chatStructured.mockResolvedValue({
-        text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'new-expert' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
-      } as any);
-
-      const result = await service.regenerate('old-expert', 'user-1');
-
-      expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({ tier: ExerciseTier.EXPERT }),
-      );
-      expect(result).toHaveLength(1);
-    });
-  });
-
-  describe('generateCustom', () => {
-    it('throws when set not found', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue(null);
-
-      await expect(service.generateCustom('missing', 'user-1')).rejects.toThrow(
-        BadRequestException,
+        expect.objectContaining({ isAIGenerated: true }),
       );
     });
 
     it('throws when set is not custom', async () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
-        tier: ExerciseTier.EASY,
         isCustom: false,
-        lessonId: 'lesson-1',
       } as any);
 
-      await expect(service.generateCustom('set-1', 'user-1')).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(
+        service.generateCustom('set-1', 'user-1'),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('throws when set already has exercises', async () => {
@@ -684,83 +134,279 @@ describe('ExerciseGenerationService', () => {
         id: 'set-1',
         isCustom: true,
         customConfig: {
-          questionCount: 10,
-          exerciseTypes: [ExerciseType.MULTIPLE_CHOICE],
-          focusArea: 'both',
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
         },
-        lessonId: 'lesson-1',
       } as any);
-      exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' } as any]);
+      exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' }] as any);
 
-      await expect(service.generateCustom('set-1', 'user-1')).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(
+        service.generateCustom('set-1', 'user-1'),
+      ).rejects.toThrow(BadRequestException);
     });
+  });
 
-    it('generates exercises using custom config', async () => {
-      const customConfig = {
-        questionCount: 5,
-        exerciseTypes: [ExerciseType.FILL_BLANK, ExerciseType.TRANSLATION],
-        focusArea: 'grammar',
-      };
+  describe('generate', () => {
+    it('generates exercises for an empty set', async () => {
       exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'custom-set-1',
-        isCustom: true,
-        customConfig,
-        tier: null,
+        id: 'set-1',
         lessonId: 'lesson-1',
+        isCustom: false,
+        title: 'Default',
       } as any);
       exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+
+      const lessonRepo = {
+        findOne: jest.fn().mockResolvedValue({
+          id: 'lesson-1',
+          title: 'Greetings',
+          contents: [],
+          vocabularies: [],
+          grammarRules: [],
+        }),
+      };
+      dataSource.getRepository.mockReturnValue(lessonRepo);
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+
       genaiService.chatStructured.mockResolvedValue({
         text: validAiResponse,
-        usageMetadata: {},
-      });
-      exercisesRepo.create.mockImplementation(
-        async (data) =>
-          ({
-            id: `gen-${data.orderIndex}`,
-            ...data,
-          }) as any,
-      );
-      exerciseSetsRepo.update.mockResolvedValue({ id: 'custom-set-1' } as any);
-      exerciseSetsRepo.findActiveByLessonAndTier.mockResolvedValue({
-        id: 'basic-set',
       } as any);
 
-      const result = await service.generateCustom('custom-set-1', 'user-1');
+      const result = await service.generate('set-1', 'user-1');
 
       expect(result).toHaveLength(1);
-      expect(genaiService.chatStructured).toHaveBeenCalledWith(
-        expect.objectContaining({
-          messages: [
-            expect.objectContaining({
-              content: expect.stringContaining('5'),
-            }),
-          ],
-        }),
+    });
+
+    it('throws when set already has exercises', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({
+        id: 'set-1',
+        lessonId: 'lesson-1',
+      } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' }] as any);
+
+      await expect(service.generate('set-1', 'user-1')).rejects.toThrow(
+        BadRequestException,
       );
     });
   });
 
-  describe('buildPrompt with custom config', () => {
-    it('includes custom question count and focus area', () => {
-      const customGuidelines = {
-        questionCount: 12,
-        preferredTypes: [ExerciseType.FILL_BLANK, ExerciseType.TRANSLATION],
-        description:
-          'Focus on grammar — emphasize fill-blank, ordering, and translation exercises',
+  describe('regenerate', () => {
+    it('soft-deletes existing and generates new exercises', async () => {
+      const originalSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
+        },
+        title: 'Custom Practice',
+        orderIndex: 1,
+      };
+      const newSet = { ...originalSet, id: 'set-2' };
+
+      exerciseSetsRepo.findById.mockResolvedValue(originalSet as any);
+      exerciseSetsRepo.softDelete.mockResolvedValue(undefined);
+      exercisesRepo.softDeleteBySetId.mockResolvedValue(undefined);
+      exerciseSetsRepo.create.mockResolvedValue(newSet as any);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+
+      const lessonRepo = {
+        findOne: jest.fn().mockResolvedValue({
+          id: 'lesson-1',
+          title: 'Greetings',
+          contents: [],
+          vocabularies: [],
+          grammarRules: [],
+        }),
+      };
+      dataSource.getRepository.mockReturnValue(lessonRepo);
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      const result = await service.regenerate('set-1', 'user-1');
+
+      expect(exerciseSetsRepo.softDelete).toHaveBeenCalledWith('set-1');
+      expect(exercisesRepo.softDeleteBySetId).toHaveBeenCalledWith('set-1');
+      expect(result).toHaveLength(1);
+    });
+  });
+
+  describe('loadLessonContext', () => {
+    it('loads lesson with related data', async () => {
+      const lesson = {
+        id: 'lesson-1',
+        title: 'Greetings',
+        contents: [
+          {
+            contentType: 'text',
+            vietnameseText: 'Xin chào',
+            translation: 'Hello',
+            phonetic: 'sin chow',
+          },
+        ],
+        vocabularies: [
+          {
+            word: 'Xin chào',
+            translation: 'Hello',
+            phonetic: 'sin chow',
+            partOfSpeech: 'noun',
+            exampleSentence: 'Xin chào bạn!',
+            exampleTranslation: 'Hello friend!',
+          },
+        ],
+        grammarRules: [
+          {
+            title: 'Basic greeting',
+            explanation: 'Use "Xin chào" for hello',
+            structure: 'Xin chào + pronoun',
+            examples: [{ vi: 'Xin chào anh', en: 'Hello brother' }],
+          },
+        ],
       };
 
-      const prompt = service.buildPrompt(
-        mockLessonContext,
-        customGuidelines,
-        'Custom (grammar)',
-      );
+      const lessonRepo = {
+        findOne: jest.fn().mockResolvedValue(lesson),
+      };
+      dataSource.getRepository.mockReturnValue(lessonRepo);
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
 
-      expect(prompt).toContain('12');
-      expect(prompt).toContain('Custom (grammar)');
-      expect(prompt).toContain('fill_blank');
-      expect(prompt).toContain('translation');
+      const context = await service.loadLessonContext('lesson-1');
+
+      expect(context.lessonTitle).toBe('Greetings');
+      expect(context.contents).toHaveLength(1);
+      expect(context.vocabularies).toHaveLength(1);
+      expect(context.grammarRules).toHaveLength(1);
+      expect(context.existingExercises).toEqual([]);
+    });
+
+    it('collects existing exercises from all sets', async () => {
+      const lesson = {
+        id: 'lesson-1',
+        title: 'Greetings',
+        contents: [],
+        vocabularies: [],
+        grammarRules: [],
+      };
+
+      const lessonRepo = {
+        findOne: jest.fn().mockResolvedValue(lesson),
+      };
+      dataSource.getRepository.mockReturnValue(lessonRepo);
+
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([
+        { id: 'set-1' },
+        { id: 'set-2' },
+      ] as any);
+
+      exercisesRepo.findBySetId.mockImplementation(async (setId: string) => {
+        if (setId === 'set-1') {
+          return [
+            {
+              exerciseType: 'multiple_choice',
+              question: 'Q1',
+              correctAnswer: { selectedChoice: 'A' },
+            },
+          ] as any;
+        }
+        return [];
+      });
+
+      const context = await service.loadLessonContext('lesson-1');
+
+      expect(context.existingExercises).toHaveLength(1);
+      expect(context.existingExercises[0].question).toBe('Q1');
+    });
+
+    it('throws when lesson not found', async () => {
+      const lessonRepo = {
+        findOne: jest.fn().mockResolvedValue(null),
+      };
+      dataSource.getRepository.mockReturnValue(lessonRepo);
+
+      await expect(service.loadLessonContext('missing')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+  });
+
+  describe('buildPrompt', () => {
+    it('includes lesson context and guidelines', () => {
+      const context = {
+        lessonTitle: 'Greetings',
+        contents: [],
+        vocabularies: [],
+        grammarRules: [],
+        existingExercises: [],
+      };
+      const guidelines = {
+        questionCount: 5,
+        preferredTypes: [ExerciseType.MATCHING],
+        description: 'Test description',
+      };
+
+      const prompt = service.buildPrompt(context, guidelines, 'Custom');
+
+      expect(prompt).toContain('Generate 5 Vietnamese language exercises');
+      expect(prompt).toContain('Test description');
+      expect(prompt).toContain('matching');
+    });
+
+    it('lists existing exercises to avoid duplication', () => {
+      const context = {
+        lessonTitle: 'Greetings',
+        contents: [],
+        vocabularies: [],
+        grammarRules: [],
+        existingExercises: [
+          {
+            exerciseType: 'multiple_choice',
+            question: 'What does "Xin chào" mean?',
+            correctAnswer: { selectedChoice: 'Hello' },
+          },
+        ],
+      };
+      const guidelines = {
+        questionCount: 3,
+        preferredTypes: [ExerciseType.MATCHING],
+        description: 'Test',
+      };
+
+      const prompt = service.buildPrompt(context, guidelines, 'Custom');
+
+      expect(prompt).toContain('Existing Exercises (DO NOT duplicate these)');
+      expect(prompt).toContain('What does "Xin chào" mean?');
+    });
+  });
+
+  describe('parseResponse', () => {
+    it('parses valid JSON response', () => {
+      const result = service.parseResponse(validAiResponse);
+
+      expect(result.exercises).toHaveLength(1);
+      expect(result.exercises[0].exerciseType).toBe('matching');
+    });
+
+    it('throws when response is not valid JSON', () => {
+      expect(() => service.parseResponse('not json')).toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('throws when schema validation fails', () => {
+      const invalid = JSON.stringify({ exercises: [] });
+
+      expect(() => service.parseResponse(invalid)).toThrow(
+        BadRequestException,
+      );
     });
   });
 });

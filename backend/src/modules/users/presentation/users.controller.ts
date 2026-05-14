@@ -22,7 +22,7 @@ export class UsersController {
   @Get('me')
   @ApiOperation({
     summary: 'Lấy thông tin user hiện tại',
-    description: 'Lấy thông tin profile của user đang đăng nhập',
+    description: 'Lấy thông tin user đang đăng nhập',
   })
   @ApiResponse({
     status: 200,
@@ -47,7 +47,7 @@ export class UsersController {
   @Patch('me')
   @ApiOperation({
     summary: 'Cập nhật thông tin user',
-    description: 'Cập nhật thông tin profile của user đang đăng nhập',
+    description: 'Cập nhật thông tin user đang đăng nhập',
   })
   @ApiBody({
     schema: {
