@@ -102,10 +102,10 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
               const SizedBox(height: 16),
               Text(e.toString(), textAlign: TextAlign.center),
               const SizedBox(height: 16),
-              AppButton(
+                AppButton(
                 label: 'Thử lại',
                 variant: AppButtonVariant.primary,
-                onPressed: () => ref.invalidate(flashcardBookmarksProvider),
+                onPressed: () => ref.read(flashcardBookmarksProvider.notifier).refresh(),
               ),
             ],
           ),

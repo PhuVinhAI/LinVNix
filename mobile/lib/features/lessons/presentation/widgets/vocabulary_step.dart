@@ -22,51 +22,16 @@ class VocabularyStepWidget extends ConsumerStatefulWidget {
 
 class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
   final Set<String> _pendingToggleIds = {};
-  late final Set<String> _bookmarkedIds;
-
-  @override
-  void initState() {
-    super.initState();
-    _bookmarkedIds = widget.vocabularies
-        .where((v) => v.isBookmarked)
-        .map((v) => v.id)
-        .toSet();
-  }
 
   Future<void> _toggleBookmark(String vocabularyId) async {
     if (_pendingToggleIds.contains(vocabularyId)) return;
 
-    final wasBookmarked = _bookmarkedIds.contains(vocabularyId);
-    setState(() {
-      _pendingToggleIds.add(vocabularyId);
-      if (wasBookmarked) {
-        _bookmarkedIds.remove(vocabularyId);
-      } else {
-        _bookmarkedIds.add(vocabularyId);
-      }
-    });
+    setState(() => _pendingToggleIds.add(vocabularyId));
 
     try {
-      final repo = ref.read(bookmarkRepositoryProvider);
-      final isNowBookmarked = await repo.toggleBookmark(vocabularyId);
-      if (mounted) {
-        setState(() {
-          if (isNowBookmarked) {
-            _bookmarkedIds.add(vocabularyId);
-          } else {
-            _bookmarkedIds.remove(vocabularyId);
-          }
-        });
-      }
+      await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
     } catch (e) {
       if (mounted) {
-        setState(() {
-          if (wasBookmarked) {
-            _bookmarkedIds.add(vocabularyId);
-          } else {
-            _bookmarkedIds.remove(vocabularyId);
-          }
-        });
         AppToast.show(context, message: 'Error: $e', type: AppToastType.error);
       }
     } finally {
@@ -78,6 +43,9 @@ class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bookmarkIdsAsync = ref.watch(bookmarkIdsProvider);
+    final bookmarkIds = bookmarkIdsAsync.value;
+
     if (widget.vocabularies.isEmpty) {
       return const Center(child: Text('No vocabulary for this lesson'));
     }
@@ -89,7 +57,7 @@ class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
         final vocab = widget.vocabularies[index];
         return _VocabularyCard(
           vocabulary: vocab,
-          isBookmarked: _bookmarkedIds.contains(vocab.id),
+          isBookmarked: bookmarkIds?.contains(vocab.id) ?? vocab.isBookmarked,
           isPending: _pendingToggleIds.contains(vocab.id),
           onToggle: _toggleBookmark,
         );

@@ -53,4 +53,8 @@ abstract class CachedRepository<T> extends AsyncNotifier<T> {
   void forceExpire() {
     _lastFetchedAt = null;
   }
+
+  void refresh() {
+    ref.invalidateSelf();
+  }
 }

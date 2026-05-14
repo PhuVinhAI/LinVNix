@@ -59,73 +59,7 @@ void main() {
       expect(result.totalItems, 1);
     });
 
-    test('toggleBookmark removes item when unbookmarked', () async {
-      when(() => mockDio.get<Map<String, dynamic>>(
-            '/vocabularies/bookmarks',
-            queryParameters: any(named: 'queryParameters'),
-          )).thenAnswer(
-        (_) async => Response(
-          requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
-          statusCode: 200,
-          data: {
-            'data': [
-              {
-                'bookmarkedAt': '2026-01-01T00:00:00.000Z',
-                'vocabulary': {
-                  'id': 'v1',
-                  'word': 'con mèo',
-                  'translation': 'cat',
-                  'partOfSpeech': 'NOUN',
-                },
-              },
-              {
-                'bookmarkedAt': '2026-01-02T00:00:00.000Z',
-                'vocabulary': {
-                  'id': 'v2',
-                  'word': 'con chó',
-                  'translation': 'dog',
-                  'partOfSpeech': 'NOUN',
-                },
-              },
-            ],
-            'meta': {
-              'total': 2,
-              'page': 1,
-              'limit': 20,
-              'totalPages': 1,
-            },
-          },
-        ),
-      );
-
-      when(() => mockDio.post<Map<String, dynamic>>(
-            '/vocabularies/v1/bookmark',
-          )).thenAnswer(
-        (_) async => Response(
-          requestOptions: RequestOptions(path: '/vocabularies/v1/bookmark'),
-          statusCode: 200,
-          data: {'isBookmarked': false},
-        ),
-      );
-
-      final container = ProviderContainer(
-        overrides: [
-          dioProvider.overrideWithValue(mockDio),
-        ],
-      );
-
-      await container.read(bookmarksProvider.future);
-      final isBookmarked =
-          await container.read(bookmarksProvider.notifier).toggleBookmark('v1');
-      expect(isBookmarked, false);
-
-      final updated = container.read(bookmarksProvider).value;
-      expect(updated!.items, hasLength(1));
-      expect(updated.items[0].vocabularyId, 'v2');
-      expect(updated.totalItems, 1);
-    });
-
-    test('toggleBookmark keeps item when bookmarked', () async {
+    test('toggleBookmark delegates to bookmarkIdsProvider', () async {
       when(() => mockDio.get<Map<String, dynamic>>(
             '/vocabularies/bookmarks',
             queryParameters: any(named: 'queryParameters'),
@@ -160,8 +94,8 @@ void main() {
           )).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: '/vocabularies/v1/bookmark'),
-          statusCode: 201,
-          data: {'isBookmarked': true},
+          statusCode: 200,
+          data: {'isBookmarked': false},
         ),
       );
 
@@ -172,12 +106,10 @@ void main() {
       );
 
       await container.read(bookmarksProvider.future);
-      final isBookmarked =
-          await container.read(bookmarksProvider.notifier).toggleBookmark('v1');
-      expect(isBookmarked, true);
+      await container.read(bookmarksProvider.notifier).toggleBookmark('v1');
 
-      final updated = container.read(bookmarksProvider).value;
-      expect(updated!.items, hasLength(1));
+      final updated = container.read(bookmarkIdsProvider).value;
+      expect(updated, isNot(contains('v1')));
     });
 
     test('refresh resets and reloads', () async {
