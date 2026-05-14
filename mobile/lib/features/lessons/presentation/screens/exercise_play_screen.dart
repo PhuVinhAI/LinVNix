@@ -39,7 +39,8 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   final Map<int, dynamic> _answers = {};
   final Map<int, ExerciseSubmissionResult> _results = {};
 
-  bool _initialized = false;
+  bool _initialResumeFlowScheduled = false;
+  bool _resumeGateDone = false;
   String? _resolvedSetId;
 
   LessonExercisesArgs get _args => LessonExercisesArgs(
@@ -48,35 +49,119 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         setId: widget.setId,
       );
 
-  void _loadCurrentAnswer() {
+  @override
+  void didUpdateWidget(covariant ExercisePlayScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.lessonId != widget.lessonId ||
+        oldWidget.tierValue != widget.tierValue ||
+        oldWidget.setId != widget.setId) {
+      _initialResumeFlowScheduled = false;
+      _resumeGateDone = false;
+      _exercises = [];
+      _currentIndex = 0;
+      _answers.clear();
+      _results.clear();
+      _currentAnswer = null;
+      _submitted = false;
+      _result = null;
+      _submitting = false;
+      _submitError = null;
+    }
+  }
+
+  /// Syncs `_currentAnswer`, `_submitted`, `_result` from `_answers` / `_results`.
+  /// Call only inside [setState].
+  void _applyLocalStateForCurrentQuestion() {
+    _currentAnswer = _answers[_currentIndex];
     if (_results.containsKey(_currentIndex)) {
       _result = _results[_currentIndex];
       _submitted = true;
+    } else {
+      _result = null;
+      _submitted = false;
     }
-    _currentAnswer = _answers[_currentIndex];
-    _submitted = _results.containsKey(_currentIndex);
   }
 
-  Future<void> _restoreSessionIfAny() async {
-    final setId = _resolvedSetId;
-    if (setId == null || _exercises.isEmpty) return;
+  void _applySessionFromHive(ExerciseSession session) {
+    if (!mounted) return;
+    setState(() {
+      _currentIndex = session.currentIndex.clamp(0, _exercises.length - 1);
+      _answers.clear();
+      _answers.addAll(session.answers);
+      _results.clear();
+      for (final entry in session.results.entries) {
+        _results[entry.key] = ExerciseSubmissionResult.fromJson(entry.value);
+      }
+      _applyLocalStateForCurrentQuestion();
+    });
+  }
 
-    final service = ref.read(exerciseSessionServiceProvider);
-    final session = await service.load(setId);
-    if (session == null) return;
+  Future<void> _runInitialResumeFlow() async {
+    try {
+      final setId = _resolvedSetId;
+      if (setId == null || _exercises.isEmpty) return;
 
-    if (mounted) {
-      setState(() {
-        _currentIndex = session.currentIndex.clamp(0, _exercises.length - 1);
-        _answers.clear();
-        _answers.addAll(session.answers);
-        _results.clear();
-        for (final entry in session.results.entries) {
-          _results[entry.key] = ExerciseSubmissionResult.fromJson(entry.value);
-        }
-      });
-      _loadCurrentAnswer();
+      final service = ref.read(exerciseSessionServiceProvider);
+      final session = await service.load(setId);
+      if (!mounted) return;
+
+      if (session == null) return;
+
+      final meaningful = session.currentIndex > 0 ||
+          session.results.isNotEmpty ||
+          session.answers.isNotEmpty;
+
+      if (!meaningful) return;
+
+      final choice = await AppDialog.show<bool>(
+        context,
+        barrierDismissible: false,
+        builder: (ctx) => AppDialog(
+          title: 'Resume exercise?',
+          content:
+              'You have unfinished progress at question ${session.currentIndex + 1} of ${_exercises.length}. Continue from there or start over?',
+          actions: [
+            AppDialogAction(
+              label: 'Start over',
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            AppDialogAction(
+              label: 'Continue',
+              isPrimary: true,
+              onPressed: () => Navigator.of(ctx).pop(true),
+            ),
+          ],
+        ),
+      );
+
+      if (!mounted) return;
+
+      if (choice == true) {
+        _applySessionFromHive(session);
+      } else if (choice == false) {
+        await service.delete(setId);
+        if (!mounted) return;
+        setState(() {
+          _currentIndex = 0;
+          _answers.clear();
+          _results.clear();
+          _submitError = null;
+          _applyLocalStateForCurrentQuestion();
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _resumeGateDone = true);
+      }
     }
+  }
+
+  Map<int, dynamic> _answersSnapshotForPersistence() {
+    final out = Map<int, dynamic>.from(_answers);
+    if (!_submitted && _currentAnswer != null) {
+      out[_currentIndex] = _currentAnswer;
+    }
+    return out;
   }
 
   Future<void> _saveSession() async {
@@ -89,14 +174,18 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       lessonId: widget.lessonId,
       tier: widget.tierValue,
       currentIndex: _currentIndex,
-      answers: Map<int, dynamic>.from(_answers),
+      answers: _answersSnapshotForPersistence(),
       results: _results.map(
         (k, v) => MapEntry<int, Map<String, dynamic>>(k, v.toJson()),
       ),
       exercises: _exercises.map((e) => e.toJson()).toList(),
     );
 
-    await service.save(session);
+    try {
+      await service.save(session);
+    } catch (_) {
+      // Hive / IO — avoid crashing the UI; a later save may succeed
+    }
   }
 
   Future<void> _deleteSession() async {
@@ -144,9 +233,11 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
       await _saveSession();
 
-      ref.read(dataChangeBusProvider.notifier).emit(
-        {'exercise', 'lesson-${widget.lessonId}'},
-      );
+      ref.read(dataChangeBusProvider.notifier).emit({
+        'exercise',
+        'exercise-set',
+        'lesson-${widget.lessonId}',
+      });
 
       setState(() {
         _result = result;
@@ -165,11 +256,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     if (_isLastQuestion) return;
     setState(() {
       _currentIndex++;
-      _submitted = false;
-      _result = null;
       _submitError = null;
+      _applyLocalStateForCurrentQuestion();
     });
-    _loadCurrentAnswer();
     await _saveSession();
   }
 
@@ -345,12 +434,21 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         final notifier = ref.read(lessonExercisesProvider(_args).notifier);
         _resolvedSetId = notifier.resolvedSetId ?? widget.setId;
 
-        if (!_initialized) {
-          _initialized = true;
-          _restoreSessionIfAny();
+        if (!_initialResumeFlowScheduled) {
+          _initialResumeFlowScheduled = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _runInitialResumeFlow();
+          });
         }
 
-        _loadCurrentAnswer();
+        if (!_resumeGateDone) {
+          return Scaffold(
+            appBar: AppAppBar(
+              title: Text(ExerciseTier.fromString(widget.tierValue).displayName),
+            ),
+            body: const Center(child: AppSpinner()),
+          );
+        }
 
         final exercise = _currentExercise!;
         final renderer = getRenderer(exercise.exerciseType);
@@ -358,7 +456,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
         return WillPopScope(
           onWillPop: () async {
-            await _deleteSession();
+            await _saveSession();
             return true;
           },
           child: Scaffold(

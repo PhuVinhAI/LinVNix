@@ -11,9 +11,18 @@ mixin DataChangeBusSubscriber<T> on AsyncNotifier<T> {
           next.tags.intersection(tags).isNotEmpty &&
           !identical(next, _lastHandled)) {
         _lastHandled = next;
+        _expireLocalCacheAfterBusEmit();
         ref.invalidateSelf();
       }
     });
+  }
+
+  /// [CachedRepository] / [CachedNotifierMixin] giữ TTL trong RAM; chỉ
+  /// [invalidateSelf] sẽ chạy lại [build] nhưng vẫn trả cache nếu TTL chưa hết.
+  void _expireLocalCacheAfterBusEmit() {
+    try {
+      (this as dynamic).forceExpire();
+    } catch (_) {}
   }
 }
 

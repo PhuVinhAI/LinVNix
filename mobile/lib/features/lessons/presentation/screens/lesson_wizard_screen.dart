@@ -21,15 +21,19 @@ class LessonWizardScreen extends ConsumerStatefulWidget {
 class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   PageController? _pageController;
   int _currentPage = 0;
-  bool _promptShown = false;
+  bool _initialProgressHandled = false;
+  bool _startExercisesDialogOpen = false;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    Future.microtask(() {
-      ref.read(lessonProgressProvider(widget.lessonId).notifier).startLesson();
-    });
+  }
+
+  static bool _isInProgress(Map<String, dynamic>? progress) {
+    if (progress == null) return false;
+    final s = progress['status']?.toString().toLowerCase();
+    return s == 'in_progress';
   }
 
   void _showResumeDialog() {
@@ -62,14 +66,14 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   }
 
   void _showExercisePrompt() {
-    if (_promptShown) return;
-    _promptShown = true;
+    if (_startExercisesDialogOpen) return;
+    _startExercisesDialogOpen = true;
 
     ref
         .read(lessonProgressProvider(widget.lessonId).notifier)
         .markContentReviewed();
 
-    AppDialog.show(
+    AppDialog.show<void>(
       context,
       barrierDismissible: false,
       builder: (ctx) => AppDialog(
@@ -94,12 +98,28 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
           ),
         ],
       ),
-    );
+    ).whenComplete(() {
+      if (mounted) {
+        setState(() => _startExercisesDialogOpen = false);
+      }
+    });
   }
 
   bool _canGoForwardFrom(int index, int stepCount) {
     if (index >= stepCount - 1) return false;
     return true;
+  }
+
+  @override
+  void didUpdateWidget(covariant LessonWizardScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.lessonId != widget.lessonId) {
+      _initialProgressHandled = false;
+      _startExercisesDialogOpen = false;
+      _currentPage = 0;
+      _pageController?.dispose();
+      _pageController = PageController();
+    }
   }
 
   @override
@@ -141,6 +161,31 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     final vocabs = vocabAsync.value ?? [];
     final progress = progressAsync.value;
 
+    if (!_initialProgressHandled && !progressAsync.isLoading) {
+      if (progressAsync.hasError) {
+        _initialProgressHandled = true;
+        Future.microtask(() => ref
+            .read(lessonProgressProvider(widget.lessonId).notifier)
+            .startLesson());
+      } else if (progressAsync.hasValue) {
+        _initialProgressHandled = true;
+        final hadExistingProgress = progress != null;
+        final showResume = hadExistingProgress && _isInProgress(progress);
+        Future.microtask(() async {
+          final notifier =
+              ref.read(lessonProgressProvider(widget.lessonId).notifier);
+          if (showResume) {
+            if (mounted) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) _showResumeDialog();
+              });
+            }
+          }
+          await notifier.startLesson();
+        });
+      }
+    }
+
     final steps = <_WizardStep>[];
 
     for (final content in lesson.contents) {
@@ -165,17 +210,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
         label: 'Grammar',
         grammarRules: lesson.grammarRules,
       ));
-    }
-
-    final isInProgress = progress != null &&
-        (progress['status'] == 'in_progress' ||
-            progress['status'] == 'IN_PROGRESS');
-
-    if (progressAsync.hasValue && isInProgress && !_promptShown) {
-      _promptShown = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _showResumeDialog();
-      });
     }
 
     if (steps.isEmpty) {
