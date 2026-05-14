@@ -214,6 +214,70 @@ final exerciseSetsProvider =
   (arg) => ExerciseSetsNotifier(arg),
 );
 
+class ModuleExerciseSetsNotifier extends CachedRepository<ModuleExerciseSummary>
+    with DataChangeBusSubscriber<ModuleExerciseSummary> {
+  ModuleExerciseSetsNotifier(this.moduleId);
+
+  final String moduleId;
+
+  @override
+  Duration get ttl => const Duration(minutes: 1);
+
+  @override
+  Future<ModuleExerciseSummary> fetchFromApi() async {
+    final repo = ref.read(lessonRepositoryProvider);
+    return repo.fetchModuleExerciseSets(moduleId);
+  }
+
+  @override
+  Future<ModuleExerciseSummary> build() async {
+    watchTags({'exercise-set', 'module-$moduleId'});
+    return super.build();
+  }
+
+  Future<ExerciseSetModel> createCustomSet(CustomSetConfig config,
+      {CancelToken? cancelToken}) async {
+    final repo = ref.read(lessonRepositoryProvider);
+    final set = await repo.createCustomSetForModule(moduleId, config,
+        cancelToken: cancelToken);
+    return set;
+  }
+
+  Future<void> generateSet(String setId,
+      {String? userPrompt, CancelToken? cancelToken}) async {
+    final repo = ref.read(lessonRepositoryProvider);
+    await repo.generateExercises(setId,
+        userPrompt: userPrompt, cancelToken: cancelToken);
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
+  }
+
+  Future<String> regenerateSet(String setId,
+      {String? userPrompt, CancelToken? cancelToken}) async {
+    final repo = ref.read(lessonRepositoryProvider);
+    final newSetId = await repo.regenerateExercises(setId,
+        userPrompt: userPrompt, cancelToken: cancelToken);
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
+    return newSetId;
+  }
+
+  Future<void> deleteSet(String setId) async {
+    final repo = ref.read(lessonRepositoryProvider);
+    await repo.deleteCustomExerciseSet(setId);
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
+  }
+
+  Future<void> resetSetProgress(String setId) async {
+    final repo = ref.read(lessonRepositoryProvider);
+    await repo.resetExerciseSetProgress(setId);
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
+  }
+}
+
+final moduleExerciseSetsProvider = AsyncNotifierProvider.family<
+    ModuleExerciseSetsNotifier, ModuleExerciseSummary, String>(
+  (arg) => ModuleExerciseSetsNotifier(arg),
+);
+
 final exerciseSessionServiceProvider = Provider<ExerciseSessionService>((ref) {
   throw UnimplementedError(
     'exerciseSessionServiceProvider must be overridden in main.dart',

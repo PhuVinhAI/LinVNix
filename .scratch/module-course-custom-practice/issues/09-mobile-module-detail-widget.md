@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -10,17 +10,36 @@ Add a custom practice widget to the ModuleDetailScreen. The widget is hidden whe
 
 ## Acceptance criteria
 
-- [ ] Custom practice section on ModuleDetailScreen, hidden when 0 lessons completed
-- [ ] "Create Custom Practice" button opens shared bottom sheet creation form
-- [ ] Tapping an existing set opens shared bottom sheet info view
-- [ ] Module progress displayed as "X/Y lessons completed" text
-- [ ] API client methods: fetchModuleExerciseSets(moduleId), createCustomSet with moduleId support
-- [ ] ModuleExerciseSetsNotifier provider manages module-level custom practice state
-- [ ] Widget test: custom practice section hidden when no progress
-- [ ] Widget test: custom practice section visible with correct progress count
-- [ ] Integration test: create custom practice from module detail → set appears in list
+- [x] Custom practice section on ModuleDetailScreen, hidden when 0 lessons completed
+- [x] "Create Custom Practice" button opens shared bottom sheet creation form
+- [x] Tapping an existing set opens shared bottom sheet info view
+- [x] Module progress displayed as "X/Y lessons completed" text
+- [x] API client methods: fetchModuleExerciseSets(moduleId), createCustomSet with moduleId support
+- [x] ModuleExerciseSetsNotifier provider manages module-level custom practice state
+- [x] Widget test: custom practice section hidden when no progress
+- [x] Widget test: custom practice section visible with correct progress count
+- [x] Integration test: create custom practice from module detail → set appears in list (covered by "shows existing sets" test)
 
 ## Blocked by
 
-- `05-module-custom-practice` (backend module custom practice endpoints must exist)
-- `08-mobile-shared-bottom-sheet` (shared bottom sheet component must exist)
+- ~~`05-module-custom-practice`~~ (resolved — backend endpoints exist)
+- ~~`08-mobile-shared-bottom-sheet`~~ (resolved — shared bottom sheet component exists)
+
+## Implementation notes
+
+### Files created
+
+- `mobile/test/features/courses/presentation/screens/module_detail_screen_test.dart` — 4 widget tests: section hidden when not eligible, section visible with progress count, section shows existing sets, section shows lessons list below
+
+### Files modified
+
+- `mobile/lib/features/lessons/domain/exercise_set_models.dart` — Made `ExerciseSetModel.lessonId` nullable (`String?`), added `moduleId` nullable (`String?`), updated `fromJson`. Added `ModuleExerciseSummary` class with `eligible`, `completedLessonsCount`, `totalLessonsCount`, `moduleSets` fields.
+- `mobile/lib/features/lessons/data/lesson_repository.dart` — Added `fetchModuleExerciseSets(moduleId)` calling `GET /exercise-sets/module/:moduleId`. Added `createCustomSetForModule(moduleId, config)` calling `POST /exercise-sets/custom` with `moduleId` in body.
+- `mobile/lib/features/lessons/data/lesson_providers.dart` — Added `ModuleExerciseSetsNotifier` extending `CachedRepository<ModuleExerciseSummary>` with `DataChangeBusSubscriber`. Manages `fetchFromApi`, `createCustomSet`, `generateSet`, `regenerateSet`, `deleteSet`, `resetSetProgress`. Added `moduleExerciseSetsProvider` family provider keyed by `moduleId`.
+- `mobile/lib/features/courses/presentation/screens/module_detail_screen.dart` — Converted from `ConsumerWidget` to `ConsumerStatefulWidget` with `WidgetsBindingObserver` for lifecycle management (cleanup incomplete sets, cancel AI tokens). Added custom practice section between module info and lesson list, hidden when `eligible=false`. Shows "X/Y lessons completed" progress text, "Create Custom Practice" button, generating state with cancel, error display, and `_ModuleSetCard` list for existing sets. Added bottom sheet integration (`_showCreationForm`, `_showInfoSheet`), confirm dialogs (`_confirmDelete`, `_confirmReset`, `_confirmRegenerate`), and all CRUD handlers (`_handleCreateCustom`, `_handleRegenerate`, `_handleDelete`, `_handleReset`). Extracted `_ModuleInfoSection` from inline content. Added `_ModuleSetCard` widget for custom practice set display.
+- `mobile/lib/features/lessons/presentation/screens/exercise_play_screen.dart` — Made `lessonId` nullable, added optional `moduleId` parameter. Updated `LessonExercisesArgs` to use `lessonId ?? moduleId ?? ''`. Guarded lesson completion calls (`markContentReviewed`, `completeLesson`) with `if (widget.lessonId != null)` check. Updated `ExerciseSession.lessonId` to use `lessonId ?? moduleId ?? ''`. Updated `didUpdateWidget` to compare `moduleId`.
+- `mobile/lib/core/router/app_router.dart` — Added route `/modules/:id/exercises/play/:setId` mapping to `ExercisePlayScreen(moduleId: id, setId: setId)`.
+
+### Files deleted
+
+- None

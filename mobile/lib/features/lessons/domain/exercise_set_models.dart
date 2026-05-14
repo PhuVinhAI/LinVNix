@@ -58,8 +58,9 @@ class CustomSetConfig {
 class ExerciseSetModel {
   const ExerciseSetModel({
     required this.id,
-    required this.lessonId,
+    this.lessonId,
     required this.title,
+    this.moduleId,
     this.description,
     this.userPrompt,
     this.isCustom = false,
@@ -71,8 +72,9 @@ class ExerciseSetModel {
   factory ExerciseSetModel.fromJson(Map<String, dynamic> json) {
     return ExerciseSetModel(
       id: json['id'] as String,
-      lessonId: json['lessonId'] as String,
+      lessonId: json['lessonId'] as String?,
       title: json['title'] as String,
+      moduleId: json['moduleId'] as String?,
       description: json['description'] as String?,
       userPrompt: json['userPrompt'] as String?,
       isCustom: json['isCustom'] as bool? ?? false,
@@ -86,8 +88,9 @@ class ExerciseSetModel {
   }
 
   final String id;
-  final String lessonId;
+  final String? lessonId;
   final String title;
+  final String? moduleId;
   final String? description;
   final String? userPrompt;
   final bool isCustom;
@@ -165,6 +168,33 @@ class LessonExerciseSummary {
 
   List<SetProgress> get customSets =>
       sets.where((s) => s.isCustom).toList();
+}
+
+class ModuleExerciseSummary {
+  const ModuleExerciseSummary({
+    required this.eligible,
+    required this.completedLessonsCount,
+    required this.totalLessonsCount,
+    required this.moduleSets,
+  });
+
+  factory ModuleExerciseSummary.fromJson(Map<String, dynamic> json) {
+    return ModuleExerciseSummary(
+      eligible: json['eligible'] as bool? ?? false,
+      completedLessonsCount:
+          (json['completedLessonsCount'] as num?)?.toInt() ?? 0,
+      totalLessonsCount: (json['totalLessonsCount'] as num?)?.toInt() ?? 0,
+      moduleSets: (json['moduleSets'] as List<dynamic>?)
+              ?.map((e) => SetProgress.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
+  }
+
+  final bool eligible;
+  final int completedLessonsCount;
+  final int totalLessonsCount;
+  final List<SetProgress> moduleSets;
 }
 
 class SetProgressDetail {
