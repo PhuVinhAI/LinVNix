@@ -21,7 +21,7 @@ class ContinueCard extends ConsumerWidget {
       child: continueAsync.when(
         loading: () => const _ShimmerCard(),
         error: (error, _) => _ErrorCard(
-          onRetry: () => ref.invalidate(continueLearningProvider),
+          onRetry: () => ref.read(continueLearningProvider.notifier).refresh(),
         ),
         data: (continueLearning) {
           if (continueLearning == null) {

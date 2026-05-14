@@ -7,7 +7,6 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
-import '../../../profile/data/profile_providers.dart';
 
 class EmailVerificationScreen extends ConsumerStatefulWidget {
   const EmailVerificationScreen({super.key, this.email});
@@ -63,9 +62,7 @@ class _EmailVerificationScreenState
         refreshToken: response.refreshToken,
       );
 
-      ref.invalidate(userProfileProvider);
-
-      ref.read(authStateProvider.notifier).setAuthenticated(true);
+      ref.read(authStateProvider.notifier).notifyAuthenticated(true);
       setState(() => _isVerified = true);
     } on AppException catch (e) {
       setState(() => _errorMessage = e.message);

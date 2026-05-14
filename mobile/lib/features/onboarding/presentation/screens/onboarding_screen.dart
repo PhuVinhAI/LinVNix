@@ -5,7 +5,6 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
-import '../../../profile/data/profile_providers.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -87,8 +86,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await prefs.setOnboardingCompleted();
 
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
-
-      ref.invalidate(userProfileProvider);
 
       if (mounted) {
         context.go('/');

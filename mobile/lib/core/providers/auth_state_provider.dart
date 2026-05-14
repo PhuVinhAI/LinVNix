@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../sync/sync.dart';
 import 'providers.dart';
-import '../../features/profile/data/profile_providers.dart';
 
 class AuthState {
   const AuthState({
@@ -64,6 +64,13 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isAuthenticated: value);
   }
 
+  void notifyAuthenticated(bool authenticated) {
+    state = state.copyWith(isAuthenticated: authenticated);
+    if (authenticated) {
+      ref.read(dataChangeBusProvider.notifier).emit({'auth'});
+    }
+  }
+
   Future<void> logout() async {
     final storage = ref.read(secureStorageProvider);
     final refreshToken = await storage.getRefreshToken();
@@ -83,7 +90,7 @@ class AuthNotifier extends Notifier<AuthState> {
     } catch (_) {}
 
     ref.read(onboardingCompletedProvider.notifier).reset();
-    ref.invalidate(userProfileProvider);
+    ref.read(dataChangeBusProvider.notifier).emit({'auth'});
 
     state = state.copyWith(isAuthenticated: false);
   }

@@ -25,10 +25,25 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepository(ref.watch(dioProvider));
 });
 
-final preferencesProvider = FutureProvider<PreferencesService>((ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  return PreferencesService(prefs);
-});
+class PreferencesNotifier extends AsyncNotifier<PreferencesService> {
+  @override
+  Future<PreferencesService> build() async {
+    final prefs = await SharedPreferences.getInstance();
+    return PreferencesService(prefs);
+  }
+}
+
+class PreloadedPreferencesNotifier extends PreferencesNotifier {
+  PreloadedPreferencesNotifier(this._value);
+  final PreferencesService _value;
+
+  @override
+  Future<PreferencesService> build() async => _value;
+}
+
+final preferencesProvider = AsyncNotifierProvider<PreferencesNotifier, PreferencesService>(
+  PreferencesNotifier.new,
+);
 
 final onboardingCompletedProvider = NotifierProvider<OnboardingCompletedNotifier, bool>(
   OnboardingCompletedNotifier.new,

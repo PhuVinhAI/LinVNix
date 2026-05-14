@@ -6,7 +6,6 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
-import '../../../profile/data/profile_providers.dart';
 import '../widgets/google_sign_in_button.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -48,15 +47,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         refreshToken: response.refreshToken,
       );
 
-      ref.invalidate(userProfileProvider);
-
       if (response.user.onboardingCompleted) {
         ref.read(onboardingCompletedProvider.notifier).markCompleted();
       } else {
         ref.read(onboardingCompletedProvider.notifier).reset();
       }
 
-      ref.read(authStateProvider.notifier).setAuthenticated(true);
+      ref.read(authStateProvider.notifier).notifyAuthenticated(true);
     } on EmailNotVerifiedException catch (e) {
       if (mounted) {
         context.push('/verify-email?email=${Uri.encodeComponent(e.email)}');
@@ -87,15 +84,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         refreshToken: response.refreshToken,
       );
 
-      ref.invalidate(userProfileProvider);
-
       if (response.user.onboardingCompleted) {
         ref.read(onboardingCompletedProvider.notifier).markCompleted();
       } else {
         ref.read(onboardingCompletedProvider.notifier).reset();
       }
 
-      ref.read(authStateProvider.notifier).setAuthenticated(true);
+      ref.read(authStateProvider.notifier).notifyAuthenticated(true);
     } on AppException catch (e) {
       if (mounted) {
         AppToast.show(context, message: e.message, type: AppToastType.error);

@@ -30,7 +30,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+            preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(prefsService)),
           ],
           child: const LinVNixApp(),
         ),
@@ -54,7 +54,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+            preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(prefsService)),
             authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
           ],
           child: const LinVNixApp(),
@@ -70,7 +70,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+            preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(prefsService)),
             authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
           ],
           child: const LinVNixApp(),
@@ -110,7 +110,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+            preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(prefsService)),
             authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
           ],
           child: const LinVNixApp(),

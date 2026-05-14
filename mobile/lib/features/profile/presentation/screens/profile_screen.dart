@@ -28,7 +28,12 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: profileAsync.when(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await ref.read(userProfileProvider.notifier).refresh();
+          await ref.read(exerciseStatsProvider.notifier).refresh();
+        },
+        child: profileAsync.when(
           loading: () => const Center(child: AppSpinner(size: 20)),
           error: (error, stack) => Center(
             child: Padding(
@@ -42,7 +47,7 @@ class ProfileScreen extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
                   const SizedBox(height: 8),
                   AppButton(
-                    onPressed: () => ref.invalidate(userProfileProvider),
+                    onPressed: () => ref.read(userProfileProvider.notifier).refresh(),
                     icon: const Icon(Icons.refresh),
                     label: 'Retry',
                     variant: AppButtonVariant.primary,
@@ -74,6 +79,7 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.lg),
             ],
           ),
+        ),
       ),
     );
   }

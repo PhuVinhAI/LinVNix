@@ -25,7 +25,7 @@ void main() {
     return ProviderScope(
       overrides: [
         userRepositoryProvider.overrideWithValue(mockUserRepo),
-        preferencesProvider.overrideWithValue(AsyncData(prefsService)),
+        preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(prefsService)),
       ],
       child: const MaterialApp(
         home: OnboardingScreen(),
