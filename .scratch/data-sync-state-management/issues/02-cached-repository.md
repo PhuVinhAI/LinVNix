@@ -1,4 +1,4 @@
-Status: `ready-for-agent`
+Status: `completed`
 
 ## What to build
 
@@ -29,19 +29,51 @@ Create the abstract `CachedRepository<T>` — a generic base class that encapsul
 
 ## Acceptance criteria
 
-- [ ] Abstract `CachedRepository<T>` class with configurable TTL per entity
-- [ ] `fetchFromApi()` abstract method for entity-specific implementation
-- [ ] `build()` method with TTL check and cache-first logic
-- [ ] `mutate()` method implementing optimistic write → API → reconcile/revert pattern
-- [ ] `mutate()` emits DataChangeBus event only after API success (not on optimistic write)
-- [ ] `mutate()` restores previous state snapshot on API failure
-- [ ] Unit test: fresh provider → always fetches from API
-- [ ] Unit test: data within TTL → returns cached, no API call
-- [ ] Unit test: data past TTL → refetches from API
-- [ ] Unit test: optimistic write → state updates immediately
-- [ ] Unit test: API success → state reconciled with response
-- [ ] Unit test: API failure → state reverted to snapshot, error available
+- [x] Abstract `CachedRepository<T>` class with configurable TTL per entity
+- [x] `fetchFromApi()` abstract method for entity-specific implementation
+- [x] `build()` method with TTL check and cache-first logic
+- [x] `mutate()` method implementing optimistic write → API → reconcile/revert pattern
+- [x] `mutate()` emits DataChangeBus event only after API success (not on optimistic write)
+- [x] `mutate()` restores previous state snapshot on API failure
+- [x] Unit test: fresh provider → always fetches from API
+- [x] Unit test: data within TTL → returns cached, no API call
+- [x] Unit test: data past TTL → refetches from API
+- [x] Unit test: optimistic write → state updates immediately
+- [x] Unit test: API success → state reconciled with response
+- [x] Unit test: API failure → state reverted to snapshot, error available
 
 ## Blocked by
 
 - Issue 01 (DataChangeBus + Event Infrastructure) — `mutate()` needs DataChangeBus.emit()
+
+## Implementation notes
+
+### Files created
+
+- `mobile/lib/core/sync/cached_repository.dart` — Abstract class `CachedRepository<T>` extends `AsyncNotifier<T>`. Cung cấp:
+  - `Duration get ttl` (abstract) cho subclass định nghĩa.
+  - `Future<T> fetchFromApi()` (abstract) cho entity-specific API call.
+  - `Future<T> build()` — cache-first logic: trả `_cachedData` nếu còn trong TTL, ngược lại gọi `fetchFromApi()` và lưu cache + timestamp.
+  - `Future<void> mutate({required T optimisticData, required Future<T> Function() apiCall, required Set<String> emitTags})` — lưu snapshot, optimistic update state, gọi API, reconcile + emit DataChangeBus nếu success, revert snapshot nếu failure.
+  - `void forceExpire()` — helper để test invalidate TTL.
+- `mobile/test/core/sync/cached_repository_test.dart` — 6 unit tests cover:
+  - Fresh provider luôn gọi `fetchFromApi()`
+  - Data trong TTL trả cached, không gọi API
+  - Data quá TTL refetch từ API
+  - Optimistic write cập nhật state ngay lập tức
+  - API success → state reconcile + emit DataChangeBus event
+  - API failure → state revert về snapshot, error rethrow cho caller
+
+### Files modified
+
+- `mobile/lib/core/sync/sync.dart` — Thêm export `cached_repository.dart`.
+
+### Files deleted
+
+- Không có file nào bị xóa.
+
+### Pipeline notes
+
+- `flutter analyze` pass với 0 lỗi từ code mới.
+- `flutter test test/core/sync/` pass 14/14 (8 tests từ issue 01 + 6 tests mới).
+- Không sinh thêm file `.g.dart` hay `.freezed.dart` vì `CachedRepository` là abstract class thuần, không dùng code generation.
