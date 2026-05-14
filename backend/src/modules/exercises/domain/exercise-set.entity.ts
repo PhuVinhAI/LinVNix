@@ -63,6 +63,9 @@ export class ExerciseSet extends BaseEntity {
   @Column({ name: 'generation_status', type: 'varchar', length: 20, nullable: true })
   generationStatus?: 'generating' | 'ready' | 'failed' | null;
 
+  @Column({ name: 'replaces_set_id', nullable: true })
+  replacesSetId?: string;
+
   @OneToMany('Exercise', 'exerciseSet')
   exercises: any[];
 }
