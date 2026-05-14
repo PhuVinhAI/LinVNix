@@ -43,6 +43,13 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   }
 
   @override
+  void deactivate() {
+    _aiCancelToken?.cancel();
+    _cleanupIncompleteSet();
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _aiCancelToken?.cancel();
@@ -53,10 +60,14 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   void _cleanupIncompleteSet() {
     final repo = ref.read(lessonRepositoryProvider);
     if (_creatingSetId != null) {
-      repo.deleteCustomExerciseSet(_creatingSetId!).catchError((_) {});
+      final id = _creatingSetId!;
+      _creatingSetId = null;
+      repo.deleteCustomExerciseSet(id).catchError((_) {});
     }
     if (_regeneratingNewSetId != null) {
-      repo.deleteCustomExerciseSet(_regeneratingNewSetId!).catchError((_) {});
+      final id = _regeneratingNewSetId!;
+      _regeneratingNewSetId = null;
+      repo.deleteCustomExerciseSet(id).catchError((_) {});
     }
   }
 
