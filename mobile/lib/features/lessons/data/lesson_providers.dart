@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/sync/sync.dart';
 import '../../../core/providers/providers.dart';
 import '../data/lesson_repository.dart';
+import '../data/exercise_session_service.dart';
 import '../domain/lesson_models.dart';
 import '../domain/exercise_models.dart';
 import '../domain/exercise_set_models.dart';
@@ -128,6 +129,7 @@ class LessonExercisesNotifier extends CachedRepository<List<Exercise>>
   LessonExercisesNotifier(this.args);
 
   final LessonExercisesArgs args;
+  String? resolvedSetId;
 
   @override
   Duration get ttl => Duration.zero;
@@ -137,6 +139,7 @@ class LessonExercisesNotifier extends CachedRepository<List<Exercise>>
     final repo = ref.read(lessonRepositoryProvider);
     final setId = args.setId;
     if (setId != null) {
+      resolvedSetId = setId;
       return repo.getExercisesBySet(setId);
     }
     final tierSummary = await repo.getExerciseSetsByLesson(args.lessonId);
@@ -145,6 +148,7 @@ class LessonExercisesNotifier extends CachedRepository<List<Exercise>>
     if (progress == null || progress.setId.isEmpty) {
       throw Exception('No exercises found for this tier');
     }
+    resolvedSetId = progress.setId;
     return repo.getExercisesBySet(progress.setId);
   }
 
@@ -239,3 +243,9 @@ final moduleTierSummariesProvider = AsyncNotifierProvider.family<
     ModuleTierSummariesNotifier, Map<String, TierSummary>, String>(
   (arg) => ModuleTierSummariesNotifier(arg),
 );
+
+final exerciseSessionServiceProvider = Provider<ExerciseSessionService>((ref) {
+  throw UnimplementedError(
+    'exerciseSessionServiceProvider must be overridden in main.dart',
+  );
+});

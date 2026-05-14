@@ -71,6 +71,20 @@ class Exercise {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'exerciseType': exerciseType.value,
+      'question': question,
+      'questionAudioUrl': questionAudioUrl,
+      'options': options.toJson(),
+      'correctAnswer': correctAnswer.toJson(),
+      'explanation': explanation,
+      'orderIndex': orderIndex,
+      'difficultyLevel': difficultyLevel,
+    };
+  }
+
   final String id;
   final ExerciseType exerciseType;
   final String question;
@@ -102,6 +116,8 @@ sealed class ExerciseOptions {
       ExerciseType.listening => ListeningOptions.fromJson(json),
     };
   }
+
+  Map<String, dynamic> toJson();
 }
 
 class MultipleChoiceOptions extends ExerciseOptions {
@@ -115,6 +131,9 @@ class MultipleChoiceOptions extends ExerciseOptions {
     );
   }
   final List<String> choices;
+
+  @override
+  Map<String, dynamic> toJson() => {'choices': choices};
 }
 
 class FillBlankOptions extends ExerciseOptions {
@@ -130,6 +149,12 @@ class FillBlankOptions extends ExerciseOptions {
   }
   final int blanks;
   final List<List<String>>? acceptedAnswers;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'blanks': blanks,
+        'acceptedAnswers': acceptedAnswers,
+      };
 }
 
 class MatchingOptions extends ExerciseOptions {
@@ -143,6 +168,11 @@ class MatchingOptions extends ExerciseOptions {
     );
   }
   final List<MatchPair> pairs;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'pairs': pairs.map((p) => {'left': p.left, 'right': p.right}).toList(),
+      };
 }
 
 class OrderingOptions extends ExerciseOptions {
@@ -156,6 +186,9 @@ class OrderingOptions extends ExerciseOptions {
     );
   }
   final List<String> items;
+
+  @override
+  Map<String, dynamic> toJson() => {'items': items};
 }
 
 class TranslationOptions extends ExerciseOptions {
@@ -176,6 +209,13 @@ class TranslationOptions extends ExerciseOptions {
   final String sourceLanguage;
   final String targetLanguage;
   final List<String>? acceptedTranslations;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'sourceLanguage': sourceLanguage,
+        'targetLanguage': targetLanguage,
+        'acceptedTranslations': acceptedTranslations,
+      };
 }
 
 class ListeningOptions extends ExerciseOptions {
@@ -196,6 +236,13 @@ class ListeningOptions extends ExerciseOptions {
   final String audioUrl;
   final String transcriptType;
   final List<String>? keywords;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'audioUrl': audioUrl,
+        'transcriptType': transcriptType,
+        'keywords': keywords,
+      };
 }
 
 class MatchPair {
@@ -208,6 +255,8 @@ class MatchPair {
   }
   final String left;
   final String right;
+
+  Map<String, dynamic> toJson() => {'left': left, 'right': right};
 }
 
 @immutable
@@ -355,4 +404,16 @@ class ExerciseSubmissionResult {
   final int? timeTaken;
   final DateTime? attemptedAt;
   final String? nextTierUnlocked;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'isCorrect': isCorrect,
+      'score': score,
+      'userAnswer': userAnswer,
+      'timeTaken': timeTaken,
+      'attemptedAt': attemptedAt?.toIso8601String(),
+      'nextTierUnlocked': nextTierUnlocked,
+    };
+  }
 }
