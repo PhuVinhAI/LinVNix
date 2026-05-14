@@ -31,7 +31,7 @@ import { ExercisesModule } from '../exercises/exercises.module';
     ]),
     forwardRef(() => ContentsModule),
     GrammarModule,
-    ProgressModule,
+    forwardRef(() => ProgressModule),
     ExercisesModule,
   ],
   controllers: [CoursesController, ModulesController, LessonsController],
@@ -44,6 +44,12 @@ import { ExercisesModule } from '../exercises/exercises.module';
     ContentsRepository,
     GrammarRepository,
   ],
-  exports: [CoursesService, CourseContentService],
+  exports: [
+    CoursesService,
+    CourseContentService,
+    CoursesRepository,
+    ModulesRepository,
+    LessonsRepository,
+  ],
 })
 export class CoursesModule {}
