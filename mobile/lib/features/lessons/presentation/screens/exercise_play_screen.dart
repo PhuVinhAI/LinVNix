@@ -12,11 +12,13 @@ import '../../domain/exercise_renderer_registry.dart';
 class ExercisePlayScreen extends ConsumerStatefulWidget {
   const ExercisePlayScreen({
     super.key,
-    required this.lessonId,
+    this.lessonId,
+    this.moduleId,
     required this.setId,
   });
 
-  final String lessonId;
+  final String? lessonId;
+  final String? moduleId;
   final String setId;
 
   @override
@@ -40,7 +42,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   bool _resumeGateDone = false;
 
   LessonExercisesArgs get _args => LessonExercisesArgs(
-        lessonId: widget.lessonId,
+        lessonId: widget.lessonId ?? widget.moduleId ?? '',
         setId: widget.setId,
       );
 
@@ -48,6 +50,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   void didUpdateWidget(covariant ExercisePlayScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.lessonId != widget.lessonId ||
+        oldWidget.moduleId != widget.moduleId ||
         oldWidget.setId != widget.setId) {
       _initialResumeFlowScheduled = false;
       _resumeGateDone = false;
@@ -171,7 +174,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     final service = ref.read(exerciseSessionServiceProvider);
     final session = ExerciseSession(
       setId: setId,
-      lessonId: widget.lessonId,
+      lessonId: widget.lessonId ?? widget.moduleId ?? '',
       currentIndex: _currentIndex,
       answers: _answersSnapshotForPersistence(),
       results: _results.map(
@@ -331,11 +334,13 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
             onPressed: () async {
               Navigator.of(ctx).pop();
               await _deleteSession();
-              try {
-                final repo = ref.read(lessonRepositoryProvider);
-                await repo.markContentReviewed(widget.lessonId);
-                await repo.completeLesson(widget.lessonId);
-              } catch (_) {}
+              if (widget.lessonId != null) {
+                try {
+                  final repo = ref.read(lessonRepositoryProvider);
+                  await repo.markContentReviewed(widget.lessonId!);
+                  await repo.completeLesson(widget.lessonId!);
+                } catch (_) {}
+              }
               ref.read(dataChangeBusProvider.notifier).emit(
                 {'progress', 'exercise', 'exercise-set'},
               );

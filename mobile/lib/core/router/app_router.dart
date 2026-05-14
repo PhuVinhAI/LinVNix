@@ -159,6 +159,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/modules/:id/exercises/play/:setId',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final setId = state.pathParameters['setId']!;
+          return ExercisePlayScreen(moduleId: id, setId: setId);
+        },
+      ),
+      GoRoute(
         path: '/bookmarks',
         builder: (context, state) => const BookmarksScreen(),
       ),

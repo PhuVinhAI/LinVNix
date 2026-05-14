@@ -191,6 +191,40 @@ class LessonRepository {
     }
   }
 
+  Future<ModuleExerciseSummary> fetchModuleExerciseSets(
+      String moduleId) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+          '/exercise-sets/module/$moduleId');
+      return ModuleExerciseSummary.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<ExerciseSetModel> createCustomSetForModule(
+    String moduleId,
+    CustomSetConfig config, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/exercise-sets/custom',
+        data: {
+          'moduleId': moduleId,
+          'config': config.toJson(),
+          if (config.userPrompt != null) 'userPrompt': config.userPrompt,
+        },
+        cancelToken: cancelToken,
+      );
+      final data = response.data!;
+      final setMap = data['set'] as Map<String, dynamic>;
+      return ExerciseSetModel.fromJson(setMap);
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<String> regenerateExercises(
     String setId, {
     String? userPrompt,
