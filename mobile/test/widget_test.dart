@@ -41,11 +41,11 @@ void main() {
     });
   });
 
-  group('Authenticated with onboarding completed', () {
+  group('Authenticated', () {
     late PreferencesService prefsService;
 
     setUp(() async {
-      SharedPreferences.setMockInitialValues({'onboarding_completed': true});
+      SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
       prefsService = PreferencesService(prefs);
     });
@@ -63,7 +63,6 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(NavigationBar), findsOneWidget);
       expect(find.text('Courses'), findsWidgets);
-      expect(find.text('Profile'), findsWidgets);
     });
 
     testWidgets('Tapping tabs navigates to correct screens', (WidgetTester tester) async {
@@ -86,38 +85,6 @@ void main() {
       ));
       await tester.pumpAndSettle();
       expect(find.text('Courses coming soon'), findsOneWidget);
-
-      await tester.tap(find.descendant(
-        of: find.byType(NavigationBar),
-        matching: find.text('Profile'),
-      ));
-      await tester.pumpAndSettle();
-      expect(find.text('Profile settings coming soon'), findsOneWidget);
-    });
-  });
-
-  group('Authenticated without onboarding', () {
-    late PreferencesService prefsService;
-
-    setUp(() async {
-      SharedPreferences.setMockInitialValues({});
-      final prefs = await SharedPreferences.getInstance();
-      prefsService = PreferencesService(prefs);
-    });
-
-    testWidgets('App redirects to onboarding when authenticated but not completed',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(prefsService)),
-            authStateProvider.overrideWith(() => _AuthenticatedAuthNotifier()),
-          ],
-          child: const LinVNixApp(),
-        ),
-      );
-      await tester.pumpAndSettle();
-      expect(find.text("What's your current level?"), findsOneWidget);
     });
   });
 }

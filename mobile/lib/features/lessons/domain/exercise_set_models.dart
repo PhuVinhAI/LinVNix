@@ -1,31 +1,3 @@
-enum ExerciseTier {
-  basic('BASIC'),
-  easy('EASY'),
-  medium('MEDIUM'),
-  hard('HARD'),
-  expert('EXPERT');
-
-  const ExerciseTier(this.value);
-  final String value;
-
-  static ExerciseTier fromString(String value) {
-    return ExerciseTier.values.firstWhere(
-      (t) => t.value == value,
-      orElse: () => ExerciseTier.basic,
-    );
-  }
-
-  String get displayName {
-    return switch (this) {
-      ExerciseTier.basic => 'Basic',
-      ExerciseTier.easy => 'Easy',
-      ExerciseTier.medium => 'Medium',
-      ExerciseTier.hard => 'Hard',
-      ExerciseTier.expert => 'Expert',
-    };
-  }
-}
-
 enum FocusArea {
   vocabulary('vocabulary'),
   grammar('grammar'),
@@ -83,7 +55,6 @@ class ExerciseSetModel {
   const ExerciseSetModel({
     required this.id,
     required this.lessonId,
-    required this.tier,
     required this.title,
     this.isCustom = false,
     this.isAIGenerated = false,
@@ -95,9 +66,6 @@ class ExerciseSetModel {
     return ExerciseSetModel(
       id: json['id'] as String,
       lessonId: json['lessonId'] as String,
-      tier: json['tier'] != null
-          ? ExerciseTier.fromString(json['tier'] as String)
-          : null,
       title: json['title'] as String,
       isCustom: json['isCustom'] as bool? ?? false,
       isAIGenerated: json['isAIGenerated'] as bool? ?? false,
@@ -111,7 +79,6 @@ class ExerciseSetModel {
 
   final String id;
   final String lessonId;
-  final ExerciseTier? tier;
   final String title;
   final bool isCustom;
   final bool isAIGenerated;
@@ -119,9 +86,9 @@ class ExerciseSetModel {
   final CustomSetConfig? customConfig;
 }
 
-class TierProgress {
-  const TierProgress({
-    required this.tier,
+class SetProgress {
+  const SetProgress({
+    required this.setId,
     required this.title,
     this.isCustom = false,
     this.isAIGenerated = false,
@@ -130,14 +97,11 @@ class TierProgress {
     this.correct = 0,
     this.percentComplete = 0,
     this.percentCorrect = 0,
-    this.setId = '',
   });
 
-  factory TierProgress.fromJson(Map<String, dynamic> json) {
-    return TierProgress(
-      tier: json['tier'] != null
-          ? ExerciseTier.fromString(json['tier'] as String)
-          : null,
+  factory SetProgress.fromJson(Map<String, dynamic> json) {
+    return SetProgress(
+      setId: json['setId'] as String? ?? '',
       title: json['title'] as String,
       isCustom: json['isCustom'] as bool? ?? false,
       isAIGenerated: json['isAIGenerated'] as bool? ?? false,
@@ -146,11 +110,10 @@ class TierProgress {
       correct: (json['correct'] as num?)?.toInt() ?? 0,
       percentComplete: (json['percentComplete'] as num?)?.toDouble() ?? 0,
       percentCorrect: (json['percentCorrect'] as num?)?.toDouble() ?? 0,
-      setId: json['setId'] as String? ?? '',
     );
   }
 
-  final ExerciseTier? tier;
+  final String setId;
   final String title;
   final bool isCustom;
   final bool isAIGenerated;
@@ -159,53 +122,33 @@ class TierProgress {
   final int correct;
   final double percentComplete;
   final double percentCorrect;
-  final String setId;
 
   bool get isCompleted => percentComplete == 100 && percentCorrect >= 80;
   bool get isInProgress => attempted > 0 && !isCompleted;
   bool get isNotStarted => attempted == 0;
 }
 
-class LessonTierSummary {
-  const LessonTierSummary({
+class LessonExerciseSummary {
+  const LessonExerciseSummary({
     required this.sets,
-    required this.unlockedTiers,
-    this.customSets = const [],
-    this.customPracticeUnlocked = false,
   });
 
-  factory LessonTierSummary.fromJson(Map<String, dynamic> json) {
-    return LessonTierSummary(
+  factory LessonExerciseSummary.fromJson(Map<String, dynamic> json) {
+    return LessonExerciseSummary(
       sets: (json['sets'] as List<dynamic>?)
-              ?.map((e) => TierProgress.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => SetProgress.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      unlockedTiers: (json['unlockedTiers'] as List<dynamic>?)
-              ?.map((e) => ExerciseTier.fromString(e as String))
-              .toList() ??
-          const [ExerciseTier.basic],
-      customSets: (json['customSets'] as List<dynamic>?)
-              ?.map((e) => TierProgress.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
-      customPracticeUnlocked:
-          json['customPracticeUnlocked'] as bool? ?? false,
     );
   }
 
-  final List<TierProgress> sets;
-  final List<ExerciseTier> unlockedTiers;
-  final List<TierProgress> customSets;
-  final bool customPracticeUnlocked;
+  final List<SetProgress> sets;
 
-  bool isTierUnlocked(ExerciseTier tier) {
-    return unlockedTiers.contains(tier);
-  }
+  List<SetProgress> get defaultSets =>
+      sets.where((s) => !s.isCustom).toList();
 
-  TierProgress? progressForTier(ExerciseTier tier) {
-    final idx = sets.indexWhere((s) => s.tier == tier);
-    return idx >= 0 ? sets[idx] : null;
-  }
+  List<SetProgress> get customSets =>
+      sets.where((s) => s.isCustom).toList();
 }
 
 class SetProgressDetail {
@@ -215,7 +158,6 @@ class SetProgressDetail {
     this.correct = 0,
     this.percentCorrect = 0,
     this.percentComplete = 0,
-    this.nextTierUnlocked,
   });
 
   factory SetProgressDetail.fromJson(Map<String, dynamic> json) {
@@ -225,9 +167,6 @@ class SetProgressDetail {
       correct: (json['correct'] as num?)?.toInt() ?? 0,
       percentCorrect: (json['percentCorrect'] as num?)?.toDouble() ?? 0,
       percentComplete: (json['percentComplete'] as num?)?.toDouble() ?? 0,
-      nextTierUnlocked: json['nextTierUnlocked'] != null
-          ? ExerciseTier.fromString(json['nextTierUnlocked'] as String)
-          : null,
     );
   }
 
@@ -236,59 +175,4 @@ class SetProgressDetail {
   final int correct;
   final double percentCorrect;
   final double percentComplete;
-  final ExerciseTier? nextTierUnlocked;
-}
-
-enum TierStatus { completed, inProgress, locked }
-
-class TierSummaryItem {
-  const TierSummaryItem({
-    required this.tier,
-    required this.status,
-    required this.percentCorrect,
-  });
-
-  factory TierSummaryItem.fromJson(Map<String, dynamic> json) {
-    return TierSummaryItem(
-      tier: ExerciseTier.fromString(json['tier'] as String),
-      status: _parseStatus(json['status'] as String),
-      percentCorrect: (json['percentCorrect'] as num?)?.toDouble() ?? 0,
-    );
-  }
-
-  final ExerciseTier tier;
-  final TierStatus status;
-  final double percentCorrect;
-
-  static TierStatus _parseStatus(String value) {
-    return switch (value) {
-      'completed' => TierStatus.completed,
-      'in_progress' => TierStatus.inProgress,
-      _ => TierStatus.locked,
-    };
-  }
-}
-
-class TierSummary {
-  const TierSummary({
-    required this.currentTier,
-    required this.unlockedTiers,
-    required this.tiers,
-  });
-
-  factory TierSummary.fromJson(Map<String, dynamic> json) {
-    return TierSummary(
-      currentTier: ExerciseTier.fromString(json['currentTier'] as String),
-      unlockedTiers: (json['unlockedTiers'] as List<dynamic>)
-          .map((e) => ExerciseTier.fromString(e as String))
-          .toList(),
-      tiers: (json['tiers'] as List<dynamic>)
-          .map((e) => TierSummaryItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
-
-  final ExerciseTier currentTier;
-  final List<ExerciseTier> unlockedTiers;
-  final List<TierSummaryItem> tiers;
 }

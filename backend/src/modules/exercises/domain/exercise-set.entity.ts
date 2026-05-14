@@ -7,7 +7,7 @@ import {
   Unique,
 } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { ExerciseTier, ExerciseType } from '../../../common/enums';
+import { ExerciseType } from '../../../common/enums';
 
 export interface CustomSetConfig {
   questionCount: number;
@@ -16,7 +16,6 @@ export interface CustomSetConfig {
 }
 
 @Entity('exercise_sets')
-@Unique('UQ_lesson_tier_active', ['lessonId', 'tier', 'deletedAt'])
 export class ExerciseSet extends BaseEntity {
   @Column({ name: 'lesson_id' })
   lessonId: string;
@@ -24,9 +23,6 @@ export class ExerciseSet extends BaseEntity {
   @ManyToOne('Lesson', 'exerciseSets', { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'lesson_id' })
   lesson: any;
-
-  @Column({ type: 'enum', enum: ExerciseTier, nullable: true })
-  tier: ExerciseTier | null;
 
   @Column({ name: 'is_custom', default: false })
   isCustom: boolean;

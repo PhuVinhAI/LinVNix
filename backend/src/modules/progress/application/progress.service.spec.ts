@@ -1,12 +1,10 @@
 import { ProgressService } from './progress.service';
 import { ProgressRepository } from './progress.repository';
-import { TierProgressService } from '../../exercises/application/tier-progress.service';
-import { ProgressStatus, ExerciseTier } from '../../../common/enums';
+import { ProgressStatus } from '../../../common/enums';
 
 describe('ProgressService', () => {
   let service: ProgressService;
   let progressRepo: jest.Mocked<ProgressRepository>;
-  let tierProgressService: jest.Mocked<TierProgressService>;
 
   beforeEach(() => {
     progressRepo = {
@@ -15,11 +13,7 @@ describe('ProgressService', () => {
       update: jest.fn(),
     } as any;
 
-    tierProgressService = {
-      getLessonTierSummary: jest.fn(),
-    } as any;
-
-    service = new ProgressService(progressRepo, tierProgressService);
+    service = new ProgressService(progressRepo);
   });
 
   describe('markContentReviewed', () => {
@@ -108,7 +102,7 @@ describe('ProgressService', () => {
       ).rejects.toThrow('Content must be viewed before completing lesson');
     });
 
-    it('rejects completion when basic tier not completed', async () => {
+    it('allows completion when contentViewed=true', async () => {
       const progress = {
         id: 'p-1',
         userId: 'user-1',
@@ -117,45 +111,6 @@ describe('ProgressService', () => {
         contentViewed: true,
       };
       progressRepo.findByUserAndLesson.mockResolvedValue(progress as any);
-      tierProgressService.getLessonTierSummary.mockResolvedValue({
-        sets: [
-          {
-            setId: 'set-1',
-            tier: ExerciseTier.BASIC,
-            percentComplete: 50,
-            percentCorrect: 80,
-          },
-        ],
-        unlockedTiers: [ExerciseTier.BASIC],
-      } as any);
-
-      await expect(
-        service.completeLesson('user-1', 'lesson-1', 80),
-      ).rejects.toThrow(
-        'Basic tier must be completed before completing lesson',
-      );
-    });
-
-    it('allows completion when contentViewed=true and basic tier completed', async () => {
-      const progress = {
-        id: 'p-1',
-        userId: 'user-1',
-        lessonId: 'lesson-1',
-        status: ProgressStatus.IN_PROGRESS,
-        contentViewed: true,
-      };
-      progressRepo.findByUserAndLesson.mockResolvedValue(progress as any);
-      tierProgressService.getLessonTierSummary.mockResolvedValue({
-        sets: [
-          {
-            setId: 'set-1',
-            tier: ExerciseTier.BASIC,
-            percentComplete: 100,
-            percentCorrect: 90,
-          },
-        ],
-        unlockedTiers: [ExerciseTier.BASIC, ExerciseTier.EASY],
-      } as any);
       progressRepo.update.mockResolvedValue({
         ...progress,
         status: ProgressStatus.COMPLETED,
@@ -166,29 +121,27 @@ describe('ProgressService', () => {
 
       expect(result.status).toBe(ProgressStatus.COMPLETED);
     });
+  });
 
-    it('allows completion when lesson has no exercises (no basic tier set)', async () => {
-      const progress = {
-        id: 'p-1',
-        userId: 'user-1',
-        lessonId: 'lesson-1',
-        status: ProgressStatus.IN_PROGRESS,
+  describe('getLessonExerciseStatus', () => {
+    it('returns contentViewed status', async () => {
+      progressRepo.findByUserAndLesson.mockResolvedValue({
         contentViewed: true,
-      };
-      progressRepo.findByUserAndLesson.mockResolvedValue(progress as any);
-      tierProgressService.getLessonTierSummary.mockResolvedValue({
-        sets: [],
-        unlockedTiers: [ExerciseTier.BASIC],
-      } as any);
-      progressRepo.update.mockResolvedValue({
-        ...progress,
-        status: ProgressStatus.COMPLETED,
-        score: 80,
       } as any);
 
-      const result = await service.completeLesson('user-1', 'lesson-1', 80);
+      const result = await service.getLessonExerciseStatus('user-1', 'lesson-1');
 
-      expect(result.status).toBe(ProgressStatus.COMPLETED);
+      expect(result.contentViewed).toBe(true);
+      expect(result.hasIncompleteSet).toBe(false);
+      expect(result.incompleteSetId).toBeNull();
+    });
+
+    it('returns false when no progress exists', async () => {
+      progressRepo.findByUserAndLesson.mockResolvedValue(null);
+
+      const result = await service.getLessonExerciseStatus('user-1', 'lesson-1');
+
+      expect(result.contentViewed).toBe(false);
     });
   });
 });

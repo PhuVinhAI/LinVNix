@@ -53,7 +53,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
             isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
-              _navigateToExerciseTiers();
+              _navigateToExerciseHub();
             },
           ),
         ],
@@ -61,7 +61,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     );
   }
 
-  void _navigateToExerciseTiers() {
+  void _navigateToExerciseHub() {
     context.push('/lessons/${widget.lessonId}/exercises');
   }
 
@@ -93,7 +93,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
             isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
-              _navigateToExerciseTiers();
+              _navigateToExerciseHub();
             },
           ),
         ],

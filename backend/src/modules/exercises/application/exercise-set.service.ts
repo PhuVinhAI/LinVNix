@@ -4,11 +4,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
-import { TierProgressService } from './tier-progress.service';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
 import { ExerciseGenerationService } from './exercise-generation.service';
-import { ExerciseTier } from '../../../common/enums';
 import {
   ExerciseSet,
   type CustomSetConfig,
@@ -29,6 +27,22 @@ export interface WrongQuestion {
   userAnswer?: any;
 }
 
+export interface ExerciseSetProgress {
+  setId: string;
+  title: string;
+  isCustom: boolean;
+  isAIGenerated: boolean;
+  totalExercises: number;
+  attempted: number;
+  correct: number;
+  percentCorrect: number;
+  percentComplete: number;
+}
+
+export interface LessonExerciseSummary {
+  sets: ExerciseSetProgress[];
+}
+
 export interface ExerciseSetSummary {
   stats: {
     totalExercises: number;
@@ -38,21 +52,61 @@ export interface ExerciseSetSummary {
     percentComplete: number;
   };
   wrongQuestions: WrongQuestion[];
-  nextTierUnlocked: ExerciseTier | null;
 }
 
 @Injectable()
 export class ExerciseSetService {
   constructor(
     private readonly exerciseSetsRepository: ExerciseSetsRepository,
-    private readonly tierProgressService: TierProgressService,
     private readonly exercisesRepository: ExercisesRepository,
     private readonly userExerciseResultsRepository: UserExerciseResultsRepository,
     private readonly exerciseGenerationService: ExerciseGenerationService,
   ) {}
 
-  async findByLessonId(lessonId: string, userId: string) {
-    return this.tierProgressService.getLessonTierSummary(lessonId, userId);
+  async findByLessonId(
+    lessonId: string,
+    userId: string,
+  ): Promise<LessonExerciseSummary> {
+    const sets =
+      await this.exerciseSetsRepository.findActiveByLessonId(lessonId);
+    const progresses: ExerciseSetProgress[] = [];
+
+    for (const set of sets) {
+      const exercises = await this.exercisesRepository.findBySetId(set.id);
+      const exerciseIds = exercises.map((e) => e.id);
+      const totalExercises = exerciseIds.length;
+
+      let attempted = 0;
+      let correct = 0;
+
+      if (totalExercises > 0 && userId) {
+        const results =
+          await this.userExerciseResultsRepository.findByUserAndExerciseIds(
+            userId,
+            exerciseIds,
+          );
+        attempted = results.length;
+        correct = results.filter((r) => r.isCorrect).length;
+      }
+
+      const percentComplete =
+        totalExercises > 0 ? (attempted / totalExercises) * 100 : 0;
+      const percentCorrect = attempted > 0 ? (correct / attempted) * 100 : 0;
+
+      progresses.push({
+        setId: set.id,
+        title: set.title,
+        isCustom: set.isCustom,
+        isAIGenerated: set.isAIGenerated,
+        totalExercises,
+        attempted,
+        correct,
+        percentCorrect: Math.round(percentCorrect * 100) / 100,
+        percentComplete: Math.round(percentComplete * 100) / 100,
+      });
+    }
+
+    return { sets: progresses };
   }
 
   async getSetProgress(setId: string, userId: string) {
@@ -60,7 +114,35 @@ export class ExerciseSetService {
     if (!set) {
       throw new NotFoundException(`ExerciseSet with ID ${setId} not found`);
     }
-    return this.tierProgressService.getSetProgress(setId, userId);
+
+    const exercises = await this.exercisesRepository.findBySetId(setId);
+    const exerciseIds = exercises.map((e) => e.id);
+    const totalExercises = exerciseIds.length;
+
+    let attempted = 0;
+    let correct = 0;
+
+    if (totalExercises > 0 && userId) {
+      const results =
+        await this.userExerciseResultsRepository.findByUserAndExerciseIds(
+          userId,
+          exerciseIds,
+        );
+      attempted = results.length;
+      correct = results.filter((r) => r.isCorrect).length;
+    }
+
+    const percentComplete =
+      totalExercises > 0 ? (attempted / totalExercises) * 100 : 0;
+    const percentCorrect = attempted > 0 ? (correct / attempted) * 100 : 0;
+
+    return {
+      totalExercises,
+      attempted,
+      correct,
+      percentCorrect: Math.round(percentCorrect * 100) / 100,
+      percentComplete: Math.round(percentComplete * 100) / 100,
+    };
   }
 
   async findById(id: string) {
@@ -85,14 +167,6 @@ export class ExerciseSetService {
     return this.exerciseGenerationService.regenerate(setId, userId);
   }
 
-  async generateForTier(lessonId: string, tier: ExerciseTier, userId: string) {
-    return this.exerciseGenerationService.generateForTier(
-      lessonId,
-      tier,
-      userId,
-    );
-  }
-
   async createCustom(
     lessonId: string,
     config: CustomSetConfig,
@@ -102,20 +176,8 @@ export class ExerciseSetService {
       throw new BadRequestException('Invalid custom set config');
     }
 
-    const summary = await this.tierProgressService.getLessonTierSummary(
-      lessonId,
-      userId,
-    );
-
-    if (!summary.customPracticeUnlocked) {
-      throw new BadRequestException(
-        'Custom practice is locked. Complete basic tier first.',
-      );
-    }
-
     const set = await this.exerciseSetsRepository.create({
       lessonId,
-      tier: null,
       isCustom: true,
       customConfig: config,
       isAIGenerated: false,
@@ -192,10 +254,7 @@ export class ExerciseSetService {
       throw new NotFoundException(`ExerciseSet with ID ${setId} not found`);
     }
 
-    const progress = await this.tierProgressService.getSetProgress(
-      setId,
-      userId,
-    );
+    const progress = await this.getSetProgress(setId, userId);
 
     const exercises = await this.exercisesRepository.findBySetId(setId);
     const exerciseIds = exercises.map((e) => e.id);
@@ -232,7 +291,6 @@ export class ExerciseSetService {
         percentComplete: progress.percentComplete,
       },
       wrongQuestions,
-      nextTierUnlocked: progress.nextTierUnlocked,
     };
   }
 }

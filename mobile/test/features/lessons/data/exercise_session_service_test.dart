@@ -136,7 +136,6 @@ void main() {
       final session = ExerciseSession(
         setId: 'set-1',
         lessonId: 'lesson-1',
-        tier: 'BASIC',
         currentIndex: 2,
         answers: {0: 'answer0', 1: 'answer1'},
         results: {
@@ -155,7 +154,6 @@ void main() {
       expect(loaded, isNotNull);
       expect(loaded!.setId, 'set-1');
       expect(loaded.lessonId, 'lesson-1');
-      expect(loaded.tier, 'BASIC');
       expect(loaded.currentIndex, 2);
       expect(loaded.answers, {0: 'answer0', 1: 'answer1'});
       expect(loaded.results, {
@@ -170,7 +168,6 @@ void main() {
       final session = ExerciseSession(
         setId: 'set-2',
         lessonId: 'lesson-2',
-        tier: 'EASY',
         currentIndex: 0,
         answers: {},
         results: {},
@@ -188,7 +185,6 @@ void main() {
       final session = ExerciseSession(
         setId: 'set-3',
         lessonId: 'lesson-3',
-        tier: 'MEDIUM',
         currentIndex: 1,
         answers: {0: 'partial'},
         results: {
@@ -239,7 +235,6 @@ void main() {
       final session = ExerciseSession(
         setId: 'set-match',
         lessonId: 'lesson-1',
-        tier: 'BASIC',
         currentIndex: 0,
         answers: {
           0: [const MatchPair(left: 'A', right: '1')],
@@ -263,7 +258,6 @@ void main() {
       final session1 = ExerciseSession(
         setId: 'set-4',
         lessonId: 'lesson-4',
-        tier: 'HARD',
         currentIndex: 0,
         answers: {},
         results: {},
@@ -273,7 +267,6 @@ void main() {
       final session2 = ExerciseSession(
         setId: 'set-4',
         lessonId: 'lesson-4',
-        tier: 'HARD',
         currentIndex: 3,
         answers: {0: 'a', 1: 'b', 2: 'c'},
         results: {
@@ -297,7 +290,6 @@ void main() {
       final session = ExerciseSession(
         setId: 'set-5',
         lessonId: 'lesson-5',
-        tier: 'EXPERT',
         currentIndex: 0,
         answers: {},
         results: {},

@@ -6,7 +6,6 @@ class ExerciseSession {
   const ExerciseSession({
     required this.setId,
     required this.lessonId,
-    required this.tier,
     required this.currentIndex,
     required this.answers,
     required this.results,
@@ -34,7 +33,6 @@ class ExerciseSession {
     return ExerciseSession(
       setId: map['setId'] as String,
       lessonId: map['lessonId'] as String,
-      tier: map['tier'] as String,
       currentIndex: (map['currentIndex'] as num?)?.toInt() ?? 0,
       answers: ExerciseSessionCodec.decodeAnswers(answersRaw, exercises),
       results: resultsRaw?.map((k, v) => MapEntry<int, Map<String, dynamic>>(
@@ -54,7 +52,6 @@ class ExerciseSession {
 
   final String setId;
   final String lessonId;
-  final String tier;
   final int currentIndex;
   final Map<int, dynamic> answers;
   final Map<int, Map<String, dynamic>> results;
@@ -67,7 +64,6 @@ class ExerciseSession {
     final root = <String, dynamic>{
       'setId': setId,
       'lessonId': lessonId,
-      'tier': tier,
       'currentIndex': currentIndex,
       'answers': encodedAnswers,
       'results': results.map((k, v) => MapEntry<String, dynamic>(k.toString(), v)),
@@ -83,7 +79,6 @@ class ExerciseSession {
   ExerciseSession copyWith({
     String? setId,
     String? lessonId,
-    String? tier,
     int? currentIndex,
     Map<int, dynamic>? answers,
     Map<int, Map<String, dynamic>>? results,
@@ -94,7 +89,6 @@ class ExerciseSession {
     return ExerciseSession(
       setId: setId ?? this.setId,
       lessonId: lessonId ?? this.lessonId,
-      tier: tier ?? this.tier,
       currentIndex: currentIndex ?? this.currentIndex,
       answers: answers ?? this.answers,
       results: results ?? this.results,

@@ -19,7 +19,6 @@ export interface SubmitAnswerResult {
   userAnswer: any;
   timeTaken?: number;
   attemptedAt: Date;
-  nextTierUnlocked?: string;
 }
 
 @Injectable()

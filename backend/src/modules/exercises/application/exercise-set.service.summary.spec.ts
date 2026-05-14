@@ -1,14 +1,12 @@
 import { ExerciseSetService } from './exercise-set.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
-import { TierProgressService } from './tier-progress.service';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
-import { ExerciseTier } from '../../../common/enums';
+import { NotFoundException } from '@nestjs/common';
 
 describe('ExerciseSetService - Summary', () => {
   let service: ExerciseSetService;
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
-  let tierProgressService: jest.Mocked<TierProgressService>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let resultsRepo: jest.Mocked<UserExerciseResultsRepository>;
 
@@ -17,14 +15,8 @@ describe('ExerciseSetService - Summary', () => {
       findById: jest.fn(),
     } as any;
 
-    tierProgressService = {
-      getSetProgress: jest.fn(),
-      getLessonTierSummary: jest.fn(),
-    } as any;
-
     exercisesRepo = {
       findBySetId: jest.fn(),
-      findById: jest.fn(),
     } as any;
 
     resultsRepo = {
@@ -33,10 +25,9 @@ describe('ExerciseSetService - Summary', () => {
 
     service = new ExerciseSetService(
       exerciseSetsRepo,
-      tierProgressService,
       exercisesRepo,
       resultsRepo,
-      { generate: jest.fn(), generateForTier: jest.fn() } as any,
+      { generate: jest.fn(), regenerate: jest.fn(), generateCustom: jest.fn() } as any,
     );
   });
 
@@ -45,7 +36,6 @@ describe('ExerciseSetService - Summary', () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic',
       } as any);
 
@@ -84,15 +74,6 @@ describe('ExerciseSetService - Summary', () => {
       ];
       resultsRepo.findByUserAndExerciseIds.mockResolvedValue(results as any);
 
-      tierProgressService.getSetProgress.mockResolvedValue({
-        totalExercises: 3,
-        attempted: 3,
-        correct: 1,
-        percentCorrect: 33.33,
-        percentComplete: 100,
-        nextTierUnlocked: null,
-      });
-
       const summary = await service.getSummary('set-1', 'user-1');
 
       expect(summary.stats.totalExercises).toBe(3);
@@ -112,7 +93,6 @@ describe('ExerciseSetService - Summary', () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic',
       } as any);
 
@@ -142,64 +122,17 @@ describe('ExerciseSetService - Summary', () => {
       ];
       resultsRepo.findByUserAndExerciseIds.mockResolvedValue(results as any);
 
-      tierProgressService.getSetProgress.mockResolvedValue({
-        totalExercises: 2,
-        attempted: 2,
-        correct: 2,
-        percentCorrect: 100,
-        percentComplete: 100,
-        nextTierUnlocked: ExerciseTier.EASY,
-      });
-
       const summary = await service.getSummary('set-1', 'user-1');
 
       expect(summary.wrongQuestions).toHaveLength(0);
-      expect(summary.nextTierUnlocked).toBe(ExerciseTier.EASY);
-    });
-
-    it('includes nextTierUnlocked when unlock condition met', async () => {
-      exerciseSetsRepo.findById.mockResolvedValue({
-        id: 'set-1',
-        lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
-        title: 'Basic',
-      } as any);
-
-      const exercises = Array.from({ length: 10 }, (_, i) => ({
-        id: `ex-${i}`,
-        question: `Q${i}`,
-        exerciseType: 'MULTIPLE_CHOICE',
-        correctAnswer: { value: 'A' },
-        explanation: 'Exp',
-        orderIndex: i,
-      }));
-      exercisesRepo.findBySetId.mockResolvedValue(exercises as any);
-
-      const results = Array.from({ length: 10 }, (_, i) => ({
-        exerciseId: `ex-${i}`,
-        isCorrect: i < 8,
-      }));
-      resultsRepo.findByUserAndExerciseIds.mockResolvedValue(results as any);
-
-      tierProgressService.getSetProgress.mockResolvedValue({
-        totalExercises: 10,
-        attempted: 10,
-        correct: 8,
-        percentCorrect: 80,
-        percentComplete: 100,
-        nextTierUnlocked: ExerciseTier.EASY,
-      });
-
-      const summary = await service.getSummary('set-1', 'user-1');
-
-      expect(summary.nextTierUnlocked).toBe(ExerciseTier.EASY);
+      expect(summary.stats.percentComplete).toBe(100);
     });
 
     it('throws NotFoundException for unknown set', async () => {
       exerciseSetsRepo.findById.mockResolvedValue(null);
 
       await expect(service.getSummary('missing', 'user-1')).rejects.toThrow(
-        'ExerciseSet with ID missing not found',
+        NotFoundException,
       );
     });
   });

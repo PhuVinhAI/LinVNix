@@ -2,16 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { ExerciseSetService } from './exercise-set.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
-import { TierProgressService } from './tier-progress.service';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { UserExerciseResultsRepository } from './repositories/user-exercise-results.repository';
 import { ExerciseGenerationService } from './exercise-generation.service';
-import { ExerciseTier, ExerciseType } from '../../../common/enums';
+import { ExerciseType } from '../../../common/enums';
 
 describe('ExerciseSetService', () => {
   let service: ExerciseSetService;
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
-  let tierProgressService: jest.Mocked<TierProgressService>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let resultsRepo: jest.Mocked<UserExerciseResultsRepository>;
   let generationService: jest.Mocked<ExerciseGenerationService>;
@@ -22,11 +20,7 @@ describe('ExerciseSetService', () => {
       findByIdWithExercises: jest.fn(),
       findById: jest.fn(),
       softDelete: jest.fn(),
-    } as any;
-
-    tierProgressService = {
-      getLessonTierSummary: jest.fn(),
-      getSetProgress: jest.fn(),
+      findActiveByLessonId: jest.fn(),
     } as any;
 
     exercisesRepo = {
@@ -51,10 +45,6 @@ describe('ExerciseSetService', () => {
         {
           provide: ExerciseSetsRepository,
           useValue: exerciseSetsRepo,
-        },
-        {
-          provide: TierProgressService,
-          useValue: tierProgressService,
         },
         {
           provide: ExercisesRepository,
@@ -102,49 +92,56 @@ describe('ExerciseSetService', () => {
   });
 
   describe('findByLessonId', () => {
-    it('delegates to tierProgressService', async () => {
-      const mockSummary = {
-        sets: [],
-        unlockedTiers: ['BASIC'],
-      };
-      tierProgressService.getLessonTierSummary.mockResolvedValue(
-        mockSummary as any,
+    it('returns exercise sets with progress stats', async () => {
+      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([
+        { id: 'set-1', title: 'Basic', isCustom: false, isAIGenerated: false },
+        { id: 'set-2', title: 'Custom', isCustom: true, isAIGenerated: true },
+      ] as any);
+
+      exercisesRepo.findBySetId.mockImplementation(async (setId: string) => {
+        if (setId === 'set-1') return [{ id: 'ex-1' }, { id: 'ex-2' }] as any;
+        return [{ id: 'ex-3' }] as any;
+      });
+
+      resultsRepo.findByUserAndExerciseIds.mockImplementation(
+        async (_userId: string, exerciseIds: string[]) => {
+          return exerciseIds.map((id) => ({
+            exerciseId: id,
+            isCorrect: id === 'ex-1',
+          })) as any;
+        },
       );
 
       const result = await service.findByLessonId('lesson-1', 'user-1');
 
-      expect(result).toEqual(mockSummary);
-      expect(tierProgressService.getLessonTierSummary).toHaveBeenCalledWith(
-        'lesson-1',
-        'user-1',
-      );
+      expect(result.sets).toHaveLength(2);
+      expect(result.sets[0].totalExercises).toBe(2);
+      expect(result.sets[0].attempted).toBe(2);
+      expect(result.sets[0].correct).toBe(1);
+      expect(result.sets[0].percentComplete).toBe(100);
     });
   });
 
   describe('getSetProgress', () => {
-    it('delegates to tierProgressService when set exists', async () => {
+    it('returns progress when set exists', async () => {
       exerciseSetsRepo.findById.mockResolvedValue({
         id: 'set-1',
-        tier: ExerciseTier.BASIC,
       } as any);
-
-      const mockProgress = {
-        totalExercises: 10,
-        attempted: 10,
-        correct: 8,
-        percentCorrect: 80,
-        percentComplete: 100,
-        nextTierUnlocked: ExerciseTier.EASY,
-      };
-      tierProgressService.getSetProgress.mockResolvedValue(mockProgress);
+      exercisesRepo.findBySetId.mockResolvedValue([
+        { id: 'ex-1' },
+        { id: 'ex-2' },
+      ] as any);
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue([
+        { exerciseId: 'ex-1', isCorrect: true },
+      ] as any);
 
       const result = await service.getSetProgress('set-1', 'user-1');
 
-      expect(result).toEqual(mockProgress);
-      expect(tierProgressService.getSetProgress).toHaveBeenCalledWith(
-        'set-1',
-        'user-1',
-      );
+      expect(result.totalExercises).toBe(2);
+      expect(result.attempted).toBe(1);
+      expect(result.correct).toBe(1);
+      expect(result.percentComplete).toBe(50);
+      expect(result.percentCorrect).toBe(100);
     });
 
     it('throws NotFoundException when set not found', async () => {
@@ -160,7 +157,6 @@ describe('ExerciseSetService', () => {
     it('creates and returns exercise set', async () => {
       const data = {
         lessonId: 'lesson-1',
-        tier: ExerciseTier.BASIC,
         title: 'Basic Exercises',
       };
       const created = { id: 'set-1', ...data };
@@ -210,13 +206,7 @@ describe('ExerciseSetService', () => {
       focusArea: 'both' as const,
     };
 
-    it('creates custom set and generates exercises when unlocked', async () => {
-      tierProgressService.getLessonTierSummary.mockResolvedValue({
-        sets: [],
-        customSets: [],
-        unlockedTiers: [ExerciseTier.BASIC, ExerciseTier.EASY],
-        customPracticeUnlocked: true,
-      });
+    it('creates custom set and generates exercises', async () => {
       exerciseSetsRepo.create.mockResolvedValue({
         id: 'custom-set-1',
         lessonId: 'lesson-1',
@@ -236,7 +226,6 @@ describe('ExerciseSetService', () => {
       expect(exerciseSetsRepo.create).toHaveBeenCalledWith(
         expect.objectContaining({
           lessonId: 'lesson-1',
-          tier: null,
           isCustom: true,
           customConfig: validConfig,
           title: 'Custom Practice',
@@ -248,19 +237,6 @@ describe('ExerciseSetService', () => {
       );
       expect(result.set.id).toBe('custom-set-1');
       expect(result.exercises).toHaveLength(1);
-    });
-
-    it('throws when custom practice is locked', async () => {
-      tierProgressService.getLessonTierSummary.mockResolvedValue({
-        sets: [],
-        customSets: [],
-        unlockedTiers: [ExerciseTier.BASIC],
-        customPracticeUnlocked: false,
-      });
-
-      await expect(
-        service.createCustom('lesson-1', validConfig, 'user-1'),
-      ).rejects.toThrow(BadRequestException);
     });
 
     it('throws when config is invalid', async () => {
@@ -320,6 +296,97 @@ describe('ExerciseSetService', () => {
         BadRequestException,
       );
       expect(exercisesRepo.softDeleteBySetId).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getResumeInfo', () => {
+    it('returns canResume=true when partially completed', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([
+        { id: 'ex-1' },
+        { id: 'ex-2' },
+      ] as any);
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue([
+        { exerciseId: 'ex-1' },
+      ] as any);
+
+      const result = await service.getResumeInfo('set-1', 'user-1');
+
+      expect(result.canResume).toBe(true);
+      expect(result.attempted).toBe(1);
+      expect(result.totalExercises).toBe(2);
+    });
+
+    it('returns canResume=false when not started', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([
+        { id: 'ex-1' },
+      ] as any);
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue([] as any);
+
+      const result = await service.getResumeInfo('set-1', 'user-1');
+
+      expect(result.canResume).toBe(false);
+    });
+
+    it('returns canResume=false when fully completed', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([{ id: 'ex-1' }] as any);
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue([
+        { exerciseId: 'ex-1' },
+      ] as any);
+
+      const result = await service.getResumeInfo('set-1', 'user-1');
+
+      expect(result.canResume).toBe(false);
+    });
+  });
+
+  describe('resetProgress', () => {
+    it('deletes user results for set exercises', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([
+        { id: 'ex-1' },
+        { id: 'ex-2' },
+      ] as any);
+      resultsRepo.deleteByUserAndExerciseIds.mockResolvedValue(undefined);
+
+      await service.resetProgress('set-1', 'user-1');
+
+      expect(resultsRepo.deleteByUserAndExerciseIds).toHaveBeenCalledWith(
+        'user-1',
+        ['ex-1', 'ex-2'],
+      );
+    });
+
+    it('throws NotFoundException when set not found', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue(null);
+
+      await expect(service.resetProgress('missing', 'user-1')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('getSummary', () => {
+    it('returns stats and wrong questions', async () => {
+      exerciseSetsRepo.findById.mockResolvedValue({ id: 'set-1' } as any);
+      exercisesRepo.findBySetId.mockResolvedValue([
+        { id: 'ex-1', question: 'Q1', exerciseType: 'multiple_choice', correctAnswer: { selectedChoice: 'A' }, explanation: 'E1' },
+        { id: 'ex-2', question: 'Q2', exerciseType: 'matching', correctAnswer: { matches: [] }, explanation: 'E2' },
+      ] as any);
+      resultsRepo.findByUserAndExerciseIds.mockResolvedValue([
+        { exerciseId: 'ex-1', isCorrect: true, userAnswer: { selectedChoice: 'A' } },
+        { exerciseId: 'ex-2', isCorrect: false, userAnswer: { matches: [] } },
+      ] as any);
+
+      const result = await service.getSummary('set-1', 'user-1');
+
+      expect(result.stats.totalExercises).toBe(2);
+      expect(result.stats.attempted).toBe(2);
+      expect(result.stats.correct).toBe(1);
+      expect(result.wrongQuestions).toHaveLength(1);
+      expect(result.wrongQuestions[0].exerciseId).toBe('ex-2');
     });
   });
 });

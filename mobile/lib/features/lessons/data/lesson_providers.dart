@@ -104,12 +104,10 @@ final lessonProgressProvider = AsyncNotifierProvider.family<
 class LessonExercisesArgs {
   const LessonExercisesArgs({
     required this.lessonId,
-    required this.tierValue,
     this.setId,
   });
 
   final String lessonId;
-  final String tierValue;
   final String? setId;
 
   @override
@@ -118,11 +116,10 @@ class LessonExercisesArgs {
       other is LessonExercisesArgs &&
           runtimeType == other.runtimeType &&
           lessonId == other.lessonId &&
-          tierValue == other.tierValue &&
           setId == other.setId;
 
   @override
-  int get hashCode => Object.hash(lessonId, tierValue, setId);
+  int get hashCode => Object.hash(lessonId, setId);
 }
 
 class LessonExercisesNotifier extends CachedRepository<List<Exercise>>
@@ -143,14 +140,7 @@ class LessonExercisesNotifier extends CachedRepository<List<Exercise>>
       resolvedSetId = setId;
       return repo.getExercisesBySet(setId);
     }
-    final tierSummary = await repo.getExerciseSetsByLesson(args.lessonId);
-    final tier = ExerciseTier.fromString(args.tierValue);
-    final progress = tierSummary.progressForTier(tier);
-    if (progress == null || progress.setId.isEmpty) {
-      throw Exception('No exercises found for this tier');
-    }
-    resolvedSetId = progress.setId;
-    return repo.getExercisesBySet(progress.setId);
+    throw Exception('setId is required to load exercises');
   }
 
   @override
@@ -166,8 +156,8 @@ final lessonExercisesProvider =
   (arg) => LessonExercisesNotifier(arg),
 );
 
-class ExerciseSetsNotifier extends CachedRepository<LessonTierSummary>
-    with DataChangeBusSubscriber<LessonTierSummary> {
+class ExerciseSetsNotifier extends CachedRepository<LessonExerciseSummary>
+    with DataChangeBusSubscriber<LessonExerciseSummary> {
   ExerciseSetsNotifier(this.lessonId);
 
   final String lessonId;
@@ -176,21 +166,15 @@ class ExerciseSetsNotifier extends CachedRepository<LessonTierSummary>
   Duration get ttl => const Duration(minutes: 1);
 
   @override
-  Future<LessonTierSummary> fetchFromApi() async {
+  Future<LessonExerciseSummary> fetchFromApi() async {
     final repo = ref.read(lessonRepositoryProvider);
     return repo.getExerciseSetsByLesson(lessonId);
   }
 
   @override
-  Future<LessonTierSummary> build() async {
+  Future<LessonExerciseSummary> build() async {
     watchTags({'exercise-set', 'lesson-$lessonId'});
     return super.build();
-  }
-
-  Future<void> generateTier(String tier, {CancelToken? cancelToken}) async {
-    final repo = ref.read(lessonRepositoryProvider);
-    await repo.generateExercisesForTier(lessonId, tier, cancelToken: cancelToken);
-    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
   }
 
   Future<void> regenerateSet(String setId, {CancelToken? cancelToken}) async {
@@ -210,39 +194,17 @@ class ExerciseSetsNotifier extends CachedRepository<LessonTierSummary>
     await repo.createCustomSet(lessonId, config, cancelToken: cancelToken);
     ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
   }
+
+  Future<void> resetSetProgress(String setId) async {
+    final repo = ref.read(lessonRepositoryProvider);
+    await repo.resetExerciseSetProgress(setId);
+    ref.read(dataChangeBusProvider.notifier).emit({'exercise-set', 'lesson-$lessonId'});
+  }
 }
 
 final exerciseSetsProvider =
-    AsyncNotifierProvider.family<ExerciseSetsNotifier, LessonTierSummary, String>(
+    AsyncNotifierProvider.family<ExerciseSetsNotifier, LessonExerciseSummary, String>(
   (arg) => ExerciseSetsNotifier(arg),
-);
-
-class ModuleTierSummariesNotifier
-    extends CachedRepository<Map<String, TierSummary>>
-    with DataChangeBusSubscriber<Map<String, TierSummary>> {
-  ModuleTierSummariesNotifier(this.moduleId);
-
-  final String moduleId;
-
-  @override
-  Duration get ttl => Duration.zero;
-
-  @override
-  Future<Map<String, TierSummary>> fetchFromApi() async {
-    final repo = ref.read(lessonRepositoryProvider);
-    return repo.getModuleTierSummaries(moduleId);
-  }
-
-  @override
-  Future<Map<String, TierSummary>> build() async {
-    watchTags({'exercise-set'});
-    return super.build();
-  }
-}
-
-final moduleTierSummariesProvider = AsyncNotifierProvider.family<
-    ModuleTierSummariesNotifier, Map<String, TierSummary>, String>(
-  (arg) => ModuleTierSummariesNotifier(arg),
 );
 
 final exerciseSessionServiceProvider = Provider<ExerciseSessionService>((ref) {

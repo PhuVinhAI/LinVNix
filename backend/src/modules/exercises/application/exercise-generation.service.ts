@@ -7,7 +7,7 @@ import {
 } from '../../../infrastructure/genai/genai.service';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
-import { ExerciseTier, ExerciseType } from '../../../common/enums';
+import { ExerciseType } from '../../../common/enums';
 import { Exercise } from '../domain/exercise.entity';
 import type {
   ExerciseOptions,
@@ -36,68 +36,23 @@ interface LessonContext {
     structure?: string;
     examples: Array<{ vi: string; en: string }>;
   }>;
-  basicExercises: Array<{
+  existingExercises: Array<{
     exerciseType: string;
     question: string;
     correctAnswer: any;
   }>;
 }
 
-export const TIER_GUIDELINES: Record<
-  ExerciseTier,
-  {
-    questionCount: number;
-    preferredTypes: ExerciseType[];
-    description: string;
-  }
-> = {
-  [ExerciseTier.BASIC]: {
-    questionCount: 6,
-    preferredTypes: [ExerciseType.MULTIPLE_CHOICE, ExerciseType.MATCHING],
-    description:
-      'Basic level — focus on recognition and simple recall of vocabulary',
-  },
-  [ExerciseTier.EASY]: {
-    questionCount: 8,
-    preferredTypes: [ExerciseType.MATCHING, ExerciseType.MULTIPLE_CHOICE],
-    description:
-      'Easy level — prefer matching and multiple choice, use vocabulary and grammar from lesson',
-  },
-  [ExerciseTier.MEDIUM]: {
-    questionCount: 12,
-    preferredTypes: [
-      ExerciseType.FILL_BLANK,
-      ExerciseType.TRANSLATION,
-      ExerciseType.MULTIPLE_CHOICE,
-      ExerciseType.MATCHING,
-    ],
-    description:
-      'Medium level — more fill-blank and translation, increasing complexity',
-  },
-  [ExerciseTier.HARD]: {
-    questionCount: 15,
-    preferredTypes: [
-      ExerciseType.TRANSLATION,
-      ExerciseType.FILL_BLANK,
-      ExerciseType.ORDERING,
-      ExerciseType.MATCHING,
-    ],
-    description:
-      'Hard level — complex grammar, harder vocabulary, emphasize translation',
-  },
-  [ExerciseTier.EXPERT]: {
-    questionCount: 18,
-    preferredTypes: [
-      ExerciseType.TRANSLATION,
-      ExerciseType.FILL_BLANK,
-      ExerciseType.ORDERING,
-      ExerciseType.MATCHING,
-      ExerciseType.MULTIPLE_CHOICE,
-      ExerciseType.LISTENING,
-    ],
-    description:
-      'Expert level — all exercise types at max complexity, advanced vocabulary and grammar',
-  },
+const DEFAULT_GUIDELINES = {
+  questionCount: 10,
+  preferredTypes: [
+    ExerciseType.MULTIPLE_CHOICE,
+    ExerciseType.MATCHING,
+    ExerciseType.FILL_BLANK,
+    ExerciseType.TRANSLATION,
+  ],
+  description:
+    'Mixed difficulty — balanced variety of vocabulary and grammar exercises based on lesson content',
 };
 
 const GeneratedExerciseSchema = z.object({
@@ -311,53 +266,8 @@ export class ExerciseGenerationService {
     if (!set) {
       throw new BadRequestException(`ExerciseSet ${setId} not found`);
     }
-    if (set.tier === ExerciseTier.BASIC) {
-      throw new BadRequestException(
-        'Cannot AI-generate exercises for BASIC tier',
-      );
-    }
 
     const existing = await this.exercisesRepository.findBySetId(setId);
-    if (existing.length > 0) {
-      throw new BadRequestException(
-        'Set already has exercises. Use regenerate instead.',
-      );
-    }
-
-    if (set.isCustom) {
-      return this.doGenerate(set, userId);
-    }
-
-    return this.doGenerate(set, userId);
-  }
-
-  async generateForTier(
-    lessonId: string,
-    tier: ExerciseTier,
-    userId: string,
-  ): Promise<Exercise[]> {
-    if (tier === ExerciseTier.BASIC) {
-      throw new BadRequestException(
-        'Cannot AI-generate exercises for BASIC tier',
-      );
-    }
-
-    let set = await this.exerciseSetsRepository.findActiveByLessonAndTier(
-      lessonId,
-      tier,
-    );
-
-    if (!set) {
-      set = await this.exerciseSetsRepository.create({
-        lessonId,
-        tier,
-        isAIGenerated: false,
-        title: `AI Generated - ${tier}`,
-        orderIndex: this.tierToOrderIndex(tier),
-      });
-    }
-
-    const existing = await this.exercisesRepository.findBySetId(set.id);
     if (existing.length > 0) {
       throw new BadRequestException(
         'Set already has exercises. Use regenerate instead.',
@@ -372,9 +282,6 @@ export class ExerciseGenerationService {
     if (!set) {
       throw new BadRequestException(`ExerciseSet ${setId} not found`);
     }
-    if (set.tier === ExerciseTier.BASIC) {
-      throw new BadRequestException('Cannot regenerate BASIC tier exercises');
-    }
 
     await this.exerciseSetsRepository.softDelete(setId);
     await this.exercisesRepository.softDeleteBySetId(setId);
@@ -383,18 +290,12 @@ export class ExerciseGenerationService {
       import('../domain/exercise-set.entity').ExerciseSet
     > = {
       lessonId: set.lessonId,
+      isCustom: set.isCustom,
+      customConfig: set.customConfig,
       isAIGenerated: false,
-      title: set.isCustom ? 'Custom Practice' : `AI Generated - ${set.tier}`,
+      title: set.isCustom ? 'Custom Practice' : set.title,
       orderIndex: set.orderIndex,
     };
-
-    if (set.isCustom) {
-      (newSetData as any).isCustom = true;
-      (newSetData as any).customConfig = set.customConfig;
-      (newSetData as any).tier = null;
-    } else {
-      (newSetData as any).tier = set.tier;
-    }
 
     const newSet = await this.exerciseSetsRepository.create(newSetData);
 
@@ -408,7 +309,7 @@ export class ExerciseGenerationService {
     }
     if (!set.isCustom) {
       throw new BadRequestException(
-        'Use generate() for tier-based sets, not generateCustom()',
+        'generateCustom() can only be used for custom sets',
       );
     }
 
@@ -433,22 +334,22 @@ export class ExerciseGenerationService {
       preferredTypes: ExerciseType[];
       description: string;
     };
-    let tierLabel: string;
+    let label: string;
 
     if (set.isCustom && set.customConfig) {
       const config = set.customConfig;
-      tierLabel = `Custom (${config.focusArea})`;
+      label = `Custom (${config.focusArea})`;
       guidelines = {
         questionCount: config.questionCount,
         preferredTypes: config.exerciseTypes,
         description: this.getFocusAreaDescription(config.focusArea),
       };
     } else {
-      tierLabel = set.tier ?? 'Custom';
-      guidelines = TIER_GUIDELINES[set.tier as ExerciseTier];
+      label = 'AI Generated';
+      guidelines = DEFAULT_GUIDELINES;
     }
 
-    const prompt = this.buildPrompt(context, guidelines, tierLabel);
+    const prompt = this.buildPrompt(context, guidelines, label);
     const systemInstruction = this.buildSystemInstruction();
 
     const response = await this.genaiService.chatStructured({
@@ -468,7 +369,7 @@ export class ExerciseGenerationService {
     });
 
     this.logger.log(
-      `Generated ${exercises.length} exercises for set ${set.id} (tier: ${tierLabel})`,
+      `Generated ${exercises.length} exercises for set ${set.id} (${label})`,
     );
 
     return exercises;
@@ -485,24 +386,24 @@ export class ExerciseGenerationService {
       throw new BadRequestException(`Lesson ${lessonId} not found`);
     }
 
-    const basicSet =
-      await this.exerciseSetsRepository.findActiveByLessonAndTier(
-        lessonId,
-        ExerciseTier.BASIC,
-      );
+    const existingSets =
+      await this.exerciseSetsRepository.findActiveByLessonId(lessonId);
 
-    let basicExercises: Array<{
+    let existingExercises: Array<{
       exerciseType: string;
       question: string;
       correctAnswer: any;
     }> = [];
-    if (basicSet) {
-      const exercises = await this.exercisesRepository.findBySetId(basicSet.id);
-      basicExercises = exercises.map((e) => ({
-        exerciseType: e.exerciseType,
-        question: e.question,
-        correctAnswer: e.correctAnswer,
-      }));
+
+    for (const s of existingSets) {
+      const exercises = await this.exercisesRepository.findBySetId(s.id);
+      existingExercises.push(
+        ...exercises.map((e) => ({
+          exerciseType: e.exerciseType,
+          question: e.question,
+          correctAnswer: e.correctAnswer,
+        })),
+      );
     }
 
     return {
@@ -527,19 +428,23 @@ export class ExerciseGenerationService {
         structure: g.structure,
         examples: g.examples,
       })),
-      basicExercises,
+      existingExercises,
     };
   }
 
   buildPrompt(
     context: LessonContext,
-    guidelines: (typeof TIER_GUIDELINES)[ExerciseTier],
-    tier: string,
+    guidelines: {
+      questionCount: number;
+      preferredTypes: ExerciseType[];
+      description: string;
+    },
+    label: string,
   ): string {
     const contextSection = this.formatContext(context);
-    const avoidSection = this.formatBasicExercises(context.basicExercises);
+    const avoidSection = this.formatExistingExercises(context.existingExercises);
 
-    return `Generate ${guidelines.questionCount} Vietnamese language exercises for the ${tier} tier (${guidelines.description}).
+    return `Generate ${guidelines.questionCount} Vietnamese language exercises for ${label} (${guidelines.description}).
 Preferred exercise types: ${guidelines.preferredTypes.join(', ')}.
 
 ## Lesson: ${context.lessonTitle}
@@ -549,7 +454,7 @@ ${avoidSection}
 
 Each exercise must:
 - Test different vocabulary or grammar from the lesson
-- Be unique (not duplicating basic tier exercises above)
+- Be unique (not duplicating existing exercises above)
 - Mix Vietnamese and English naturally per exercise type
   - matching: Vietnamese↔English pairs
   - translation: either direction (Vietnamese→English or English→Vietnamese)
@@ -631,15 +536,15 @@ Exercise-type option/answer shapes:
     return parts.join('\n');
   }
 
-  private formatBasicExercises(
-    basicExercises: LessonContext['basicExercises'],
+  private formatExistingExercises(
+    existingExercises: LessonContext['existingExercises'],
   ): string {
-    if (basicExercises.length === 0) return '';
+    if (existingExercises.length === 0) return '';
 
     const lines = [
-      '\n### Existing Basic Tier Exercises (DO NOT duplicate these)',
+      '\n### Existing Exercises (DO NOT duplicate these)',
     ];
-    for (const e of basicExercises) {
+    for (const e of existingExercises) {
       lines.push(`- [${e.exerciseType}] ${e.question}`);
     }
     return lines.join('\n');
@@ -661,7 +566,7 @@ Exercise-type option/answer shapes:
         correctAnswer: ex.correctAnswer as ExerciseAnswer,
         explanation: ex.explanation,
         orderIndex: i + 1,
-        difficultyLevel: this.tierToDifficulty(set.tier),
+        difficultyLevel: 2,
         lessonId: set.lessonId,
         setId: set.id,
       });
@@ -669,24 +574,6 @@ Exercise-type option/answer shapes:
     }
 
     return exercises;
-  }
-
-  private tierToDifficulty(tier: ExerciseTier | null): number {
-    if (!tier) return 3;
-    switch (tier) {
-      case ExerciseTier.BASIC:
-        return 1;
-      case ExerciseTier.EASY:
-        return 2;
-      case ExerciseTier.MEDIUM:
-        return 3;
-      case ExerciseTier.HARD:
-        return 4;
-      case ExerciseTier.EXPERT:
-        return 5;
-      default:
-        return 1;
-    }
   }
 
   private getFocusAreaDescription(focusArea: string): string {
@@ -699,16 +586,5 @@ Exercise-type option/answer shapes:
       default:
         return 'Mix of vocabulary and grammar — use a balanced variety of exercise types covering both word knowledge and grammar structure';
     }
-  }
-
-  private tierToOrderIndex(tier: ExerciseTier): number {
-    const order: Record<ExerciseTier, number> = {
-      [ExerciseTier.BASIC]: 0,
-      [ExerciseTier.EASY]: 1,
-      [ExerciseTier.MEDIUM]: 2,
-      [ExerciseTier.HARD]: 3,
-      [ExerciseTier.EXPERT]: 4,
-    };
-    return order[tier] ?? 0;
   }
 }

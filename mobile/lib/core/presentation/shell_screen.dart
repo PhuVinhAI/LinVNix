@@ -11,7 +11,6 @@ class ShellScreen extends StatelessWidget {
     return switch (location) {
       '/' => 0,
       '/courses' => 1,
-      '/profile' => 2,
       _ => 0,
     };
   }
@@ -22,8 +21,6 @@ class ShellScreen extends StatelessWidget {
         context.go('/');
       case 1:
         context.go('/courses');
-      case 2:
-        context.go('/profile');
     }
   }
 
@@ -44,11 +41,6 @@ class ShellScreen extends StatelessWidget {
             icon: Icons.school_outlined,
             selectedIcon: Icons.school,
             label: 'Courses',
-          ),
-          const AppNavBarDestination(
-            icon: Icons.person_outlined,
-            selectedIcon: Icons.person,
-            label: 'Profile',
           ),
         ],
       ),

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
-import '../../../lessons/data/lesson_providers.dart';
-import '../../../lessons/domain/exercise_set_models.dart';
+
 
 class ModuleDetailScreen extends ConsumerWidget {
   const ModuleDetailScreen({super.key, required this.moduleId});
@@ -18,7 +16,6 @@ class ModuleDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final moduleAsync = ref.watch(moduleDetailProvider(moduleId));
     final progressAsync = ref.watch(userProgressProvider);
-    final tierSummariesAsync = ref.watch(moduleTierSummariesProvider(moduleId));
 
     return Scaffold(
       body: moduleAsync.when(
@@ -29,7 +26,6 @@ class ModuleDetailScreen extends ConsumerWidget {
         data: (module) => _ModuleDetailContent(
           module: module,
           progressMap: _buildProgressMap(progressAsync),
-          tierSummariesMap: tierSummariesAsync.whenOrNull(data: (d) => d) ?? {},
         ),
       ),
     );
@@ -52,11 +48,9 @@ class _ModuleDetailContent extends StatelessWidget {
   const _ModuleDetailContent({
     required this.module,
     required this.progressMap,
-    required this.tierSummariesMap,
   });
   final CourseModule module;
   final Map<String, UserProgress> progressMap;
-  final Map<String, TierSummary> tierSummariesMap;
 
   @override
   Widget build(BuildContext context) {
@@ -141,8 +135,7 @@ class _ModuleDetailContent extends StatelessWidget {
             (context, index) {
               final lesson = module.lessons[index];
               final progress = progressMap[lesson.id];
-              final tierSummary = tierSummariesMap[lesson.id];
-              return _LessonCard(lesson: lesson, progress: progress, tierSummary: tierSummary);
+              return _LessonCard(lesson: lesson, progress: progress);
             },
             childCount: module.lessons.length,
           ),
@@ -154,31 +147,10 @@ class _ModuleDetailContent extends StatelessWidget {
 }
 
 class _LessonCard extends StatelessWidget {
-  const _LessonCard({required this.lesson, this.progress, this.tierSummary});
+  const _LessonCard({required this.lesson, this.progress});
 
   final Lesson lesson;
   final UserProgress? progress;
-  final TierSummary? tierSummary;
-
-  Color _tierColor(AppColors c, ExerciseTier tier) {
-    return switch (tier) {
-      ExerciseTier.basic => c.primary,
-      ExerciseTier.easy => c.success,
-      ExerciseTier.medium => c.warning,
-      ExerciseTier.hard => c.error,
-      ExerciseTier.expert => c.secondary,
-    };
-  }
-
-  IconData _tierIcon(ExerciseTier tier) {
-    return switch (tier) {
-      ExerciseTier.basic => Icons.looks_one,
-      ExerciseTier.easy => Icons.looks_two,
-      ExerciseTier.medium => Icons.looks_3,
-      ExerciseTier.hard => Icons.looks_4,
-      ExerciseTier.expert => Icons.looks_5,
-    };
-  }
 
   Color _statusColor(String? status, AppColors c) {
     return switch (status) {
@@ -216,7 +188,6 @@ class _LessonCard extends StatelessWidget {
     final c = AppTheme.colors(context);
     final theme = Theme.of(context);
     final statusColor = _statusColor(progress?.status, c);
-    final currentTier = tierSummary?.currentTier;
 
     return AppCard(
       variant: AppCardVariant.outlined,
@@ -269,35 +240,6 @@ class _LessonCard extends StatelessWidget {
             const SizedBox(height: 6),
             Row(
               children: [
-                if (currentTier != null) ...[
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: _tierColor(c, currentTier).withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(AppRadius.sm),
-                      border: Border.all(
-                        color: _tierColor(c, currentTier).withValues(alpha: 0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(_tierIcon(currentTier), size: 11, color: _tierColor(c, currentTier)),
-                        const SizedBox(width: 3),
-                        Text(
-                          currentTier.displayName,
-                          style: GoogleFonts.inter(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: _tierColor(c, currentTier),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                ],
                 if (lesson.estimatedDuration != null) ...[
                   Icon(Icons.access_time, size: 12, color: c.mutedForeground),
                   const SizedBox(width: AppSpacing.xs),

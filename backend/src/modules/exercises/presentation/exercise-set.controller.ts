@@ -35,7 +35,7 @@ export class ExerciseSetController {
   @ApiOperation({
     summary: 'Create custom practice set with AI generation',
     description:
-      'Create a custom exercise set with user-defined config (questionCount, exerciseTypes, focusArea). Requires AI_GENERATE_EXERCISE permission. Custom practice unlocks after completing basic tier.',
+      'Create a custom exercise set with user-defined config (questionCount, exerciseTypes, focusArea). Requires AI_GENERATE_EXERCISE permission.',
   })
   @ApiResponse({
     status: 201,
@@ -43,7 +43,7 @@ export class ExerciseSetController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Invalid config or custom practice locked',
+    description: 'Invalid config',
   })
   async createCustom(
     @Body() dto: CreateCustomSetDto,
@@ -61,46 +61,12 @@ export class ExerciseSetController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @RequirePermissions(Permission.AI_GENERATE_EXERCISE)
-  @Post('lesson/:lessonId/tier/:tier/generate')
-  @ApiOperation({
-    summary: 'AI generate exercises for a lesson tier',
-    description:
-      'Generate AI exercises for a lesson tier (creates set if needed). Requires AI_GENERATE_EXERCISE permission.',
-  })
-  @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
-  @ApiParam({
-    name: 'tier',
-    description: 'Tier name (EASY, MEDIUM, HARD, EXPERT)',
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'Exercises generated successfully',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'BASIC tier or set already has exercises',
-  })
-  async generateForTier(
-    @Param('lessonId') lessonId: string,
-    @Param('tier') tier: string,
-    @CurrentUser() user: User,
-  ) {
-    return this.exerciseSetService.generateForTier(
-      lessonId,
-      tier as any,
-      user.id,
-    );
-  }
-
-  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('lesson/:lessonId')
   @ApiOperation({
     summary: 'Lấy exercise sets theo lesson',
     description:
-      'Lấy danh sách active exercise sets theo tier với progress stats và unlockedTiers',
+      'Lấy danh sách active exercise sets với progress stats',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -120,7 +86,7 @@ export class ExerciseSetController {
   @ApiOperation({
     summary: 'Lấy tiến độ chi tiết của exercise set',
     description:
-      'Lấy tiến độ chi tiết bao gồm totalExercises, attempted, correct, percentCorrect, percentComplete, nextTierUnlocked',
+      'Lấy tiến độ chi tiết bao gồm totalExercises, attempted, correct, percentCorrect, percentComplete',
   })
   @ApiParam({ name: 'id', description: 'ID của exercise set' })
   @ApiResponse({
@@ -156,9 +122,9 @@ export class ExerciseSetController {
   @RequirePermissions(Permission.AI_GENERATE_EXERCISE)
   @Post(':id/generate')
   @ApiOperation({
-    summary: 'AI generate exercises for an empty non-basic set',
+    summary: 'AI generate exercises for an empty set',
     description:
-      'Generate AI exercises for an empty exercise set (non-basic tier). Requires AI_GENERATE_EXERCISE permission.',
+      'Generate AI exercises for an empty exercise set. Requires AI_GENERATE_EXERCISE permission.',
   })
   @ApiParam({ name: 'id', description: 'ID của exercise set' })
   @ApiResponse({
@@ -167,7 +133,7 @@ export class ExerciseSetController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Set is basic tier or already has exercises',
+    description: 'Set already has exercises',
   })
   async generate(@Param('id') id: string, @CurrentUser() user: User) {
     return this.exerciseSetService.generate(id, user.id);
@@ -189,7 +155,7 @@ export class ExerciseSetController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Set is basic tier or not found',
+    description: 'Set not found',
   })
   async regenerate(@Param('id') id: string, @CurrentUser() user: User) {
     return this.exerciseSetService.regenerate(id, user.id);
@@ -239,7 +205,7 @@ export class ExerciseSetController {
   @ApiOperation({
     summary: 'Lấy tóm tắt kết quả exercise set',
     description:
-      'Trả về thống kê tổng quan, danh sách câu sai với đáp án đúng, và thông báo unlock tier mới nếu có',
+      'Trả về thống kê tổng quan và danh sách câu sai với đáp án đúng',
   })
   @ApiParam({ name: 'id', description: 'ID của exercise set' })
   @ApiResponse({
@@ -262,7 +228,6 @@ export class ExerciseSetController {
             explanation: 'Exp',
           },
         ],
-        nextTierUnlocked: 'EASY',
       },
     },
   })

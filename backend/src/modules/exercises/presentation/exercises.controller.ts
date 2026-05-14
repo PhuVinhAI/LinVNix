@@ -22,16 +22,12 @@ import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/domain/user.entity';
 import { Public } from '../../../common/decorators';
 import { CreateExerciseDto } from '../dto/create-exercise.dto';
-import { TierProgressService } from '../application/tier-progress.service';
 import { SubmitAnswerResult } from '../application/exercises.service';
 
 @ApiTags('Exercises')
 @Controller('exercises')
 export class ExercisesController {
-  constructor(
-    private readonly exercisesService: ExercisesService,
-    private readonly tierProgressService: TierProgressService,
-  ) {}
+  constructor(private readonly exercisesService: ExercisesService) {}
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -210,7 +206,7 @@ export class ExercisesController {
   @ApiOperation({
     summary: 'Nộp bài tập',
     description:
-      'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm. Bao gồm nextTierUnlocked nếu lần nộp này mở khóa tier mới.',
+      'Nộp câu trả lời cho bài tập và nhận kết quả chấm điểm.',
   })
   @ApiParam({ name: 'id', description: 'ID của bài tập' })
   @ApiBody({
@@ -232,7 +228,6 @@ export class ExercisesController {
         score: 10,
         userAnswer: 'Cả 3 đều đúng',
         timeSpent: 30,
-        nextTierUnlocked: 'EASY',
       },
     },
   })
@@ -244,33 +239,12 @@ export class ExercisesController {
   ): Promise<SubmitAnswerResult> {
     const exercise = await this.exercisesService.findById(exerciseId);
 
-    let beforeUnlockedCount = 0;
-    if (exercise.lessonId) {
-      const beforeSummary = await this.tierProgressService.getLessonTierSummary(
-        exercise.lessonId,
-        user.id,
-      );
-      beforeUnlockedCount = beforeSummary.unlockedTiers.length;
-    }
-
     const result = await this.exercisesService.submitAnswer(
       user.id,
       exerciseId,
       body.userAnswer,
       body.timeSpent,
     );
-
-    let nextTierUnlocked: string | undefined;
-    if (exercise.lessonId) {
-      const afterSummary = await this.tierProgressService.getLessonTierSummary(
-        exercise.lessonId,
-        user.id,
-      );
-      if (afterSummary.unlockedTiers.length > beforeUnlockedCount) {
-        nextTierUnlocked =
-          afterSummary.unlockedTiers[afterSummary.unlockedTiers.length - 1];
-      }
-    }
 
     return {
       id: result.id,
@@ -279,7 +253,6 @@ export class ExercisesController {
       userAnswer: result.userAnswer,
       timeTaken: result.timeTaken,
       attemptedAt: result.attemptedAt,
-      nextTierUnlocked,
     };
   }
 }

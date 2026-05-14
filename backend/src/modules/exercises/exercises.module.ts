@@ -6,7 +6,7 @@ import { UserExerciseResult } from './domain/user-exercise-result.entity';
 import { ExercisesService } from './application/exercises.service';
 import { ExerciseSetService } from './application/exercise-set.service';
 import { ExerciseGenerationService } from './application/exercise-generation.service';
-import { TierProgressService } from './application/tier-progress.service';
+
 import { AnswerAssessment } from './application/answer-assessment.service';
 import { AnswerNormalizer } from './application/answer-normalizer';
 import { ExercisesRepository } from './application/repositories/exercises.repository';
@@ -24,7 +24,6 @@ import { ExerciseSetController } from './presentation/exercise-set.controller';
     ExercisesService,
     ExerciseSetService,
     ExerciseGenerationService,
-    TierProgressService,
     AnswerAssessment,
     AnswerNormalizer,
     ExercisesRepository,
@@ -35,7 +34,6 @@ import { ExerciseSetController } from './presentation/exercise-set.controller';
     ExercisesService,
     ExerciseSetService,
     ExerciseGenerationService,
-    TierProgressService,
     ExercisesRepository,
     UserExerciseResultsRepository,
   ],

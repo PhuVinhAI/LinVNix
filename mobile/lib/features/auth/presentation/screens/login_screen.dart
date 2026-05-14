@@ -47,12 +47,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         refreshToken: response.refreshToken,
       );
 
-      if (response.user.onboardingCompleted) {
-        ref.read(onboardingCompletedProvider.notifier).markCompleted();
-      } else {
-        ref.read(onboardingCompletedProvider.notifier).reset();
-      }
-
       ref.read(authStateProvider.notifier).notifyAuthenticated(true);
     } on EmailNotVerifiedException catch (e) {
       if (mounted) {
@@ -83,12 +77,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       );
-
-      if (response.user.onboardingCompleted) {
-        ref.read(onboardingCompletedProvider.notifier).markCompleted();
-      } else {
-        ref.read(onboardingCompletedProvider.notifier).reset();
-      }
 
       ref.read(authStateProvider.notifier).notifyAuthenticated(true);
     } on AppException catch (e) {

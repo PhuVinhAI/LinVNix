@@ -7,20 +7,17 @@ import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
 import '../../domain/exercise_models.dart';
 import '../../domain/exercise_session.dart';
-import '../../domain/exercise_set_models.dart';
 import '../../domain/exercise_renderer_registry.dart';
 
 class ExercisePlayScreen extends ConsumerStatefulWidget {
   const ExercisePlayScreen({
     super.key,
     required this.lessonId,
-    required this.tierValue,
-    this.setId,
+    required this.setId,
   });
 
   final String lessonId;
-  final String tierValue;
-  final String? setId;
+  final String setId;
 
   @override
   ConsumerState<ExercisePlayScreen> createState() => _ExercisePlayScreenState();
@@ -41,11 +38,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
   bool _initialResumeFlowScheduled = false;
   bool _resumeGateDone = false;
-  String? _resolvedSetId;
 
   LessonExercisesArgs get _args => LessonExercisesArgs(
         lessonId: widget.lessonId,
-        tierValue: widget.tierValue,
         setId: widget.setId,
       );
 
@@ -53,7 +48,6 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   void didUpdateWidget(covariant ExercisePlayScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.lessonId != widget.lessonId ||
-        oldWidget.tierValue != widget.tierValue ||
         oldWidget.setId != widget.setId) {
       _initialResumeFlowScheduled = false;
       _resumeGateDone = false;
@@ -98,8 +92,8 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
   Future<void> _runInitialResumeFlow() async {
     try {
-      final setId = _resolvedSetId;
-      if (setId == null || _exercises.isEmpty) return;
+      final setId = widget.setId;
+      if (_exercises.isEmpty) return;
 
       final service = ref.read(exerciseSessionServiceProvider);
       final session = await service.load(setId);
@@ -165,14 +159,13 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   }
 
   Future<void> _saveSession() async {
-    final setId = _resolvedSetId;
-    if (setId == null || _exercises.isEmpty) return;
+    final setId = widget.setId;
+    if (_exercises.isEmpty) return;
 
     final service = ref.read(exerciseSessionServiceProvider);
     final session = ExerciseSession(
       setId: setId,
       lessonId: widget.lessonId,
-      tier: widget.tierValue,
       currentIndex: _currentIndex,
       answers: _answersSnapshotForPersistence(),
       results: _results.map(
@@ -189,9 +182,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   }
 
   Future<void> _deleteSession() async {
-    final setId = _resolvedSetId;
-    if (setId == null) return;
-
+    final setId = widget.setId;
     final service = ref.read(exerciseSessionServiceProvider);
     await service.delete(setId);
   }
@@ -269,36 +260,20 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     final correct = _totalCorrect;
     final percent = total > 0 ? ((correct / total) * 100).round() : 0;
 
-    final lastResult = _results[_exercises.length - 1];
-    final nextTier = lastResult?.nextTierUnlocked;
-
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AppDialog(
         titleWidget: Row(
           children: [
-            Icon(
-              nextTier != null ? Icons.celebration : Icons.check_circle,
-              color: nextTier != null ? Colors.amber : c.primary,
-            ),
+            Icon(Icons.check_circle, color: c.primary),
             const SizedBox(width: 8),
-            Text(nextTier != null ? 'Next Tier Unlocked!' : 'Exercise Complete!'),
+            const Text('Exercise Complete!'),
           ],
         ),
         contentWidget: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (nextTier != null) ...[
-              Text(
-                '${ExerciseTier.fromString(nextTier).displayName} tier is now available!',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: c.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
             Text('Your score', style: theme.textTheme.bodyLarge),
             const SizedBox(height: 8),
             Text(
@@ -346,7 +321,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         ),
         actions: [
           AppDialogAction(
-            label: 'Return to tier selector',
+            label: 'Return to practice',
             isPrimary: true,
             onPressed: () async {
               Navigator.of(ctx).pop();
@@ -414,7 +389,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'No exercises available for this tier',
+                      'No exercises available',
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -431,8 +406,6 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         }
 
         _exercises = exercises;
-        final notifier = ref.read(lessonExercisesProvider(_args).notifier);
-        _resolvedSetId = notifier.resolvedSetId ?? widget.setId;
 
         if (!_initialResumeFlowScheduled) {
           _initialResumeFlowScheduled = true;
@@ -442,11 +415,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         }
 
         if (!_resumeGateDone) {
-          return Scaffold(
-            appBar: AppAppBar(
-              title: Text(ExerciseTier.fromString(widget.tierValue).displayName),
-            ),
-            body: const Center(child: AppSpinner()),
+          return const Scaffold(
+            appBar: AppAppBar(title: Text('Exercise')),
+            body: Center(child: AppSpinner()),
           );
         }
 
@@ -461,7 +432,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
           },
           child: Scaffold(
             appBar: AppAppBar(
-              title: Text(ExerciseTier.fromString(widget.tierValue).displayName),
+              title: const Text('Exercise'),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(4),
                 child: AppProgress(
