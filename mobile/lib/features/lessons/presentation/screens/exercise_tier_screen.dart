@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
@@ -22,6 +24,26 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
   bool _isCreatingCustom = false;
   String? _busyCustomSetId;
   String? _customError;
+  CancelToken? _aiCancelToken;
+
+  CancelToken _newAiCancelToken() {
+    _aiCancelToken?.cancel();
+    final next = CancelToken();
+    _aiCancelToken = next;
+    return next;
+  }
+
+  @override
+  void dispose() {
+    _aiCancelToken?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _pushExercisePlay(String location) async {
+    await context.push(location);
+    if (!mounted) return;
+    await ref.read(exerciseSetsProvider(widget.lessonId).notifier).refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +98,9 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                     ? () {
                         final progress = summary.progressForTier(tier);
                         final setId = progress?.setId ?? '';
-                        context.push('/lessons/${widget.lessonId}/exercises/play/${tier.value}/$setId');
+                        _pushExercisePlay(
+                          '/lessons/${widget.lessonId}/exercises/play/${tier.value}/$setId',
+                        );
                       }
                     : null,
                 onGenerate: summary.isTierUnlocked(tier) && tier != ExerciseTier.basic
@@ -97,7 +121,7 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
                 busySetId: _busyCustomSetId,
                 error: _customError,
                 onCreate: () => _showCustomConfigForm(context, summary),
-                onPlaySet: (setId) => context.push(
+                onPlaySet: (setId) => _pushExercisePlay(
                   '/lessons/${widget.lessonId}/exercises/play/custom/$setId',
                 ),
                 onRegenerate: (setId) => _handleRegenerateCustom(setId),
@@ -125,8 +149,9 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
     });
 
     try {
+      final token = _newAiCancelToken();
       final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      await notifier.generateTier(tier.value);
+      await notifier.generateTier(tier.value, cancelToken: token);
       if (mounted) {
         setState(() {
           _generatingTier = null;
@@ -134,12 +159,18 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
         });
       }
     } catch (e) {
-      if (mounted) {
+      if (!mounted) return;
+      if (e is RequestCancelledException) {
         setState(() {
           _generatingTier = null;
-          _generationError = e.toString();
+          _generationError = null;
         });
+        return;
       }
+      setState(() {
+        _generatingTier = null;
+        _generationError = e.toString();
+      });
     }
   }
 
@@ -150,20 +181,27 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
     });
 
     try {
+      final token = _newAiCancelToken();
       final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      await notifier.regenerateSet(setId);
+      await notifier.regenerateSet(setId, cancelToken: token);
       if (mounted) {
         setState(() {
           _busyCustomSetId = null;
         });
       }
     } catch (e) {
-      if (mounted) {
+      if (!mounted) return;
+      if (e is RequestCancelledException) {
         setState(() {
           _busyCustomSetId = null;
-          _customError = e.toString();
+          _customError = null;
         });
+        return;
       }
+      setState(() {
+        _busyCustomSetId = null;
+        _customError = e.toString();
+      });
     }
   }
 
@@ -229,18 +267,25 @@ class _ExerciseTierScreenState extends ConsumerState<ExerciseTierScreen> {
             _customError = null;
           });
           try {
+            final token = _newAiCancelToken();
             final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-            await notifier.createCustomSet(config);
+            await notifier.createCustomSet(config, cancelToken: token);
             if (mounted) {
               setState(() => _isCreatingCustom = false);
             }
           } catch (e) {
-            if (mounted) {
+            if (!mounted) return;
+            if (e is RequestCancelledException) {
               setState(() {
                 _isCreatingCustom = false;
-                _customError = e.toString();
+                _customError = null;
               });
+              return;
             }
+            setState(() {
+              _isCreatingCustom = false;
+              _customError = e.toString();
+            });
           }
         },
       ),
@@ -809,8 +854,7 @@ class _TierCardState extends State<_TierCard> with SingleTickerProviderStateMixi
     if (_needsGeneration) return 'Ready to generate';
     if (widget.progress == null) return 'Locked';
     if (widget.progress!.isCompleted) return 'Completed';
-    if (widget.progress!.isInProgress) return '${widget.progress!.percentComplete.round()}%';
-    return '0%';
+    return '${widget.progress!.percentComplete.round()}%';
   }
 
   @override
