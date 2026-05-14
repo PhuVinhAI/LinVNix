@@ -11,6 +11,7 @@ import {
   ExerciseSet,
   type CustomSetConfig,
 } from '../domain/exercise-set.entity';
+import { Exercise } from '../domain/exercise.entity';
 
 export interface ResumeInfo {
   canResume: boolean;
@@ -163,8 +164,14 @@ export class ExerciseSetService {
     return this.exerciseSetsRepository.create(data);
   }
 
-  async generate(setId: string, userId: string) {
-    return this.exerciseGenerationService.generate(setId, userId);
+  async generate(setId: string, userId: string): Promise<Exercise[]> {
+    const exercises = await this.exerciseGenerationService.generate(setId, userId);
+    const set = await this.exerciseSetsRepository.findById(setId);
+    if (set?.replacesSetId) {
+      await this.exercisesRepository.softDeleteBySetId(set.replacesSetId);
+      await this.exerciseSetsRepository.softDelete(set.replacesSetId);
+    }
+    return exercises;
   }
 
   async regenerate(setId: string, _userId: string) {

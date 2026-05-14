@@ -310,6 +310,7 @@ export class ExerciseGenerationService {
       title: set.isCustom ? 'Custom Practice' : set.title,
       orderIndex: set.orderIndex,
       generationStatus: 'generating' as any,
+      replacesSetId: setId,
     };
 
     return this.exerciseSetsRepository.create(newSetData);
