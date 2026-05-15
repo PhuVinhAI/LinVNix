@@ -6,7 +6,7 @@ class PreferencesService {
   final SharedPreferences _prefs;
 
   static const _onboardingCompletedKey = 'onboarding_completed';
-  static const _dailyGoalKey = 'daily_goal';
+  static const _dailyGoalsMigratedKey = 'daily_goals_migrated';
   static const _themeModeKey = 'theme_mode';
   static const _notificationEnabledKey = 'notification_enabled';
   static const _notificationTimeKey = 'notification_time';
@@ -19,13 +19,13 @@ class PreferencesService {
 
   Future<void> clearOnboardingState() async {
     await _prefs.remove(_onboardingCompletedKey);
-    await _prefs.remove(_dailyGoalKey);
   }
 
-  int get dailyGoal => _prefs.getInt(_dailyGoalKey) ?? 20;
+  bool get isDailyGoalsMigrated =>
+      _prefs.getBool(_dailyGoalsMigratedKey) ?? false;
 
-  Future<void> setDailyGoal(int goal) =>
-      _prefs.setInt(_dailyGoalKey, goal);
+  Future<void> setDailyGoalsMigrated() =>
+      _prefs.setBool(_dailyGoalsMigratedKey, true);
 
   bool get notificationEnabled =>
       _prefs.getBool(_notificationEnabledKey) ?? false;
