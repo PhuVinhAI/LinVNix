@@ -7,27 +7,49 @@ import 'package:linvnix/core/theme/app_theme.dart';
 import 'package:linvnix/core/theme/widgets/app_button.dart';
 import 'package:linvnix/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:linvnix/features/user/data/user_repository.dart';
+import 'package:linvnix/features/daily_goals/data/daily_goals_repository.dart';
+import 'package:linvnix/features/daily_goals/data/daily_goals_providers.dart';
+import 'package:linvnix/features/daily_goals/domain/daily_goal_models.dart';
 import 'package:linvnix/core/storage/preferences_service.dart';
 import 'package:linvnix/core/providers/providers.dart';
 
 class MockUserRepository extends Mock implements UserRepository {}
 
+class MockDailyGoalsRepository extends Mock implements DailyGoalsRepository {}
+
 void main() {
   late MockUserRepository mockUserRepo;
+  late MockDailyGoalsRepository mockGoalsRepo;
   late PreferencesService prefsService;
+
+  setUpAll(() {
+    registerFallbackValue(GoalType.exercises);
+  });
 
   setUp(() async {
     mockUserRepo = MockUserRepository();
+    mockGoalsRepo = MockDailyGoalsRepository();
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     prefsService = PreferencesService(prefs);
+
+    when(() => mockGoalsRepo.getGoals()).thenAnswer((_) async => []);
+    when(() => mockGoalsRepo.createGoal(any(), any())).thenAnswer(
+      (invocation) async => DailyGoal(
+        id: 'goal-${invocation.positionalArguments[1]}',
+        goalType: invocation.positionalArguments[0] as GoalType,
+        targetValue: invocation.positionalArguments[1] as int,
+      ),
+    );
   });
 
   Widget buildSubject() {
     return ProviderScope(
       overrides: [
         userRepositoryProvider.overrideWithValue(mockUserRepo),
-        preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(prefsService)),
+        dailyGoalsRepositoryProvider.overrideWithValue(mockGoalsRepo),
+        preferencesProvider.overrideWith(
+            () => PreloadedPreferencesNotifier(prefsService)),
       ],
       child: MaterialApp(
         theme: AppTheme.light(),
@@ -96,7 +118,8 @@ void main() {
       expect(nextButton.onPressed, isNotNull);
     });
 
-    testWidgets('navigates to dialect step after selecting A1 and tapping Next',
+    testWidgets(
+        'navigates to dialect step after selecting A1 and tapping Next',
         (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
@@ -146,7 +169,9 @@ void main() {
       expect(nextButton.onPressed, isNotNull);
     });
 
-    testWidgets('navigates to daily goal step', (tester) async {
+    testWidgets(
+        'daily goal step shows 3 goal types with toggles and sliders for enabled goals',
+        (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -162,23 +187,19 @@ void main() {
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Set your daily goal'), findsOneWidget);
-      expect(find.text('words per day'), findsOneWidget);
-      expect(find.text('20'), findsOneWidget);
+      expect(find.text('Đặt mục tiêu hàng ngày'), findsOneWidget);
+      expect(find.text('Bài tập'), findsOneWidget);
+      expect(find.text('Phút học'), findsOneWidget);
+      expect(find.text('Bài học'), findsOneWidget);
+      expect(find.byType(Switch), findsNWidgets(3));
+      expect(find.byType(Slider), findsNWidgets(2));
+      expect(find.text('10 bài tập/ngày'), findsOneWidget);
+      expect(find.text('15 phút/ngày'), findsOneWidget);
     });
 
-    testWidgets('daily goal slider changes value', (tester) async {
-      await tester.pumpWidget(buildSubject());
-
-      await tester.tap(find.text('Skip'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Skip'));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(Slider), findsOneWidget);
-    });
-
-    testWidgets('Get Started button submits on last step', (tester) async {
+    testWidgets(
+        'Get Started submits onboarding without dailyGoal and creates goals via API',
+        (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -210,14 +231,20 @@ void main() {
       verify(() => mockUserRepo.submitOnboarding({
             'currentLevel': 'A1',
             'preferredDialect': 'NORTHERN',
-            'dailyGoal': 20,
             'completeLowerCourses': false,
           })).called(1);
+
+      verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
+          .called(1);
+      verify(() => mockGoalsRepo.createGoal(GoalType.studyMinutes, 15))
+          .called(1);
+      verifyNever(() => mockGoalsRepo.createGoal(GoalType.lessons, any()));
 
       expect(prefsService.isOnboardingCompleted, isTrue);
     });
 
-    testWidgets('Skip All on last step submits with completeLowerCourses false',
+    testWidgets(
+        'Skip All submits onboarding without dailyGoal and creates enabled goals',
         (tester) async {
       when(() => mockUserRepo.submitOnboarding(any())).thenAnswer(
         (_) async => {'id': 'user-1'},
@@ -233,14 +260,19 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(() => mockUserRepo.submitOnboarding({
-            'dailyGoal': 20,
             'completeLowerCourses': false,
           })).called(1);
+
+      verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
+          .called(1);
+      verify(() => mockGoalsRepo.createGoal(GoalType.studyMinutes, 15))
+          .called(1);
 
       expect(prefsService.isOnboardingCompleted, isTrue);
     });
 
-    testWidgets('bypass dialog appears when level > A1 selected', (tester) async {
+    testWidgets('bypass dialog appears when level > A1 selected',
+        (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -254,12 +286,14 @@ void main() {
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Mark lower-level courses as completed?'), findsOneWidget);
+      expect(find.text('Mark lower-level courses as completed?'),
+          findsOneWidget);
       expect(find.text('Yes'), findsOneWidget);
       expect(find.text('No'), findsOneWidget);
     });
 
-    testWidgets('bypass dialog does NOT appear when A1 selected', (tester) async {
+    testWidgets('bypass dialog does NOT appear when A1 selected',
+        (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -273,11 +307,14 @@ void main() {
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Mark lower-level courses as completed?'), findsNothing);
+      expect(
+          find.text('Mark lower-level courses as completed?'), findsNothing);
       expect(find.text('Which dialect do you prefer?'), findsOneWidget);
     });
 
-    testWidgets('submit payload includes completeLowerCourses flag', (tester) async {
+    testWidgets(
+        'submit with completeLowerCourses creates goals via API without dailyGoal',
+        (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -312,9 +349,13 @@ void main() {
       verify(() => mockUserRepo.submitOnboarding({
             'currentLevel': 'B1',
             'preferredDialect': 'NORTHERN',
-            'dailyGoal': 20,
             'completeLowerCourses': true,
           })).called(1);
+
+      verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
+          .called(1);
+      verify(() => mockGoalsRepo.createGoal(GoalType.studyMinutes, 15))
+          .called(1);
     });
   });
 }

@@ -21,7 +21,32 @@ class DailyGoalsNotifier extends CachedRepository<List<DailyGoal>>
   @override
   Future<List<DailyGoal>> fetchFromApi() async {
     final repo = ref.read(dailyGoalsRepositoryProvider);
-    return repo.getGoals();
+    var goals = await repo.getGoals();
+
+    if (goals.isEmpty) {
+      try {
+        final prefs = await ref.read(preferencesProvider.future);
+        if (prefs.isOnboardingCompleted && !prefs.isDailyGoalsMigrated) {
+          await prefs.setDailyGoalsMigrated();
+          final created = <DailyGoal>[];
+          try {
+            created.add(await repo.createGoal(
+              GoalType.exercises,
+              GoalType.exercises.defaultTarget,
+            ));
+          } catch (_) {}
+          try {
+            created.add(await repo.createGoal(
+              GoalType.studyMinutes,
+              GoalType.studyMinutes.defaultTarget,
+            ));
+          } catch (_) {}
+          goals = created;
+        }
+      } catch (_) {}
+    }
+
+    return goals;
   }
 
   Future<void> createGoal(GoalType goalType, int targetValue) async {
