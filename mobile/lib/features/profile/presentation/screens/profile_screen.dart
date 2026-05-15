@@ -260,6 +260,7 @@ class _ProfileHeader extends StatelessWidget {
           Text(
             profile.fullName,
             style: theme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
@@ -267,6 +268,7 @@ class _ProfileHeader extends StatelessWidget {
             style: theme.textTheme.bodyMedium?.copyWith(
               color: c.mutedForeground,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

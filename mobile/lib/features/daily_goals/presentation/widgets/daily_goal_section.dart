@@ -211,11 +211,6 @@ class _GoalsCard extends ConsumerWidget {
                   await ref
                       .read(dailyGoalsProvider.notifier)
                       .createGoal(selectedType!, targetValue);
-                  if (context.mounted) {
-                    AppToast.show(context,
-                        message: 'Đã thêm mục tiêu',
-                        type: AppToastType.success);
-                  }
                 } catch (e) {
                   if (context.mounted) {
                     AppToast.show(context,
@@ -300,11 +295,6 @@ class _GoalTile extends ConsumerWidget {
                   await ref
                       .read(dailyGoalsProvider.notifier)
                       .updateGoal(goal.id, targetValue);
-                  if (context.mounted) {
-                    AppToast.show(context,
-                        message: 'Đã cập nhật',
-                        type: AppToastType.success);
-                  }
                 } catch (e) {
                   if (context.mounted) {
                     AppToast.show(context,
@@ -340,10 +330,6 @@ class _GoalTile extends ConsumerWidget {
                 await ref
                     .read(dailyGoalsProvider.notifier)
                     .deleteGoal(goal.id);
-                if (dialogCtx.mounted) {
-                  AppToast.show(dialogCtx,
-                      message: 'Đã xoá', type: AppToastType.success);
-                }
               } catch (e) {
                 if (dialogCtx.mounted) {
                   AppToast.show(dialogCtx,
@@ -404,7 +390,7 @@ class _TargetSlider extends StatelessWidget {
           value: value.toDouble(),
           min: min.toDouble(),
           max: max.toDouble(),
-          divisions: (max - min).clamp(1, 50),
+          divisions: (max - min) ~/ goalType.step,
           label: '$value',
           onChanged: (v) => onChanged(v.round()),
         ),
@@ -451,7 +437,7 @@ class _NotificationSettings extends ConsumerWidget {
                 'Nhắc mục tiêu',
                 style: theme.textTheme.bodyMedium,
               ),
-              trailing: Switch(
+              trailing: AppSwitch(
                 value: profile.notificationEnabled,
                 onChanged: (value) => _onToggle(context, ref, value),
               ),
@@ -475,6 +461,7 @@ class _NotificationSettings extends ConsumerWidget {
                     color: c.mutedForeground,
                   ),
                 ),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () => _showTimePicker(context, ref, profile),
               ),
             ],
