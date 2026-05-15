@@ -7,6 +7,7 @@ import '../widgets/continue_card.dart';
 import '../../data/home_providers.dart';
 import '../../../courses/data/courses_providers.dart';
 import '../../../courses/domain/course_models.dart';
+import '../../../daily_goals/presentation/widgets/daily_goal_progress_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -69,6 +70,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: const ContinueCard(),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: const DailyGoalProgressCard(),
             ),
             const SizedBox(height: AppSpacing.xl),
             Padding(

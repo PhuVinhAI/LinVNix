@@ -71,6 +71,23 @@ export class ProgressRepository {
     }));
   }
 
+  async countCompletedByUserIdAndDateRange(
+    userId: string,
+    start: Date,
+    end: Date,
+  ): Promise<number> {
+    const result = await this.repository
+      .createQueryBuilder('progress')
+      .where('progress.userId = :userId', { userId })
+      .andWhere('progress.status = :status', {
+        status: ProgressStatus.COMPLETED,
+      })
+      .andWhere('progress.completedAt >= :start', { start })
+      .andWhere('progress.completedAt < :end', { end })
+      .getCount();
+    return result;
+  }
+
   async findCompletedByUserInLessons(
     userId: string,
     lessonIds: string[],

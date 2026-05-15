@@ -87,6 +87,20 @@ export class UserExerciseResultsRepository {
     );
   }
 
+  async countByUserIdAndDateRange(
+    userId: string,
+    start: Date,
+    end: Date,
+  ): Promise<number> {
+    const result = await this.repository
+      .createQueryBuilder('result')
+      .where('result.userId = :userId', { userId })
+      .andWhere('result.attemptedAt >= :start', { start })
+      .andWhere('result.attemptedAt < :end', { end })
+      .getCount();
+    return result;
+  }
+
   async getExercisesWithHighestErrorRate(
     minAttempts: number,
     limit: number,
