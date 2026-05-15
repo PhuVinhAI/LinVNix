@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Always respond to the user in Vietnamese. All documentation, sub-agent interactions, and internal agent communication must be in English.
+Respond to the user in the same language they use in their prompt (if Vietnamese → Vietnamese, if English → English, etc.). All documentation, sub-agent interactions, and internal agent communication must be in English.
 
 ## Monorepo Structure
 
