@@ -492,7 +492,14 @@ class _NotificationSettings extends ConsumerWidget {
           );
       final prefs = await ref.read(preferencesProvider.future);
       await prefs.setNotificationEnabled(value);
-      if (!value) {
+      if (value) {
+        final profile = ref.read(userProfileProvider).value;
+        if (profile != null) {
+          await NotificationService.scheduleDailyReminder(
+            notificationTime: profile.notificationTime,
+          );
+        }
+      } else {
         await NotificationService.cancelDailyReminder();
       }
     } catch (e) {
@@ -526,6 +533,12 @@ class _NotificationSettings extends ConsumerWidget {
           );
       final prefs = await ref.read(preferencesProvider.future);
       await prefs.setNotificationTime(time);
+      final profile = ref.read(userProfileProvider).value;
+      if (profile != null && profile.notificationEnabled) {
+        await NotificationService.scheduleDailyReminder(
+          notificationTime: time,
+        );
+      }
     } catch (e) {
       if (context.mounted) {
         AppToast.show(context,

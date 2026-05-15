@@ -32,9 +32,11 @@ class NotificationService {
       final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>();
       if (androidPlugin != null) {
-        final enabled =
+        final alreadyEnabled =
             await androidPlugin.areNotificationsEnabled() ?? false;
-        return enabled;
+        if (alreadyEnabled) return true;
+        final granted = await androidPlugin.requestNotificationsPermission();
+        return granted ?? false;
       }
     }
 
@@ -92,7 +94,7 @@ class NotificationService {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 
