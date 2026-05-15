@@ -1,10 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/widgets/widgets.dart';
+import '../../features/daily_goals/data/app_session_timer.dart';
 
-class ShellScreen extends StatelessWidget {
+class ShellScreen extends ConsumerStatefulWidget {
   const ShellScreen({super.key, required this.child});
   final Widget child;
+
+  @override
+  ConsumerState<ShellScreen> createState() => _ShellScreenState();
+}
+
+class _ShellScreenState extends ConsumerState<ShellScreen>
+    with WidgetsBindingObserver {
+  late final AppSessionTimer _sessionTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _sessionTimer = ref.read(appSessionTimerProvider);
+    WidgetsBinding.instance.addObserver(this);
+    if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+      _sessionTimer.onAppResumed();
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _sessionTimer.onAppResumed();
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        _sessionTimer.onAppPaused();
+    }
+  }
 
   int _getCurrentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
@@ -28,9 +61,16 @@ class ShellScreen extends StatelessWidget {
   }
 
   @override
+  void dispose() {
+    _sessionTimer.onAppPaused();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: child,
+      body: widget.child,
       bottomNavigationBar: AppNavBar(
         selectedIndex: _getCurrentIndex(context),
         onDestinationSelected: (index) => _onTap(context, index),
