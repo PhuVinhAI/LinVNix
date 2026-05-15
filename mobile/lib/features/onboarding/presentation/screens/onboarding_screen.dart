@@ -21,8 +21,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   String? _selectedDialect;
   int _dailyGoal = 20;
   bool _isSubmitting = false;
+  bool _completeLowerCourses = false;
 
   static const _levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+  static const _a1Index = 0;
   static const _dialects = [
     _DialectOption('STANDARD', 'Standard', 'Chuẩn chung'),
     _DialectOption('NORTHERN', 'Northern', 'Miền Bắc (Hà Nội)'),
@@ -45,6 +47,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _nextStep() {
     if (_currentStep < 2) {
+      if (_currentStep == 0 && _selectedLevel != null) {
+        final selectedIndex = _levels.indexOf(_selectedLevel!);
+        if (selectedIndex > _a1Index) {
+          _showBypassDialog();
+          return;
+        }
+      }
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -54,8 +63,46 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
   }
 
+  void _showBypassDialog() {
+    AppDialog.show(
+      context,
+      builder: (dialogCtx) => AppDialog(
+        title: 'Mark lower-level courses as completed?',
+        actions: [
+          AppDialogAction(
+            label: 'No',
+            onPressed: () {
+              setState(() => _completeLowerCourses = false);
+              Navigator.pop(dialogCtx);
+              _goToNextPage();
+            },
+          ),
+          AppDialogAction(
+            label: 'Yes',
+            isPrimary: true,
+            onPressed: () {
+              setState(() => _completeLowerCourses = true);
+              Navigator.pop(dialogCtx);
+              _goToNextPage();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _goToNextPage() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   void _skipStep() {
     if (_currentStep < 2) {
+      if (_currentStep == 0) {
+        setState(() => _completeLowerCourses = false);
+      }
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -69,18 +116,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     setState(() => _isSubmitting = true);
 
     try {
-      final updateData = <String, dynamic>{
-        'onboardingCompleted': true,
+      final onboardingData = <String, dynamic>{
+        'dailyGoal': _dailyGoal,
+        'completeLowerCourses': _completeLowerCourses,
       };
       if (_selectedLevel != null) {
-        updateData['currentLevel'] = _selectedLevel;
+        onboardingData['currentLevel'] = _selectedLevel;
       }
       if (_selectedDialect != null) {
-        updateData['preferredDialect'] = _selectedDialect;
+        onboardingData['preferredDialect'] = _selectedDialect;
       }
 
       final repository = ref.read(userRepositoryProvider);
-      await repository.updateMe(updateData);
+      await repository.submitOnboarding(onboardingData);
       ref.invalidate(userProfileProvider);
 
       final prefs = await ref.read(preferencesProvider.future);

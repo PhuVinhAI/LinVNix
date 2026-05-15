@@ -27,6 +27,19 @@ class UserRepository {
     }
   }
 
+  Future<Map<String, dynamic>> submitOnboarding(
+      Map<String, dynamic> data) async {
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/users/onboarding',
+        data: data,
+      );
+      return response.data!;
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<Map<String, dynamic>> getMyStats() async {
     try {
       final response =
