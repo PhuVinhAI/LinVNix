@@ -43,4 +43,14 @@ export class UpdateUserDto {
   @IsEnum(Dialect)
   @IsOptional()
   preferredDialect?: Dialect;
+
+  @ApiProperty({ example: false, required: false })
+  @IsBoolean()
+  @IsOptional()
+  notificationEnabled?: boolean;
+
+  @ApiProperty({ example: '20:00', required: false })
+  @IsString()
+  @IsOptional()
+  notificationTime?: string;
 }

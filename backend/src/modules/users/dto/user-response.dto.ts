@@ -39,4 +39,12 @@ export class UserResponseDto {
   @Expose()
   @ApiProperty()
   updatedAt: Date;
+
+  @Expose()
+  @ApiProperty()
+  notificationEnabled: boolean;
+
+  @Expose()
+  @ApiProperty()
+  notificationTime: string;
 }

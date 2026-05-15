@@ -6,6 +6,8 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../features/profile/data/profile_providers.dart';
+import '../../../../features/daily_goals/data/daily_goals_providers.dart';
+import '../../../../features/daily_goals/domain/daily_goal_models.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -19,9 +21,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _currentStep = 0;
   String? _selectedLevel;
   String? _selectedDialect;
-  int _dailyGoal = 20;
   bool _isSubmitting = false;
   bool _completeLowerCourses = false;
+
+  final _goalEnabled = <GoalType, bool>{
+    GoalType.exercises: true,
+    GoalType.studyMinutes: true,
+    GoalType.lessons: false,
+  };
+  final _goalTargets = <GoalType, int>{
+    GoalType.exercises: 10,
+    GoalType.studyMinutes: 15,
+    GoalType.lessons: 2,
+  };
 
   static const _levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
   static const _a1Index = 0;
@@ -117,7 +129,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
     try {
       final onboardingData = <String, dynamic>{
-        'dailyGoal': _dailyGoal,
         'completeLowerCourses': _completeLowerCourses,
       };
       if (_selectedLevel != null) {
@@ -131,8 +142,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await repository.submitOnboarding(onboardingData);
       ref.invalidate(userProfileProvider);
 
+      final goalsNotifier = ref.read(dailyGoalsProvider.notifier);
+      for (final entry in _goalEnabled.entries) {
+        if (entry.value) {
+          await goalsNotifier.createGoal(
+            entry.key,
+            _goalTargets[entry.key] ?? entry.key.defaultTarget,
+          );
+        }
+      }
+
       final prefs = await ref.read(preferencesProvider.future);
-      await prefs.setDailyGoal(_dailyGoal);
       await prefs.setOnboardingCompleted();
 
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
@@ -200,9 +220,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     },
                   ),
                   _DailyGoalStep(
-                    goal: _dailyGoal,
-                    onChanged: (value) {
-                      setState(() => _dailyGoal = value);
+                    goalEnabled: _goalEnabled,
+                    goalTargets: _goalTargets,
+                    onToggle: (type, enabled) {
+                      setState(() => _goalEnabled[type] = enabled);
+                    },
+                    onTargetChanged: (type, value) {
+                      setState(() => _goalTargets[type] = value);
                     },
                   ),
                 ],
@@ -409,12 +433,16 @@ class _DialectStep extends StatelessWidget {
 
 class _DailyGoalStep extends StatelessWidget {
   const _DailyGoalStep({
-    required this.goal,
-    required this.onChanged,
+    required this.goalEnabled,
+    required this.goalTargets,
+    required this.onToggle,
+    required this.onTargetChanged,
   });
 
-  final int goal;
-  final ValueChanged<int> onChanged;
+  final Map<GoalType, bool> goalEnabled;
+  final Map<GoalType, int> goalTargets;
+  final void Function(GoalType, bool) onToggle;
+  final void Function(GoalType, int) onTargetChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -428,7 +456,7 @@ class _DailyGoalStep extends StatelessWidget {
         children: [
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Set your daily goal',
+            'Đặt mục tiêu hàng ngày',
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
@@ -436,63 +464,99 @@ class _DailyGoalStep extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'How many words do you want to review each day? You can change this later.',
+            'Chọn mục tiêu bạn muốn theo dõi. Có thể thay đổi sau trong Profile.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: c.mutedForeground,
               height: 1.5,
             ),
           ),
-          const SizedBox(height: AppSpacing.xxxl),
-          // Big number display
-          Center(
-            child: Column(
+          const SizedBox(height: AppSpacing.xxl),
+          ...GoalType.values.map((type) => _GoalToggleTile(
+                goalType: type,
+                enabled: goalEnabled[type] ?? false,
+                targetValue: goalTargets[type] ?? type.defaultTarget,
+                onToggle: (v) => onToggle(type, v),
+                onTargetChanged: (v) => onTargetChanged(type, v),
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class _GoalToggleTile extends StatelessWidget {
+  const _GoalToggleTile({
+    required this.goalType,
+    required this.enabled,
+    required this.targetValue,
+    required this.onToggle,
+    required this.onTargetChanged,
+  });
+
+  final GoalType goalType;
+  final bool enabled;
+  final int targetValue;
+  final ValueChanged<bool> onToggle;
+  final ValueChanged<int> onTargetChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+    final (min, max) = goalType.range;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+      child: AppCard(
+        variant: AppCardVariant.outlined,
+        borderColor: enabled ? c.primary : c.border,
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          children: [
+            Row(
               children: [
-                Text(
-                  '$goal',
-                  style: theme.textTheme.displayLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: c.primary,
-                    letterSpacing: -2,
+                Icon(goalType.icon,
+                    color: enabled ? c.primary : c.mutedForeground, size: 24),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    goalType.viLabel,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: enabled ? c.foreground : c.mutedForeground,
+                    ),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'words per day',
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: c.mutedForeground,
-                  ),
+                Switch(
+                  value: enabled,
+                  onChanged: onToggle,
+                  activeColor: c.primary,
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: AppSpacing.xxl),
-          AppSlider(
-            value: goal.toDouble(),
-            min: 5,
-            max: 50,
-            divisions: 9,
-            label: '$goal',
-            onChanged: (value) => onChanged(value.round()),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '5',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: c.mutedForeground,
+            if (enabled) ...[
+              const SizedBox(height: AppSpacing.md),
+              Center(
+                child: Text(
+                  '$targetValue ${goalType.unit}/ngày',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: c.primary,
+                  ),
                 ),
               ),
-              Text(
-                '50',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: c.mutedForeground,
-                ),
+              const SizedBox(height: AppSpacing.sm),
+              AppSlider(
+                value: targetValue.toDouble(),
+                min: min.toDouble(),
+                max: max.toDouble(),
+                divisions: (max - min).clamp(1, 50),
+                label: '$targetValue',
+                onChanged: (v) => onTargetChanged(v.round()),
               ),
             ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

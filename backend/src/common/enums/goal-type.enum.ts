@@ -1,0 +1,5 @@
+export enum GoalType {
+  EXERCISES = 'EXERCISES',
+  STUDY_MINUTES = 'STUDY_MINUTES',
+  LESSONS = 'LESSONS',
+}

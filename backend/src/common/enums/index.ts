@@ -10,3 +10,4 @@ export * from './permission.enum';
 export * from './dialect.enum';
 export * from './conversation-status.enum';
 export * from './conversation-message-role.enum';
+export * from './goal-type.enum';
