@@ -69,4 +69,10 @@ export class User extends BaseEntity {
 
   @OneToMany('RefreshToken', 'user')
   refreshTokens: any[];
+
+  @Column({ name: 'notification_enabled', default: false })
+  notificationEnabled: boolean;
+
+  @Column({ name: 'notification_time', default: '20:00' })
+  notificationTime: string;
 }

@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+enum GoalType {
+  exercises('EXERCISES'),
+  studyMinutes('STUDY_MINUTES'),
+  lessons('LESSONS');
+
+  const GoalType(this.value);
+  final String value;
+
+  static GoalType fromString(String value) {
+    return GoalType.values.firstWhere(
+      (t) => t.value == value,
+      orElse: () => GoalType.exercises,
+    );
+  }
+
+  String get viLabel => switch (this) {
+        GoalType.exercises => 'Bài tập',
+        GoalType.studyMinutes => 'Phút học',
+        GoalType.lessons => 'Bài học',
+      };
+
+  String get unit => switch (this) {
+        GoalType.exercises => 'bài tập',
+        GoalType.studyMinutes => 'phút',
+        GoalType.lessons => 'bài học',
+      };
+
+  int get defaultTarget => switch (this) {
+        GoalType.exercises => 10,
+        GoalType.studyMinutes => 15,
+        GoalType.lessons => 2,
+      };
+
+  (int, int) get range => switch (this) {
+        GoalType.exercises => (1, 50),
+        GoalType.studyMinutes => (5, 120),
+        GoalType.lessons => (1, 10),
+      };
+
+  IconData get icon => switch (this) {
+        GoalType.exercises => Icons.fitness_center,
+        GoalType.studyMinutes => Icons.timer,
+        GoalType.lessons => Icons.menu_book,
+      };
+}
+
+class DailyGoal {
+  const DailyGoal({
+    required this.id,
+    required this.goalType,
+    required this.targetValue,
+  });
+
+  factory DailyGoal.fromJson(Map<String, dynamic> json) {
+    return DailyGoal(
+      id: json['id'] as String,
+      goalType: GoalType.fromString(json['goalType'] as String),
+      targetValue: (json['targetValue'] as num).toInt(),
+    );
+  }
+
+  final String id;
+  final GoalType goalType;
+  final int targetValue;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'goalType': goalType.value,
+      'targetValue': targetValue,
+    };
+  }
+
+  DailyGoal copyWith({int? targetValue}) {
+    return DailyGoal(
+      id: id,
+      goalType: goalType,
+      targetValue: targetValue ?? this.targetValue,
+    );
+  }
+}

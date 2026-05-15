@@ -8,6 +8,8 @@ class UserProfile {
     this.preferredDialect,
     this.avatarUrl,
     this.onboardingCompleted = false,
+    this.notificationEnabled = false,
+    this.notificationTime = '20:00',
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,8 @@ class UserProfile {
       preferredDialect: json['preferredDialect'] as String?,
       avatarUrl: json['avatarUrl'] as String?,
       onboardingCompleted: json['onboardingCompleted'] as bool? ?? false,
+      notificationEnabled: json['notificationEnabled'] as bool? ?? false,
+      notificationTime: json['notificationTime'] as String? ?? '20:00',
     );
   }
 
@@ -31,6 +35,8 @@ class UserProfile {
   final String? preferredDialect;
   final String? avatarUrl;
   final bool onboardingCompleted;
+  final bool notificationEnabled;
+  final String notificationTime;
 
   Map<String, dynamic> toJson() {
     return {
@@ -42,6 +48,8 @@ class UserProfile {
       'preferredDialect': preferredDialect,
       'avatarUrl': avatarUrl,
       'onboardingCompleted': onboardingCompleted,
+      'notificationEnabled': notificationEnabled,
+      'notificationTime': notificationTime,
     };
   }
 }

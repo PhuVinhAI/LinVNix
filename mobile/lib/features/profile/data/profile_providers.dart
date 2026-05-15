@@ -20,6 +20,8 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile>
     String? currentLevel,
     String? preferredDialect,
     String? avatarUrl,
+    bool? notificationEnabled,
+    String? notificationTime,
   }) async {
     final repository = ref.read(userRepositoryProvider);
     final data = <String, dynamic>{};
@@ -28,6 +30,8 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile>
     if (currentLevel != null) data['currentLevel'] = currentLevel;
     if (preferredDialect != null) data['preferredDialect'] = preferredDialect;
     if (avatarUrl != null) data['avatarUrl'] = avatarUrl;
+    if (notificationEnabled != null) data['notificationEnabled'] = notificationEnabled;
+    if (notificationTime != null) data['notificationTime'] = notificationTime;
 
     final updated = await repository.updateMe(data);
     state = AsyncData(UserProfile.fromJson(updated));

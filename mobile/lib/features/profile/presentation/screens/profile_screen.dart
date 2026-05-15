@@ -9,6 +9,7 @@ import '../../data/profile_providers.dart';
 import '../../../user/domain/user_profile.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
 import '../../../bookmarks/domain/bookmark_models.dart';
+import '../../../daily_goals/presentation/widgets/daily_goal_section.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -70,6 +71,8 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               _ThemeSection(),
+              const SizedBox(height: AppSpacing.md),
+              const DailyGoalSection(),
               const SizedBox(height: AppSpacing.md),
               _StatsSection(),
               const SizedBox(height: AppSpacing.md),
