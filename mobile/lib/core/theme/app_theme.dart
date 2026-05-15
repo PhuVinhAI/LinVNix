@@ -497,6 +497,26 @@ class AppTheme {
         elevation: 0,
         pressElevation: 0,
       ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return c.primaryForeground;
+          }
+          return c.mutedForeground;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return c.primary;
+          }
+          return c.muted;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.transparent;
+          }
+          return c.border;
+        }),
+      ),
       sliderTheme: SliderThemeData(
         activeTrackColor: c.primary,
         inactiveTrackColor: c.muted,
@@ -697,6 +717,26 @@ class AppTheme {
         ),
         elevation: 0,
         pressElevation: 0,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return c.primaryForeground;
+          }
+          return c.mutedForeground;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return c.primary;
+          }
+          return c.muted;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.transparent;
+          }
+          return c.border;
+        }),
       ),
       sliderTheme: SliderThemeData(
         activeTrackColor: c.primary,

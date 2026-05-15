@@ -527,10 +527,9 @@ class _GoalToggleTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                Switch(
+                AppSwitch(
                   value: enabled,
                   onChanged: onToggle,
-                  activeColor: c.primary,
                 ),
               ],
             ),
@@ -550,7 +549,7 @@ class _GoalToggleTile extends StatelessWidget {
                 value: targetValue.toDouble(),
                 min: min.toDouble(),
                 max: max.toDouble(),
-                divisions: (max - min).clamp(1, 50),
+                divisions: (max - min) ~/ goalType.step,
                 label: '$targetValue',
                 onChanged: (v) => onTargetChanged(v.round()),
               ),

@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:linvnix/core/theme/app_theme.dart';
 import 'package:linvnix/core/theme/widgets/app_button.dart';
+import 'package:linvnix/core/theme/widgets/app_switch.dart';
 import 'package:linvnix/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:linvnix/features/user/data/user_repository.dart';
 import 'package:linvnix/features/daily_goals/data/daily_goals_repository.dart';
@@ -191,7 +192,7 @@ void main() {
       expect(find.text('Bài tập'), findsOneWidget);
       expect(find.text('Phút học'), findsOneWidget);
       expect(find.text('Bài học'), findsOneWidget);
-      expect(find.byType(Switch), findsNWidgets(3));
+      expect(find.byType(AppSwitch), findsNWidgets(3));
       expect(find.byType(Slider), findsNWidgets(2));
       expect(find.text('10 bài tập/ngày'), findsOneWidget);
       expect(find.text('15 phút/ngày'), findsOneWidget);

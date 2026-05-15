@@ -19,6 +19,7 @@ class PreferencesService {
 
   Future<void> clearOnboardingState() async {
     await _prefs.remove(_onboardingCompletedKey);
+    await _prefs.remove(_dailyGoalsMigratedKey);
   }
 
   bool get isDailyGoalsMigrated =>

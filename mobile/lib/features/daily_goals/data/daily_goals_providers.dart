@@ -19,6 +19,12 @@ class DailyGoalsNotifier extends CachedRepository<List<DailyGoal>>
   Duration get ttl => const Duration(minutes: 2);
 
   @override
+  Future<List<DailyGoal>> build() async {
+    watchTags({'daily-goal', 'auth'});
+    return super.build();
+  }
+
+  @override
   Future<List<DailyGoal>> fetchFromApi() async {
     final repo = ref.read(dailyGoalsRepositoryProvider);
     var goals = await repo.getGoals();

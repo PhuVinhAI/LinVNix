@@ -39,6 +39,12 @@ enum GoalType {
         GoalType.lessons => (1, 10),
       };
 
+  int get step => switch (this) {
+        GoalType.exercises => 1,
+        GoalType.studyMinutes => 5,
+        GoalType.lessons => 1,
+      };
+
   IconData get icon => switch (this) {
         GoalType.exercises => Icons.fitness_center,
         GoalType.studyMinutes => Icons.timer,
