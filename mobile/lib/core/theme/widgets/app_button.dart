@@ -76,7 +76,9 @@ class _AppButtonState extends State<AppButton> {
         children: [
           IconTheme(data: IconThemeData(color: isDisabled ? disabledFg : fgColor, size: 20), child: widget.icon!),
           const SizedBox(width: AppSpacing.sm),
-          Text(widget.label!, style: GoogleFonts.inter(fontSize: effectiveFontSize, fontWeight: FontWeight.w600, color: isDisabled ? disabledFg : fgColor)),
+          Flexible(
+            child: Text(widget.label!, style: GoogleFonts.inter(fontSize: effectiveFontSize, fontWeight: FontWeight.w600, color: isDisabled ? disabledFg : fgColor), overflow: TextOverflow.ellipsis),
+          ),
         ],
       );
     } else if (widget.icon != null) {

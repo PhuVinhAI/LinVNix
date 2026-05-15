@@ -152,6 +152,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/courses/:id/exercises/play/:setId',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final setId = state.pathParameters['setId']!;
+          return ExercisePlayScreen(courseId: id, setId: setId);
+        },
+      ),
+      GoRoute(
         path: '/modules/:id',
         builder: (context, state) {
           final id = state.pathParameters['id']!;

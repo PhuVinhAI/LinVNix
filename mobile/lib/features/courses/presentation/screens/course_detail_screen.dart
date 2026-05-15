@@ -566,6 +566,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
                     return _ModuleCard(
                       module: module,
                       index: index,
+                      progressMap: progressMap,
                       onTap: () => context.push('/modules/${module.id}'),
                     );
                   },
@@ -778,14 +779,7 @@ class _CourseInfoSection extends StatelessWidget {
             course.description,
             style: theme.textTheme.bodyMedium,
           ),
-          const SizedBox(height: AppSpacing.xl),
-          Text(
-            'Modules',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.lg),
         ],
       ),
     );
@@ -796,11 +790,23 @@ class _ModuleCard extends StatelessWidget {
   const _ModuleCard({
     required this.module,
     required this.index,
+    required this.progressMap,
     required this.onTap,
   });
   final CourseModule module;
   final int index;
+  final Map<String, UserProgress> progressMap;
   final VoidCallback onTap;
+
+  bool get _isCompleted {
+    if (module.lessons.isEmpty) return false;
+    return module.lessons.every(
+        (l) => progressMap.containsKey(l.id) && progressMap[l.id]!.status == 'completed');
+  }
+
+  bool get _hasProgress {
+    return module.lessons.any((l) => progressMap.containsKey(l.id));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -874,9 +880,19 @@ class _ModuleCard extends StatelessWidget {
             ],
           ],
         ),
-        trailing: Icon(
-          Icons.chevron_right,
-          color: c.mutedForeground,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_isCompleted)
+              Icon(Icons.check_circle, color: const Color(0xFF22C55E), size: 22)
+            else if (_hasProgress)
+              Icon(Icons.radio_button_checked, color: c.primary, size: 22),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.chevron_right,
+              color: c.mutedForeground,
+            ),
+          ],
         ),
       ),
     );

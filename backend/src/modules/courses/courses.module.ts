@@ -32,7 +32,7 @@ import { ExercisesModule } from '../exercises/exercises.module';
     forwardRef(() => ContentsModule),
     GrammarModule,
     forwardRef(() => ProgressModule),
-    ExercisesModule,
+    forwardRef(() => ExercisesModule),
   ],
   controllers: [CoursesController, ModulesController, LessonsController],
   providers: [

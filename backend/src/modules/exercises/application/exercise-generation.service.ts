@@ -1,5 +1,7 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { z } from 'zod';
+import * as fs from 'fs';
+import * as path from 'path';
 import {
   GenaiService,
   Type,
@@ -500,6 +502,15 @@ export class ExerciseGenerationService {
     }
 
     const systemInstruction = this.buildSystemInstruction();
+
+    const debugDir = path.join(process.cwd(), 'debug');
+    if (!fs.existsSync(debugDir)) fs.mkdirSync(debugDir, { recursive: true });
+    const debugId = `${set.id}-${Date.now()}`;
+    fs.writeFileSync(
+      path.join(debugDir, `prompt-${debugId}.txt`),
+      `=== SYSTEM INSTRUCTION ===\n${systemInstruction}\n\n=== USER PROMPT ===\n${prompt}\n\n=== SCHEMA ===\n${JSON.stringify(EXERCISE_RESPONSE_SCHEMA, null, 2)}`,
+    );
+    this.logger.log(`Debug prompt written to debug/prompt-${debugId}.txt`);
 
     const response = await this.genaiService.chatStructured({
       messages: [{ role: 'user', content: prompt }],
