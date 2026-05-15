@@ -698,42 +698,69 @@ class _SetCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              width: isBusy && onCancel != null ? 72 : 48,
-              height: 48,
-              child: isBusy
-                  ? (onCancel != null
-                      ? Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: onCancel,
-                            borderRadius: BorderRadius.circular(12),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const AppSpinner(size: 20, strokeWidth: 2),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'Cancel',
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    color: c.mutedForeground,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
+            if (isCustom && isBusy && onCancel != null)
+              SizedBox(
+                width: 72,
+                height: 48,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onCancel,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const AppSpinner(size: 20, strokeWidth: 2),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Cancel',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: c.mutedForeground,
+                            fontSize: 10,
                           ),
-                        )
-                      : const Center(
-                          child: AppSpinner(size: 22),
-                        ))
-                  : IconButton(
-                      icon: Icon(Icons.keyboard_arrow_down_rounded,
-                          color: c.mutedForeground, size: 26),
-                      tooltip: 'Actions',
-                      onPressed: () => _openActionsMenu(context),
+                        ),
+                      ],
                     ),
-            ),
+                  ),
+                ),
+              )
+            else if (!isCustom)
+              SizedBox(
+                width: isBusy && onCancel != null ? 72 : 48,
+                height: 48,
+                child: isBusy
+                    ? (onCancel != null
+                        ? Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: onCancel,
+                              borderRadius: BorderRadius.circular(12),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const AppSpinner(size: 20, strokeWidth: 2),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Cancel',
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: c.mutedForeground,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : const Center(
+                            child: AppSpinner(size: 22),
+                          ))
+                    : IconButton(
+                        icon: Icon(Icons.keyboard_arrow_down_rounded,
+                            color: c.mutedForeground, size: 26),
+                        tooltip: 'Actions',
+                        onPressed: () => _openActionsMenu(context),
+                      ),
+              ),
           ],
         ),
       ),

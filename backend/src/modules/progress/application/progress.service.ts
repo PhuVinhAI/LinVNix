@@ -35,10 +35,13 @@ export class ProgressService {
     );
 
     if (existing) {
-      return this.progressRepository.update(existing.id, {
-        status: ProgressStatus.IN_PROGRESS,
+      const updateData: Partial<UserProgress> = {
         lastAccessedAt: new Date(),
-      });
+      };
+      if (existing.status !== ProgressStatus.COMPLETED) {
+        updateData.status = ProgressStatus.IN_PROGRESS;
+      }
+      return this.progressRepository.update(existing.id, updateData);
     }
 
     return this.progressRepository.create({

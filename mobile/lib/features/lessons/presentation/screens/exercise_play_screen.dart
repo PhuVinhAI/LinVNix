@@ -14,11 +14,13 @@ class ExercisePlayScreen extends ConsumerStatefulWidget {
     super.key,
     this.lessonId,
     this.moduleId,
+    this.courseId,
     required this.setId,
   });
 
   final String? lessonId;
   final String? moduleId;
+  final String? courseId;
   final String setId;
 
   @override

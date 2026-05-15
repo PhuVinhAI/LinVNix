@@ -196,11 +196,14 @@ export class GenaiService implements IAiProvider, OnModuleInit {
       const lineIndent = line.length - line.trimStart().length;
 
       if (collectingMultiLine) {
-        if (trimmed === '' || lineIndent > multiLineIndent) {
-          multiLineBuffer.push(trimmed);
-          continue;
+        if (trimmed === '') {
+          multiLineBuffer.push('');
+        } else if (lineIndent >= multiLineIndent) {
+          multiLineBuffer.push(line.slice(multiLineIndent));
+        } else {
+          flushMultiLine();
         }
-        flushMultiLine();
+        if (collectingMultiLine) continue;
       }
 
       if (!trimmed || trimmed.startsWith('#')) continue;
