@@ -155,6 +155,87 @@ describe('GenaiService', () => {
         }),
       );
     });
+
+    it('propagates functionCalls from function_call steps in the SDK response', async () => {
+      // The @google/genai Interactions API returns function-call invocations as
+      // top-level steps with `type: 'function_call'`, `name`, `arguments`
+      // (verified against sdk-samples/interactions_function_calling_client_state.ts).
+      // Today the response mapper drops them, which is why the existing tool
+      // loop in `AgentService.runTurn` never actually sees tool calls.
+      mockClient.interactions.create.mockResolvedValue({
+        steps: [
+          {
+            type: 'function_call',
+            id: 'call-1',
+            name: 'get_user_summary',
+            arguments: {},
+          },
+          {
+            type: 'function_call',
+            id: 'call-2',
+            name: 'search_vocabulary',
+            arguments: { query: 'xin chào', dialect: 'NORTHERN' },
+          },
+        ],
+        usageMetadata: { promptTokenCount: 4, candidatesTokenCount: 0 },
+      });
+
+      const result = await service.chat({
+        messages: [{ role: 'user', content: 'How am I doing?' }],
+      });
+
+      expect(result.functionCalls).toEqual([
+        { name: 'get_user_summary', arguments: {} },
+        {
+          name: 'search_vocabulary',
+          arguments: { query: 'xin chào', dialect: 'NORTHERN' },
+        },
+      ]);
+      expect(result.text).toBe('');
+    });
+
+    it('returns undefined functionCalls when the model only emitted text', async () => {
+      mockClient.interactions.create.mockResolvedValue({
+        steps: [
+          { type: 'model_output', content: [{ type: 'text', text: 'Hi!' }] },
+        ],
+        usageMetadata: {},
+      });
+
+      const result = await service.chat({
+        messages: [{ role: 'user', content: 'hello' }],
+      });
+
+      expect(result.functionCalls).toBeUndefined();
+      expect(result.text).toBe('Hi!');
+    });
+
+    it('returns both text and functionCalls when the model emitted both', async () => {
+      mockClient.interactions.create.mockResolvedValue({
+        steps: [
+          {
+            type: 'model_output',
+            content: [{ type: 'text', text: 'Let me look that up.' }],
+          },
+          {
+            type: 'function_call',
+            id: 'call-1',
+            name: 'search_vocabulary',
+            arguments: { query: 'xin chào' },
+          },
+        ],
+        usageMetadata: {},
+      });
+
+      const result = await service.chat({
+        messages: [{ role: 'user', content: 'translate xin chào' }],
+      });
+
+      expect(result.text).toBe('Let me look that up.');
+      expect(result.functionCalls).toEqual([
+        { name: 'search_vocabulary', arguments: { query: 'xin chào' } },
+      ]);
+    });
   });
 
   describe('chatStream()', () => {
