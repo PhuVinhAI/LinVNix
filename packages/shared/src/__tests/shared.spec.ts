@@ -93,6 +93,7 @@ describe('AiException hierarchy', () => {
 describe('BaseTool', () => {
   class TestTool extends BaseTool<{ input: string }, string> {
     readonly name = 'test_tool';
+    readonly displayName = 'Đang chạy test tool...';
     readonly description = 'A test tool';
     readonly parameters = z.object({
       input: z.string().describe('The input value'),
@@ -111,6 +112,7 @@ describe('BaseTool', () => {
     boolean
   > {
     readonly name = 'nested_tool';
+    readonly displayName = 'Đang xử lý...';
     readonly description = 'A tool with nested params';
     readonly parameters = z.object({
       user: z.object({
@@ -127,6 +129,7 @@ describe('BaseTool', () => {
 
   class CtxAwareTool extends BaseTool<{ q: string }, ToolContext> {
     readonly name = 'ctx_aware_tool';
+    readonly displayName = 'Đang lấy ngữ cảnh...';
     readonly description = 'Returns the ctx for verification';
     readonly parameters = z.object({ q: z.string() });
 
@@ -142,6 +145,16 @@ describe('BaseTool', () => {
     const tool = new TestTool();
     const result = await tool.execute({ input: 'hello' }, mockCtx);
     expect(result).toBe('processed: hello');
+  });
+
+  it('exposes a Vietnamese displayName for the per-tool loading state', () => {
+    // Every tool MUST expose `displayName` — the mobile assistant shows this
+    // as the spinner subtitle during Phase B of the Mid mode so the learner
+    // knows what the AI is currently doing.
+    const tool = new TestTool();
+    expect(typeof tool.displayName).toBe('string');
+    expect(tool.displayName.length).toBeGreaterThan(0);
+    expect(tool.displayName).toBe('Đang chạy test tool...');
   });
 
   it('execute forwards ToolContext to tool implementation', async () => {

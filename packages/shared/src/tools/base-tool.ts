@@ -5,6 +5,13 @@ import type { ToolContext } from './tool-context.js';
 
 export abstract class BaseTool<TParams, TResult> {
   abstract readonly name: string;
+
+  // Vietnamese status text the mobile assistant shows as the spinner subtitle
+  // during Phase B ("Đang suy nghĩ...") of the Mid-mode UI so the learner
+  // knows what the AI is doing right now. Required for every tool — emitted
+  // via the `tool_start` SSE event by `AgentService.runTurnStream`.
+  abstract readonly displayName: string;
+
   abstract readonly description: string;
   abstract readonly parameters: ZodSchema<TParams>;
 
