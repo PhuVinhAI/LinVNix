@@ -39,6 +39,7 @@ describe('CourseContentService', () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      findByFilter: jest.fn(),
     };
     const contentsMock = {
       findByLessonId: jest.fn(),
@@ -53,6 +54,7 @@ describe('CourseContentService', () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      search: jest.fn(),
     };
     const progressMock = {
       getTopCoursesByEnrollment: jest.fn(),
@@ -149,6 +151,8 @@ describe('CourseContentService', () => {
         title: 'Lesson 1',
         contents: [],
         grammarRules: [],
+        exercises: [],
+        exerciseSets: [],
       };
       const contents = [
         { id: 'ct1', contentType: 'text', vietnameseText: 'Xin chào' },
@@ -167,6 +171,30 @@ describe('CourseContentService', () => {
       expect(result.grammarRules[0].id).toBe('gr1');
       expect(contentsRepo.findByLessonId).toHaveBeenCalledWith('l1');
       expect(grammarRepo.findByLessonId).toHaveBeenCalledWith('l1');
+    });
+
+    it('exposes exercises and exerciseSets loaded by LessonsRepository.findById', async () => {
+      const lesson = {
+        id: 'l1',
+        title: 'Lesson 1',
+        contents: [],
+        grammarRules: [],
+        exercises: [
+          { id: 'e1', type: 'multiple_choice' },
+          { id: 'e2', type: 'fill_blank' },
+        ],
+        exerciseSets: [{ id: 'es1', title: 'Practice set' }],
+      };
+      lessonsRepo.findById.mockResolvedValue(lesson as any);
+      contentsRepo.findByLessonId.mockResolvedValue([]);
+      grammarRepo.findByLessonId.mockResolvedValue([]);
+
+      const result = await service.getLessonDetail('l1');
+
+      expect(result.exercises).toHaveLength(2);
+      expect(result.exercises[0].id).toBe('e1');
+      expect(result.exerciseSets).toHaveLength(1);
+      expect(result.exerciseSets[0].id).toBe('es1');
     });
 
     it('throws NotFoundException when lesson not found', async () => {
@@ -230,6 +258,110 @@ describe('CourseContentService', () => {
       await expect(service.getContentDetail('missing')).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('findLessons', () => {
+    it('forwards the full filter set to LessonsRepository.findByFilter', async () => {
+      lessonsRepo.findByFilter.mockResolvedValue([]);
+
+      await service.findLessons({
+        topic: 'family',
+        level: 'A1' as any,
+        type: 'vocabulary' as any,
+        limit: 5,
+      });
+
+      expect(lessonsRepo.findByFilter).toHaveBeenCalledWith({
+        topic: 'family',
+        level: 'A1',
+        type: 'vocabulary',
+        limit: 5,
+      });
+    });
+
+    it('returns lesson summary shape: id, title, level, type, courseTitle, moduleTitle', async () => {
+      lessonsRepo.findByFilter.mockResolvedValue([
+        {
+          id: 'l1',
+          title: 'Family members',
+          lessonType: 'vocabulary',
+          module: {
+            id: 'm1',
+            title: 'Family',
+            course: { id: 'c1', title: 'Beginner Vietnamese', level: 'A1' },
+          },
+        } as any,
+      ]);
+
+      const result = await service.findLessons({ topic: 'family' });
+
+      expect(result).toEqual([
+        {
+          id: 'l1',
+          title: 'Family members',
+          level: 'A1',
+          type: 'vocabulary',
+          courseTitle: 'Beginner Vietnamese',
+          moduleTitle: 'Family',
+        },
+      ]);
+    });
+
+    it('omits filters that are undefined when calling the repository', async () => {
+      lessonsRepo.findByFilter.mockResolvedValue([]);
+
+      await service.findLessons({ topic: 'family' });
+
+      expect(lessonsRepo.findByFilter).toHaveBeenCalledWith({
+        topic: 'family',
+      });
+    });
+
+    it('accepts an empty filter (returns whatever the repository returns)', async () => {
+      lessonsRepo.findByFilter.mockResolvedValue([]);
+
+      const result = await service.findLessons({});
+
+      expect(lessonsRepo.findByFilter).toHaveBeenCalledWith({});
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('searchGrammar', () => {
+    it('forwards a plain query (no opts) to GrammarRepository.search', async () => {
+      grammarRepo.search.mockResolvedValue([
+        { id: 'gr1', title: 'Classifiers' } as any,
+      ]);
+
+      const result = await service.searchGrammar('classifier');
+
+      expect(grammarRepo.search).toHaveBeenCalledWith('classifier', {});
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe('gr1');
+    });
+
+    it('forwards lessonId and level filters to the repository', async () => {
+      grammarRepo.search.mockResolvedValue([]);
+
+      await service.searchGrammar('classifier', {
+        lessonId: 'l1',
+        level: 'A2' as any,
+      });
+
+      expect(grammarRepo.search).toHaveBeenCalledWith('classifier', {
+        lessonId: 'l1',
+        level: 'A2',
+      });
+    });
+
+    it('returns [] without hitting the repository on empty / whitespace query', async () => {
+      const a = await service.searchGrammar('');
+      const b = await service.searchGrammar('   ');
+
+      expect(a).toEqual([]);
+      expect(b).toEqual([]);
+      expect(grammarRepo.search).not.toHaveBeenCalled();
     });
   });
 

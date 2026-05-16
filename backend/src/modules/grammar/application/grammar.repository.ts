@@ -2,6 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GrammarRule } from '../domain/grammar-rule.entity';
+import { UserLevel } from '../../../common/enums';
+
+export interface GrammarSearchOptions {
+  lessonId?: string;
+  level?: UserLevel;
+}
 
 @Injectable()
 export class GrammarRepository {
@@ -36,5 +42,43 @@ export class GrammarRepository {
 
   async delete(id: string): Promise<void> {
     await this.repository.softDelete(id);
+  }
+
+  /**
+   * ILIKE search over `title` + `explanation`. The catalog is small enough
+   * today that a plain ILIKE is fine; a normalized lower-case GIN index is
+   * an obvious next step once row counts grow.
+   *
+   * Optional filters:
+   * - `lessonId` — narrow to one lesson (useful when the learner asks about
+   *   grammar inside a lesson context).
+   * - `level` — match the CEFR level of the lesson's owning course; requires
+   *   joining `lesson → module → course`.
+   *
+   * Hard-capped at 50 rows.
+   */
+  async search(
+    query: string,
+    opts: GrammarSearchOptions = {},
+  ): Promise<GrammarRule[]> {
+    const qb = this.repository
+      .createQueryBuilder('grammar')
+      .where(
+        '(grammar.title ILIKE :query OR grammar.explanation ILIKE :query)',
+        { query: `%${query}%` },
+      );
+
+    if (opts.lessonId) {
+      qb.andWhere('grammar.lesson_id = :lessonId', { lessonId: opts.lessonId });
+    }
+
+    if (opts.level) {
+      qb.innerJoin('lessons', 'lesson', 'lesson.id = grammar.lesson_id')
+        .innerJoin('modules', 'module', 'module.id = lesson.module_id')
+        .innerJoin('courses', 'course', 'course.id = module.course_id')
+        .andWhere('course.level = :level', { level: opts.level });
+    }
+
+    return qb.orderBy('grammar.title', 'ASC').limit(50).getMany();
   }
 }

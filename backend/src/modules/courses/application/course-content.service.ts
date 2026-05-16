@@ -1,9 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CoursesRepository } from './repositories/courses.repository';
 import { ModulesRepository } from './repositories/modules.repository';
-import { LessonsRepository } from './repositories/lessons.repository';
+import {
+  LessonsRepository,
+  LessonFilterOptions,
+} from './repositories/lessons.repository';
 import { ContentsRepository } from '../../contents/application/contents.repository';
-import { GrammarRepository } from '../../grammar/application/grammar.repository';
+import {
+  GrammarRepository,
+  GrammarSearchOptions,
+} from '../../grammar/application/grammar.repository';
 import { ProgressRepository } from '../../progress/application/progress.repository';
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
 import { CourseProgressRepository } from '../../progress/application/course-progress.repository';
@@ -11,12 +17,28 @@ import { ProgressStatus } from '../../../common/enums';
 import { Course } from '../domain/course.entity';
 import { Module } from '../domain/module.entity';
 import { Lesson } from '../domain/lesson.entity';
+import { LessonType, UserLevel } from '../../../common/enums';
 import { LessonContent } from '../../contents/domain/lesson-content.entity';
 import { GrammarRule } from '../../grammar/domain/grammar-rule.entity';
 import {
   CourseStatsPort,
   CourseStatsResult,
 } from '../../admin/application/ports/dashboard-stats.ports';
+
+/**
+ * Lightweight catalog-lookup summary returned by `findLessons`. Intentionally
+ * excludes full lesson content (contents, vocabularies, grammar rules) — the
+ * AI fetches those via `get_lesson_detail` once it has narrowed to one
+ * lesson the learner cares about.
+ */
+export interface LessonSummary {
+  id: string;
+  title: string;
+  level: UserLevel;
+  type: LessonType;
+  courseTitle: string;
+  moduleTitle: string;
+}
 
 @Injectable()
 export class CourseContentService implements CourseStatsPort {
@@ -70,6 +92,29 @@ export class CourseContentService implements CourseStatsPort {
     return this.lessonsRepository.findByModuleId(moduleId);
   }
 
+  /**
+   * Catalog-level lesson search used by the `find_lessons` AI tool. Returns
+   * compact summaries (not full lesson bodies); the AI follows up with
+   * `get_lesson_detail` when it needs content.
+   */
+  async findLessons(opts: LessonFilterOptions = {}): Promise<LessonSummary[]> {
+    const filter: LessonFilterOptions = {};
+    if (opts.topic !== undefined) filter.topic = opts.topic;
+    if (opts.level !== undefined) filter.level = opts.level;
+    if (opts.type !== undefined) filter.type = opts.type;
+    if (opts.limit !== undefined) filter.limit = opts.limit;
+
+    const lessons = await this.lessonsRepository.findByFilter(filter);
+    return lessons.map((lesson) => ({
+      id: lesson.id,
+      title: lesson.title,
+      level: lesson.module?.course?.level,
+      type: lesson.lessonType,
+      courseTitle: lesson.module?.course?.title,
+      moduleTitle: lesson.module?.title,
+    }));
+  }
+
   async getContentsByLesson(lessonId: string): Promise<LessonContent[]> {
     return this.contentsRepository.findByLessonId(lessonId);
   }
@@ -84,6 +129,21 @@ export class CourseContentService implements CourseStatsPort {
 
   async getGrammarByLesson(lessonId: string): Promise<GrammarRule[]> {
     return this.grammarRepository.findByLessonId(lessonId);
+  }
+
+  /**
+   * Catalog-level grammar search used by the `search_grammar_rules` AI tool.
+   * Empty / whitespace queries short-circuit without touching the DB.
+   */
+  async searchGrammar(
+    query: string,
+    opts: GrammarSearchOptions = {},
+  ): Promise<GrammarRule[]> {
+    const q = query?.trim() ?? '';
+    if (q.length === 0) {
+      return [];
+    }
+    return this.grammarRepository.search(q, opts);
   }
 
   async getGrammarDetail(grammarId: string): Promise<GrammarRule> {
