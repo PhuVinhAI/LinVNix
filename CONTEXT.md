@@ -115,21 +115,43 @@ _Avoid_: Bookmark, Favorite, Flashcard
 
 ### AI
 
+**Trợ lý AI**:
+Tính năng AI tương tác trong app: học viên hỏi gì đó về màn hình hiện tại, AI trả lời và có thể gọi **Công cụ AI** để truy xuất/ghi dữ liệu hệ thống. Surface có 3 trạng thái UI:
+1. **Thanh Trợ lý AI** (thu gọn, luôn hiện ở đáy) — chưa mở.
+2. **Trạng thái Hỏi** (mid) — single-exchange focused, không hiện message list. Có 3 phase tuần tự: **Soạn** (textarea ≤ 5 dòng + nút Gửi), **Loading** (spinner + "Đang suy nghĩ..." + nút Dừng), **Đọc** (AI streaming render markdown, tự co giãn tới max ~75% screen + nút Dừng khi đang stream / nút Soạn tiếp khi đã xong). Tap **Soạn tiếp** → quay lại phase Soạn, AI message bị ẩn (Hội thoại server-side vẫn liên tục).
+3. **Trạng thái Toàn màn hình** — chat list truyền thống. Header: drawer toggle, tên screen Flutter hiện tại (để học viên biết Ngữ cảnh đang include), Reset, đóng. Drawer trái: list **Hội thoại** + CRUD (rename, delete) + nút **+ Mới**. Body: user message right-aligned + nền, AI message full-width không nền + markdown.
+
+Học viên muốn xem lại Tin nhắn trước cùng Hội thoại → vào trạng thái Toàn màn hình. Trạng thái Hỏi cố tình giữ tối giản.
+_Avoid_: AI Assistant, Chatbot, Cô giáo AI, Gia sư AI
+
+**Thanh Trợ lý AI**:
+Thanh ngang nhỏ ở vị trí **thấp nhất của màn hình** (dưới cả bottom nav trên route có bottom nav). Hiện trên mọi route authenticated kể cả khi đang làm bài tập. Không hiện ở splash, các route auth (`/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password*`), và `/onboarding`. Kéo lên → mở **Trợ lý AI** trạng thái sheet/toàn màn hình. Có nút **Reset** để ngừng active **Hội thoại** hiện tại và mở phiên mới.
+_Avoid_: AI bar, Chat bar, Mini chat, Floating button
+
 **Hội thoại**:
-Phiên chat giữa **Học viên** và AI, có thể gắn với **Bài học** hoặc **Khóa học**. Theo dõi token sử dụng. Không có trạng thái archive — chỉ tồn tại hoặc bị soft-delete.
-_Avoid_: Conversation, Chat session
+Phiên hỏi đáp giữa **Học viên** và AI, **scoped với một Ngữ cảnh màn hình duy nhất** tại thời điểm tin nhắn đầu tiên. Mỗi lần học viên mở **Thanh Trợ lý AI** để hỏi → một Hội thoại mới (lazy — tạo khi có Tin nhắn đầu tiên). Ngữ cảnh đông cứng, không đổi giữa chừng (kể cả khi học viên chuyển route mà thanh vẫn mở). Học viên không tiếp Hội thoại cũ qua thanh — chỉ qua **Trợ lý AI** trạng thái toàn màn hình. Có nút **Reset** trong thanh để ngừng active phiên hiện tại và bắt đầu phiên mới với ngữ cảnh màn hình hiện tại. Theo dõi token. Không có trạng thái archive — chỉ tồn tại hoặc bị soft-delete.
+_Avoid_: Conversation, Chat session, đoạn chat, long thread
 
 **Tin nhắn**:
 Một lượt trong **Hội thoại** — do học viên gửi, AI phản hồi, hoặc kết quả gọi công cụ AI. Học viên chỉ thấy tin nhắn USER và ASSISTANT; tin nhắn TOOL là nội bộ agent loop.
 _Avoid_: ConversationMessage, Chat message
 
 **Công cụ AI**:
-Hàm mà AI có thể gọi trong vòng lặp agent (Reason-Act). Mỗi công cụ định nghĩa tham số bằng Zod schema. Hiện chỉ có EchoTool (placeholder). Cần bổ sung tool thật — sẽ quyết định trong grill riêng.
-_Avoid_: Tool, AI Tool
+Hàm mà AI có thể gọi trong vòng lặp agent (Reason-Act). Mỗi công cụ định nghĩa tham số bằng Zod schema. Phân làm 3 loại theo semantics:
+- **Tool đọc**: truy xuất data của **Học viên** (tiến trình, bookmarks, lịch sử bài tập) hoặc catalog hệ thống (từ vựng, ngữ pháp, bài học). Execute trực tiếp.
+- **Tool ghi trực tiếp**: action reversible nhanh (vd: toggle **Yêu sách**). Execute trực tiếp.
+- **Tool đề xuất** (propose): action nhạy hơn (vd: CRUD **Mục tiêu ngày**, sinh **Bộ bài tập do AI sinh**). Backend trả về proposal payload; UI mobile hiện inline confirm card; học viên bấm OK → client gọi endpoint thật.
+
+Tool **không cho phép** progression-mutating action (vd: `mark_lesson_complete`, `update_profile.level`) trong V1. Tool nhận `userId` của **Hội thoại** owner từ execution context (không từ AI params) để scope an toàn.
+_Avoid_: Tool, AI Tool, Function call
 
 **Bộ bài tập do AI sinh**:
 **Bộ bài tập tùy chỉnh** (cá nhân) được tạo tự động bởi AI dựa trên ngữ cảnh bài học và cấu hình yêu cầu. Có vòng đời: đang sinh → sẵn sàng → thất bại.
 _Avoid_: AI-generated exercise set
+
+**Ngữ cảnh màn hình**:
+Snapshot dữ liệu structured của màn hình Flutter mà **Học viên** đang xem tại thời điểm tạo **Hội thoại**. Mobile push lên backend dưới dạng JSON (route, IDs, tóm tắt UI và nội dung học viên đang nhìn — vd: nội dung bài, câu hỏi đang làm, đáp án tạm). Lưu thành cột JSONB `screenContext` trên `Conversation`. AI lấy snapshot này làm hệ quy chiếu chính; **Công cụ AI** dùng để bổ sung dữ liệu nằm ngoài snapshot (lịch sử, catalog, ghi data).
+_Avoid_: Screen context, Page context, Route context, Snapshot
 
 ## Quan hệ
 
@@ -144,7 +166,7 @@ _Avoid_: AI-generated exercise set
 - Một **Học viên** có **Chuỗi mục tiêu** — số ngày liên tiếp đạt tất cả mục tiêu
 - Một **Học viên** có cài đặt **Nhắc mục tiêu** (bật/tắt + giờ nhắc)
 - Một **Học viên** có nhiều **Hội thoại**; mỗi **Hội thoại** có nhiều **Tin nhắn**
-- Một **Hội thoại** có thể gắn với một **Bài học** hoặc **Khóa học** (tùy chọn). Không cho đổi bài gắn — phải tạo hội thoại mới. Học viên có thể tạo nhiều hội thoại cùng gắn một bài.
+- Một **Hội thoại** scoped với đúng một **Ngữ cảnh màn hình** (đông cứng lúc tạo). Học viên có thể có nhiều Hội thoại cùng route/cùng bài học.
 - **Quyền hạn** gán cho **Vai trò**; **Vai trò** gán cho người dùng
 
 ## Ví dụ đối thoại
@@ -173,6 +195,7 @@ _Avoid_: AI-generated exercise set
 - **Không giới hạn token cho học viên** — quota quản lý ở cấp infrastructure (KeyPool cooldown, fallback model). Nên hiển thị usage cho học viên để tự điều tiết.
 - **Phương ngữ ưu tiên ảnh hưởng gì đến trải nghiệm** (audio? hiển thị? AI chat?) — sẽ quyết định trong grill riêng.
 - **Bài tập listening khi chưa có audio thật** — cách xử lý sẽ quyết định khi implement TTS/thu âm.
+- **AI sửa lỗi phát âm/ngữ pháp từ text** — defer, sẽ grill riêng. Có thể là Công cụ AI thêm hoặc làm trực tiếp trong response.
 - **ConversationStatus (ACTIVE/ARCHIVED) không cần thiết** — Hội thoại chỉ tồn tại hoặc bị soft-delete. Bỏ enum `ConversationStatus`.
 - ~~"User" vừa chỉ **Học viên** vừa chỉ **Quản trị viên** — code dùng chung entity User với RBAC phân biệt, nhưng domain nên tách biệt khái niệm.~~ **Đã giải quyết:** Gọi theo ngữ cảnh sử dụng. Dual-role (USER+ADMIN) gọi kèm ngoặc, vd: "Quản trị viên (vai trò USER+ADMIN)".
 - ~~SSE streaming endpoint gọi AI trực tiếp không qua agent loop — không hỗ trợ **Công cụ AI** trong chế độ streaming.~~ **Đã xác nhận là bug:** Streaming cần gọi **Công cụ AI** qua agent loop như non-streaming. Cần sửa khi bổ sung tool thật.
@@ -182,3 +205,20 @@ _Avoid_: AI-generated exercise set
 - **Chuỗi mục tiêu yêu cầu đạt TẤT CẢ** — đạt 1 trong 3 goal không tính chuỗi. Tiêu chuẩn rõ ràng, tránh mơ hồ.
 - **Phút truy cập app = thời gian app foreground toàn bộ** — không phân biệt screen. Đếm khi app foreground, pause khi minimize/lock. Mobile đếm timer, sync tổng phút hôm nay lên backend khi có event.
 - **Timezone hardcode Asia/Ho_Chi_Minh** — app học tiếng Việt, user đa số ở VN. Không cần timezone picker cho MVP.
+- **Hội thoại là phiên hỏi đáp ngắn 1-ngữ-cảnh, không phải long thread như ChatGPT** — mỗi lần kéo thanh trợ lý lên để hỏi → Hội thoại mới (lazy create lúc gửi tin nhắn đầu tiên). Ngữ cảnh màn hình đông cứng tại thời điểm tạo. Thanh trợ lý persistent xuyên route, có nút **Reset** để mở phiên mới với ngữ cảnh hiện tại. Học viên muốn tiếp Hội thoại cũ phải vào màn lịch sử.
+- **Ngữ cảnh màn hình gửi dày, mobile build, JSONB** — mobile push toàn bộ snapshot dữ liệu hiển thị (text nội dung, câu hỏi đang làm, ...) lên cùng tin nhắn đầu tiên; backend lưu JSONB. **Công cụ AI** chỉ dành cho dữ liệu nằm NGOÀI snapshot (lịch sử cross-screen, catalog tra cứu, ghi data). Lý do: bài học và screen content trong app rất nhỏ — payload không đáng lo, lợi về latency và đơn giản.
+- **Tool catalog V1 = reads + low-risk writes** — AI không tự ý mark complete bài, đổi level học viên, hay xoá data. Writes chia 2 nhánh: **direct execute** (bookmark toggle) và **propose + confirm** (CRUD Mục tiêu ngày, sinh Bộ bài tập tùy chỉnh). `userId` luôn lấy từ Hội thoại owner, không từ AI params.
+- **V1 catalog 12 tool** — `get_user_summary`, `get_progress_overview`, `list_recent_exercise_results`, `list_bookmarks`, `search_vocabulary`, `search_grammar_rules`, `find_lessons`, `get_lesson_detail`, `toggle_bookmark` (direct), `propose_create_daily_goal`, `propose_update_daily_goal`, `propose_generate_custom_exercise_set` (propose). V2 (sau): get_*_detail còn lại, `get_daily_goal_history`, `propose_delete_*`, `list_conversations`.
+- **Propose action: mobile gọi endpoint thật** — tool `propose_*` chỉ trả proposal payload kèm trong tool result; UI mobile hiện inline confirm card; học viên bấm OK thì client tự gọi endpoint REST thật (POST /daily-goals, POST .../custom, etc.). Backend không lưu pending proposal — audit trail dựa vào toolCalls/toolResults trong Hội thoại + log của endpoint thật.
+- **Kiến trúc Thanh Trợ lý AI = MaterialApp.router.builder wrap** — toàn bộ router tree được wrap bằng `GlobalAssistantShell` widget. Bar luôn ở đáy màn hình, không dùng Overlay (modal/dialog vẫn được ở trên bar). Visibility logic watch route hiện tại để hide ở splash/auth/onboarding.
+- **Bar hiện cả ở exercise play** — học viên có thể hỏi AI giữa lúc làm bài. Tránh "gian lận" bằng cách design AI response style (gợi ý hint không đưa đáp án thẳng) thay vì hide UI. Phù hợp triết lý "không giới hạn token cho học viên".
+- **Mid mode là single-exchange focused, không phải chat list** — phase Soạn chỉ có textarea, phase Đọc chỉ có AI message hiện tại. Tap **Soạn tiếp** = ẩn AI message cũ, hiện textarea trống mới (Hội thoại server-side vẫn liên tục, AI vẫn nhớ ngữ cảnh). Muốn xem Tin nhắn trước → vào trạng thái Toàn màn hình.
+- **Nút Dừng = abort + lưu partial** — tap Dừng giữa Phase B/C: backend ngắt request, partial response (nếu có) lưu lại như Tin nhắn cuối với flag `interrupted=true`. Học viên cảm thấy điều khiển được.
+- **CRUD Hội thoại V1 = rename + delete** — không pin V1 (defer V2 nếu cần). Tap vào Hội thoại trong drawer = mở Hội thoại đó làm active.
+- **Streaming protocol = single endpoint `POST /ai/chat/stream` (SSE)** — gộp 2-step cũ (`POST /ai/chat` + `GET /ai/chat/:id/stream`) thành 1 POST trả SSE thẳng. Mobile gửi `{ conversationId?, message, screenContext? }`, backend lazy-create Hội thoại (đính `screenContext` JSONB), gọi `AgentService.runTurnStream()` (mới, async generator) yield events typed: `tool_start`, `tool_result`, `text_chunk`, `propose`, `error`, `done`. SSE bypass-tool bug cũ → fix bằng cách stream handler gọi qua agent loop chứ không gọi thẳng `genai.chatStream`.
+- **Tool activity granular trong Phase B** — mỗi **Công cụ AI** khai báo `displayName` Vietnamese (vd: "Đang tra cứu từ vựng..."); mobile render status text theo `tool_start.displayName`. Generic "Đang suy nghĩ..." chỉ khi chưa có tool nào chạy.
+- **Abort = Dio cancel + backend cleanup + flag `interrupted`** — schema mới: `ConversationMessage.interrupted: boolean default false`. Mobile cancel SSE → backend ngắt Gemini stream → lưu partial assistant message với flag. UI hiện partial text + label "Đã dừng".
+- **Propose card embed endpoint+payload** — tool `propose_*` trả về proposal struct có sẵn `endpoint` + `payload` cho mobile gọi thật khi user confirm. AI không được notify khi user decline (V1). Lưu vào `toolResults[]` của Tin nhắn.
+- **Mobile context plumbing: reactive Riverpod provider `currentScreenContextProvider`** — auto-computes từ route + watch domain providers. Schema `ScreenContext { route, displayName, barPlaceholder, data: Map<String,dynamic> }`. Identity của Học viên (level, dialect, nativeLanguage) **không** push từ mobile mỗi lần — backend tự merge từ `User` entity của Hội thoại owner. `data` chỉ chứa thông tin của screen. Exercise play screen include `userAnswer` (AI cần thấy để gợi ý đúng).
+- **Trợ lý AI persona & language rule** — 1 template prompt `assistant-tutor.yaml` với placeholders `{{user.*}}` và `{{screenContext.*}}`. AI **luôn phản hồi bằng `user.nativeLanguage`** (hard rule, không adaptive theo level). Tiếng Việt chỉ dùng cho từ vựng đích, ví dụ, và trích Nội dung bài/Quy tắc ngữ pháp. Hint mode khi đang `exercises/play` (không đưa đáp án thẳng) áp dụng qua prompt rule. Dialect awareness qua prompt directive. Markdown render trong cả Mid Phase C lẫn Full mode. V2 có thể thêm `User.aiResponseLanguage` cho immersion-mode.
+- **V1 không rate limit / concurrency cho AI chat** — chỉ dùng `ThrottlerGuard` global hiện tại (1000/60s). Concurrent stream: backend không enforce, mobile tự cancel stream cũ khi user gửi mới (race-safe). Quota Gemini quản lý ở `KeyPool` cooldown (đã có). Bỏ enum `AI_CHAT_STREAM` (gộp với `AI_CHAT`); bổ sung guard `AI_GENERATE_EXERCISE` lên endpoint sinh exercise đã có. Không tạo permission mới cho V1.
