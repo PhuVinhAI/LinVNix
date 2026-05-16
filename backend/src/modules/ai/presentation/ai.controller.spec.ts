@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ForbiddenException } from '@nestjs/common';
+import { ForbiddenException, MessageEvent } from '@nestjs/common';
 import { AiController } from './ai.controller';
 import { ConversationService } from '../../conversations/application/conversation.service';
 import { AgentService } from '../../agent/application/agent.service';
 import { GenaiService } from '../../../infrastructure/genai/genai.service';
-import { ConversationMessageRole } from '../../../common/enums';
 import { Observable } from 'rxjs';
+import type { StreamEvent } from '../../agent/application/stream-event';
 
 describe('AiController', () => {
   let controller: AiController;
@@ -30,6 +30,36 @@ describe('AiController', () => {
     updatedAt: new Date(),
   };
 
+  function makeStreamFrom(events: StreamEvent[]): AsyncIterable<StreamEvent> {
+    return (async function* () {
+      for (const e of events) yield e;
+    })();
+  }
+
+  async function collect<T>(
+    observable: Observable<T>,
+    timeoutMs = 2000,
+  ): Promise<T[]> {
+    return new Promise<T[]>((resolve, reject) => {
+      const collected: T[] = [];
+      const timer = setTimeout(
+        () => reject(new Error('Observable did not complete in time')),
+        timeoutMs,
+      );
+      observable.subscribe({
+        next: (event) => collected.push(event),
+        complete: () => {
+          clearTimeout(timer);
+          resolve(collected);
+        },
+        error: (err) => {
+          clearTimeout(timer);
+          reject(err instanceof Error ? err : new Error(String(err)));
+        },
+      });
+    });
+  }
+
   beforeEach(async () => {
     conversationService = {
       create: jest.fn(),
@@ -42,6 +72,7 @@ describe('AiController', () => {
 
     agentService = {
       runTurn: jest.fn(),
+      runTurnStream: jest.fn(),
     } as any;
 
     genaiService = {
@@ -64,154 +95,183 @@ describe('AiController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('POST /ai/chat', () => {
-    it('creates a new conversation when conversationId is not provided', async () => {
-      conversationService.create.mockResolvedValue(mockConversation as any);
-      conversationService.addMessage.mockResolvedValue({} as any);
-
-      const result = await controller.chat(mockUser, {
-        message: 'Xin chào',
-        stream: true,
-      });
-
-      expect(conversationService.create).toHaveBeenCalledWith('user-1', {
-        model: 'gemini-2.0-flash',
-        lessonId: undefined,
-      });
-      expect(result).toEqual({ conversationId: 'conv-1' });
-    });
-
-    it('uses existing conversation when conversationId is provided', async () => {
-      conversationService.addMessage.mockResolvedValue({} as any);
-
-      const result = await controller.chat(mockUser, {
-        message: 'Xin chào',
-        conversationId: 'conv-1',
-        stream: true,
-      });
-
-      expect(conversationService.create).not.toHaveBeenCalled();
-      expect(conversationService.addMessage).toHaveBeenCalledWith('conv-1', {
-        role: ConversationMessageRole.USER,
-        content: 'Xin chào',
-        tokenCount: 0,
-      });
-      expect(result).toEqual({ conversationId: 'conv-1' });
-    });
-
-    it('returns full response when stream is false', async () => {
-      conversationService.create.mockResolvedValue(mockConversation as any);
-      agentService.runTurn.mockResolvedValue({
-        text: 'Xin chào!',
-        usageMetadata: {
-          promptTokenCount: 10,
-          candidatesTokenCount: 5,
-          totalTokenCount: 15,
-        },
-      } as any);
-
-      const result = await controller.chat(mockUser, {
-        message: 'Xin chào',
-        stream: false,
-      });
-
-      expect(agentService.runTurn).toHaveBeenCalledWith('conv-1', 'Xin chào');
-      expect(result).toEqual({
-        conversationId: 'conv-1',
-        text: 'Xin chào!',
-        usageMetadata: {
-          promptTokenCount: 10,
-          candidatesTokenCount: 5,
-          totalTokenCount: 15,
-        },
-      });
-    });
-
-    it('passes lessonId when creating a new conversation', async () => {
-      conversationService.create.mockResolvedValue(mockConversation as any);
-      conversationService.addMessage.mockResolvedValue({} as any);
-
-      await controller.chat(mockUser, {
-        message: 'Xin chào',
-        lessonId: 'lesson-1',
-        stream: true,
-      });
-
-      expect(conversationService.create).toHaveBeenCalledWith('user-1', {
-        model: 'gemini-2.0-flash',
-        lessonId: 'lesson-1',
-      });
-    });
-  });
-
-  describe('GET /ai/chat/:id/stream', () => {
-    it('returns an Observable for SSE streaming', async () => {
-      conversationService.findById.mockResolvedValue(mockConversation as any);
-      genaiService.chatStream.mockReturnValue(
-        (async function* () {
-          yield { text: 'Hello ' };
-          yield { text: 'world' };
-        })(),
+  describe('POST /ai/chat/stream', () => {
+    it('returns an Observable that yields encoded SSE events', async () => {
+      agentService.runTurnStream.mockReturnValue(
+        makeStreamFrom([
+          { type: 'text_chunk', text: 'Hi' },
+          { type: 'done', messageId: 'msg-1', interrupted: false },
+        ]),
       );
 
-      const result = await controller.stream(mockUser, 'conv-1');
+      const result = controller.chatStream(mockUser, {
+        message: 'hello',
+      });
 
       expect(result).toBeInstanceOf(Observable);
+      const events = await collect(result);
+      expect(events).toHaveLength(2);
+      expect(events[0].type).toBe('text_chunk');
+      expect(JSON.parse(events[0].data as string)).toEqual({ text: 'Hi' });
+      expect(events[1].type).toBe('done');
+      expect(JSON.parse(events[1].data as string)).toEqual({
+        messageId: 'msg-1',
+        interrupted: false,
+      });
     });
 
-    it('throws ForbiddenException when user does not own the conversation', async () => {
-      conversationService.findById.mockResolvedValue({
-        ...mockConversation,
-        userId: 'other-user',
-      } as any);
+    it('emits a full tool-call sequence: tool_start, tool_result, text_chunk, done', async () => {
+      agentService.runTurnStream.mockReturnValue(
+        makeStreamFrom([
+          {
+            type: 'tool_start',
+            name: 'get_user_summary',
+            displayName: 'Đang tóm tắt thông tin của bạn...',
+            args: {},
+          },
+          { type: 'tool_result', name: 'get_user_summary', ok: true },
+          { type: 'text_chunk', text: 'Bạn đang học rất tốt!' },
+          { type: 'done', messageId: 'msg-2', interrupted: false },
+        ]),
+      );
 
-      await expect(controller.stream(mockUser, 'conv-1')).rejects.toThrow(
-        ForbiddenException,
+      const observable = controller.chatStream(mockUser, {
+        message: 'How am I doing?',
+        screenContext: {
+          route: '/',
+          displayName: 'Trang chủ',
+          barPlaceholder: 'Hỏi gì đi nào?',
+          data: {},
+        },
+      });
+
+      const events = await collect(observable);
+      expect(events.map((e) => e.type)).toEqual([
+        'tool_start',
+        'tool_result',
+        'text_chunk',
+        'done',
+      ]);
+    });
+
+    it('forwards userId, conversationId, message, screenContext, and abortSignal to AgentService', async () => {
+      agentService.runTurnStream.mockReturnValue(
+        makeStreamFrom([
+          { type: 'done', messageId: 'msg-x', interrupted: false },
+        ]),
+      );
+      const sc = {
+        route: '/lessons/abc',
+        displayName: 'Bài học',
+        barPlaceholder: 'Hỏi về bài học?',
+        data: { lessonId: 'abc' },
+      };
+
+      const observable = controller.chatStream(mockUser, {
+        conversationId: 'conv-existing',
+        message: 'tell me more',
+        screenContext: sc,
+      });
+      await collect(observable);
+
+      expect(agentService.runTurnStream).toHaveBeenCalledWith(
+        'user-1',
+        'conv-existing',
+        'tell me more',
+        sc,
+        expect.any(AbortSignal),
       );
     });
 
-    it('streams chunks as JSON-encoded MessageEvents', async () => {
-      conversationService.findById.mockResolvedValue(mockConversation as any);
-      genaiService.chatStream.mockReturnValue(
-        (async function* () {
-          yield { text: 'Hello ' };
-          yield { text: 'world' };
-        })(),
+    it('passes conversationId=null to the agent when none is provided (lazy create path)', async () => {
+      agentService.runTurnStream.mockReturnValue(
+        makeStreamFrom([
+          { type: 'done', messageId: 'msg-z', interrupted: false },
+        ]),
       );
 
-      const observable = await controller.stream(mockUser, 'conv-1');
-      const events: MessageEvent[] = await new Promise((resolve) => {
-        const collected: MessageEvent[] = [];
-        observable.subscribe({
-          next: (event) => collected.push(event),
-          complete: () => resolve(collected),
+      const observable = controller.chatStream(mockUser, {
+        message: 'first message ever',
+      });
+      await collect(observable);
+
+      expect(agentService.runTurnStream).toHaveBeenCalledWith(
+        'user-1',
+        null,
+        'first message ever',
+        undefined,
+        expect.any(AbortSignal),
+      );
+    });
+
+    it('aborts the agent stream when the SSE subscriber unsubscribes', async () => {
+      let capturedSignal: AbortSignal | undefined;
+      // Build an async iterable we can hold open until abort fires.
+      const yieldOne = (event: StreamEvent) => ({
+        async *[Symbol.asyncIterator]() {
+          yield event;
+          // Stall here; the controller's teardown should fire abort and
+          // the loop should bail out via the abort signal.
+          await new Promise((resolve, reject) => {
+            const i = setInterval(() => {
+              if (capturedSignal?.aborted) {
+                clearInterval(i);
+                resolve(undefined);
+              }
+            }, 5);
+            // safety net
+            setTimeout(() => {
+              clearInterval(i);
+              reject(new Error('abort never fired'));
+            }, 1000);
+          });
+        },
+      });
+      agentService.runTurnStream.mockImplementation((...args: any[]) => {
+        capturedSignal = args[4] as AbortSignal;
+        return yieldOne({
+          type: 'text_chunk',
+          text: 'partial',
+        }) as any;
+      });
+
+      const observable = controller.chatStream(mockUser, {
+        message: 'long answer',
+      });
+
+      // Subscribe, receive the first event, then unsubscribe to trigger teardown.
+      await new Promise<void>((resolve) => {
+        const sub = observable.subscribe({
+          next: () => {
+            // unsubscribe inside next() — same shape the SSE controller hits
+            // when Dio cancels mid-stream.
+            sub.unsubscribe();
+            // Give the agent loop time to observe the aborted signal.
+            setTimeout(resolve, 20);
+          },
         });
       });
 
-      expect(events).toHaveLength(2);
-      expect(JSON.parse(events[0].data)).toEqual({ text: 'Hello ' });
-      expect(JSON.parse(events[1].data)).toEqual({ text: 'world' });
+      expect(capturedSignal?.aborted).toBe(true);
     });
 
-    it('persists assistant message after stream completes', async () => {
-      conversationService.findById.mockResolvedValue(mockConversation as any);
-      genaiService.chatStream.mockReturnValue(
+    it('emits an error event when the agent stream throws', async () => {
+      agentService.runTurnStream.mockReturnValue(
         (async function* () {
-          yield { text: 'Hello ' };
-          yield { text: 'world' };
-        })(),
+          throw new Error('boom');
+
+          yield;
+        })() as AsyncIterable<StreamEvent>,
       );
 
-      const observable = await controller.stream(mockUser, 'conv-1');
-      await new Promise<void>((resolve) => {
-        observable.subscribe({ complete: () => resolve() });
+      const observable = controller.chatStream(mockUser, {
+        message: 'hi',
       });
 
-      expect(conversationService.addMessage).toHaveBeenCalledWith('conv-1', {
-        role: ConversationMessageRole.ASSISTANT,
-        content: 'Hello world',
-        tokenCount: 0,
-      });
+      const events = await collect(observable);
+      const errorEvt = events.find((e) => e.type === 'error');
+      expect(errorEvt).toBeDefined();
+      expect(JSON.parse(errorEvt!.data as string).message).toBe('boom');
     });
   });
 

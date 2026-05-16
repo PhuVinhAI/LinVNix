@@ -8,6 +8,7 @@ export class EchoTool extends BaseTool<
   Record<string, any>
 > {
   readonly name = 'echo';
+  readonly displayName = 'Đang xử lý...';
   readonly description = 'Echoes the input parameters back as result';
   readonly parameters: ZodSchema<Record<string, any>> = z.record(z.any());
 
