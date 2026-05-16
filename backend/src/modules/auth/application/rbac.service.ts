@@ -271,12 +271,7 @@ export class RbacService implements OnModuleInit {
       // AI permissions
       {
         name: PermissionEnum.AI_CHAT,
-        description: 'Chat với AI',
-        category: 'ai',
-      },
-      {
-        name: PermissionEnum.AI_CHAT_STREAM,
-        description: 'Chat với AI (streaming)',
+        description: 'Chat với AI (streaming and non-streaming)',
         category: 'ai',
       },
       {
@@ -349,7 +344,6 @@ export class RbacService implements OnModuleInit {
       PermissionEnum.PROGRESS_UPDATE,
       PermissionEnum.CONTENT_READ,
       PermissionEnum.AI_CHAT,
-      PermissionEnum.AI_CHAT_STREAM,
       PermissionEnum.AI_GENERATE_EXERCISE,
       PermissionEnum.AI_CORRECT_GRAMMAR,
       PermissionEnum.AI_VIEW_CONVERSATIONS,

@@ -32,8 +32,14 @@ interface AiChatStructuredRequest {
   model?: string;
 }
 
+interface AiFunctionCall {
+  name: string;
+  arguments: Record<string, any>;
+}
+
 interface AiChatResponse {
   text: string;
+  functionCalls?: AiFunctionCall[];
   usageMetadata: {
     promptTokenCount?: number;
     candidatesTokenCount?: number;
@@ -485,14 +491,38 @@ export class GenaiService implements IAiProvider, OnModuleInit {
   }
 
   private mapResponseToAiChatResponse(response: any): AiChatResponse {
-    const steps = response.steps || [];
-    const lastStep = steps[steps.length - 1];
-    const content = lastStep?.content?.[0];
-    const text = content?.text || '';
+    const steps: any[] = response.steps || [];
+
+    // Gemini Interactions API returns each function invocation as a top-level
+    // step with `type: 'function_call'` (see js-genai/sdk-samples). Collect
+    // them so AgentService can drive the ReAct tool loop — without this
+    // mapping the existing tool loop never sees any calls.
+    const functionCalls: AiFunctionCall[] = [];
+    let text = '';
+
+    for (const step of steps) {
+      if (step?.type === 'function_call' && typeof step.name === 'string') {
+        functionCalls.push({
+          name: step.name,
+          arguments: (step.arguments ?? {}) as Record<string, any>,
+        });
+        continue;
+      }
+      // Text lives on model_output steps (or on the older `content`-only shape
+      // emitted by the test fixtures, which omit `type`). Accept both.
+      const contents: any[] = Array.isArray(step?.content) ? step.content : [];
+      for (const item of contents) {
+        if (item?.type === 'text' && typeof item.text === 'string') {
+          text += item.text;
+        }
+      }
+    }
+
     const usageMetadata = response.usageMetadata || {};
 
     return {
       text,
+      ...(functionCalls.length > 0 ? { functionCalls } : {}),
       usageMetadata: {
         promptTokenCount: usageMetadata.promptTokenCount,
         candidatesTokenCount: usageMetadata.candidatesTokenCount,
