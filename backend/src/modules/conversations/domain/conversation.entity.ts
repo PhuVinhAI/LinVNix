@@ -1,6 +1,5 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { ConversationStatus } from '../../../common/enums';
 import { User } from '../../users/domain/user.entity';
 import { Course } from '../../courses/domain/course.entity';
 import { Lesson } from '../../courses/domain/lesson.entity';
@@ -34,6 +33,16 @@ export class Conversation extends BaseEntity {
   @Column({ name: 'system_instruction', type: 'text', default: '' })
   systemInstruction: string;
 
+  @Column({ type: 'varchar', default: '' })
+  title: string;
+
+  @Column({
+    name: 'screen_context',
+    type: 'jsonb',
+    default: () => "'{}'::jsonb",
+  })
+  screenContext: Record<string, any>;
+
   @Column({ name: 'total_tokens', default: 0 })
   totalTokens: number;
 
@@ -42,13 +51,6 @@ export class Conversation extends BaseEntity {
 
   @Column({ name: 'total_completion_tokens', default: 0 })
   totalCompletionTokens: number;
-
-  @Column({
-    type: 'enum',
-    enum: ConversationStatus,
-    default: ConversationStatus.ACTIVE,
-  })
-  status: ConversationStatus;
 
   @OneToMany('ConversationMessage', 'conversation')
   messages: any[];

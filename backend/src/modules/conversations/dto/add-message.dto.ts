@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
+  IsBoolean,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ConversationMessageRole } from '../../../common/enums';
@@ -40,4 +41,14 @@ export class AddMessageDto {
   @IsNumber()
   @IsOptional()
   tokenCount?: number;
+
+  @ApiProperty({
+    description:
+      'True when the assistant turn was cut short by an abort. Default false.',
+    example: false,
+    required: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  interrupted?: boolean;
 }

@@ -1,4 +1,4 @@
-import { IsString, IsUUID, IsOptional } from 'class-validator';
+import { IsString, IsUUID, IsOptional, IsObject } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateConversationDto {
@@ -23,4 +23,24 @@ export class CreateConversationDto {
   @IsUUID()
   @IsOptional()
   lessonId?: string;
+
+  @ApiProperty({ example: 'Hỏi về xin chào', required: false })
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @ApiProperty({
+    description:
+      'Frozen mobile screen snapshot at first-message time (route, displayName, barPlaceholder, data).',
+    example: {
+      route: '/lessons/abc',
+      displayName: 'Bài học: Chào hỏi',
+      barPlaceholder: 'Hỏi về bài học?',
+      data: { lessonId: 'abc' },
+    },
+    required: false,
+  })
+  @IsObject()
+  @IsOptional()
+  screenContext?: Record<string, any>;
 }

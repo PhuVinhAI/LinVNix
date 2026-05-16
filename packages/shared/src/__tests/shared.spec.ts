@@ -9,8 +9,16 @@ import {
   AiServiceUnavailableException,
 } from '../exceptions/ai.exception.js';
 import { BaseTool } from '../tools/base-tool.js';
+import type { ToolContext } from '../tools/tool-context.js';
 import type { ToolDeclaration } from '../types/ai.js';
 import type { IAiProvider } from '../types/provider.js';
+
+const mockCtx: ToolContext = {
+  userId: 'user-1',
+  conversationId: 'conv-1',
+  screenContext: { route: '/' },
+  user: { id: 'user-1' },
+};
 
 describe('AiException hierarchy', () => {
   it('AiException has correct base properties', () => {
@@ -90,7 +98,10 @@ describe('BaseTool', () => {
       input: z.string().describe('The input value'),
     });
 
-    async execute(params: { input: string }): Promise<string> {
+    async execute(
+      params: { input: string },
+      _ctx: ToolContext,
+    ): Promise<string> {
       return `processed: ${params.input}`;
     }
   }
@@ -114,10 +125,31 @@ describe('BaseTool', () => {
     }
   }
 
-  it('execute works correctly', async () => {
+  class CtxAwareTool extends BaseTool<{ q: string }, ToolContext> {
+    readonly name = 'ctx_aware_tool';
+    readonly description = 'Returns the ctx for verification';
+    readonly parameters = z.object({ q: z.string() });
+
+    async execute(
+      _params: { q: string },
+      ctx: ToolContext,
+    ): Promise<ToolContext> {
+      return ctx;
+    }
+  }
+
+  it('execute receives params and ToolContext', async () => {
     const tool = new TestTool();
-    const result = await tool.execute({ input: 'hello' });
+    const result = await tool.execute({ input: 'hello' }, mockCtx);
     expect(result).toBe('processed: hello');
+  });
+
+  it('execute forwards ToolContext to tool implementation', async () => {
+    const tool = new CtxAwareTool();
+    const result = await tool.execute({ q: 'x' }, mockCtx);
+    expect(result).toBe(mockCtx);
+    expect(result.userId).toBe('user-1');
+    expect(result.conversationId).toBe('conv-1');
   });
 
   it('toDeclaration returns correct ToolDeclaration shape', () => {
@@ -201,5 +233,16 @@ describe('Type contracts', () => {
     expect(decl.name).toBe('test');
     expect(decl.description).toBe('desc');
     expect(typeof decl.parameters).toBe('object');
+  });
+
+  it('ToolContext has the documented shape', () => {
+    const ctx: ToolContext<{ id: string; nativeLanguage: string }> = {
+      userId: 'u1',
+      conversationId: 'c1',
+      screenContext: { route: '/x' },
+      user: { id: 'u1', nativeLanguage: 'English' },
+    };
+    expect(ctx.userId).toBe('u1');
+    expect(ctx.user.nativeLanguage).toBe('English');
   });
 });

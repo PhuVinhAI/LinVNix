@@ -33,3 +33,4 @@ export {
 } from './exceptions/ai.exception.js';
 
 export { BaseTool } from './tools/base-tool.js';
+export type { ToolContext } from './tools/tool-context.js';
