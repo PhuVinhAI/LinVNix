@@ -150,7 +150,7 @@ export class VocabulariesController {
     },
   })
   async search(@Query('q') query: string, @CurrentUser() user?: User) {
-    const vocabularies = await this.vocabulariesService.search(query);
+    const vocabularies = await this.vocabulariesService.search({ query });
     return this.vocabulariesService.enrichWithBookmarks(vocabularies, user?.id);
   }
 

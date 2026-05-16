@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { VocabulariesRepository } from './repositories/vocabularies.repository';
+import {
+  VocabulariesRepository,
+  VocabularySearchOptions,
+} from './repositories/vocabularies.repository';
 import { BookmarksService } from './bookmarks.service';
 import { Vocabulary } from '../domain/vocabulary.entity';
 import { Dialect } from '../../../common/enums';
@@ -97,11 +100,26 @@ export class VocabulariesService {
     await this.vocabulariesRepository.delete(id);
   }
 
-  async search(query: string): Promise<Vocabulary[]> {
-    if (!query || query.trim().length === 0) {
+  /**
+   * Search vocabulary by text with optional `lessonId` and `dialect` filters.
+   *
+   * The dialect filter pairs with the AI assistant flow — `search_vocabulary`
+   * tool defaults `dialect` to the conversation owner's `preferredDialect`
+   * when the LLM doesn't specify one, so the learner's regional preference
+   * propagates to results without the AI needing to be aware of identity.
+   *
+   * Returns `[]` early on empty / whitespace-only queries to avoid hitting
+   * the DB with a wildcard scan.
+   */
+  async search(options: VocabularySearchOptions): Promise<Vocabulary[]> {
+    const query = options.query?.trim() ?? '';
+    if (query.length === 0) {
       return [];
     }
-    return this.vocabulariesRepository.search(query.trim());
+    const repoArgs: VocabularySearchOptions = { query };
+    if (options.lessonId) repoArgs.lessonId = options.lessonId;
+    if (options.dialect) repoArgs.dialect = options.dialect;
+    return this.vocabulariesRepository.search(repoArgs);
   }
 
   async enrichWithBookmarks(

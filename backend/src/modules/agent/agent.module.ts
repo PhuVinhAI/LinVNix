@@ -6,12 +6,17 @@ import { DailyGoalsModule } from '../daily-goals/daily-goals.module';
 import { ProgressModule } from '../progress/progress.module';
 import { ExercisesModule } from '../exercises/exercises.module';
 import { VocabulariesModule } from '../vocabularies/vocabularies.module';
+import { CoursesModule } from '../courses/courses.module';
 import { EchoTool } from './tools/echo.tool';
 import { GetUserSummaryTool } from './tools/get-user-summary.tool';
 import { GetProgressOverviewTool } from './tools/get-progress-overview.tool';
 import { ListRecentExerciseResultsTool } from './tools/list-recent-exercise-results.tool';
 import { ListBookmarksTool } from './tools/list-bookmarks.tool';
 import { ToggleBookmarkTool } from './tools/toggle-bookmark.tool';
+import { SearchVocabularyTool } from './tools/search-vocabulary.tool';
+import { SearchGrammarRulesTool } from './tools/search-grammar-rules.tool';
+import { FindLessonsTool } from './tools/find-lessons.tool';
+import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
 
 @Module({
   imports: [
@@ -21,6 +26,7 @@ import { ToggleBookmarkTool } from './tools/toggle-bookmark.tool';
     ProgressModule,
     ExercisesModule,
     VocabulariesModule,
+    CoursesModule,
   ],
   providers: [
     AgentService,
@@ -30,6 +36,10 @@ import { ToggleBookmarkTool } from './tools/toggle-bookmark.tool';
     ListRecentExerciseResultsTool,
     ListBookmarksTool,
     ToggleBookmarkTool,
+    SearchVocabularyTool,
+    SearchGrammarRulesTool,
+    FindLessonsTool,
+    GetLessonDetailTool,
     {
       provide: 'TOOLS',
       useFactory: (
@@ -39,6 +49,10 @@ import { ToggleBookmarkTool } from './tools/toggle-bookmark.tool';
         listRecentExerciseResultsTool: ListRecentExerciseResultsTool,
         listBookmarksTool: ListBookmarksTool,
         toggleBookmarkTool: ToggleBookmarkTool,
+        searchVocabularyTool: SearchVocabularyTool,
+        searchGrammarRulesTool: SearchGrammarRulesTool,
+        findLessonsTool: FindLessonsTool,
+        getLessonDetailTool: GetLessonDetailTool,
       ) => [
         echoTool,
         getUserSummaryTool,
@@ -46,6 +60,10 @@ import { ToggleBookmarkTool } from './tools/toggle-bookmark.tool';
         listRecentExerciseResultsTool,
         listBookmarksTool,
         toggleBookmarkTool,
+        searchVocabularyTool,
+        searchGrammarRulesTool,
+        findLessonsTool,
+        getLessonDetailTool,
       ],
       inject: [
         EchoTool,
@@ -54,6 +72,10 @@ import { ToggleBookmarkTool } from './tools/toggle-bookmark.tool';
         ListRecentExerciseResultsTool,
         ListBookmarksTool,
         ToggleBookmarkTool,
+        SearchVocabularyTool,
+        SearchGrammarRulesTool,
+        FindLessonsTool,
+        GetLessonDetailTool,
       ],
     },
   ],
