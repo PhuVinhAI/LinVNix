@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConversationsRepository } from './repositories/conversations.repository';
 import { Conversation } from '../domain/conversation.entity';
 import { ConversationMessage } from '../domain/conversation-message.entity';
-import { ConversationStatus } from '../../../common/enums';
 import { CreateConversationDto } from '../dto/create-conversation.dto';
 import { AddMessageDto } from '../dto/add-message.dto';
 
@@ -22,7 +21,8 @@ export class ConversationService {
       systemInstruction: dto.systemInstruction || '',
       courseId: dto.courseId,
       lessonId: dto.lessonId,
-      status: ConversationStatus.ACTIVE,
+      title: dto.title ?? '',
+      screenContext: dto.screenContext ?? {},
     });
   }
 
@@ -61,6 +61,7 @@ export class ConversationService {
       toolCalls: dto.toolCalls,
       toolResults: dto.toolResults,
       tokenCount: dto.tokenCount || 0,
+      interrupted: dto.interrupted ?? false,
     });
   }
 
@@ -78,18 +79,8 @@ export class ConversationService {
     });
   }
 
-  async archive(id: string): Promise<Conversation> {
-    await this.findById(id);
-    return this.conversationsRepository.updateConversation(id, {
-      status: ConversationStatus.ARCHIVED,
-    });
-  }
-
   async softDelete(id: string): Promise<void> {
     await this.findById(id);
-    await this.conversationsRepository.updateConversation(id, {
-      status: ConversationStatus.ARCHIVED,
-    });
     await this.conversationsRepository.softDeleteConversation(id);
   }
 }

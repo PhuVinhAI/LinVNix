@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseTool } from '@linvnix/shared';
+import { BaseTool, ToolContext } from '@linvnix/shared';
 import { z, ZodSchema } from 'zod';
 
 @Injectable()
@@ -11,7 +11,10 @@ export class EchoTool extends BaseTool<
   readonly description = 'Echoes the input parameters back as result';
   readonly parameters: ZodSchema<Record<string, any>> = z.record(z.any());
 
-  async execute(params: Record<string, any>): Promise<Record<string, any>> {
+  async execute(
+    params: Record<string, any>,
+    _ctx: ToolContext,
+  ): Promise<Record<string, any>> {
     return { echo: params };
   }
 }

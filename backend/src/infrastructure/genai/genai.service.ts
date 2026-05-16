@@ -255,7 +255,7 @@ export class GenaiService implements IAiProvider, OnModuleInit {
 
   renderPrompt(
     templateName: string,
-    variables: Record<string, string> = {},
+    variables: Record<string, any> = {},
   ): string {
     const template = this.promptTemplates.get(templateName);
     if (!template) {
@@ -265,10 +265,41 @@ export class GenaiService implements IAiProvider, OnModuleInit {
     }
 
     let rendered = template.template;
-    for (const [key, value] of Object.entries(variables)) {
-      rendered = rendered.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), value);
+    const flat = this.flattenVariables(variables);
+    for (const [key, value] of Object.entries(flat)) {
+      const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      rendered = rendered.replace(
+        new RegExp(`\\{\\{${escaped}\\}\\}`, 'g'),
+        value,
+      );
     }
     return rendered;
+  }
+
+  // Flattens `{ a: { b: 'x' }, c: 1 }` → `{ 'a.b': 'x', c: '1' }` so a flat
+  // `{{a.b}}` substitution can resolve nested template variables without
+  // pulling in a Jinja-style template engine.
+  private flattenVariables(
+    input: Record<string, any>,
+    prefix = '',
+  ): Record<string, string> {
+    const out: Record<string, string> = {};
+    for (const [key, value] of Object.entries(input)) {
+      const fullKey = prefix ? `${prefix}.${key}` : key;
+      if (value === null || value === undefined) {
+        out[fullKey] = '';
+      } else if (
+        typeof value === 'object' &&
+        !Array.isArray(value) &&
+        !(value instanceof Date) &&
+        !(value instanceof Buffer)
+      ) {
+        Object.assign(out, this.flattenVariables(value, fullKey));
+      } else {
+        out[fullKey] = String(value);
+      }
+    }
+    return out;
   }
 
   async chat(req: AiChatRequest): Promise<AiChatResponse> {

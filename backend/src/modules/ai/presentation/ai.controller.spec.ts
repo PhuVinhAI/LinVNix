@@ -4,10 +4,7 @@ import { AiController } from './ai.controller';
 import { ConversationService } from '../../conversations/application/conversation.service';
 import { AgentService } from '../../agent/application/agent.service';
 import { GenaiService } from '../../../infrastructure/genai/genai.service';
-import {
-  ConversationMessageRole,
-  ConversationStatus,
-} from '../../../common/enums';
+import { ConversationMessageRole } from '../../../common/enums';
 import { Observable } from 'rxjs';
 
 describe('AiController', () => {
@@ -23,7 +20,8 @@ describe('AiController', () => {
     model: 'gemini-2.0-flash',
     systemInstruction: 'You are a tutor.',
     lessonId: undefined,
-    status: ConversationStatus.ACTIVE,
+    title: '',
+    screenContext: {},
     totalTokens: 0,
     totalPromptTokens: 0,
     totalCompletionTokens: 0,
@@ -39,7 +37,6 @@ describe('AiController', () => {
       findByUser: jest.fn(),
       addMessage: jest.fn(),
       accumulateTokens: jest.fn(),
-      archive: jest.fn(),
       softDelete: jest.fn(),
     } as any;
 
