@@ -29,4 +29,7 @@ export class ConversationMessage extends BaseEntity {
 
   @Column({ name: 'token_count', default: 0 })
   tokenCount: number;
+
+  @Column({ default: false })
+  interrupted: boolean;
 }

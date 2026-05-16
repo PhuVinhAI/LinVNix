@@ -5,10 +5,12 @@ import type {
   AiChatResponse,
   AiMessage,
   AiFunctionResult,
+  ToolContext,
 } from '@linvnix/shared';
 import { BaseTool } from '@linvnix/shared';
 import { ConversationService } from '../../conversations/application/conversation.service';
 import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { UsersService } from '../../users/application/users.service';
 import { ConversationMessageRole } from '../../../common/enums';
 import { ZodError } from 'zod';
 
@@ -24,11 +26,11 @@ export class AgentService {
     private readonly aiProvider: IAiProvider,
     private readonly conversationService: ConversationService,
     private readonly genaiService: GenaiService,
+    private readonly usersService: UsersService,
     // Inject all BaseTool subclasses; they are registered as providers in AgentModule
     @Inject('TOOLS')
     private readonly tools: BaseTool<any, any>[],
   ) {
-    // Build tool map by name
     for (const tool of this.tools) {
       this.toolMap.set(tool.name, tool);
     }
@@ -38,27 +40,31 @@ export class AgentService {
     conversationId: string,
     userMessage: string,
   ): Promise<AiChatResponse> {
-    // 1. Load conversation history
     const conversation =
       await this.conversationService.findById(conversationId);
     const messages = conversation.messages || [];
 
-    // 2. Render system prompt from YAML + inject lesson context if lessonId set
+    // Owner is hydrated once per turn; tools read user-scoped settings via ctx.user.
+    const user = await this.usersService.findById(conversation.userId);
+    const ctx: ToolContext = {
+      userId: conversation.userId,
+      conversationId,
+      screenContext: conversation.screenContext ?? {},
+      user,
+    };
+
     let systemInstruction = conversation.systemInstruction || '';
     if (conversation.lessonId) {
       // TODO: inject lesson/vocabulary context into system prompt
-      // For now, we can add a placeholder
       systemInstruction += `\nCurrent lesson ID: ${conversation.lessonId}`;
     }
 
-    // 3. Persist user message
     await this.conversationService.addMessage(conversationId, {
       role: ConversationMessageRole.USER,
       content: userMessage,
-      tokenCount: 0, // will be updated after AI call
+      tokenCount: 0,
     });
 
-    // Build AiMessage list from history + new user message
     const aiMessages: AiMessage[] = [
       ...messages.map((msg) => {
         let role: 'user' | 'assistant' | 'system' | 'function';
@@ -80,28 +86,23 @@ export class AgentService {
       { role: 'user', content: userMessage },
     ];
 
-    // 4. Build tool declarations
     const toolDeclarations = this.tools.map((tool) => tool.toDeclaration());
 
-    // 5. Tool loop
     let iterations = 0;
     let finalResponse: AiChatResponse | null = null;
 
     while (iterations < AI_TOOL_MAX_ITERATIONS) {
       iterations++;
 
-      // Build request
       const request: AiChatRequest = {
         messages: aiMessages,
         systemInstruction,
         tools: toolDeclarations,
       };
 
-      // Call AI provider
       const response = await this.aiProvider.chat(request);
       finalResponse = response;
 
-      // Persist assistant message
       const assistantTokenCount =
         response.usageMetadata?.candidatesTokenCount || 0;
       await this.conversationService.addMessage(conversationId, {
@@ -110,19 +111,16 @@ export class AgentService {
         tokenCount: assistantTokenCount,
       });
 
-      // Accumulate tokens
       await this.conversationService.accumulateTokens(
         conversationId,
         response.usageMetadata?.promptTokenCount || 0,
         assistantTokenCount,
       );
 
-      // If no function calls, we're done
       if (!response.functionCalls || response.functionCalls.length === 0) {
         break;
       }
 
-      // Execute function calls
       const functionResults: AiFunctionResult[] = [];
       for (const fc of response.functionCalls) {
         const tool = this.toolMap.get(fc.name);
@@ -135,7 +133,6 @@ export class AgentService {
           continue;
         }
 
-        // Validate parameters
         let validatedParams: any;
         try {
           validatedParams = tool.parameters.parse(fc.arguments);
@@ -153,9 +150,8 @@ export class AgentService {
           throw error;
         }
 
-        // Execute tool
         try {
-          const result = await tool.execute(validatedParams);
+          const result = await tool.execute(validatedParams, ctx);
           functionResults.push({
             name: fc.name,
             result,
@@ -169,16 +165,14 @@ export class AgentService {
         }
       }
 
-      // Persist tool calls and results
       await this.conversationService.addMessage(conversationId, {
         role: ConversationMessageRole.TOOL,
-        content: '', // tool messages have no content
+        content: '',
         toolCalls: response.functionCalls,
         toolResults: functionResults,
         tokenCount: 0,
       });
 
-      // Append function results to messages for next iteration
       aiMessages.push(
         ...response.functionCalls.map((fc) => ({
           role: 'assistant' as const,

@@ -1,10 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { ConversationService } from './conversation.service';
 import { ConversationsRepository } from './repositories/conversations.repository';
-import {
-  ConversationStatus,
-  ConversationMessageRole,
-} from '../../../common/enums';
+import { ConversationMessageRole } from '../../../common/enums';
 
 describe('ConversationService', () => {
   let service: ConversationService;
@@ -30,7 +27,8 @@ describe('ConversationService', () => {
         userId: 'user-1',
         model: 'gemini-2.0-flash',
         systemInstruction: '',
-        status: ConversationStatus.ACTIVE,
+        title: '',
+        screenContext: {},
         totalTokens: 0,
         totalPromptTokens: 0,
         totalCompletionTokens: 0,
@@ -49,7 +47,8 @@ describe('ConversationService', () => {
         systemInstruction: '',
         courseId: undefined,
         lessonId: undefined,
-        status: ConversationStatus.ACTIVE,
+        title: '',
+        screenContext: {},
       });
       expect(result).toEqual(mockConversation);
     });
@@ -62,7 +61,8 @@ describe('ConversationService', () => {
         systemInstruction: 'You are a tutor.',
         courseId: 'course-1',
         lessonId: 'lesson-1',
-        status: ConversationStatus.ACTIVE,
+        title: '',
+        screenContext: {},
       };
       repository.createConversation.mockResolvedValue(mockConversation as any);
 
@@ -79,10 +79,40 @@ describe('ConversationService', () => {
         systemInstruction: 'You are a tutor.',
         courseId: 'course-1',
         lessonId: 'lesson-1',
-        status: ConversationStatus.ACTIVE,
+        title: '',
+        screenContext: {},
       });
       expect(result.courseId).toBe('course-1');
       expect(result.lessonId).toBe('lesson-1');
+    });
+
+    it('persists provided title and screenContext snapshot verbatim', async () => {
+      repository.createConversation.mockResolvedValue({
+        id: 'conv-3',
+      } as any);
+
+      const screenContext = {
+        route: '/lessons/abc',
+        displayName: 'Bài học: Chào hỏi',
+        barPlaceholder: 'Hỏi về bài học?',
+        data: { lessonId: 'abc', body: 'Xin chào' },
+      };
+
+      await service.create('user-1', {
+        model: 'gemini-2.0-flash',
+        title: 'Hỏi về xin chào',
+        screenContext,
+      });
+
+      expect(repository.createConversation).toHaveBeenCalledWith({
+        userId: 'user-1',
+        model: 'gemini-2.0-flash',
+        systemInstruction: '',
+        courseId: undefined,
+        lessonId: undefined,
+        title: 'Hỏi về xin chào',
+        screenContext,
+      });
     });
   });
 
@@ -177,6 +207,7 @@ describe('ConversationService', () => {
         toolCalls: undefined,
         toolResults: undefined,
         tokenCount: 10,
+        interrupted: false,
       });
       expect(result).toEqual(mockMessage);
     });
@@ -223,6 +254,41 @@ describe('ConversationService', () => {
 
       expect(repository.createMessage).toHaveBeenCalledWith(
         expect.objectContaining({ tokenCount: 0 }),
+      );
+    });
+
+    it('marks message as interrupted when flag is set', async () => {
+      const mockConversation = { id: 'conv-1', messages: [] };
+      repository.findConversationById.mockResolvedValue(
+        mockConversation as any,
+      );
+      repository.createMessage.mockResolvedValue({} as any);
+
+      await service.addMessage('conv-1', {
+        role: ConversationMessageRole.ASSISTANT,
+        content: 'Partial...',
+        interrupted: true,
+      });
+
+      expect(repository.createMessage).toHaveBeenCalledWith(
+        expect.objectContaining({ interrupted: true }),
+      );
+    });
+
+    it('defaults interrupted to false when not provided', async () => {
+      const mockConversation = { id: 'conv-1', messages: [] };
+      repository.findConversationById.mockResolvedValue(
+        mockConversation as any,
+      );
+      repository.createMessage.mockResolvedValue({} as any);
+
+      await service.addMessage('conv-1', {
+        role: ConversationMessageRole.ASSISTANT,
+        content: 'Hello!',
+      });
+
+      expect(repository.createMessage).toHaveBeenCalledWith(
+        expect.objectContaining({ interrupted: false }),
       );
     });
 
@@ -289,41 +355,17 @@ describe('ConversationService', () => {
     });
   });
 
-  describe('archive', () => {
-    it('sets conversation status to archived', async () => {
-      const mockConversation = {
-        id: 'conv-1',
-        status: ConversationStatus.ACTIVE,
-      };
-      const mockUpdated = { id: 'conv-1', status: ConversationStatus.ARCHIVED };
-      repository.findConversationById.mockResolvedValue(
-        mockConversation as any,
-      );
-      repository.updateConversation.mockResolvedValue(mockUpdated as any);
-
-      const result = await service.archive('conv-1');
-
-      expect(repository.updateConversation).toHaveBeenCalledWith('conv-1', {
-        status: ConversationStatus.ARCHIVED,
-      });
-      expect(result.status).toBe(ConversationStatus.ARCHIVED);
-    });
-  });
-
   describe('softDelete', () => {
-    it('archives then soft-deletes the conversation', async () => {
+    it('soft-deletes the conversation without touching status', async () => {
       const mockConversation = { id: 'conv-1' };
       repository.findConversationById.mockResolvedValue(
         mockConversation as any,
       );
-      repository.updateConversation.mockResolvedValue({} as any);
       repository.softDeleteConversation.mockResolvedValue(undefined);
 
       await service.softDelete('conv-1');
 
-      expect(repository.updateConversation).toHaveBeenCalledWith('conv-1', {
-        status: ConversationStatus.ARCHIVED,
-      });
+      expect(repository.updateConversation).not.toHaveBeenCalled();
       expect(repository.softDeleteConversation).toHaveBeenCalledWith('conv-1');
     });
 

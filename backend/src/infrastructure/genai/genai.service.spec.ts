@@ -1,4 +1,5 @@
 import { ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
 import { GenaiService } from './genai.service';
 import { KeyPool } from './key-pool';
 import {
@@ -407,6 +408,73 @@ describe('GenaiService', () => {
       expect(() => service.renderPrompt('nonexistent')).toThrow(
         AiInvalidRequestException,
       );
+    });
+
+    describe('with a loaded template', () => {
+      const yaml = `t:
+  description: "T"
+  template: |
+    Hi {{name}}.
+    Lang: {{user.nativeLanguage}}.
+    Dialect: {{user.preferredDialect}}.
+    Route: {{screenContext.route}}.
+    Data: {{screenContext.data}}.
+    Count: {{count}}.
+`;
+
+      beforeEach(() => {
+        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        (fs.readdirSync as jest.Mock).mockReturnValue(['t.yaml']);
+        (fs.readFileSync as jest.Mock).mockReturnValue(yaml);
+        service = new GenaiService(createConfigService(), mockKeyPool);
+        service.onModuleInit();
+      });
+
+      it('substitutes flat placeholders (existing behavior preserved)', () => {
+        const out = service.renderPrompt('t', { name: 'Alex', count: '3' });
+        expect(out).toContain('Hi Alex.');
+        expect(out).toContain('Count: 3.');
+      });
+
+      it('substitutes nested placeholders via dot notation', () => {
+        const out = service.renderPrompt('t', {
+          name: 'Alex',
+          user: {
+            nativeLanguage: 'English',
+            preferredDialect: 'NORTHERN',
+          },
+          screenContext: {
+            route: '/lessons/abc',
+            data: '{"lessonId":"abc"}',
+          },
+          count: 1,
+        });
+        expect(out).toContain('Hi Alex.');
+        expect(out).toContain('Lang: English.');
+        expect(out).toContain('Dialect: NORTHERN.');
+        expect(out).toContain('Route: /lessons/abc.');
+        expect(out).toContain('Data: {"lessonId":"abc"}.');
+        expect(out).toContain('Count: 1.');
+      });
+
+      it('coerces null and undefined values to empty strings', () => {
+        const out = service.renderPrompt('t', {
+          name: null,
+          user: { nativeLanguage: undefined, preferredDialect: 'STANDARD' },
+          screenContext: { route: '/', data: '' },
+          count: 0,
+        });
+        expect(out).toContain('Hi .');
+        expect(out).toContain('Lang: .');
+        expect(out).toContain('Dialect: STANDARD.');
+        expect(out).toContain('Count: 0.');
+      });
+
+      it('leaves un-substituted placeholders intact (and does not throw)', () => {
+        const out = service.renderPrompt('t', { name: 'A' });
+        expect(out).toContain('Hi A.');
+        expect(out).toContain('{{user.nativeLanguage}}');
+      });
     });
   });
 });
