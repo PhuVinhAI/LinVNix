@@ -1018,5 +1018,107 @@ describe('AgentService', () => {
       expect(typeof done.messageId).toBe('string');
       expect(done.messageId.length).toBeGreaterThan(0);
     });
+
+    it('emits propose event when a tool returns a ProposalPayload', async () => {
+      const proposeTool = {
+        name: 'propose_create_daily_goal',
+        displayName: 'Đang chuẩn bị mục tiêu mới...',
+        description: 'Propose creating a daily goal',
+        parameters: { parse: jest.fn() },
+        execute: jest.fn(),
+        toDeclaration: jest.fn().mockReturnValue({
+          name: 'propose_create_daily_goal',
+          description: 'Propose creating a daily goal',
+          parameters: {},
+        }),
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          AgentService,
+          { provide: 'AI_PROVIDER', useValue: aiProvider },
+          { provide: ConversationService, useValue: conversationService },
+          { provide: GenaiService, useValue: genaiService },
+          { provide: UsersService, useValue: usersService },
+          { provide: 'TOOLS', useValue: [proposeTool] },
+        ],
+      }).compile();
+
+      const proposeService = module.get<AgentService>(AgentService);
+
+      const proposalPayload = {
+        kind: 'create_daily_goal',
+        title: 'Tạo mục tiêu hằng ngày?',
+        description: 'Đặt mục tiêu 30 phút học mỗi ngày',
+        endpoint: 'POST /api/v1/daily-goals',
+        payload: { goalType: 'STUDY_MINUTES', targetValue: 30 },
+      };
+
+      const fc = {
+        name: 'propose_create_daily_goal',
+        arguments: { type: 'STUDY_MINUTES', target: 30 },
+      };
+      aiProvider.chat
+        .mockResolvedValueOnce({
+          text: '',
+          functionCalls: [fc],
+          usageMetadata: { promptTokenCount: 5, candidatesTokenCount: 0 },
+        })
+        .mockResolvedValueOnce({
+          text: 'Tôi đã chuẩn bị mục tiêu cho bạn!',
+          usageMetadata: { promptTokenCount: 10, candidatesTokenCount: 8 },
+        });
+
+      proposeTool.parameters.parse.mockReturnValue({
+        type: 'STUDY_MINUTES',
+        target: 30,
+      });
+      proposeTool.execute.mockResolvedValue(proposalPayload);
+
+      const events = await collect(
+        proposeService.runTurnStream('user-1', conversationId, userMessage),
+      );
+
+      const eventTypes = events.map((e: any) => e.type);
+      expect(eventTypes).toEqual([
+        'conversation_started',
+        'tool_start',
+        'tool_result',
+        'propose',
+        'text_chunk',
+        'done',
+      ]);
+
+      const proposeEvent = events.find((e: any) => e.type === 'propose') as any;
+      expect(proposeEvent.kind).toBe('create_daily_goal');
+      expect(proposeEvent.endpoint).toBe('POST /api/v1/daily-goals');
+      expect(proposeEvent.payload).toEqual({
+        goalType: 'STUDY_MINUTES',
+        targetValue: 30,
+      });
+    });
+
+    it('does NOT emit propose event when a regular (non-propose) tool runs', async () => {
+      const fc = { name: 'mock_tool', arguments: { input: 'hello' } };
+      aiProvider.chat
+        .mockResolvedValueOnce({
+          text: '',
+          functionCalls: [fc],
+          usageMetadata: { promptTokenCount: 5, candidatesTokenCount: 0 },
+        })
+        .mockResolvedValueOnce({
+          text: 'done',
+          usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
+        });
+      mockTool.parameters.parse.mockReturnValue({ input: 'hello' });
+      mockTool.execute.mockResolvedValue({ output: 'ok' });
+
+      const events = await collect(
+        service.runTurnStream('user-1', conversationId, userMessage),
+      );
+
+      const eventTypes = events.map((e: any) => e.type);
+      expect(eventTypes).not.toContain('propose');
+    });
   });
 });

@@ -12,6 +12,7 @@ import { BaseTool } from '../tools/base-tool.js';
 import type { ToolContext } from '../tools/tool-context.js';
 import type { ToolDeclaration } from '../types/ai.js';
 import type { IAiProvider } from '../types/provider.js';
+import { isProposalPayload, DEFAULT_PROPOSAL_LABELS } from '../tools/proposal-payload.js';
 
 const mockCtx: ToolContext = {
   userId: 'user-1',
@@ -257,5 +258,93 @@ describe('Type contracts', () => {
     };
     expect(ctx.userId).toBe('u1');
     expect(ctx.user.nativeLanguage).toBe('English');
+  });
+});
+
+describe('isProposalPayload', () => {
+  it('returns true for a valid ProposalPayload', () => {
+    const payload = {
+      kind: 'create_daily_goal',
+      title: 'Tạo mục tiêu?',
+      description: 'Đặt mục tiêu 30 phút',
+      endpoint: 'POST /api/v1/daily-goals',
+      payload: { goalType: 'STUDY_MINUTES', targetValue: 30 },
+    };
+    expect(isProposalPayload(payload)).toBe(true);
+  });
+
+  it('returns true when optional labels are present', () => {
+    const payload = {
+      kind: 'create_daily_goal',
+      title: 'Tạo mục tiêu?',
+      description: 'desc',
+      endpoint: 'POST /daily-goals',
+      payload: {},
+      labels: { confirm: 'Có', decline: 'Không' },
+    };
+    expect(isProposalPayload(payload)).toBe(true);
+  });
+
+  it('returns false for objects with error field', () => {
+    expect(isProposalPayload({ error: 'boom' })).toBe(false);
+  });
+
+  it('returns false for null', () => {
+    expect(isProposalPayload(null)).toBe(false);
+  });
+
+  it('returns false for undefined', () => {
+    expect(isProposalPayload(undefined)).toBe(false);
+  });
+
+  it('returns false for arrays', () => {
+    expect(isProposalPayload([])).toBe(false);
+  });
+
+  it('returns false for non-object values', () => {
+    expect(isProposalPayload('string')).toBe(false);
+    expect(isProposalPayload(42)).toBe(false);
+  });
+
+  it('returns false when kind is missing', () => {
+    expect(
+      isProposalPayload({
+        title: 't',
+        description: 'd',
+        endpoint: 'e',
+        payload: {},
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when payload is null', () => {
+    expect(
+      isProposalPayload({
+        kind: 'k',
+        title: 't',
+        description: 'd',
+        endpoint: 'e',
+        payload: null,
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when payload is an array', () => {
+    expect(
+      isProposalPayload({
+        kind: 'k',
+        title: 't',
+        description: 'd',
+        endpoint: 'e',
+        payload: [],
+      }),
+    ).toBe(false);
+  });
+});
+
+describe('DEFAULT_PROPOSAL_LABELS', () => {
+  it('has Vietnamese confirm and decline labels', () => {
+    expect(DEFAULT_PROPOSAL_LABELS.confirm).toBe('Có');
+    expect(DEFAULT_PROPOSAL_LABELS.decline).toBe('Không');
   });
 });

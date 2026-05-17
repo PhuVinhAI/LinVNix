@@ -11,6 +11,7 @@ import { AI_PROVIDER } from '../src/infrastructure/genai/genai.module';
 import { User } from '../src/modules/users/domain/user.entity';
 import { Role as RoleEntity } from '../src/modules/auth/domain/role.entity';
 import { Role as RoleEnum } from '../src/common/enums';
+import { ConversationMessage } from '../src/modules/conversations/domain/conversation-message.entity';
 
 interface SsePacket {
   event: string;
@@ -46,6 +47,7 @@ describe('POST /ai/chat/stream (e2e)', () => {
   let authToken: string;
   let testUserEmail: string;
   let userRepo: Repository<User>;
+  let messageRepo: Repository<ConversationMessage>;
   let aiProviderMock: {
     chat: jest.Mock;
     chatStream: jest.Mock;
@@ -83,6 +85,7 @@ describe('POST /ai/chat/stream (e2e)', () => {
     // ourselves with the same JwtService the app uses, against a user row
     // already marked `emailVerified=true`.
     userRepo = moduleFixture.get<Repository<User>>(getRepositoryToken(User));
+    messageRepo = moduleFixture.get<Repository<ConversationMessage>>(getRepositoryToken(ConversationMessage));
     const roleRepo = moduleFixture.get<Repository<RoleEntity>>(
       getRepositoryToken(RoleEntity),
     );
@@ -224,6 +227,88 @@ describe('POST /ai/chat/stream (e2e)', () => {
       aiProviderMock.chat.mock.calls.length - 1
     ][0];
     expect(lastCallArg.systemInstruction).toContain('lessonId');
+  });
+
+  it('emits tool_start + tool_result + propose + text_chunk + done when a propose tool runs', async () => {
+    aiProviderMock.chat
+      .mockResolvedValueOnce({
+        text: '',
+        functionCalls: [
+          {
+            name: 'propose_create_daily_goal',
+            arguments: { type: 'STUDY_MINUTES', target: 30 },
+          },
+        ],
+        usageMetadata: { promptTokenCount: 8, candidatesTokenCount: 0 },
+      })
+      .mockResolvedValueOnce({
+        text: 'Tôi đã chuẩn bị mục tiêu cho bạn!',
+        usageMetadata: { promptTokenCount: 16, candidatesTokenCount: 10 },
+      });
+
+    const res = await request(app.getHttpServer())
+      .post('/api/v1/ai/chat/stream')
+      .set('Authorization', `Bearer ${authToken}`)
+      .set('Accept', 'text/event-stream')
+      .send({
+        message: 'Set me a 30-minute study goal',
+        screenContext: {
+          route: '/',
+          displayName: 'Trang chủ',
+          barPlaceholder: 'Hỏi gì đi nào?',
+          data: {},
+        },
+      })
+      .buffer(true)
+      .parse((response, callback) => {
+        const chunks: Buffer[] = [];
+        response.on('data', (chunk: Buffer) => chunks.push(chunk));
+        response.on('end', () =>
+          callback(null, Buffer.concat(chunks).toString('utf-8')),
+        );
+        response.on('error', (err) => callback(err, null as any));
+      });
+
+    expect(res.status).toBe(200);
+
+    const packets = parseSse(res.body as unknown as string);
+    expect(packets.map((p) => p.event)).toEqual([
+      'conversation_started',
+      'tool_start',
+      'tool_result',
+      'propose',
+      'text_chunk',
+      'done',
+    ]);
+
+    const toolStart = packets[1];
+    expect(toolStart.data.name).toBe('propose_create_daily_goal');
+    expect(toolStart.data.displayName).toBe('Đang chuẩn bị mục tiêu mới...');
+
+    const toolResult = packets[2];
+    expect(toolResult.data).toEqual({ name: 'propose_create_daily_goal', ok: true });
+
+    const propose = packets[3];
+    expect(propose.data.kind).toBe('create_daily_goal');
+    expect(propose.data.endpoint).toBe('POST /api/v1/daily-goals');
+    expect(propose.data.payload).toEqual({ goalType: 'STUDY_MINUTES', targetValue: 30 });
+    expect(typeof propose.data.title).toBe('string');
+    expect(typeof propose.data.description).toBe('string');
+
+    const done = packets[5];
+    expect(done.data.interrupted).toBe(false);
+
+    const convId = packets[0].data.conversationId;
+    const toolMessages = await messageRepo.find({
+      where: { conversationId: convId },
+      order: { createdAt: 'ASC' },
+    });
+    const toolMsg = toolMessages.find(
+      (m) => m.role === 'tool' && m.toolResults?.length,
+    );
+    expect(toolMsg).toBeDefined();
+    expect(toolMsg!.toolResults![0].result.kind).toBe('create_daily_goal');
+    expect(toolMsg!.toolResults![0].result.endpoint).toBe('POST /api/v1/daily-goals');
   });
 
   it('rejects unauthenticated requests with 401', async () => {
