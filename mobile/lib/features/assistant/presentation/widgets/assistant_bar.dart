@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../application/assistant_chat_notifier.dart';
@@ -70,8 +71,10 @@ class AssistantBar extends ConsumerWidget {
   void _openSheet(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(assistantChatNotifierProvider);
     notifier.openBar();
+    final navKey = ref.read(rootNavigatorKeyProvider);
+    final sheetContext = navKey.currentContext ?? context;
     AppBottomSheet.show<void>(
-      context,
+      sheetContext,
       isScrollControlled: true,
       builder: (ctx) => const AssistantQuestionSheet(),
     ).whenComplete(() {
