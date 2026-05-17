@@ -170,6 +170,26 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     state = const AssistantCollapsed();
   }
 
+  /// Drag-up from any Mid state → Full. Saves the current state as
+  /// [priorState] so [exitFull] can restore it.
+  void enterFull() {
+    final s = state;
+    if (s is AssistantCollapsed || s is AssistantFull) {
+      throw _invalid('enterFull');
+    }
+    state = AssistantFull(priorState: s);
+  }
+
+  /// Back gesture or close button from Full → prior Mid state (or
+  /// Collapsed if no prior state was recorded).
+  void exitFull() {
+    final s = state;
+    if (s is! AssistantFull) {
+      throw _invalid('exitFull');
+    }
+    state = s.priorState ?? const AssistantCollapsed();
+  }
+
   StateError _invalid(String op) => StateError(
         'AssistantStateMachine.$op called in invalid state: '
         '${state.runtimeType}',

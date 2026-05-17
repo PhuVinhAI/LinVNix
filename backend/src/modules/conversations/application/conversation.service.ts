@@ -79,6 +79,11 @@ export class ConversationService {
     });
   }
 
+  async updateTitle(id: string, title: string): Promise<Conversation> {
+    await this.findById(id);
+    return this.conversationsRepository.updateConversation(id, { title });
+  }
+
   async softDelete(id: string): Promise<void> {
     await this.findById(id);
     await this.conversationsRepository.softDeleteConversation(id);

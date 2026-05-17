@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Patch,
   Delete,
   Body,
   Param,
@@ -34,6 +35,7 @@ import { GenaiService } from '../../../infrastructure/genai/genai.service';
 import { CreateConversationDto } from '../../conversations/dto/create-conversation.dto';
 import { AiChatRequestDto } from '../dto/ai-chat-request.dto';
 import { AiChatStreamRequestDto } from '../dto/ai-chat-stream-request.dto';
+import { UpdateConversationDto } from '../dto/update-conversation.dto';
 import { ListConversationsQueryDto } from '../dto/list-conversations-query.dto';
 import { SseEventEncoder } from './sse-event-encoder';
 
@@ -205,6 +207,34 @@ export class AiController {
     }
 
     return conversation;
+  }
+
+  @Patch('conversations/:id')
+  @RequirePermissions(Permission.AI_CHAT)
+  @ApiOperation({
+    summary: 'Rename a conversation',
+    description:
+      'Updates the title of a conversation. Only own conversations can be renamed.',
+  })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
+  @ApiBody({ type: UpdateConversationDto })
+  @ApiResponse({ status: 200, description: 'Conversation renamed' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Conversation not found' })
+  async renameConversation(
+    @CurrentUser() user: any,
+    @Param('id') id: string,
+    @Body() dto: UpdateConversationDto,
+  ) {
+    const conversation = await this.conversationService.findById(id);
+
+    if (conversation.userId !== user.id) {
+      throw new ForbiddenException(
+        'You do not have access to this conversation',
+      );
+    }
+
+    return this.conversationService.updateTitle(id, dto.title);
   }
 
   @Delete('conversations/:id')

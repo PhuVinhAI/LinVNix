@@ -142,17 +142,25 @@ class AssistantMidError extends AssistantState {
       'AssistantMidError(message: $message, lastInput: $lastInput)';
 }
 
-/// Stub for slice #08 (full-screen chat). Reachable via drag-up from any
-/// Mid state once #08 lands; no transitions wire into it in this slice.
+/// Full-screen chat state. Reachable via drag-up from any Mid state.
+/// Stores [priorState] so a back gesture or close button can restore
+/// the previous Mid state (or Collapsed if none).
 class AssistantFull extends AssistantState {
-  const AssistantFull();
+  const AssistantFull({this.priorState});
+
+  /// The state the user was in before entering Full. Back gesture or
+  /// close button returns here. `null` means the machine was freshly
+  /// opened into Full (unlikely but safe to default to Collapsed).
+  final AssistantState? priorState;
 
   @override
-  bool operator ==(Object other) => other is AssistantFull;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AssistantFull && priorState == other.priorState;
 
   @override
-  int get hashCode => 0;
+  int get hashCode => priorState.hashCode;
 
   @override
-  String toString() => 'AssistantFull';
+  String toString() => 'AssistantFull(priorState: $priorState)';
 }

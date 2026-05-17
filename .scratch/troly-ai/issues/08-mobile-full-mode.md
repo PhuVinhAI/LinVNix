@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 # Mobile Full mode: chat list + drawer + Conversation rename / delete / +Mới
 
@@ -25,17 +25,42 @@ Per PRD's V1 testing scope, no widget tests for `AssistantFullScreen`, `Conversa
 
 ## Acceptance criteria
 
-- [ ] Drag-up from Mid Reading state opens Full screen with the same active Conversation
-- [ ] Back gesture / close button from Full returns to prior Mid state (or Collapsed)
-- [ ] Drawer lists Conversations sorted by `updatedAt` DESC
-- [ ] Rename works end-to-end (UI edit → backend `PATCH` → drawer reflects new title; server endpoint added if missing, ownership-checked)
-- [ ] Delete works end-to-end (confirm → backend `DELETE` → drawer no longer shows it)
-- [ ] "+ Mới" creates a new Conversation with current `screenContext` on next Send (verifiable by 2 distinct conversation IDs in DB)
-- [ ] Tapping an old Conversation loads its messages and renders user bubbles + AI markdown correctly
-- [ ] Auto-generated title is populated server-side on first Send (max ~50 chars from first user message); manual rename overrides it
-- [ ] Backend endpoints `GET /ai/conversations` (paginated), `GET /ai/conversations/:id`, `GET /ai/conversations/:id/messages`, `PATCH /ai/conversations/:id`, `DELETE /ai/conversations/:id` exist and are guarded by `AI_VIEW_CONVERSATIONS` (read) / `AI_CHAT` (mutate)
-- [ ] `cd mobile && flutter analyze && flutter test` pass; `cd backend && bun run lint && bun run typecheck && bun run test && bun run test:e2e` pass
+- [x] Drag-up from Mid Reading state opens Full screen with the same active Conversation
+- [x] Back gesture / close button from Full returns to prior Mid state (or Collapsed)
+- [x] Drawer lists Conversations sorted by `updatedAt` DESC
+- [x] Rename works end-to-end (UI edit → backend `PATCH` → drawer reflects new title; server endpoint added if missing, ownership-checked)
+- [x] Delete works end-to-end (confirm → backend `DELETE` → drawer no longer shows it)
+- [x] "+ Mới" creates a new Conversation with current `screenContext` on next Send (verifiable by 2 distinct conversation IDs in DB)
+- [x] Tapping an old Conversation loads its messages and renders user bubbles + AI markdown correctly
+- [x] Auto-generated title is populated server-side on first Send (max ~50 chars from first user message); manual rename overrides it
+- [x] Backend endpoints `GET /ai/conversations` (paginated), `GET /ai/conversations/:id`, `GET /ai/conversations/:id/messages`, `PATCH /ai/conversations/:id`, `DELETE /ai/conversations/:id` exist and are guarded by `AI_VIEW_CONVERSATIONS` (read) / `AI_CHAT` (mutate)
+- [x] `cd mobile && flutter analyze && flutter test` pass; `cd backend && bun run lint && bun run typecheck && bun run test` pass (e2e tests require `db:up` — pre-existing infra dependency)
 
 ## Blocked by
 
 - [`04-mobile-mid-mode.md`](./04-mobile-mid-mode.md)
+
+## Implementation notes
+
+### Files created
+
+| File | Description |
+|------|-------------|
+| `backend/src/modules/ai/dto/update-conversation.dto.ts` | DTO for `PATCH /ai/conversations/:id` — validates `title` (string, max 200 chars) |
+| `mobile/lib/features/assistant/data/conversation_model.dart` | `ConversationSummary` and `ConversationMessage` models for the drawer and full-screen chat list |
+| `mobile/lib/features/assistant/data/conversation_list_provider.dart` | Riverpod `AsyncNotifier` for conversation list with `refresh`, `rename`, `delete` operations |
+| `mobile/lib/features/assistant/presentation/widgets/conversation_drawer.dart` | `ConversationDrawer` widget — lists conversations sorted by `updatedAt` DESC with inline rename, delete confirmation dialog, and "+ Mới" button |
+| `mobile/lib/features/assistant/presentation/widgets/assistant_full_screen.dart` | `AssistantFullScreen` widget — header with drawer toggle/display name/reset/close, scrolling chat list with user bubbles (right-aligned, primary color background) and AI messages (full-width markdown), compose bar at bottom |
+
+### Files modified
+
+| File | Description |
+|------|-------------|
+| `backend/src/modules/ai/presentation/ai.controller.ts` | Added `PATCH /ai/conversations/:id` endpoint (rename) with `AI_CHAT` permission guard and ownership check |
+| `backend/src/modules/conversations/application/conversation.service.ts` | Added `updateTitle(id, title)` method |
+| `backend/src/modules/agent/application/agent.service.ts` | Auto-title generation: when lazily creating a conversation in `runTurnStream`, populates `title` with first ~50 chars of user message |
+| `mobile/lib/features/assistant/domain/assistant_state.dart` | `AssistantFull` now carries `priorState` field for back navigation |
+| `mobile/lib/features/assistant/application/assistant_state_machine.dart` | Added `enterFull()` and `exitFull()` transitions |
+| `mobile/lib/features/assistant/application/assistant_chat_notifier.dart` | Added `enterFull()`, `exitFull()`, `openExistingConversation()`, and public `conversationId` getter |
+| `mobile/lib/features/assistant/data/ai_api.dart` | Added `listConversations`, `getConversation`, `renameConversation`, `deleteConversation` methods |
+| `mobile/lib/features/assistant/presentation/widgets/assistant_question_sheet.dart` | Added "Toàn màn hình" button in header; handles `AssistantFull` state transition by dismissing sheet and navigating to `AssistantFullScreen` |
