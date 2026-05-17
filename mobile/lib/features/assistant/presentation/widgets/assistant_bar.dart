@@ -6,12 +6,15 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../application/assistant_chat_notifier.dart';
 import '../../data/screen_context_provider.dart';
+import 'assistant_full_screen.dart';
 import 'assistant_question_sheet.dart';
 
-/// Thin always-visible entry-point to the Trợ lý AI. Tapping it opens
-/// the [AssistantQuestionSheet] in its Compose phase and drives the
-/// state machine through the chat notifier; dismissing the sheet
-/// collapses the state machine and drops the cached `conversationId`.
+/// Thin always-visible entry-point to the Trợ lý AI.
+///
+/// V2 changes:
+/// - **Tap** → opens [AssistantQuestionSheet] in Mid compose (unchanged).
+/// - **Long-press** → transitions Collapsed → FullCompose and navigates
+///   directly to [AssistantFullScreen], skipping the bottom sheet.
 class AssistantBar extends ConsumerWidget {
   const AssistantBar({super.key});
 
@@ -28,6 +31,7 @@ class AssistantBar extends ConsumerWidget {
         top: false,
         child: InkWell(
           onTap: () => _openSheet(context, ref),
+          onLongPress: () => _openFullDirect(context, ref),
           child: Container(
             decoration: BoxDecoration(
               border: Border(top: BorderSide(color: c.border)),
@@ -68,6 +72,7 @@ class AssistantBar extends ConsumerWidget {
     );
   }
 
+  /// Tap → Mid bottom sheet.
   void _openSheet(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(assistantChatNotifierProvider);
     notifier.openBar();
@@ -78,10 +83,24 @@ class AssistantBar extends ConsumerWidget {
       isScrollControlled: true,
       builder: (ctx) => const AssistantQuestionSheet(),
     ).whenComplete(() {
-      // Dismissed via backdrop, drag-down, or the "−" button. The state
-      // machine collapses and the cached conversationId is dropped so the
-      // next session starts a fresh Conversation.
+      // Only collapse if we're still in a Mid state; if the user
+      // entered Full from the sheet, don't collapse the state machine.
       notifier.collapse();
     });
+  }
+
+  /// Long-press → Full screen directly (Collapsed → FullCompose).
+  void _openFullDirect(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(assistantChatNotifierProvider);
+    notifier.openFullDirect();
+
+    final navKey = ref.read(rootNavigatorKeyProvider);
+    final navContext = navKey.currentContext ?? context;
+    Navigator.of(navContext).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const AssistantFullScreen(),
+        fullscreenDialog: true,
+      ),
+    );
   }
 }
