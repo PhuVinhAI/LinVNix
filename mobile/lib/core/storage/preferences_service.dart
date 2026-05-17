@@ -11,6 +11,9 @@ class PreferencesService {
   static const _notificationEnabledKey = 'notification_enabled';
   static const _notificationTimeKey = 'notification_time';
 
+  // Issue 02 — assistant bar visibility preference
+  static const _assistantBarVisibleKey = 'assistant_bar_visible';
+
   bool get isOnboardingCompleted =>
       _prefs.getBool(_onboardingCompletedKey) ?? false;
 
@@ -60,4 +63,13 @@ class PreferencesService {
     };
     return _prefs.setString(_themeModeKey, value);
   }
+
+  /// Whether the Thanh Trợ lý AI bar is shown. Defaults to `true` so
+  /// existing users who have never set this preference still see the bar.
+  bool get assistantBarVisible =>
+      _prefs.getBool(_assistantBarVisibleKey) ?? true;
+
+  /// Persists the learner's bar-visibility preference immediately.
+  Future<void> setAssistantBarVisible(bool visible) =>
+      _prefs.setBool(_assistantBarVisibleKey, visible);
 }
