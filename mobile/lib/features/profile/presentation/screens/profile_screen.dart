@@ -10,6 +10,7 @@ import '../../../user/domain/user_profile.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
 import '../../../bookmarks/domain/bookmark_models.dart';
 import '../../../daily_goals/presentation/widgets/daily_goal_section.dart';
+import '../../../assistant/application/assistant_bar_visible_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -71,6 +72,8 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               _ThemeSection(),
+              const SizedBox(height: AppSpacing.md),
+              const _AssistantBarToggleSection(),
               const SizedBox(height: AppSpacing.md),
               const DailyGoalSection(),
               const SizedBox(height: AppSpacing.md),
@@ -844,6 +847,58 @@ class _SavedWordsSection extends StatelessWidget {
         trailing: const Icon(Icons.chevron_right),
         onTap: () => context.push('/bookmarks'),
       ),
+    );
+  }
+}
+
+class _AssistantBarToggleSection extends ConsumerWidget {
+  const _AssistantBarToggleSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
+    final isVisible = ref.watch(assistantBarVisibleProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Trợ lý AI',
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        AppCard(
+          variant: AppCardVariant.outlined,
+          child: AppListItem(
+            leading: Icon(
+              Icons.auto_awesome,
+              color: isVisible ? c.primary : c.mutedForeground,
+            ),
+            titleWidget: Text(
+              'Hiện thanh Trợ lý AI',
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitleWidget: Text(
+              isVisible
+                  ? 'Thanh trợ lý hiển thị ở tất cả màn hình'
+                  : 'Thanh trợ lý đã bị ẩn',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: c.mutedForeground,
+              ),
+            ),
+            trailing: Switch(
+              value: isVisible,
+              onChanged: (value) =>
+                  ref.read(assistantBarVisibleProvider.notifier).setVisible(value),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
