@@ -4,17 +4,20 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/app_router.dart';
 import '../data/route_match.dart' as assistant;
 import '../data/screen_context_provider.dart';
+import '../application/assistant_bar_visible_provider.dart';
 import 'assistant_visibility.dart';
 import 'widgets/assistant_bar.dart';
 
 /// Wraps the entire router output and renders the persistent assistant
-/// surface (`AssistantBar` + sheet) below the route content. Hooked into
-/// `MaterialApp.router(builder: ...)` from `mobile/lib/main.dart`.
+/// surface (`AssistantBar` + sheet) below the route content.
 ///
-/// The shell listens to GoRouter's route information stream and pushes
-/// the current `RouteMatch` into `currentRouteMatchProvider`, so any
-/// `ScreenContextBuilder` registered in the registry recomputes naturally
-/// as the learner navigates.
+/// V2: The bar is also suppressed when the learner has opted out via the
+/// profile toggle (`assistantBarVisibleProvider == false`). When hidden,
+/// the bar leaves no visual trace and there is no alternative entry point.
+///
+/// Stream-safe: toggling the preference off while a Full screen is open
+/// does NOT force-close it — the bar simply won't reappear once the
+/// learner returns to collapsed state.
 class GlobalAssistantShell extends ConsumerStatefulWidget {
   const GlobalAssistantShell({super.key, required this.child});
 
@@ -34,11 +37,6 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   void initState() {
     super.initState();
     _router = ref.read(routerProvider);
-    // Defer subscribing until AFTER the very first frame commits so that
-    // `setInitialRoutePath` (which runs during the initial route widget's
-    // didChangeDependencies) doesn't fire our listener mid-build, and so
-    // the test environment's `pumpAndSettle` is not extended past the
-    // first redirect by a stray microtask.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _router.routeInformationProvider.addListener(_scheduleRouteSync);
@@ -55,10 +53,6 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
     super.dispose();
   }
 
-  /// GoRouter's listeners can fire from inside Flutter's build pipeline
-  /// (e.g. `setInitialRoutePath` during `didChangeDependencies`). Riverpod
-  /// disallows provider mutations from build, so we always defer by one
-  /// microtask — harmless in production, mandatory in widget tests.
   void _scheduleRouteSync() {
     Future.microtask(_handleRouteChange);
   }
@@ -69,7 +63,6 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
     try {
       config = _router.routerDelegate.currentConfiguration;
     } catch (_) {
-      // Router not yet initialised (race during first frame of a test).
       return;
     }
     final fullPath = config.fullPath;
@@ -94,9 +87,17 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   @override
   Widget build(BuildContext context) {
     final match = ref.watch(currentRouteMatchProvider);
-    final visible = isAssistantBarVisible(match?.location);
 
-    if (!visible) {
+    // Gate 1: route-based visibility (auth / onboarding screens hide the bar)
+    final routeVisible = isAssistantBarVisible(match?.location);
+
+    // Gate 2: learner preference (opt-out toggle in profile settings)
+    final preferenceVisible = ref.watch(assistantBarVisibleProvider);
+
+    // Both gates must be true for the bar to render.
+    final showBar = routeVisible && preferenceVisible;
+
+    if (!showBar) {
       return widget.child;
     }
 
@@ -106,9 +107,6 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
       children: [
         Expanded(
           child: MediaQuery(
-            // Take ownership of the bottom safe-area inset so each route's
-            // Scaffold + AppNavBar stops drawing into the gesture-bar zone
-            // — the AssistantBar handles that with its own SafeArea below.
             data: mq.copyWith(
               padding: mq.padding.copyWith(bottom: 0),
               viewPadding: mq.viewPadding.copyWith(bottom: 0),
