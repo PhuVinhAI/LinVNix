@@ -7,7 +7,7 @@ import type {
   AiFunctionResult,
   ToolContext,
 } from '@linvnix/shared';
-import { BaseTool } from '@linvnix/shared';
+import { BaseTool, isProposalPayload } from '@linvnix/shared';
 import { ConversationService } from '../../conversations/application/conversation.service';
 import { GenaiService } from '../../../infrastructure/genai/genai.service';
 import { UsersService } from '../../users/application/users.service';
@@ -397,6 +397,17 @@ export class AgentService {
           const ok = !(result && result.error);
           functionResults.push({ name: fc.name, result });
           yield { type: 'tool_result', name: fc.name, ok };
+
+          if (isProposalPayload(result)) {
+            yield {
+              type: 'propose',
+              kind: result.kind,
+              title: result.title,
+              description: result.description,
+              endpoint: result.endpoint,
+              payload: result.payload,
+            };
+          }
         } catch (error) {
           this.logger.error(`Tool ${fc.name} execution failed: ${error}`);
           functionResults.push({

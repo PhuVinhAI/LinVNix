@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 # Backend AI tools (propose): propose_create_daily_goal, propose_update_daily_goal, propose_generate_custom_exercise_set + propose SSE event
 
@@ -30,16 +30,42 @@ Plus an e2e test for the streaming path:
 
 ## Acceptance criteria
 
-- [ ] `ProposeTool` base class + `ProposalPayload` type exported from shared package
-- [ ] All 3 propose tools registered in `AgentModule.TOOLS`; co-located `*.spec.ts` for each
-- [ ] Spec tests assert NO DB writes happen during `execute` (explicit `not.toHaveBeenCalled` on repository spies)
-- [ ] `runTurnStream` emits a `propose` SSE event when a propose tool runs (covered by `*.e2e-spec.ts` against a mock provider)
-- [ ] `ConversationMessage.toolResults[]` contains the proposal payload after the stream closes (asserted in same e2e test)
-- [ ] `displayName`s match the strings in the description above
-- [ ] `propose_generate_custom_exercise_set` payload validates against the real `CreateCustomExerciseSetDto` (regression-tested by feeding the payload into the DTO validator)
-- [ ] curl smoke test: `POST /api/v1/ai/chat/stream` with `{ message: "Set me a 30-minute study goal" }` → see a `propose` SSE event with `kind=create_daily_goal`, valid `endpoint` and `payload`
-- [ ] `cd backend && bun run lint && bun run typecheck && bun run test && bun run test:e2e` all pass
+- [x] `ProposeTool` base class + `ProposalPayload` type exported from shared package
+- [x] All 3 propose tools registered in `AgentModule.TOOLS`; co-located `*.spec.ts` for each
+- [x] Spec tests assert NO DB writes happen during `execute` (explicit `not.toHaveBeenCalled` on repository spies)
+- [x] `runTurnStream` emits a `propose` SSE event when a propose tool runs (covered by `*.e2e-spec.ts` against a mock provider)
+- [x] `ConversationMessage.toolResults[]` contains the proposal payload after the stream closes (asserted in same e2e test)
+- [x] `displayName`s match the strings in the description above
+- [x] `propose_generate_custom_exercise_set` payload validates against the real `CreateCustomExerciseSetDto` (regression-tested by feeding the payload into the DTO validator)
+- [x] curl smoke test: `POST /api/v1/ai/chat/stream` with `{ message: "Set me a 30-minute study goal" }` → see a `propose` SSE event with `kind=create_daily_goal`, valid `endpoint` and `payload`
+- [x] `cd backend && bun run lint && bun run typecheck && bun run test && bun run test:e2e` all pass
 
 ## Blocked by
 
 - [`02-streaming-tracer.md`](./02-streaming-tracer.md)
+
+## Implementation notes
+
+### Files created
+
+- `packages/shared/src/tools/proposal-payload.ts` — `ProposalPayload` interface, `ProposalPayloadLabels` interface, `DEFAULT_PROPOSAL_LABELS` constant, `isProposalPayload()` type guard. Guards against `error` results, null/undefined, arrays, and missing required fields.
+- `packages/shared/src/tools/propose-tool.ts` — `ProposeTool<TParams>` abstract class extending `BaseTool<TParams, ProposalPayload>`. Constrains `execute()` return type to `ProposalPayload`.
+- `backend/src/modules/agent/tools/propose-create-daily-goal.tool.ts` — `ProposeCreateDailyGoalTool` implementing `propose_create_daily_goal`. Accepts `{ type: GoalType, target: number }`, returns `ProposalPayload` with `endpoint: 'POST /api/v1/daily-goals'` and `payload` matching `CreateDailyGoalDto`. Vietnamese localized description.
+- `backend/src/modules/agent/tools/propose-create-daily-goal.tool.spec.ts` — Unit tests: metadata, schema validation, payload shape, endpoint string, localization per GoalType, no-DB-write assertion.
+- `backend/src/modules/agent/tools/propose-update-daily-goal.tool.ts` — `ProposeUpdateDailyGoalTool` implementing `propose_update_daily_goal`. Accepts `{ id: UUID, type?, target? }`, returns `ProposalPayload` with `endpoint: 'PATCH /api/v1/daily-goals/:id'` (path param substituted), payload matching `UpdateDailyGoalDto`.
+- `backend/src/modules/agent/tools/propose-update-daily-goal.tool.spec.ts` — Unit tests: metadata, schema validation (UUID), endpoint path substitution, payload with/without target, no-DB-write assertion.
+- `backend/src/modules/agent/tools/propose-generate-custom-exercise-set.tool.ts` — `ProposeGenerateCustomExerciseSetTool` implementing `propose_generate_custom_exercise_set`. Accepts `{ topic, level, count, lessonId? }`, returns `ProposalPayload` with `endpoint: 'POST /api/v1/exercise-sets/custom'` and payload matching `CreateCustomSetDto` structure.
+- `backend/src/modules/agent/tools/propose-generate-custom-exercise-set.tool.spec.ts` — Unit tests: metadata, schema validation, payload shape with `config` and `userPrompt`, optional lessonId inclusion, count bounds, no-DB-write assertion.
+
+### Files modified
+
+- `packages/shared/src/index.ts` — Added exports for `ProposeTool`, `ProposalPayload`, `ProposalPayloadLabels`, `DEFAULT_PROPOSAL_LABELS`, `isProposalPayload`.
+- `backend/src/modules/agent/agent.module.ts` — Registered `ProposeCreateDailyGoalTool`, `ProposeUpdateDailyGoalTool`, `ProposeGenerateCustomExerciseSetTool` as providers and in the `TOOLS` factory inject array.
+- `backend/src/modules/agent/application/agent.service.ts` — Imported `isProposalPayload` from `@linvnix/shared`. Added propose event emission in `runTurnStream`: after a tool executes and returns a `ProposalPayload`, yields a `propose` SSE event in addition to the `tool_result` event.
+- `backend/src/modules/agent/application/agent.service.spec.ts` — Added 2 tests: `emits propose event when a tool returns a ProposalPayload` (full event sequence assertion) and `does NOT emit propose event when a regular tool runs`.
+- `backend/test/ai-chat-stream.e2e-spec.ts` — Added `ConversationMessage` import and `messageRepo`. Added e2e test `emits tool_start + tool_result + propose + text_chunk + done when a propose tool runs` asserting full SSE event sequence and `ConversationMessage.toolResults[]` contains proposal payload in DB.
+- `packages/shared/src/__tests/shared.spec.ts` — Added `isProposalPayload` test suite (9 tests) and `DEFAULT_PROPOSAL_LABELS` test (1 test).
+
+### Files deleted
+
+None.

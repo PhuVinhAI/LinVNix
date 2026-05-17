@@ -34,3 +34,12 @@ export {
 
 export { BaseTool } from './tools/base-tool.js';
 export type { ToolContext } from './tools/tool-context.js';
+export { ProposeTool } from './tools/propose-tool.js';
+export {
+  DEFAULT_PROPOSAL_LABELS,
+  isProposalPayload,
+} from './tools/proposal-payload.js';
+export type {
+  ProposalPayload,
+  ProposalPayloadLabels,
+} from './tools/proposal-payload.js';

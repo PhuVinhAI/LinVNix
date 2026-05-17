@@ -17,6 +17,9 @@ import { SearchVocabularyTool } from './tools/search-vocabulary.tool';
 import { SearchGrammarRulesTool } from './tools/search-grammar-rules.tool';
 import { FindLessonsTool } from './tools/find-lessons.tool';
 import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
+import { ProposeCreateDailyGoalTool } from './tools/propose-create-daily-goal.tool';
+import { ProposeUpdateDailyGoalTool } from './tools/propose-update-daily-goal.tool';
+import { ProposeGenerateCustomExerciseSetTool } from './tools/propose-generate-custom-exercise-set.tool';
 
 @Module({
   imports: [
@@ -40,6 +43,9 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
     SearchGrammarRulesTool,
     FindLessonsTool,
     GetLessonDetailTool,
+    ProposeCreateDailyGoalTool,
+    ProposeUpdateDailyGoalTool,
+    ProposeGenerateCustomExerciseSetTool,
     {
       provide: 'TOOLS',
       useFactory: (
@@ -53,6 +59,9 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
         searchGrammarRulesTool: SearchGrammarRulesTool,
         findLessonsTool: FindLessonsTool,
         getLessonDetailTool: GetLessonDetailTool,
+        proposeCreateDailyGoalTool: ProposeCreateDailyGoalTool,
+        proposeUpdateDailyGoalTool: ProposeUpdateDailyGoalTool,
+        proposeGenerateCustomExerciseSetTool: ProposeGenerateCustomExerciseSetTool,
       ) => [
         echoTool,
         getUserSummaryTool,
@@ -64,6 +73,9 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
         searchGrammarRulesTool,
         findLessonsTool,
         getLessonDetailTool,
+        proposeCreateDailyGoalTool,
+        proposeUpdateDailyGoalTool,
+        proposeGenerateCustomExerciseSetTool,
       ],
       inject: [
         EchoTool,
@@ -76,6 +88,9 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
         SearchGrammarRulesTool,
         FindLessonsTool,
         GetLessonDetailTool,
+        ProposeCreateDailyGoalTool,
+        ProposeUpdateDailyGoalTool,
+        ProposeGenerateCustomExerciseSetTool,
       ],
     },
   ],
