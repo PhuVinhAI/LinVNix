@@ -42,6 +42,10 @@ class AssistantChatNotifier {
   @visibleForTesting
   String? get conversationIdForTesting => _conversationId;
 
+  /// The current conversation ID. Used by the full-screen widget to
+  /// load conversation messages.
+  String? get conversationId => _conversationId;
+
   /// Bar tap / drag-up: Collapsed → MidCompose. Idempotent on already-open
   /// states (no-op if not Collapsed) so the bar can be safely re-tapped
   /// in race conditions.
@@ -136,7 +140,13 @@ class AssistantChatNotifier {
   Future<void> reset() async {
     await _cancelInFlight();
     _conversationId = null;
-    _ref.read(assistantStateMachineProvider.notifier).reset();
+    final sm = _ref.read(assistantStateMachineProvider.notifier);
+    final current = _ref.read(assistantStateMachineProvider);
+    if (current is AssistantFull) {
+      sm.reset();
+    } else {
+      sm.reset();
+    }
   }
 
   /// User dismissed the sheet (`−` button, backdrop tap, drag-down).
@@ -146,6 +156,38 @@ class AssistantChatNotifier {
     await _cancelInFlight();
     _conversationId = null;
     _ref.read(assistantStateMachineProvider.notifier).collapse();
+  }
+
+  /// Drag-up gesture from Mid state → Full. Does NOT drop
+  /// `conversationId` so the same conversation is shown in Full.
+  void enterFull() {
+    final sm = _ref.read(assistantStateMachineProvider.notifier);
+    sm.enterFull();
+  }
+
+  /// Back gesture or close button from Full → prior Mid state.
+  void exitFull() {
+    final sm = _ref.read(assistantStateMachineProvider.notifier);
+    sm.exitFull();
+  }
+
+  /// Opens an existing conversation by id. Sets the internal
+  /// `conversationId` and transitions to MidReading so the caller can
+  /// display the loaded messages. Used when tapping a conversation row
+  /// in the drawer.
+  void openExistingConversation(String conversationId) {
+    _conversationId = conversationId;
+    // Transition to MidCompose so the user can send a follow-up.
+    final sm = _ref.read(assistantStateMachineProvider.notifier);
+    final current = _ref.read(assistantStateMachineProvider);
+    if (current is AssistantFull) {
+      // Stay in Full; the full-screen widget handles message display.
+    } else if (current is! AssistantMidCompose) {
+      // If not already in compose, try to get there.
+      if (current is AssistantCollapsed) {
+        sm.openBar();
+      }
+    }
   }
 
   /// User tapped "Thử lại" on a pre-token error. Re-sends the cached

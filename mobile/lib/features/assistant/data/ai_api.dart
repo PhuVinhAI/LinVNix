@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../domain/assistant_event.dart';
 import '../domain/screen_context.dart';
 import '../domain/sse_event_decoder.dart';
+import 'conversation_model.dart';
 
 /// Thin wrapper around the backend's `POST /api/v1/ai/chat/stream`
 /// SSE endpoint. Uses Dio's `ResponseType.stream` so the response body
@@ -63,5 +64,50 @@ class AiApi {
     }
 
     yield* _decoder.decode(byteStream);
+  }
+
+  /// Lists conversations for the current user, sorted by updatedAt DESC.
+  Future<List<ConversationSummary>> listConversations({
+    int page = 1,
+    int limit = 50,
+  }) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/ai/conversations',
+      queryParameters: {'page': '$page', 'limit': '$limit'},
+    );
+    final data = response.data?['data'] as List<dynamic>? ?? [];
+    return data
+        .map((e) =>
+            ConversationSummary.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// Gets a single conversation with its messages.
+  Future<({
+    ConversationSummary conversation,
+    List<ConversationMessage> messages,
+  })> getConversation(String id) async {
+    final response =
+        await _dio.get<Map<String, dynamic>>('/ai/conversations/$id');
+    final data = response.data!;
+    final conversation = ConversationSummary.fromJson(data);
+    final messages = (data['messages'] as List<dynamic>? ?? [])
+        .map((e) =>
+            ConversationMessage.fromJson(e as Map<String, dynamic>))
+        .toList();
+    return (conversation: conversation, messages: messages);
+  }
+
+  /// Renames a conversation.
+  Future<void> renameConversation(String id, String title) async {
+    await _dio.patch<void>(
+      '/ai/conversations/$id',
+      data: {'title': title},
+    );
+  }
+
+  /// Deletes a conversation.
+  Future<void> deleteConversation(String id) async {
+    await _dio.delete<void>('/ai/conversations/$id');
   }
 }

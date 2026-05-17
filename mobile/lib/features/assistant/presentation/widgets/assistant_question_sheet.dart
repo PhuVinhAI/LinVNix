@@ -9,6 +9,7 @@ import '../../application/assistant_chat_notifier.dart';
 import '../../application/assistant_state_machine.dart';
 import '../../data/screen_context_provider.dart';
 import '../../domain/assistant_state.dart';
+import 'assistant_full_screen.dart';
 
 /// The Mid (Hỏi) bottom-sheet surface. Renders three phases driven by
 /// [assistantStateMachineProvider]:
@@ -74,6 +75,17 @@ class _AssistantQuestionSheetState
       // programmatic flow) and the sheet is still mounted, dismiss it.
       if (next is AssistantCollapsed) {
         Navigator.of(context).maybePop();
+      }
+      // When entering Full, dismiss the sheet and navigate to the
+      // full-screen chat view.
+      if (next is AssistantFull) {
+        Navigator.of(context).maybePop();
+        Navigator.of(context).push<void>(
+          MaterialPageRoute(
+            builder: (_) => const AssistantFullScreen(),
+            fullscreenDialog: true,
+          ),
+        );
       }
     });
 
@@ -162,6 +174,14 @@ class _Header extends ConsumerWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
+        if (_resetVisible)
+          IconButton(
+            icon: const Icon(Icons.open_in_full),
+            color: c.mutedForeground,
+            tooltip: 'Toàn màn hình',
+            onPressed: () =>
+                ref.read(assistantChatNotifierProvider).enterFull(),
+          ),
         if (_resetVisible)
           IconButton(
             icon: const Icon(Icons.refresh),

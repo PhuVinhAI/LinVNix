@@ -231,9 +231,12 @@ export class AgentService {
   ): AsyncIterable<StreamEvent> {
     let activeConversationId = conversationId;
     if (activeConversationId === null) {
+      const autoTitle =
+        userMessage.length > 50 ? userMessage.substring(0, 50) : userMessage;
       const created = await this.conversationService.create(userId, {
         model: 'gemini-2.0-flash',
         screenContext: screenContext ?? {},
+        title: autoTitle,
       });
       activeConversationId = created.id;
     }
