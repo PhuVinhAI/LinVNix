@@ -39,6 +39,10 @@ final _routerListenableProvider = Provider<_RouterListenable>((ref) {
   return _RouterListenable(ref);
 });
 
+final rootNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
+  return _rootNavigatorKey;
+});
+
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = ref.watch(_routerListenableProvider);
 
