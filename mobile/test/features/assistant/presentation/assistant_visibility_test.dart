@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:linvnix/features/assistant/domain/assistant_state.dart';
 import 'package:linvnix/features/assistant/presentation/assistant_visibility.dart';
 
 void main() {
@@ -45,19 +46,85 @@ void main() {
       expect(isAssistantBarVisible(null), isFalse);
     });
 
+    test('hidden on auth routes that carry query parameters '
+        '(e.g. /verify-email?email=...)', () {
+      expect(isAssistantBarVisible('/verify-email?email=foo@bar.com'), isFalse);
+      expect(isAssistantBarVisible('/reset-password?token=xyz'), isFalse);
+    });
+  });
+
+  group('shouldRenderAssistantBar', () {
+    test('renders on visible routes when the learner preference is on', () {
+      expect(
+        shouldRenderAssistantBar(
+          routeVisible: true,
+          preferenceVisible: true,
+          state: const AssistantCollapsed(),
+        ),
+        isTrue,
+      );
+    });
+
     test(
-      'hidden on auth routes that carry query parameters '
-      '(e.g. /verify-email?email=...)',
+      'hides completely when preference is off and assistant is collapsed',
       () {
         expect(
-          isAssistantBarVisible('/verify-email?email=foo@bar.com'),
-          isFalse,
-        );
-        expect(
-          isAssistantBarVisible('/reset-password?token=xyz'),
+          shouldRenderAssistantBar(
+            routeVisible: true,
+            preferenceVisible: false,
+            state: const AssistantCollapsed(),
+          ),
           isFalse,
         );
       },
     );
+
+    test(
+      'keeps rendering while a Full stream is active after preference is off',
+      () {
+        expect(
+          shouldRenderAssistantBar(
+            routeVisible: true,
+            preferenceVisible: false,
+            state: const AssistantFullReading(
+              partial: 'Xin chào',
+              streaming: true,
+            ),
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test(
+      'keeps rendering while Full screen is open after preference is off',
+      () {
+        expect(
+          shouldRenderAssistantBar(
+            routeVisible: true,
+            preferenceVisible: false,
+            state: const AssistantFullReading(
+              partial: 'Xin chào',
+              streaming: false,
+            ),
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test('hidden routes take precedence over an active assistant state', () {
+      expect(
+        shouldRenderAssistantBar(
+          routeVisible: false,
+          preferenceVisible: true,
+          state: const AssistantFullReading(
+            partial: 'Xin chào',
+            streaming: true,
+          ),
+        ),
+        isFalse,
+      );
+    });
   });
 }

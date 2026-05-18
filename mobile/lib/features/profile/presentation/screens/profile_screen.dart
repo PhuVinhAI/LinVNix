@@ -5,6 +5,7 @@ import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/providers/theme_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../widgets/assistant_bar_visibility_setting.dart';
 import '../../data/profile_providers.dart';
 import '../../../user/domain/user_profile.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
@@ -71,6 +72,8 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               _ThemeSection(),
+              const SizedBox(height: AppSpacing.md),
+              const AssistantBarVisibilitySetting(),
               const SizedBox(height: AppSpacing.md),
               const DailyGoalSection(),
               const SizedBox(height: AppSpacing.md),

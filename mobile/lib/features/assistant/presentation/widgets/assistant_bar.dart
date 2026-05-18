@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/providers/assistant_bar_visible_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../application/assistant_chat_notifier.dart';
 import '../../application/assistant_state_machine.dart';
 import '../../data/screen_context_provider.dart';
 import '../../domain/assistant_state.dart';
+import '../assistant_visibility.dart';
 import 'assistant_full_screen.dart';
 import 'assistant_question_sheet.dart';
 
@@ -20,6 +22,17 @@ class AssistantBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final assistantBarVisible = ref.watch(assistantBarVisibleProvider);
+    final assistantState = ref.watch(assistantStateMachineProvider);
+    final visible = shouldRenderAssistantBar(
+      routeVisible: true,
+      preferenceVisible: assistantBarVisible,
+      state: assistantState,
+    );
+    if (!visible) {
+      return const SizedBox.shrink();
+    }
+
     final c = AppTheme.colors(context);
     final placeholder = ref.watch(
       currentScreenContextProvider.select((s) => s.barPlaceholder),

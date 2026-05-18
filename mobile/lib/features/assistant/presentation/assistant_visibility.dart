@@ -1,3 +1,5 @@
+import '../domain/assistant_state.dart';
+
 /// Locations where the AssistantBar must be hidden. Per PRD, these are the
 /// one-time linear flows (auth + onboarding + splash) where the assistant
 /// would be a distraction.
@@ -21,4 +23,20 @@ bool isAssistantBarVisible(String? location) {
   // Strip the query string so e.g. `/verify-email?email=...` still matches.
   final pathOnly = location.split('?').first;
   return !_hiddenLocations.contains(pathOnly);
+}
+
+bool shouldRenderAssistantBar({
+  required bool routeVisible,
+  required bool preferenceVisible,
+  required AssistantState state,
+}) {
+  if (!routeVisible) return false;
+  if (preferenceVisible) return true;
+  if (state is AssistantMidLoading) return true;
+  if (state is AssistantMidReading && state.streaming) return true;
+  if (state is AssistantFullCompose) return true;
+  if (state is AssistantFullLoading) return true;
+  if (state is AssistantFullReading) return true;
+  if (state is AssistantFullError) return true;
+  return false;
 }
