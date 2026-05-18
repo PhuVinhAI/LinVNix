@@ -24,15 +24,26 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     state = const AssistantMidCompose();
   }
 
-  /// Send tapped: MidCompose → MidLoading. Also valid as a retry from
-  /// MidError so the chat notifier can re-issue with the cached input
-  /// without manually clearing the error state first.
+  /// Bar long-press: Collapsed → FullCompose.
+  void openFull() {
+    if (state is! AssistantCollapsed) {
+      throw _invalid('openFull');
+    }
+    state = const AssistantFullCompose();
+  }
+
+  /// Send tapped: Compose/Error → Loading on the current surface.
   void send(String input) {
     final s = state;
-    if (s is! AssistantMidCompose && s is! AssistantMidError) {
-      throw _invalid('send');
+    if (s is AssistantMidCompose || s is AssistantMidError) {
+      state = AssistantMidLoading(lastInput: input);
+      return;
     }
-    state = AssistantMidLoading(lastInput: input);
+    if (s is AssistantFullCompose || s is AssistantFullError) {
+      state = AssistantFullLoading(lastInput: input);
+      return;
+    }
+    throw _invalid('send');
   }
 
   /// `tool_start` event arrived. Updates the loading-phase status text.
@@ -41,13 +52,21 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   /// generic fallback.
   void onToolStart({required String displayName}) {
     final s = state;
-    if (s is! AssistantMidLoading) {
-      throw _invalid('onToolStart');
+    if (s is AssistantMidLoading) {
+      state = AssistantMidLoading(
+        lastInput: s.lastInput,
+        statusText: displayName,
+      );
+      return;
     }
-    state = AssistantMidLoading(
-      lastInput: s.lastInput,
-      statusText: displayName,
-    );
+    if (s is AssistantFullLoading) {
+      state = AssistantFullLoading(
+        lastInput: s.lastInput,
+        statusText: displayName,
+      );
+      return;
+    }
+    throw _invalid('onToolStart');
   }
 
   /// `text_chunk` event arrived. From MidLoading this transitions into
@@ -62,6 +81,20 @@ class AssistantStateMachine extends Notifier<AssistantState> {
       state = AssistantMidReading(
         partial: s.partial + text,
         streaming: true,
+        messageId: s.messageId,
+        proposals: s.proposals,
+      );
+      return;
+    }
+    if (s is AssistantFullLoading) {
+      state = AssistantFullReading(partial: text, streaming: true);
+      return;
+    }
+    if (s is AssistantFullReading && s.streaming) {
+      state = AssistantFullReading(
+        partial: s.partial + text,
+        streaming: true,
+        messageId: s.messageId,
         proposals: s.proposals,
       );
       return;
@@ -87,6 +120,25 @@ class AssistantStateMachine extends Notifier<AssistantState> {
       state = AssistantMidReading(
         partial: s.partial,
         streaming: true,
+        messageId: s.messageId,
+        proposals: [...s.proposals, proposal],
+      );
+      return;
+    }
+    if (s is AssistantFullReading && s.streaming) {
+      final proposal = ProposalState(
+        kind: event.kind,
+        title: event.title,
+        description: event.description,
+        endpoint: event.endpoint,
+        payload: event.payload,
+        confirmLabel: event.confirmLabel,
+        declineLabel: event.declineLabel,
+      );
+      state = AssistantFullReading(
+        partial: s.partial,
+        streaming: true,
+        messageId: s.messageId,
         proposals: [...s.proposals, proposal],
       );
       return;
@@ -106,6 +158,20 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     }
     if (s is AssistantMidReading && s.streaming) {
       state = AssistantMidReading(
+        partial: s.partial,
+        streaming: false,
+        interrupted: true,
+        messageId: s.messageId,
+        proposals: s.proposals,
+      );
+      return;
+    }
+    if (s is AssistantFullLoading) {
+      state = AssistantFullError(message: message, lastInput: s.lastInput);
+      return;
+    }
+    if (s is AssistantFullReading && s.streaming) {
+      state = AssistantFullReading(
         partial: s.partial,
         streaming: false,
         interrupted: true,
@@ -141,6 +207,25 @@ class AssistantStateMachine extends Notifier<AssistantState> {
       );
       return;
     }
+    if (s is AssistantFullLoading) {
+      state = AssistantFullReading(
+        partial: '',
+        streaming: false,
+        interrupted: interrupted,
+        messageId: messageId,
+      );
+      return;
+    }
+    if (s is AssistantFullReading && s.streaming) {
+      state = AssistantFullReading(
+        partial: s.partial,
+        streaming: false,
+        interrupted: interrupted,
+        messageId: messageId,
+        proposals: s.proposals,
+      );
+      return;
+    }
     throw _invalid('onDone');
   }
 
@@ -168,6 +253,24 @@ class AssistantStateMachine extends Notifier<AssistantState> {
       );
       return;
     }
+    if (s is AssistantFullLoading) {
+      state = const AssistantFullReading(
+        partial: '',
+        streaming: false,
+        interrupted: true,
+      );
+      return;
+    }
+    if (s is AssistantFullReading && s.streaming) {
+      state = AssistantFullReading(
+        partial: s.partial,
+        streaming: false,
+        interrupted: true,
+        messageId: s.messageId,
+        proposals: s.proposals,
+      );
+      return;
+    }
     throw _invalid('stop');
   }
 
@@ -176,10 +279,15 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   /// notifier (which keeps the cached `conversationId`).
   void composeAgain() {
     final s = state;
-    if (s is! AssistantMidReading || s.streaming) {
-      throw _invalid('composeAgain');
+    if (s is AssistantMidReading && !s.streaming) {
+      state = const AssistantMidCompose();
+      return;
     }
-    state = const AssistantMidCompose();
+    if (s is AssistantFullReading && !s.streaming) {
+      state = const AssistantFullCompose();
+      return;
+    }
+    throw _invalid('composeAgain');
   }
 
   /// "Reset" button — drops the current conversation and returns to
@@ -189,7 +297,13 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     if (state is AssistantCollapsed) {
       throw _invalid('reset');
     }
-    state = const AssistantMidCompose();
+    state = switch (state) {
+      AssistantFullCompose() ||
+      AssistantFullLoading() ||
+      AssistantFullReading() ||
+      AssistantFullError() => const AssistantFullCompose(),
+      _ => const AssistantMidCompose(),
+    };
   }
 
   /// Backdrop tap, "−" button, drag-down — back to Collapsed.
@@ -200,24 +314,35 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     state = const AssistantCollapsed();
   }
 
-  /// Drag-up from any Mid state → Full. Saves the current state as
-  /// [priorState] so [exitFull] can restore it.
+  /// Drag-up from any Mid state → mirrored Full state.
   void enterFull() {
     final s = state;
-    if (s is AssistantCollapsed || s is AssistantFull) {
-      throw _invalid('enterFull');
+    if (s is AssistantMidCompose) {
+      state = const AssistantFullCompose();
+      return;
     }
-    state = AssistantFull(priorState: s);
-  }
-
-  /// Back gesture or close button from Full → prior Mid state (or
-  /// Collapsed if no prior state was recorded).
-  void exitFull() {
-    final s = state;
-    if (s is! AssistantFull) {
-      throw _invalid('exitFull');
+    if (s is AssistantMidLoading) {
+      state = AssistantFullLoading(
+        lastInput: s.lastInput,
+        statusText: s.statusText,
+      );
+      return;
     }
-    state = s.priorState ?? const AssistantCollapsed();
+    if (s is AssistantMidReading) {
+      state = AssistantFullReading(
+        partial: s.partial,
+        streaming: s.streaming,
+        interrupted: s.interrupted,
+        messageId: s.messageId,
+        proposals: s.proposals,
+      );
+      return;
+    }
+    if (s is AssistantMidError) {
+      state = AssistantFullError(message: s.message, lastInput: s.lastInput);
+      return;
+    }
+    throw _invalid('enterFull');
   }
 
   /// Updates a single proposal's status within the current MidReading
@@ -225,50 +350,80 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   /// transitions.
   void updateProposal(int index, ProposalState updated) {
     final s = state;
-    if (s is! AssistantMidReading) {
-      throw _invalid('updateProposal');
-    }
-    final proposals = List<ProposalState>.from(s.proposals);
+    final proposals = switch (s) {
+      AssistantMidReading(:final proposals) => List<ProposalState>.from(
+        proposals,
+      ),
+      AssistantFullReading(:final proposals) => List<ProposalState>.from(
+        proposals,
+      ),
+      _ => throw _invalid('updateProposal'),
+    };
     if (index < 0 || index >= proposals.length) {
       throw RangeError.index(index, proposals, 'proposals');
     }
     proposals[index] = updated;
-    state = AssistantMidReading(
-      partial: s.partial,
-      streaming: s.streaming,
-      interrupted: s.interrupted,
-      messageId: s.messageId,
-      proposals: proposals,
-    );
+    state = switch (s) {
+      AssistantMidReading() => AssistantMidReading(
+        partial: s.partial,
+        streaming: s.streaming,
+        interrupted: s.interrupted,
+        messageId: s.messageId,
+        proposals: proposals,
+      ),
+      AssistantFullReading() => AssistantFullReading(
+        partial: s.partial,
+        streaming: s.streaming,
+        interrupted: s.interrupted,
+        messageId: s.messageId,
+        proposals: proposals,
+      ),
+      _ => throw _invalid('updateProposal'),
+    };
   }
 
   /// Removes a proposal (decline). The card is dismissed.
   void dismissProposal(int index) {
     final s = state;
-    if (s is! AssistantMidReading) {
-      throw _invalid('dismissProposal');
-    }
-    final proposals = List<ProposalState>.from(s.proposals);
+    final proposals = switch (s) {
+      AssistantMidReading(:final proposals) => List<ProposalState>.from(
+        proposals,
+      ),
+      AssistantFullReading(:final proposals) => List<ProposalState>.from(
+        proposals,
+      ),
+      _ => throw _invalid('dismissProposal'),
+    };
     if (index < 0 || index >= proposals.length) {
       throw RangeError.index(index, proposals, 'proposals');
     }
     proposals.removeAt(index);
-    state = AssistantMidReading(
-      partial: s.partial,
-      streaming: s.streaming,
-      interrupted: s.interrupted,
-      messageId: s.messageId,
-      proposals: proposals,
-    );
+    state = switch (s) {
+      AssistantMidReading() => AssistantMidReading(
+        partial: s.partial,
+        streaming: s.streaming,
+        interrupted: s.interrupted,
+        messageId: s.messageId,
+        proposals: proposals,
+      ),
+      AssistantFullReading() => AssistantFullReading(
+        partial: s.partial,
+        streaming: s.streaming,
+        interrupted: s.interrupted,
+        messageId: s.messageId,
+        proposals: proposals,
+      ),
+      _ => throw _invalid('dismissProposal'),
+    };
   }
 
   StateError _invalid(String op) => StateError(
-        'AssistantStateMachine.$op called in invalid state: '
-        '${state.runtimeType}',
-      );
+    'AssistantStateMachine.$op called in invalid state: '
+    '${state.runtimeType}',
+  );
 }
 
 final assistantStateMachineProvider =
     NotifierProvider<AssistantStateMachine, AssistantState>(
-  AssistantStateMachine.new,
-);
+      AssistantStateMachine.new,
+    );

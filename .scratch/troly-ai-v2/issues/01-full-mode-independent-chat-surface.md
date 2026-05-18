@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -56,24 +56,55 @@ Transitions:
 
 ## Acceptance criteria
 
-- [ ] `AssistantState` sealed class has 9 states (4 Full replacing single `AssistantFull`), no `priorState` field
-- [ ] State machine: all transitions from the table above work; invalid transitions throw `StateError`
-- [ ] `enterFull()` mirrors Mid→Full state mapping (MidCompose→FullCompose, MidLoading→FullLoading, MidReading→FullReading, MidError→FullError)
-- [ ] Closing Full → Collapsed (not Mid); `exitFull()` and `priorState` removed
-- [ ] Reset in Full → FullCompose (stays in Full)
-- [ ] Chat notifier `_handleEvent` dispatches ToolStartEvent/TextChunkEvent/ProposeEvent/AssistantErrorEvent/DoneEvent for FullLoading and FullReading states
-- [ ] Chat notifier `sendMessage` handles Full source states: FullCompose/FullError (send), FullReading(done) (rapid-send), FullLoading/FullReading(streaming) (stop+composeAgain+send)
-- [ ] Long-press on AssistantBar → FullCompose + navigate to AssistantFullScreen (skip bottom sheet)
-- [ ] Full screen renders streaming AI bubble inline from `FullReading.partial`, persisted messages from server
-- [ ] FullLoading shows typing indicator (AI avatar + statusText + animated dots)
-- [ ] FullError shows error bubble inline with "Thử lại" button, compose bar remains visible
-- [ ] Stop icon replaces Send icon during FullLoading/FullReading(streaming)
-- [ ] Partial responses show "Đã dừng" indicator when stopped
-- [ ] Compose bar always ready after FullReading(done) — no "Soạn tiếp" button
-- [ ] Mid→Full mirror: conversation continues, stream renders seamlessly, history loads while streaming
-- [ ] Closing Full → Collapsed, drops conversationId
-- [ ] Unit tests: state machine (9 states, all transitions, invalid transitions, mirror), chat notifier (Full state event dispatch)
+- [x] `AssistantState` sealed class has 9 states (4 Full replacing single `AssistantFull`), no `priorState` field
+- [x] State machine: all transitions from the table above work; invalid transitions throw `StateError`
+- [x] `enterFull()` mirrors Mid→Full state mapping (MidCompose→FullCompose, MidLoading→FullLoading, MidReading→FullReading, MidError→FullError)
+- [x] Closing Full → Collapsed (not Mid); `exitFull()` and `priorState` removed
+- [x] Reset in Full → FullCompose (stays in Full)
+- [x] Chat notifier `_handleEvent` dispatches ToolStartEvent/TextChunkEvent/ProposeEvent/AssistantErrorEvent/DoneEvent for FullLoading and FullReading states
+- [x] Chat notifier `sendMessage` handles Full source states: FullCompose/FullError (send), FullReading(done) (rapid-send), FullLoading/FullReading(streaming) (stop+composeAgain+send)
+- [x] Long-press on AssistantBar → FullCompose + navigate to AssistantFullScreen (skip bottom sheet)
+- [x] Full screen renders streaming AI bubble inline from `FullReading.partial`, persisted messages from server
+- [x] FullLoading shows typing indicator (AI avatar + statusText + animated dots)
+- [x] FullError shows error bubble inline with "Thử lại" button, compose bar remains visible
+- [x] Stop icon replaces Send icon during FullLoading/FullReading(streaming)
+- [x] Partial responses show "Đã dừng" indicator when stopped
+- [x] Compose bar always ready after FullReading(done) — no "Soạn tiếp" button
+- [x] Mid→Full mirror: conversation continues, stream renders seamlessly, history loads while streaming
+- [x] Closing Full → Collapsed, drops conversationId
+- [x] Unit tests: state machine (9 states, all transitions, invalid transitions, mirror), chat notifier (Full state event dispatch)
 
 ## Blocked by
 
 None - can start immediately
+
+## Implementation notes
+
+Implemented Full mode as an independent chat surface in the mobile app. `AssistantFull(priorState)` was removed and replaced with dedicated `AssistantFullCompose`, `AssistantFullLoading`, `AssistantFullReading`, and `AssistantFullError` states. Mid-to-Full now mirrors the active phase and keeps the same conversation/stream, while closing Full always collapses and clears the cached conversation id.
+
+### Files created
+
+- None.
+
+### Files modified
+
+- `mobile/lib/features/assistant/domain/assistant_state.dart` — replaced monolithic `AssistantFull` with four Full phase states and shared Full reading/loading/error data shape.
+- `mobile/lib/features/assistant/application/assistant_state_machine.dart` — added `openFull`, Full send/loading/reading/error transitions, mirror `enterFull`, Full reset, proposal mutation in Full, and invalid transition guards.
+- `mobile/lib/features/assistant/application/assistant_chat_notifier.dart` — added Full entry/close support, Full SSE event dispatch, Full retry/rapid-send handling, and Full mode helpers.
+- `mobile/lib/features/assistant/presentation/widgets/assistant_bar.dart` — added long-press direct Full entry and guarded sheet dismissal so Mid→Full navigation does not collapse the Full state.
+- `mobile/lib/features/assistant/presentation/widgets/assistant_question_sheet.dart` — updated Full navigation/listening for the new Full state variants.
+- `mobile/lib/features/assistant/presentation/widgets/assistant_full_screen.dart` — rendered persisted history plus live streaming bubble, inline typing indicator, inline error retry bubble, Stop/Send compose action, interrupted label, and close-to-collapsed behavior.
+- `mobile/test/features/assistant/application/assistant_state_machine_test.dart` — added coverage for 9 states, Full transitions, invalid Full transitions, mirror mapping, reset/collapse, and proposal handling.
+- `mobile/test/features/assistant/application/assistant_chat_notifier_test.dart` — added coverage for Full SSE dispatch, Full rapid-send, and Full close clearing conversation id.
+- `.scratch/troly-ai-v2/issues/01-full-mode-independent-chat-surface.md` — updated status, acceptance criteria, and implementation notes.
+
+### Files deleted
+
+- None.
+
+### Validation
+
+- `flutter analyze` — failed only because of existing warnings/info outside this assistant change (unused lesson imports, deprecated `WillPopScope` in `exercise_play_screen.dart`, stale widget test overrides, etc.); no assistant-related analyzer issues.
+- `flutter analyze --no-fatal-warnings --no-fatal-infos` — passed with the same pre-existing warnings/info.
+- `flutter test test/features/assistant/application/assistant_state_machine_test.dart test/features/assistant/application/assistant_chat_notifier_test.dart` — passed.
+- `flutter test` — failed in existing `test/widget_test.dart` app-level tests (`pumpAndSettle` timeout and missing expected home/navigation widgets), unrelated to the assistant Full mode changes.

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,8 +78,7 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        _scrollController
-            .jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
     });
   }
@@ -101,10 +102,7 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
     });
     _scrollToBottom();
 
-    await notifier.sendMessage(text);
-    // Reload to get the full conversation including the new messages.
-    _loadedConversationId = null;
-    await _loadCurrentConversation();
+    unawaited(notifier.sendMessage(text));
   }
 
   void _onConversationTap(String conversationId) {
@@ -121,47 +119,70 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
       currentScreenContextProvider.select((s) => s.displayName),
     );
 
+    final assistantState = ref.watch(assistantStateMachineProvider);
+
     // If state machine exits Full, pop this screen.
     ref.listen(assistantStateMachineProvider, (prev, next) {
-      if (prev is AssistantFull && next is! AssistantFull) {
+      if (_isFullState(prev) && !_isFullState(next)) {
         Navigator.of(context).maybePop();
+      }
+      if (_isFullState(next)) {
+        _loadCurrentConversation();
+        _scrollToBottom();
+      }
+      if (next is AssistantFullReading && !next.streaming) {
+        _loadedConversationId = null;
+        _loadCurrentConversation();
       }
     });
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: c.background,
-      drawer: ConversationDrawer(onConversationTap: _onConversationTap),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _Header(
-              displayName: displayName,
-              onDrawerTap: () =>
-                  _scaffoldKey.currentState?.openDrawer(),
-              onClose: () =>
-                  ref.read(assistantChatNotifierProvider).exitFull(),
-              onReset: () =>
-                  ref.read(assistantChatNotifierProvider).reset(),
-            ),
-            Divider(color: c.border, height: 1),
-            Expanded(child: _buildBody(c)),
-            _ComposeBar(
-              controller: _controller,
-              onSend: _onSend,
-            ),
-          ],
+    return PopScope<void>(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          unawaited(ref.read(assistantChatNotifierProvider).closeFull());
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: c.background,
+        drawer: ConversationDrawer(onConversationTap: _onConversationTap),
+        body: SafeArea(
+          child: Column(
+            children: [
+              _Header(
+                displayName: displayName,
+                onDrawerTap: () => _scaffoldKey.currentState?.openDrawer(),
+                onClose: () =>
+                    ref.read(assistantChatNotifierProvider).closeFull(),
+                onReset: () => ref.read(assistantChatNotifierProvider).reset(),
+              ),
+              Divider(color: c.border, height: 1),
+              Expanded(child: _buildBody(c, assistantState)),
+              _ComposeBar(
+                controller: _controller,
+                isBusy: _isFullBusy(assistantState),
+                onSend: _onSend,
+                onStop: () => ref.read(assistantChatNotifierProvider).stop(),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBody(AppColors c) {
+  Widget _buildBody(AppColors c, AssistantState assistantState) {
     if (_loadingMessages && _messages.isEmpty) {
       return const Center(child: AppSpinner());
     }
 
-    if (_messages.isEmpty) {
+    final liveItemCount = _liveItemCount(assistantState);
+    final visibleMessages = _messages
+        .where((m) => !_isPersistedLiveAssistantMessage(m, assistantState))
+        .toList();
+
+    if (visibleMessages.isEmpty && liveItemCount == 0) {
       return Center(
         child: Text(
           'Bắt đầu cuộc trò chuyện',
@@ -173,47 +194,79 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
       );
     }
 
-    // Watch for proposals from the current streaming state.
-    final assistantState = ref.watch(assistantStateMachineProvider);
-    final proposals = assistantState is AssistantMidReading
-        ? assistantState.proposals
-        : <ProposalState>[];
-
     return ListView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
         vertical: AppSpacing.md,
       ),
-      itemCount: _messages.length + (proposals.isNotEmpty ? 1 : 0),
+      itemCount: visibleMessages.length + liveItemCount,
       itemBuilder: (ctx, i) {
-        if (i < _messages.length) {
-          return _MessageBubble(message: _messages[i]);
+        if (i < visibleMessages.length) {
+          return _MessageBubble(message: visibleMessages[i]);
         }
-        // Render proposal cards after the last message.
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var j = 0; j < proposals.length; j++)
-              ProposalCard(
-                proposal: proposals[j],
-                index: j,
-                onDecline: (idx) => ref
-                    .read(assistantChatNotifierProvider)
-                    .dismissProposal(idx),
-                onSuccess: (idx) => ref
-                    .read(assistantChatNotifierProvider)
-                    .updateProposal(
-                      idx,
-                      proposals[idx]
-                          .copyWith(status: ProposalCardStatus.success),
-                    ),
-              ),
-          ],
-        );
+        return _buildLiveItem(assistantState);
       },
     );
   }
+
+  Widget _buildLiveItem(AssistantState assistantState) {
+    return switch (assistantState) {
+      AssistantFullLoading(:final statusText) => _TypingIndicator(
+        statusText: statusText,
+      ),
+      AssistantFullReading(
+        :final partial,
+        :final interrupted,
+        :final proposals,
+      ) =>
+        _LiveAssistantBubble(
+          partial: partial,
+          interrupted: interrupted,
+          proposals: proposals,
+        ),
+      AssistantFullError(:final message) => _InlineErrorBubble(
+        message: message,
+      ),
+      _ => const SizedBox.shrink(),
+    };
+  }
+
+  int _liveItemCount(AssistantState assistantState) {
+    return switch (assistantState) {
+      AssistantFullLoading() ||
+      AssistantFullReading() ||
+      AssistantFullError() => 1,
+      _ => 0,
+    };
+  }
+
+  bool _isPersistedLiveAssistantMessage(
+    ConversationMessage message,
+    AssistantState assistantState,
+  ) {
+    return assistantState is AssistantFullReading &&
+        assistantState.messageId != null &&
+        message.id == assistantState.messageId;
+  }
+}
+
+bool _isFullState(AssistantState? state) {
+  return switch (state) {
+    AssistantFullCompose() ||
+    AssistantFullLoading() ||
+    AssistantFullReading() ||
+    AssistantFullError() => true,
+    _ => false,
+  };
+}
+
+bool _isFullBusy(AssistantState state) {
+  return switch (state) {
+    AssistantFullLoading() => true,
+    AssistantFullReading(:final streaming) => streaming,
+    _ => false,
+  };
 }
 
 class _Header extends StatelessWidget {
@@ -352,14 +405,229 @@ class _MessageBubble extends StatelessWidget {
   }
 }
 
+class _TypingIndicator extends StatelessWidget {
+  const _TypingIndicator({required this.statusText});
+
+  final String statusText;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 16,
+              backgroundColor: c.primary.withValues(alpha: 0.12),
+              child: Icon(Icons.auto_awesome, size: 16, color: c.primary),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.md,
+                ),
+                decoration: BoxDecoration(
+                  color: c.muted.withValues(alpha: 0.45),
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        statusText,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyMedium,
+                          color: c.mutedForeground,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    const _TypingDots(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TypingDots extends StatefulWidget {
+  const _TypingDots();
+
+  @override
+  State<_TypingDots> createState() => _TypingDotsState();
+}
+
+class _TypingDotsState extends State<_TypingDots> {
+  int _tick = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(milliseconds: 350), (_) {
+      if (mounted) setState(() => _tick = (_tick + 1) % 4);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Text(
+      '.' * (_tick + 1),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.mutedForeground,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
+class _LiveAssistantBubble extends ConsumerWidget {
+  const _LiveAssistantBubble({
+    required this.partial,
+    required this.interrupted,
+    required this.proposals,
+  });
+
+  final String partial;
+  final bool interrupted;
+  final List<ProposalState> proposals;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppTheme.colors(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            MarkdownBody(
+              data: partial.isEmpty ? '_(không có phản hồi)_' : partial,
+              selectable: true,
+            ),
+            if (interrupted)
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.xs),
+                child: Text(
+                  'Đã dừng',
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.caption,
+                    color: c.mutedForeground,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            for (var i = 0; i < proposals.length; i++)
+              ProposalCard(
+                proposal: proposals[i],
+                index: i,
+                onDecline: (idx) => ref
+                    .read(assistantChatNotifierProvider)
+                    .dismissProposal(idx),
+                onSuccess: (idx) => ref
+                    .read(assistantChatNotifierProvider)
+                    .updateProposal(
+                      idx,
+                      proposals[idx].copyWith(
+                        status: ProposalCardStatus.success,
+                      ),
+                    ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InlineErrorBubble extends ConsumerWidget {
+  const _InlineErrorBubble({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppTheme.colors(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+        padding: const EdgeInsets.all(AppSpacing.md),
+        decoration: BoxDecoration(
+          color: c.error.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: c.error.withValues(alpha: 0.24)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.error_outline, color: c.error),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      color: c.foreground,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: AppButton(
+                onPressed: () =>
+                    ref.read(assistantChatNotifierProvider).retry(),
+                label: 'Thử lại',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ComposeBar extends StatelessWidget {
   const _ComposeBar({
     required this.controller,
+    required this.isBusy,
     required this.onSend,
+    required this.onStop,
   });
 
   final TextEditingController controller;
+  final bool isBusy;
   final VoidCallback onSend;
+  final VoidCallback onStop;
 
   @override
   Widget build(BuildContext context) {
@@ -389,9 +657,7 @@ class _ComposeBar extends StatelessWidget {
               ),
               decoration: InputDecoration(
                 hintText: 'Nhập tin nhắn...',
-                hintStyle: GoogleFonts.inter(
-                  color: c.mutedForeground,
-                ),
+                hintStyle: GoogleFonts.inter(color: c.mutedForeground),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.md,
@@ -415,8 +681,12 @@ class _ComposeBar extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           IconButton(
-            icon: Icon(Icons.send, color: c.primary),
-            onPressed: onSend,
+            icon: Icon(
+              isBusy ? Icons.stop_rounded : Icons.send,
+              color: c.primary,
+            ),
+            tooltip: isBusy ? 'Dừng' : 'Gửi',
+            onPressed: isBusy ? onStop : onSend,
           ),
         ],
       ),

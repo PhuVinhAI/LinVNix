@@ -57,6 +57,16 @@ class AssistantChatNotifier {
     sm.openBar();
   }
 
+  /// Bar long-press: Collapsed → FullCompose. Idempotent on already-open
+  /// states for the same reason as [openBar].
+  void openFull() {
+    final sm = _ref.read(assistantStateMachineProvider.notifier);
+    if (_ref.read(assistantStateMachineProvider) is! AssistantCollapsed) {
+      return;
+    }
+    sm.openFull();
+  }
+
   /// User tapped Send. Cancels any in-flight stream (rapid-send), drives
   /// the state machine into Loading, then opens a new SSE stream and
   /// dispatches events to the state machine.
@@ -74,12 +84,11 @@ class AssistantChatNotifier {
     // Bring the state machine to a `send()`-accepting state (Compose or
     // Error). Rapid send from a still-streaming reply synthesizes the
     // Stop + Soạn-tiếp transitions the user would otherwise tap.
-    if (current is AssistantMidLoading ||
-        (current is AssistantMidReading && current.streaming)) {
+    if (_isLoading(current) || _isStreamingReading(current)) {
       sm.stop();
       sm.composeAgain();
-    } else if (current is AssistantMidReading) {
-      // MidReading(done) — implicit Soạn tiếp.
+    } else if (_isDoneReading(current)) {
+      // Reading(done) — implicit Soạn tiếp.
       sm.composeAgain();
     } else if (current is AssistantCollapsed) {
       // Defensive: allow programmatic send to also open the sheet.
@@ -141,12 +150,7 @@ class AssistantChatNotifier {
     await _cancelInFlight();
     _conversationId = null;
     final sm = _ref.read(assistantStateMachineProvider.notifier);
-    final current = _ref.read(assistantStateMachineProvider);
-    if (current is AssistantFull) {
-      sm.reset();
-    } else {
-      sm.reset();
-    }
+    sm.reset();
   }
 
   /// User dismissed the sheet (`−` button, backdrop tap, drag-down).
@@ -165,10 +169,23 @@ class AssistantChatNotifier {
     sm.enterFull();
   }
 
-  /// Back gesture or close button from Full → prior Mid state.
-  void exitFull() {
-    final sm = _ref.read(assistantStateMachineProvider.notifier);
-    sm.exitFull();
+  /// Back gesture or close button from Full → Collapsed. Drops the cached
+  /// conversation so the next entry starts fresh.
+  Future<void> closeFull() async {
+    await collapse();
+  }
+
+  /// Backwards-compatible alias for existing UI callers.
+  Future<void> exitFull() => closeFull();
+
+  bool get isFullMode {
+    return switch (_ref.read(assistantStateMachineProvider)) {
+      AssistantFullCompose() ||
+      AssistantFullLoading() ||
+      AssistantFullReading() ||
+      AssistantFullError() => true,
+      _ => false,
+    };
   }
 
   /// Opens an existing conversation by id. Sets the internal
@@ -177,10 +194,10 @@ class AssistantChatNotifier {
   /// in the drawer.
   void openExistingConversation(String conversationId) {
     _conversationId = conversationId;
-    // Transition to MidCompose so the user can send a follow-up.
+    // Transition to Compose so the user can send a follow-up.
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     final current = _ref.read(assistantStateMachineProvider);
-    if (current is AssistantFull) {
+    if (_isFullState(current)) {
       // Stay in Full; the full-screen widget handles message display.
     } else if (current is! AssistantMidCompose) {
       // If not already in compose, try to get there.
@@ -194,13 +211,20 @@ class AssistantChatNotifier {
   /// `lastInput` so the learner doesn't lose their question.
   Future<void> retry() async {
     final s = _ref.read(assistantStateMachineProvider);
-    if (s is! AssistantMidError) return;
-    await sendMessage(s.lastInput);
+    if (s is AssistantMidError) {
+      await sendMessage(s.lastInput);
+      return;
+    }
+    if (s is AssistantFullError) {
+      await sendMessage(s.lastInput);
+    }
   }
 
   /// Updates a proposal's status (e.g. loading → success/error).
   void updateProposal(int index, ProposalState updated) {
-    _ref.read(assistantStateMachineProvider.notifier).updateProposal(index, updated);
+    _ref
+        .read(assistantStateMachineProvider.notifier)
+        .updateProposal(index, updated);
   }
 
   /// Dismisses a proposal card (decline).
@@ -216,7 +240,7 @@ class AssistantChatNotifier {
       case ConversationStartedEvent(:final conversationId):
         _conversationId = conversationId;
       case ToolStartEvent(:final displayName):
-        if (current is AssistantMidLoading) {
+        if (_isLoading(current)) {
           sm.onToolStart(displayName: displayName);
         }
       case ToolResultEvent():
@@ -225,23 +249,20 @@ class AssistantChatNotifier {
         // not visualize per-tool result yet.
         break;
       case TextChunkEvent(:final text):
-        if (current is AssistantMidLoading ||
-            (current is AssistantMidReading && current.streaming)) {
+        if (_isLoading(current) || _isStreamingReading(current)) {
           sm.onTextChunk(text);
         }
       case ProposeEvent():
         final current = _ref.read(assistantStateMachineProvider);
-        if (current is AssistantMidReading && current.streaming) {
+        if (_isStreamingReading(current)) {
           sm.onPropose(event);
         }
       case AssistantErrorEvent(:final message):
-        if (current is AssistantMidLoading ||
-            (current is AssistantMidReading && current.streaming)) {
+        if (_isLoading(current) || _isStreamingReading(current)) {
           sm.onError(message: message);
         }
       case DoneEvent(:final messageId, :final interrupted):
-        if (current is AssistantMidLoading ||
-            (current is AssistantMidReading && current.streaming)) {
+        if (_isLoading(current) || _isStreamingReading(current)) {
           sm.onDone(messageId: messageId, interrupted: interrupted);
         }
     }
@@ -264,8 +285,7 @@ class AssistantChatNotifier {
     final message = _humanReadableError(error);
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     final current = _ref.read(assistantStateMachineProvider);
-    if (current is AssistantMidLoading ||
-        (current is AssistantMidReading && current.streaming)) {
+    if (_isLoading(current) || _isStreamingReading(current)) {
       sm.onError(message: message);
     }
     _subscription = null;
@@ -276,8 +296,7 @@ class AssistantChatNotifier {
     final current = _ref.read(assistantStateMachineProvider);
     // Server should have sent a `done` event; if not, defensively
     // terminate the stream so the UI does not stay stuck in Loading.
-    if (current is AssistantMidLoading ||
-        (current is AssistantMidReading && current.streaming)) {
+    if (_isLoading(current) || _isStreamingReading(current)) {
       _ref.read(assistantStateMachineProvider.notifier).stop();
     }
     _subscription = null;
@@ -312,6 +331,36 @@ class AssistantChatNotifier {
     sub?.onError((Object _, StackTrace _) {});
     _subscription = null;
     _cancelToken = null;
+  }
+
+  bool _isFullState(AssistantState state) {
+    return switch (state) {
+      AssistantFullCompose() ||
+      AssistantFullLoading() ||
+      AssistantFullReading() ||
+      AssistantFullError() => true,
+      _ => false,
+    };
+  }
+
+  bool _isLoading(AssistantState state) {
+    return state is AssistantMidLoading || state is AssistantFullLoading;
+  }
+
+  bool _isStreamingReading(AssistantState state) {
+    return switch (state) {
+      AssistantMidReading(:final streaming) ||
+      AssistantFullReading(:final streaming) => streaming,
+      _ => false,
+    };
+  }
+
+  bool _isDoneReading(AssistantState state) {
+    return switch (state) {
+      AssistantMidReading(:final streaming) ||
+      AssistantFullReading(:final streaming) => !streaming,
+      _ => false,
+    };
   }
 
   @visibleForTesting

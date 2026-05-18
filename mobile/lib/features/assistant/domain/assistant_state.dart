@@ -117,10 +117,7 @@ class ProposalState {
   final ProposalCardStatus status;
   final String? errorMessage;
 
-  ProposalState copyWith({
-    ProposalCardStatus? status,
-    String? errorMessage,
-  }) {
+  ProposalState copyWith({ProposalCardStatus? status, String? errorMessage}) {
     return ProposalState(
       kind: kind,
       title: title,
@@ -150,15 +147,15 @@ class ProposalState {
 
   @override
   int get hashCode => Object.hash(
-        kind,
-        title,
-        description,
-        endpoint,
-        confirmLabel,
-        declineLabel,
-        status,
-        errorMessage,
-      );
+    kind,
+    title,
+    description,
+    endpoint,
+    confirmLabel,
+    declineLabel,
+    status,
+    errorMessage,
+  );
 
   @override
   String toString() =>
@@ -202,8 +199,13 @@ class AssistantMidReading extends AssistantState {
           listEquals(proposals, other.proposals);
 
   @override
-  int get hashCode =>
-      Object.hash(partial, streaming, interrupted, messageId, Object.hashAll(proposals));
+  int get hashCode => Object.hash(
+    partial,
+    streaming,
+    interrupted,
+    messageId,
+    Object.hashAll(proposals),
+  );
 
   @override
   String toString() =>
@@ -216,10 +218,7 @@ class AssistantMidReading extends AssistantState {
 /// `text_chunk` arrived. The UI shows the message and a "Thử lại" button
 /// that retries with [lastInput].
 class AssistantMidError extends AssistantState {
-  const AssistantMidError({
-    required this.message,
-    required this.lastInput,
-  });
+  const AssistantMidError({required this.message, required this.lastInput});
 
   final String message;
   final String lastInput;
@@ -239,25 +238,109 @@ class AssistantMidError extends AssistantState {
       'AssistantMidError(message: $message, lastInput: $lastInput)';
 }
 
-/// Full-screen chat state. Reachable via drag-up from any Mid state.
-/// Stores [priorState] so a back gesture or close button can restore
-/// the previous Mid state (or Collapsed if none).
-class AssistantFull extends AssistantState {
-  const AssistantFull({this.priorState});
+/// Compose phase of the Full state — full-screen textarea visible, Send tappable.
+class AssistantFullCompose extends AssistantState {
+  const AssistantFullCompose();
 
-  /// The state the user was in before entering Full. Back gesture or
-  /// close button returns here. `null` means the machine was freshly
-  /// opened into Full (unlikely but safe to default to Collapsed).
-  final AssistantState? priorState;
+  @override
+  bool operator ==(Object other) => other is AssistantFullCompose;
+
+  @override
+  int get hashCode => 0;
+
+  @override
+  String toString() => 'AssistantFullCompose';
+}
+
+/// Full-screen loading phase — inline typing indicator + per-tool status text.
+class AssistantFullLoading extends AssistantState {
+  const AssistantFullLoading({
+    required this.lastInput,
+    this.statusText = defaultStatusText,
+  });
+
+  static const String defaultStatusText = AssistantMidLoading.defaultStatusText;
+
+  final String lastInput;
+  final String statusText;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AssistantFull && priorState == other.priorState;
+      other is AssistantFullLoading &&
+          lastInput == other.lastInput &&
+          statusText == other.statusText;
 
   @override
-  int get hashCode => priorState.hashCode;
+  int get hashCode => Object.hash(lastInput, statusText);
 
   @override
-  String toString() => 'AssistantFull(priorState: $priorState)';
+  String toString() =>
+      'AssistantFullLoading(statusText: $statusText, lastInput: $lastInput)';
+}
+
+/// Full-screen reading phase — live inline assistant bubble in the chat list.
+class AssistantFullReading extends AssistantState {
+  const AssistantFullReading({
+    required this.partial,
+    required this.streaming,
+    this.interrupted = false,
+    this.messageId,
+    this.proposals = const [],
+  });
+
+  final String partial;
+  final bool streaming;
+  final bool interrupted;
+  final String? messageId;
+  final List<ProposalState> proposals;
+
+  bool get isDone => !streaming;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AssistantFullReading &&
+          partial == other.partial &&
+          streaming == other.streaming &&
+          interrupted == other.interrupted &&
+          messageId == other.messageId &&
+          listEquals(proposals, other.proposals);
+
+  @override
+  int get hashCode => Object.hash(
+    partial,
+    streaming,
+    interrupted,
+    messageId,
+    Object.hashAll(proposals),
+  );
+
+  @override
+  String toString() =>
+      'AssistantFullReading(streaming: $streaming, interrupted: $interrupted, '
+      'messageId: $messageId, partialLength: ${partial.length}, '
+      'proposals: ${proposals.length})';
+}
+
+/// Full-screen pre-token error state rendered as an inline error bubble.
+class AssistantFullError extends AssistantState {
+  const AssistantFullError({required this.message, required this.lastInput});
+
+  final String message;
+  final String lastInput;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AssistantFullError &&
+          message == other.message &&
+          lastInput == other.lastInput;
+
+  @override
+  int get hashCode => Object.hash(message, lastInput);
+
+  @override
+  String toString() =>
+      'AssistantFullError(message: $message, lastInput: $lastInput)';
 }

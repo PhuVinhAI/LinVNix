@@ -5,7 +5,10 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../application/assistant_chat_notifier.dart';
+import '../../application/assistant_state_machine.dart';
 import '../../data/screen_context_provider.dart';
+import '../../domain/assistant_state.dart';
+import 'assistant_full_screen.dart';
 import 'assistant_question_sheet.dart';
 
 /// Thin always-visible entry-point to the Trợ lý AI. Tapping it opens
@@ -28,6 +31,7 @@ class AssistantBar extends ConsumerWidget {
         top: false,
         child: InkWell(
           onTap: () => _openSheet(context, ref),
+          onLongPress: () => _openFull(context, ref),
           child: Container(
             decoration: BoxDecoration(
               border: Border(top: BorderSide(color: c.border)),
@@ -38,11 +42,7 @@ class AssistantBar extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.auto_awesome,
-                  color: c.primary,
-                  size: 20,
-                ),
+                Icon(Icons.auto_awesome, color: c.primary, size: 20),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
@@ -81,7 +81,27 @@ class AssistantBar extends ConsumerWidget {
       // Dismissed via backdrop, drag-down, or the "−" button. The state
       // machine collapses and the cached conversationId is dropped so the
       // next session starts a fresh Conversation.
-      notifier.collapse();
+      final state = ref.read(assistantStateMachineProvider);
+      if (!notifier.isFullMode && state is! AssistantCollapsed) {
+        notifier.collapse();
+      }
     });
+  }
+
+  void _openFull(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(assistantChatNotifierProvider);
+    final before = ref.read(assistantStateMachineProvider);
+    notifier.openFull();
+    if (before is! AssistantCollapsed || !notifier.isFullMode) {
+      return;
+    }
+    final navKey = ref.read(rootNavigatorKeyProvider);
+    final navContext = navKey.currentContext ?? context;
+    Navigator.of(navContext).push<void>(
+      MaterialPageRoute(
+        builder: (_) => const AssistantFullScreen(),
+        fullscreenDialog: true,
+      ),
+    );
   }
 }
