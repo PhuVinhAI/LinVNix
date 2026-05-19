@@ -437,6 +437,7 @@ class _LiveAssistantTurn extends StatelessWidget {
           AssistantMidReading(
             :final partial,
             :final interrupted,
+            :final toolStatusText,
             :final proposals,
           ) =>
             Column(
@@ -458,6 +459,25 @@ class _LiveAssistantTurn extends StatelessWidget {
                         color: c.mutedForeground,
                         fontStyle: FontStyle.italic,
                       ),
+                    ),
+                  ),
+                if (toolStatusText != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppSpacing.sm),
+                    child: Row(
+                      children: [
+                        const AppSpinner(),
+                        const SizedBox(width: AppSpacing.md),
+                        Flexible(
+                          child: Text(
+                            toolStatusText,
+                            style: GoogleFonts.inter(
+                              fontSize: AppTypography.bodyMedium,
+                              color: c.mutedForeground,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 for (var i = 0; i < proposals.length; i++)

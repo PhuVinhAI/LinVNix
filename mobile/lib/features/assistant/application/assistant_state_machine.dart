@@ -38,15 +38,54 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   /// `tool_start` event arrived. Updates the loading-phase status text.
   /// The PRD pins the source of [displayName] to the tool's own
   /// declaration (e.g. "Đang tóm tắt thông tin của bạn..."), not a
-  /// generic fallback.
+  /// generic fallback. If text already started streaming, the reading body
+  /// stays visible and the tool status is rendered as one inline loading row.
   void onToolStart({required String displayName}) {
     final s = _activeState;
-    if (s is! AssistantMidLoading) {
-      throw _invalid('onToolStart');
+    if (s is AssistantMidLoading) {
+      _setActiveState(
+        AssistantMidLoading(lastInput: s.lastInput, statusText: displayName),
+      );
+      return;
     }
-    _setActiveState(
-      AssistantMidLoading(lastInput: s.lastInput, statusText: displayName),
-    );
+    if (s is AssistantMidReading && s.streaming) {
+      _setActiveState(
+        AssistantMidReading(
+          partial: s.partial,
+          streaming: true,
+          interrupted: s.interrupted,
+          messageId: s.messageId,
+          toolStatusText: displayName,
+          proposals: s.proposals,
+        ),
+      );
+      return;
+    }
+    throw _invalid('onToolStart');
+  }
+
+  /// `tool_result` event arrived. When a tool was shown inline after text had
+  /// already started streaming, clear that one-line loading row.
+  void onToolResult() {
+    final s = _activeState;
+    if (s is AssistantMidLoading) {
+      _setActiveState(AssistantMidLoading(lastInput: s.lastInput));
+      return;
+    }
+    if (s is AssistantMidReading && s.streaming) {
+      _setActiveState(
+        AssistantMidReading(
+          partial: s.partial,
+          streaming: true,
+          interrupted: s.interrupted,
+          messageId: s.messageId,
+          toolStatusText: null,
+          proposals: s.proposals,
+        ),
+      );
+      return;
+    }
+    throw _invalid('onToolResult');
   }
 
   /// `text_chunk` event arrived. From MidLoading this transitions into
@@ -54,7 +93,15 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   void onTextChunk(String text) {
     final s = _activeState;
     if (s is AssistantMidLoading) {
-      _setActiveState(AssistantMidReading(partial: text, streaming: true));
+      _setActiveState(
+        AssistantMidReading(
+          partial: text,
+          streaming: true,
+          toolStatusText: s.statusText == AssistantMidLoading.defaultStatusText
+              ? null
+              : s.statusText,
+        ),
+      );
       return;
     }
     if (s is AssistantMidReading && s.streaming) {
@@ -62,6 +109,9 @@ class AssistantStateMachine extends Notifier<AssistantState> {
         AssistantMidReading(
           partial: s.partial + text,
           streaming: true,
+          interrupted: s.interrupted,
+          messageId: s.messageId,
+          toolStatusText: s.toolStatusText,
           proposals: s.proposals,
         ),
       );
@@ -89,6 +139,9 @@ class AssistantStateMachine extends Notifier<AssistantState> {
         AssistantMidReading(
           partial: s.partial,
           streaming: true,
+          interrupted: s.interrupted,
+          messageId: s.messageId,
+          toolStatusText: s.toolStatusText,
           proposals: [...s.proposals, proposal],
         ),
       );
@@ -116,6 +169,7 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           streaming: false,
           interrupted: true,
           messageId: s.messageId,
+          toolStatusText: null,
           proposals: s.proposals,
         ),
       );
@@ -147,6 +201,7 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           streaming: false,
           interrupted: interrupted,
           messageId: messageId,
+          toolStatusText: null,
           proposals: s.proposals,
         ),
       );
@@ -163,7 +218,11 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     final s = _activeState;
     if (s is AssistantMidLoading) {
       _setActiveState(
-        AssistantMidReading(partial: '', streaming: false, interrupted: true),
+        const AssistantMidReading(
+          partial: '',
+          streaming: false,
+          interrupted: true,
+        ),
       );
       return;
     }
@@ -174,6 +233,7 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           streaming: false,
           interrupted: true,
           messageId: s.messageId,
+          toolStatusText: null,
           proposals: s.proposals,
         ),
       );
@@ -250,6 +310,7 @@ class AssistantStateMachine extends Notifier<AssistantState> {
         streaming: s.streaming,
         interrupted: s.interrupted,
         messageId: s.messageId,
+        toolStatusText: s.toolStatusText,
         proposals: proposals,
       ),
     );
@@ -272,6 +333,7 @@ class AssistantStateMachine extends Notifier<AssistantState> {
         streaming: s.streaming,
         interrupted: s.interrupted,
         messageId: s.messageId,
+        toolStatusText: s.toolStatusText,
         proposals: proposals,
       ),
     );

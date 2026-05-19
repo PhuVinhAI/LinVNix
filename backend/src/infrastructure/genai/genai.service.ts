@@ -57,6 +57,8 @@ interface AiChatResponse {
 
 interface AiChatChunk {
   text: string;
+  functionCalls?: AiFunctionCall[];
+  usageMetadata?: AiChatResponse['usageMetadata'];
 }
 
 interface AiEmbedding {
@@ -328,6 +330,7 @@ export class GenaiService implements IAiProvider, OnModuleInit {
       const response = await client.interactions.create({
         model,
         input: steps,
+        store: false,
         stream: false,
         system_instruction: req.systemInstruction,
         ...(req.tools?.length
@@ -358,13 +361,98 @@ export class GenaiService implements IAiProvider, OnModuleInit {
       store: false,
       stream: true,
       system_instruction: req.systemInstruction,
+      ...(req.tools?.length
+        ? {
+            tools: req.tools.map((t) => ({
+              type: 'function' as const,
+              name: t.name,
+              description: t.description,
+              parameters: t.parameters,
+            })),
+          }
+        : {}),
     });
+
+    const pendingFunctionCalls = new Map<number, AiFunctionCall>();
+    const pendingArgumentDeltas = new Map<number, string>();
+    const emittedFunctionCallIndexes = new Set<number>();
 
     for await (const event of stream) {
       if (event.event_type === 'step.delta' && event.delta?.type === 'text') {
         yield {
           text: event.delta.text ?? '',
         };
+        continue;
+      }
+
+      if (
+        event.event_type === 'step.delta' &&
+        event.delta?.type === 'arguments_delta'
+      ) {
+        const existing = pendingArgumentDeltas.get(event.index) ?? '';
+        pendingArgumentDeltas.set(
+          event.index,
+          existing + (event.delta.partial_arguments ?? ''),
+        );
+        continue;
+      }
+
+      if (
+        event.event_type === 'step.start' &&
+        event.step?.type === 'function_call'
+      ) {
+        const step = event.step as any;
+        pendingFunctionCalls.set(event.index, {
+          id: step.id,
+          name: step.name,
+          arguments: (step.arguments ?? step.args ?? {}) as Record<string, any>,
+        });
+        continue;
+      }
+
+      if (event.event_type === 'step.stop') {
+        const call = this.finalizeStreamedFunctionCall(
+          event.index,
+          pendingFunctionCalls,
+          pendingArgumentDeltas,
+        );
+        if (call && !emittedFunctionCallIndexes.has(event.index)) {
+          emittedFunctionCallIndexes.add(event.index);
+          yield { text: '', functionCalls: [call] };
+        }
+        continue;
+      }
+
+      if (event.event_type === 'interaction.completed') {
+        for (const [index] of pendingFunctionCalls) {
+          if (emittedFunctionCallIndexes.has(index)) continue;
+          const call = this.finalizeStreamedFunctionCall(
+            index,
+            pendingFunctionCalls,
+            pendingArgumentDeltas,
+          );
+          if (call) {
+            emittedFunctionCallIndexes.add(index);
+            yield { text: '', functionCalls: [call] };
+          }
+        }
+
+        const usage = (event as any).interaction?.usage;
+        if (usage) {
+          yield {
+            text: '',
+            usageMetadata: {
+              promptTokenCount: usage.total_input_tokens,
+              candidatesTokenCount: usage.total_output_tokens,
+              totalTokenCount: usage.total_tokens,
+            },
+          };
+        }
+        continue;
+      }
+
+      if (event.event_type === 'error') {
+        throw this.mapSdkError(event as any);
       }
     }
   }
@@ -550,6 +638,33 @@ export class GenaiService implements IAiProvider, OnModuleInit {
       return 'Tool returned empty result';
     }
     return JSON.stringify(sanitized);
+  }
+
+  private finalizeStreamedFunctionCall(
+    index: number,
+    pendingFunctionCalls: Map<number, AiFunctionCall>,
+    pendingArgumentDeltas: Map<number, string>,
+  ): AiFunctionCall | null {
+    const call = pendingFunctionCalls.get(index);
+    if (!call) return null;
+
+    const partialArguments = pendingArgumentDeltas.get(index);
+    if (!partialArguments) return call;
+
+    try {
+      const parsed = JSON.parse(partialArguments);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return {
+          ...call,
+          arguments: parsed as Record<string, any>,
+        };
+      }
+    } catch {
+      // Keep the complete arguments from step.start when streamed partial
+      // arguments are incomplete or not valid JSON in this SDK event shape.
+    }
+
+    return call;
   }
 
   private mapMessagesToContents(

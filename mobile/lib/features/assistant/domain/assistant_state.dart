@@ -117,10 +117,7 @@ class ProposalState {
   final ProposalCardStatus status;
   final String? errorMessage;
 
-  ProposalState copyWith({
-    ProposalCardStatus? status,
-    String? errorMessage,
-  }) {
+  ProposalState copyWith({ProposalCardStatus? status, String? errorMessage}) {
     return ProposalState(
       kind: kind,
       title: title,
@@ -150,15 +147,15 @@ class ProposalState {
 
   @override
   int get hashCode => Object.hash(
-        kind,
-        title,
-        description,
-        endpoint,
-        confirmLabel,
-        declineLabel,
-        status,
-        errorMessage,
-      );
+    kind,
+    title,
+    description,
+    endpoint,
+    confirmLabel,
+    declineLabel,
+    status,
+    errorMessage,
+  );
 
   @override
   String toString() =>
@@ -174,6 +171,7 @@ class AssistantMidReading extends AssistantState {
     required this.streaming,
     this.interrupted = false,
     this.messageId,
+    this.toolStatusText,
     this.proposals = const [],
   });
 
@@ -181,6 +179,7 @@ class AssistantMidReading extends AssistantState {
   final bool streaming;
   final bool interrupted;
   final String? messageId;
+  final String? toolStatusText;
 
   /// Inline proposal cards emitted by `propose` SSE events during this
   /// turn. Rendered below the AI markdown in both Mid and Full modes.
@@ -199,16 +198,24 @@ class AssistantMidReading extends AssistantState {
           streaming == other.streaming &&
           interrupted == other.interrupted &&
           messageId == other.messageId &&
+          toolStatusText == other.toolStatusText &&
           listEquals(proposals, other.proposals);
 
   @override
-  int get hashCode =>
-      Object.hash(partial, streaming, interrupted, messageId, Object.hashAll(proposals));
+  int get hashCode => Object.hash(
+    partial,
+    streaming,
+    interrupted,
+    messageId,
+    toolStatusText,
+    Object.hashAll(proposals),
+  );
 
   @override
   String toString() =>
       'AssistantMidReading(streaming: $streaming, interrupted: $interrupted, '
       'messageId: $messageId, partialLength: ${partial.length}, '
+      'toolStatusText: $toolStatusText, '
       'proposals: ${proposals.length})';
 }
 
@@ -216,10 +223,7 @@ class AssistantMidReading extends AssistantState {
 /// `text_chunk` arrived. The UI shows the message and a "Thử lại" button
 /// that retries with [lastInput].
 class AssistantMidError extends AssistantState {
-  const AssistantMidError({
-    required this.message,
-    required this.lastInput,
-  });
+  const AssistantMidError({required this.message, required this.lastInput});
 
   final String message;
   final String lastInput;

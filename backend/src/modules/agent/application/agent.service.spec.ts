@@ -584,6 +584,17 @@ describe('AgentService', () => {
         totalCompletionTokens: 0,
         messages: [],
       } as any);
+
+      aiProvider.chatStream.mockImplementation(async function* (request) {
+        const response = await aiProvider.chat(request);
+        if (response.text) {
+          yield { text: response.text };
+        }
+        if (response.functionCalls?.length) {
+          yield { text: '', functionCalls: response.functionCalls };
+        }
+        yield { text: '', usageMetadata: response.usageMetadata };
+      });
     });
 
     it('yields conversation_started + text_chunk + done for a plain text response (no tool calls)', async () => {
@@ -949,6 +960,39 @@ describe('AgentService', () => {
         conversationId,
         expect.objectContaining({
           role: ConversationMessageRole.ASSISTANT,
+          interrupted: true,
+        }),
+      );
+    });
+
+    it('persists streamed partial text when aborted during provider streaming', async () => {
+      const abortController = new AbortController();
+      aiProvider.chatStream.mockImplementation(async function* () {
+        yield { text: 'partial answer' };
+        abortController.abort();
+        yield { text: ' should not be processed' };
+      });
+
+      const events = await collect(
+        service.runTurnStream(
+          'user-1',
+          conversationId,
+          userMessage,
+          undefined,
+          abortController.signal,
+        ),
+      );
+
+      expect(events).toEqual([
+        { type: 'conversation_started', conversationId },
+        { type: 'text_chunk', text: 'partial answer' },
+        expect.objectContaining({ type: 'done', interrupted: true }),
+      ]);
+      expect(conversationService.addMessage).toHaveBeenCalledWith(
+        conversationId,
+        expect.objectContaining({
+          role: ConversationMessageRole.ASSISTANT,
+          content: 'partial answer',
           interrupted: true,
         }),
       );
