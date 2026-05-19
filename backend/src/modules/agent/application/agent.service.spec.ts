@@ -5,6 +5,7 @@ import { GenaiService } from '../../../infrastructure/genai/genai.service';
 import { UsersService } from '../../users/application/users.service';
 import { ConversationMessageRole } from '../../../common/enums';
 import { ZodError } from 'zod';
+import fs from 'fs';
 
 abstract class BaseTool<TParams = any, TResult = any> {
   abstract readonly name: string;
@@ -69,6 +70,7 @@ describe('AgentService', () => {
       accumulateTokens: jest.fn(),
       create: jest.fn(),
       findByUser: jest.fn(),
+      updateScreenContext: jest.fn(),
       softDelete: jest.fn(),
     } as any;
 
@@ -536,6 +538,8 @@ describe('AgentService', () => {
       barPlaceholder: 'Hỏi gì đi nào?',
       data: {},
     };
+    let mkdirSyncSpy: jest.SpyInstance;
+    let writeFileSyncSpy: jest.SpyInstance;
 
     async function collect<T>(iter: AsyncIterable<T>): Promise<T[]> {
       const out: T[] = [];
@@ -544,6 +548,13 @@ describe('AgentService', () => {
     }
 
     beforeEach(() => {
+      mkdirSyncSpy = jest
+        .spyOn(fs, 'mkdirSync')
+        .mockImplementation(() => undefined as any);
+      writeFileSyncSpy = jest
+        .spyOn(fs, 'writeFileSync')
+        .mockImplementation(() => undefined);
+
       conversationService.findById.mockResolvedValue({
         id: conversationId,
         userId: 'user-1',
@@ -572,6 +583,7 @@ describe('AgentService', () => {
         } as any;
       });
       conversationService.accumulateTokens.mockResolvedValue({} as any);
+      conversationService.updateScreenContext.mockResolvedValue({} as any);
       conversationService.create.mockResolvedValue({
         id: 'conv-new',
         userId: 'user-1',
@@ -595,6 +607,11 @@ describe('AgentService', () => {
         }
         yield { text: '', usageMetadata: response.usageMetadata };
       });
+    });
+
+    afterEach(() => {
+      mkdirSyncSpy.mockRestore();
+      writeFileSyncSpy.mockRestore();
     });
 
     it('yields conversation_started + text_chunk + done for a plain text response (no tool calls)', async () => {
@@ -894,6 +911,71 @@ describe('AgentService', () => {
       );
     });
 
+    it('uses the latest incoming screenContext for an existing conversation turn', async () => {
+      const staleScreenContext = {
+        route: '/old',
+        displayName: 'Màn cũ',
+        barPlaceholder: 'Hỏi về màn cũ?',
+        data: { screen: 'old' },
+      };
+      const latestScreenContext = {
+        route: '/lessons/new',
+        displayName: 'Bài học mới',
+        barPlaceholder: 'Hỏi về bài học mới?',
+        data: {
+          lessonId: 'new',
+          uiSnapshot: {
+            texts: ['Xin chào', 'Bắt đầu'],
+            structure: [{ type: 'Text', text: 'Xin chào' }],
+          },
+        },
+      };
+      conversationService.findById.mockResolvedValue({
+        id: conversationId,
+        userId: 'user-1',
+        model: 'gemini-2.0-flash',
+        systemInstruction: '',
+        title: '',
+        screenContext: staleScreenContext,
+        totalTokens: 0,
+        totalPromptTokens: 0,
+        totalCompletionTokens: 0,
+        messages: [],
+      } as any);
+      genaiService.renderPrompt = jest
+        .fn()
+        .mockReturnValue('PROMPT WITH LATEST SCREEN');
+      aiProvider.chat.mockResolvedValue({
+        text: 'ok',
+        usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
+      });
+
+      await collect(
+        service.runTurnStream(
+          'user-1',
+          conversationId,
+          userMessage,
+          latestScreenContext,
+        ),
+      );
+
+      expect(conversationService.updateScreenContext).toHaveBeenCalledWith(
+        conversationId,
+        latestScreenContext,
+      );
+      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+        'assistant-tutor',
+        expect.objectContaining({
+          screenContext: expect.objectContaining({
+            route: '/lessons/new',
+            displayName: 'Bài học mới',
+            data: JSON.stringify(latestScreenContext.data),
+          }),
+        }),
+      );
+      expect(mockTool.execute).not.toHaveBeenCalled();
+    });
+
     it('falls back to the conversation systemInstruction when screenContext is empty', async () => {
       conversationService.findById.mockResolvedValue({
         id: conversationId,
@@ -922,6 +1004,60 @@ describe('AgentService', () => {
       expect(aiProvider.chat).toHaveBeenCalledWith(
         expect.objectContaining({ systemInstruction: 'Default tutor.' }),
       );
+    });
+
+    it('writes a debug snapshot of the exact AI stream request', async () => {
+      const incomingScreenContext = {
+        route: '/debug',
+        displayName: 'Debug screen',
+        barPlaceholder: 'Ask from debug',
+        data: {
+          uiSnapshot: {
+            texts: ['Visible text'],
+            structure: [{ type: 'Text', text: 'Visible text' }],
+          },
+        },
+      };
+      genaiService.renderPrompt = jest.fn().mockReturnValue('DEBUG PROMPT');
+      aiProvider.chat.mockResolvedValue({
+        text: 'ok',
+        usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
+      });
+
+      await collect(
+        service.runTurnStream(
+          'user-1',
+          conversationId,
+          userMessage,
+          incomingScreenContext,
+        ),
+      );
+
+      expect(writeFileSyncSpy).toHaveBeenCalledTimes(1);
+      const [, rawContent] = writeFileSyncSpy.mock.calls[0];
+      const snapshot = JSON.parse(rawContent as string);
+      expect(snapshot).toEqual(
+        expect.objectContaining({
+          userId: 'user-1',
+          conversationId,
+          userMessage,
+          incomingScreenContext,
+          effectiveScreenContext: incomingScreenContext,
+          iterations: [
+            expect.objectContaining({
+              iteration: 1,
+              request: expect.objectContaining({
+                systemInstruction: 'DEBUG PROMPT',
+                messages: [{ role: 'user', content: userMessage }],
+                tools: expect.arrayContaining([
+                  expect.objectContaining({ name: 'mock_tool' }),
+                ]),
+              }),
+            }),
+          ],
+        }),
+      );
+      expect(snapshot.iterations[0].request.abortSignal).toBeUndefined();
     });
 
     it('persists a partial assistant message with interrupted=true when aborted mid-loop', async () => {

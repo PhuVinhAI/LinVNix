@@ -355,6 +355,39 @@ describe('ConversationService', () => {
     });
   });
 
+  describe('updateScreenContext', () => {
+    it('updates the stored screen context snapshot', async () => {
+      const screenContext = {
+        route: '/lessons/abc',
+        displayName: 'Bài học',
+        data: { lessonId: 'abc' },
+      };
+      repository.findConversationById.mockResolvedValue({
+        id: 'conv-1',
+      } as any);
+      repository.updateConversation.mockResolvedValue({
+        id: 'conv-1',
+        screenContext,
+      } as any);
+
+      const result = await service.updateScreenContext('conv-1', screenContext);
+
+      expect(repository.updateConversation).toHaveBeenCalledWith('conv-1', {
+        screenContext,
+      });
+      expect(result.screenContext).toEqual(screenContext);
+    });
+
+    it('throws NotFoundException when conversation does not exist', async () => {
+      repository.findConversationById.mockResolvedValue(null);
+
+      await expect(
+        service.updateScreenContext('missing', { route: '/' }),
+      ).rejects.toThrow(NotFoundException);
+      expect(repository.updateConversation).not.toHaveBeenCalled();
+    });
+  });
+
   describe('softDelete', () => {
     it('soft-deletes the conversation without touching status', async () => {
       const mockConversation = { id: 'conv-1' };
