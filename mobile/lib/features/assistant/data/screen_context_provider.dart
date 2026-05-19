@@ -5,6 +5,7 @@ import 'builders/home_screen_context_builder.dart';
 import 'builders/lesson_screen_context_builder.dart';
 import 'route_match.dart';
 import 'screen_context_registry.dart';
+import 'screen_ui_snapshot_provider.dart';
 
 class CurrentRouteMatchNotifier extends Notifier<RouteMatch?> {
   @override
@@ -21,8 +22,8 @@ class CurrentRouteMatchNotifier extends Notifier<RouteMatch?> {
 /// without spinning up a router.
 final currentRouteMatchProvider =
     NotifierProvider<CurrentRouteMatchNotifier, RouteMatch?>(
-  CurrentRouteMatchNotifier.new,
-);
+      CurrentRouteMatchNotifier.new,
+    );
 
 /// Production-wired registry of `ScreenContextBuilder`s. Overridable in
 /// tests with `screenContextRegistryProvider.overrideWithValue(...)`.
@@ -51,5 +52,9 @@ final screenContextRegistryProvider = Provider<ScreenContextRegistry>((ref) {
 final currentScreenContextProvider = Provider<ScreenContext>((ref) {
   final match = ref.watch(currentRouteMatchProvider);
   final registry = ref.watch(screenContextRegistryProvider);
-  return registry.resolve(ref, match);
+  final base = registry.resolve(ref, match);
+  final uiSnapshot = ref.watch(currentScreenUiSnapshotProvider);
+  if (uiSnapshot.isEmpty) return base;
+
+  return base.copyWithData({...base.data, 'uiSnapshot': uiSnapshot});
 });

@@ -107,6 +107,13 @@ describe('assistant-tutor prompt template', () => {
     expect(out.toLowerCase()).toContain('markdown');
   });
 
+  it('explains the runtime Flutter uiSnapshot contract to the model', () => {
+    const out = service.renderPrompt('assistant-tutor', {});
+    expect(out).toContain('screenContext.data.uiSnapshot');
+    expect(out).toContain('texts');
+    expect(out).toContain('structure');
+  });
+
   it('reads from backend/src/infrastructure/genai/prompts/assistant-tutor.yaml on disk', () => {
     const expected = path.join(__dirname, 'prompts', 'assistant-tutor.yaml');
     // If this file ever moves the loader skips it silently, which would make

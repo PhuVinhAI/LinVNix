@@ -13,7 +13,9 @@ import 'assistant_question_sheet.dart';
 /// state machine through the chat notifier; dismissing the sheet
 /// collapses the state machine and drops the cached `conversationId`.
 class AssistantBar extends ConsumerWidget {
-  const AssistantBar({super.key});
+  const AssistantBar({super.key, this.onOpen});
+
+  final VoidCallback? onOpen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,11 +40,7 @@ class AssistantBar extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.auto_awesome,
-                  color: c.primary,
-                  size: 20,
-                ),
+                Icon(Icons.auto_awesome, color: c.primary, size: 20),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
@@ -69,6 +67,7 @@ class AssistantBar extends ConsumerWidget {
   }
 
   void _openSheet(BuildContext context, WidgetRef ref) {
+    onOpen?.call();
     final notifier = ref.read(assistantChatNotifierProvider);
     notifier.openBar();
     final navKey = ref.read(rootNavigatorKeyProvider);

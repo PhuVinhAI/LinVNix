@@ -8,6 +8,7 @@ import '../data/ai_api.dart';
 import '../data/ai_api_provider.dart';
 import '../data/conversation_list_provider.dart';
 import '../data/screen_context_provider.dart';
+import '../data/screen_ui_snapshot_provider.dart';
 import '../domain/assistant_event.dart';
 import '../domain/assistant_state.dart';
 import 'assistant_state_machine.dart';
@@ -98,6 +99,7 @@ class AssistantChatNotifier {
     _cancelToken = cancelToken;
     _userCancelled = false;
 
+    _refreshScreenUiSnapshot();
     final screenContext = _ref.read(currentScreenContextProvider);
     final api = _ref.read(aiApiProvider);
 
@@ -321,6 +323,20 @@ class AssistantChatNotifier {
       return 'Mất kết nối. Vui lòng thử lại.';
     }
     return 'Đã xảy ra lỗi. Vui lòng thử lại.';
+  }
+
+  void _refreshScreenUiSnapshot() {
+    final snapshot = _ref
+        .read(screenUiSnapshotCoordinatorProvider)
+        .captureNow();
+    if (snapshot == null) return;
+
+    final notifier = _ref.read(currentScreenUiSnapshotProvider.notifier);
+    if (snapshot.isEmpty) {
+      notifier.clear();
+      return;
+    }
+    notifier.update(snapshot.toJson());
   }
 
   Future<void> _cancelInFlight() async {
