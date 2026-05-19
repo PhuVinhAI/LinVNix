@@ -231,14 +231,18 @@ class AssistantChatNotifier {
       case ConversationStartedEvent(:final conversationId):
         _conversationId = conversationId;
       case ToolStartEvent(:final displayName):
-        if (current is AssistantMidLoading) {
+        if (current is AssistantMidLoading ||
+            (current is AssistantMidReading && current.streaming)) {
           sm.onToolStart(displayName: displayName);
         }
       case ToolResultEvent():
         // No state change in V1 — tool_result is observable via
         // network logs and the message-history endpoint. The UI does
         // not visualize per-tool result yet.
-        break;
+        if (current is AssistantMidLoading ||
+            (current is AssistantMidReading && current.streaming)) {
+          sm.onToolResult();
+        }
       case TextChunkEvent(:final text):
         if (current is AssistantMidLoading ||
             (current is AssistantMidReading && current.streaming)) {

@@ -196,12 +196,10 @@ export class AgentService {
    *   `interrupted=true` is persisted. The final `done` event carries the
    *   same flag.
    *
-   * NOTE: This V1 tracer uses non-streaming `chat()` for every iteration of
-   * the ReAct tool loop, because the Gemini Developer API does not reliably
-   * stream function calls (per `js-genai/sdk-samples/chat_afc_streaming_*`).
-   * The final response text is yielded as a single `text_chunk` event. A
-   * future enhancement can split it via `chatStream` once the dev API gains
-   * streaming function-call support.
+   * Uses `chatStream()` for each model iteration so text is forwarded as soon
+   * as the provider emits it, including pre-tool text from the first model
+   * turn. Function calls are collected from the same stream, then executed
+   * after the model finishes that iteration.
    */
   async *runTurnStream(
     userId: string,
@@ -245,6 +243,8 @@ export class AgentService {
 
     let interrupted = false;
     let finalAssistantMessage: ConversationMessage | null = null;
+    let interruptedResponseText = '';
+    let interruptedAssistantTokens = 0;
 
     if (abortSignal?.aborted) {
       interrupted = true;
@@ -279,27 +279,50 @@ export class AgentService {
         ...(iterations === 1 ? { tools: toolDeclarations } : {}),
       };
 
-      const response = await this.aiProvider.chat(request);
+      let responseText = '';
+      let responseUsage: AiChatResponse['usageMetadata'] = {};
+      const calls: NonNullable<AiChatResponse['functionCalls']> = [];
 
-      const assistantTokens = response.usageMetadata?.candidatesTokenCount || 0;
+      for await (const chunk of this.aiProvider.chatStream(request)) {
+        if (abortSignal?.aborted) {
+          interrupted = true;
+          interruptedResponseText = responseText;
+          interruptedAssistantTokens = responseUsage?.candidatesTokenCount || 0;
+          break toolLoop;
+        }
+
+        if (chunk.text) {
+          responseText += chunk.text;
+          yield { type: 'text_chunk', text: chunk.text };
+        }
+
+        if (chunk.functionCalls?.length) {
+          calls.push(...chunk.functionCalls);
+        }
+
+        if (chunk.usageMetadata) {
+          responseUsage = {
+            ...responseUsage,
+            ...chunk.usageMetadata,
+          };
+        }
+      }
+
+      const assistantTokens = responseUsage?.candidatesTokenCount || 0;
       await this.conversationService.accumulateTokens(
         activeConversationId,
-        response.usageMetadata?.promptTokenCount || 0,
+        responseUsage?.promptTokenCount || 0,
         assistantTokens,
       );
 
-      const calls = response.functionCalls ?? [];
-
       if (calls.length === 0) {
-        // Final answer turn — no more tools to call. Yield the full text as
-        // a single text_chunk and persist the final assistant message.
-        yield { type: 'text_chunk', text: response.text };
-
+        // Final answer turn — no more tools to call. Text chunks have already
+        // been yielded as provider deltas; persist the assembled message.
         finalAssistantMessage = await this.conversationService.addMessage(
           activeConversationId,
           {
             role: ConversationMessageRole.ASSISTANT,
-            content: response.text,
+            content: responseText,
             tokenCount: assistantTokens,
             interrupted: false,
           },
@@ -311,7 +334,7 @@ export class AgentService {
       // walk through each tool call.
       await this.conversationService.addMessage(activeConversationId, {
         role: ConversationMessageRole.ASSISTANT,
-        content: response.text,
+        content: responseText,
         tokenCount: assistantTokens,
       });
 
@@ -432,8 +455,8 @@ export class AgentService {
         activeConversationId,
         {
           role: ConversationMessageRole.ASSISTANT,
-          content: '',
-          tokenCount: 0,
+          content: interrupted ? interruptedResponseText : '',
+          tokenCount: interrupted ? interruptedAssistantTokens : 0,
           interrupted,
         },
       );

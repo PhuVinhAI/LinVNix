@@ -234,7 +234,11 @@ describe('GenaiService', () => {
 
       expect(result.text).toBe('Let me look that up.');
       expect(result.functionCalls).toEqual([
-        { id: 'call-1', name: 'search_vocabulary', arguments: { query: 'xin chào' } },
+        {
+          id: 'call-1',
+          name: 'search_vocabulary',
+          arguments: { query: 'xin chào' },
+        },
       ]);
     });
   });
@@ -279,6 +283,76 @@ describe('GenaiService', () => {
       expect(mockClient.interactions.create).toHaveBeenCalledWith(
         expect.objectContaining({ stream: true }),
       );
+    });
+
+    it('yields streamed function calls after argument deltas are complete', async () => {
+      const mockStream = (async function* () {
+        yield {
+          event_type: 'step.delta',
+          delta: { type: 'text', text: 'Let me check. ' },
+        };
+        yield {
+          event_type: 'step.start',
+          index: 1,
+          step: {
+            type: 'function_call',
+            id: 'call-1',
+            name: 'search_vocabulary',
+            arguments: {},
+          },
+        };
+        yield {
+          event_type: 'step.delta',
+          index: 1,
+          delta: { type: 'arguments_delta', partial_arguments: '{"query":"' },
+        };
+        yield {
+          event_type: 'step.delta',
+          index: 1,
+          delta: { type: 'arguments_delta', partial_arguments: 'xin chao"}' },
+        };
+        yield { event_type: 'step.stop', index: 1 };
+        yield {
+          event_type: 'interaction.completed',
+          interaction: {
+            usage: {
+              total_input_tokens: 5,
+              total_output_tokens: 2,
+              total_tokens: 7,
+            },
+          },
+        };
+      })();
+      mockClient.interactions.create.mockResolvedValue(mockStream);
+
+      const chunks: any[] = [];
+      for await (const chunk of service.chatStream({
+        messages: [{ role: 'user', content: 'lookup xin chao' }],
+      })) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toEqual([
+        { text: 'Let me check. ' },
+        {
+          text: '',
+          functionCalls: [
+            {
+              id: 'call-1',
+              name: 'search_vocabulary',
+              arguments: { query: 'xin chao' },
+            },
+          ],
+        },
+        {
+          text: '',
+          usageMetadata: {
+            promptTokenCount: 5,
+            candidatesTokenCount: 2,
+            totalTokenCount: 7,
+          },
+        },
+      ]);
     });
   });
 

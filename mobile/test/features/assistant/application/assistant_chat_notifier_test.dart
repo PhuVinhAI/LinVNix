@@ -110,6 +110,18 @@ void main() {
     });
   }
 
+  Future<void> waitFor(
+    bool Function() condition, {
+    Duration timeout = const Duration(seconds: 2),
+  }) async {
+    final deadline = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(deadline)) {
+      if (condition()) return;
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    }
+    expect(condition(), isTrue);
+  }
+
   test(
     'first send creates a new Conversation (conversationId not sent in body) '
     'and persists the server-assigned id',
@@ -117,8 +129,7 @@ void main() {
       scriptHappyPath(conversationId: 'conv-new-1');
       notifier.openBar();
       await notifier.sendMessage('How am I doing?');
-      // Allow the stream to drain.
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await waitFor(() => notifier.conversationIdForTesting == 'conv-new-1');
 
       expect(adapter.capturedRequests, hasLength(1));
       final body = adapter.capturedRequests.single.data as Map<String, dynamic>;
@@ -134,14 +145,17 @@ void main() {
       scriptHappyPath(conversationId: 'conv-keep');
       notifier.openBar();
       await notifier.sendMessage('first');
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await waitFor(() => notifier.conversationIdForTesting == 'conv-keep');
 
       notifier.composeAgain();
 
       adapter.prepareNext();
       scriptHappyPath(conversationId: 'conv-keep', messageId: 'msg-2');
       await notifier.sendMessage('second');
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await waitFor(() {
+        final s = container.read(assistantStateMachineProvider);
+        return s is AssistantMidReading && s.messageId == 'msg-2';
+      });
 
       expect(adapter.capturedRequests, hasLength(2));
       final secondBody =
@@ -157,7 +171,7 @@ void main() {
       scriptHappyPath(conversationId: 'conv-full', messageId: 'msg-1');
       notifier.openBar();
       await notifier.sendMessage('first');
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await waitFor(() => notifier.conversationIdForTesting == 'conv-full');
 
       notifier.enterFull();
 
@@ -168,7 +182,11 @@ void main() {
         text: 'full answer',
       );
       await notifier.sendMessage('second from full');
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await waitFor(() {
+        final state = container.read(assistantStateMachineProvider);
+        final turn = state is AssistantFull ? state.priorState : null;
+        return turn is AssistantMidReading && turn.messageId == 'msg-2';
+      });
 
       expect(adapter.capturedRequests, hasLength(2));
       final secondBody =
@@ -192,7 +210,7 @@ void main() {
       scriptHappyPath(conversationId: 'conv-full', messageId: 'msg-1');
       notifier.openBar();
       await notifier.sendMessage('first');
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await waitFor(() => notifier.conversationIdForTesting == 'conv-full');
 
       notifier.enterFull();
       await notifier.collapse();
@@ -227,7 +245,7 @@ void main() {
     scriptHappyPath(conversationId: 'conv-A');
     notifier.openBar();
     await notifier.sendMessage('first on screen A');
-    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await waitFor(() => notifier.conversationIdForTesting == 'conv-A');
 
     // Simulate route change → currentScreenContextProvider re-resolves.
     // Because we don't register any builders, the fallback uses
@@ -248,7 +266,7 @@ void main() {
     adapter.prepareNext();
     scriptHappyPath(conversationId: 'conv-B');
     await notifier.sendMessage('second on screen B');
-    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await waitFor(() => notifier.conversationIdForTesting == 'conv-B');
 
     expect(adapter.capturedRequests, hasLength(2));
     final secondBody = adapter.capturedRequests[1].data as Map<String, dynamic>;
@@ -277,7 +295,10 @@ void main() {
 
     notifier.openBar();
     final firstSend = notifier.sendMessage('first');
-    await Future<void>.delayed(const Duration(milliseconds: 60));
+    await waitFor(() {
+      final s = container.read(assistantStateMachineProvider);
+      return s is AssistantMidReading && s.streaming;
+    });
 
     // We should be in MidReading(streaming) at this point.
     final midStream = container.read(assistantStateMachineProvider);
@@ -288,7 +309,10 @@ void main() {
     adapter.prepareNext();
     scriptHappyPath(conversationId: 'c1', messageId: 'msg-2');
     await notifier.sendMessage('second');
-    await Future<void>.delayed(const Duration(milliseconds: 60));
+    await waitFor(() {
+      final s = container.read(assistantStateMachineProvider);
+      return s is AssistantMidReading && s.messageId == 'msg-2';
+    });
 
     // Done with the original send future too.
     await firstSend;
@@ -318,7 +342,9 @@ void main() {
 
     notifier.openBar();
     await notifier.sendMessage('please answer');
-    await Future<void>.delayed(const Duration(milliseconds: 60));
+    await waitFor(
+      () => container.read(assistantStateMachineProvider) is AssistantMidError,
+    );
 
     final errState =
         container.read(assistantStateMachineProvider) as AssistantMidError;
@@ -328,7 +354,10 @@ void main() {
     adapter.prepareNext();
     scriptHappyPath(conversationId: 'c-retry');
     await notifier.retry();
-    await Future<void>.delayed(const Duration(milliseconds: 60));
+    await waitFor(
+      () =>
+          container.read(assistantStateMachineProvider) is AssistantMidReading,
+    );
 
     expect(adapter.capturedRequests, hasLength(2));
     final retryBody = adapter.capturedRequests[1].data as Map<String, dynamic>;
@@ -352,7 +381,10 @@ void main() {
 
       notifier.openBar();
       final pending = notifier.sendMessage('q');
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await waitFor(() {
+        final s = container.read(assistantStateMachineProvider);
+        return s is AssistantMidReading && s.partial == 'partial';
+      });
 
       notifier.stop();
       await Future<void>.delayed(const Duration(milliseconds: 30));
@@ -364,6 +396,60 @@ void main() {
       expect(s.partial, 'partial');
 
       await pending;
+    },
+  );
+
+  test(
+    'text before tool streams immediately and tool loading is inline',
+    () async {
+      scheduleMicrotask(() async {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        adapter.controller
+          ..add(_frame('conversation_started', {'conversationId': 'c-inline'}))
+          ..add(_frame('text_chunk', {'text': 'Để tôi kiểm tra '}));
+
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        adapter.controller.add(
+          _frame('tool_start', {
+            'name': 'search_vocabulary',
+            'displayName': 'Đang tra cứu từ vựng...',
+            'args': {'query': 'xin chào'},
+          }),
+        );
+
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        adapter.controller
+          ..add(
+            _frame('tool_result', {'name': 'search_vocabulary', 'ok': true}),
+          )
+          ..add(_frame('text_chunk', {'text': 'xong rồi.'}))
+          ..add(
+            _frame('done', {'messageId': 'msg-inline', 'interrupted': false}),
+          );
+        await adapter.controller.close();
+      });
+
+      notifier.openBar();
+      await notifier.sendMessage('xin chào nghĩa là gì?');
+      await waitFor(() {
+        final s = container.read(assistantStateMachineProvider);
+        return s is AssistantMidReading && s.toolStatusText != null;
+      });
+
+      var reading =
+          container.read(assistantStateMachineProvider) as AssistantMidReading;
+      expect(reading.partial, 'Để tôi kiểm tra ');
+      expect(reading.toolStatusText, 'Đang tra cứu từ vựng...');
+
+      await waitFor(() {
+        final s = container.read(assistantStateMachineProvider);
+        return s is AssistantMidReading && s.isDone;
+      });
+      reading =
+          container.read(assistantStateMachineProvider) as AssistantMidReading;
+      expect(reading.partial, 'Để tôi kiểm tra xong rồi.');
+      expect(reading.toolStatusText, isNull);
+      expect(reading.isDone, isTrue);
     },
   );
 }

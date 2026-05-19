@@ -105,6 +105,49 @@ void main() {
     );
 
     test(
+      'text before tool keeps reading visible with one inline loading row',
+      () {
+        sm.openBar();
+        sm.send('look this up');
+        sm.onTextChunk('Để tôi kiểm tra ');
+
+        sm.onToolStart(displayName: 'Đang tra cứu từ vựng...');
+        var reading =
+            container.read(assistantStateMachineProvider)
+                as AssistantMidReading;
+        expect(reading.partial, 'Để tôi kiểm tra ');
+        expect(reading.streaming, isTrue);
+        expect(reading.toolStatusText, 'Đang tra cứu từ vựng...');
+
+        sm.onToolResult();
+        reading =
+            container.read(assistantStateMachineProvider)
+                as AssistantMidReading;
+        expect(reading.partial, 'Để tôi kiểm tra ');
+        expect(reading.streaming, isTrue);
+        expect(reading.toolStatusText, isNull);
+      },
+    );
+
+    test('tool result before first text clears loading tool status', () {
+      sm.openBar();
+      sm.send('look this up');
+
+      sm.onToolStart(displayName: 'Đang tra cứu từ vựng...');
+      sm.onToolResult();
+
+      final loading =
+          container.read(assistantStateMachineProvider) as AssistantMidLoading;
+      expect(loading.statusText, AssistantMidLoading.defaultStatusText);
+
+      sm.onTextChunk('Xong rồi.');
+      final reading =
+          container.read(assistantStateMachineProvider) as AssistantMidReading;
+      expect(reading.partial, 'Xong rồi.');
+      expect(reading.toolStatusText, isNull);
+    });
+
+    test(
       'pre-token error transitions to MidError with lastInput preserved',
       () {
         sm.openBar();

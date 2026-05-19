@@ -237,12 +237,14 @@ class _Body extends ConsumerWidget {
         :final partial,
         :final streaming,
         :final interrupted,
+        :final toolStatusText,
         :final proposals,
       ) =>
         _ReadingBody(
           partial: partial,
           streaming: streaming,
           interrupted: interrupted,
+          toolStatusText: toolStatusText,
           proposals: proposals,
         ),
       AssistantMidError(:final message) => _ErrorBody(message: message),
@@ -401,12 +403,14 @@ class _ReadingBody extends ConsumerWidget {
     required this.partial,
     required this.streaming,
     required this.interrupted,
+    required this.toolStatusText,
     this.proposals = const [],
   });
 
   final String partial;
   final bool streaming;
   final bool interrupted;
+  final String? toolStatusText;
   final List<ProposalState> proposals;
 
   @override
@@ -464,7 +468,23 @@ class _ReadingBody extends ConsumerWidget {
             ),
           ),
         const SizedBox(height: AppSpacing.md),
-        if (streaming)
+        if (streaming && toolStatusText != null)
+          Row(
+            children: [
+              const AppSpinner(),
+              const SizedBox(width: AppSpacing.md),
+              Flexible(
+                child: Text(
+                  toolStatusText!,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
+                    color: c.mutedForeground,
+                  ),
+                ),
+              ),
+            ],
+          )
+        else if (streaming)
           AppButton(
             onPressed: () => ref.read(assistantChatNotifierProvider).stop(),
             label: 'Dừng',
