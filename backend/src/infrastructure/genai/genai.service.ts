@@ -30,6 +30,7 @@ interface AiChatRequest {
     parameters: Record<string, any>;
   }>;
   model?: string;
+  abortSignal?: AbortSignal;
 }
 
 interface AiChatStructuredRequest {
@@ -350,16 +351,20 @@ export class GenaiService implements IAiProvider, OnModuleInit {
   }
 
   async *chatStream(req: AiChatRequest): AsyncIterable<AiChatChunk> {
+    if (req.abortSignal?.aborted) {
+      return;
+    }
+
     const model = req.model || this.config.models.chat;
     const steps = this.mapMessagesToSteps(req.messages);
 
     const { client } = this.keyPool.getKey();
 
-    const stream = await client.interactions.create({
+    const params = {
       model,
       input: steps,
       store: false,
-      stream: true,
+      stream: true as const,
       system_instruction: req.systemInstruction,
       ...(req.tools?.length
         ? {
@@ -371,13 +376,20 @@ export class GenaiService implements IAiProvider, OnModuleInit {
             })),
           }
         : {}),
-    });
+    };
+    const stream = req.abortSignal
+      ? await client.interactions.create(params, { signal: req.abortSignal })
+      : await client.interactions.create(params);
 
     const pendingFunctionCalls = new Map<number, AiFunctionCall>();
     const pendingArgumentDeltas = new Map<number, string>();
     const emittedFunctionCallIndexes = new Set<number>();
 
     for await (const event of stream) {
+      if (req.abortSignal?.aborted) {
+        break;
+      }
+
       if (event.event_type === 'step.delta' && event.delta?.type === 'text') {
         yield {
           text: event.delta.text ?? '',

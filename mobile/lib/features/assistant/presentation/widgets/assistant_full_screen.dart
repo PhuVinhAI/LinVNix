@@ -66,7 +66,7 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
       if (mounted) {
         setState(() {
           _messages = result.messages
-              .where((m) => m.isUser || m.isAssistant)
+              .where((m) => m.isVisibleInConversationHistory)
               .toList();
           _loadingMessages = false;
           _loadedConversationId = convId;
@@ -155,6 +155,46 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
     });
   }
 
+  void _replaceLiveTurn(AssistantState state) {
+    if (state is AssistantMidLoading) {
+      return;
+    }
+
+    setState(() {
+      _messages = [..._messages, _buildLiveTurnMessage(state)];
+      _fullTurnInFlight = false;
+    });
+    _scrollToBottom();
+  }
+
+  ConversationMessage _buildLiveTurnMessage(AssistantState state) {
+    return switch (state) {
+      AssistantMidReading(
+        :final partial,
+        :final interrupted,
+        :final messageId,
+      ) =>
+        ConversationMessage(
+          id: messageId ?? 'local-${DateTime.now().millisecondsSinceEpoch}',
+          role: 'assistant',
+          content: partial,
+          interrupted: interrupted,
+        ),
+      AssistantMidError() => ConversationMessage(
+        id: 'local-${DateTime.now().millisecondsSinceEpoch}',
+        role: 'assistant',
+        content: '',
+        interrupted: true,
+      ),
+      _ => ConversationMessage(
+        id: 'local-${DateTime.now().millisecondsSinceEpoch}',
+        role: 'assistant',
+        content: '',
+        interrupted: true,
+      ),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
@@ -177,7 +217,11 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
         if (_fullTurnInFlight &&
             activeState is AssistantMidReading &&
             activeState.isDone) {
-          _reloadAfterCurrentTurn();
+          if (activeState.interrupted) {
+            _replaceLiveTurn(activeState);
+          } else {
+            _reloadAfterCurrentTurn();
+          }
         } else if (_fullTurnInFlight) {
           _scrollToBottom();
         }
@@ -405,7 +449,7 @@ class _MessageBubble extends StatelessWidget {
           children: [
             if (message.content.isNotEmpty)
               MarkdownBody(data: message.content, selectable: true)
-            else
+            else if (!message.interrupted)
               Text(
                 '_(không có phản hồi)_',
                 style: GoogleFonts.inter(
@@ -480,17 +524,13 @@ class _LiveAssistantTurn extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                MarkdownBody(
-                  data: partial.isEmpty
-                      ? '_(khÃ´ng cÃ³ pháº£n há»“i)_'
-                      : partial,
-                  selectable: true,
-                ),
+                if (partial.isNotEmpty)
+                  MarkdownBody(data: partial, selectable: true),
                 if (interrupted)
                   Padding(
                     padding: const EdgeInsets.only(top: AppSpacing.xs),
                     child: Text(
-                      'ÄÃ£ dá»«ng',
+                      'Đã dừng',
                       style: GoogleFonts.inter(
                         fontSize: AppTypography.caption,
                         color: c.mutedForeground,

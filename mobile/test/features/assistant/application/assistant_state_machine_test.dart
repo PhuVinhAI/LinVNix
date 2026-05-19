@@ -129,7 +129,7 @@ void main() {
       },
     );
 
-    test('tool result before first text clears loading tool status', () {
+    test('tool result before first text keeps last loading tool status', () {
       sm.openBar();
       sm.send('look this up');
 
@@ -138,7 +138,7 @@ void main() {
 
       final loading =
           container.read(assistantStateMachineProvider) as AssistantMidLoading;
-      expect(loading.statusText, AssistantMidLoading.defaultStatusText);
+      expect(loading.statusText, 'Đang tra cứu từ vựng...');
 
       sm.onTextChunk('Xong rồi.');
       final reading =

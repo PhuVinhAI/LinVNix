@@ -277,35 +277,54 @@ export class AgentService {
         messages: aiMessages,
         systemInstruction,
         ...(iterations === 1 ? { tools: toolDeclarations } : {}),
+        ...(abortSignal ? { abortSignal } : {}),
       };
 
       let responseText = '';
       let responseUsage: AiChatResponse['usageMetadata'] = {};
       const calls: NonNullable<AiChatResponse['functionCalls']> = [];
 
-      for await (const chunk of this.aiProvider.chatStream(request)) {
+      try {
+        for await (const chunk of this.aiProvider.chatStream(request)) {
+          if (abortSignal?.aborted) {
+            interrupted = true;
+            interruptedResponseText = responseText;
+            interruptedAssistantTokens =
+              responseUsage?.candidatesTokenCount || 0;
+            break toolLoop;
+          }
+
+          if (chunk.text) {
+            responseText += chunk.text;
+            yield { type: 'text_chunk', text: chunk.text };
+          }
+
+          if (chunk.functionCalls?.length) {
+            calls.push(...chunk.functionCalls);
+          }
+
+          if (chunk.usageMetadata) {
+            responseUsage = {
+              ...responseUsage,
+              ...chunk.usageMetadata,
+            };
+          }
+        }
+      } catch (error) {
         if (abortSignal?.aborted) {
           interrupted = true;
           interruptedResponseText = responseText;
           interruptedAssistantTokens = responseUsage?.candidatesTokenCount || 0;
           break toolLoop;
         }
+        throw error;
+      }
 
-        if (chunk.text) {
-          responseText += chunk.text;
-          yield { type: 'text_chunk', text: chunk.text };
-        }
-
-        if (chunk.functionCalls?.length) {
-          calls.push(...chunk.functionCalls);
-        }
-
-        if (chunk.usageMetadata) {
-          responseUsage = {
-            ...responseUsage,
-            ...chunk.usageMetadata,
-          };
-        }
+      if (abortSignal?.aborted) {
+        interrupted = true;
+        interruptedResponseText = responseText;
+        interruptedAssistantTokens = responseUsage?.candidatesTokenCount || 0;
+        break;
       }
 
       const assistantTokens = responseUsage?.candidatesTokenCount || 0;

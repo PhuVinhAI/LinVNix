@@ -12,6 +12,7 @@ import {
   ForbiddenException,
   HttpCode,
   Logger,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -23,6 +24,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
+import type { Request } from 'express';
 import { UseGuards } from '@nestjs/common';
 import { PermissionsGuard } from '../../../common/guards/permissions.guard';
 import { RequirePermissions } from '../../../common/decorators/permissions.decorator';
@@ -76,10 +78,19 @@ export class AiController {
   chatStream(
     @CurrentUser() user: any,
     @Body() dto: AiChatStreamRequestDto,
+    @Req() request?: Request,
   ): Observable<MessageEvent> {
     return new Observable<MessageEvent>((subscriber) => {
       const abortController = new AbortController();
       let teardown = false;
+      const abort = () => {
+        teardown = true;
+        if (!abortController.signal.aborted) {
+          abortController.abort();
+        }
+      };
+
+      request?.once?.('aborted', abort);
 
       const pump = async () => {
         try {
@@ -118,8 +129,8 @@ export class AiController {
       pump();
 
       return () => {
-        teardown = true;
-        abortController.abort();
+        request?.off?.('aborted', abort);
+        abort();
       };
     });
   }

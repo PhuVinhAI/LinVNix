@@ -29,6 +29,7 @@ export interface AiChatRequest {
   tools?: ToolDeclaration[];
   model?: string;
   functionResults?: AiFunctionResult[];
+  abortSignal?: AbortSignal;
 }
 
 export interface AiChatResponse {

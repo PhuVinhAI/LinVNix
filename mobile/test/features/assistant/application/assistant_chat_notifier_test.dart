@@ -369,6 +369,51 @@ void main() {
   });
 
   test(
+    'tool loading status survives tool_result until the first text chunk',
+    () async {
+      const displayName = 'Đang tra cứu từ vựng...';
+
+      scheduleMicrotask(() async {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        adapter.controller
+          ..add(_frame('conversation_started', {'conversationId': 'c-tool'}))
+          ..add(
+            _frame('tool_start', {
+              'name': 'search_vocabulary',
+              'displayName': displayName,
+              'args': {'query': 'xin chào'},
+            }),
+          )
+          ..add(
+            _frame('tool_result', {'name': 'search_vocabulary', 'ok': true}),
+          );
+      });
+
+      notifier.openBar();
+      await notifier.sendMessage('xin chào nghĩa là gì?');
+      await waitFor(() {
+        final s = container.read(assistantStateMachineProvider);
+        return s is AssistantMidLoading && s.statusText == displayName;
+      });
+
+      final loading =
+          container.read(assistantStateMachineProvider) as AssistantMidLoading;
+      expect(loading.statusText, displayName);
+
+      adapter.controller
+        ..add(_frame('text_chunk', {'text': 'Xin chào means hello.'}))
+        ..add(_frame('done', {'messageId': 'msg-tool', 'interrupted': false}));
+      await adapter.controller.close();
+
+      await waitFor(() {
+        final s = container.read(assistantStateMachineProvider);
+        return s is AssistantMidReading && s.messageId == 'msg-tool';
+      });
+      await Future<void>.delayed(const Duration(milliseconds: 30));
+    },
+  );
+
+  test(
     'Stop tapped mid-stream cancels Dio and transitions to interrupted done',
     () async {
       scheduleMicrotask(() async {
