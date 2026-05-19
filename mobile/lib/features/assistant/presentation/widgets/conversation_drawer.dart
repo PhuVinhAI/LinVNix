@@ -3,18 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_theme.dart';
-import '../../application/assistant_chat_notifier.dart';
 import '../../data/conversation_list_provider.dart';
 import '../../data/conversation_model.dart';
 
 class ConversationDrawer extends ConsumerStatefulWidget {
-  const ConversationDrawer({super.key, required this.onConversationTap});
+  const ConversationDrawer({
+    super.key,
+    required this.onConversationTap,
+    required this.onNewConversation,
+  });
 
   final void Function(String conversationId) onConversationTap;
+  final VoidCallback onNewConversation;
 
   @override
-  ConsumerState<ConversationDrawer> createState() =>
-      _ConversationDrawerState();
+  ConsumerState<ConversationDrawer> createState() => _ConversationDrawerState();
 }
 
 class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
@@ -74,16 +77,14 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
             Divider(color: c.border, height: 1),
             Expanded(
               child: conversations.when(
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, _) => Center(
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.lg),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.error_outline,
-                            color: c.error, size: 32),
+                        Icon(Icons.error_outline, color: c.error, size: 32),
                         const SizedBox(height: AppSpacing.sm),
                         Text(
                           'Không thể tải danh sách',
@@ -119,25 +120,23 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
                         ref.read(conversationListProvider.notifier).refresh(),
                     child: ListView.builder(
                       itemCount: list.length,
-                      itemBuilder: (ctx, i) =>
-                          _ConversationRow(
-                            conversation: list[i],
-                            isRenaming: _renamingId == list[i].id,
-                            renameController: _renameController,
-                            onTap: () {
-                              Navigator.of(context).maybePop();
-                              widget.onConversationTap(list[i].id);
-                            },
-                            onRename: () => _startRename(list[i]),
-                            onDelete: () => _confirmDelete(context, list[i]),
-                            onRenameSubmit: (title) =>
-                                _submitRename(list[i].id, title),
-                            onRenameCancel: () =>
-                                setState(() {
-                                  _renamingId = null;
-                                  _renameController.clear();
-                                }),
-                          ),
+                      itemBuilder: (ctx, i) => _ConversationRow(
+                        conversation: list[i],
+                        isRenaming: _renamingId == list[i].id,
+                        renameController: _renameController,
+                        onTap: () {
+                          Navigator.of(context).maybePop();
+                          widget.onConversationTap(list[i].id);
+                        },
+                        onRename: () => _startRename(list[i]),
+                        onDelete: () => _confirmDelete(context, list[i]),
+                        onRenameSubmit: (title) =>
+                            _submitRename(list[i].id, title),
+                        onRenameCancel: () => setState(() {
+                          _renamingId = null;
+                          _renameController.clear();
+                        }),
+                      ),
                     ),
                   );
                 },
@@ -151,7 +150,7 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
 
   void _createNew(BuildContext context) {
     Navigator.of(context).maybePop();
-    ref.read(assistantChatNotifierProvider).reset();
+    widget.onNewConversation();
   }
 
   void _startRename(ConversationSummary conv) {
@@ -169,14 +168,14 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
   }
 
   Future<void> _confirmDelete(
-      BuildContext context, ConversationSummary conv) async {
+    BuildContext context,
+    ConversationSummary conv,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Xóa hội thoại'),
-        content: Text(
-          'Bạn có chắc muốn xóa "${conv.displayTitle}"?',
-        ),
+        content: Text('Bạn có chắc muốn xóa "${conv.displayTitle}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
