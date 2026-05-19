@@ -188,7 +188,12 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
             _Header(
               displayName: displayName,
               onDrawerTap: () => _scaffoldKey.currentState?.openDrawer(),
-              onClose: () => ref.read(assistantChatNotifierProvider).exitFull(),
+              onClose: () {
+                final notifier = ref.read(assistantChatNotifierProvider);
+                if (!notifier.exitFull()) {
+                  Navigator.of(context).maybePop();
+                }
+              },
               onReset: _onReset,
             ),
             Divider(color: c.border, height: 1),
