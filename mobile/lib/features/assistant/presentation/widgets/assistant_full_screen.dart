@@ -34,6 +34,7 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
   bool _loadingMessages = false;
   bool _fullTurnInFlight = false;
   bool _reloadAfterTurnScheduled = false;
+  bool _drawerOpen = false;
   String? _loadedConversationId;
 
   @override
@@ -157,6 +158,7 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
+    final assistantState = ref.watch(assistantStateMachineProvider);
     final displayName = ref.watch(
       currentScreenContextProvider.select((s) => s.displayName),
     );
@@ -164,7 +166,11 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
     // If state machine exits Full, pop this screen.
     ref.listen(assistantStateMachineProvider, (prev, next) {
       if (prev is AssistantFull && next is! AssistantFull) {
-        Navigator.of(context).maybePop();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            Navigator.of(context).maybePop();
+          }
+        });
       }
       if (next is AssistantFull) {
         final activeState = next.priorState;
@@ -179,17 +185,15 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
     });
 
     return PopScope(
-      canPop: false,
+      canPop: assistantState is! AssistantFull || _drawerOpen,
       onPopInvokedWithResult: (didPop, _) {
-        if (didPop) return;
-        final notifier = ref.read(assistantChatNotifierProvider);
-        if (!notifier.exitFull()) {
-          Navigator.of(context).maybePop();
-        }
+        if (didPop || assistantState is! AssistantFull) return;
+        ref.read(assistantChatNotifierProvider).exitFull();
       },
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: c.background,
+        onDrawerChanged: _onDrawerChanged,
         drawer: ConversationDrawer(
           onConversationTap: _onConversationTap,
           onNewConversation: _onNewConversation,
@@ -214,15 +218,17 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
                 controller: _controller,
                 onSend: _onSend,
                 onStop: () => ref.read(assistantChatNotifierProvider).stop(),
-                inFlight: _isFullTurnInFlight(
-                  ref.watch(assistantStateMachineProvider),
-                ),
+                inFlight: _isFullTurnInFlight(assistantState),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _onDrawerChanged(bool isOpened) {
+    setState(() => _drawerOpen = isOpened);
   }
 
   Future<void> _onNewConversation() async {
