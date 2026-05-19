@@ -84,6 +84,16 @@ export class ConversationService {
     return this.conversationsRepository.updateConversation(id, { title });
   }
 
+  async updateScreenContext(
+    id: string,
+    screenContext: Record<string, any>,
+  ): Promise<Conversation> {
+    await this.findById(id);
+    return this.conversationsRepository.updateConversation(id, {
+      screenContext,
+    });
+  }
+
   async softDelete(id: string): Promise<void> {
     await this.findById(id);
     await this.conversationsRepository.softDeleteConversation(id);

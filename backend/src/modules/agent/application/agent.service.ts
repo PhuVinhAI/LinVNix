@@ -13,6 +13,8 @@ import { GenaiService } from '../../../infrastructure/genai/genai.service';
 import { UsersService } from '../../users/application/users.service';
 import { ConversationMessageRole } from '../../../common/enums';
 import { ZodError } from 'zod';
+import fs from 'fs';
+import * as path from 'path';
 import type { Conversation } from '../../conversations/domain/conversation.entity';
 import type { ConversationMessage } from '../../conversations/domain/conversation-message.entity';
 import type { StreamEvent } from './stream-event';
@@ -209,6 +211,7 @@ export class AgentService {
     abortSignal?: AbortSignal,
   ): AsyncIterable<StreamEvent> {
     let activeConversationId = conversationId;
+    const createdConversationFromRequest = activeConversationId === null;
     if (activeConversationId === null) {
       const autoTitle =
         userMessage.length > 50 ? userMessage.substring(0, 50) : userMessage;
@@ -231,15 +234,30 @@ export class AgentService {
     const conversation =
       await this.conversationService.findById(activeConversationId);
     const user = await this.usersService.findById(conversation.userId);
+    const effectiveScreenContext =
+      screenContext ?? conversation.screenContext ?? {};
+
+    if (!createdConversationFromRequest && screenContext !== undefined) {
+      await this.conversationService.updateScreenContext(
+        activeConversationId,
+        screenContext,
+      );
+    }
 
     const ctx: ToolContext = {
       userId: conversation.userId,
       conversationId: activeConversationId,
-      screenContext: conversation.screenContext ?? {},
+      screenContext: effectiveScreenContext,
       user,
     };
 
-    const systemInstruction = this.buildSystemInstruction(conversation, user);
+    const systemInstruction = this.buildSystemInstruction(
+      {
+        ...conversation,
+        screenContext: effectiveScreenContext,
+      },
+      user,
+    );
 
     let interrupted = false;
     let finalAssistantMessage: ConversationMessage | null = null;
@@ -262,6 +280,30 @@ export class AgentService {
     );
 
     const toolDeclarations = this.tools.map((tool) => tool.toDeclaration());
+    const safeConversationId = activeConversationId.replace(
+      /[^a-zA-Z0-9_-]/g,
+      '_',
+    );
+    const aiDebugSnapshot = {
+      fileName: `ai-turn-${safeConversationId}-${Date.now()}.json`,
+      timestamp: new Date().toISOString(),
+      userId,
+      conversationId: activeConversationId,
+      userMessage,
+      conversation: {
+        id: conversation.id,
+        userId: conversation.userId,
+        lessonId: conversation.lessonId,
+        courseId: conversation.courseId,
+        screenContext: conversation.screenContext ?? {},
+      },
+      incomingScreenContext: screenContext ?? null,
+      effectiveScreenContext,
+      iterations: [] as Array<{
+        iteration: number;
+        request: Omit<AiChatRequest, 'abortSignal'>;
+      }>,
+    };
 
     let iterations = 0;
 
@@ -279,6 +321,12 @@ export class AgentService {
         ...(iterations === 1 ? { tools: toolDeclarations } : {}),
         ...(abortSignal ? { abortSignal } : {}),
       };
+
+      aiDebugSnapshot.iterations.push({
+        iteration: iterations,
+        request: this.serializeAiRequestForDebug(request),
+      });
+      this.writeAiDebugSnapshot(aiDebugSnapshot);
 
       let responseText = '';
       let responseUsage: AiChatResponse['usageMetadata'] = {};
@@ -542,7 +590,10 @@ export class AgentService {
   }
 
   private buildSystemInstruction(
-    conversation: Conversation,
+    conversation: Pick<
+      Conversation,
+      'screenContext' | 'systemInstruction' | 'lessonId'
+    >,
     user: any,
   ): string {
     const sc = conversation.screenContext ?? {};
@@ -571,5 +622,59 @@ export class AgentService {
       systemInstruction += `\nCurrent lesson ID: ${conversation.lessonId}`;
     }
     return systemInstruction;
+  }
+
+  private serializeAiRequestForDebug(
+    request: AiChatRequest,
+  ): Omit<AiChatRequest, 'abortSignal'> {
+    const requestForLog: Record<string, any> = { ...request };
+    delete requestForLog.abortSignal;
+    return requestForLog as Omit<AiChatRequest, 'abortSignal'>;
+  }
+
+  private writeAiDebugSnapshot(input: {
+    fileName: string;
+    timestamp: string;
+    userId: string;
+    conversationId: string;
+    userMessage: string;
+    conversation: {
+      id: string;
+      userId: string;
+      lessonId?: string;
+      courseId?: string;
+      screenContext: Record<string, any>;
+    };
+    incomingScreenContext: Record<string, any> | null;
+    effectiveScreenContext: Record<string, any>;
+    iterations: Array<{
+      iteration: number;
+      request: Omit<AiChatRequest, 'abortSignal'>;
+    }>;
+  }): void {
+    try {
+      const debugDir = path.join(process.cwd(), 'debug');
+      fs.mkdirSync(debugDir, { recursive: true });
+
+      const filePath = path.join(debugDir, input.fileName);
+      const content = {
+        timestamp: input.timestamp,
+        userId: input.userId,
+        conversationId: input.conversationId,
+        userMessage: input.userMessage,
+        conversation: input.conversation,
+        incomingScreenContext: input.incomingScreenContext,
+        effectiveScreenContext: input.effectiveScreenContext,
+        iterations: input.iterations,
+      };
+
+      fs.writeFileSync(filePath, JSON.stringify(content, null, 2), 'utf8');
+
+      this.logger.debug(`AI debug snapshot written to debug/${input.fileName}`);
+    } catch (error) {
+      this.logger.warn(
+        `Failed to write AI debug snapshot: ${(error as Error).message}`,
+      );
+    }
   }
 }

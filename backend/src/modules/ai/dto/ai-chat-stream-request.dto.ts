@@ -7,9 +7,9 @@ import { ScreenContextDto } from './screen-context.dto';
  * Single-shot streaming chat request body for `POST /ai/chat/stream`.
  *
  * `conversationId` is optional — when absent, the agent lazily creates a fresh
- * Conversation owned by the authenticated user and snapshots the supplied
- * `screenContext` onto it. This replaces the previous 2-step
- * "create-then-open-SSE" flow that was racy.
+ * Conversation owned by the authenticated user. The supplied `screenContext`
+ * is used for the current prompt; for existing conversations it refreshes the
+ * stored snapshot before the model turn.
  */
 export class AiChatStreamRequestDto {
   @ApiProperty({ example: 'How am I doing?' })
@@ -25,8 +25,8 @@ export class AiChatStreamRequestDto {
     type: ScreenContextDto,
     required: false,
     description:
-      'Frozen screen snapshot used as the AI prompt context. Only honored ' +
-      'when creating a new conversation (lazy create).',
+      'Frozen screen snapshot used as the AI prompt context for this turn. ' +
+      'When conversationId is present, this replaces the stored snapshot.',
   })
   @ValidateNested()
   @Type(() => ScreenContextDto)
