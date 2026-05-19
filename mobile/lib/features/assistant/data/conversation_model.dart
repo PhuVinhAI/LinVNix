@@ -64,6 +64,9 @@ class ConversationMessage {
   bool get isUser => role == 'user';
   bool get isAssistant => role == 'assistant';
   bool get isTool => role == 'tool';
+  bool get hasVisibleContent => content.trim().isNotEmpty;
+  bool get isVisibleInConversationHistory =>
+      isUser || (isAssistant && (hasVisibleContent || interrupted));
 
   @override
   bool operator ==(Object other) =>

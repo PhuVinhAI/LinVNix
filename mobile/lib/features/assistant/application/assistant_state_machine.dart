@@ -69,7 +69,9 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   void onToolResult() {
     final s = _activeState;
     if (s is AssistantMidLoading) {
-      _setActiveState(AssistantMidLoading(lastInput: s.lastInput));
+      _setActiveState(
+        AssistantMidLoading(lastInput: s.lastInput, statusText: s.statusText),
+      );
       return;
     }
     if (s is AssistantMidReading && s.streaming) {
@@ -93,15 +95,7 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   void onTextChunk(String text) {
     final s = _activeState;
     if (s is AssistantMidLoading) {
-      _setActiveState(
-        AssistantMidReading(
-          partial: text,
-          streaming: true,
-          toolStatusText: s.statusText == AssistantMidLoading.defaultStatusText
-              ? null
-              : s.statusText,
-        ),
-      );
+      _setActiveState(AssistantMidReading(partial: text, streaming: true));
       return;
     }
     if (s is AssistantMidReading && s.streaming) {

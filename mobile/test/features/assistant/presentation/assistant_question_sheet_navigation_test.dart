@@ -123,6 +123,57 @@ void main() {
 
     fixture.dispose();
   });
+
+  testWidgets('full-screen stop keeps the local turn visible until reload', (
+    tester,
+  ) async {
+    final fixture = _FullScreenStopFixture();
+    await fixture.pump(tester);
+
+    await tester.enterText(find.byType(TextField).last, 'Hello');
+    await tester.tap(find.byIcon(Icons.send));
+    await tester.pump();
+    fixture.adapter.startStreaming();
+
+    expect(find.text('Hello'), findsOneWidget);
+    expect(find.byIcon(Icons.stop_rounded), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 30));
+    expect(find.text('partial answer'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.stop_rounded));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text('Hello'), findsOneWidget);
+    expect(find.text('partial answer'), findsOneWidget);
+    expect(find.text('Đã dừng'), findsOneWidget);
+
+    fixture.dispose();
+  });
+
+  testWidgets('full-screen stop from loading does not show empty fallback', (
+    tester,
+  ) async {
+    final fixture = _FullScreenStopFixture();
+    await fixture.pump(tester);
+
+    await tester.enterText(find.byType(TextField).last, 'Hello');
+    await tester.tap(find.byIcon(Icons.send));
+    await tester.pump();
+    fixture.adapter.startLoadingOnly();
+
+    await tester.pump(const Duration(milliseconds: 30));
+    await tester.tap(find.byIcon(Icons.stop_rounded));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text('Hello'), findsOneWidget);
+    expect(find.text('Đã dừng'), findsOneWidget);
+    expect(find.text('_(không có phản hồi)_'), findsNothing);
+
+    fixture.dispose();
+  });
 }
 
 class _CountingNavigatorObserver extends NavigatorObserver {
@@ -182,6 +233,44 @@ class _FullScreenFixture {
   }
 }
 
+class _FullScreenStopFixture {
+  _FullScreenStopFixture() {
+    adapter = _FullScreenStreamAdapter();
+    dio.httpClientAdapter = adapter;
+    container = ProviderContainer(
+      overrides: [aiApiProvider.overrideWithValue(AiApi(dio))],
+    );
+
+    final stateMachine = container.read(assistantStateMachineProvider.notifier);
+    stateMachine.openBar();
+    stateMachine.enterFull();
+  }
+
+  final dio = Dio(BaseOptions(baseUrl: 'https://test.local'));
+  late final ProviderContainer container;
+  late final _FullScreenStreamAdapter adapter;
+
+  Future<void> pump(WidgetTester tester) async {
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          theme: AppTheme.light(),
+          home: const AssistantFullScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    adapter.prepare();
+  }
+
+  void dispose() {
+    dio.close(force: true);
+    container.dispose();
+  }
+}
+
 class _JsonAdapter implements HttpClientAdapter {
   _JsonAdapter(this._handler);
 
@@ -205,4 +294,63 @@ class _JsonAdapter implements HttpClientAdapter {
 
   @override
   void close({bool force = false}) {}
+}
+
+class _FullScreenStreamAdapter implements HttpClientAdapter {
+  late StreamController<List<int>> controller;
+  final List<RequestOptions> capturedRequests = [];
+
+  void prepare() {
+    controller = StreamController<List<int>>();
+  }
+
+  void startStreaming() {
+    scheduleMicrotask(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      controller
+        ..add(
+          utf8.encode(
+            'event: conversation_started\ndata: {"conversationId":"conv-stop"}\n\n',
+          ),
+        )
+        ..add(
+          utf8.encode('event: text_chunk\ndata: {"text":"partial answer"}\n\n'),
+        );
+    });
+  }
+
+  void startLoadingOnly() {
+    scheduleMicrotask(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      controller.add(
+        utf8.encode(
+          'event: conversation_started\ndata: {"conversationId":"conv-stop"}\n\n',
+        ),
+      );
+    });
+  }
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    capturedRequests.add(options);
+    cancelFuture?.then((_) {
+      if (!controller.isClosed) controller.close();
+    });
+    return ResponseBody(
+      controller.stream.map((bytes) => Uint8List.fromList(bytes)),
+      200,
+      headers: {
+        Headers.contentTypeHeader: ['text/event-stream'],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {
+    if (!controller.isClosed) controller.close();
+  }
 }

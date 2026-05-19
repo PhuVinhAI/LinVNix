@@ -998,6 +998,39 @@ describe('AgentService', () => {
       );
     });
 
+    it('persists partial text when the provider aborts with an error', async () => {
+      const abortController = new AbortController();
+      aiProvider.chatStream.mockImplementation(async function* () {
+        yield { text: 'partial answer' };
+        abortController.abort();
+        throw new Error('The operation was aborted');
+      });
+
+      const events = await collect(
+        service.runTurnStream(
+          'user-1',
+          conversationId,
+          userMessage,
+          undefined,
+          abortController.signal,
+        ),
+      );
+
+      expect(events).toEqual([
+        { type: 'conversation_started', conversationId },
+        { type: 'text_chunk', text: 'partial answer' },
+        expect.objectContaining({ type: 'done', interrupted: true }),
+      ]);
+      expect(conversationService.addMessage).toHaveBeenCalledWith(
+        conversationId,
+        expect.objectContaining({
+          role: ConversationMessageRole.ASSISTANT,
+          content: 'partial answer',
+          interrupted: true,
+        }),
+      );
+    });
+
     it('does not call the AI provider when the abort signal is already aborted on entry', async () => {
       const abortController = new AbortController();
       abortController.abort();

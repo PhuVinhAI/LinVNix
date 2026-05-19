@@ -354,6 +354,44 @@ describe('GenaiService', () => {
         },
       ]);
     });
+
+    it('passes the abortSignal through to the underlying request options', async () => {
+      const abortController = new AbortController();
+      const mockStream = (async function* () {
+        yield { event_type: 'step.delta', delta: { type: 'text', text: 'ok' } };
+      })();
+      mockClient.interactions.create.mockResolvedValue(mockStream);
+
+      const chunks: any[] = [];
+      for await (const chunk of service.chatStream({
+        messages: [{ role: 'user', content: 'test' }],
+        abortSignal: abortController.signal,
+      })) {
+        chunks.push(chunk);
+      }
+
+      expect(mockClient.interactions.create).toHaveBeenCalledWith(
+        expect.any(Object),
+        expect.objectContaining({ signal: abortController.signal }),
+      );
+      expect(chunks).toEqual([{ text: 'ok' }]);
+    });
+
+    it('returns early when the abortSignal is already aborted', async () => {
+      const abortController = new AbortController();
+      abortController.abort();
+
+      const chunks: any[] = [];
+      for await (const chunk of service.chatStream({
+        messages: [{ role: 'user', content: 'test' }],
+        abortSignal: abortController.signal,
+      })) {
+        chunks.push(chunk);
+      }
+
+      expect(mockClient.interactions.create).not.toHaveBeenCalled();
+      expect(chunks).toEqual([]);
+    });
   });
 
   describe('chatStructured()', () => {
