@@ -5,6 +5,15 @@ import 'package:linvnix/features/assistant/data/screen_context_provider.dart';
 import 'package:linvnix/features/lessons/data/lesson_providers.dart';
 import 'package:linvnix/features/lessons/domain/lesson_models.dart';
 
+class _StubLessonVocabulariesNotifier extends LessonVocabularyNotifier {
+  _StubLessonVocabulariesNotifier(super.lessonId, this._vocabs);
+
+  final List<LessonVocabulary> _vocabs;
+
+  @override
+  Future<List<LessonVocabulary>> build() async => _vocabs;
+}
+
 class _StubLessonDetailNotifier extends LessonDetailNotifier {
   _StubLessonDetailNotifier(super.lessonId, this._detail);
 
@@ -18,7 +27,7 @@ void main() {
   group('lessonScreenContextBuilder', () {
     test(
       'produces a lesson ScreenContext with title + content summary + '
-      'vocab / grammar IDs pulled from the lesson detail provider',
+      'vocab / grammar summaries pulled from the lesson detail provider',
       () async {
         const lessonId = 'lesson-greetings';
         const detail = LessonDetail(
@@ -44,10 +53,7 @@ void main() {
               translation: 'Goodbye!',
             ),
           ],
-          vocabularies: [
-            LessonVocabulary(id: 'v1', word: 'xin chào', translation: 'hello'),
-            LessonVocabulary(id: 'v2', word: 'tạm biệt', translation: 'bye'),
-          ],
+          vocabularies: const [],
           grammarRules: [
             GrammarRule(
               id: 'g1',
@@ -57,16 +63,33 @@ void main() {
           ],
         );
 
+        final vocabs = [
+          const LessonVocabulary(
+            id: 'v1',
+            word: 'xin chào',
+            translation: 'hello',
+          ),
+          const LessonVocabulary(
+            id: 'v2',
+            word: 'tạm biệt',
+            translation: 'bye',
+          ),
+        ];
+
         final container = ProviderContainer(
           overrides: [
             lessonDetailProvider(lessonId).overrideWith(
               () => _StubLessonDetailNotifier(lessonId, detail),
+            ),
+            lessonVocabulariesProvider(lessonId).overrideWith(
+              () => _StubLessonVocabulariesNotifier(lessonId, vocabs),
             ),
           ],
         );
         addTearDown(container.dispose);
 
         await container.read(lessonDetailProvider(lessonId).future);
+        await container.read(lessonVocabulariesProvider(lessonId).future);
 
         container.read(currentRouteMatchProvider.notifier).update(
               const RouteMatch(
@@ -87,16 +110,25 @@ void main() {
           'lessonId',
           'title',
           'description',
-          'vocabularyIds',
-          'grammarRuleIds',
+          'vocabularies',
+          'grammarRules',
           'contentSummary',
         ]));
         expect(ctx.data['screenType'], 'lessonDetail');
         expect(ctx.data['status'], 'data');
         expect(ctx.data['lessonId'], lessonId);
         expect(ctx.data['title'], 'Greetings');
-        expect(ctx.data['vocabularyIds'], ['v1', 'v2']);
-        expect(ctx.data['grammarRuleIds'], ['g1']);
+        expect(ctx.data['vocabularies'], [
+          {'id': 'v1', 'word': 'xin chào', 'translation': 'hello'},
+          {'id': 'v2', 'word': 'tạm biệt', 'translation': 'bye'},
+        ]);
+        expect(ctx.data['grammarRules'], [
+          {
+            'id': 'g1',
+            'title': 'Greetings',
+            'explanation': 'Use xin chào in any context.',
+          },
+        ]);
         expect(ctx.data['contentSummary'], isA<String>());
         expect(ctx.data['contentSummary'], contains('Xin chào'));
       },
@@ -124,8 +156,8 @@ void main() {
         expect(ctx.data['screenType'], 'lessonDetail');
         expect(ctx.data['status'], 'loading');
         expect(ctx.data['lessonId'], lessonId);
-        expect(ctx.data['vocabularyIds'], isEmpty);
-        expect(ctx.data['grammarRuleIds'], isEmpty);
+        expect(ctx.data['vocabularies'], isEmpty);
+        expect(ctx.data['grammarRules'], isEmpty);
       },
     );
   });

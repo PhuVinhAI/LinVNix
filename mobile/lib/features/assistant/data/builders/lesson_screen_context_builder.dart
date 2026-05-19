@@ -3,9 +3,10 @@ import '../../../lessons/data/lesson_providers.dart';
 import '../../../lessons/domain/lesson_models.dart';
 import '../../domain/screen_context.dart';
 import '../route_match.dart';
+import 'lesson_context_summaries.dart';
 
 /// `ScreenContext` builder for `/lessons/:id`. Pulls lesson title, content
-/// summary, vocab IDs, and grammar-rule IDs from the existing
+/// summary, vocabulary, and grammar rules from the existing
 /// `lessonDetailProvider` so the AI can answer questions like "What's this
 /// lesson about?" without an extra `get_lesson_detail` tool call.
 ScreenContext lessonScreenContextBuilder(Ref ref, RouteMatch match) {
@@ -20,6 +21,15 @@ ScreenContext lessonScreenContextBuilder(Ref ref, RouteMatch match) {
   );
   final detail = detailAsync.whenOrNull(data: (d) => d);
 
+  // Lesson UI loads vocab via GET /vocabularies/lesson/:id; lesson detail may
+  // not include the full vocabulary list — prefer the dedicated provider.
+  final vocabAsync = lessonId.isEmpty
+      ? const AsyncValue<List<LessonVocabulary>>.loading()
+      : ref.watch(lessonVocabulariesProvider(lessonId));
+  final vocabularies = vocabAsync.whenOrNull(data: (list) => list) ??
+      detail?.vocabularies ??
+      const <LessonVocabulary>[];
+
   final data = <String, dynamic>{
     'screenType': 'lessonDetail',
     'status': status,
@@ -27,10 +37,13 @@ ScreenContext lessonScreenContextBuilder(Ref ref, RouteMatch match) {
     'title': detail?.title ?? '',
     'description': detail?.description ?? '',
     'lessonType': detail?.lessonType ?? '',
-    'vocabularyIds': detail?.vocabularies.map((v) => v.id).toList() ??
-        const <String>[],
-    'grammarRuleIds':
-        detail?.grammarRules.map((g) => g.id).toList() ?? const <String>[],
+    'vocabularies': vocabularies
+        .map(vocabularyContextSummary)
+        .toList(growable: false),
+    'grammarRules': detail?.grammarRules
+            .map(grammarRuleContextSummary)
+            .toList(growable: false) ??
+        const <Map<String, dynamic>>[],
     'contentSummary': _summariseContents(detail?.contents),
   };
   if (status == 'error') {
