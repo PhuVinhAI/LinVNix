@@ -272,7 +272,7 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   }
 
   /// Drag-up from any Mid state → Full. Saves the current state as
-  /// [priorState] so [exitFull] can restore it.
+  /// [priorState] so Full can keep rendering the active turn.
   void enterFull() {
     final s = state;
     if (s is AssistantCollapsed || s is AssistantFull) {
@@ -281,14 +281,15 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     state = AssistantFull(priorState: s);
   }
 
-  /// Back gesture or close button from Full → prior Mid state (or
-  /// Collapsed if no prior state was recorded).
+  /// Back gesture or close button from Full → Collapsed. Closing Full
+  /// intentionally does not restore the previous Mid state; the next bar
+  /// open starts from Compose instead of showing stale Mid content.
   void exitFull() {
     final s = state;
     if (s is! AssistantFull) {
       throw _invalid('exitFull');
     }
-    state = s.priorState ?? const AssistantCollapsed();
+    state = const AssistantCollapsed();
   }
 
   /// Updates a single proposal's status within the current MidReading

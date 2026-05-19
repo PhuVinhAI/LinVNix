@@ -244,14 +244,14 @@ class AssistantMidError extends AssistantState {
 }
 
 /// Full-screen chat state. Reachable via drag-up from any Mid state.
-/// Stores [priorState] so a back gesture or close button can restore
-/// the previous Mid state (or Collapsed if none).
+/// Stores [priorState] so Full can render the active Mid turn while it is
+/// open. Closing Full collapses the surface; it does not restore stale
+/// Mid content.
 class AssistantFull extends AssistantState {
   const AssistantFull({this.priorState});
 
-  /// The state the user was in before entering Full. Back gesture or
-  /// close button returns here. `null` means the machine was freshly
-  /// opened into Full (unlikely but safe to default to Collapsed).
+  /// The state the user was in before entering Full. `null` means the
+  /// machine was freshly opened into Full (unlikely but safe).
   final AssistantState? priorState;
 
   @override

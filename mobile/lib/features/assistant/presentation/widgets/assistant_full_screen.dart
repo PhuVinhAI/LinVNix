@@ -178,31 +178,62 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
       }
     });
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: c.background,
-      drawer: ConversationDrawer(onConversationTap: _onConversationTap),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _Header(
-              displayName: displayName,
-              onDrawerTap: () => _scaffoldKey.currentState?.openDrawer(),
-              onClose: () {
-                final notifier = ref.read(assistantChatNotifierProvider);
-                if (!notifier.exitFull()) {
-                  Navigator.of(context).maybePop();
-                }
-              },
-              onReset: _onReset,
-            ),
-            Divider(color: c.border, height: 1),
-            Expanded(child: _buildBody(c)),
-            _ComposeBar(controller: _controller, onSend: _onSend),
-          ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        final notifier = ref.read(assistantChatNotifierProvider);
+        if (!notifier.exitFull()) {
+          Navigator.of(context).maybePop();
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: c.background,
+        drawer: ConversationDrawer(
+          onConversationTap: _onConversationTap,
+          onNewConversation: _onNewConversation,
+        ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              _Header(
+                displayName: displayName,
+                onDrawerTap: () => _scaffoldKey.currentState?.openDrawer(),
+                onClose: () {
+                  final notifier = ref.read(assistantChatNotifierProvider);
+                  if (!notifier.exitFull()) {
+                    Navigator.of(context).maybePop();
+                  }
+                },
+                onReset: _onReset,
+              ),
+              Divider(color: c.border, height: 1),
+              Expanded(child: _buildBody(c)),
+              _ComposeBar(
+                controller: _controller,
+                onSend: _onSend,
+                onStop: () => ref.read(assistantChatNotifierProvider).stop(),
+                inFlight: _isFullTurnInFlight(
+                  ref.watch(assistantStateMachineProvider),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> _onNewConversation() async {
+    await _onReset();
+  }
+
+  bool _isFullTurnInFlight(AssistantState state) {
+    if (state is! AssistantFull) return false;
+    final activeState = state.priorState;
+    return activeState is AssistantMidLoading ||
+        (activeState is AssistantMidReading && activeState.streaming);
   }
 
   Widget _buildBody(AppColors c) {
@@ -524,10 +555,17 @@ class _LiveAssistantTurn extends StatelessWidget {
 }
 
 class _ComposeBar extends StatelessWidget {
-  const _ComposeBar({required this.controller, required this.onSend});
+  const _ComposeBar({
+    required this.controller,
+    required this.onSend,
+    required this.onStop,
+    required this.inFlight,
+  });
 
   final TextEditingController controller;
   final VoidCallback onSend;
+  final VoidCallback onStop;
+  final bool inFlight;
 
   @override
   Widget build(BuildContext context) {
@@ -581,8 +619,12 @@ class _ComposeBar extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           IconButton(
-            icon: Icon(Icons.send, color: c.primary),
-            onPressed: onSend,
+            icon: Icon(
+              inFlight ? Icons.stop_rounded : Icons.send,
+              color: inFlight ? c.error : c.primary,
+            ),
+            tooltip: inFlight ? 'Dừng' : 'Gửi',
+            onPressed: inFlight ? onStop : onSend,
           ),
         ],
       ),

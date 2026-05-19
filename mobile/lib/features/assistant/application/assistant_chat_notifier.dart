@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/ai_api.dart';
 import '../data/ai_api_provider.dart';
+import '../data/conversation_list_provider.dart';
 import '../data/screen_context_provider.dart';
 import '../domain/assistant_event.dart';
 import '../domain/assistant_state.dart';
@@ -173,12 +174,14 @@ class AssistantChatNotifier {
     sm.enterFull();
   }
 
-  /// Back gesture or close button from Full → prior Mid state.
+  /// Back gesture or close button from Full → Collapsed.
   /// Returns `true` when the state machine actually exited Full.
   bool exitFull() {
     if (_ref.read(assistantStateMachineProvider) is! AssistantFull) {
       return false;
     }
+    unawaited(_cancelInFlight());
+    _conversationId = null;
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     sm.exitFull();
     return true;
@@ -262,6 +265,7 @@ class AssistantChatNotifier {
         if (current is AssistantMidLoading ||
             (current is AssistantMidReading && current.streaming)) {
           sm.onDone(messageId: messageId, interrupted: interrupted);
+          _ref.invalidate(conversationListProvider);
         }
     }
   }

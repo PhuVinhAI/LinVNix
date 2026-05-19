@@ -223,20 +223,21 @@ void main() {
     },
   );
 
-  test('exitFull is ignored after the first close request', () {
+  test('exitFull collapses and is ignored after the first close request', () {
     notifier.openBar();
     notifier.enterFull();
 
     expect(notifier.exitFull(), isTrue);
     expect(
       container.read(assistantStateMachineProvider),
-      isA<AssistantMidCompose>(),
+      isA<AssistantCollapsed>(),
     );
+    expect(notifier.conversationIdForTesting, isNull);
 
     expect(notifier.exitFull(), isFalse);
     expect(
       container.read(assistantStateMachineProvider),
-      isA<AssistantMidCompose>(),
+      isA<AssistantCollapsed>(),
     );
   });
 

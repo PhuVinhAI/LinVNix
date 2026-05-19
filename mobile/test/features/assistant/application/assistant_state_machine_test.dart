@@ -247,6 +247,20 @@ void main() {
       expect(done.isDone, isTrue);
       expect(done.messageId, 'm-full');
     });
+
+    test('exitFull collapses instead of restoring the previous mid state', () {
+      sm.openBar();
+      sm.send('hi');
+      sm.onDone(messageId: 'm', interrupted: false);
+      sm.enterFull();
+
+      sm.exitFull();
+
+      expect(
+        container.read(assistantStateMachineProvider),
+        isA<AssistantCollapsed>(),
+      );
+    });
   });
 
   group('invalid transitions throw StateError', () {

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/router/app_router.dart';
+import '../application/assistant_state_machine.dart';
 import '../data/route_match.dart' as assistant;
 import '../data/screen_context_provider.dart';
+import '../domain/assistant_state.dart';
 import 'assistant_visibility.dart';
 import 'widgets/assistant_bar.dart';
 
@@ -94,7 +96,10 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   @override
   Widget build(BuildContext context) {
     final match = ref.watch(currentRouteMatchProvider);
-    final visible = isAssistantBarVisible(match?.location);
+    final assistantState = ref.watch(assistantStateMachineProvider);
+    final visible =
+        isAssistantBarVisible(match?.location) &&
+        assistantState is! AssistantFull;
 
     if (!visible) {
       return widget.child;

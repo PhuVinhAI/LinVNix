@@ -49,6 +49,33 @@ void main() {
 
     container.dispose();
   });
+
+  testWidgets('full-screen composer shows Stop while a turn is loading', (
+    tester,
+  ) async {
+    final container = ProviderContainer();
+    final stateMachine = container.read(assistantStateMachineProvider.notifier);
+
+    stateMachine.openBar();
+    stateMachine.enterFull();
+    stateMachine.send('hello from full');
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          theme: AppTheme.light(),
+          home: const AssistantFullScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byIcon(Icons.stop_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.send), findsNothing);
+
+    container.dispose();
+  });
 }
 
 class _CountingNavigatorObserver extends NavigatorObserver {
