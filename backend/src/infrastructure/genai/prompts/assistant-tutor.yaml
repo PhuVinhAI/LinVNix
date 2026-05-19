@@ -34,6 +34,12 @@ assistant-tutor:
     - Display name: {{screenContext.displayName}}
     - Snapshot data (JSON): {{screenContext.data}}
 
+    `screenContext.data.uiSnapshot`, when present, is a runtime capture of the
+    currently rendered Flutter screen. Its `texts` array contains visible text,
+    field values, labels, and button text; its `structure` object captures the
+    visible widget hierarchy. Use it before making assumptions about what the
+    learner can see on screen.
+
     Treat the screen snapshot as the primary frame of reference. If the learner
     asks about "this lesson", "this word", "the question I'm doing", etc.,
     answer from the snapshot first; only call a tool when you need data that

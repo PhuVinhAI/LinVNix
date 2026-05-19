@@ -25,6 +25,15 @@ class ScreenContext {
   final String barPlaceholder;
   final Map<String, dynamic> data;
 
+  ScreenContext copyWithData(Map<String, dynamic> data) {
+    return ScreenContext(
+      route: route,
+      displayName: displayName,
+      barPlaceholder: barPlaceholder,
+      data: data,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -36,13 +45,13 @@ class ScreenContext {
 
   @override
   int get hashCode => Object.hash(
-        route,
-        displayName,
-        barPlaceholder,
-        Object.hashAllUnordered(
-          data.entries.map((e) => Object.hash(e.key, e.value)),
-        ),
-      );
+    route,
+    displayName,
+    barPlaceholder,
+    Object.hashAllUnordered(
+      data.entries.map((e) => Object.hash(e.key, e.value)),
+    ),
+  );
 
   @override
   String toString() =>

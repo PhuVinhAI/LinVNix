@@ -5,8 +5,10 @@ import '../../../core/router/app_router.dart';
 import '../application/assistant_state_machine.dart';
 import '../data/route_match.dart' as assistant;
 import '../data/screen_context_provider.dart';
+import '../data/screen_ui_snapshot_provider.dart';
 import '../domain/assistant_state.dart';
 import 'assistant_visibility.dart';
+import 'screen_ui_snapshot.dart';
 import 'widgets/assistant_bar.dart';
 
 /// Wraps the entire router output and renders the persistent assistant
@@ -29,6 +31,7 @@ class GlobalAssistantShell extends ConsumerStatefulWidget {
 
 class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   late final GoRouter _router;
+  final _snapshotHostKey = GlobalKey<ScreenUiSnapshotHostState>();
 
   bool _listening = false;
 
@@ -54,6 +57,7 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
     if (_listening) {
       _router.routeInformationProvider.removeListener(_scheduleRouteSync);
     }
+    ref.read(screenUiSnapshotCoordinatorProvider).detach(_snapshotHostKey);
     super.dispose();
   }
 
@@ -91,10 +95,28 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
     if (current != next) {
       ref.read(currentRouteMatchProvider.notifier).update(next);
     }
+    _syncScreenUiSnapshotNow();
+  }
+
+  void _syncScreenUiSnapshotNow() {
+    final snapshot = ref.read(screenUiSnapshotCoordinatorProvider).captureNow();
+    if (snapshot == null) return;
+    _storeScreenUiSnapshot(snapshot);
+  }
+
+  void _storeScreenUiSnapshot(ScreenUiSnapshot snapshot) {
+    final notifier = ref.read(currentScreenUiSnapshotProvider.notifier);
+    if (snapshot.isEmpty) {
+      notifier.clear();
+      return;
+    }
+    notifier.update(snapshot.toJson());
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.read(screenUiSnapshotCoordinatorProvider).attach(_snapshotHostKey);
+
     final match = ref.watch(currentRouteMatchProvider);
     final assistantState = ref.watch(assistantStateMachineProvider);
     final visible =
@@ -102,7 +124,7 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
         assistantState is! AssistantFull;
 
     if (!visible) {
-      return widget.child;
+      return ScreenUiSnapshotHost(key: _snapshotHostKey, child: widget.child);
     }
 
     final mq = MediaQuery.of(context);
@@ -118,10 +140,13 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
               padding: mq.padding.copyWith(bottom: 0),
               viewPadding: mq.viewPadding.copyWith(bottom: 0),
             ),
-            child: widget.child,
+            child: ScreenUiSnapshotHost(
+              key: _snapshotHostKey,
+              child: widget.child,
+            ),
           ),
         ),
-        const AssistantBar(),
+        AssistantBar(onOpen: _syncScreenUiSnapshotNow),
       ],
     );
   }
