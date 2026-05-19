@@ -56,7 +56,6 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           interrupted: s.interrupted,
           messageId: s.messageId,
           toolStatusText: displayName,
-          proposals: s.proposals,
         ),
       );
       return;
@@ -82,7 +81,6 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           interrupted: s.interrupted,
           messageId: s.messageId,
           toolStatusText: null,
-          proposals: s.proposals,
         ),
       );
       return;
@@ -106,42 +104,11 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           interrupted: s.interrupted,
           messageId: s.messageId,
           toolStatusText: s.toolStatusText,
-          proposals: s.proposals,
         ),
       );
       return;
     }
     throw _invalid('onTextChunk');
-  }
-
-  /// `propose` event arrived. Appends a new [ProposalState] to the
-  /// current MidReading state's proposals list. Valid while streaming
-  /// (the propose event arrives mid-stream, before `done`).
-  void onPropose(ProposeEvent event) {
-    final s = _activeState;
-    if (s is AssistantMidReading && s.streaming) {
-      final proposal = ProposalState(
-        kind: event.kind,
-        title: event.title,
-        description: event.description,
-        endpoint: event.endpoint,
-        payload: event.payload,
-        confirmLabel: event.confirmLabel,
-        declineLabel: event.declineLabel,
-      );
-      _setActiveState(
-        AssistantMidReading(
-          partial: s.partial,
-          streaming: true,
-          interrupted: s.interrupted,
-          messageId: s.messageId,
-          toolStatusText: s.toolStatusText,
-          proposals: [...s.proposals, proposal],
-        ),
-      );
-      return;
-    }
-    throw _invalid('onPropose');
   }
 
   /// `error` event arrived. From MidLoading (no token yet) transitions
@@ -164,7 +131,6 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           interrupted: true,
           messageId: s.messageId,
           toolStatusText: null,
-          proposals: s.proposals,
         ),
       );
       return;
@@ -196,7 +162,6 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           interrupted: interrupted,
           messageId: messageId,
           toolStatusText: null,
-          proposals: s.proposals,
         ),
       );
       return;
@@ -228,7 +193,6 @@ class AssistantStateMachine extends Notifier<AssistantState> {
           interrupted: true,
           messageId: s.messageId,
           toolStatusText: null,
-          proposals: s.proposals,
         ),
       );
       return;
@@ -284,54 +248,6 @@ class AssistantStateMachine extends Notifier<AssistantState> {
       throw _invalid('exitFull');
     }
     state = const AssistantCollapsed();
-  }
-
-  /// Updates a single proposal's status within the current MidReading
-  /// state. Used by the ProposalCard to reflect confirm/decline/error
-  /// transitions.
-  void updateProposal(int index, ProposalState updated) {
-    final s = _activeState;
-    if (s is! AssistantMidReading) {
-      throw _invalid('updateProposal');
-    }
-    final proposals = List<ProposalState>.from(s.proposals);
-    if (index < 0 || index >= proposals.length) {
-      throw RangeError.index(index, proposals, 'proposals');
-    }
-    proposals[index] = updated;
-    _setActiveState(
-      AssistantMidReading(
-        partial: s.partial,
-        streaming: s.streaming,
-        interrupted: s.interrupted,
-        messageId: s.messageId,
-        toolStatusText: s.toolStatusText,
-        proposals: proposals,
-      ),
-    );
-  }
-
-  /// Removes a proposal (decline). The card is dismissed.
-  void dismissProposal(int index) {
-    final s = _activeState;
-    if (s is! AssistantMidReading) {
-      throw _invalid('dismissProposal');
-    }
-    final proposals = List<ProposalState>.from(s.proposals);
-    if (index < 0 || index >= proposals.length) {
-      throw RangeError.index(index, proposals, 'proposals');
-    }
-    proposals.removeAt(index);
-    _setActiveState(
-      AssistantMidReading(
-        partial: s.partial,
-        streaming: s.streaming,
-        interrupted: s.interrupted,
-        messageId: s.messageId,
-        toolStatusText: s.toolStatusText,
-        proposals: proposals,
-      ),
-    );
   }
 
   AssistantState get _activeState {

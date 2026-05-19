@@ -104,50 +104,6 @@ class TextChunkEvent extends AssistantEvent {
   String toString() => 'TextChunkEvent(text: $text)';
 }
 
-/// Structured proposal payload from a propose-tool. Mobile renders a
-/// confirm card; on "Có" the mobile client calls the real REST
-/// endpoint. Reserved for slice #07; declared here so the protocol
-/// surface is locked.
-class ProposeEvent extends AssistantEvent {
-  const ProposeEvent({
-    required this.kind,
-    required this.title,
-    required this.description,
-    required this.endpoint,
-    this.payload = const {},
-    this.confirmLabel = 'Có',
-    this.declineLabel = 'Không',
-  });
-
-  final String kind;
-  final String title;
-  final String description;
-  final String endpoint;
-  final Map<String, dynamic> payload;
-  final String confirmLabel;
-  final String declineLabel;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ProposeEvent &&
-          kind == other.kind &&
-          title == other.title &&
-          description == other.description &&
-          endpoint == other.endpoint &&
-          confirmLabel == other.confirmLabel &&
-          declineLabel == other.declineLabel &&
-          mapEquals(payload, other.payload);
-
-  @override
-  int get hashCode =>
-      Object.hash(kind, title, description, endpoint, confirmLabel, declineLabel);
-
-  @override
-  String toString() =>
-      'ProposeEvent(kind: $kind, title: $title, endpoint: $endpoint)';
-}
-
 /// Backend-side error mid-stream. The mobile UI shows the message and,
 /// for pre-token errors, a "Thử lại" button.
 class AssistantErrorEvent extends AssistantEvent {

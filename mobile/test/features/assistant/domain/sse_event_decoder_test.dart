@@ -124,13 +124,6 @@ void main() {
           _frame('tool_result', {'name': 'get_user_summary', 'ok': true}),
           _frame('text_chunk', {'text': 'Bạn đã học '}),
           _frame('text_chunk', {'text': 'liên tục 3 ngày.'}),
-          _frame('propose', {
-            'kind': 'create_daily_goal',
-            'title': 'Tạo mục tiêu hằng ngày?',
-            'description': 'Học 30 phút mỗi ngày',
-            'endpoint': 'POST /daily-goals',
-            'payload': {'goalType': 'STUDY_MINUTES', 'targetValue': 30},
-          }),
           _frame('error', {'code': 'AI_X', 'message': 'broken'}),
           _frame('done', {'messageId': 'msg-1', 'interrupted': false}),
         ].expand((bytes) => bytes).toList();
@@ -138,7 +131,7 @@ void main() {
 
         final events = await decoder.decode(source).toList();
 
-        expect(events, hasLength(8));
+        expect(events, hasLength(7));
         expect(events[0], isA<ConversationStartedEvent>());
         expect(
           (events[0] as ConversationStartedEvent).conversationId,
@@ -148,13 +141,11 @@ void main() {
         expect(events[2], isA<ToolResultEvent>());
         expect(events[3], isA<TextChunkEvent>());
         expect(events[4], isA<TextChunkEvent>());
-        expect(events[5], isA<ProposeEvent>());
-        expect((events[5] as ProposeEvent).kind, 'create_daily_goal');
-        expect(events[6], isA<AssistantErrorEvent>());
-        expect((events[6] as AssistantErrorEvent).code, 'AI_X');
-        expect(events[7], isA<DoneEvent>());
-        expect((events[7] as DoneEvent).messageId, 'msg-1');
-        expect((events[7] as DoneEvent).interrupted, isFalse);
+        expect(events[5], isA<AssistantErrorEvent>());
+        expect((events[5] as AssistantErrorEvent).code, 'AI_X');
+        expect(events[6], isA<DoneEvent>());
+        expect((events[6] as DoneEvent).messageId, 'msg-1');
+        expect((events[6] as DoneEvent).interrupted, isFalse);
       },
     );
 

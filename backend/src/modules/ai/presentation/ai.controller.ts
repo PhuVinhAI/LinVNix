@@ -64,7 +64,7 @@ export class AiController {
     summary: 'Streaming AI chat (single SSE endpoint)',
     description:
       'Drives the full agent tool loop and streams typed SSE events ' +
-      '(`tool_start`, `tool_result`, `text_chunk`, `propose`, `error`, ' +
+      '(`tool_start`, `tool_result`, `text_chunk`, `error`, ' +
       '`done`). Lazily creates a Conversation when `conversationId` is ' +
       'omitted and snapshots the supplied `screenContext` onto it.',
   })

@@ -77,26 +77,6 @@ describe('SseEventEncoder', () => {
     expect(JSON.parse(out.data as string)).toEqual({ text: 'Bạn có thể ' });
   });
 
-  it('encodes propose with kind, title, description, endpoint, payload', () => {
-    const out = encoder.encode({
-      type: 'propose',
-      kind: 'create_daily_goal',
-      title: 'Tạo mục tiêu hằng ngày?',
-      description: 'Học 30 phút mỗi ngày',
-      endpoint: 'POST /daily-goals',
-      payload: { goalType: 'STUDY_MINUTES', targetValue: 30 },
-    });
-
-    expect(out.type).toBe('propose');
-    expect(JSON.parse(out.data as string)).toEqual({
-      kind: 'create_daily_goal',
-      title: 'Tạo mục tiêu hằng ngày?',
-      description: 'Học 30 phút mỗi ngày',
-      endpoint: 'POST /daily-goals',
-      payload: { goalType: 'STUDY_MINUTES', targetValue: 30 },
-    });
-  });
-
   it('encodes error with code and message', () => {
     const out = encoder.encode({
       type: 'error',
@@ -162,23 +142,6 @@ describe('SseEventEncoder', () => {
 
       expect(out.data as string).not.toMatch(/[\r\n]/);
       expect(JSON.parse(out.data as string).text).toBe('a\nb\nc\r\nd');
-    });
-
-    it('serializes propose payload containing newlines as escaped JSON', () => {
-      const out = encoder.encode({
-        type: 'propose',
-        kind: 'create_daily_goal',
-        title: 'A\nB',
-        description: 'multi\nline\ndescription',
-        endpoint: 'POST /daily-goals',
-        payload: { note: 'has\nnewline' },
-      });
-
-      expect(out.data as string).not.toMatch(/[\r\n]/);
-      const parsed = JSON.parse(out.data as string);
-      expect(parsed.title).toBe('A\nB');
-      expect(parsed.description).toBe('multi\nline\ndescription');
-      expect(parsed.payload.note).toBe('has\nnewline');
     });
 
     it('emits a single-line data: payload regardless of text content', () => {

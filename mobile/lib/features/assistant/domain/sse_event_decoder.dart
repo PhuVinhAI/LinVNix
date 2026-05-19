@@ -160,42 +160,6 @@ class SseEventDecoder {
         }
         return TextChunkEvent(text: text);
 
-      case 'propose':
-        final kind = data['kind'];
-        final title = data['title'];
-        final description = data['description'];
-        final endpoint = data['endpoint'];
-        if (kind is! String ||
-            title is! String ||
-            description is! String ||
-            endpoint is! String) {
-          throw SseDecoderException(
-            'propose event missing required fields',
-            rawFrame,
-          );
-        }
-        final rawPayload = data['payload'];
-        final rawLabels = data['labels'];
-        String confirmLabel = 'Có';
-        String declineLabel = 'Không';
-        if (rawLabels is Map<String, dynamic>) {
-          final c = rawLabels['confirm'];
-          final d = rawLabels['decline'];
-          if (c is String) confirmLabel = c;
-          if (d is String) declineLabel = d;
-        }
-        return ProposeEvent(
-          kind: kind,
-          title: title,
-          description: description,
-          endpoint: endpoint,
-          payload: rawPayload is Map<String, dynamic>
-              ? rawPayload
-              : <String, dynamic>{},
-          confirmLabel: confirmLabel,
-          declineLabel: declineLabel,
-        );
-
       case 'error':
         final code = data['code'];
         final message = data['message'];
