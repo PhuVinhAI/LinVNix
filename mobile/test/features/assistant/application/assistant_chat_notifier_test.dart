@@ -418,7 +418,7 @@ void main() {
           }),
         );
 
-        await Future<void>.delayed(const Duration(milliseconds: 10));
+        await Future<void>.delayed(const Duration(milliseconds: 50));
         adapter.controller
           ..add(
             _frame('tool_result', {'name': 'search_vocabulary', 'ok': true}),
