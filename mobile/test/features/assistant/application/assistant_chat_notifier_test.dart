@@ -205,6 +205,23 @@ void main() {
     },
   );
 
+  test('exitFull is ignored after the first close request', () {
+    notifier.openBar();
+    notifier.enterFull();
+
+    expect(notifier.exitFull(), isTrue);
+    expect(
+      container.read(assistantStateMachineProvider),
+      isA<AssistantMidCompose>(),
+    );
+
+    expect(notifier.exitFull(), isFalse);
+    expect(
+      container.read(assistantStateMachineProvider),
+      isA<AssistantMidCompose>(),
+    );
+  });
+
   test('Reset drops the conversationId so the next send creates a new '
       'Conversation with the now-current screenContext', () async {
     scriptHappyPath(conversationId: 'conv-A');

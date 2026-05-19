@@ -74,13 +74,13 @@ class _AssistantQuestionSheetState
       }
       // Defensive: if anything transitions us to Collapsed (e.g.
       // programmatic flow) and the sheet is still mounted, dismiss it.
-      if (next is AssistantCollapsed) {
-        Navigator.of(context).maybePop();
+      if (prev is! AssistantCollapsed && next is AssistantCollapsed) {
+        _dismissSheetIfCurrent();
       }
       // When entering Full, dismiss the sheet and navigate to the
       // full-screen chat view.
-      if (next is AssistantFull) {
-        Navigator.of(context).maybePop();
+      if (prev is! AssistantFull && next is AssistantFull) {
+        _dismissSheetIfCurrent();
         Navigator.of(context).push<void>(
           MaterialPageRoute(
             builder: (_) => const AssistantFullScreen(),
@@ -127,6 +127,12 @@ class _AssistantQuestionSheetState
         ),
       ),
     );
+  }
+
+  void _dismissSheetIfCurrent() {
+    final route = ModalRoute.of(context);
+    if (!mounted || route?.isCurrent != true) return;
+    Navigator.of(context).pop();
   }
 }
 
@@ -188,8 +194,7 @@ class _Header extends ConsumerWidget {
             icon: const Icon(Icons.refresh),
             color: c.mutedForeground,
             tooltip: 'Reset hội thoại',
-            onPressed: () =>
-                ref.read(assistantChatNotifierProvider).reset(),
+            onPressed: () => ref.read(assistantChatNotifierProvider).reset(),
           ),
         IconButton(
           icon: const Icon(Icons.remove),
@@ -221,12 +226,13 @@ class _Body extends ConsumerWidget {
       AssistantCollapsed() => const SizedBox.shrink(),
       AssistantFull() => const SizedBox.shrink(),
       AssistantMidCompose() => _ComposeBody(
-          controller: controller,
-          focusNode: focusNode,
-          onSend: onSend,
-        ),
-      AssistantMidLoading(:final statusText) =>
-        _LoadingBody(statusText: statusText),
+        controller: controller,
+        focusNode: focusNode,
+        onSend: onSend,
+      ),
+      AssistantMidLoading(:final statusText) => _LoadingBody(
+        statusText: statusText,
+      ),
       AssistantMidReading(
         :final partial,
         :final streaming,
@@ -368,8 +374,7 @@ class _LoadingBody extends ConsumerWidget {
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
-              onTap: () =>
-                  ref.read(assistantChatNotifierProvider).stop(),
+              onTap: () => ref.read(assistantChatNotifierProvider).stop(),
               child: Container(
                 width: 36,
                 height: 36,
@@ -437,8 +442,9 @@ class _ReadingBody extends ConsumerWidget {
                         .read(assistantChatNotifierProvider)
                         .updateProposal(
                           idx,
-                          proposals[idx]
-                              .copyWith(status: ProposalCardStatus.success),
+                          proposals[idx].copyWith(
+                            status: ProposalCardStatus.success,
+                          ),
                         ),
                   ),
               ],

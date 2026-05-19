@@ -174,9 +174,14 @@ class AssistantChatNotifier {
   }
 
   /// Back gesture or close button from Full → prior Mid state.
-  void exitFull() {
+  /// Returns `true` when the state machine actually exited Full.
+  bool exitFull() {
+    if (_ref.read(assistantStateMachineProvider) is! AssistantFull) {
+      return false;
+    }
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     sm.exitFull();
+    return true;
   }
 
   /// Opens an existing conversation by id. Sets the internal
