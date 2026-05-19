@@ -221,18 +221,6 @@ class AssistantChatNotifier {
     await sendMessage(s.lastInput);
   }
 
-  /// Updates a proposal's status (e.g. loading → success/error).
-  void updateProposal(int index, ProposalState updated) {
-    _ref
-        .read(assistantStateMachineProvider.notifier)
-        .updateProposal(index, updated);
-  }
-
-  /// Dismisses a proposal card (decline).
-  void dismissProposal(int index) {
-    _ref.read(assistantStateMachineProvider.notifier).dismissProposal(index);
-  }
-
   void _handleEvent(AssistantEvent event) {
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     final current = _activeState(_ref.read(assistantStateMachineProvider));
@@ -257,11 +245,6 @@ class AssistantChatNotifier {
         if (current is AssistantMidLoading ||
             (current is AssistantMidReading && current.streaming)) {
           sm.onTextChunk(text);
-        }
-      case ProposeEvent():
-        final current = _activeState(_ref.read(assistantStateMachineProvider));
-        if (current is AssistantMidReading && current.streaming) {
-          sm.onPropose(event);
         }
       case AssistantErrorEvent(:final message):
         if (current is AssistantMidLoading ||

@@ -13,7 +13,6 @@ export type StreamEvent =
   | ToolStartEvent
   | ToolResultEvent
   | TextChunkEvent
-  | ProposeEvent
   | ErrorEvent
   | DoneEvent;
 
@@ -45,17 +44,6 @@ export interface ToolResultEvent {
 export interface TextChunkEvent {
   type: 'text_chunk';
   text: string;
-}
-
-// `propose` is reserved for the propose-tools slice (#07). It is exported here
-// so the encoder + protocol contract is locked in by the streaming tracer.
-export interface ProposeEvent {
-  type: 'propose';
-  kind: string;
-  title: string;
-  description: string;
-  endpoint: string;
-  payload: Record<string, any>;
 }
 
 export interface ErrorEvent {

@@ -12,7 +12,6 @@ import '../../data/conversation_model.dart';
 import '../../data/screen_context_provider.dart';
 import '../../domain/assistant_state.dart';
 import 'conversation_drawer.dart';
-import 'proposal_card.dart';
 
 /// Full-screen chat view. Shows the complete conversation history with
 /// user bubbles (right-aligned) and AI messages (full-width markdown).
@@ -326,14 +325,6 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
         }
         return _LiveAssistantTurn(
           state: activeFullState!,
-          onDeclineProposal: (idx) =>
-              ref.read(assistantChatNotifierProvider).dismissProposal(idx),
-          onProposalSuccess: (idx, proposal) => ref
-              .read(assistantChatNotifierProvider)
-              .updateProposal(
-                idx,
-                proposal.copyWith(status: ProposalCardStatus.success),
-              ),
           onRetry: () => ref.read(assistantChatNotifierProvider).retry(),
         );
       },
@@ -480,14 +471,10 @@ class _MessageBubble extends StatelessWidget {
 class _LiveAssistantTurn extends StatelessWidget {
   const _LiveAssistantTurn({
     required this.state,
-    required this.onDeclineProposal,
-    required this.onProposalSuccess,
     required this.onRetry,
   });
 
   final AssistantState state;
-  final ValueChanged<int> onDeclineProposal;
-  final void Function(int index, ProposalState proposal) onProposalSuccess;
   final VoidCallback onRetry;
 
   @override
@@ -519,7 +506,6 @@ class _LiveAssistantTurn extends StatelessWidget {
             :final partial,
             :final interrupted,
             :final toolStatusText,
-            :final proposals,
           ) =>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -556,13 +542,6 @@ class _LiveAssistantTurn extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                for (var i = 0; i < proposals.length; i++)
-                  ProposalCard(
-                    proposal: proposals[i],
-                    index: i,
-                    onDecline: onDeclineProposal,
-                    onSuccess: (idx) => onProposalSuccess(idx, proposals[idx]),
                   ),
               ],
             ),

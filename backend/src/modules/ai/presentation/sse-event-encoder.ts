@@ -40,17 +40,6 @@ export class SseEventEncoder {
           type: 'text_chunk',
           data: JSON.stringify({ text: event.text }),
         };
-      case 'propose':
-        return {
-          type: 'propose',
-          data: JSON.stringify({
-            kind: event.kind,
-            title: event.title,
-            description: event.description,
-            endpoint: event.endpoint,
-            payload: event.payload,
-          }),
-        };
       case 'error':
         return {
           type: 'error',
