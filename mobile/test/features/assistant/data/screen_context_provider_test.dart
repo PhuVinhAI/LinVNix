@@ -189,12 +189,12 @@ void main() {
 
       container.read(currentRouteMatchProvider.notifier).update(
             const RouteMatch(
-              routePattern: '/profile',
-              location: '/profile',
+              routePattern: '/login',
+              location: '/login',
             ),
           );
       container.read(currentScreenUiSnapshotProvider.notifier).update(const {
-        'texts': ['Profile'],
+        'texts': ['Login'],
         'structure': {'type': 'Column'},
       });
 

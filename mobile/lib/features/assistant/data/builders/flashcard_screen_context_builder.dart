@@ -1,0 +1,40 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../bookmarks/data/bookmark_providers.dart';
+import '../../domain/screen_context.dart';
+import '../route_match.dart';
+import 'bookmark_context_summaries.dart';
+import 'course_context_summaries.dart';
+
+/// `ScreenContext` builder for `/bookmarks/flashcard`. Pulls the full
+/// flashcard deck from `flashcardBookmarksProvider` so the AI can help with
+/// review even though the current card index lives only in widget state.
+ScreenContext flashcardScreenContextBuilder(Ref ref, RouteMatch match) {
+  final bookmarksAsync = ref.watch(flashcardBookmarksProvider);
+  final status = asyncLoadStatus(bookmarksAsync);
+
+  final data = <String, dynamic>{
+    'screenType': 'bookmarksFlashcard',
+    'status': status,
+  };
+
+  if (status == 'error') {
+    data['error'] = shortAsyncError(bookmarksAsync.error);
+    data['cardCount'] = 0;
+    data['cards'] = const <Map<String, dynamic>>[];
+  } else if (status == 'loading') {
+    data['cardCount'] = 0;
+    data['cards'] = const <Map<String, dynamic>>[];
+  } else {
+    final cards = bookmarksAsync.requireValue;
+    data['cardCount'] = cards.length;
+    data['cards'] =
+        cards.map(bookmarkContextSummary).toList(growable: false);
+  }
+
+  return ScreenContext(
+    route: match.location,
+    displayName: 'Flashcards',
+    barPlaceholder: 'Hỏi về thẻ từ?',
+    data: data,
+  );
+}

@@ -30,6 +30,30 @@ void main() {
           pathParameters: {'id': 'm1'},
           screenType: 'moduleDetail',
         ),
+        (
+          routePattern: '/profile',
+          location: '/profile',
+          pathParameters: {},
+          screenType: 'profile',
+        ),
+        (
+          routePattern: '/bookmarks',
+          location: '/bookmarks',
+          pathParameters: {},
+          screenType: 'bookmarksList',
+        ),
+        (
+          routePattern: '/bookmarks/flashcard',
+          location: '/bookmarks/flashcard',
+          pathParameters: {},
+          screenType: 'bookmarksFlashcard',
+        ),
+        (
+          routePattern: '/lessons/:id/exercises',
+          location: '/lessons/lesson-1/exercises',
+          pathParameters: {'id': 'lesson-1'},
+          screenType: 'exerciseHub',
+        ),
       ];
 
       for (final testCase in cases) {
