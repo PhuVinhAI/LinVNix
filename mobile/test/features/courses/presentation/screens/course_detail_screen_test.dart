@@ -137,7 +137,7 @@ class _FakeUserProfileNotifier extends UserProfileNotifier {
 void main() {
   group('CourseDetailScreen custom practice section', () {
     testWidgets(
-        'custom practice section hidden when 0 modules completed (eligible=false) and no bypass buttons',
+        'custom practice shows locked message when not eligible',
         (tester) async {
       final notEligibleSummary = const CourseExerciseSummary(
         eligible: false,
@@ -175,8 +175,12 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.text('Custom Practice'), findsNothing);
-      expect(find.text('0/2 modules completed'), findsNothing);
+      expect(find.text('Custom Practice'), findsOneWidget);
+      expect(find.text('0/2 completed'), findsOneWidget);
+      expect(
+        find.text('Complete at least one module to unlock custom practice.'),
+        findsOneWidget,
+      );
       expect(find.text('Create Custom Practice'), findsNothing);
     });
 
@@ -220,8 +224,55 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Custom Practice'), findsOneWidget);
-      expect(find.text('1/2 modules completed'), findsOneWidget);
+      expect(find.text('1/2 completed'), findsOneWidget);
       expect(find.text('Create Custom Practice'), findsOneWidget);
+    });
+
+    testWidgets(
+        'custom practice shows empty state when eligible with no sets',
+        (tester) async {
+      final eligibleSummary = const CourseExerciseSummary(
+        eligible: true,
+        completedModulesCount: 1,
+        totalModulesCount: 2,
+        courseSets: [],
+      );
+
+      const user = UserProfile(
+        id: 'u1',
+        email: 'test@test.com',
+        fullName: 'Test User',
+        currentLevel: 'A1',
+        onboardingCompleted: true,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
+            courseExerciseSetsProvider.overrideWith(
+              () => _FakeCourseExerciseSetsNotifier('course-1', eligibleSummary),
+            ),
+            userProgressProvider
+                .overrideWith(() => _FakeUserProgressNotifier(const [])),
+            userProfileProvider
+                .overrideWith(() => _FakeUserProfileNotifier(user)),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            home: const CourseDetailScreen(courseId: 'course-1'),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'No custom practice sets yet. Create one to review what you\'ve learned.',
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets(
@@ -633,7 +684,7 @@ void main() {
   });
 
   group('CourseDetailScreen modules list', () {
-    testWidgets('shows modules below custom practice', (tester) async {
+    testWidgets('shows custom practice below modules list', (tester) async {
       final eligibleSummary = const CourseExerciseSummary(
         eligible: true,
         completedModulesCount: 1,
@@ -672,6 +723,11 @@ void main() {
 
       expect(find.text('Module 1'), findsOneWidget);
       expect(find.text('Module 2'), findsOneWidget);
+
+      final module1Offset = tester.getTopLeft(find.text('Module 1'));
+      final customPracticeOffset =
+          tester.getTopLeft(find.text('Custom Practice'));
+      expect(module1Offset.dy, lessThan(customPracticeOffset.dy));
     });
   });
 }

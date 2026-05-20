@@ -12,6 +12,7 @@ import '../../../lessons/presentation/widgets/custom_practice_bottom_sheet.dart'
 import '../../../profile/data/profile_providers.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
+import '../widgets/course_content_sections.dart';
 
 const _levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -545,19 +546,10 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
               SliverToBoxAdapter(
                 child: _CourseInfoSection(course: course),
               ),
-              _buildCustomPracticeSliver(
-                  context, exerciseSetsAsync, course, showCompleteAll, hasProgress),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(AppSpacing.lg,
-                      AppSpacing.xl, AppSpacing.lg, AppSpacing.sm),
-                  child: Text(
-                    'Modules',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ),
+              _buildListHeaderSliver(
+                exerciseSetsAsync,
+                showCompleteAll,
+                hasProgress,
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -573,6 +565,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
                   childCount: course.modules.length,
                 ),
               ),
+              _buildCustomPracticeSliver(context, exerciseSetsAsync),
               const SliverToBoxAdapter(
                   child: SizedBox(height: AppSpacing.lg)),
             ],
@@ -582,154 +575,72 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     );
   }
 
+  Widget _buildListHeaderSliver(
+    AsyncValue<CourseExerciseSummary> exerciseSetsAsync,
+    bool showCompleteAll,
+    bool hasProgress,
+  ) {
+    return exerciseSetsAsync.when(
+      loading: () => const SliverToBoxAdapter(
+        child: ContentListHeader(title: 'Modules'),
+      ),
+      error: (_, __) => const SliverToBoxAdapter(
+        child: ContentListHeader(title: 'Modules'),
+      ),
+      data: (summary) {
+        final hasBypassProgress = summary.completedModulesCount > 0;
+        final shouldShowReset = hasProgress || hasBypassProgress;
+
+        return SliverToBoxAdapter(
+          child: ContentListHeader(
+            title: 'Modules',
+            progressText:
+                '${summary.completedModulesCount}/${summary.totalModulesCount} completed',
+            showCompleteAll: showCompleteAll,
+            showReset: shouldShowReset,
+            isCompletingAll: _busyAction == _BusyAction.completeAll,
+            isResetting: _busyAction == _BusyAction.resetCourse,
+            onCompleteAll: _confirmCompleteAll,
+            onReset: _confirmResetCourse,
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildCustomPracticeSliver(
     BuildContext context,
     AsyncValue<CourseExerciseSummary> exerciseSetsAsync,
-    Course course,
-    bool showCompleteAll,
-    bool hasProgress,
   ) {
     return exerciseSetsAsync.when(
       loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
       error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
       data: (summary) {
-        final c = AppTheme.colors(context);
-        final theme = Theme.of(context);
         final customSets = summary.courseSets;
-        final hasBypassProgress = summary.completedModulesCount > 0;
-        final shouldShowReset = hasProgress || hasBypassProgress;
-
-        if (!summary.eligible && !showCompleteAll && !shouldShowReset) {
-          return const SliverToBoxAdapter(child: SizedBox.shrink());
-        }
 
         return SliverToBoxAdapter(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: AppSpacing.xl),
-                Row(
-                  children: [
-                    Icon(Icons.auto_awesome, color: c.primary, size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Custom Practice',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  '${summary.completedModulesCount}/${summary.totalModulesCount} modules completed',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                      color: c.mutedForeground),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                if (summary.eligible) ...[
-                  if (_isCreatingCustom) ...[
-                    SizedBox(
-                      width: double.infinity,
-                      child: AppButton(
-                        label: 'Generating exercises...',
-                        variant: AppButtonVariant.secondary,
-                        onPressed: null,
-                        icon: const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child:
-                              CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    SizedBox(
-                      width: double.infinity,
-                      child: AppButton(
-                        label: 'Cancel',
-                        variant: AppButtonVariant.outline,
-                        onPressed: () => _aiCancelToken?.cancel(),
-                      ),
-                    ),
-                  ] else
-                    SizedBox(
-                      width: double.infinity,
-                      child: AppButton(
-                        label: 'Create Custom Practice',
-                        variant: AppButtonVariant.primary,
-                        onPressed: _showCreationForm,
-                        icon: const Icon(Icons.add),
-                      ),
-                    ),
-                ],
-                if (_error != null) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    _error!,
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: c.error),
+          child: CustomPracticeSection(
+            eligible: summary.eligible,
+            lockedMessage:
+                'Complete at least one module to unlock custom practice.',
+            emptyMessage:
+                'No custom practice sets yet. Create one to review what you\'ve learned.',
+            isCreating: _isCreatingCustom,
+            error: _error,
+            onCreate: _showCreationForm,
+            onCancelCreate: () => _aiCancelToken?.cancel(),
+            setCards: customSets
+                .map(
+                  (set) => _CourseSetCard(
+                    progress: set,
+                    isBusy: _busySetId == set.setId,
+                    isRegenerating: _busySetId == set.setId &&
+                        _busyAction == _BusyAction.regenerate,
+                    onTap: () => _showInfoSheet(set),
+                    onCancel: () => _aiCancelToken?.cancel(),
                   ),
-                ],
-                const SizedBox(height: AppSpacing.md),
-                ...customSets.map((set) => _CourseSetCard(
-                      progress: set,
-                      isBusy: _busySetId == set.setId,
-                      isRegenerating: _busySetId == set.setId &&
-                          _busyAction == _BusyAction.regenerate,
-                      onTap: () => _showInfoSheet(set),
-                      onCancel: () => _aiCancelToken?.cancel(),
-                    )),
-                if (showCompleteAll) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  SizedBox(
-                    width: double.infinity,
-                    child: AppButton(
-                      label: _busyAction == _BusyAction.completeAll
-                          ? 'Completing all...'
-                          : 'Complete All',
-                      variant: AppButtonVariant.secondary,
-                      onPressed: _busyAction == _BusyAction.completeAll
-                          ? null
-                          : _confirmCompleteAll,
-                      icon: _busyAction == _BusyAction.completeAll
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                  strokeWidth: 2),
-                            )
-                          : const Icon(Icons.done_all),
-                    ),
-                  ),
-                ],
-                if (shouldShowReset) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  SizedBox(
-                    width: double.infinity,
-                    child: AppButton(
-                      label: _busyAction == _BusyAction.resetCourse
-                          ? 'Resetting...'
-                          : 'Reset',
-                      variant: AppButtonVariant.outline,
-                      onPressed: _busyAction == _BusyAction.resetCourse
-                          ? null
-                          : _confirmResetCourse,
-                      icon: _busyAction == _BusyAction.resetCourse
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                  strokeWidth: 2),
-                            )
-                          : const Icon(Icons.restart_alt),
-                    ),
-                  ),
-                ],
-              ],
-            ),
+                )
+                .toList(),
           ),
         );
       },
