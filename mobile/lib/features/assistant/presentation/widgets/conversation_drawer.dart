@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/conversation_list_provider.dart';
 import '../../data/conversation_model.dart';
 
@@ -17,16 +18,36 @@ class ConversationDrawer extends ConsumerStatefulWidget {
   final VoidCallback onNewConversation;
 
   @override
-  ConsumerState<ConversationDrawer> createState() => _ConversationDrawerState();
+  ConsumerState<ConversationDrawer> createState() =>
+      _ConversationDrawerState();
 }
 
 class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
   String? _renamingId;
   final TextEditingController _renameController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // Pre-load conversations in background so the list is ready
+    // before the user opens the drawer for the first time.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final current = ref.read(conversationListProvider);
+      if (!current.hasValue) {
+        ref.read(conversationListProvider.notifier).refresh();
+      }
+    });
+    _searchController.addListener(() {
+      setState(() => _searchQuery = _searchController.text.trim().toLowerCase());
+    });
+  }
 
   @override
   void dispose() {
     _renameController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -35,17 +56,27 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
     final c = AppTheme.colors(context);
     final conversations = ref.watch(conversationListProvider);
 
+    final filteredList = conversations.whenOrNull(
+      data: (list) => _searchQuery.isEmpty
+          ? list
+          : list
+              .where((conv) =>
+                  conv.displayTitle.toLowerCase().contains(_searchQuery))
+              .toList(),
+    );
+
     return Drawer(
       backgroundColor: c.card,
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // ── Header ────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.lg,
                 AppSpacing.lg,
-                AppSpacing.lg,
+                AppSpacing.md,
                 AppSpacing.sm,
               ),
               child: Row(
@@ -60,13 +91,27 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
                       ),
                     ),
                   ),
-                  TextButton.icon(
+                  // Primary-styled New button
+                  FilledButton.icon(
                     onPressed: () => _createNew(context),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: c.primary,
+                      foregroundColor: c.primaryForeground,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.sm,
+                      ),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
+                    ),
                     icon: const Icon(Icons.add, size: 18),
                     label: Text(
                       'New',
                       style: GoogleFonts.inter(
-                        fontSize: AppTypography.bodySmall,
+                        fontSize: AppTypography.bodyMedium,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -74,10 +119,68 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
                 ],
               ),
             ),
+
+            // ── Search bar ────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                0,
+                AppSpacing.lg,
+                AppSpacing.sm,
+              ),
+              child: TextField(
+                controller: _searchController,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodySmall,
+                  color: c.foreground,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Search conversations...',
+                  hintStyle: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
+                    color: c.mutedForeground,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    size: 18,
+                    color: c.mutedForeground,
+                  ),
+                  suffixIcon: _searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(Icons.clear,
+                              size: 16, color: c.mutedForeground),
+                          onPressed: () => _searchController.clear(),
+                        )
+                      : null,
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: AppSpacing.sm,
+                  ),
+                  filled: true,
+                  fillColor: c.muted.withValues(alpha: 0.4),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                    borderSide: BorderSide(color: c.primary, width: 1),
+                  ),
+                ),
+              ),
+            ),
+
             Divider(color: c.border, height: 1),
+
+            // ── List ──────────────────────────────────────────────
             Expanded(
               child: conversations.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () =>
+                    const Center(child: AppSpinner()),
                 error: (e, _) => Center(
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.lg),
@@ -94,20 +197,25 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
                           ),
                         ),
                         const SizedBox(height: AppSpacing.md),
-                        TextButton(
+                        AppButton(
+                          label: 'Retry',
                           onPressed: () =>
-                              ref.invalidate(conversationListProvider),
-                          child: const Text('Retry'),
+                              ref.read(conversationListProvider.notifier).refresh(),
+                          variant: AppButtonVariant.outline,
                         ),
                       ],
                     ),
                   ),
                 ),
-                data: (list) {
+                data: (_) {
+                  final list = filteredList ?? [];
+
                   if (list.isEmpty) {
                     return Center(
                       child: Text(
-                        'No conversations yet',
+                        _searchQuery.isNotEmpty
+                            ? 'No results found'
+                            : 'No conversations yet',
                         style: GoogleFonts.inter(
                           fontSize: AppTypography.bodySmall,
                           color: c.mutedForeground,
@@ -171,22 +279,22 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
     BuildContext context,
     ConversationSummary conv,
   ) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Delete conversation'),
-        content: Text('Are you sure you want to delete "${conv.displayTitle}"?'),
+    final confirmed = await AppDialog.show<bool>(
+      context,
+      barrierDismissible: true,
+      builder: (ctx) => AppDialog(
+        title: 'Delete conversation',
+        content:
+            'Are you sure you want to delete "${conv.displayTitle}"? This action cannot be undone.',
         actions: [
-          TextButton(
+          AppDialogAction(
+            label: 'Cancel',
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
           ),
-          TextButton(
+          AppDialogAction(
+            label: 'Delete',
+            isPrimary: true,
             onPressed: () => Navigator.of(ctx).pop(true),
-            style: TextButton.styleFrom(
-              foregroundColor: AppTheme.colors(context).error,
-            ),
-            child: const Text('Delete'),
           ),
         ],
       ),
