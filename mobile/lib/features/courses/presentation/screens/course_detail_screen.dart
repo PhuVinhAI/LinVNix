@@ -13,6 +13,8 @@ import '../../../profile/data/profile_providers.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
 import '../widgets/course_content_sections.dart';
+import '../../../../core/providers/providers.dart';
+import '../../../user/domain/user_profile.dart';
 
 const _levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -328,6 +330,12 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
       await notifier.resetCourseProgress();
       ref.invalidate(userProgressProvider);
       ref.invalidate(courseDetailProvider(widget.courseId));
+      
+      final prefs = ref.read(preferencesProvider).value;
+      if (prefs != null) {
+        await prefs.setLevelUpPrompted(widget.courseId, false);
+      }
+
       if (mounted) {
         setState(() {
           _busyAction = _BusyAction.none;
@@ -340,6 +348,89 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
         _error = e.toString();
       });
     }
+  }
+
+  String _getTargetLevel(String courseLevel) {
+    final index = _levelOrder.indexOf(courseLevel);
+    if (index == -1) return courseLevel;
+    if (index < _levelOrder.length - 1) {
+      return _levelOrder[index + 1];
+    }
+    return courseLevel;
+  }
+
+  void _checkAndShowLevelUpDialog({
+    required Course course,
+    required CourseExerciseSummary summary,
+    required UserProfile profile,
+  }) {
+    final isCompleted = summary.completedModulesCount == summary.totalModulesCount &&
+        summary.totalModulesCount > 0;
+    if (!isCompleted) return;
+
+    final prefs = ref.read(preferencesProvider).value;
+    if (prefs == null) return;
+    if (prefs.isLevelUpPrompted(widget.courseId)) return;
+
+    final userLevel = profile.currentLevel;
+    final isUserLevelLowerOrEqual = userLevel == null ||
+        !_isLevelHigher(userLevel, course.level) ||
+        userLevel == course.level;
+
+    if (!isUserLevelLowerOrEqual) return;
+
+    final targetLevel = _getTargetLevel(course.level);
+
+    prefs.setLevelUpPrompted(widget.courseId, true);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _showLevelUpDialog(course, targetLevel);
+    });
+  }
+
+  void _showLevelUpDialog(Course course, String targetLevel) {
+    AppDialog.show(
+      context,
+      builder: (dialogCtx) => AppDialog(
+        title: 'Level Up Profile?',
+        content:
+            'Congratulations on completing "${course.title}"! Would you like to update your profile level to $targetLevel?',
+        actions: [
+          AppDialogAction(
+            label: 'No, thanks',
+            onPressed: () => Navigator.pop(dialogCtx),
+          ),
+          AppDialogAction(
+            label: 'Update Level',
+            isPrimary: true,
+            onPressed: () async {
+              Navigator.pop(dialogCtx);
+              try {
+                await ref
+                    .read(userProfileProvider.notifier)
+                    .updateProfile(currentLevel: targetLevel);
+                if (mounted) {
+                  AppToast.show(
+                    context,
+                    message: 'Successfully updated profile level to $targetLevel!',
+                    type: AppToastType.success,
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  AppToast.show(
+                    context,
+                    message: 'Failed to update level: $e',
+                    type: AppToastType.error,
+                  );
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void _showCreationForm({String? initialUserPrompt}) {
@@ -518,6 +609,14 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     final exerciseSetsAsync =
         ref.watch(courseExerciseSetsProvider(widget.courseId));
     final userProfileAsync = ref.watch(userProfileProvider);
+
+    if (courseAsync.hasValue && exerciseSetsAsync.hasValue && userProfileAsync.hasValue) {
+      _checkAndShowLevelUpDialog(
+        course: courseAsync.requireValue,
+        summary: exerciseSetsAsync.requireValue,
+        profile: userProfileAsync.requireValue,
+      );
+    }
 
     return Scaffold(
       body: courseAsync.when(

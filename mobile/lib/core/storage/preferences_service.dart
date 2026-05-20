@@ -67,4 +67,10 @@ class PreferencesService {
 
   Future<void> setAssistantBarEnabled(bool enabled) =>
       _prefs.setBool(_assistantBarEnabledKey, enabled);
+
+  bool isLevelUpPrompted(String courseId) =>
+      _prefs.getBool('level_up_prompted_$courseId') ?? false;
+
+  Future<void> setLevelUpPrompted(String courseId, bool value) =>
+      _prefs.setBool('level_up_prompted_$courseId', value);
 }
