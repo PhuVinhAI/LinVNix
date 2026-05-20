@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -7,6 +7,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { UsersService } from '../application/users.service';
+import { UserDataCleanupService } from '../application/user-data-cleanup.service';
 import { ProgressService } from '../../progress/application/progress.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators';
@@ -23,6 +24,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly progressService: ProgressService,
+    private readonly userDataCleanupService: UserDataCleanupService,
   ) {}
 
   @Get('me')
@@ -129,5 +131,43 @@ export class UsersController {
     }
 
     return updatedUser;
+  }
+
+  @Delete('me/data')
+  @ApiOperation({
+    summary: 'Xóa toàn bộ dữ liệu học tập của user',
+    description:
+      'Xóa tiến độ, kết quả bài tập, bookmark, mục tiêu hàng ngày và lịch sử AI. Tài khoản vẫn được giữ lại.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Đã xóa dữ liệu',
+    schema: {
+      example: { message: 'All learning data has been deleted' },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  async clearUserData(@CurrentUser() user: User) {
+    await this.userDataCleanupService.clearAllUserData(user.id);
+    return { message: 'All learning data has been deleted' };
+  }
+
+  @Delete('me')
+  @ApiOperation({
+    summary: 'Xóa tài khoản',
+    description:
+      'Xóa vĩnh viễn tài khoản và toàn bộ dữ liệu liên quan. Không thể hoàn tác.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Đã xóa tài khoản',
+    schema: {
+      example: { message: 'Account deleted successfully' },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  async deleteAccount(@CurrentUser() user: User) {
+    await this.userDataCleanupService.deleteAccount(user.id);
+    return { message: 'Account deleted successfully' };
   }
 }

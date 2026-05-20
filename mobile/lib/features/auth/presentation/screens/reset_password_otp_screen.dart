@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../widgets/auth_action_skeleton.dart';
+import '../widgets/otp_code_input.dart';
 
 class ResetPasswordOtpScreen extends ConsumerStatefulWidget {
-  const ResetPasswordOtpScreen({super.key, required this.email});
+  const ResetPasswordOtpScreen({
+    super.key,
+    required this.email,
+    this.fromSettings = false,
+  });
 
   final String email;
+  final bool fromSettings;
 
   @override
   ConsumerState<ResetPasswordOtpScreen> createState() =>
@@ -19,28 +25,12 @@ class ResetPasswordOtpScreen extends ConsumerStatefulWidget {
 
 class _ResetPasswordOtpScreenState
     extends ConsumerState<ResetPasswordOtpScreen> {
-  final List<TextEditingController> _codeControllers =
-      List.generate(6, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
+  String _code = '';
   bool _isVerifying = false;
   String? _errorMessage;
 
-  @override
-  void dispose() {
-    for (final c in _codeControllers) {
-      c.dispose();
-    }
-    for (final f in _focusNodes) {
-      f.dispose();
-    }
-    super.dispose();
-  }
-
-  String get _code => _codeControllers.map((c) => c.text).join();
-
   Future<void> _verifyCode() async {
-    final code = _code;
-    if (code.length != 6) return;
+    if (_code.length != 6) return;
 
     setState(() {
       _isVerifying = true;
@@ -51,11 +41,12 @@ class _ResetPasswordOtpScreenState
       final repository = ref.read(authRepositoryProvider);
       final response = await repository.verifyResetCode(
         email: widget.email,
-        code: code,
+        code: _code,
       );
 
       if (mounted) {
-        context.push('/reset-password?token=${response.resetToken}');
+        final from = widget.fromSettings ? '&from=settings' : '';
+        context.push('/reset-password?token=${response.resetToken}$from');
       }
     } on AppException catch (e) {
       setState(() => _errorMessage = e.message);
@@ -80,15 +71,6 @@ class _ResetPasswordOtpScreenState
     }
   }
 
-  void _onChanged(String value, int index) {
-    if (value.isNotEmpty && index < 5) {
-      _focusNodes[index + 1].requestFocus();
-    }
-    if (_code.length == 6) {
-      _verifyCode();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -108,7 +90,7 @@ class _ResetPasswordOtpScreenState
             children: [
               if (_isVerifying) ...[
                 const SizedBox(height: AppSpacing.xxxl),
-                const Center(child: AppSpinner(size: 32)),
+                const AuthActionSkeleton(),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
                   'Verifying code...',
@@ -118,7 +100,6 @@ class _ResetPasswordOtpScreenState
                   textAlign: TextAlign.center,
                 ),
               ] else ...[
-                // Icon
                 Center(
                   child: Container(
                     width: 72,
@@ -153,11 +134,11 @@ class _ResetPasswordOtpScreenState
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xxl),
-                // OTP input
-                _OtpInputRow(
-                  controllers: _codeControllers,
-                  focusNodes: _focusNodes,
-                  onChanged: _onChanged,
+                AutofillGroup(
+                  child: OtpCodeInput(
+                    onChanged: (code) => setState(() => _code = code),
+                    onCompleted: (_) => _verifyCode(),
+                  ),
                 ),
                 if (_errorMessage != null) ...[
                   const SizedBox(height: AppSpacing.md),
@@ -177,7 +158,6 @@ class _ResetPasswordOtpScreenState
                   label: 'Verify Code',
                 ),
                 const SizedBox(height: AppSpacing.md),
-                // Resend row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -195,96 +175,21 @@ class _ResetPasswordOtpScreenState
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.xs),
-                AppButton(
-                  variant: AppButtonVariant.text,
-                  isFullWidth: true,
-                  onPressed: () => context.go('/login'),
-                  label: 'Back to Sign In',
-                ),
+                if (!widget.fromSettings) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  AppButton(
+                    variant: AppButtonVariant.text,
+                    isFullWidth: true,
+                    onPressed: () => context.go('/login'),
+                    label: 'Back to Sign In',
+                  ),
+                ],
               ],
             ],
           ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _OtpInputRow extends StatelessWidget {
-  const _OtpInputRow({
-    required this.controllers,
-    required this.focusNodes,
-    required this.onChanged,
-  });
-
-  final List<TextEditingController> controllers;
-  final List<FocusNode> focusNodes;
-  final void Function(String value, int index) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(6, (index) {
-        return Flexible(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: SizedBox(
-              height: 52,
-              child: KeyboardListener(
-                focusNode: FocusNode(),
-                onKeyEvent: (event) {
-                  if (event is KeyDownEvent &&
-                      event.logicalKey == LogicalKeyboardKey.backspace) {
-                    if (controllers[index].text.isEmpty && index > 0) {
-                      controllers[index - 1].clear();
-                      focusNodes[index - 1].requestFocus();
-                    }
-                  }
-                },
-                child: TextField(
-                  controller: controllers[index],
-                  focusNode: focusNodes[index],
-                  textAlign: TextAlign.center,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(1),
-                  ],
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        height: 1.0,
-                      ),
-                  decoration: InputDecoration(
-                    counterText: '',
-                    contentPadding: EdgeInsets.zero,
-                    filled: true,
-                    fillColor: c.card,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: c.border),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: c.border),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: c.primary, width: 2),
-                    ),
-                  ),
-                  onChanged: (value) => onChanged(value, index),
-                ),
-              ),
-            ),
-          ),
-        );
-      }),
     );
   }
 }

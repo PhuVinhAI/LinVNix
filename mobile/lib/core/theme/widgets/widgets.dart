@@ -13,6 +13,7 @@ export 'app_nav_bar.dart';
 export 'app_app_bar.dart';
 export 'app_progress.dart';
 export 'app_slider.dart';
+export 'app_shimmer.dart';
 export 'app_spinner.dart';
 export 'app_switch.dart';
 export 'app_toast.dart';

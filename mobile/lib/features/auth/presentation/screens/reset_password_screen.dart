@@ -7,9 +7,14 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
-  const ResetPasswordScreen({super.key, this.token});
+  const ResetPasswordScreen({
+    super.key,
+    this.token,
+    this.fromSettings = false,
+  });
 
   final String? token;
+  final bool fromSettings;
 
   @override
   ConsumerState<ResetPasswordScreen> createState() =>
@@ -104,7 +109,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Your password has been reset successfully. You can now sign in with your new password.',
+                      widget.fromSettings
+                          ? 'Your password has been changed successfully.'
+                          : 'Your password has been reset successfully. You can now sign in with your new password.',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: c.mutedForeground,
                         height: 1.5,
@@ -115,8 +122,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     AppButton(
                       variant: AppButtonVariant.primary,
                       isFullWidth: true,
-                      onPressed: () => context.go('/login'),
-                      label: 'Sign In',
+                      onPressed: () => context.go(
+                        widget.fromSettings ? '/settings' : '/login',
+                      ),
+                      label: widget.fromSettings ? 'Back to Settings' : 'Sign In',
                     ),
                   ],
                 )
@@ -228,13 +237,15 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         isLoading: _isLoading,
                         label: 'Reset Password',
                       ),
-                      const SizedBox(height: AppSpacing.md),
-                      AppButton(
-                        variant: AppButtonVariant.text,
-                        isFullWidth: true,
-                        onPressed: () => context.go('/login'),
-                        label: 'Back to Sign In',
-                      ),
+                      if (!widget.fromSettings) ...[
+                        const SizedBox(height: AppSpacing.md),
+                        AppButton(
+                          variant: AppButtonVariant.text,
+                          isFullWidth: true,
+                          onPressed: () => context.go('/login'),
+                          label: 'Back to Sign In',
+                        ),
+                      ],
                     ],
                   ),
                 ),

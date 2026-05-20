@@ -35,6 +35,26 @@ export class UsersService implements UserStatsPort {
     return this.usersRepository.findByEmail(email);
   }
 
+  async findByEmailIncludingDeleted(email: string): Promise<User | null> {
+    return this.usersRepository.findByEmailIncludingDeleted(email);
+  }
+
+  async restoreDeletedUser(
+    id: string,
+    data: Partial<User>,
+  ): Promise<User> {
+    await this.usersRepository.restore(id);
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+    return this.usersRepository.update(id, {
+      ...data,
+      onboardingCompleted: false,
+      emailVerified: false,
+      emailVerifiedAt: null as any,
+    });
+  }
+
   async update(id: string, data: Partial<User>): Promise<User> {
     await this.findById(id);
     if (data.password) {

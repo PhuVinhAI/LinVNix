@@ -2,6 +2,7 @@ import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './domain/user.entity';
 import { UsersService } from './application/users.service';
+import { UserDataCleanupService } from './application/user-data-cleanup.service';
 import { UsersRepository } from './application/users.repository';
 import { UsersController } from './presentation/users.controller';
 import { ProgressModule } from '../progress/progress.module';
@@ -9,7 +10,7 @@ import { ProgressModule } from '../progress/progress.module';
 @Module({
   imports: [TypeOrmModule.forFeature([User]), forwardRef(() => ProgressModule)],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository],
+  providers: [UsersService, UsersRepository, UserDataCleanupService],
   exports: [UsersService],
 })
 export class UsersModule {}

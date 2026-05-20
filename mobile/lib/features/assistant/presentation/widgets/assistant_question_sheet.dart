@@ -365,6 +365,7 @@ class _LoadingBody extends ConsumerWidget {
                 Flexible(
                   child: Text(
                     statusText,
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: AppTypography.bodyMedium,
                       color: c.mutedForeground,
@@ -453,6 +454,7 @@ class _ReadingBody extends ConsumerWidget {
         const SizedBox(height: AppSpacing.md),
         if (streaming && toolStatusText != null)
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const AppSpinner(),
               const SizedBox(width: AppSpacing.md),

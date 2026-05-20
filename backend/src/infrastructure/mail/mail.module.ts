@@ -16,6 +16,11 @@ import { MailService } from './mail.service';
           adapter: new HandlebarsAdapter(),
           options: configService.get('mail.template.options'),
         },
+        // Layout must live at root `options`, not under `template.options`
+        // (see HandlebarsAdapter: mailerOptions.options.layout).
+        options: {
+          layout: 'layout',
+        },
       }),
       inject: [ConfigService],
     }),

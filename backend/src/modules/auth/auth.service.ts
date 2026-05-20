@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan } from 'typeorm';
 import { OAuth2Client } from 'google-auth-library';
 import { UsersService } from '../users/application/users.service';
+import { User } from '../users/domain/user.entity';
 import { LoggingService } from '../../infrastructure/logging/logging.service';
 import { EmailQueueService } from '../../infrastructure/queue/email-queue.service';
 import { RegisterDto } from './dto/register.dto';
@@ -44,28 +45,33 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     try {
-      const existingUser = await this.usersService.findByEmail(
+      const existingUser = await this.usersService.findByEmailIncludingDeleted(
         registerDto.email,
       );
-      if (existingUser) {
+      if (existingUser && !existingUser.deletedAt) {
         throw new ConflictException('Email is already registered');
       }
 
-      // Tạo user mới
-      const user = await this.usersService.create(registerDto);
+      let user: User;
 
-      // Assign USER role mặc định
+      if (existingUser?.deletedAt) {
+        user = await this.usersService.restoreDeletedUser(existingUser.id, {
+          fullName: registerDto.fullName,
+          password: registerDto.password,
+        });
+      } else {
+        user = await this.usersService.create(registerDto);
+      }
+
       const userRole = await this.roleRepository.findOne({
         where: { name: RoleEnum.USER },
       });
 
       if (userRole) {
-        // Không dùng update, dùng save trực tiếp
         user.roles = [userRole];
         await this.usersService.save(user);
       }
 
-      // Tạo verification token
       const verificationToken =
         await this.tokenLifecycle.createVerificationToken(user.id);
 

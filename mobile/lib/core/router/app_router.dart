@@ -17,6 +17,7 @@ import '../../features/courses/presentation/screens/module_detail_screen.dart';
 import '../../features/bookmarks/presentation/screens/bookmarks_screen.dart';
 import '../../features/bookmarks/presentation/screens/flashcard_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/profile/presentation/screens/settings_screen.dart';
 import '../../features/profile/data/profile_providers.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/lessons/presentation/screens/lesson_wizard_screen.dart';
@@ -79,9 +80,9 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (!authState.isInitialized) return '/splash';
 
-      final isAuthRoute = location == '/login' ||
-          location == '/register' ||
-          location == '/forgot-password' ||
+      final isAuthRoute = location == '/login' || location == '/register';
+
+      final isPasswordResetRoute = location == '/forgot-password' ||
           location == '/reset-password' ||
           location == '/reset-password-otp';
 
@@ -102,6 +103,10 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (authState.isAuthenticated && isAuthRoute) {
         return '/';
+      }
+
+      if (authState.isAuthenticated && isPasswordResetRoute) {
+        return null;
       }
 
       if (authState.isAuthenticated &&
@@ -140,14 +145,24 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/reset-password-otp',
         builder: (context, state) {
           final email = state.uri.queryParameters['email'] ?? '';
-          return ResetPasswordOtpScreen(email: email);
+          final fromSettings =
+              state.uri.queryParameters['from'] == 'settings';
+          return ResetPasswordOtpScreen(
+            email: email,
+            fromSettings: fromSettings,
+          );
         },
       ),
       GoRoute(
         path: '/reset-password',
         builder: (context, state) {
           final token = state.uri.queryParameters['token'];
-          return ResetPasswordScreen(token: token);
+          final fromSettings =
+              state.uri.queryParameters['from'] == 'settings';
+          return ResetPasswordScreen(
+            token: token,
+            fromSettings: fromSettings,
+          );
         },
       ),
       GoRoute(
@@ -183,6 +198,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           final setId = state.pathParameters['setId']!;
           return ExercisePlayScreen(moduleId: id, setId: setId);
         },
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
         path: '/bookmarks',

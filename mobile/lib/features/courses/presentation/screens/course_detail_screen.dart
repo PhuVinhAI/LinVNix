@@ -998,7 +998,9 @@ class _CourseSetCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const AppSpinner(
-                                    size: 20, strokeWidth: 2),
+                                  size: 20,
+                                  strokeWidth: 2,
+                                ),
                                 const SizedBox(height: 2),
                                 Text(
                                   'Cancel',

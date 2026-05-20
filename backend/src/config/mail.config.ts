@@ -11,7 +11,7 @@ export default registerAs('mail', () => ({
     },
   },
   defaults: {
-    from: `"${process.env.MAIL_FROM_NAME || 'Language Learning App'}" <${process.env.MAIL_FROM || process.env.MAIL_USER}>`,
+    from: `"${process.env.MAIL_FROM_NAME || 'LinVNix'}" <${process.env.MAIL_FROM || process.env.MAIL_USER}>`,
   },
   template: {
     dir: process.cwd() + '/src/infrastructure/mail/templates',

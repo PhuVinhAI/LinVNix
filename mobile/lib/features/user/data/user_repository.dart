@@ -62,4 +62,20 @@ class UserRepository {
       throw mapDioException(e);
     }
   }
+
+  Future<void> clearUserData() async {
+    try {
+      await _dio.delete<void>('/users/me/data');
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      await _dio.delete<void>('/users/me');
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
 }

@@ -20,4 +20,8 @@ class ExerciseSessionService {
   Future<void> delete(String setId) async {
     await _box.delete(setId);
   }
+
+  Future<void> clearAll() async {
+    await _box.clear();
+  }
 }

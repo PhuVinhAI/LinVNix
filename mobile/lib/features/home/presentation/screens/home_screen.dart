@@ -124,12 +124,7 @@ class _CoursesSection extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         coursesAsync.when(
-          loading: () => const Center(
-            child: Padding(
-              padding: EdgeInsets.all(AppSpacing.xl),
-              child: CircularProgressIndicator(),
-            ),
-          ),
+          loading: () => const _HomeCoursesLoading(),
           error: (_, _) => Center(
             child: Text(
               'Unable to load courses',
@@ -215,6 +210,61 @@ class _CoursesSection extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _HomeCoursesLoading extends StatelessWidget {
+  const _HomeCoursesLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(3, (index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.md),
+          child: AppCard(
+            variant: AppCardVariant.outlined,
+            borderRadius: AppRadius.lg,
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Row(
+              children: [
+                const AppShimmerBox(
+                  width: 48,
+                  height: 48,
+                  borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppShimmerBox(
+                        width: index == 0 ? 180 : 160,
+                        height: 18,
+                        borderRadius:
+                            BorderRadius.circular(AppRadius.sm),
+                      ),
+                      const SizedBox(height: 6),
+                      AppShimmerBox(
+                        width: index == 1 ? 220 : 140,
+                        height: 12,
+                        borderRadius:
+                            BorderRadius.circular(AppRadius.sm),
+                      ),
+                    ],
+                  ),
+                ),
+                const AppShimmerBox(
+                  width: 20,
+                  height: 20,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }

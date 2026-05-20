@@ -130,25 +130,26 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     try {
       final onboardingData = <String, dynamic>{
         'completeLowerCourses': _completeLowerCourses,
+        'currentLevel': _selectedLevel ?? 'A1',
       };
-      if (_selectedLevel != null) {
-        onboardingData['currentLevel'] = _selectedLevel;
-      }
       if (_selectedDialect != null) {
         onboardingData['preferredDialect'] = _selectedDialect;
       }
 
       final repository = ref.read(userRepositoryProvider);
       await repository.submitOnboarding(onboardingData);
-      ref.invalidate(userProfileProvider);
 
       final goalsNotifier = ref.read(dailyGoalsProvider.notifier);
       for (final entry in _goalEnabled.entries) {
-        if (entry.value) {
+        if (!entry.value) continue;
+        try {
           await goalsNotifier.createGoal(
             entry.key,
             _goalTargets[entry.key] ?? entry.key.defaultTarget,
           );
+        } on AppException catch (e) {
+          final alreadyExists = e.message.toLowerCase().contains('already exists');
+          if (!alreadyExists) rethrow;
         }
       }
 
@@ -156,6 +157,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await prefs.setOnboardingCompleted();
 
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
+      ref.invalidate(userProfileProvider);
 
       if (mounted) {
         context.go('/');
@@ -166,7 +168,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
+        AppToast.show(
+          context,
+          message: 'An unexpected error occurred',
+          type: AppToastType.error,
+        );
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);

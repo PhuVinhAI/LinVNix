@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
@@ -7,6 +6,8 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../widgets/auth_action_skeleton.dart';
+import '../widgets/otp_code_input.dart';
 
 class EmailVerificationScreen extends ConsumerStatefulWidget {
   const EmailVerificationScreen({super.key, this.email});
@@ -20,29 +21,13 @@ class EmailVerificationScreen extends ConsumerStatefulWidget {
 
 class _EmailVerificationScreenState
     extends ConsumerState<EmailVerificationScreen> {
-  final List<TextEditingController> _codeControllers =
-      List.generate(6, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
+  String _code = '';
   bool _isVerifying = false;
   bool _isVerified = false;
   String? _errorMessage;
 
-  @override
-  void dispose() {
-    for (final c in _codeControllers) {
-      c.dispose();
-    }
-    for (final f in _focusNodes) {
-      f.dispose();
-    }
-    super.dispose();
-  }
-
-  String get _code => _codeControllers.map((c) => c.text).join();
-
   Future<void> _verifyCode() async {
-    final code = _code;
-    if (code.length != 6) return;
+    if (_code.length != 6) return;
 
     setState(() {
       _isVerifying = true;
@@ -53,7 +38,7 @@ class _EmailVerificationScreenState
       final repository = ref.read(authRepositoryProvider);
       final response = await repository.verifyEmailCode(
         email: widget.email ?? '',
-        code: code,
+        code: _code,
       );
 
       final storage = ref.read(secureStorageProvider);
@@ -89,15 +74,6 @@ class _EmailVerificationScreenState
     }
   }
 
-  void _onChanged(String value, int index) {
-    if (value.isNotEmpty && index < 5) {
-      _focusNodes[index + 1].requestFocus();
-    }
-    if (_code.length == 6) {
-      _verifyCode();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -117,7 +93,7 @@ class _EmailVerificationScreenState
             children: [
               if (_isVerifying) ...[
                 const SizedBox(height: AppSpacing.xxxl),
-                const Center(child: AppSpinner(size: 32)),
+                const AuthActionSkeleton(),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
                   'Verifying your email...',
@@ -128,7 +104,6 @@ class _EmailVerificationScreenState
                 ),
               ] else if (_isVerified) ...[
                 const SizedBox(height: AppSpacing.xxxl),
-                // Success icon
                 Center(
                   child: Container(
                     width: 72,
@@ -170,7 +145,6 @@ class _EmailVerificationScreenState
                   label: 'Continue to Home',
                 ),
               ] else ...[
-                // Envelope icon
                 Center(
                   child: Container(
                     width: 72,
@@ -205,11 +179,11 @@ class _EmailVerificationScreenState
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xxl),
-                // OTP input
-                _OtpInputRow(
-                  controllers: _codeControllers,
-                  focusNodes: _focusNodes,
-                  onChanged: _onChanged,
+                AutofillGroup(
+                  child: OtpCodeInput(
+                    onChanged: (code) => setState(() => _code = code),
+                    onCompleted: (_) => _verifyCode(),
+                  ),
                 ),
                 if (_errorMessage != null) ...[
                   const SizedBox(height: AppSpacing.md),
@@ -229,7 +203,6 @@ class _EmailVerificationScreenState
                   label: 'Verify',
                 ),
                 const SizedBox(height: AppSpacing.md),
-                // Resend row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -253,83 +226,6 @@ class _EmailVerificationScreenState
           ),
         ),
       ),
-    );
-  }
-}
-
-class _OtpInputRow extends StatelessWidget {
-  const _OtpInputRow({
-    required this.controllers,
-    required this.focusNodes,
-    required this.onChanged,
-  });
-
-  final List<TextEditingController> controllers;
-  final List<FocusNode> focusNodes;
-  final void Function(String value, int index) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(6, (index) {
-        return Flexible(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: SizedBox(
-              height: 52,
-              child: KeyboardListener(
-                focusNode: FocusNode(),
-                onKeyEvent: (event) {
-                  if (event is KeyDownEvent &&
-                      event.logicalKey == LogicalKeyboardKey.backspace) {
-                    if (controllers[index].text.isEmpty && index > 0) {
-                      controllers[index - 1].clear();
-                      focusNodes[index - 1].requestFocus();
-                    }
-                  }
-                },
-                child: TextField(
-                  controller: controllers[index],
-                  focusNode: focusNodes[index],
-                  textAlign: TextAlign.center,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(1),
-                  ],
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        height: 1.0,
-                      ),
-                  decoration: InputDecoration(
-                    counterText: '',
-                    contentPadding: EdgeInsets.zero,
-                    filled: true,
-                    fillColor: c.card,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: c.border),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: c.border),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: c.primary, width: 2),
-                    ),
-                  ),
-                  onChanged: (value) => onChanged(value, index),
-                ),
-              ),
-            ),
-          ),
-        );
-      }),
     );
   }
 }

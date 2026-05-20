@@ -2,23 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../../core/providers/assistant_bar_provider.dart';
-import '../../../../core/providers/auth_state_provider.dart';
-import '../../../../core/providers/theme_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/profile_providers.dart';
-import '../../../user/domain/user_profile.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
 import '../../../bookmarks/domain/bookmark_models.dart';
-import '../../../daily_goals/presentation/widgets/daily_goal_section.dart';
+import '../../../user/domain/user_profile.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final c = AppTheme.colors(context);
     final profileAsync = ref.watch(userProfileProvider);
 
     return Scaffold(
@@ -26,8 +21,9 @@ class ProfileScreen extends ConsumerWidget {
         title: const Text('Profile'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => _showLogoutDialog(context, ref),
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Settings',
+            onPressed: () => context.push('/settings'),
           ),
         ],
       ),
@@ -35,224 +31,30 @@ class ProfileScreen extends ConsumerWidget {
         onRefresh: () async {
           await ref.read(userProfileProvider.notifier).refresh();
           await ref.read(exerciseStatsProvider.notifier).refresh();
+          await ref.read(bookmarkStatsProvider.notifier).refresh();
         },
-        child: profileAsync.when(
-          loading: () => const _ProfileLoading(),
-          error: (error, stack) => Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 48),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: c.error.withValues(alpha: 0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.error_outline_rounded,
-                      size: 80,
-                      color: c.error,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  Text(
-                    'Failed to load profile',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: c.foreground,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    error.toString(),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: c.mutedForeground,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  AppButton(
-                    onPressed: () => ref.read(userProfileProvider.notifier).refresh(),
-                    icon: const Icon(Icons.refresh),
-                    label: 'Retry',
-                    variant: AppButtonVariant.primary,
-                  ),
-                ],
-              ),
-            ),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
           ),
-          data: (profile) => ListView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
+          children: [
+            profileAsync.when(
+              loading: () => const _ProfileHeaderLoading(),
+              error: (_, __) => const SizedBox.shrink(),
+              data: (profile) => _ProfileHeader(profile: profile),
             ),
-            children: [
-              _ProfileHeader(profile: profile),
-              const SizedBox(height: AppSpacing.lg),
-              _ProfileInfoCard(
-                profile: profile,
-                onEdit: () => _showEditDialog(context, ref, profile),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              _ThemeSection(),
-              const SizedBox(height: AppSpacing.md),
-              const DailyGoalSection(),
-              const SizedBox(height: AppSpacing.md),
-              _StatsSection(),
-              const SizedBox(height: AppSpacing.md),
-              _VocabStatsSection(),
-              const SizedBox(height: AppSpacing.md),
-              _SavedWordsSection(),
-              const SizedBox(height: AppSpacing.lg),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    AppDialog.show(
-      context,
-      builder: (ctx) => AppDialog(
-        title: 'Logout',
-        content: 'Are you sure you want to logout?',
-        actions: [
-          AppDialogAction(
-            label: 'Cancel',
-            onPressed: () => Navigator.pop(ctx),
-          ),
-          AppDialogAction(
-            label: 'Logout',
-            isPrimary: true,
-            onPressed: () async {
-              Navigator.pop(ctx);
-              await ref.read(authStateProvider.notifier).logout();
-              if (ctx.mounted) {
-                context.go('/login');
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEditDialog(
-      BuildContext context, WidgetRef ref, UserProfile profile) {
-    final fullNameController = TextEditingController(text: profile.fullName);
-    String? selectedLanguage = profile.nativeLanguage;
-    String? selectedLevel = profile.currentLevel;
-    String? selectedDialect = profile.preferredDialect;
-
-    final languages = [
-      'English',
-      'Chinese',
-      'Japanese',
-      'Korean',
-      'French',
-      'German',
-      'Spanish',
-      'Vietnamese',
-    ];
-
-    final levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-
-    final dialects = ['STANDARD', 'NORTHERN', 'CENTRAL', 'SOUTHERN'];
-
-    AppDialog.show(
-      context,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setState) => AppDialog(
-          title: 'Edit Profile',
-          contentWidget: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AppInput(
-                  controller: fullNameController,
-                  label: 'Full Name',
-                ),
-                const SizedBox(height: 16),
-                AppDropdownField<String>(
-                  label: 'Native Language',
-                  value: selectedLanguage,
-                  items: languages,
-                  onChanged: (value) {
-                    setState(() => selectedLanguage = value);
-                  },
-                ),
-                const SizedBox(height: 16),
-                AppDropdownField<String>(
-                  label: 'Current Level',
-                  value: selectedLevel,
-                  items: levels,
-                  onChanged: (value) {
-                    setState(() => selectedLevel = value);
-                  },
-                ),
-                const SizedBox(height: 16),
-                AppDropdownField<String>(
-                  label: 'Preferred Dialect',
-                  value: selectedDialect,
-                  items: dialects,
-                  itemLabelBuilder: (d) => _formatDialect(d),
-                  onChanged: (value) {
-                    setState(() => selectedDialect = value);
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            AppDialogAction(
-              label: 'Cancel',
-              onPressed: () => Navigator.pop(context),
-            ),
-            AppDialogAction(
-              label: 'Save',
-              isPrimary: true,
-              onPressed: () async {
-                Navigator.pop(context);
-                try {
-                  await ref.read(userProfileProvider.notifier).updateProfile(
-                        fullName: fullNameController.text.trim(),
-                        nativeLanguage: selectedLanguage,
-                        currentLevel: selectedLevel,
-                        preferredDialect: selectedDialect,
-                      );
-                  if (context.mounted) {
-                    AppToast.show(context, message: 'Profile updated successfully', type: AppToastType.success);
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    AppToast.show(context, message: 'Failed to update profile: ${e.toString()}', type: AppToastType.error);
-                  }
-                }
-              },
-            ),
+            const SizedBox(height: AppSpacing.lg),
+            const _StatsSection(),
+            const SizedBox(height: AppSpacing.md),
+            const _VocabStatsSection(),
+            const SizedBox(height: AppSpacing.md),
+            const _SavedWordsSection(),
+            const SizedBox(height: AppSpacing.lg),
           ],
         ),
       ),
     );
-  }
-
-  static String _formatDialect(String dialect) {
-    switch (dialect) {
-      case 'STANDARD':
-        return 'Standard';
-      case 'NORTHERN':
-        return 'Northern';
-      case 'CENTRAL':
-        return 'Central';
-      case 'SOUTHERN':
-        return 'Southern';
-      default:
-        return dialect;
-    }
   }
 }
 
@@ -289,258 +91,48 @@ class _ProfileHeader extends StatelessWidget {
             style: theme.textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            profile.email,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: c.mutedForeground,
-            ),
-            textAlign: TextAlign.center,
-          ),
         ],
       ),
     );
   }
 }
 
-class _ProfileInfoCard extends StatelessWidget {
-  const _ProfileInfoCard({required this.profile, required this.onEdit});
-  final UserProfile profile;
-  final VoidCallback onEdit;
+class _ProfileHeaderLoading extends StatelessWidget {
+  const _ProfileHeaderLoading();
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      padding: EdgeInsets.zero,
+    return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Profile Information',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.edit, size: 18),
-                  onPressed: onEdit,
-                  visualDensity: VisualDensity.compact,
-                ),
-              ],
+          Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
             ),
           ),
-          AppDivider(),
-          AppListItem(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
-            ),
-            leading: const Icon(Icons.language, size: 20),
-            titleWidget: Text(
-              'Native Language',
-              style: theme.textTheme.bodySmall,
-            ),
-            subtitleWidget: Text(
-              profile.nativeLanguage ?? 'Not set',
-              style: theme.textTheme.bodyMedium,
-            ),
-          ),
-          AppDivider(),
-          AppListItem(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
-            ),
-            leading: const Icon(Icons.trending_up, size: 20),
-            titleWidget: Text(
-              'Current Level',
-              style: theme.textTheme.bodySmall,
-            ),
-            subtitleWidget: Text(
-              profile.currentLevel ?? 'Not set',
-              style: theme.textTheme.bodyMedium,
-            ),
-          ),
-          AppDivider(),
-          AppListItem(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
-            ),
-            leading: const Icon(Icons.record_voice_over, size: 20),
-            titleWidget: Text(
-              'Preferred Dialect',
-              style: theme.textTheme.bodySmall,
-            ),
-            subtitleWidget: Text(
-              profile.preferredDialect != null
-                  ? ProfileScreen._formatDialect(profile.preferredDialect!)
-                  : 'Not set',
-              style: theme.textTheme.bodyMedium,
+          const SizedBox(height: AppSpacing.md),
+          Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Container(
+              width: 140,
+              height: 22,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ThemeSection extends ConsumerWidget {
-  const _ThemeSection();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final currentMode = ref.watch(themeModeProvider);
-
-    Future<void> setMode(ThemeMode mode) async {
-      await ref.read(themeModeProvider.notifier).setThemeMode(mode);
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Settings',
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        AppCard(
-          variant: AppCardVariant.outlined,
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Row(
-            children: [
-              _ThemeBlock(
-                icon: Icons.brightness_auto,
-                label: 'System',
-                isSelected: currentMode == ThemeMode.system,
-                onTap: () => setMode(ThemeMode.system),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              _ThemeBlock(
-                icon: Icons.light_mode,
-                label: 'Light',
-                isSelected: currentMode == ThemeMode.light,
-                onTap: () => setMode(ThemeMode.light),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              _ThemeBlock(
-                icon: Icons.dark_mode,
-                label: 'Dark',
-                isSelected: currentMode == ThemeMode.dark,
-                onTap: () => setMode(ThemeMode.dark),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        const _AssistantBarSetting(),
-      ],
-    );
-  }
-}
-
-class _AssistantBarSetting extends ConsumerWidget {
-  const _AssistantBarSetting();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-    final enabled = ref.watch(assistantBarEnabledProvider);
-
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      padding: EdgeInsets.zero,
-      child: AppListItem(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.sm,
-        ),
-        leading: Icon(Icons.auto_awesome, color: c.primary, size: 20),
-        titleWidget: Text(
-          'AI assistant bar',
-          style: theme.textTheme.bodyMedium,
-        ),
-        subtitleWidget: Text(
-          'Show on lesson and exercise screens',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: c.mutedForeground,
-          ),
-        ),
-        trailing: AppSwitch(
-          value: enabled,
-          onChanged: (value) =>
-              ref.read(assistantBarEnabledProvider.notifier).setEnabled(value),
-        ),
-      ),
-    );
-  }
-}
-
-class _ThemeBlock extends StatelessWidget {
-  const _ThemeBlock({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: isSelected ? c.primary.withValues(alpha: 0.12) : c.muted,
-            borderRadius: BorderRadius.circular(AppRadius.xl),
-            border: Border.all(
-              color: isSelected ? c.primary : c.border,
-              width: isSelected ? 1.5 : 1,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                size: 28,
-                color: isSelected ? c.primary : c.mutedForeground,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: AppTypography.bodySmall,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected ? c.primary : c.foreground,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -567,10 +159,7 @@ class _StatsSection extends ConsumerWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         statsAsync.when(
-          loading: () => const AppCard(
-            variant: AppCardVariant.outlined,
-            child: Center(child: AppSpinner(size: 20)),
-          ),
+          loading: () => const _StatsSectionLoading(),
           error: (error, stack) => AppCard(
             variant: AppCardVariant.outlined,
             child: Column(
@@ -644,7 +233,10 @@ class _StatsSection extends ConsumerWidget {
                 label: 'Accuracy: ${stats.accuracy.toStringAsFixed(1)} percent',
                 child: AppCard(
                   variant: AppCardVariant.outlined,
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.md,
+                  ),
                   child: Row(
                     children: [
                       Icon(Icons.speed, color: c.primary),
@@ -692,6 +284,226 @@ class _StatsSection extends ConsumerWidget {
     final hours = (seconds / 3600).floor();
     final minutes = ((seconds % 3600) / 60).floor();
     return '${hours}h ${minutes}m';
+  }
+}
+
+class _StatsSectionLoading extends StatelessWidget {
+  const _StatsSectionLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(child: _StatCardSkeleton()),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(child: _StatCardSkeleton()),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Row(
+          children: [
+            Expanded(child: _StatCardSkeleton()),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(child: _StatCardSkeleton()),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        const _AccuracyCardSkeleton(),
+      ],
+    );
+  }
+}
+
+class _StatCardSkeleton extends StatelessWidget {
+  const _StatCardSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      borderRadius: AppRadius.lg,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.md,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Row(
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Container(
+                  width: 48,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Container(
+              width: 90,
+              height: 12,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AccuracyCardSkeleton extends StatelessWidget {
+  const _AccuracyCardSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.md,
+      ),
+      child: Row(
+        children: [
+          Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Shimmer.fromColors(
+                  baseColor: c.muted,
+                  highlightColor: c.card,
+                  child: Container(
+                    width: 64,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Shimmer.fromColors(
+                  baseColor: c.muted,
+                  highlightColor: c.card,
+                  child: Container(
+                    width: 56,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Container(
+              width: 56,
+              height: 56,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VocabStatsSectionLoading extends StatelessWidget {
+  const _VocabStatsSectionLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      borderRadius: AppRadius.lg,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.md,
+      ),
+      child: Shimmer.fromColors(
+        baseColor: c.muted,
+        highlightColor: c.card,
+        child: Row(
+          children: [
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Container(
+              width: 32,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+            ),
+            const Spacer(),
+            Container(
+              width: 80,
+              height: 12,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -764,24 +576,21 @@ class _VocabStatsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Vocabulary Stats',
+          'Bookmarked',
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: AppSpacing.md),
         statsAsync.when(
-          loading: () => const AppCard(
-            variant: AppCardVariant.outlined,
-            child: Center(child: AppSpinner(size: 20)),
-          ),
+          loading: () => const _VocabStatsSectionLoading(),
           error: (error, stack) => AppCard(
             variant: AppCardVariant.outlined,
             child: Row(
               children: [
                 Icon(Icons.error_outline, color: c.error),
                 const SizedBox(width: AppSpacing.md),
-                const Expanded(child: Text('Unable to load stats')),
+                const Expanded(child: Text('Unable to load bookmark stats')),
               ],
             ),
           ),
@@ -826,7 +635,7 @@ class _VocabStatsCard extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Saved Words',
+              'Saved words',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: c.mutedForeground,
               ),
@@ -862,7 +671,7 @@ class _VocabStatsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Saved Words',
+                'Saved words',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: c.mutedForeground,
                 ),
@@ -903,7 +712,7 @@ class _SavedWordsSection extends StatelessWidget {
       child: AppListItem(
         leading: Icon(Icons.bookmark, color: c.primary),
         titleWidget: Text(
-          'Saved Words',
+          'View saved words',
           style: theme.textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -911,92 +720,6 @@ class _SavedWordsSection extends StatelessWidget {
         trailing: const Icon(Icons.chevron_right),
         onTap: () => context.push('/bookmarks'),
       ),
-    );
-  }
-}
-
-class _ProfileLoading extends StatelessWidget {
-  const _ProfileLoading();
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-
-    Widget buildBlockShimmer({required double height}) {
-      return Shimmer.fromColors(
-        baseColor: c.muted,
-        highlightColor: c.card,
-        child: Container(
-          width: double.infinity,
-          height: height,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-          ),
-        ),
-      );
-    }
-
-    return ListView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm,
-      ),
-      children: [
-        const SizedBox(height: AppSpacing.md),
-        Center(
-          child: Column(
-            children: [
-              Shimmer.fromColors(
-                baseColor: c.muted,
-                highlightColor: c.card,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Shimmer.fromColors(
-                baseColor: c.muted,
-                highlightColor: c.card,
-                child: Container(
-                  width: 140,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Shimmer.fromColors(
-                baseColor: c.muted,
-                highlightColor: c.card,
-                child: Container(
-                  width: 180,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        buildBlockShimmer(height: 120),
-        const SizedBox(height: AppSpacing.md),
-        buildBlockShimmer(height: 60),
-        const SizedBox(height: AppSpacing.md),
-        buildBlockShimmer(height: 150),
-        const SizedBox(height: AppSpacing.md),
-        buildBlockShimmer(height: 120),
-      ],
     );
   }
 }

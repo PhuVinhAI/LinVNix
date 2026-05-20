@@ -187,5 +187,54 @@ void main() {
         );
       });
     });
+
+    group('clearUserData', () {
+      test('calls DELETE /users/me/data', () async {
+        when(() => mockDio.delete<void>('/users/me/data')).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(path: '/users/me/data'),
+            statusCode: 200,
+          ),
+        );
+
+        await repository.clearUserData();
+
+        verify(() => mockDio.delete<void>('/users/me/data')).called(1);
+      });
+    });
+
+    group('deleteAccount', () {
+      test('calls DELETE /users/me', () async {
+        when(() => mockDio.delete<void>('/users/me')).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(path: '/users/me'),
+            statusCode: 200,
+          ),
+        );
+
+        await repository.deleteAccount();
+
+        verify(() => mockDio.delete<void>('/users/me')).called(1);
+      });
+
+      test('throws AuthException on 401 response', () async {
+        when(() => mockDio.delete<void>('/users/me')).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(path: '/users/me'),
+            response: Response(
+              requestOptions: RequestOptions(path: '/users/me'),
+              statusCode: 401,
+              data: {'message': 'Unauthorized'},
+            ),
+            type: DioExceptionType.badResponse,
+          ),
+        );
+
+        expect(
+          () => repository.deleteAccount(),
+          throwsA(isA<AuthException>()),
+        );
+      });
+    });
   });
 }

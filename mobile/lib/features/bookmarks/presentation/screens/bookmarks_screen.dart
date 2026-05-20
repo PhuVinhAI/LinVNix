@@ -217,12 +217,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
             itemCount: page.items.length + (page.items.length < page.totalItems ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == page.items.length) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: AppSpinner(),
-                  ),
-                );
+                return const _BookmarkPageFooterSkeleton();
               }
 
               final item = page.items[index];
@@ -361,6 +356,53 @@ class _BookmarksLoading extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _BookmarkPageFooterSkeleton extends StatelessWidget {
+  const _BookmarkPageFooterSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      borderRadius: AppRadius.lg,
+      margin: const EdgeInsets.symmetric(
+        vertical: AppSpacing.xs,
+        horizontal: AppSpacing.sm,
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(AppSpacing.lg),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppShimmerBox(
+                    width: 120,
+                    height: 18,
+                    borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
+                  ),
+                  SizedBox(height: AppSpacing.md),
+                  AppShimmerBox(
+                    width: 200,
+                    height: 14,
+                    borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(width: AppSpacing.md),
+            AppShimmerBox(
+              width: 32,
+              height: 32,
+              shape: BoxShape.circle,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

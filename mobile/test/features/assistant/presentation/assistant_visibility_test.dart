@@ -15,6 +15,7 @@ void main() {
       '/',
       '/courses',
       '/profile',
+      '/settings',
     ];
 
     for (final loc in hiddenLocations) {

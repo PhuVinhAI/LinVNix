@@ -179,8 +179,7 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
             // ── List ──────────────────────────────────────────────
             Expanded(
               child: conversations.when(
-                loading: () =>
-                    const Center(child: AppSpinner()),
+                loading: () => const _ConversationsLoading(),
                 error: (e, _) => Center(
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.lg),
@@ -425,5 +424,41 @@ class _ConversationRow extends StatelessWidget {
       return '$d ${d == 1 ? 'day' : 'days'} ago';
     }
     return '${dt.day}/${dt.month}/${dt.year}';
+  }
+}
+
+class _ConversationsLoading extends StatelessWidget {
+  const _ConversationsLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      itemCount: 8,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppShimmerBox(
+                width: index.isEven ? 200 : 160,
+                height: 14,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+              const SizedBox(height: 6),
+              const AppShimmerBox(
+                width: 72,
+                height: 10,
+                borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

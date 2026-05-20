@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -784,7 +784,9 @@ class _ModuleSetCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const AppSpinner(
-                                    size: 20, strokeWidth: 2),
+                                  size: 20,
+                                  strokeWidth: 2,
+                                ),
                                 const SizedBox(height: 2),
                                 Text(
                                   'Cancel',

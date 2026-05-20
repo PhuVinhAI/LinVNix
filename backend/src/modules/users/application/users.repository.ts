@@ -29,6 +29,14 @@ export class UsersRepository {
     });
   }
 
+  async findByEmailIncludingDeleted(email: string): Promise<User | null> {
+    return this.repository.findOne({
+      where: { email },
+      withDeleted: true,
+      relations: ['roles', 'roles.permissions'],
+    });
+  }
+
   async update(id: string, data: Partial<User>): Promise<User> {
     await this.repository.update(id, data);
     const user = await this.findById(id);
@@ -40,6 +48,10 @@ export class UsersRepository {
 
   async delete(id: string): Promise<void> {
     await this.repository.softDelete(id);
+  }
+
+  async restore(id: string): Promise<void> {
+    await this.repository.restore(id);
   }
 
   async save(user: User): Promise<User> {

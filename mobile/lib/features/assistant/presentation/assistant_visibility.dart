@@ -13,6 +13,7 @@ const Set<String> _hiddenLocations = {
   '/',
   '/courses',
   '/profile',
+  '/settings',
 };
 
 /// Pure visibility check used by `GlobalAssistantShell` and unit-tested in
