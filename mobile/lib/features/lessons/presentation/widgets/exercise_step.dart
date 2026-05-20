@@ -42,6 +42,7 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
   bool _submitting = false;
   ExerciseSubmissionResult? _result;
   String? _error;
+  final Stopwatch _questionTimer = Stopwatch();
 
   ExerciseRenderer get _renderer => getRenderer(widget.exercise.exerciseType);
 
@@ -53,6 +54,7 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
     _currentAnswer = widget.initialAnswer;
     _submitted = widget.initialResult != null;
     _result = widget.initialResult;
+    _syncQuestionTimer();
   }
 
   @override
@@ -62,7 +64,18 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
       _currentAnswer = widget.initialAnswer;
       _submitted = widget.initialResult != null;
       _result = widget.initialResult;
+      _syncQuestionTimer();
     }
+  }
+
+  void _syncQuestionTimer() {
+    if (_submitted) {
+      _questionTimer.stop();
+      return;
+    }
+    _questionTimer
+      ..reset()
+      ..start();
   }
 
   Future<void> _submit() async {
@@ -79,6 +92,7 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
       final result = await repo.submitExerciseAnswer(
         widget.exercise.id,
         payload,
+        timeSpent: _questionTimer.elapsed.inSeconds,
       );
 
       if (!mounted) return;

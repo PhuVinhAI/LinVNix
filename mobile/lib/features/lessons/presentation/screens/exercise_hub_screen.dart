@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
+import '../../data/lesson_time_tracker.dart';
 import '../../domain/exercise_set_models.dart';
 import '../widgets/custom_practice_bottom_sheet.dart';
 
@@ -29,6 +32,18 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   String? _creatingSetId;
   String? _regeneratingNewSetId;
   CancelToken? _aiCancelToken;
+  LessonTimeTracker? _lessonTimeTracker;
+
+  void _bindLessonTimeTracker() {
+    _lessonTimeTracker ??= LessonTimeTracker(
+      onFlush: (seconds) => ref
+          .read(lessonProgressProvider(widget.lessonId).notifier)
+          .addTimeSpent(seconds),
+    );
+    if (!_lessonTimeTracker!.isRunning) {
+      _lessonTimeTracker!.start();
+    }
+  }
 
   CancelToken _newAiCancelToken() {
     _aiCancelToken?.cancel();
@@ -41,6 +56,10 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _bindLessonTimeTracker();
+    });
   }
 
   @override
@@ -55,6 +74,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     WidgetsBinding.instance.removeObserver(this);
     _aiCancelToken?.cancel();
     _cleanupIncompleteSet();
+    unawaited(_lessonTimeTracker?.stop());
     super.dispose();
   }
 
@@ -74,15 +94,23 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      _cleanupIncompleteSet();
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        _cleanupIncompleteSet();
+        unawaited(_lessonTimeTracker?.pauseAndFlush());
+      case AppLifecycleState.resumed:
+        _lessonTimeTracker?.resume();
     }
   }
 
   Future<void> _pushExercisePlay(String setId) async {
+    await _lessonTimeTracker?.pauseAndFlush();
     await context.push('/lessons/${widget.lessonId}/exercises/play/$setId');
     if (!mounted) return;
+    _lessonTimeTracker?.start();
     await ref.read(exerciseSetsProvider(widget.lessonId).notifier).refresh();
   }
 

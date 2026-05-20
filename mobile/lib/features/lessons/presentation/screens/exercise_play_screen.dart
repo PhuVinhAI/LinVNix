@@ -41,6 +41,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
   final Map<int, dynamic> _answers = {};
   final Map<int, ExerciseSubmissionResult> _results = {};
+  final Stopwatch _questionTimer = Stopwatch();
 
   bool _initialResumeFlowScheduled = false;
   bool _resumeGateDone = false;
@@ -89,9 +90,13 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     if (_results.containsKey(_currentIndex)) {
       _result = _results[_currentIndex];
       _submitted = true;
+      _questionTimer.stop();
     } else {
       _result = null;
       _submitted = false;
+      _questionTimer
+        ..reset()
+        ..start();
     }
   }
 
@@ -170,7 +175,14 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       }
     } finally {
       if (mounted) {
-        setState(() => _resumeGateDone = true);
+        setState(() {
+          _resumeGateDone = true;
+          if (!_submitted && !_questionTimer.isRunning) {
+            _questionTimer
+              ..reset()
+              ..start();
+          }
+        });
       }
     }
   }
@@ -242,6 +254,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       final result = await repo.submitExerciseAnswer(
         _currentExercise!.id,
         payload,
+        timeSpent: _questionTimer.elapsed.inSeconds,
       );
 
       _answers[_currentIndex] = _currentAnswer;

@@ -94,6 +94,18 @@ class LessonProgressNotifier extends AsyncNotifier<Map<String, dynamic>?>
     await repo.completeLesson(lessonId, score: score);
     ref.read(dataChangeBusProvider.notifier).emit({'progress'});
   }
+
+  Future<void> addTimeSpent(int additionalTime) async {
+    if (additionalTime <= 0) return;
+    final repo = ref.read(lessonRepositoryProvider);
+    try {
+      await repo.updateLessonTimeSpent(lessonId, additionalTime);
+    } catch (_) {
+      await repo.startLesson(lessonId);
+      await repo.updateLessonTimeSpent(lessonId, additionalTime);
+    }
+    ref.read(dataChangeBusProvider.notifier).emit({'progress', 'exercise'});
+  }
 }
 
 final lessonProgressProvider = AsyncNotifierProvider.family<

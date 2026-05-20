@@ -182,6 +182,41 @@ void main() {
       });
     });
 
+    group('updateLessonTimeSpent', () {
+      test('sends additionalTime to progress endpoint', () async {
+        when(() => mockDio.patch<Map<String, dynamic>>(
+              '/progress/lesson/lesson-1/time',
+              data: {'additionalTime': 45},
+            )).thenAnswer(
+          (_) async => Response(
+            requestOptions:
+                RequestOptions(path: '/progress/lesson/lesson-1/time'),
+            statusCode: 200,
+            data: {
+              'id': 'p1',
+              'timeSpent': 45,
+            },
+          ),
+        );
+
+        await repository.updateLessonTimeSpent('lesson-1', 45);
+
+        verify(() => mockDio.patch<Map<String, dynamic>>(
+              '/progress/lesson/lesson-1/time',
+              data: {'additionalTime': 45},
+            )).called(1);
+      });
+
+      test('skips request when additionalTime is zero', () async {
+        await repository.updateLessonTimeSpent('lesson-1', 0);
+
+        verifyNever(() => mockDio.patch<Map<String, dynamic>>(
+              any(),
+              data: any(named: 'data'),
+            ));
+      });
+    });
+
     group('getLessonProgress', () {
       test('returns progress data when exists', () async {
         when(() => mockDio

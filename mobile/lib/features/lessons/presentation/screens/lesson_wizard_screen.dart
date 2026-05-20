@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +7,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
+import '../../data/lesson_time_tracker.dart';
 import '../../domain/lesson_models.dart';
 import '../widgets/content_widgets.dart';
 import '../widgets/vocabulary_step.dart';
@@ -18,16 +21,30 @@ class LessonWizardScreen extends ConsumerStatefulWidget {
   ConsumerState<LessonWizardScreen> createState() => _LessonWizardScreenState();
 }
 
-class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
+class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
+    with WidgetsBindingObserver {
   PageController? _pageController;
   int _currentPage = 0;
   bool _initialProgressHandled = false;
   bool _startExercisesDialogOpen = false;
+  LessonTimeTracker? _lessonTimeTracker;
+
+  void _bindLessonTimeTracker() {
+    _lessonTimeTracker ??= LessonTimeTracker(
+      onFlush: (seconds) => ref
+          .read(lessonProgressProvider(widget.lessonId).notifier)
+          .addTimeSpent(seconds),
+    );
+    if (!_lessonTimeTracker!.isRunning) {
+      _lessonTimeTracker!.start();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   static bool _isInProgress(Map<String, dynamic>? progress) {
@@ -62,6 +79,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   }
 
   void _navigateToExerciseHub() {
+    unawaited(_lessonTimeTracker?.stop());
     context.push('/lessons/${widget.lessonId}/exercises');
   }
 
@@ -114,6 +132,8 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   void didUpdateWidget(covariant LessonWizardScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.lessonId != widget.lessonId) {
+      unawaited(_lessonTimeTracker?.stop());
+      _lessonTimeTracker = null;
       _initialProgressHandled = false;
       _startExercisesDialogOpen = false;
       _currentPage = 0;
@@ -123,7 +143,22 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        unawaited(_lessonTimeTracker?.pauseAndFlush());
+      case AppLifecycleState.resumed:
+        _lessonTimeTracker?.resume();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_lessonTimeTracker?.stop());
     _pageController?.dispose();
     super.dispose();
   }
@@ -166,9 +201,12 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
     if (!_initialProgressHandled && !progressAsync.isLoading) {
       if (progressAsync.hasError) {
         _initialProgressHandled = true;
-        Future.microtask(() => ref
-            .read(lessonProgressProvider(widget.lessonId).notifier)
-            .startLesson());
+        Future.microtask(() async {
+          await ref
+              .read(lessonProgressProvider(widget.lessonId).notifier)
+              .startLesson();
+          if (mounted) _bindLessonTimeTracker();
+        });
       } else if (progressAsync.hasValue) {
         _initialProgressHandled = true;
         final hadExistingProgress = progress != null;
@@ -184,6 +222,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen> {
             }
           }
           await notifier.startLesson();
+          if (mounted) _bindLessonTimeTracker();
         });
       }
     }

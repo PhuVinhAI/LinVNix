@@ -107,6 +107,21 @@ class LessonRepository {
     }
   }
 
+  Future<void> updateLessonTimeSpent(
+    String lessonId,
+    int additionalTime,
+  ) async {
+    if (additionalTime <= 0) return;
+    try {
+      await _dio.patch<Map<String, dynamic>>(
+        '/progress/lesson/$lessonId/time',
+        data: {'additionalTime': additionalTime},
+      );
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<Map<String, dynamic>?> getLessonProgress(String lessonId) async {
     try {
       final response =
