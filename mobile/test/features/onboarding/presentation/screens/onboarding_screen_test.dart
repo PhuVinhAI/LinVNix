@@ -262,6 +262,7 @@ void main() {
 
       verify(() => mockUserRepo.submitOnboarding({
             'completeLowerCourses': false,
+            'currentLevel': 'A1',
           })).called(1);
 
       verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))

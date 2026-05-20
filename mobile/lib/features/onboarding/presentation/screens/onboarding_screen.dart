@@ -5,8 +5,9 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
-import '../../../../features/profile/data/profile_providers.dart';
 import '../../../../features/daily_goals/data/daily_goals_providers.dart';
+import '../../../../features/daily_goals/data/daily_goals_repository.dart';
+import '../../../../features/profile/data/profile_providers.dart';
 import '../../../../features/daily_goals/domain/daily_goal_models.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -125,8 +126,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _submit() async {
+    if (_isSubmitting) return;
     setState(() => _isSubmitting = true);
 
+    var succeeded = false;
     try {
       final onboardingData = <String, dynamic>{
         'completeLowerCourses': _completeLowerCourses,
@@ -139,11 +142,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final repository = ref.read(userRepositoryProvider);
       await repository.submitOnboarding(onboardingData);
 
-      final goalsNotifier = ref.read(dailyGoalsProvider.notifier);
+      final goalsRepo = ref.read(dailyGoalsRepositoryProvider);
       for (final entry in _goalEnabled.entries) {
         if (!entry.value) continue;
         try {
-          await goalsNotifier.createGoal(
+          await goalsRepo.createGoal(
             entry.key,
             _goalTargets[entry.key] ?? entry.key.defaultTarget,
           );
@@ -157,11 +160,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await prefs.setOnboardingCompleted();
 
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
-      ref.invalidate(userProfileProvider);
 
-      if (mounted) {
-        context.go('/');
-      }
+      if (!context.mounted) return;
+      context.go('/');
+      succeeded = true;
+
+      // Refresh cached profile/goals after leaving onboarding so home has
+      // server data without triggering router redirects mid-submit.
+      Future.microtask(() {
+        ref.invalidate(dailyGoalsProvider);
+        ref.invalidate(userProfileProvider);
+      });
     } on AppException catch (e) {
       if (mounted) {
         AppToast.show(context, message: e.message, type: AppToastType.error);
@@ -175,7 +184,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         );
       }
     } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+      if (mounted && !succeeded) {
+        setState(() => _isSubmitting = false);
+      }
     }
   }
 
@@ -255,7 +266,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   AppButton(
                     label: _currentStep < 2 ? 'Next' : 'Get Started',
                     variant: AppButtonVariant.primary,
-                    onPressed: _canProceed ? _nextStep : null,
+                    onPressed:
+                        _canProceed && !_isSubmitting ? _nextStep : null,
                     isLoading: _isSubmitting,
                   ),
                 ],

@@ -60,8 +60,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         data: (profile) => profile.onboardingCompleted,
       );
 
+      // Prefer true from either source: stale server profile (false) must not
+      // override local completion set during onboarding submit.
       final isOnboardingCompleted =
-          serverOnboarding ?? onboardingCompleted;
+          onboardingCompleted || (serverOnboarding ?? false);
 
       final location = state.matchedLocation;
 

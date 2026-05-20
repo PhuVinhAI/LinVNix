@@ -50,17 +50,33 @@ final onboardingCompletedProvider = NotifierProvider<OnboardingCompletedNotifier
 );
 
 class OnboardingCompletedNotifier extends Notifier<bool> {
+  bool _markedCompleted = false;
+
   @override
   bool build() {
     final prefsAsync = ref.watch(preferencesProvider);
-    return prefsAsync.whenOrNull(data: (prefs) => prefs.isOnboardingCompleted) ?? false;
+    final fromPrefs = prefsAsync.whenOrNull(
+      data: (prefs) => prefs.isOnboardingCompleted,
+    );
+    if (fromPrefs == true) {
+      _markedCompleted = false;
+      return true;
+    }
+    if (fromPrefs == false) {
+      _markedCompleted = false;
+      return false;
+    }
+    // While prefs reload, keep optimistic completion from markCompleted().
+    return _markedCompleted;
   }
 
   void markCompleted() {
+    _markedCompleted = true;
     state = true;
   }
 
   void reset() {
+    _markedCompleted = false;
     state = false;
   }
 }
