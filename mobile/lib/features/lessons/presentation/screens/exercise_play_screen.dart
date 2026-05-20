@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -403,10 +404,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     final exercisesAsync = ref.watch(lessonExercisesProvider(_args));
 
     return exercisesAsync.when(
-      loading: () => Scaffold(
-        appBar: const AppAppBar(title: Text('Exercise')),
-        body: const Center(child: AppSpinner()),
-      ),
+      loading: () => const _ExercisePlayLoading(),
       error: (error, _) => Scaffold(
         appBar: const AppAppBar(title: Text('Exercise')),
         body: Center(
@@ -415,12 +413,36 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: c.error.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.error_outline_rounded,
+                    size: 80,
+                    color: c.error,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
                 Text(
-                  error.toString(),
-                  style: theme.textTheme.bodyLarge,
+                  'Failed to load exercises',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: c.foreground,
+                  ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  error.toString(),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: c.mutedForeground,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppSpacing.lg),
                 AppButton(
                   label: 'Go back',
                   variant: AppButtonVariant.primary,
@@ -441,11 +463,28 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: c.primary.withValues(alpha: 0.08),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.edit_note_rounded,
+                        size: 80,
+                        color: c.primary,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Text(
                       'No exercises available',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: c.foreground,
+                      ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.lg),
                     AppButton(
                       label: 'Go back',
                       variant: AppButtonVariant.primary,
@@ -468,10 +507,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         }
 
         if (!_resumeGateDone) {
-          return const Scaffold(
-            appBar: AppAppBar(title: Text('Exercise')),
-            body: Center(child: AppSpinner()),
-          );
+          return const _ExercisePlayLoading();
         }
 
         final exercise = _currentExercise!;
@@ -666,6 +702,149 @@ class ExplanationPanel extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _ExercisePlayLoading extends StatelessWidget {
+  const _ExercisePlayLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    Widget buildOptionShimmer() {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: AppCard(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Shimmer.fromColors(
+                  baseColor: c.muted,
+                  highlightColor: c.card,
+                  child: Container(
+                    width: 180,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppAppBar(
+        title: const Text('Exercise'),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4),
+          child: Shimmer.fromColors(
+            baseColor: c.muted,
+            highlightColor: c.card,
+            child: Container(
+              width: double.infinity,
+              height: 4,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 100,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 80,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.full),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 200,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            buildOptionShimmer(),
+            buildOptionShimmer(),
+            buildOptionShimmer(),
+            const SizedBox(height: 24),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: double.infinity,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

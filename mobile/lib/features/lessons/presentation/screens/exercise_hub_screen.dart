@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -361,15 +362,43 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     return Scaffold(
       appBar: const AppAppBar(title: Text('Practice')),
       body: summaryAsync.when(
-        loading: () => const Center(child: AppSpinner()),
+        loading: () => const _ExerciseHubLoading(),
         error: (e, _) => Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Failed to load exercises', style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
-                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: c.error.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.error_outline_rounded,
+                    size: 80,
+                    color: c.error,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  'Failed to load exercises',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: c.foreground,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  e.toString(),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: c.mutedForeground,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppSpacing.lg),
                 AppButton(
                   label: 'Retry',
                   variant: AppButtonVariant.primary,
@@ -476,12 +505,39 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
               )),
               if (customSets.isEmpty && defaultSets.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: 32),
+                  padding: const EdgeInsets.only(top: 48),
                   child: Center(
-                    child: Text(
-                      'No exercises yet. Create a custom set to start practicing!',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: c.primary.withValues(alpha: 0.08),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.edit_note_rounded,
+                            size: 80,
+                            color: c.primary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        Text(
+                          'No exercises yet',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: c.foreground,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          'Create a custom set to start practicing!',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: c.mutedForeground,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -489,6 +545,189 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
           );
         },
       ),
+    );
+  }
+}
+
+class _ExerciseHubLoading extends StatelessWidget {
+  const _ExerciseHubLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    Widget buildCardShimmer() {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: AppCard(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Shimmer.fromColors(
+                      baseColor: c.muted,
+                      highlightColor: c.card,
+                      child: Container(
+                        width: 120,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Shimmer.fromColors(
+                      baseColor: c.muted,
+                      highlightColor: c.card,
+                      child: Container(
+                        width: 200,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Shimmer.fromColors(
+                      baseColor: c.muted,
+                      highlightColor: c.card,
+                      child: Container(
+                        width: 80,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 28,
+                  height: 28,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Shimmer.fromColors(
+          baseColor: c.muted,
+          highlightColor: c.card,
+          child: Container(
+            width: 160,
+            height: 24,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Shimmer.fromColors(
+          baseColor: c.muted,
+          highlightColor: c.card,
+          child: Container(
+            width: 280,
+            height: 14,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        buildCardShimmer(),
+        buildCardShimmer(),
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 160,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Shimmer.fromColors(
+          baseColor: c.muted,
+          highlightColor: c.card,
+          child: Container(
+            width: 280,
+            height: 14,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Shimmer.fromColors(
+          baseColor: c.muted,
+          highlightColor: c.card,
+          child: Container(
+            width: double.infinity,
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

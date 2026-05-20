@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/providers/assistant_bar_provider.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/providers/theme_provider.dart';
@@ -36,18 +37,43 @@ class ProfileScreen extends ConsumerWidget {
           await ref.read(exerciseStatsProvider.notifier).refresh();
         },
         child: profileAsync.when(
-          loading: () => const Center(child: AppSpinner(size: 20)),
+          loading: () => const _ProfileLoading(),
           error: (error, stack) => Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 48),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: c.error),
-                  const SizedBox(height: 16),
-                  Text('Failed to load profile',
-                      style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
-                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: c.error.withValues(alpha: 0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.error_outline_rounded,
+                      size: 80,
+                      color: c.error,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(
+                    'Failed to load profile',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: c.foreground,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    error.toString(),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: c.mutedForeground,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
                   AppButton(
                     onPressed: () => ref.read(userProfileProvider.notifier).refresh(),
                     icon: const Icon(Icons.refresh),
@@ -885,6 +911,92 @@ class _SavedWordsSection extends StatelessWidget {
         trailing: const Icon(Icons.chevron_right),
         onTap: () => context.push('/bookmarks'),
       ),
+    );
+  }
+}
+
+class _ProfileLoading extends StatelessWidget {
+  const _ProfileLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    Widget buildBlockShimmer({required double height}) {
+      return Shimmer.fromColors(
+        baseColor: c.muted,
+        highlightColor: c.card,
+        child: Container(
+          width: double.infinity,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+          ),
+        ),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm,
+      ),
+      children: [
+        const SizedBox(height: AppSpacing.md),
+        Center(
+          child: Column(
+            children: [
+              Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 140,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 180,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        buildBlockShimmer(height: 120),
+        const SizedBox(height: AppSpacing.md),
+        buildBlockShimmer(height: 60),
+        const SizedBox(height: AppSpacing.md),
+        buildBlockShimmer(height: 150),
+        const SizedBox(height: AppSpacing.md),
+        buildBlockShimmer(height: 120),
+      ],
     );
   }
 }

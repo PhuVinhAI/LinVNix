@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/bookmark_providers.dart';
@@ -176,15 +177,27 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.bookmark_border, size: 64, color: c.mutedForeground),
-                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: c.primary.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.bookmark_outline_rounded,
+                    size: 80,
+                    color: c.primary,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
                 Text(
                   'No saved words yet',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: c.mutedForeground,
+                        fontWeight: FontWeight.bold,
+                        color: c.foreground,
                       ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.xs),
                 Text(
                   'Save your favorite words from lessons',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -224,17 +237,34 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
           ),
         );
       },
-      loading: () => const Center(child: AppSpinner()),
+      loading: () => const _BookmarksLoading(),
       error: (error, stack) => Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 48, color: c.error),
-              const SizedBox(height: 16),
-              Text(error.toString(), textAlign: TextAlign.center),
-              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: c.error.withValues(alpha: 0.08),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.error_outline_rounded,
+                  size: 80,
+                  color: c.error,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                error.toString(),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: c.mutedForeground,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSpacing.lg),
               AppButton(
                 label: 'Retry',
                 variant: AppButtonVariant.primary,
@@ -244,6 +274,93 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BookmarksLoading extends StatelessWidget {
+  const _BookmarksLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return AppCard(
+          variant: AppCardVariant.outlined,
+          borderRadius: AppRadius.lg,
+          margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs, horizontal: AppSpacing.sm),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Shimmer.fromColors(
+                          baseColor: c.muted,
+                          highlightColor: c.card,
+                          child: Container(
+                            width: 120,
+                            height: 18,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(AppRadius.sm),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Shimmer.fromColors(
+                          baseColor: c.muted,
+                          highlightColor: c.card,
+                          child: Container(
+                            width: 50,
+                            height: 18,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(AppRadius.full),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Shimmer.fromColors(
+                      baseColor: c.muted,
+                      highlightColor: c.card,
+                      child: Container(
+                        width: 200,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

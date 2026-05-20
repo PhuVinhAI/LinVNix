@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -330,16 +331,45 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
             activeFullState is AssistantMidError);
 
     if (_loadingMessages && _messages.isEmpty && !showLiveTurn) {
-      return const Center(child: AppSpinner());
+      return const _AssistantChatLoading();
     }
 
     if (_messages.isEmpty && !showLiveTurn) {
       return Center(
-        child: Text(
-          'Start a conversation',
-          style: GoogleFonts.inter(
-            fontSize: AppTypography.bodyMedium,
-            color: c.mutedForeground,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 48),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.08),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.forum_outlined,
+                  size: 80,
+                  color: c.primary,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                'AI Assistant',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: c.foreground,
+                    ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                'Start a conversation to get instant explanations, practice translations, or clarify language concepts.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: c.mutedForeground,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       );
@@ -697,6 +727,136 @@ class _ComposeBar extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AssistantChatLoading extends StatelessWidget {
+  const _AssistantChatLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Shimmer.fromColors(
+      baseColor: c.muted,
+      highlightColor: c.card,
+      child: ListView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.md,
+        ),
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          const SizedBox(height: AppSpacing.md),
+          // User bubble (right-aligned)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 180,
+              height: 44,
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+              ),
+            ),
+          ),
+          // AI response skeleton (left-aligned)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 240,
+                  height: 18,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 14,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+                Container(
+                  width: 280,
+                  height: 14,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+                Container(
+                  width: 150,
+                  height: 14,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // User bubble (right-aligned)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 140,
+              height: 44,
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+              ),
+            ),
+          ),
+          // AI response skeleton (left-aligned)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 200,
+                  height: 18,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 14,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+                Container(
+                  width: 220,
+                  height: 14,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

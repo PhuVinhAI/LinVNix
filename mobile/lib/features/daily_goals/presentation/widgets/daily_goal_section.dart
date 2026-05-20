@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -28,27 +29,44 @@ class DailyGoalSection extends ConsumerWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         goalsAsync.when(
-          loading: () => const AppCard(
-            variant: AppCardVariant.outlined,
-            child: Center(child: AppSpinner(size: 20)),
-          ),
+          loading: () => const _DailyGoalsLoading(),
           error: (error, stack) => AppCard(
             variant: AppCardVariant.outlined,
-            child: Column(
-              children: [
-                Icon(Icons.error_outline,
-                    color: AppTheme.colors(context).error),
-                const SizedBox(height: 8),
-                const Text('Could not load goals',
-                    textAlign: TextAlign.center),
-                const SizedBox(height: 8),
-                AppButton(
-                  label: 'Retry',
-                  variant: AppButtonVariant.outline,
-                  onPressed: () =>
-                      ref.read(dailyGoalsProvider.notifier).refresh(),
-                ),
-              ],
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.colors(context).error.withValues(alpha: 0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.error_outline_rounded,
+                      size: 40,
+                      color: AppTheme.colors(context).error,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'Could not load goals',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.colors(context).foreground,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  AppButton(
+                    label: 'Retry',
+                    variant: AppButtonVariant.outline,
+                    onPressed: () =>
+                        ref.read(dailyGoalsProvider.notifier).refresh(),
+                  ),
+                ],
+              ),
             ),
           ),
           data: (goals) => _GoalsCard(goals: goals),
@@ -76,12 +94,38 @@ class _GoalsCard extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Center(
-                child: Text(
-                  'No goals yet. Add a goal to track your progress!',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: c.mutedForeground,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: c.primary.withValues(alpha: 0.08),
+                        shape: BoxShape.circle,
                       ),
-                  textAlign: TextAlign.center,
+                      child: Icon(
+                        Icons.emoji_events_outlined,
+                        size: 48,
+                        color: c.primary,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      'No goals set yet',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: c.foreground,
+                          ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      'Add a goal to track your daily progress!',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: c.mutedForeground,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
             )
@@ -545,5 +589,171 @@ class _NotificationSettings extends ConsumerWidget {
             message: 'Error: $e', type: AppToastType.error);
       }
     }
+  }
+}
+
+class _DailyGoalsLoading extends StatelessWidget {
+  const _DailyGoalsLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    Widget buildTileShimmer() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.md,
+        ),
+        child: Row(
+          children: [
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
+                    child: Container(
+                      width: 100,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
+                    child: Container(
+                      width: 60,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return AppCard(
+      variant: AppCardVariant.outlined,
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          buildTileShimmer(),
+          AppDivider(),
+          buildTileShimmer(),
+          AppDivider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.md,
+            ),
+            child: Row(
+              children: [
+                Shimmer.fromColors(
+                  baseColor: c.muted,
+                  highlightColor: c.card,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 120,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      AppDivider(),
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.md,
+        ),
+        child: Row(
+          children: [
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Shimmer.fromColors(
+                baseColor: c.muted,
+                highlightColor: c.card,
+                child: Container(
+                  width: 160,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+);
   }
 }

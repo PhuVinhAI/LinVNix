@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/bookmark_providers.dart';
@@ -97,21 +98,41 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
           }
           return _buildCardStack(items, preferredDialect);
         },
-        loading: () => const Center(child: AppSpinner()),
+        loading: () => const _FlashcardLoading(),
         error: (e, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48, color: c.error),
-              const SizedBox(height: 16),
-              Text(e.toString(), textAlign: TextAlign.center),
-              const SizedBox(height: 16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: c.error.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.error_outline_rounded,
+                    size: 80,
+                    color: c.error,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  e.toString(),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: c.mutedForeground,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppSpacing.lg),
                 AppButton(
-                label: 'Retry',
-                variant: AppButtonVariant.primary,
-                onPressed: () => ref.read(flashcardBookmarksProvider.notifier).refresh(),
-              ),
-            ],
+                  label: 'Retry',
+                  variant: AppButtonVariant.primary,
+                  onPressed: () => ref.read(flashcardBookmarksProvider.notifier).refresh(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -123,12 +144,24 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.bookmark_border, size: 64, color: c.mutedForeground),
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: c.primary.withValues(alpha: 0.08),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.bookmark_outline_rounded,
+              size: 80,
+              color: c.primary,
+            ),
+          ),
           const SizedBox(height: AppSpacing.lg),
           Text(
             'No saved words yet',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: c.mutedForeground,
+                  fontWeight: FontWeight.bold,
+                  color: c.foreground,
                 ),
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -163,6 +196,80 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
     );
   }
 }
+
+class _FlashcardLoading extends StatelessWidget {
+  const _FlashcardLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      child: AppCard(
+        variant: AppCardVariant.outlined,
+        padding: const EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 180,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 100,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Shimmer.fromColors(
+              baseColor: c.muted,
+              highlightColor: c.card,
+              child: Container(
+                width: 80,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 class _Flashcard extends StatelessWidget {
   const _Flashcard({
