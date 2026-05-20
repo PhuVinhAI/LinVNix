@@ -8,6 +8,17 @@ import 'package:linvnix/features/courses/domain/course_models.dart';
 import 'package:linvnix/features/courses/presentation/screens/module_detail_screen.dart';
 import 'package:linvnix/features/lessons/data/lesson_providers.dart';
 import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
+import 'package:linvnix/features/profile/data/profile_providers.dart';
+import 'package:linvnix/features/user/domain/user_profile.dart';
+
+const _testCourse = Course(
+  id: 'course-1',
+  title: 'Test Course',
+  description: 'A test course',
+  level: 'A1',
+  orderIndex: 1,
+  isPublished: true,
+);
 
 const _testModule = CourseModule(
   id: 'mod-1',
@@ -15,6 +26,7 @@ const _testModule = CourseModule(
   description: 'A test module',
   orderIndex: 1,
   courseId: 'course-1',
+  course: _testCourse,
   lessons: [
     Lesson(
       id: 'lesson-1',
@@ -36,8 +48,12 @@ const _testModule = CourseModule(
 );
 
 class _FakeModuleDetail extends ModuleDetail {
+  final CourseModule _module;
+
+  _FakeModuleDetail([CourseModule? module]) : _module = module ?? _testModule;
+
   @override
-  Future<CourseModule> build(String id) async => _testModule;
+  Future<CourseModule> build(String id) async => _module;
 }
 
 class _FakeModuleExerciseSetsNotifier extends ModuleExerciseSetsNotifier {
@@ -58,10 +74,22 @@ class _FakeUserProgressNotifier extends UserProgressNotifier {
   Future<List<UserProgress>> build() async => const [];
 }
 
+class _FakeUserProfileNotifier extends UserProfileNotifier {
+  final UserProfile _data;
+
+  _FakeUserProfileNotifier(this._data);
+
+  @override
+  Future<UserProfile> build() async {
+    watchTags({'auth'});
+    return _data;
+  }
+}
+
 void main() {
   group('ModuleDetailScreen custom practice section', () {
     testWidgets(
-        'custom practice section hidden when no lessons completed (eligible=false)',
+        'custom practice shows locked message when not eligible',
         (tester) async {
       final notEligibleSummary = const ModuleExerciseSummary(
         eligible: false,
@@ -89,8 +117,12 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.text('Custom Practice'), findsNothing);
-      expect(find.text('0/2 lessons completed'), findsNothing);
+      expect(find.text('Custom Practice'), findsOneWidget);
+      expect(find.text('0/2 completed'), findsOneWidget);
+      expect(
+        find.text('Complete at least one lesson to unlock custom practice.'),
+        findsOneWidget,
+      );
       expect(find.text('Create Custom Practice'), findsNothing);
     });
 
@@ -124,7 +156,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Custom Practice'), findsOneWidget);
-      expect(find.text('1/2 lessons completed'), findsOneWidget);
+      expect(find.text('1/2 completed'), findsOneWidget);
       expect(find.text('Create Custom Practice'), findsOneWidget);
     });
 
@@ -171,14 +203,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Custom Practice'), findsOneWidget);
-      expect(find.text('2/2 lessons completed'), findsOneWidget);
+      expect(find.text('2/2 completed'), findsOneWidget);
       expect(find.text('Module Review'), findsOneWidget);
       expect(find.text('AI-generated review'), findsOneWidget);
       expect(find.text('Create Custom Practice'), findsOneWidget);
     });
 
     testWidgets(
-        'custom practice section shows lessons list below it', (tester) async {
+        'lessons list appears above custom practice section', (tester) async {
       final eligibleSummary = const ModuleExerciseSummary(
         eligible: true,
         completedLessonsCount: 1,
@@ -208,6 +240,166 @@ void main() {
       expect(find.text('Lessons'), findsOneWidget);
       expect(find.text('Lesson 1'), findsOneWidget);
       expect(find.text('Lesson 2'), findsOneWidget);
+
+      final lesson1Offset = tester.getTopLeft(find.text('Lesson 1'));
+      final customPracticeOffset =
+          tester.getTopLeft(find.text('Custom Practice'));
+      expect(lesson1Offset.dy, lessThan(customPracticeOffset.dy));
+    });
+  });
+
+  group('ModuleDetailScreen Complete All button', () {
+    testWidgets(
+        'Complete All button only shows when user level > module course level',
+        (tester) async {
+      final eligibleSummary = const ModuleExerciseSummary(
+        eligible: true,
+        completedLessonsCount: 1,
+        totalLessonsCount: 2,
+        moduleSets: [],
+      );
+
+      const b2User = UserProfile(
+        id: 'u1',
+        email: 'test@test.com',
+        fullName: 'Test User',
+        currentLevel: 'B2',
+        onboardingCompleted: true,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
+            moduleExerciseSetsProvider.overrideWith(
+              () => _FakeModuleExerciseSetsNotifier('mod-1', eligibleSummary),
+            ),
+            userProgressProvider
+                .overrideWith(() => _FakeUserProgressNotifier()),
+            userProfileProvider
+                .overrideWith(() => _FakeUserProfileNotifier(b2User)),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            home: const ModuleDetailScreen(moduleId: 'mod-1'),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Complete All'), findsOneWidget);
+    });
+
+    testWidgets(
+        'Complete All button hidden when user level equals module course level',
+        (tester) async {
+      final eligibleSummary = const ModuleExerciseSummary(
+        eligible: true,
+        completedLessonsCount: 1,
+        totalLessonsCount: 2,
+        moduleSets: [],
+      );
+
+      const a1User = UserProfile(
+        id: 'u1',
+        email: 'test@test.com',
+        fullName: 'Test User',
+        currentLevel: 'A1',
+        onboardingCompleted: true,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
+            moduleExerciseSetsProvider.overrideWith(
+              () => _FakeModuleExerciseSetsNotifier('mod-1', eligibleSummary),
+            ),
+            userProgressProvider
+                .overrideWith(() => _FakeUserProgressNotifier()),
+            userProfileProvider
+                .overrideWith(() => _FakeUserProfileNotifier(a1User)),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            home: const ModuleDetailScreen(moduleId: 'mod-1'),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Complete All'), findsNothing);
+    });
+
+    testWidgets(
+        'Complete All button hidden when user level is lower than module course level',
+        (tester) async {
+      final eligibleSummary = const ModuleExerciseSummary(
+        eligible: true,
+        completedLessonsCount: 1,
+        totalLessonsCount: 2,
+        moduleSets: [],
+      );
+
+      const a2User = UserProfile(
+        id: 'u1',
+        email: 'test@test.com',
+        fullName: 'Test User',
+        currentLevel: 'A2',
+        onboardingCompleted: true,
+      );
+
+      const b1Module = CourseModule(
+        id: 'mod-b1',
+        title: 'B1 Module',
+        description: 'B1 module',
+        orderIndex: 1,
+        courseId: 'course-b1',
+        course: Course(
+          id: 'course-b1',
+          title: 'B1 Course',
+          description: 'A B1 level course',
+          level: 'B1',
+          orderIndex: 1,
+          isPublished: true,
+        ),
+        lessons: [
+          Lesson(
+            id: 'lesson-b1',
+            title: 'B1 Lesson',
+            description: 'B1 lesson',
+            lessonType: 'vocabulary',
+            orderIndex: 1,
+            moduleId: 'mod-b1',
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            moduleDetailProvider
+                .overrideWith(() => _FakeModuleDetail(b1Module)),
+            moduleExerciseSetsProvider.overrideWith(
+              () => _FakeModuleExerciseSetsNotifier('mod-b1', eligibleSummary),
+            ),
+            userProgressProvider
+                .overrideWith(() => _FakeUserProgressNotifier()),
+            userProfileProvider
+                .overrideWith(() => _FakeUserProfileNotifier(a2User)),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            home: const ModuleDetailScreen(moduleId: 'mod-b1'),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Complete All'), findsNothing);
     });
   });
 }
