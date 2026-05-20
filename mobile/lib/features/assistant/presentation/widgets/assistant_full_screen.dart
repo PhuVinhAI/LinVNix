@@ -8,6 +8,7 @@ import '../../../../core/theme/widgets/widgets.dart';
 import '../../application/assistant_chat_notifier.dart';
 import '../../application/assistant_state_machine.dart';
 import '../../data/ai_api_provider.dart';
+import '../../data/conversation_list_provider.dart';
 import '../../data/conversation_model.dart';
 import '../../data/screen_context_provider.dart';
 import '../../domain/assistant_state.dart';
@@ -115,6 +116,10 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
     });
     _scrollToBottom();
 
+    // Refresh sidebar immediately so the conversation shows up in the
+    // list even before the AI has replied.
+    ref.invalidate(conversationListProvider);
+
     try {
       await notifier.sendMessage(text);
     } catch (_) {
@@ -159,6 +164,9 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
           _scrollToBottom();
         }
       });
+      // Refresh sidebar after AI finishes responding so the
+      // conversation's updatedAt and preview are up-to-date.
+      ref.invalidate(conversationListProvider);
     });
   }
 
@@ -620,21 +628,30 @@ class _ComposeBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: c.border)),
-        color: c.card,
-      ),
+    // Outer wrapper: no background, no border — just keyboard-aware padding.
+    return Padding(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.lg,
         AppSpacing.sm,
-        AppSpacing.sm,
+        AppSpacing.lg,
         MediaQuery.of(context).viewInsets.bottom + AppSpacing.sm,
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
+      child: Container(
+        decoration: BoxDecoration(
+          color: c.muted.withValues(alpha: 0.4),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        padding: const EdgeInsets.only(
+          left: AppSpacing.lg,
+          right: AppSpacing.sm,
+          top: AppSpacing.sm,
+          bottom: AppSpacing.sm,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
               controller: controller,
               maxLines: 5,
               minLines: 1,
@@ -645,38 +662,41 @@ class _ComposeBar extends StatelessWidget {
               ),
               decoration: InputDecoration(
                 hintText: 'Type a message...',
-                hintStyle: GoogleFonts.inter(color: c.mutedForeground),
+                hintStyle: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyMedium,
+                  color: c.mutedForeground,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.sm,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                  borderSide: BorderSide(color: c.border),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                  borderSide: BorderSide(color: c.border),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                  borderSide: BorderSide(color: c.primary, width: 1.5),
+                filled: false,
+                fillColor: Colors.transparent,
+              ),
+              onSubmitted: (_) => inFlight ? null : onSend(),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: inFlight ? onStop : onSend,
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: inFlight ? c.error : c.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    inFlight ? Icons.stop_rounded : Icons.arrow_upward_rounded,
+                    color: inFlight ? c.errorForeground : c.primaryForeground,
+                    size: 20,
+                  ),
                 ),
               ),
-              onSubmitted: (_) => onSend(),
             ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          IconButton(
-            icon: Icon(
-              inFlight ? Icons.stop_rounded : Icons.send,
-              color: inFlight ? c.error : c.primary,
-            ),
-            tooltip: inFlight ? 'Stop' : 'Send',
-            onPressed: inFlight ? onStop : onSend,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
