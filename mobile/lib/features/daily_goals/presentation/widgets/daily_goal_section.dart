@@ -208,6 +208,8 @@ class _GoalsCard extends ConsumerWidget {
     WidgetRef ref,
     List<GoalType> availableTypes,
   ) {
+    final onlyType =
+        availableTypes.length == 1 ? availableTypes.first : null;
     GoalType? selectedType = availableTypes.first;
     int targetValue = selectedType.defaultTarget;
 
@@ -218,27 +220,42 @@ class _GoalsCard extends ConsumerWidget {
           title: 'Add goal',
           contentWidget: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AppDropdownField<GoalType>(
-                label: 'Goal type',
-                value: selectedType,
-                items: availableTypes,
-                itemLabelBuilder: (t) => t.label,
-                onChanged: (type) {
-                  setState(() {
-                    selectedType = type;
-                    targetValue = type!.defaultTarget;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              if (selectedType != null) ...[
-                _TargetSlider(
-                  goalType: selectedType!,
-                  value: targetValue,
-                  onChanged: (v) => setState(() => targetValue = v),
+              if (onlyType == null) ...[
+                AppDropdownField<GoalType>(
+                  label: 'Goal type',
+                  value: selectedType,
+                  items: availableTypes,
+                  itemLabelBuilder: (t) => t.label,
+                  onChanged: (type) {
+                    setState(() {
+                      selectedType = type;
+                      targetValue = type!.defaultTarget;
+                    });
+                  },
                 ),
+                const SizedBox(height: 16),
+              ] else ...[
+                Row(
+                  children: [
+                    Icon(onlyType.icon, color: AppTheme.colors(context).primary),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      onlyType.label,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
               ],
+              _TargetSlider(
+                goalType: onlyType ?? selectedType!,
+                value: targetValue,
+                onChanged: (v) => setState(() => targetValue = v),
+              ),
             ],
           ),
           actions: [
@@ -250,11 +267,12 @@ class _GoalsCard extends ConsumerWidget {
               label: 'Add',
               isPrimary: true,
               onPressed: () async {
+                final goalType = onlyType ?? selectedType!;
                 Navigator.pop(context);
                 try {
                   await ref
                       .read(dailyGoalsProvider.notifier)
-                      .createGoal(selectedType!, targetValue);
+                      .createGoal(goalType, targetValue);
                 } catch (e) {
                   if (context.mounted) {
                     AppToast.show(context,

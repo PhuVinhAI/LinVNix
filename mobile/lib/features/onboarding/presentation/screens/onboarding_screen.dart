@@ -6,7 +6,7 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../features/daily_goals/data/daily_goals_providers.dart';
-import '../../../../features/daily_goals/data/daily_goals_repository.dart';
+import '../../../../features/daily_goals/data/daily_goal_progress_providers.dart';
 import '../../../../features/profile/data/profile_providers.dart';
 import '../../../../features/daily_goals/domain/daily_goal_models.dart';
 
@@ -142,11 +142,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final repository = ref.read(userRepositoryProvider);
       await repository.submitOnboarding(onboardingData);
 
-      final goalsRepo = ref.read(dailyGoalsRepositoryProvider);
+      final goalsNotifier = ref.read(dailyGoalsProvider.notifier);
       for (final entry in _goalEnabled.entries) {
         if (!entry.value) continue;
         try {
-          await goalsRepo.createGoal(
+          await goalsNotifier.createGoal(
             entry.key,
             _goalTargets[entry.key] ?? entry.key.defaultTarget,
           );
@@ -158,18 +158,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
       final prefs = await ref.read(preferencesProvider.future);
       await prefs.setOnboardingCompleted();
+      await prefs.setDailyGoalsMigrated();
 
+      ref.invalidate(dailyGoalProgressProvider);
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
 
       if (!context.mounted) return;
+      final container = ProviderScope.containerOf(context);
       context.go('/');
       succeeded = true;
 
-      // Refresh cached profile/goals after leaving onboarding so home has
-      // server data without triggering router redirects mid-submit.
       Future.microtask(() {
-        ref.invalidate(dailyGoalsProvider);
-        ref.invalidate(userProfileProvider);
+        container.invalidate(userProfileProvider);
       });
     } on AppException catch (e) {
       if (mounted) {
