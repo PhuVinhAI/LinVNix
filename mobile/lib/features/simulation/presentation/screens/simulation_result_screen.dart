@@ -15,27 +15,82 @@ Color _scoreColor(double score, AppColors c) {
   return c.error;
 }
 
+void _popResultScreen(
+  BuildContext context, {
+  required bool fromConversation,
+  required bool fromHistory,
+  String? historyScenarioId,
+}) {
+  if (fromConversation) {
+    context.go('/practice');
+    return;
+  }
+  if (fromHistory) {
+    final query = historyScenarioId != null && historyScenarioId.isNotEmpty
+        ? '?scenarioId=$historyScenarioId'
+        : '';
+    context.go('/practice/history$query');
+    return;
+  }
+  if (context.canPop()) {
+    context.pop();
+    return;
+  }
+  context.go('/practice');
+}
+
 class SimulationResultScreen extends ConsumerWidget {
-  const SimulationResultScreen({super.key, required this.resultId});
+  const SimulationResultScreen({
+    super.key,
+    required this.resultId,
+    this.fromConversation = false,
+    this.fromHistory = false,
+    this.historyScenarioId,
+  });
   final String resultId;
+  final bool fromConversation;
+  final bool fromHistory;
+  final String? historyScenarioId;
+
+  void _pop(BuildContext context) => _popResultScreen(
+        context,
+        fromConversation: fromConversation,
+        fromHistory: fromHistory,
+        historyScenarioId: historyScenarioId,
+      );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final resultAsync = ref.watch(simulationResultDetailProvider(resultId));
 
-    return resultAsync.when(
-      loading: () => const _ResultLoading(),
-      error: (error, stack) => _ResultError(
-        onRetry: () => ref.invalidate(simulationResultDetailProvider(resultId)),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _pop(context);
+      },
+      child: resultAsync.when(
+        loading: () => _ResultLoading(onPop: () => _pop(context)),
+        error: (error, stack) => _ResultError(
+          onPop: () => _pop(context),
+          onRetry: () => ref.invalidate(simulationResultDetailProvider(resultId)),
+        ),
+        data: (result) => _ResultContent(
+          result: result,
+          onPop: () => _pop(context),
+        ),
       ),
-      data: (result) => _ResultContent(result: result),
     );
   }
 }
 
 class _ResultContent extends StatelessWidget {
-  const _ResultContent({required this.result});
+  const _ResultContent({
+    required this.result,
+    required this.onPop,
+  });
   final SimulationResultDetail result;
+  final VoidCallback onPop;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +102,10 @@ class _ResultContent extends StatelessWidget {
           SliverAppBar(
             pinned: true,
             title: const Text('Simulation result'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: onPop,
+            ),
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -124,7 +183,7 @@ class _ResultContent extends StatelessWidget {
                 AppButton(
                   variant: AppButtonVariant.primary,
                   onPressed: () => context.push(
-                    '/practice/scenarios/${result.scenarioId}/select-character?characterId=${result.chosenCharacterId}',
+                    '/practice/scenarios/${result.scenarioId}',
                   ),
                   label: 'Play again',
                   isFullWidth: true,
@@ -323,7 +382,8 @@ class _EndReasonMessage extends StatelessWidget {
 }
 
 class _ResultLoading extends StatelessWidget {
-  const _ResultLoading();
+  const _ResultLoading({required this.onPop});
+  final VoidCallback onPop;
 
   @override
   Widget build(BuildContext context) {
@@ -334,6 +394,10 @@ class _ResultLoading extends StatelessWidget {
         slivers: [
           SliverAppBar(
             pinned: true,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: onPop,
+            ),
             title: Shimmer.fromColors(
               baseColor: c.muted,
               highlightColor: c.card,
@@ -434,7 +498,11 @@ class _ResultLoading extends StatelessWidget {
 }
 
 class _ResultError extends StatelessWidget {
-  const _ResultError({required this.onRetry});
+  const _ResultError({
+    required this.onPop,
+    required this.onRetry,
+  });
+  final VoidCallback onPop;
   final VoidCallback onRetry;
 
   @override
@@ -442,7 +510,13 @@ class _ResultError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Simulation result')),
+      appBar: AppAppBar(
+        title: const Text('Simulation result'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: onPop,
+        ),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),

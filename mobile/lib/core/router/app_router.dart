@@ -284,7 +284,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/practice/results/:id',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
-          return SimulationResultScreen(resultId: id);
+          final fromConversation =
+              state.uri.queryParameters['fromConversation'] == 'true';
+          final fromHistory =
+              state.uri.queryParameters['fromHistory'] == 'true';
+          final historyScenarioId = state.uri.queryParameters['scenarioId'];
+          return SimulationResultScreen(
+            resultId: id,
+            fromConversation: fromConversation,
+            fromHistory: fromHistory,
+            historyScenarioId: historyScenarioId,
+          );
         },
       ),
       GoRoute(

@@ -82,7 +82,12 @@ class _ResultsContent extends StatelessWidget {
             onFilterChanged: onFilterChanged,
           ),
           const SizedBox(height: AppSpacing.md),
-          ...results.map((r) => _ResultCard(result: r)),
+          ...results.map(
+            (r) => _ResultCard(
+              result: r,
+              historyScenarioId: selectedScenarioId,
+            ),
+          ),
         ],
       ),
     );
@@ -131,8 +136,12 @@ class _FilterRow extends StatelessWidget {
 }
 
 class _ResultCard extends StatelessWidget {
-  const _ResultCard({required this.result});
+  const _ResultCard({
+    required this.result,
+    this.historyScenarioId,
+  });
   final SimulationResultSummary result;
+  final String? historyScenarioId;
 
   String _formatDate(String? dateStr) {
     if (dateStr == null) return '';
@@ -180,7 +189,13 @@ class _ResultCard extends StatelessWidget {
         variant: AppCardVariant.outlined,
         borderRadius: AppRadius.lg,
         padding: const EdgeInsets.all(AppSpacing.md),
-        onTap: () => context.push('/practice/results/${result.id}'),
+        onTap: () {
+          final query = StringBuffer('fromHistory=true');
+          if (historyScenarioId != null && historyScenarioId!.isNotEmpty) {
+            query.write('&scenarioId=$historyScenarioId');
+          }
+          context.push('/practice/results/${result.id}?$query');
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

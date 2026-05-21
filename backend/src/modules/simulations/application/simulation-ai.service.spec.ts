@@ -438,6 +438,28 @@ describe('SimulationAiService', () => {
       expect(result.feedback!.reviewAvailable).toBe(true);
     });
 
+    it('parses session-ended response with float totalScore and missing feedback', () => {
+      const raw = JSON.stringify({
+        messages: [
+          {
+            speakerCharacterId: 'ch-2',
+            speakerName: 'Anh Sơn',
+            content: 'Chúc em may mắn!',
+          },
+        ],
+        nextTurnCharacterId: 'ch-1',
+        sessionEnded: true,
+        endReason: 'COMPLETED',
+        totalScore: 60.000000000000014,
+      });
+
+      const result = service.parseAiResponse(raw);
+
+      expect(result.sessionEnded).toBe(true);
+      expect(result.totalScore).toBe(60);
+      expect(result.feedback).toBeNull();
+    });
+
     it('parses session-ended response with scores', () => {
       const raw = JSON.stringify({
         messages: [
@@ -736,7 +758,7 @@ describe('SimulationAiService', () => {
       expect(result.feedback!.reviewAvailable).toBe(true);
     });
 
-    it('throws when AI returns malformed response', async () => {
+    it('throws when AI returns malformed response after retries', async () => {
       const scenario = makeScenario();
       usersService.findById.mockResolvedValue(makeUser());
       genaiService.chatStructured.mockResolvedValue({
@@ -753,6 +775,34 @@ describe('SimulationAiService', () => {
           userId: 'user-1',
         }),
       ).rejects.toThrow(BadRequestException);
+
+      expect(genaiService.chatStructured).toHaveBeenCalledTimes(3);
+    });
+
+    it('retries AI call when the first response fails validation', async () => {
+      const scenario = makeScenario();
+      usersService.findById.mockResolvedValue(makeUser());
+      genaiService.chatStructured
+        .mockResolvedValueOnce({
+          text: JSON.stringify({
+            messages: [],
+            nextTurnCharacterId: 'ch-1',
+            sessionEnded: false,
+          }),
+          usageMetadata: { totalTokenCount: 10 },
+        })
+        .mockResolvedValueOnce(makeAiResponse());
+
+      const result = await service.processTurn({
+        scenario,
+        chosenCharacterId: 'ch-1',
+        messages: [],
+        learnerMessage: 'Hello',
+        userId: 'user-1',
+      });
+
+      expect(genaiService.chatStructured).toHaveBeenCalledTimes(2);
+      expect(result.sessionEnded).toBe(false);
     });
 
     it('passes forceWrapUp to buildSystemInstruction', async () => {

@@ -64,7 +64,7 @@ simulation-conversation:
          The aiSummary should state that abusive language is not tolerated
          on the platform. Score should be 0.
     - When ending the session, provide:
-      - totalScore: 0-100 overall score
+      - totalScore: integer 0-100 overall score (no decimals)
       - criteriaScores: array of scores per criterion (from the scoring criteria)
       - aiSummary: a brief overall commentary in the learner's native language
 

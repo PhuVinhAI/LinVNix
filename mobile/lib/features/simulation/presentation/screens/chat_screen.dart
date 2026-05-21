@@ -319,7 +319,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final resultId = chatState.resultId;
     if (resultId != null && resultId.isNotEmpty) {
       ref.invalidate(pausedSessionProvider);
-      context.push('/practice/results/$resultId');
+      context.replace(
+        '/practice/results/$resultId?fromConversation=true',
+      );
     }
   }
 

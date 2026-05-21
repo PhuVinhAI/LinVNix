@@ -95,10 +95,49 @@ const FeedbackSchema = z.object({
   reviewAvailable: z.boolean(),
 });
 
+function roundBoundedScore(value: unknown): unknown {
+  if (value == null || value === '') return undefined;
+  const n = Number(value);
+  if (!Number.isFinite(n)) return value;
+  return Math.min(100, Math.max(0, Math.round(n)));
+}
+
+function roundNonNegative(value: unknown): unknown {
+  if (value == null || value === '') return undefined;
+  const n = Number(value);
+  if (!Number.isFinite(n)) return value;
+  return Math.max(0, Math.round(n));
+}
+
+function normalizeAiResponsePayload(parsed: unknown): unknown {
+  if (parsed == null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    return parsed;
+  }
+
+  const record = parsed as Record<string, unknown>;
+
+  return {
+    ...record,
+    feedback: record.feedback ?? null,
+    totalScore: roundBoundedScore(record.totalScore),
+    criteriaScores: Array.isArray(record.criteriaScores)
+      ? record.criteriaScores.map((item) => {
+          if (item == null || typeof item !== 'object') return item;
+          const criteria = item as Record<string, unknown>;
+          return {
+            ...criteria,
+            score: roundNonNegative(criteria.score),
+            maxScore: roundNonNegative(criteria.maxScore),
+          };
+        })
+      : record.criteriaScores,
+  };
+}
+
 const CriteriaScoreSchema = z.object({
   name: z.string(),
-  score: z.number().min(0),
-  maxScore: z.number().min(0),
+  score: z.preprocess(roundNonNegative, z.number().min(0)),
+  maxScore: z.preprocess(roundNonNegative, z.number().min(0)),
   comment: z.string(),
 });
 
@@ -113,7 +152,7 @@ const AiResponseSchema = z.object({
     )
     .min(1),
   nextTurnCharacterId: z.string(),
-  feedback: FeedbackSchema.nullable(),
+  feedback: FeedbackSchema.nullable().optional(),
   sessionEnded: z.boolean(),
   endReason: z
     .enum([
@@ -123,7 +162,10 @@ const AiResponseSchema = z.object({
       SimulationEndReason.ABUSIVE,
     ])
     .optional(),
-  totalScore: z.number().int().min(0).max(100).optional(),
+  totalScore: z.preprocess(
+    roundBoundedScore,
+    z.number().int().min(0).max(100),
+  ).optional(),
   criteriaScores: z.array(CriteriaScoreSchema).optional(),
   aiSummary: z.string().optional(),
 });
@@ -248,18 +290,38 @@ export class SimulationAiService {
       request.scenario.characters,
     );
 
-    const response = await this.genaiService.chatStructured({
-      messages: chatMessages,
-      systemInstruction,
-      responseSchema: SIMULATION_RESPONSE_SCHEMA,
-    });
+    let lastError: Error | null = null;
+    const maxAttempts = _MAX_PARSE_RETRIES + 1;
 
-    const parsed = this.parseAiResponse(response.text);
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const response = await this.genaiService.chatStructured({
+        messages: chatMessages,
+        systemInstruction,
+        responseSchema: SIMULATION_RESPONSE_SCHEMA,
+      });
 
-    return {
-      ...parsed,
-      tokenCount: response.usageMetadata?.totalTokenCount,
-    };
+      try {
+        const parsed = this.parseAiResponse(response.text);
+        return {
+          ...parsed,
+          feedback: parsed.feedback ?? null,
+          tokenCount: response.usageMetadata?.totalTokenCount,
+        };
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        if (attempt < maxAttempts - 1) {
+          this.logger.warn(
+            `Simulation AI response parse failed (attempt ${attempt + 1}/${maxAttempts}), retrying`,
+          );
+          continue;
+        }
+      }
+    }
+
+    throw (
+      lastError ??
+      new BadRequestException('AI response parse failed. Please try again.')
+    );
   }
 
   buildSystemInstruction(
@@ -348,21 +410,29 @@ export class SimulationAiService {
   }
 
   parseAiResponse(rawText: string): z.infer<typeof AiResponseSchema> {
-    let parsed: any;
+    let parsed: unknown;
     try {
       parsed = JSON.parse(rawText.trim());
     } catch {
       this.logger.error('Failed to parse AI response as JSON');
-      this.logger.debug('Response text:', rawText.slice(0, 500));
+      this.logger.debug(
+        `Response text (first 500 chars): ${rawText.slice(0, 500)}`,
+      );
       throw new BadRequestException(
         'AI response is not valid JSON. Please try again.',
       );
     }
 
-    const result = AiResponseSchema.safeParse(parsed);
+    const normalized = normalizeAiResponsePayload(parsed);
+    const result = AiResponseSchema.safeParse(normalized);
     if (!result.success) {
       this.logger.error('AI response schema validation failed');
-      this.logger.debug('Validation errors:', result.error.errors);
+      this.logger.debug(
+        `Validation errors: ${JSON.stringify(result.error.errors)}`,
+      );
+      this.logger.debug(
+        `Response payload: ${JSON.stringify(normalized).slice(0, 500)}`,
+      );
       throw new BadRequestException(
         'AI response does not match expected schema. Please try again.',
       );
