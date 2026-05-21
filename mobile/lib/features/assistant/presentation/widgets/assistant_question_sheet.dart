@@ -266,68 +266,11 @@ class _ComposeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: c.muted.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      padding: const EdgeInsets.only(
-        left: AppSpacing.lg,
-        right: AppSpacing.sm,
-        top: AppSpacing.sm,
-        bottom: AppSpacing.sm,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextField(
-            controller: controller,
-            focusNode: focusNode,
-            maxLines: 5,
-            minLines: 1,
-            textCapitalization: TextCapitalization.sentences,
-            style: GoogleFonts.inter(
-              fontSize: AppTypography.bodyMedium,
-              color: c.foreground,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Ask anything...',
-              hintStyle: GoogleFonts.inter(
-                fontSize: AppTypography.bodyMedium,
-                color: c.mutedForeground,
-              ),
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              contentPadding: EdgeInsets.zero,
-              isDense: true,
-              filled: false,
-              fillColor: Colors.transparent,
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: onSend,
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: c.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.arrow_upward_rounded,
-                  color: c.primaryForeground,
-                  size: 20,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return AppChatComposeField(
+      controller: controller,
+      focusNode: focusNode,
+      hintText: 'Ask anything...',
+      onSend: onSend,
     );
   }
 }

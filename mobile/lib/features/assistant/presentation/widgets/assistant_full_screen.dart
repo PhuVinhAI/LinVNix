@@ -657,7 +657,6 @@ class _ComposeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
     // Outer wrapper: no background, no border — just keyboard-aware padding.
     return Padding(
       padding: EdgeInsets.fromLTRB(
@@ -666,67 +665,18 @@ class _ComposeBar extends StatelessWidget {
         AppSpacing.lg,
         MediaQuery.of(context).viewInsets.bottom + AppSpacing.sm,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: c.muted.withValues(alpha: 0.4),
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-        ),
-        padding: const EdgeInsets.only(
-          left: AppSpacing.lg,
-          right: AppSpacing.sm,
-          top: AppSpacing.sm,
-          bottom: AppSpacing.sm,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: controller,
-              maxLines: 5,
-              minLines: 1,
-              textCapitalization: TextCapitalization.sentences,
-              style: GoogleFonts.inter(
-                fontSize: AppTypography.bodyMedium,
-                color: c.foreground,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Type a message...',
-                hintStyle: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyMedium,
-                  color: c.mutedForeground,
-                ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
-                isDense: true,
-                filled: false,
-                fillColor: Colors.transparent,
-              ),
-              onSubmitted: (_) => inFlight ? null : onSend(),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: inFlight ? onStop : onSend,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: inFlight ? c.error : c.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    inFlight ? Icons.stop_rounded : Icons.arrow_upward_rounded,
-                    color: inFlight ? c.errorForeground : c.primaryForeground,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+      child: AppChatComposeField(
+        controller: controller,
+        hintText: 'Type a message...',
+        onSend: inFlight ? onStop : onSend,
+        onSubmitted: (_) {
+          if (!inFlight) onSend();
+        },
+        trailingIcon:
+            inFlight ? Icons.stop_rounded : Icons.arrow_upward_rounded,
+        trailingColor: inFlight ? AppTheme.colors(context).error : null,
+        trailingIconColor:
+            inFlight ? AppTheme.colors(context).errorForeground : null,
       ),
     );
   }
