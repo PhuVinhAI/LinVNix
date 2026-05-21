@@ -7,6 +7,7 @@ import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/profile_providers.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
 import '../../../bookmarks/domain/bookmark_models.dart';
+import '../../../simulation/data/simulation_providers.dart';
 import '../../../user/domain/user_profile.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -32,6 +33,7 @@ class ProfileScreen extends ConsumerWidget {
           await ref.read(userProfileProvider.notifier).refresh();
           await ref.read(exerciseStatsProvider.notifier).refresh();
           await ref.read(bookmarkStatsProvider.notifier).refresh();
+          await ref.read(simulationStatsProvider.notifier).refresh();
         },
         child: ListView(
           padding: const EdgeInsets.symmetric(
@@ -46,6 +48,8 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             const _StatsSection(),
+            const SizedBox(height: AppSpacing.md),
+            const _SimulationStatsSection(),
             const SizedBox(height: AppSpacing.md),
             const _VocabStatsSection(),
             const SizedBox(height: AppSpacing.md),
@@ -284,6 +288,97 @@ class _StatsSection extends ConsumerWidget {
     final hours = (seconds / 3600).floor();
     final minutes = ((seconds % 3600) / 60).floor();
     return '${hours}h ${minutes}m';
+  }
+}
+
+class _SimulationStatsSection extends ConsumerWidget {
+  const _SimulationStatsSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppTheme.colors(context);
+    final accent = AppTheme.accents(context);
+    final theme = Theme.of(context);
+    final statsAsync = ref.watch(simulationStatsProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Simulation',
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        statsAsync.when(
+          loading: () => const _SimulationStatsSectionLoading(),
+          error: (error, stack) => AppCard(
+            variant: AppCardVariant.outlined,
+            child: Column(
+              children: [
+                Semantics(
+                  label: 'Error loading simulation statistics',
+                  child: Icon(Icons.error_outline, color: c.error),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Failed to load simulation statistics',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Semantics(
+                  label: 'Retry loading simulation statistics',
+                  button: true,
+                  child: AppButton(
+                    label: 'Retry',
+                    variant: AppButtonVariant.outline,
+                    onPressed: () =>
+                        ref.read(simulationStatsProvider.notifier).refresh(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          data: (stats) => Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.forum_outlined,
+                  label: 'Scenarios Tried',
+                  value: '${stats.scenariosAttempted}',
+                  color: accent.toneHigh,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.star_outline,
+                  label: 'Avg. Score',
+                  value: stats.averageScore.toStringAsFixed(1),
+                  color: accent.toneMid,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SimulationStatsSectionLoading extends StatelessWidget {
+  const _SimulationStatsSectionLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(child: _StatCardSkeleton()),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(child: _StatCardSkeleton()),
+      ],
+    );
   }
 }
 

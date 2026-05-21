@@ -8,6 +8,7 @@ import '../domain/scenario_detail.dart';
 import '../domain/scenario_summary.dart';
 import '../domain/simulation_result_detail.dart';
 import '../domain/simulation_result_summary.dart';
+import '../domain/simulation_stats.dart';
 
 final simulationRepositoryProvider = Provider<SimulationRepository>((ref) {
   return SimulationRepository(ref.watch(dioProvider));
@@ -159,4 +160,27 @@ class PausedSessionNotifier extends AsyncNotifier<ActiveSession?> {
 final pausedSessionProvider =
     AsyncNotifierProvider<PausedSessionNotifier, ActiveSession?>(
   PausedSessionNotifier.new,
+);
+
+class SimulationStatsNotifier extends CachedRepository<SimulationStats>
+    with DataChangeBusSubscriber<SimulationStats> {
+  @override
+  Duration get ttl => Duration.zero;
+
+  @override
+  Future<SimulationStats> fetchFromApi() async {
+    final repo = ref.read(simulationRepositoryProvider);
+    return repo.getStats();
+  }
+
+  @override
+  Future<SimulationStats> build() async {
+    watchTags({'simulation'});
+    return super.build();
+  }
+}
+
+final simulationStatsProvider =
+    AsyncNotifierProvider<SimulationStatsNotifier, SimulationStats>(
+  SimulationStatsNotifier.new,
 );

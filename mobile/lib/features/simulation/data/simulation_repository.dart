@@ -10,6 +10,7 @@ import '../domain/simulation_message.dart';
 import '../domain/simulation_result_detail.dart';
 import '../domain/simulation_result_summary.dart';
 import '../domain/simulation_session.dart';
+import '../domain/simulation_stats.dart';
 
 class SimulationRepository {
   SimulationRepository(this._dio);
@@ -152,6 +153,18 @@ class SimulationRepository {
           .map((e) =>
               SimulationResultSummary.fromJson(e as Map<String, dynamic>))
           .toList();
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<SimulationStats> getStats() async {
+    try {
+      final response =
+          await _dio.get<Map<String, dynamic>>('/simulations/stats');
+      return SimulationStats.fromJson(
+        response.data as Map<String, dynamic>,
+      );
     } on DioException catch (e) {
       throw mapDioException(e);
     }

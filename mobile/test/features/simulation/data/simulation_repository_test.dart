@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dio/dio.dart';
 import 'package:linvnix/features/simulation/data/simulation_repository.dart';
 import 'package:linvnix/core/exceptions/app_exception.dart';
+import 'package:linvnix/features/simulation/domain/simulation_stats.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockDio extends Mock implements Dio {}
@@ -413,6 +414,64 @@ void main() {
 
         expect(
           () => repository.getSession(sessionId),
+          throwsA(isA<NetworkException>()),
+        );
+      });
+    });
+
+    group('getStats', () {
+      test('calls GET /simulations/stats and returns SimulationStats', () async {
+        when(() => mockDio.get<Map<String, dynamic>>(any()))
+            .thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(path: '/simulations/stats'),
+            statusCode: 200,
+            data: {
+              'scenariosAttempted': 5,
+              'averageScore': 72.5,
+            },
+          ),
+        );
+
+        final result = await repository.getStats();
+
+        verify(() => mockDio.get<Map<String, dynamic>>(
+              '/simulations/stats',
+            )).called(1);
+
+        expect(result.scenariosAttempted, 5);
+        expect(result.averageScore, 72.5);
+      });
+
+      test('handles zero stats', () async {
+        when(() => mockDio.get<Map<String, dynamic>>(any()))
+            .thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(path: '/simulations/stats'),
+            statusCode: 200,
+            data: {
+              'scenariosAttempted': 0,
+              'averageScore': 0,
+            },
+          ),
+        );
+
+        final result = await repository.getStats();
+
+        expect(result.scenariosAttempted, 0);
+        expect(result.averageScore, 0.0);
+      });
+
+      test('throws NetworkException on connection timeout', () async {
+        when(() => mockDio.get<Map<String, dynamic>>(any())).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(path: '/simulations/stats'),
+            type: DioExceptionType.connectionTimeout,
+          ),
+        );
+
+        expect(
+          () => repository.getStats(),
           throwsA(isA<NetworkException>()),
         );
       });
