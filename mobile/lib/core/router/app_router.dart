@@ -23,6 +23,7 @@ import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/lessons/presentation/screens/lesson_wizard_screen.dart';
 import '../../features/lessons/presentation/screens/exercise_hub_screen.dart';
 import '../../features/lessons/presentation/screens/exercise_play_screen.dart';
+import '../../features/simulation/presentation/screens/practice_screen.dart';
 import '../presentation/shell_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -249,6 +250,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/courses',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: CoursesScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/practice',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: PracticeScreen(),
             ),
           ),
           GoRoute(

@@ -67,7 +67,8 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     return switch (location) {
       '/' => 0,
       '/courses' => 1,
-      '/profile' => 2,
+      '/practice' => 2,
+      '/profile' => 3,
       _ => 0,
     };
   }
@@ -79,6 +80,8 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       case 1:
         context.go('/courses');
       case 2:
+        context.go('/practice');
+      case 3:
         context.go('/profile');
     }
   }
@@ -110,6 +113,11 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
             icon: Icons.school_outlined,
             selectedIcon: Icons.school,
             label: 'Courses',
+          ),
+          const AppNavBarDestination(
+            icon: Icons.chat_bubble_outline,
+            selectedIcon: Icons.chat_bubble,
+            label: 'Practice',
           ),
           const AppNavBarDestination(
             icon: Icons.person_outlined,
