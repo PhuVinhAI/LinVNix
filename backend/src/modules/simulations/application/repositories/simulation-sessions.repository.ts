@@ -31,6 +31,7 @@ export class SimulationSessionsRepository {
     scenarioId: string;
     chosenCharacterId: string;
     status: SimulationSessionStatus;
+    nextTurnCharacterId: string;
   }): Promise<SimulationSession> {
     const session = this.repository.create(data);
     return this.repository.save(session);
@@ -48,11 +49,32 @@ export class SimulationSessionsRepository {
     });
   }
 
+  async findById(sessionId: string): Promise<SimulationSession | null> {
+    return this.repository.findOne({
+      where: { id: sessionId, deletedAt: IsNull() },
+    });
+  }
+
   async updateStatus(
     sessionId: string,
     status: SimulationSessionStatus,
   ): Promise<void> {
     await this.repository.update({ id: sessionId }, { status });
+  }
+
+  async updateNextTurnCharacterId(
+    sessionId: string,
+    nextTurnCharacterId: string,
+  ): Promise<void> {
+    await this.repository.update({ id: sessionId }, { nextTurnCharacterId });
+  }
+
+  async incrementTokens(sessionId: string, tokenCount: number): Promise<void> {
+    await this.repository.increment(
+      { id: sessionId },
+      'totalTokens',
+      tokenCount,
+    );
   }
 
   async softDelete(sessionId: string): Promise<void> {

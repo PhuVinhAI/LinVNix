@@ -13,6 +13,7 @@ import { ScenariosRepository } from './application/repositories/scenarios.reposi
 import { ScenarioCategoriesRepository } from './application/repositories/scenario-categories.repository';
 import { SimulationSessionsRepository } from './application/repositories/simulation-sessions.repository';
 import { SimulationMessagesRepository } from './application/repositories/simulation-messages.repository';
+import { SimulationResultsRepository } from './application/repositories/simulation-results.repository';
 import { SimulationsController } from './presentation/simulations.controller';
 import { UsersModule } from '../users/users.module';
 
@@ -37,6 +38,7 @@ import { UsersModule } from '../users/users.module';
     ScenarioCategoriesRepository,
     SimulationSessionsRepository,
     SimulationMessagesRepository,
+    SimulationResultsRepository,
   ],
   exports: [ScenariosService, SimulationSessionService, SimulationAiService],
 })

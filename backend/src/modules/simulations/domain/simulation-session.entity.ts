@@ -37,6 +37,9 @@ export class SimulationSession extends BaseEntity {
   @Column({ name: 'total_tokens', default: 0 })
   totalTokens: number;
 
+  @Column({ name: 'next_turn_character_id' })
+  nextTurnCharacterId: string;
+
   @OneToMany('SimulationMessage', 'session')
   messages: any[];
 

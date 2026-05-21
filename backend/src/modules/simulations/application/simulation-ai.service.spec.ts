@@ -143,7 +143,7 @@ describe('SimulationAiService', () => {
 
       service.buildSystemInstruction(scenario, 'ch-1', learner);
 
-      const callArgs = genaiService.renderPrompt.mock.calls[0]![1]!;
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
       expect(callArgs.charactersDescription).toContain('Minh');
       expect(callArgs.charactersDescription).toContain('Bà Lan');
       expect(callArgs.charactersDescription).toContain('playable');
@@ -159,7 +159,7 @@ describe('SimulationAiService', () => {
 
       service.buildSystemInstruction(scenario, 'ch-1', learner);
 
-      const callArgs = genaiService.renderPrompt.mock.calls[0]![1]!;
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
       expect(callArgs.scoringCriteriaDescription).toContain('Giao tiếp');
       expect(callArgs.scoringCriteriaDescription).toContain('Ngữ pháp');
       expect(callArgs.scoringCriteriaDescription).toContain('50');
@@ -188,7 +188,7 @@ describe('SimulationAiService', () => {
 
       service.buildSystemInstruction(scenario, 'ch-1', learner);
 
-      const callArgs = genaiService.renderPrompt.mock.calls[0]![1]!;
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
       expect(callArgs.learner.level).toBe('B1');
       expect(callArgs.learner.nativeLanguage).toBe('Japanese');
     });

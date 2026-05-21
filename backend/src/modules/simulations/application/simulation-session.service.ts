@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -7,9 +8,15 @@ import {
 import { SimulationSessionsRepository } from './repositories/simulation-sessions.repository';
 import { ScenariosRepository } from './repositories/scenarios.repository';
 import { SimulationMessagesRepository } from './repositories/simulation-messages.repository';
+import { SimulationResultsRepository } from './repositories/simulation-results.repository';
+import { SimulationAiService } from './simulation-ai.service';
 import { SimulationSession } from '../domain/simulation-session.entity';
 import { SimulationMessage } from '../domain/simulation-message.entity';
-import { SimulationSessionStatus } from '../../../common/enums';
+import { SimulationResult } from '../domain/simulation-result.entity';
+import {
+  SimulationSessionStatus,
+  SimulationEndReason,
+} from '../../../common/enums';
 
 export interface CreateSessionDto {
   scenarioId: string;
@@ -26,19 +33,33 @@ export interface SessionWithMessages {
   messages: SimulationMessage[];
 }
 
+export interface SendMessageResult {
+  messages: Array<{
+    speakerCharacterId: string;
+    speakerName: string;
+    content: string;
+  }>;
+  nextTurnCharacterId: string;
+  feedback: SimulationMessage['feedback'];
+  sessionEnded: boolean;
+  endReason?: SimulationEndReason;
+  result?: SimulationResult;
+}
+
 @Injectable()
 export class SimulationSessionService {
   constructor(
     private readonly sessionsRepository: SimulationSessionsRepository,
     private readonly scenariosRepository: ScenariosRepository,
     private readonly messagesRepository: SimulationMessagesRepository,
+    private readonly resultsRepository: SimulationResultsRepository,
+    private readonly aiService: SimulationAiService,
   ) {}
 
   async createSession(
     userId: string,
     dto: CreateSessionDto,
   ): Promise<CreateSessionResult> {
-    // 1. Validate scenario exists and is published
     const scenario = await this.scenariosRepository.findById(dto.scenarioId);
     if (!scenario || !scenario.isPublished) {
       throw new NotFoundException(
@@ -46,7 +67,6 @@ export class SimulationSessionService {
       );
     }
 
-    // 2. Validate character belongs to scenario and is playable
     const character = scenario.characters?.find(
       (c) => c.id === dto.chosenCharacterId,
     );
@@ -56,7 +76,6 @@ export class SimulationSessionService {
       );
     }
 
-    // 3. Enforce 1-session constraint
     const existingSession =
       await this.sessionsRepository.findIncompleteByUser(userId);
     if (existingSession) {
@@ -65,15 +84,14 @@ export class SimulationSessionService {
       );
     }
 
-    // 4. Create session
     const session = await this.sessionsRepository.create({
       userId,
       scenarioId: dto.scenarioId,
       chosenCharacterId: dto.chosenCharacterId,
       status: SimulationSessionStatus.ACTIVE,
+      nextTurnCharacterId: dto.chosenCharacterId,
     });
 
-    // 5. Create opening message if scenario has one
     let openingMessage: SimulationMessage | null = null;
     if (scenario.openingMessage) {
       openingMessage = await this.messagesRepository.create({
@@ -103,7 +121,6 @@ export class SimulationSessionService {
       throw new ForbiddenException('You do not have access to this session');
     }
 
-    // Resume: PAUSED → ACTIVE
     if (session.status === SimulationSessionStatus.PAUSED) {
       await this.sessionsRepository.updateStatus(
         sessionId,
@@ -130,7 +147,156 @@ export class SimulationSessionService {
       throw new ForbiddenException('You do not have access to this session');
     }
 
-    // Soft-delete: no SimulationResult is created
     await this.sessionsRepository.softDelete(sessionId);
+  }
+
+  async sendMessage(
+    userId: string,
+    sessionId: string,
+    content: string,
+  ): Promise<SendMessageResult> {
+    const session =
+      await this.sessionsRepository.findByIdWithMessages(sessionId);
+
+    if (!session) {
+      throw new NotFoundException(`Session with ID ${sessionId} not found`);
+    }
+
+    if (session.userId !== userId) {
+      throw new ForbiddenException('You do not have access to this session');
+    }
+
+    if (session.status !== SimulationSessionStatus.ACTIVE) {
+      throw new BadRequestException(
+        'Session is not active. Cannot send messages.',
+      );
+    }
+
+    if (session.nextTurnCharacterId !== session.chosenCharacterId) {
+      throw new BadRequestException('It is not your turn to speak.');
+    }
+
+    const existingMessages = session.messages ?? [];
+    const nextOrderIndex =
+      existingMessages.length > 0
+        ? Math.max(...existingMessages.map((m) => m.orderIndex)) + 1
+        : 0;
+
+    const learnerMessage = await this.messagesRepository.create({
+      sessionId: session.id,
+      speakerCharacterId: session.chosenCharacterId,
+      isLearner: true,
+      content,
+      orderIndex: nextOrderIndex,
+    });
+
+    const scenario = await this.scenariosRepository.findById(
+      session.scenarioId,
+    );
+    if (!scenario) {
+      throw new NotFoundException('Scenario not found');
+    }
+
+    const aiScenario = {
+      id: scenario.id,
+      title: scenario.title,
+      systemPrompt: scenario.systemPrompt,
+      requiredLevel: scenario.requiredLevel,
+      difficulty: scenario.difficulty,
+      scoringCriteria: scenario.scoringCriteria,
+      maxTurns: scenario.maxTurns,
+      characters: (scenario.characters ?? []).map((c: any) => ({
+        id: c.id,
+        name: c.name,
+        role: c.role,
+        personality: c.personality,
+        speechStyle: c.speechStyle,
+        isPlayable: c.isPlayable,
+      })),
+    };
+
+    const aiMessages = existingMessages.map((m: any) => ({
+      id: m.id,
+      speakerCharacterId: m.speakerCharacterId,
+      isLearner: m.isLearner,
+      content: m.content,
+      orderIndex: m.orderIndex,
+      feedback: m.feedback,
+    }));
+
+    const aiResponse = await this.aiService.processTurn({
+      scenario: aiScenario,
+      chosenCharacterId: session.chosenCharacterId,
+      messages: aiMessages,
+      learnerMessage: content,
+      userId,
+    });
+
+    let currentOrderIndex = nextOrderIndex + 1;
+    const persistedAiMessages: SimulationMessage[] = [];
+
+    for (const msg of aiResponse.messages) {
+      const aiMsg = await this.messagesRepository.create({
+        sessionId: session.id,
+        speakerCharacterId: msg.speakerCharacterId,
+        isLearner: false,
+        content: msg.content,
+        orderIndex: currentOrderIndex++,
+      });
+      persistedAiMessages.push(aiMsg);
+    }
+
+    if (aiResponse.feedback) {
+      await this.messagesRepository.updateFeedback(
+        learnerMessage.id,
+        aiResponse.feedback,
+      );
+      learnerMessage.feedback = aiResponse.feedback;
+    }
+
+    await this.sessionsRepository.updateNextTurnCharacterId(
+      session.id,
+      aiResponse.nextTurnCharacterId,
+    );
+
+    if (aiResponse.tokenCount) {
+      await this.sessionsRepository.incrementTokens(
+        session.id,
+        aiResponse.tokenCount,
+      );
+    }
+
+    let result: SimulationResult | undefined;
+    if (aiResponse.sessionEnded) {
+      await this.sessionsRepository.updateStatus(
+        session.id,
+        SimulationSessionStatus.COMPLETED,
+      );
+
+      const allMessages = await this.messagesRepository.findBySessionId(
+        session.id,
+      );
+
+      result = await this.resultsRepository.create({
+        userId: session.userId,
+        sessionId: session.id,
+        scenarioId: session.scenarioId,
+        chosenCharacterId: session.chosenCharacterId,
+        totalScore: aiResponse.totalScore ?? 0,
+        criteriaScores: aiResponse.criteriaScores ?? [],
+        endReason: aiResponse.endReason ?? SimulationEndReason.COMPLETED,
+        aiSummary: aiResponse.aiSummary ?? '',
+        totalMessages: allMessages.length,
+      });
+    }
+
+    return {
+      messages: aiResponse.messages,
+      nextTurnCharacterId: aiResponse.nextTurnCharacterId,
+      feedback: aiResponse.feedback,
+      sessionEnded: aiResponse.sessionEnded,
+      endReason: aiResponse.endReason,
+      result,
+    };
   }
 }

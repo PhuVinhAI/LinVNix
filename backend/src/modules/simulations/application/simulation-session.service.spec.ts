@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   NotFoundException,
@@ -8,13 +9,19 @@ import { SimulationSessionService } from './simulation-session.service';
 import { SimulationSessionsRepository } from './repositories/simulation-sessions.repository';
 import { ScenariosRepository } from './repositories/scenarios.repository';
 import { SimulationMessagesRepository } from './repositories/simulation-messages.repository';
-import { SimulationSessionStatus } from '../../../common/enums';
+import { SimulationResultsRepository } from './repositories/simulation-results.repository';
+import { SimulationAiService } from './simulation-ai.service';
+import {
+  SimulationSessionStatus,
+  SimulationEndReason,
+} from '../../../common/enums';
 
 const makeSession = (overrides: any = {}) => ({
   id: 'session-1',
   userId: 'user-1',
   scenarioId: 'sc-1',
   chosenCharacterId: 'ch-1',
+  nextTurnCharacterId: 'ch-1',
   status: SimulationSessionStatus.ACTIVE,
   totalTokens: 0,
   messages: [],
@@ -25,10 +32,46 @@ const makeScenario = (overrides: any = {}) => ({
   id: 'sc-1',
   isPublished: true,
   openingMessage: null,
-  characters: [
-    { id: 'ch-1', isPlayable: true },
-    { id: 'ch-2', isPlayable: false },
+  systemPrompt: 'You are a shopkeeper...',
+  requiredLevel: 'A1',
+  difficulty: 'EASY',
+  scoringCriteria: [
+    { name: 'Vocabulary', description: 'Use of vocabulary', weight: 50 },
+    { name: 'Grammar', description: 'Grammar accuracy', weight: 50 },
   ],
+  maxTurns: 10,
+  characters: [
+    {
+      id: 'ch-1',
+      name: 'Khách hàng',
+      role: 'Người mua hàng',
+      personality: 'Friendly',
+      speechStyle: 'Casual',
+      isPlayable: true,
+    },
+    {
+      id: 'ch-2',
+      name: 'Chị Lan',
+      role: 'Người bán rau',
+      personality: 'Warm and chatty',
+      speechStyle: 'Southern dialect',
+      isPlayable: false,
+    },
+  ],
+  ...overrides,
+});
+
+const makeAiResponse = (overrides: any = {}) => ({
+  messages: [
+    {
+      speakerCharacterId: 'ch-2',
+      speakerName: 'Chị Lan',
+      content: 'Chào em, em muốn mua gì hôm nay?',
+    },
+  ],
+  nextTurnCharacterId: 'ch-1',
+  feedback: null,
+  sessionEnded: false,
   ...overrides,
 });
 
@@ -37,13 +80,18 @@ describe('SimulationSessionService', () => {
   let sessionsRepo: jest.Mocked<SimulationSessionsRepository>;
   let scenariosRepo: jest.Mocked<ScenariosRepository>;
   let messagesRepo: jest.Mocked<SimulationMessagesRepository>;
+  let resultsRepo: jest.Mocked<SimulationResultsRepository>;
+  let aiService: jest.Mocked<SimulationAiService>;
 
   beforeEach(async () => {
     const sessionsMock = {
       findIncompleteByUser: jest.fn(),
       create: jest.fn(),
       findByIdWithMessages: jest.fn(),
+      findById: jest.fn(),
       updateStatus: jest.fn(),
+      updateNextTurnCharacterId: jest.fn(),
+      incrementTokens: jest.fn(),
       softDelete: jest.fn(),
     };
     const scenariosMock = {
@@ -52,6 +100,18 @@ describe('SimulationSessionService', () => {
     };
     const messagesMock = {
       create: jest.fn(),
+      findBySessionId: jest.fn(),
+      updateFeedback: jest.fn(),
+    };
+    const resultsMock = {
+      create: jest.fn(),
+    };
+    const aiMock = {
+      processTurn: jest.fn(),
+      buildSystemInstruction: jest.fn(),
+      buildChatMessages: jest.fn(),
+      parseAiResponse: jest.fn(),
+      buildPromptContext: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -60,6 +120,8 @@ describe('SimulationSessionService', () => {
         { provide: SimulationSessionsRepository, useValue: sessionsMock },
         { provide: ScenariosRepository, useValue: scenariosMock },
         { provide: SimulationMessagesRepository, useValue: messagesMock },
+        { provide: SimulationResultsRepository, useValue: resultsMock },
+        { provide: SimulationAiService, useValue: aiMock },
       ],
     }).compile();
 
@@ -67,6 +129,8 @@ describe('SimulationSessionService', () => {
     sessionsRepo = module.get(SimulationSessionsRepository);
     scenariosRepo = module.get(ScenariosRepository);
     messagesRepo = module.get(SimulationMessagesRepository);
+    resultsRepo = module.get(SimulationResultsRepository);
+    aiService = module.get(SimulationAiService);
   });
 
   // ─── createSession ────────────────────────────────────────────────────────
@@ -89,6 +153,7 @@ describe('SimulationSessionService', () => {
         scenarioId: 'sc-1',
         chosenCharacterId: 'ch-1',
         status: SimulationSessionStatus.ACTIVE,
+        nextTurnCharacterId: 'ch-1',
       });
       expect(result.session.status).toBe(SimulationSessionStatus.ACTIVE);
       expect(result.openingMessage).toBeNull();
@@ -182,7 +247,7 @@ describe('SimulationSessionService', () => {
       await expect(
         service.createSession('user-1', {
           scenarioId: 'sc-1',
-          chosenCharacterId: 'ch-2', // isPlayable: false
+          chosenCharacterId: 'ch-2',
         }),
       ).rejects.toThrow(NotFoundException);
     });
@@ -299,8 +364,384 @@ describe('SimulationSessionService', () => {
 
       await service.cancelSession('user-1', 'session-1');
 
-      // messagesRepo.create should NOT be called (no result creation)
-      expect(messagesRepo.create).not.toHaveBeenCalled();
+      expect(resultsRepo.create).not.toHaveBeenCalled();
+    });
+  });
+
+  // ─── sendMessage ─────────────────────────────────────────────────────────
+
+  describe('sendMessage', () => {
+    const setupSendMessage = (sessionOverrides: any = {}) => {
+      const session = makeSession({
+        messages: [],
+        ...sessionOverrides,
+      });
+      sessionsRepo.findByIdWithMessages.mockResolvedValue(session);
+      scenariosRepo.findById.mockResolvedValue(makeScenario());
+      messagesRepo.create.mockImplementation((data: any) =>
+        Promise.resolve({ id: `msg-${data.orderIndex}`, ...data }),
+      );
+      messagesRepo.updateFeedback.mockResolvedValue(undefined);
+      sessionsRepo.updateNextTurnCharacterId.mockResolvedValue(undefined);
+      sessionsRepo.incrementTokens.mockResolvedValue(undefined);
+      sessionsRepo.updateStatus.mockResolvedValue(undefined);
+      aiService.processTurn.mockResolvedValue(makeAiResponse());
+    };
+
+    it('throws NotFoundException when session not found', async () => {
+      sessionsRepo.findByIdWithMessages.mockResolvedValue(null);
+
+      await expect(
+        service.sendMessage('user-1', 'missing', 'Xin chào'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws ForbiddenException when session belongs to different user', async () => {
+      const session = makeSession({ userId: 'user-other' });
+      sessionsRepo.findByIdWithMessages.mockResolvedValue(session);
+
+      await expect(
+        service.sendMessage('user-1', 'session-1', 'Xin chào'),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('throws BadRequestException when session is not ACTIVE', async () => {
+      setupSendMessage({ status: SimulationSessionStatus.PAUSED });
+
+      await expect(
+        service.sendMessage('user-1', 'session-1', 'Xin chào'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('throws BadRequestException when session is COMPLETED', async () => {
+      setupSendMessage({ status: SimulationSessionStatus.COMPLETED });
+
+      await expect(
+        service.sendMessage('user-1', 'session-1', 'Xin chào'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('throws BadRequestException when it is not the learner turn', async () => {
+      setupSendMessage({
+        nextTurnCharacterId: 'ch-2',
+        chosenCharacterId: 'ch-1',
+      });
+
+      await expect(
+        service.sendMessage('user-1', 'session-1', 'Xin chào'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('persists learner message with correct metadata', async () => {
+      setupSendMessage();
+
+      await service.sendMessage('user-1', 'session-1', 'Cho tôi mua rau muống');
+
+      expect(messagesRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sessionId: 'session-1',
+          speakerCharacterId: 'ch-1',
+          isLearner: true,
+          content: 'Cho tôi mua rau muống',
+          orderIndex: 0,
+        }),
+      );
+    });
+
+    it('uses correct orderIndex when session has existing messages', async () => {
+      setupSendMessage({
+        messages: [
+          { id: 'msg-0', orderIndex: 0, isLearner: false, content: 'Chào!' },
+        ],
+      });
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(messagesRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          orderIndex: 1,
+        }),
+      );
+    });
+
+    it('persists AI character responses with correct speakerCharacterId', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        messages: [
+          {
+            speakerCharacterId: 'ch-2',
+            speakerName: 'Chị Lan',
+            content: 'Chào em!',
+          },
+        ],
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(messagesRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sessionId: 'session-1',
+          speakerCharacterId: 'ch-2',
+          isLearner: false,
+          content: 'Chào em!',
+          orderIndex: 1,
+        }),
+      );
+    });
+
+    it('persists multiple AI messages in correct order', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        messages: [
+          {
+            speakerCharacterId: 'ch-2',
+            speakerName: 'Chị Lan',
+            content: 'Chào em!',
+          },
+          {
+            speakerCharacterId: 'ch-3',
+            speakerName: 'Anh Minh',
+            content: 'Chào bạn!',
+          },
+        ],
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      const result = await service.sendMessage(
+        'user-1',
+        'session-1',
+        'Xin chào',
+      );
+
+      const createCalls = messagesRepo.create.mock.calls;
+      expect(createCalls.length).toBeGreaterThanOrEqual(3);
+      const aiMsgCalls = createCalls.slice(1);
+      expect(aiMsgCalls[0][0].orderIndex).toBe(1);
+      expect(aiMsgCalls[1][0].orderIndex).toBe(2);
+      expect(result.messages).toHaveLength(2);
+      expect(result.messages[0].speakerCharacterId).toBe('ch-2');
+      expect(result.messages[1].speakerCharacterId).toBe('ch-3');
+    });
+
+    it('stores feedback on the learner message', async () => {
+      setupSendMessage();
+      const feedback = {
+        corrections: [
+          {
+            original: 'cho tôi',
+            corrected: 'cho tôi',
+            type: 'spelling' as const,
+            severity: 'error' as const,
+            startIndex: 0,
+            endIndex: 7,
+          },
+        ],
+        review: 'Check your spelling',
+        reviewAvailable: true,
+      };
+      const aiResponse = makeAiResponse({ feedback });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      await service.sendMessage('user-1', 'session-1', 'Cho tôi mua rau');
+
+      expect(messagesRepo.updateFeedback).toHaveBeenCalledWith(
+        'msg-0',
+        feedback,
+      );
+    });
+
+    it('does not update feedback when AI returns null feedback', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({ feedback: null });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(messagesRepo.updateFeedback).not.toHaveBeenCalled();
+    });
+
+    it('reviewAvailable is true only when there is actual feedback', async () => {
+      setupSendMessage();
+      const feedback = {
+        corrections: [],
+        review: null,
+        reviewAvailable: false,
+      };
+      const aiResponse = makeAiResponse({ feedback });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      const result = await service.sendMessage(
+        'user-1',
+        'session-1',
+        'Xin chào',
+      );
+
+      expect(result.feedback?.reviewAvailable).toBe(false);
+    });
+
+    it('updates session totalTokens after AI call', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({ tokenCount: 150 });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(sessionsRepo.incrementTokens).toHaveBeenCalledWith(
+        'session-1',
+        150,
+      );
+    });
+
+    it('does not increment tokens when tokenCount is undefined', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({ tokenCount: undefined });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(sessionsRepo.incrementTokens).not.toHaveBeenCalled();
+    });
+
+    it('updates nextTurnCharacterId from AI response', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({ nextTurnCharacterId: 'ch-2' });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(sessionsRepo.updateNextTurnCharacterId).toHaveBeenCalledWith(
+        'session-1',
+        'ch-2',
+      );
+    });
+
+    it('transitions session to COMPLETED when sessionEnded is true', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.COMPLETED,
+        totalScore: 85,
+        criteriaScores: [
+          { name: 'Vocabulary', score: 45, maxScore: 50, comment: 'Good' },
+          { name: 'Grammar', score: 40, maxScore: 50, comment: 'Fair' },
+        ],
+        aiSummary: 'Well done!',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([
+        { id: 'msg-0' } as any,
+        { id: 'msg-1' } as any,
+      ]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      await service.sendMessage('user-1', 'session-1', 'Cảm ơn chị');
+
+      expect(sessionsRepo.updateStatus).toHaveBeenCalledWith(
+        'session-1',
+        SimulationSessionStatus.COMPLETED,
+      );
+    });
+
+    it('creates SimulationResult when sessionEnded is true', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.COMPLETED,
+        totalScore: 85,
+        criteriaScores: [
+          { name: 'Vocabulary', score: 45, maxScore: 50, comment: 'Good' },
+          { name: 'Grammar', score: 40, maxScore: 50, comment: 'Fair' },
+        ],
+        aiSummary: 'Well done!',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([
+        { id: 'msg-0' } as any,
+        { id: 'msg-1' } as any,
+      ]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      const result = await service.sendMessage(
+        'user-1',
+        'session-1',
+        'Cảm ơn chị',
+      );
+
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: 'user-1',
+          sessionId: 'session-1',
+          scenarioId: 'sc-1',
+          chosenCharacterId: 'ch-1',
+          totalScore: 85,
+          endReason: SimulationEndReason.COMPLETED,
+          aiSummary: 'Well done!',
+          totalMessages: 2,
+        }),
+      );
+      expect(result.sessionEnded).toBe(true);
+      expect(result.result).toBeDefined();
+      expect(result.endReason).toBe(SimulationEndReason.COMPLETED);
+    });
+
+    it('does NOT create SimulationResult when sessionEnded is false', async () => {
+      setupSendMessage();
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(resultsRepo.create).not.toHaveBeenCalled();
+      expect(sessionsRepo.updateStatus).not.toHaveBeenCalled();
+    });
+
+    it('returns the full response shape with all fields', async () => {
+      setupSendMessage();
+      const feedback = {
+        corrections: [
+          {
+            original: 'xin chào',
+            corrected: 'xin chào',
+            type: 'spelling' as const,
+            severity: 'warning' as const,
+            startIndex: 0,
+            endIndex: 8,
+          },
+        ],
+        review: 'Minor issue',
+        reviewAvailable: true,
+      };
+      const aiResponse = makeAiResponse({
+        messages: [
+          {
+            speakerCharacterId: 'ch-2',
+            speakerName: 'Chị Lan',
+            content: 'Chào em!',
+          },
+        ],
+        nextTurnCharacterId: 'ch-1',
+        feedback,
+        sessionEnded: false,
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+
+      const result = await service.sendMessage(
+        'user-1',
+        'session-1',
+        'Xin chào',
+      );
+
+      expect(result).toEqual({
+        messages: [
+          {
+            speakerCharacterId: 'ch-2',
+            speakerName: 'Chị Lan',
+            content: 'Chào em!',
+          },
+        ],
+        nextTurnCharacterId: 'ch-1',
+        feedback,
+        sessionEnded: false,
+      });
     });
   });
 });

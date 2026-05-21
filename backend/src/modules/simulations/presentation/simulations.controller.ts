@@ -25,6 +25,7 @@ import { ScenariosService } from '../application/scenarios.service';
 import { SimulationSessionService } from '../application/simulation-session.service';
 import { ListScenariosDto } from '../dto/list-scenarios.dto';
 import { CreateSessionDto } from '../dto/create-session.dto';
+import { SendMessageDto } from '../dto/send-message.dto';
 
 @ApiTags('Simulations')
 @Controller('simulations')
@@ -269,5 +270,66 @@ export class SimulationsController {
     @Param('id') sessionId: string,
   ) {
     await this.sessionService.cancelSession(user.id, sessionId);
+  }
+
+  @Post('sessions/:id/messages')
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Gửi tin nhắn trong phiên mô phỏng',
+    description:
+      'Gửi tin nhắn của học viên, nhận phản hồi AI kèm nhận xét. AI có thể trả lời bằng nhiều nhân vật trong một response.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của phiên mô phỏng',
+    example: 'uuid-string',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'AI phản hồi kèm feedback',
+    schema: {
+      example: {
+        messages: [
+          {
+            speakerCharacterId: 'uuid',
+            speakerName: 'Chị Lan',
+            content: 'Chào em, em muốn mua gì?',
+          },
+        ],
+        nextTurnCharacterId: 'uuid',
+        feedback: {
+          corrections: [
+            {
+              original: 'cho tôi',
+              corrected: 'cho tôi',
+              type: 'spelling',
+              severity: 'error',
+              startIndex: 0,
+              endIndex: 7,
+            },
+          ],
+          review: 'Check your spelling',
+          reviewAvailable: true,
+        },
+        sessionEnded: false,
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({
+    status: 403,
+    description: 'Không có quyền hoặc phiên không thuộc về bạn',
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy phiên' })
+  @ApiResponse({
+    status: 400,
+    description: 'Phiên không hoạt động hoặc không phải lượt của bạn',
+  })
+  async sendMessage(
+    @CurrentUser() user: { id: string },
+    @Param('id') sessionId: string,
+    @Body() dto: SendMessageDto,
+  ) {
+    return this.sessionService.sendMessage(user.id, sessionId, dto.content);
   }
 }
