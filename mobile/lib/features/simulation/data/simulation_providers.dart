@@ -3,6 +3,7 @@ import '../../../core/sync/sync.dart';
 import '../../../core/providers/providers.dart';
 import '../data/simulation_repository.dart';
 import '../domain/scenario_category.dart';
+import '../domain/scenario_detail.dart';
 import '../domain/scenario_summary.dart';
 
 final simulationRepositoryProvider = Provider<SimulationRepository>((ref) {
@@ -119,3 +120,9 @@ final simulationScenariosProvider = AsyncNotifierProvider<
     SimulationScenariosNotifier, List<ScenarioSummary>>(
   SimulationScenariosNotifier.new,
 );
+
+final scenarioDetailProvider =
+    FutureProvider.family<ScenarioDetail, String>((ref, id) async {
+  final repo = ref.read(simulationRepositoryProvider);
+  return repo.getScenario(id);
+});

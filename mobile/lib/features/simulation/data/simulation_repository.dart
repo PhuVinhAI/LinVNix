@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../../core/network/exception_mapper.dart';
 import '../domain/scenario_category.dart';
+import '../domain/scenario_detail.dart';
 import '../domain/scenario_summary.dart';
 
 class SimulationRepository {
@@ -36,6 +37,16 @@ class SimulationRepository {
       return (response.data as List<dynamic>)
           .map((e) => ScenarioSummary.fromJson(e as Map<String, dynamic>))
           .toList();
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<ScenarioDetail> getScenario(String id) async {
+    try {
+      final response =
+          await _dio.get<Map<String, dynamic>>('/simulations/scenarios/$id');
+      return ScenarioDetail.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw mapDioException(e);
     }

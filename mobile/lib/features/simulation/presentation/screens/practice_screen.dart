@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -427,7 +428,7 @@ class _ScenarioCard extends StatelessWidget {
       variant: AppCardVariant.outlined,
       borderRadius: AppRadius.lg,
       padding: const EdgeInsets.all(AppSpacing.md),
-      onTap: () {},
+      onTap: () => context.push('/practice/scenarios/${scenario.id}'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

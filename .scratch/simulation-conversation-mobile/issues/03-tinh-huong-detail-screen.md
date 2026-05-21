@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -21,16 +21,36 @@ Add `getScenario(String id)` to `SimulationRepository`. Create models: `Scenario
 
 ## Acceptance criteria
 
-- [ ] Tapping a scenario card pushes to `/practice/scenarios/:id` detail screen
-- [ ] Detail screen shows description, scoring criteria (name + description + weight %), characters (avatar + name + role)
-- [ ] Non-playable characters are dimmed with "NPC" badge
-- [ ] Character avatar renders `avatarKey` asset if present, otherwise initial letter fallback
-- [ ] Sticky "Start" button pushes to character selection route
-- [ ] `SimulationRepository.getScenario()` calls `GET /simulations/scenarios/:id`
-- [ ] `ScenarioDetail`, `ScenarioCharacter`, `ScoringCriterion` models parse from JSON
-- [ ] `scenarioDetailProvider` fetches by ID, shimmer/error/empty states work
-- [ ] AppBar shows back button + scenario title
+- [x] Tapping a scenario card pushes to `/practice/scenarios/:id` detail screen
+- [x] Detail screen shows description, scoring criteria (name + description + weight %), characters (avatar + name + role)
+- [x] Non-playable characters are dimmed with "NPC" badge
+- [x] Character avatar renders `avatarKey` asset if present, otherwise initial letter fallback
+- [x] Sticky "Start" button pushes to character selection route
+- [x] `SimulationRepository.getScenario()` calls `GET /simulations/scenarios/:id`
+- [x] `ScenarioDetail`, `ScenarioCharacter`, `ScoringCriterion` models parse from JSON
+- [x] `scenarioDetailProvider` fetches by ID, shimmer/error/empty states work
+- [x] AppBar shows back button + scenario title
 
 ## Blocked by
 
 - `.scratch/simulation-conversation-mobile/issues/02-tinh-huong-grid-filtering.md`
+
+## Implementation notes
+
+### Files created
+
+- `mobile/lib/features/simulation/domain/scoring_criterion.dart` — `ScoringCriterion` model with `name`, `description`, `weight` fields and `fromJson`/`toJson`
+- `mobile/lib/features/simulation/domain/scenario_character.dart` — `ScenarioCharacter` model with `id`, `name`, `role`, `personality`, `speechStyle`, `avatarKey` (nullable), `isPlayable`, `orderIndex` fields and `fromJson`/`toJson`
+- `mobile/lib/features/simulation/domain/scenario_detail.dart` — `ScenarioDetail` model combining summary fields (`id`, `title`, `description`, `requiredLevel`, `difficulty`, `estimatedMinutes`, `characterCount`, `categoryInfo`) with `scoringCriteria[]` and `characters[]` arrays; `fromJson` handles both `categoryInfo` and `category` JSON keys from different endpoints
+- `mobile/lib/features/simulation/presentation/screens/scenario_detail_screen.dart` — `ScenarioDetailScreen` (ConsumerWidget) with three-state AsyncValue (shimmer loading / error with retry / data content); content uses `CustomScrollView` + `SliverAppBar` showing scenario title; sections for info badges, description, "Tiêu chí chấm điểm" scoring criteria list with `AppListItem` + weight `%` `AppBadge`, "Nhân vật" character list with `AppAvatar` (initial letter fallback) + `AppListItem` + NPC dimming + "NPC" `AppBadge`; sticky bottom `AppButton.primary` "Bắt đầu" pushes to `/practice/scenarios/:id/select-character`
+
+### Files modified
+
+- `mobile/lib/features/simulation/data/simulation_repository.dart` — Added `getScenario(String id)` method calling `GET /simulations/scenarios/$id`
+- `mobile/lib/features/simulation/data/simulation_providers.dart` — Added `scenarioDetailProvider` as `FutureProvider.family<ScenarioDetail, String>` fetching by ID; imported `ScenarioDetail` model
+- `mobile/lib/core/router/app_router.dart` — Added `GoRoute` for `/practice/scenarios/:id` → `ScenarioDetailScreen`; imported `ScenarioDetailScreen`
+- `mobile/lib/features/simulation/presentation/screens/practice_screen.dart` — Changed `_ScenarioCard.onTap` from `() {}` to `() => context.push('/practice/scenarios/${scenario.id}')`; added `go_router` import
+
+### Files deleted
+
+None.
