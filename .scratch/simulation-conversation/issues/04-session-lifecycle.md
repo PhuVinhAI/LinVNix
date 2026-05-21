@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 # 04 — Session lifecycle — create, pause, resume, cancel
 
@@ -46,16 +46,35 @@ Implement the session management layer that controls how learners start, pause, 
 
 ## Acceptance criteria
 
-- [ ] `POST /sessions` creates a session with ACTIVE status and returns session + opening
-- [ ] `POST /sessions` returns 409 if user already has an incomplete session
-- [ ] `POST /sessions` validates that scenario is published and character is playable
-- [ ] `GET /sessions/:id` returns session with full message history
-- [ ] `GET /sessions/:id` transitions PAUSED → ACTIVE on resume
-- [ ] `GET /sessions/:id` rejects if session belongs to a different user
-- [ ] Cancel (DELETE) soft-deletes the session without creating a result
-- [ ] Unit tests for `SimulationSessionService` pass
-- [ ] `bun run typecheck` passes
+- [x] `POST /sessions` creates a session with ACTIVE status and returns session + opening
+- [x] `POST /sessions` returns 409 if user already has an incomplete session
+- [x] `POST /sessions` validates that scenario is published and character is playable
+- [x] `GET /sessions/:id` returns session with full message history
+- [x] `GET /sessions/:id` transitions PAUSED → ACTIVE on resume
+- [x] `GET /sessions/:id` rejects if session belongs to a different user
+- [x] Cancel (DELETE) soft-deletes the session without creating a result
+- [x] Unit tests for `SimulationSessionService` pass
+- [x] `bun run typecheck` passes
 
 ## Blocked by
 
 - [01 — Enums, entities, and module scaffold](./01-enums-entities-module-scaffold.md)
+
+## Implementation notes
+
+**Test results**: 17/17 unit tests pass. Full suite: 608 tests, 43 suites — all pass.
+
+**Check order**: lint (0 errors, warnings only) → typecheck ✅ → test ✅
+
+### Files created
+
+- `backend/src/modules/simulations/application/simulation-session.service.ts` — Core service with `createSession`, `getSessionWithMessages`, `cancelSession`. Validates scenario/character, enforces 1-session constraint, handles PAUSED→ACTIVE transition on resume, soft-deletes on cancel without creating result.
+- `backend/src/modules/simulations/application/simulation-session.service.spec.ts` — 17 unit tests covering all acceptance criteria: creation happy path, opening message, 409 conflict, scenario/character validation, resume transition, authorization, cancel soft-delete.
+- `backend/src/modules/simulations/application/repositories/simulation-sessions.repository.ts` — TypeORM repository with `findIncompleteByUser` (checks ACTIVE|PAUSED), `create`, `findByIdWithMessages`, `updateStatus`, `softDelete`.
+- `backend/src/modules/simulations/application/repositories/simulation-messages.repository.ts` — TypeORM repository with `create` method for persisting messages.
+- `backend/src/modules/simulations/dto/create-session.dto.ts` — DTO for `POST /sessions` with `scenarioId` and `chosenCharacterId` UUID validation.
+
+### Files modified
+
+- `backend/src/modules/simulations/presentation/simulations.controller.ts` — Added `POST /sessions`, `GET /sessions/:id`, `DELETE /sessions/:id` endpoints with full Swagger documentation and `@CurrentUser()` injection.
+- `backend/src/modules/simulations/simulations.module.ts` — Registered `SimulationSessionService`, `SimulationSessionsRepository`, `SimulationMessagesRepository` as providers; exported `SimulationSessionService`.

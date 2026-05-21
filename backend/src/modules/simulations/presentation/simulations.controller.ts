@@ -1,4 +1,15 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -9,15 +20,21 @@ import {
 import { RequirePermissions } from '../../../common/decorators';
 import { PermissionsGuard } from '../../../common/guards/permissions.guard';
 import { Permission } from '../../../common/enums';
+import { CurrentUser } from '../../../common/decorators';
 import { ScenariosService } from '../application/scenarios.service';
+import { SimulationSessionService } from '../application/simulation-session.service';
 import { ListScenariosDto } from '../dto/list-scenarios.dto';
+import { CreateSessionDto } from '../dto/create-session.dto';
 
 @ApiTags('Simulations')
 @Controller('simulations')
 @UseGuards(PermissionsGuard)
 @ApiBearerAuth()
 export class SimulationsController {
-  constructor(private readonly scenariosService: ScenariosService) {}
+  constructor(
+    private readonly scenariosService: ScenariosService,
+    private readonly sessionService: SimulationSessionService,
+  ) {}
 
   @Get('categories')
   @RequirePermissions(Permission.SIMULATION_ACCESS)
@@ -130,5 +147,127 @@ export class SimulationsController {
   @ApiResponse({ status: 404, description: 'Không tìm thấy tình huống' })
   async getScenarioDetail(@Param('id') id: string) {
     return this.scenariosService.getScenarioDetail(id);
+  }
+
+  // ─── Session endpoints ────────────────────────────────────────────────────
+
+  @Post('sessions')
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Tạo phiên mô phỏng mới',
+    description:
+      'Tạo một phiên mô phỏng mới. Mỗi người dùng chỉ được có 1 phiên chưa hoàn thành (ACTIVE hoặc PAUSED) tại một thời điểm.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Phiên được tạo thành công',
+    schema: {
+      example: {
+        session: {
+          id: 'uuid',
+          scenarioId: 'uuid',
+          chosenCharacterId: 'uuid',
+          status: 'ACTIVE',
+          totalTokens: 0,
+        },
+        openingMessage: {
+          id: 'uuid',
+          content: 'Chào mừng đến chợ!',
+          isLearner: false,
+          speakerCharacterId: null,
+          orderIndex: 0,
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({ status: 403, description: 'Không có quyền SIMULATION_ACCESS' })
+  @ApiResponse({
+    status: 404,
+    description: 'Tình huống không tồn tại hoặc nhân vật không hợp lệ',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Người dùng đang có phiên chưa hoàn thành',
+  })
+  async createSession(
+    @CurrentUser() user: { id: string },
+    @Body() dto: CreateSessionDto,
+  ) {
+    return this.sessionService.createSession(user.id, dto);
+  }
+
+  @Get('sessions/:id')
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Lấy phiên mô phỏng với lịch sử tin nhắn (resume)',
+    description:
+      'Lấy thông tin phiên cùng toàn bộ tin nhắn. Nếu phiên đang PAUSED, tự động chuyển về ACTIVE.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của phiên mô phỏng',
+    example: 'uuid-string',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Phiên với lịch sử tin nhắn',
+    schema: {
+      example: {
+        session: {
+          id: 'uuid',
+          status: 'ACTIVE',
+          scenarioId: 'uuid',
+          chosenCharacterId: 'uuid',
+        },
+        messages: [
+          {
+            id: 'uuid',
+            content: 'Chào mừng!',
+            isLearner: false,
+            orderIndex: 0,
+          },
+        ],
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({
+    status: 403,
+    description: 'Phiên không thuộc về người dùng này',
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy phiên' })
+  async getSession(
+    @CurrentUser() user: { id: string },
+    @Param('id') sessionId: string,
+  ) {
+    return this.sessionService.getSessionWithMessages(user.id, sessionId);
+  }
+
+  @Delete('sessions/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Hủy phiên mô phỏng',
+    description:
+      'Hủy phiên mô phỏng (soft-delete). Không tạo SimulationResult.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của phiên mô phỏng',
+    example: 'uuid-string',
+  })
+  @ApiResponse({ status: 204, description: 'Phiên đã được hủy thành công' })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({
+    status: 403,
+    description: 'Phiên không thuộc về người dùng này',
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy phiên' })
+  async cancelSession(
+    @CurrentUser() user: { id: string },
+    @Param('id') sessionId: string,
+  ) {
+    await this.sessionService.cancelSession(user.id, sessionId);
   }
 }
