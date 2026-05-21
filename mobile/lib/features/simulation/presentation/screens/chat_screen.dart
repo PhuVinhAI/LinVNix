@@ -677,16 +677,22 @@ class _LearnerBubble extends ConsumerWidget {
                     ),
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: maxBubbleWidth),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: c.primary.withAlpha(25),
-                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                    child: GestureDetector(
+                      onTap: _hasFeedback
+                          ? () => _openFeedbackSheet(context)
+                          : null,
+                      behavior: HitTestBehavior.opaque,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: c.primary.withAlpha(25),
+                          borderRadius: BorderRadius.circular(AppRadius.lg),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.lg,
+                          vertical: AppSpacing.md,
+                        ),
+                        child: textWidget,
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.lg,
-                        vertical: AppSpacing.md,
-                      ),
-                      child: textWidget,
                     ),
                   ),
                 ],

@@ -20,7 +20,12 @@ class CorrectionTextSpanBuilder {
       return [_plainSpan(text, baseStyle)];
     }
 
-    final sorted = List<Correction>.from(corrections)
+    final resolved = _resolveCorrectionRanges(text, corrections);
+    if (resolved.isEmpty) {
+      return [_plainSpan(text, baseStyle)];
+    }
+
+    final sorted = List<Correction>.from(resolved)
       ..sort((a, b) => a.startIndex.compareTo(b.startIndex));
 
     final merged = _mergeOverlapping(sorted, errorColor, warningColor);
@@ -47,6 +52,67 @@ class CorrectionTextSpanBuilder {
     }
 
     return spans;
+  }
+
+  static List<Correction> _resolveCorrectionRanges(
+    String text,
+    List<Correction> corrections,
+  ) {
+    if (text.isEmpty || corrections.isEmpty) return corrections;
+
+    final sorted = List<Correction>.from(corrections)
+      ..sort((a, b) => a.startIndex.compareTo(b.startIndex));
+
+    final resolved = <Correction>[];
+    var searchFrom = 0;
+
+    for (final correction in sorted) {
+      if (correction.original.isEmpty) continue;
+
+      final range = _locateOriginal(text, correction, searchFrom);
+      if (range == null) continue;
+
+      resolved.add(
+        Correction(
+          original: correction.original,
+          corrected: correction.corrected,
+          type: correction.type,
+          severity: correction.severity,
+          startIndex: range.$1,
+          endIndex: range.$2,
+        ),
+      );
+      searchFrom = range.$2;
+    }
+
+    return resolved;
+  }
+
+  static (int start, int end)? _locateOriginal(
+    String text,
+    Correction correction,
+    int searchFrom,
+  ) {
+    final start = correction.startIndex;
+    final end = correction.endIndex;
+
+    if (start >= 0 &&
+        end <= text.length &&
+        end > start &&
+        text.substring(start, end) == correction.original) {
+      return (start, end);
+    }
+
+    var found = text.indexOf(correction.original, searchFrom);
+    if (found < 0) {
+      found = text.indexOf(correction.original);
+    }
+    if (found < 0) return null;
+
+    final resolvedEnd = found + correction.original.length;
+    if (resolvedEnd > text.length) return null;
+
+    return (found, resolvedEnd);
   }
 
   static List<_MergedRange> _mergeOverlapping(

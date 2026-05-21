@@ -97,7 +97,7 @@ void main() {
           endIndex: 3,
         ),
         Correction(
-          original: 'lo',
+          original: 'll',
           corrected: 'llo',
           type: 'GRAMMAR',
           severity: 'error',
@@ -375,6 +375,47 @@ void main() {
       expect((spans[0]).text, 'Hello');
       expect((spans[0]).style?.decorationColor, Colors.red);
       expect((spans[1]).text, ' world');
+    });
+
+    test('wrong AI indices are resolved by matching original text', () {
+      const text = 'không thĩhs nào xả';
+      const corrections = [
+        Correction(
+          original: 'thĩhs',
+          corrected: 'thích',
+          type: 'grammar',
+          severity: 'error',
+          startIndex: 6,
+          endIndex: 11,
+        ),
+        Correction(
+          original: 'xả',
+          corrected: 'gì',
+          type: 'grammar',
+          severity: 'error',
+          startIndex: 12,
+          endIndex: 15,
+        ),
+      ];
+
+      final spans = CorrectionTextSpanBuilder.build(
+        text: text,
+        corrections: corrections,
+        errorColor: Colors.red,
+        warningColor: Colors.amber,
+        baseStyle: const TextStyle(fontSize: 14),
+        onCorrectionTap: null,
+      );
+
+      expect(spans, hasLength(4));
+      expect((spans[0]).text, 'không ');
+      expect((spans[0]).style?.decoration, TextDecoration.none);
+      expect((spans[1]).text, 'thĩhs');
+      expect((spans[1]).style?.decoration, TextDecoration.underline);
+      expect((spans[2]).text, ' nào ');
+      expect((spans[2]).style?.decoration, TextDecoration.none);
+      expect((spans[3]).text, 'xả');
+      expect((spans[3]).style?.decoration, TextDecoration.underline);
     });
 
     test('onCorrectionTap callback receives correction index after merge', () {
