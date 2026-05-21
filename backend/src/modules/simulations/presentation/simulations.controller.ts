@@ -23,9 +23,11 @@ import { Permission } from '../../../common/enums';
 import { CurrentUser } from '../../../common/decorators';
 import { ScenariosService } from '../application/scenarios.service';
 import { SimulationSessionService } from '../application/simulation-session.service';
+import { SimulationResultsService } from '../application/simulation-results.service';
 import { ListScenariosDto } from '../dto/list-scenarios.dto';
 import { CreateSessionDto } from '../dto/create-session.dto';
 import { SendMessageDto } from '../dto/send-message.dto';
+import { ListResultsDto } from '../dto/list-results.dto';
 
 @ApiTags('Simulations')
 @Controller('simulations')
@@ -35,6 +37,7 @@ export class SimulationsController {
   constructor(
     private readonly scenariosService: ScenariosService,
     private readonly sessionService: SimulationSessionService,
+    private readonly resultsService: SimulationResultsService,
   ) {}
 
   @Get('categories')
@@ -331,5 +334,106 @@ export class SimulationsController {
     @Body() dto: SendMessageDto,
   ) {
     return this.sessionService.sendMessage(user.id, sessionId, dto.content);
+  }
+
+  // ─── Results endpoints ────────────────────────────────────────────────────
+
+  @Get('results')
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Danh sách kết quả mô phỏng',
+    description:
+      'Lấy danh sách kết quả mô phỏng của người dùng hiện tại, sắp xếp theo mới nhất. Có thể lọc theo scenarioId.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Danh sách kết quả mô phỏng',
+    schema: {
+      example: [
+        {
+          id: 'uuid',
+          totalScore: 85,
+          endReason: 'COMPLETED',
+          createdAt: '2025-01-01T00:00:00.000Z',
+          scenarioTitle: 'Mua rau ở chợ',
+          chosenCharacterName: 'Khách hàng',
+        },
+      ],
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({ status: 403, description: 'Không có quyền SIMULATION_ACCESS' })
+  async listResults(
+    @CurrentUser() user: { id: string },
+    @Query() query: ListResultsDto,
+  ) {
+    return this.resultsService.listResults(user.id, query);
+  }
+
+  @Get('results/:id')
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Chi tiết kết quả mô phỏng',
+    description:
+      'Lấy chi tiết kết quả mô phỏng bao gồm điểm số theo tiêu chí và nhận xét AI',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của kết quả mô phỏng',
+    example: 'uuid-string',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Chi tiết kết quả mô phỏng',
+    schema: {
+      example: {
+        id: 'uuid',
+        totalScore: 85,
+        criteriaScores: [
+          { name: 'Vocabulary', score: 45, maxScore: 50, comment: 'Good' },
+          { name: 'Grammar', score: 40, maxScore: 50, comment: 'Fair' },
+        ],
+        endReason: 'COMPLETED',
+        aiSummary: 'Well done!',
+        totalMessages: 10,
+        scenario: { id: 'uuid', title: 'Mua rau ở chợ' },
+        chosenCharacter: { id: 'uuid', name: 'Khách hàng' },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({
+    status: 403,
+    description: 'Không có quyền hoặc kết quả không thuộc về bạn',
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy kết quả' })
+  async getResultDetail(
+    @CurrentUser() user: { id: string },
+    @Param('id') resultId: string,
+  ) {
+    return this.resultsService.getResultDetail(user.id, resultId);
+  }
+
+  @Get('stats')
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Thống kê mô phỏng',
+    description:
+      'Lấy thống kê mô phỏng của người dùng: số tình huống đã thử và điểm trung bình',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Thống kê mô phỏng',
+    schema: {
+      example: {
+        scenariosAttempted: 5,
+        averageScore: 72.5,
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({ status: 403, description: 'Không có quyền SIMULATION_ACCESS' })
+  async getStats(@CurrentUser() user: { id: string }) {
+    return this.resultsService.getStats(user.id);
   }
 }

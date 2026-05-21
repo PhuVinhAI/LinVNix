@@ -9,6 +9,7 @@ import { SimulationResult } from './domain/simulation-result.entity';
 import { ScenariosService } from './application/scenarios.service';
 import { SimulationSessionService } from './application/simulation-session.service';
 import { SimulationAiService } from './application/simulation-ai.service';
+import { SimulationResultsService } from './application/simulation-results.service';
 import { ScenariosRepository } from './application/repositories/scenarios.repository';
 import { ScenarioCategoriesRepository } from './application/repositories/scenario-categories.repository';
 import { SimulationSessionsRepository } from './application/repositories/simulation-sessions.repository';
@@ -34,6 +35,7 @@ import { UsersModule } from '../users/users.module';
     ScenariosService,
     SimulationSessionService,
     SimulationAiService,
+    SimulationResultsService,
     ScenariosRepository,
     ScenarioCategoriesRepository,
     SimulationSessionsRepository,
