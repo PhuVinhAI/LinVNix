@@ -257,6 +257,7 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
         endReason: response.endReason,
         resultId: resultId,
       );
+      notifySimulationResultsChanged(ref, scenarioId: state.scenarioId);
     } else {
       state = state.copyWith(status: SimulationChatStatus.idle);
     }

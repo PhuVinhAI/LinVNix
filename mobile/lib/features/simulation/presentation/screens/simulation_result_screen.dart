@@ -26,6 +26,10 @@ void _popResultScreen(
     return;
   }
   if (fromHistory) {
+    if (context.canPop()) {
+      context.pop();
+      return;
+    }
     final query = historyScenarioId != null && historyScenarioId.isNotEmpty
         ? '?scenarioId=$historyScenarioId'
         : '';

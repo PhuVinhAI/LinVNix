@@ -170,7 +170,10 @@ class _ScenarioDetailContent extends ConsumerWidget {
                     error: (_, _) => const SizedBox.shrink(),
                     data: (results) {
                       if (results.isEmpty) return const SizedBox.shrink();
-                      return _MiniHistorySection(results: results);
+                      return _MiniHistorySection(
+                        results: results,
+                        scenarioId: detail.id,
+                      );
                     },
                   ),
                   const SizedBox(height: AppSpacing.xxl + AppSpacing.lg),
@@ -573,8 +576,12 @@ class _ScenarioDetailError extends StatelessWidget {
 }
 
 class _MiniHistorySection extends StatelessWidget {
-  const _MiniHistorySection({required this.results});
+  const _MiniHistorySection({
+    required this.results,
+    required this.scenarioId,
+  });
   final List<SimulationResultSummary> results;
+  final String scenarioId;
 
   String _formatDate(String? dateStr) {
     if (dateStr == null) return '';
@@ -607,7 +614,7 @@ class _MiniHistorySection extends StatelessWidget {
             const Spacer(),
             GestureDetector(
               onTap: () => context.push(
-                '/practice/history?scenarioId=${results.first.scenarioId}',
+                '/practice/history?scenarioId=$scenarioId',
               ),
               child: Text(
                 'See all',

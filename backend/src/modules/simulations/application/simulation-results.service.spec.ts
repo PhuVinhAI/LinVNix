@@ -80,6 +80,7 @@ describe('SimulationResultsService', () => {
       const list = await service.listResults('user-1', {});
 
       expect(list[0]).toMatchObject({
+        scenarioId: 'sc-1',
         scenarioTitle: 'Mua rau ở chợ',
         chosenCharacterName: 'Khách hàng',
       });

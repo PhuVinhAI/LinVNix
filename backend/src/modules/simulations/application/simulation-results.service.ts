@@ -10,6 +10,7 @@ export interface ResultListItem {
   totalScore: number;
   endReason: string;
   createdAt: Date;
+  scenarioId: string;
   scenarioTitle: string;
   chosenCharacterName: string;
 }
@@ -61,6 +62,7 @@ export class SimulationResultsService {
       totalScore: r.totalScore,
       endReason: r.endReason,
       createdAt: r.createdAt,
+      scenarioId: r.scenarioId,
       scenarioTitle: (r.scenario as any)?.title ?? '',
       chosenCharacterName: (r.chosenCharacter as any)?.name ?? '',
     }));

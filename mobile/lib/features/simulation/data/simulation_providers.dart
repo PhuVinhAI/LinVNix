@@ -131,13 +131,40 @@ final scenarioDetailProvider =
   return repo.getScenario(id);
 });
 
-final simulationResultsProvider =
-    FutureProvider.family<List<SimulationResultSummary>, String?>(
-  (ref, scenarioId) async {
+class SimulationResultsNotifier
+    extends AsyncNotifier<List<SimulationResultSummary>>
+    with DataChangeBusSubscriber<List<SimulationResultSummary>> {
+  SimulationResultsNotifier(this.scenarioId);
+
+  final String? scenarioId;
+
+  @override
+  Future<List<SimulationResultSummary>> build() async {
+    watchTags({'simulation-results'});
     final repo = ref.read(simulationRepositoryProvider);
     return repo.listResults(scenarioId: scenarioId);
-  },
+  }
+
+  Future<void> refresh() async {
+    ref.invalidateSelf();
+  }
+}
+
+final simulationResultsProvider = AsyncNotifierProvider.family<
+    SimulationResultsNotifier, List<SimulationResultSummary>, String?>(
+  (arg) => SimulationResultsNotifier(arg),
 );
+
+void notifySimulationResultsChanged(Ref ref, {String? scenarioId}) {
+  ref.read(dataChangeBusProvider.notifier).emit({
+    'simulation',
+    'simulation-results',
+  });
+  ref.invalidate(simulationResultsProvider(null));
+  if (scenarioId != null && scenarioId.isNotEmpty) {
+    ref.invalidate(simulationResultsProvider(scenarioId));
+  }
+}
 
 final simulationResultDetailProvider =
     FutureProvider.family<SimulationResultDetail, String>((ref, id) async {

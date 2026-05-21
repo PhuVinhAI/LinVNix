@@ -26,18 +26,39 @@ class _ResultsHistoryScreenState extends ConsumerState<ResultsHistoryScreen> {
     _selectedScenarioId = widget.scenarioId;
   }
 
+  void _onBack() {
+    if (context.canPop()) {
+      context.pop();
+      return;
+    }
+    context.go('/practice');
+  }
+
   @override
   Widget build(BuildContext context) {
     final resultsAsync =
         ref.watch(simulationResultsProvider(_selectedScenarioId));
 
-    return Scaffold(
-      appBar: AppAppBar(title: const Text('Conversation history')),
-      body: resultsAsync.when(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _onBack();
+      },
+      child: Scaffold(
+        appBar: AppAppBar(
+          title: const Text('Conversation history'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: _onBack,
+          ),
+        ),
+        body: resultsAsync.when(
         loading: () => const _ResultsLoading(),
         error: (error, stack) => _ResultsError(
-          onRetry: () =>
-              ref.invalidate(simulationResultsProvider(_selectedScenarioId)),
+          onRetry: () => ref
+              .read(simulationResultsProvider(_selectedScenarioId).notifier)
+              .refresh(),
         ),
         data: (results) => _ResultsContent(
           results: results,
@@ -45,6 +66,10 @@ class _ResultsHistoryScreenState extends ConsumerState<ResultsHistoryScreen> {
           onFilterChanged: (scenarioId) {
             setState(() => _selectedScenarioId = scenarioId);
           },
+          onRefresh: () => ref
+              .read(simulationResultsProvider(_selectedScenarioId).notifier)
+              .refresh(),
+        ),
         ),
       ),
     );
@@ -56,11 +81,13 @@ class _ResultsContent extends StatelessWidget {
     required this.results,
     this.selectedScenarioId,
     required this.onFilterChanged,
+    required this.onRefresh,
   });
 
   final List<SimulationResultSummary> results;
   final String? selectedScenarioId;
   final void Function(String?) onFilterChanged;
+  final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +96,7 @@ class _ResultsContent extends StatelessWidget {
     }
 
     return RefreshIndicator(
-      onRefresh: () async {
-        // RefreshIndicator requires a Future - the provider will auto-refresh
-        // when invalidated, but since we're using FutureProvider.family,
-        // we just return a completed future here as the data is already fresh.
-      },
+      onRefresh: onRefresh,
       child: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: [
