@@ -56,6 +56,13 @@ class PracticeScreen extends ConsumerWidget {
       appBar: AppAppBar(
         title: const Text('Thực hành'),
         actions: [
+          IconButton(
+            onPressed: () => context.push('/practice/history'),
+            icon: Icon(
+              Icons.history,
+              color: AppTheme.colors(context).foreground,
+            ),
+          ),
           _FilterActionIcon(
             isActive: filter.isActive,
             onTap: () => _showFilterSheet(context, ref),

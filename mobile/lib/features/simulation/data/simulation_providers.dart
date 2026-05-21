@@ -7,6 +7,7 @@ import '../domain/scenario_category.dart';
 import '../domain/scenario_detail.dart';
 import '../domain/scenario_summary.dart';
 import '../domain/simulation_result_detail.dart';
+import '../domain/simulation_result_summary.dart';
 
 final simulationRepositoryProvider = Provider<SimulationRepository>((ref) {
   return SimulationRepository(ref.watch(dioProvider));
@@ -128,6 +129,14 @@ final scenarioDetailProvider =
   final repo = ref.read(simulationRepositoryProvider);
   return repo.getScenario(id);
 });
+
+final simulationResultsProvider =
+    FutureProvider.family<List<SimulationResultSummary>, String?>(
+  (ref, scenarioId) async {
+    final repo = ref.read(simulationRepositoryProvider);
+    return repo.listResults(scenarioId: scenarioId);
+  },
+);
 
 final simulationResultDetailProvider =
     FutureProvider.family<SimulationResultDetail, String>((ref, id) async {

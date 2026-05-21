@@ -6,6 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/simulation_providers.dart';
 import '../../domain/scenario_detail.dart';
+import '../../domain/simulation_result_summary.dart';
 
 Color _getLevelColor(String level, AppColors c) {
   return switch (level) {
@@ -55,13 +56,15 @@ class ScenarioDetailScreen extends ConsumerWidget {
   }
 }
 
-class _ScenarioDetailContent extends StatelessWidget {
+class _ScenarioDetailContent extends ConsumerWidget {
   const _ScenarioDetailContent({required this.detail});
   final ScenarioDetail detail;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = AppTheme.colors(context);
+    final miniHistoryAsync =
+        ref.watch(simulationResultsProvider(detail.id));
 
     return Scaffold(
       body: CustomScrollView(
@@ -104,6 +107,14 @@ class _ScenarioDetailContent extends StatelessWidget {
                       (character) => _CharacterItem(character: character),
                     ),
                   ],
+                  miniHistoryAsync.when(
+                    loading: () => const _MiniHistoryLoading(),
+                    error: (_, _) => const SizedBox.shrink(),
+                    data: (results) {
+                      if (results.isEmpty) return const SizedBox.shrink();
+                      return _MiniHistorySection(results: results);
+                    },
+                  ),
                   const SizedBox(height: AppSpacing.xxl + AppSpacing.lg),
                 ],
               ),
@@ -507,6 +518,206 @@ class _ScenarioDetailError extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _MiniHistorySection extends StatelessWidget {
+  const _MiniHistorySection({required this.results});
+  final List<SimulationResultSummary> results;
+
+  String _formatDate(String? dateStr) {
+    if (dateStr == null) return '';
+    try {
+      final date = DateTime.parse(dateStr);
+      return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    } catch (_) {
+      return dateStr;
+    }
+  }
+
+  Color _scoreColor(double score, AppColors c) {
+    if (score >= 71) return c.success;
+    if (score >= 41) return c.warning;
+    return c.error;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: AppSpacing.xl),
+        Row(
+          children: [
+            const _SectionHeader(title: 'Lịch sử kết quả'),
+            const Spacer(),
+            GestureDetector(
+              onTap: () => context.push(
+                '/practice/history?scenarioId=${results.first.scenarioId}',
+              ),
+              child: Text(
+                'Xem tất cả',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: c.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        ...results.take(3).map(
+          (r) => _MiniHistoryItem(
+            result: r,
+            scoreColor: _scoreColor(r.totalScore, c),
+            formattedDate: _formatDate(r.createdAt),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MiniHistoryItem extends StatelessWidget {
+  const _MiniHistoryItem({
+    required this.result,
+    required this.scoreColor,
+    required this.formattedDate,
+  });
+
+  final SimulationResultSummary result;
+  final Color scoreColor;
+  final String formattedDate;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: AppCard(
+        variant: AppCardVariant.outlined,
+        borderRadius: AppRadius.lg,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        onTap: () => context.push('/practice/results/${result.id}'),
+        child: Row(
+          children: [
+            Text(
+              result.totalScore.round().toString(),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: scoreColor,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.xs),
+            Text(
+              '/100',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: c.mutedForeground,
+              ),
+            ),
+            const Spacer(),
+            if (result.characterName != null)
+              Flexible(
+                child: Text(
+                  result.characterName!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: c.mutedForeground,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            if (result.characterName != null)
+              const SizedBox(width: AppSpacing.md),
+            Text(
+              formattedDate,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: c.mutedForeground,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MiniHistoryLoading extends StatelessWidget {
+  const _MiniHistoryLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: AppSpacing.xl),
+        Shimmer.fromColors(
+          baseColor: c.muted,
+          highlightColor: c.card,
+          child: Container(
+            height: 20,
+            width: 120,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        ...List.generate(
+          2,
+          (_) => Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+            child: AppCard(
+              variant: AppCardVariant.outlined,
+              borderRadius: AppRadius.lg,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              child: Row(
+                children: [
+                  Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
+                    child: Container(
+                      width: 40,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Shimmer.fromColors(
+                    baseColor: c.muted,
+                    highlightColor: c.card,
+                    child: Container(
+                      width: 60,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

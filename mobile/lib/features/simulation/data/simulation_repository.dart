@@ -8,6 +8,7 @@ import '../domain/scenario_summary.dart';
 import '../domain/send_message_response.dart';
 import '../domain/simulation_message.dart';
 import '../domain/simulation_result_detail.dart';
+import '../domain/simulation_result_summary.dart';
 import '../domain/simulation_session.dart';
 
 class SimulationRepository {
@@ -131,6 +132,26 @@ class SimulationRepository {
       return SimulationResultDetail.fromJson(
         response.data as Map<String, dynamic>,
       );
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<List<SimulationResultSummary>> listResults({
+    String? scenarioId,
+  }) async {
+    try {
+      final queryParameters = <String, String>{};
+      if (scenarioId != null) queryParameters['scenarioId'] = scenarioId;
+
+      final response = await _dio.get<List<dynamic>>(
+        '/simulations/results',
+        queryParameters: queryParameters.isNotEmpty ? queryParameters : null,
+      );
+      return (response.data as List<dynamic>)
+          .map((e) =>
+              SimulationResultSummary.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       throw mapDioException(e);
     }

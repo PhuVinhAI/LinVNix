@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -18,17 +18,36 @@ Add `listResults({String? scenarioId})` to `SimulationRepository`. Create `Simul
 
 ## Acceptance criteria
 
-- [ ] AppBar history icon on tab landing pushes to `/practice/history`
-- [ ] Results history screen lists results newest-first with score, end reason, date, scenario title, character name
-- [ ] Tap a result card → push result detail screen
-- [ ] Scenario filter on history screen filters results by scenario
-- [ ] Mini history section on scenario detail shows past results (score + date) when they exist
-- [ ] Tapping a mini history result pushes to result detail
-- [ ] `SimulationRepository.listResults()` calls `GET /simulations/results` with optional scenarioId
-- [ ] `SimulationResultSummary` model parses from JSON
-- [ ] `simulationResultsProvider` refetches when scenarioId filter changes
-- [ ] Loading shimmer, error, and empty states work for both list and mini section
+- [x] AppBar history icon on tab landing pushes to `/practice/history`
+- [x] Results history screen lists results newest-first with score, end reason, date, scenario title, character name
+- [x] Tap a result card → push result detail screen
+- [x] Scenario filter on history screen filters results by scenario
+- [x] Mini history section on scenario detail shows past results (score + date) when they exist
+- [x] Tapping a mini history result pushes to result detail
+- [x] `SimulationRepository.listResults()` calls `GET /simulations/results` with optional scenarioId
+- [x] `SimulationResultSummary` model parses from JSON
+- [x] `simulationResultsProvider` refetches when scenarioId filter changes
+- [x] Loading shimmer, error, and empty states work for both list and mini section
 
 ## Blocked by
 
 - `.scratch/simulation-conversation-mobile/issues/09-ket-qua-mo-phong-screen.md`
+
+## Implementation notes
+
+### Files created
+
+- `mobile/lib/features/simulation/domain/simulation_result_summary.dart` — `SimulationResultSummary` model with fromJson/toJson (id, totalScore, endReason, createdAt, scenarioTitle, characterName, scenarioId). Handles nested `scenario` and `chosenCharacter` objects from API.
+- `mobile/lib/features/simulation/presentation/screens/results_history_screen.dart` — Full results history screen with: AppBar "Lịch sử hội thoại", scenario filter indicator (when arriving from scenario detail), ListView of result cards showing score/100, end reason badge, scenario title, character name, date. Loading shimmer, error with retry, empty state. `ConsumerStatefulWidget` with `_selectedScenarioId` state for filter switching.
+
+### Files modified
+
+- `mobile/lib/features/simulation/data/simulation_repository.dart` — Added `listResults({String? scenarioId})` method calling `GET /simulations/results` with optional `scenarioId` query parameter.
+- `mobile/lib/features/simulation/data/simulation_providers.dart` — Added `simulationResultsProvider` as `FutureProvider.family<List<SimulationResultSummary>, String?>` — family parameter is the optional scenarioId, enabling both unfiltered list and per-scenario mini history. Refetches automatically when scenarioId changes.
+- `mobile/lib/features/simulation/presentation/screens/practice_screen.dart` — Added history icon button (`Icons.history`) to AppBar actions, pushing to `/practice/history`.
+- `mobile/lib/features/simulation/presentation/screens/scenario_detail_screen.dart` — Changed `_ScenarioDetailContent` from `StatelessWidget` to `ConsumerWidget`. Added mini history section between characters list and bottom padding: watches `simulationResultsProvider(detail.id)`, shows loading shimmer, hides on error/empty, displays up to 3 compact result cards with score + character name + date, "Xem tất cả" link pushes to `/practice/history?scenarioId=...`.
+- `mobile/lib/core/router/app_router.dart` — Added `/practice/history` push route (outside shell) mapping to `ResultsHistoryScreen` with optional `?scenarioId=` query parameter.
+
+### Files deleted
+
+(none)
