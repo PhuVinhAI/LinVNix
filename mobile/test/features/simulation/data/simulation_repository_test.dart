@@ -268,6 +268,71 @@ void main() {
       });
     });
 
+    group('getActiveSession', () {
+      test('calls GET /simulations/sessions/active and returns ActiveSession', () async {
+        when(() => mockDio.get<Map<String, dynamic>?>(any()))
+            .thenAnswer(
+          (_) async => Response(
+            requestOptions:
+                RequestOptions(path: '/simulations/sessions/active'),
+            statusCode: 200,
+            data: {
+              'id': 'session-1',
+              'scenarioId': 'scenario-1',
+              'scenarioTitle': 'Mua rau ở chợ',
+              'chosenCharacterId': 'char-1',
+              'chosenCharacterName': 'Khách hàng',
+              'status': 'ACTIVE',
+              'nextTurnCharacterId': 'char-1',
+            },
+          ),
+        );
+
+        final result = await repository.getActiveSession();
+
+        verify(() => mockDio.get<Map<String, dynamic>?>(
+              '/simulations/sessions/active',
+            )).called(1);
+
+        expect(result, isNotNull);
+        expect(result!.id, 'session-1');
+        expect(result.scenarioTitle, 'Mua rau ở chợ');
+        expect(result.chosenCharacterName, 'Khách hàng');
+        expect(result.status, 'ACTIVE');
+      });
+
+      test('returns null when no active session', () async {
+        when(() => mockDio.get<Map<String, dynamic>?>(any()))
+            .thenAnswer(
+          (_) async => Response(
+            requestOptions:
+                RequestOptions(path: '/simulations/sessions/active'),
+            statusCode: 200,
+            data: null,
+          ),
+        );
+
+        final result = await repository.getActiveSession();
+
+        expect(result, isNull);
+      });
+
+      test('throws NetworkException on connection timeout', () async {
+        when(() => mockDio.get<Map<String, dynamic>?>(any())).thenThrow(
+          DioException(
+            requestOptions:
+                RequestOptions(path: '/simulations/sessions/active'),
+            type: DioExceptionType.connectionTimeout,
+          ),
+        );
+
+        expect(
+          () => repository.getActiveSession(),
+          throwsA(isA<NetworkException>()),
+        );
+      });
+    });
+
     group('getSession', () {
       const sessionId = 'session-1';
 

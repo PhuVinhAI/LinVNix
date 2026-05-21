@@ -137,6 +137,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       final notifier = ref.read(simulationChatProvider.notifier);
       notifier.cancelSession();
     }
+    ref.invalidate(pausedSessionProvider);
     context.pop();
   }
 
@@ -215,6 +216,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Future<void> _doCancelSession() async {
     final notifier = ref.read(simulationChatProvider.notifier);
     await notifier.cancelSession();
+    ref.invalidate(pausedSessionProvider);
     if (!mounted) return;
     while (context.canPop()) {
       context.pop();
@@ -226,6 +228,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final chatState = ref.read(simulationChatProvider);
     final resultId = chatState.resultId;
     if (resultId != null && resultId.isNotEmpty) {
+      ref.invalidate(pausedSessionProvider);
       context.push('/practice/results/$resultId');
     }
   }

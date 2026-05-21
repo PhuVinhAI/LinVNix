@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/sync/sync.dart';
 import '../../../core/providers/providers.dart';
 import '../data/simulation_repository.dart';
+import '../domain/active_session.dart';
 import '../domain/scenario_category.dart';
 import '../domain/scenario_detail.dart';
 import '../domain/scenario_summary.dart';
@@ -126,3 +127,20 @@ final scenarioDetailProvider =
   final repo = ref.read(simulationRepositoryProvider);
   return repo.getScenario(id);
 });
+
+class PausedSessionNotifier extends AsyncNotifier<ActiveSession?> {
+  @override
+  Future<ActiveSession?> build() async {
+    final repo = ref.read(simulationRepositoryProvider);
+    return repo.getActiveSession();
+  }
+
+  Future<void> refresh() async {
+    ref.invalidateSelf();
+  }
+}
+
+final pausedSessionProvider =
+    AsyncNotifierProvider<PausedSessionNotifier, ActiveSession?>(
+  PausedSessionNotifier.new,
+);

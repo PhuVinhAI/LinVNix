@@ -37,6 +37,22 @@ export class SimulationSessionsRepository {
     return this.repository.save(session);
   }
 
+  async findIncompleteByUserWithRelations(
+    userId: string,
+  ): Promise<SimulationSession | null> {
+    return this.repository.findOne({
+      where: {
+        userId,
+        status: In([
+          SimulationSessionStatus.ACTIVE,
+          SimulationSessionStatus.PAUSED,
+        ]),
+        deletedAt: IsNull(),
+      },
+      relations: ['scenario', 'chosenCharacter'],
+    });
+  }
+
   async findByIdWithMessages(
     sessionId: string,
   ): Promise<SimulationSession | null> {

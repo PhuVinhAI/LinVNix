@@ -155,6 +155,39 @@ export class SimulationsController {
 
   // ─── Session endpoints ────────────────────────────────────────────────────
 
+  @Get('sessions/active')
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Lấy phiên đang hoạt động/tạm dừng',
+    description:
+      'Lấy phiên ACTIVE hoặc PAUSED của người dùng hiện tại. Trả về null nếu không có.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Thông tin phiên đang hoạt động hoặc null',
+    schema: {
+      oneOf: [
+        { type: 'null' },
+        {
+          example: {
+            id: 'uuid',
+            scenarioId: 'uuid',
+            scenarioTitle: 'Mua rau ở chợ',
+            chosenCharacterId: 'uuid',
+            chosenCharacterName: 'Khách hàng',
+            status: 'ACTIVE',
+            nextTurnCharacterId: 'uuid',
+          },
+        },
+      ],
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({ status: 403, description: 'Không có quyền SIMULATION_ACCESS' })
+  async getActiveSession(@CurrentUser() user: { id: string }) {
+    return this.sessionService.getActiveSession(user.id);
+  }
+
   @Post('sessions')
   @RequirePermissions(Permission.SIMULATION_ACCESS)
   @ApiOperation({

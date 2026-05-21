@@ -458,6 +458,69 @@ describe('Simulations (e2e)', () => {
     });
   });
 
+  describe('Active session endpoint', () => {
+    let activeSessionId: string;
+
+    it('GET /sessions/active returns null when no incomplete session', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/api/v1/simulations/sessions/active')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.data).toBeNull();
+    });
+
+    it('GET /sessions/active returns incomplete session with scenario/character info', async () => {
+      const createRes = await request(app.getHttpServer())
+        .post('/api/v1/simulations/sessions')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ scenarioId, chosenCharacterId: playableCharId });
+      expect(createRes.status).toBe(201);
+      activeSessionId = createRes.body.data.session.id;
+
+      const res = await request(app.getHttpServer())
+        .get('/api/v1/simulations/sessions/active')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.data).toBeDefined();
+      expect(res.body.data.id).toBe(activeSessionId);
+      expect(res.body.data.scenarioId).toBe(scenarioId);
+      expect(res.body.data.scenarioTitle).toBe('E2E Test Scenario');
+      expect(res.body.data.chosenCharacterId).toBe(playableCharId);
+      expect(res.body.data.chosenCharacterName).toBe('Khách hàng');
+      expect(res.body.data.status).toBe('ACTIVE');
+    });
+
+    it('GET /sessions/active returns PAUSED session', async () => {
+      await sessionRepo.update(
+        { id: activeSessionId },
+        { status: SimulationSessionStatus.PAUSED },
+      );
+
+      const res = await request(app.getHttpServer())
+        .get('/api/v1/simulations/sessions/active')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.id).toBe(activeSessionId);
+      expect(res.body.data.status).toBe('PAUSED');
+    });
+
+    it('GET /sessions/active returns null after session cancelled', async () => {
+      await request(app.getHttpServer())
+        .delete(`/api/v1/simulations/sessions/${activeSessionId}`)
+        .set('Authorization', `Bearer ${authToken}`);
+
+      const res = await request(app.getHttpServer())
+        .get('/api/v1/simulations/sessions/active')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.data).toBeNull();
+    });
+  });
+
   describe('Pause/resume flow', () => {
     it('auto-resumes PAUSED session on GET with full message history', async () => {
       const createRes = await request(app.getHttpServer())

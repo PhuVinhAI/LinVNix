@@ -166,6 +166,31 @@ export class SimulationSessionService {
     };
   }
 
+  async getActiveSession(userId: string): Promise<{
+    id: string;
+    scenarioId: string;
+    scenarioTitle: string;
+    chosenCharacterId: string;
+    chosenCharacterName: string;
+    status: string;
+    nextTurnCharacterId: string;
+  } | null> {
+    const session =
+      await this.sessionsRepository.findIncompleteByUserWithRelations(userId);
+
+    if (!session) return null;
+
+    return {
+      id: session.id,
+      scenarioId: session.scenarioId,
+      scenarioTitle: session.scenario?.title ?? '',
+      chosenCharacterId: session.chosenCharacterId,
+      chosenCharacterName: session.chosenCharacter?.name ?? '',
+      status: session.status,
+      nextTurnCharacterId: session.nextTurnCharacterId,
+    };
+  }
+
   async cancelSession(userId: string, sessionId: string): Promise<void> {
     const session =
       await this.sessionsRepository.findByIdWithMessages(sessionId);

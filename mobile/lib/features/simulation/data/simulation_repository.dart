@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import '../../../core/network/exception_mapper.dart';
+import '../domain/active_session.dart';
 import '../domain/create_session_response.dart';
 import '../domain/scenario_category.dart';
 import '../domain/scenario_detail.dart';
@@ -104,6 +105,18 @@ class SimulationRepository {
   Future<void> cancelSession(String sessionId) async {
     try {
       await _dio.delete<void>('/simulations/sessions/$sessionId');
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<ActiveSession?> getActiveSession() async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>?>(
+        '/simulations/sessions/active',
+      );
+      if (response.data == null) return null;
+      return ActiveSession.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw mapDioException(e);
     }

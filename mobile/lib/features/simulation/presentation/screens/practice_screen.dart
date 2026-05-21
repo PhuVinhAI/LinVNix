@@ -5,6 +5,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/simulation_providers.dart';
+import '../../domain/active_session.dart';
 import '../../domain/scenario_category.dart';
 import '../../domain/scenario_summary.dart';
 
@@ -49,6 +50,7 @@ class PracticeScreen extends ConsumerWidget {
     final categoriesAsync = ref.watch(simulationCategoriesProvider);
     final scenariosAsync = ref.watch(simulationScenariosProvider);
     final filter = ref.watch(scenarioFilterProvider);
+    final pausedAsync = ref.watch(pausedSessionProvider);
 
     return Scaffold(
       appBar: AppAppBar(
@@ -70,10 +72,13 @@ class PracticeScreen extends ConsumerWidget {
           categories: categories,
           scenariosAsync: scenariosAsync,
           filter: filter,
+          activeSession: pausedAsync.whenOrNull(data: (s) => s),
           onRefreshCategories: () =>
               ref.read(simulationCategoriesProvider.notifier).refresh(),
           onRefreshScenarios: () =>
               ref.read(simulationScenariosProvider.notifier).refresh(),
+          onRefreshPaused: () =>
+              ref.read(pausedSessionProvider.notifier).refresh(),
           onCategoryTap: (categoryId) {
             final notifier = ref.read(scenarioFilterProvider.notifier);
             final current = ref.read(scenarioFilterProvider);
@@ -84,6 +89,34 @@ class PracticeScreen extends ConsumerWidget {
             }
           },
           onOpenFilter: () => _showFilterSheet(context, ref),
+          onCancelSession: () async {
+            final session = pausedAsync.whenOrNull(data: (s) => s);
+            if (session == null) return;
+            final confirmed = await AppDialog.show<bool>(
+              context,
+              builder: (ctx) => AppDialog(
+                title: 'Huỷ phiên hội thoại?',
+                content:
+                    'Tiến trình hội thoại sẽ bị mất và không thể khôi phục.',
+                actions: [
+                  AppDialogAction(
+                    label: 'Không',
+                    onPressed: () => Navigator.of(ctx).pop(false),
+                  ),
+                  AppDialogAction(
+                    label: 'Huỷ phiên',
+                    isPrimary: true,
+                    onPressed: () => Navigator.of(ctx).pop(true),
+                  ),
+                ],
+              ),
+            );
+            if (confirmed != true || !context.mounted) return;
+            final repo = ref.read(simulationRepositoryProvider);
+            await repo.cancelSession(session.id);
+            ref.read(pausedSessionProvider.notifier).refresh();
+            ref.read(simulationScenariosProvider.notifier).refresh();
+          },
         ),
       ),
     );
@@ -134,19 +167,25 @@ class _PracticeContent extends StatelessWidget {
     required this.categories,
     required this.scenariosAsync,
     required this.filter,
+    this.activeSession,
     required this.onRefreshCategories,
     required this.onRefreshScenarios,
+    required this.onRefreshPaused,
     required this.onCategoryTap,
     required this.onOpenFilter,
+    required this.onCancelSession,
   });
 
   final List<ScenarioCategory> categories;
   final AsyncValue<List<ScenarioSummary>> scenariosAsync;
   final ScenarioFilter filter;
+  final ActiveSession? activeSession;
   final Future<void> Function() onRefreshCategories;
   final Future<void> Function() onRefreshScenarios;
+  final Future<void> Function() onRefreshPaused;
   final void Function(String categoryId) onCategoryTap;
   final VoidCallback onOpenFilter;
+  final VoidCallback onCancelSession;
 
   String get _sectionTitle {
     if (filter.categoryId != null) {
@@ -187,10 +226,19 @@ class _PracticeContent extends StatelessWidget {
       onRefresh: () async {
         await onRefreshCategories();
         await onRefreshScenarios();
+        await onRefreshPaused();
       },
       child: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: [
+          if (activeSession != null)
+            _PausedSessionBanner(
+              session: activeSession!,
+              onContinue: () => context.push('/practice/sessions/${activeSession!.id}'),
+              onCancel: onCancelSession,
+            ),
+          if (activeSession != null)
+            const SizedBox(height: AppSpacing.lg),
           _CategoryHeader(
             title: 'Danh mục tình huống',
             onSeeAll: filter.categoryId != null
@@ -984,6 +1032,95 @@ class _CategoriesLoading extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _PausedSessionBanner extends StatelessWidget {
+  const _PausedSessionBanner({
+    required this.session,
+    required this.onContinue,
+    required this.onCancel,
+  });
+
+  final ActiveSession session;
+  final VoidCallback onContinue;
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+
+    return AppCard(
+      variant: AppCardVariant.filled,
+      borderRadius: AppRadius.lg,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      color: c.primary.withAlpha(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.pause_circle_outline,
+                size: 20,
+                color: c.primary,
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Text(
+                  'Phiên đang tạm dừng',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: c.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            session.scenarioTitle,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Nhân vật: ${session.chosenCharacterName}',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: c.mutedForeground,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  variant: AppButtonVariant.primary,
+                  label: 'Tiếp tục',
+                  onPressed: onContinue,
+                  isFullWidth: true,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: AppButton(
+                  variant: AppButtonVariant.outline,
+                  label: 'Huỷ',
+                  onPressed: onCancel,
+                  isFullWidth: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
