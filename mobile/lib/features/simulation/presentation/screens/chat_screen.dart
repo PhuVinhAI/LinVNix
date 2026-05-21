@@ -69,7 +69,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           if (!mounted) return;
           AppToast.show(
             context,
-            message: 'Không thể tải phiên hội thoại',
+            message: 'Unable to load conversation session',
             type: AppToastType.error,
           );
         }
@@ -84,7 +84,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           if (!mounted) return;
           AppToast.show(
             context,
-            message: 'Không thể tải phiên hội thoại',
+            message: 'Unable to load conversation session',
             type: AppToastType.error,
           );
         }
@@ -154,7 +154,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Text(
-                'Tuỳ chọn phiên',
+                'Session options',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -163,7 +163,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ListTile(
               leading: Icon(Icons.cancel_outlined, color: c.error),
               title: Text(
-                'Huỷ phiên',
+                'End session',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: c.error,
                     ),
@@ -176,7 +176,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             if (chatState.scenarioId.isNotEmpty)
               ListTile(
                 leading: Icon(Icons.description_outlined, color: c.foreground),
-                title: const Text('Xem tình huống'),
+                title: const Text('View scenario'),
                 onTap: () {
                   Navigator.of(context).pop();
                   context.push('/practice/scenarios/${chatState.scenarioId}');
@@ -193,15 +193,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     AppDialog.show(
       context,
       builder: (context) => AppDialog(
-        title: 'Huỷ phiên hội thoại?',
-        content: 'Tiến trình hội thoại sẽ bị mất và không thể khôi phục.',
+        title: 'End conversation?',
+        content: 'Conversation progress will be lost and cannot be recovered.',
         actions: [
           AppDialogAction(
-            label: 'Không',
+            label: 'No',
             onPressed: () => Navigator.of(context).pop(),
           ),
           AppDialogAction(
-            label: 'Huỷ phiên',
+            label: 'End session',
             isPrimary: true,
             onPressed: () {
               Navigator.of(context).pop();
@@ -255,7 +255,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Hội thoại'),
+          title: const Text('Conversation'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: _onBack,
@@ -412,7 +412,7 @@ class _TypingIndicator extends StatelessWidget {
             AppSpinner(size: 16, color: c.mutedForeground),
             const SizedBox(width: AppSpacing.sm),
             Text(
-              'Đang suy nghĩ...',
+              'Thinking...',
               style: GoogleFonts.inter(
                 fontSize: AppTypography.bodySmall,
                 color: c.mutedForeground,
@@ -645,8 +645,8 @@ class _ComposeBar extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     final hint = isNpcTurn
-        ? (npcName.isNotEmpty ? '$npcName đang nhập...' : 'Đang suy nghĩ...')
-        : 'Lượt bạn';
+        ? (npcName.isNotEmpty ? '$npcName is typing...' : 'Thinking...')
+        : 'Your turn';
 
     return Container(
       decoration: BoxDecoration(
@@ -755,7 +755,7 @@ class _CompletedBanner extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Phiên đã kết thúc',
+                'Session ended',
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodyMedium,
                   fontWeight: FontWeight.w600,
@@ -765,7 +765,7 @@ class _CompletedBanner extends StatelessWidget {
             ),
             AppButton(
               variant: AppButtonVariant.outline,
-              label: 'Xem kết quả',
+              label: 'View results',
               onPressed: onViewResult,
             ),
           ],
@@ -803,7 +803,7 @@ class _HistoryBanner extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Phiên đã kết thúc',
+                'Session ended',
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodySmall,
                   color: c.mutedForeground,
@@ -814,7 +814,7 @@ class _HistoryBanner extends StatelessWidget {
             if (showViewResult && onViewResult != null)
               AppButton(
                 variant: AppButtonVariant.outline,
-                label: 'Xem kết quả',
+                label: 'View results',
                 onPressed: onViewResult,
               ),
           ],

@@ -55,11 +55,14 @@ export class ScenariosService {
     }));
   }
 
-  async getScenarioDetail(id: string): Promise<Scenario> {
+  async getScenarioDetail(id: string): Promise<Scenario & { characterCount: number }> {
     const scenario = await this.scenariosRepository.findById(id);
     if (!scenario) {
       throw new NotFoundException(`Scenario with ID ${id} not found`);
     }
-    return scenario;
+    return {
+      ...scenario,
+      characterCount: scenario.characters?.length ?? 0,
+    };
   }
 }

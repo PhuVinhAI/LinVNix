@@ -54,7 +54,7 @@ class PracticeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppAppBar(
-        title: const Text('Thực hành'),
+        title: const Text('Practice'),
         actions: [
           IconButton(
             onPressed: () => context.push('/practice/history'),
@@ -102,16 +102,16 @@ class PracticeScreen extends ConsumerWidget {
             final confirmed = await AppDialog.show<bool>(
               context,
               builder: (ctx) => AppDialog(
-                title: 'Huỷ phiên hội thoại?',
+                title: 'End conversation?',
                 content:
-                    'Tiến trình hội thoại sẽ bị mất và không thể khôi phục.',
+                    'Conversation progress will be lost and cannot be recovered.',
                 actions: [
                   AppDialogAction(
-                    label: 'Không',
+                    label: 'No',
                     onPressed: () => Navigator.of(ctx).pop(false),
                   ),
                   AppDialogAction(
-                    label: 'Huỷ phiên',
+                    label: 'End session',
                     isPrimary: true,
                     onPressed: () => Navigator.of(ctx).pop(true),
                   ),
@@ -197,9 +197,9 @@ class _PracticeContent extends StatelessWidget {
   String get _sectionTitle {
     if (filter.categoryId != null) {
       final category = categories.where((c) => c.id == filter.categoryId).firstOrNull;
-      return category?.name ?? 'Tất cả tình huống';
+      return category?.name ?? 'All scenarios';
     }
-    return 'Tất cả tình huống';
+    return 'All scenarios';
   }
 
   @override
@@ -247,7 +247,7 @@ class _PracticeContent extends StatelessWidget {
           if (activeSession != null)
             const SizedBox(height: AppSpacing.lg),
           _CategoryHeader(
-            title: 'Danh mục tình huống',
+            title: 'Scenario categories',
             onSeeAll: filter.categoryId != null
                 ? () => onCategoryTap(filter.categoryId!)
                 : null,
@@ -295,7 +295,7 @@ class _CategoryHeader extends StatelessWidget {
           GestureDetector(
             onTap: onSeeAll,
             child: Text(
-              'Xem tất cả',
+              'See all',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: c.primary,
                     fontWeight: FontWeight.w600,
@@ -797,20 +797,20 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                 ),
               ),
               Text(
-                'Bộ lọc',
+                'Filters',
                 style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
               ),
               const SizedBox(height: AppSpacing.xl),
               _FilterSection(
-                title: 'Danh mục',
+                title: 'Category',
                 child: Wrap(
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   children: [
                     _FilterChip(
-                      label: 'Tất cả',
+                      label: 'All',
                       isSelected: _selectedCategoryId == null,
                       onTap: () => setState(() => _selectedCategoryId = null),
                     ),
@@ -827,13 +827,13 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
               ),
               const SizedBox(height: AppSpacing.lg),
               _FilterSection(
-                title: 'Trình độ',
+                title: 'Level',
                 child: Wrap(
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   children: [
                     _FilterChip(
-                      label: 'Tất cả',
+                      label: 'All',
                       isSelected: _selectedLevel == null,
                       onTap: () => setState(() => _selectedLevel = null),
                     ),
@@ -851,13 +851,13 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
               ),
               const SizedBox(height: AppSpacing.lg),
               _FilterSection(
-                title: 'Độ khó',
+                title: 'Difficulty',
                 child: Wrap(
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   children: [
                     _FilterChip(
-                      label: 'Tất cả',
+                      label: 'All',
                       isSelected: _selectedDifficulty == null,
                       onTap: () => setState(() => _selectedDifficulty = null),
                     ),
@@ -885,7 +885,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                       difficulty: _selectedDifficulty,
                     ));
                   },
-                  label: 'Áp dụng',
+                  label: 'Apply',
                   isFullWidth: true,
                 ),
               ),
@@ -1077,7 +1077,7 @@ class _PausedSessionBanner extends StatelessWidget {
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
-                  'Phiên đang tạm dừng',
+                  'Session paused',
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: c.primary,
@@ -1097,7 +1097,7 @@ class _PausedSessionBanner extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Nhân vật: ${session.chosenCharacterName}',
+            'Character: ${session.chosenCharacterName}',
             style: theme.textTheme.bodySmall?.copyWith(
               color: c.mutedForeground,
             ),
@@ -1110,7 +1110,7 @@ class _PausedSessionBanner extends StatelessWidget {
               Expanded(
                 child: AppButton(
                   variant: AppButtonVariant.primary,
-                  label: 'Tiếp tục',
+                  label: 'Continue',
                   onPressed: onContinue,
                   isFullWidth: true,
                 ),
@@ -1119,7 +1119,7 @@ class _PausedSessionBanner extends StatelessWidget {
               Expanded(
                 child: AppButton(
                   variant: AppButtonVariant.outline,
-                  label: 'Huỷ',
+                  label: 'Cancel',
                   onPressed: onCancel,
                   isFullWidth: true,
                 ),

@@ -103,7 +103,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
       child: Row(
         children: [
           Text(
-            'Phản hồi',
+            'Feedback',
             style: GoogleFonts.inter(
               fontSize: AppTypography.titleSmall,
               fontWeight: FontWeight.w600,
@@ -165,7 +165,7 @@ class _CorrectionItemState extends State<_CorrectionItem>
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final typeLabel = widget.correction.type == 'SPELLING' ? 'Chính tả' : 'Ngữ pháp';
+    final typeLabel = widget.correction.type == 'SPELLING' ? 'Spelling' : 'Grammar';
 
     return AnimatedBuilder(
       animation: _highlightAnimation,

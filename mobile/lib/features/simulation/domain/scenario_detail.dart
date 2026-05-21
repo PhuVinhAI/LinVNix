@@ -18,6 +18,15 @@ class ScenarioDetail {
 
   factory ScenarioDetail.fromJson(Map<String, dynamic> json) {
     final categoryJson = json['categoryInfo'] ?? json['category'];
+    final characters = (json['characters'] as List<dynamic>?)
+            ?.map((e) => ScenarioCharacter.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
+    final characterCountFromApi = (json['characterCount'] as num?)?.toInt();
+    final characterCount = characters.isNotEmpty
+        ? characters.length
+        : (characterCountFromApi ?? 0);
+
     return ScenarioDetail(
       id: json['id'] as String,
       title: json['title'] as String,
@@ -25,15 +34,12 @@ class ScenarioDetail {
       requiredLevel: json['requiredLevel'] as String? ?? 'A1',
       difficulty: json['difficulty'] as String? ?? 'MEDIUM',
       estimatedMinutes: (json['estimatedMinutes'] as num?)?.toInt() ?? 5,
-      characterCount: (json['characterCount'] as num?)?.toInt() ?? 0,
+      characterCount: characterCount,
       scoringCriteria: (json['scoringCriteria'] as List<dynamic>?)
               ?.map((e) => ScoringCriterion.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      characters: (json['characters'] as List<dynamic>?)
-              ?.map((e) => ScenarioCharacter.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
+      characters: characters,
       categoryInfo: categoryJson == null
           ? null
           : CategoryInfo.fromJson(categoryJson as Map<String, dynamic>),

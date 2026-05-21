@@ -32,7 +32,7 @@ class _ResultsHistoryScreenState extends ConsumerState<ResultsHistoryScreen> {
         ref.watch(simulationResultsProvider(_selectedScenarioId));
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Lịch sử hội thoại')),
+      appBar: AppAppBar(title: const Text('Conversation history')),
       body: resultsAsync.when(
         loading: () => const _ResultsLoading(),
         error: (error, stack) => _ResultsError(
@@ -109,7 +109,7 @@ class _FilterRow extends StatelessWidget {
         Icon(Icons.filter_list, size: 16, color: c.mutedForeground),
         const SizedBox(width: AppSpacing.xs),
         Text(
-          'Đang lọc theo tình huống',
+          'Filtering by scenario',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: c.mutedForeground,
               ),
@@ -118,7 +118,7 @@ class _FilterRow extends StatelessWidget {
         GestureDetector(
           onTap: () => onFilterChanged(null),
           child: Text(
-            'Xoá bộ lọc',
+            'Clear filter',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: c.primary,
                   fontWeight: FontWeight.w600,
@@ -146,10 +146,10 @@ class _ResultCard extends StatelessWidget {
 
   String _endReasonLabel(String reason) {
     return switch (reason) {
-      'COMPLETED' => 'Hoàn thành',
-      'TOO_MANY_ERRORS' => 'Quá nhiều lỗi',
-      'INAPPROPRIATE' => 'Nội dung không phù hợp',
-      'ABUSIVE' => 'Nội dung lạm dụng',
+      'COMPLETED' => 'Completed',
+      'TOO_MANY_ERRORS' => 'Too many errors',
+      'INAPPROPRIATE' => 'Inappropriate content',
+      'ABUSIVE' => 'Abusive content',
       _ => reason,
     };
   }
@@ -275,14 +275,14 @@ class _ResultsEmpty extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            'Chưa có kết quả nào',
+            'No results yet',
             style: theme.textTheme.titleMedium?.copyWith(
               color: c.mutedForeground,
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Hoàn thành hội thoại mô phỏng để xem kết quả',
+            'Complete a simulation conversation to see results',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: c.mutedForeground,
             ),
@@ -396,7 +396,7 @@ class _ResultsError extends StatelessWidget {
             Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Không thể tải lịch sử',
+              'Unable to load history',
               style: theme.textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
@@ -405,7 +405,7 @@ class _ResultsError extends StatelessWidget {
               variant: AppButtonVariant.primary,
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: 'Thử lại',
+              label: 'Retry',
             ),
           ],
         ),

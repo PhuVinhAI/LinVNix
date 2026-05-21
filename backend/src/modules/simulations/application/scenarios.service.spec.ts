@@ -154,6 +154,7 @@ describe('ScenariosService', () => {
 
       expect(result.id).toBe('sc1');
       expect(result.characters).toHaveLength(2);
+      expect(result.characterCount).toBe(2);
       expect(scenariosRepo.findById).toHaveBeenCalledWith('sc1');
     });
 

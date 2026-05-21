@@ -54,7 +54,7 @@ class _CharacterSelectionScreenState
 
       AppToast.show(
         context,
-        message: 'Không thể tạo phiên hội thoại',
+        message: 'Unable to create conversation session',
         type: AppToastType.error,
       );
     }
@@ -137,7 +137,7 @@ class _CharacterSelectionContent extends StatelessWidget {
                 AppSpacing.sm,
               ),
               child: Text(
-                'Chọn nhân vật của bạn',
+                'Choose your character',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: c.mutedForeground,
@@ -173,19 +173,24 @@ class _CharacterSelectionContent extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.lg,
-            AppSpacing.sm,
-            AppSpacing.lg,
-            AppSpacing.lg,
-          ),
-          child: AppButton(
-            variant: AppButtonVariant.primary,
-            onPressed: selectedCharacterId != null ? onStartTap : null,
-            label: 'Bắt đầu hội thoại',
-            isFullWidth: true,
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.sm,
+                AppSpacing.lg,
+                AppSpacing.lg,
+              ),
+              child: AppButton(
+                variant: AppButtonVariant.primary,
+                onPressed: selectedCharacterId != null ? onStartTap : null,
+                label: 'Start conversation',
+                isFullWidth: true,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -272,7 +277,7 @@ class _LoadingOverlay extends StatelessWidget {
               AppSpinner(size: 28),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Đang chuẩn bị hội thoại...',
+                'Preparing conversation...',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: c.foreground,
                     ),
@@ -379,7 +384,7 @@ class _CharacterSelectionError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Chọn nhân vật')),
+      appBar: AppAppBar(title: const Text('Choose character')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -389,7 +394,7 @@ class _CharacterSelectionError extends StatelessWidget {
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
               const Text(
-                'Không thể tải dữ liệu',
+                'Unable to load data',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -397,7 +402,7 @@ class _CharacterSelectionError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Thử lại',
+                label: 'Retry',
               ),
             ],
           ),

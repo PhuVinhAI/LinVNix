@@ -46,7 +46,7 @@ class _ResultContent extends StatelessWidget {
         slivers: [
           SliverAppBar(
             pinned: true,
-            title: const Text('Kết quả mô phỏng'),
+            title: const Text('Simulation result'),
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -57,7 +57,7 @@ class _ResultContent extends StatelessWidget {
                   _TotalScoreDisplay(totalScore: result.totalScore),
                   if (result.criteriaScores.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'Tiêu chí chấm điểm'),
+                    _SectionHeader(title: 'Grading criteria'),
                     const SizedBox(height: AppSpacing.md),
                     ...result.criteriaScores.map(
                       (cs) => _CriteriaScoreItem(criteriaScore: cs),
@@ -66,7 +66,7 @@ class _ResultContent extends StatelessWidget {
                   if (result.aiSummary != null &&
                       result.aiSummary!.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'Nhận xét AI'),
+                    _SectionHeader(title: 'AI feedback'),
                     const SizedBox(height: AppSpacing.md),
                     Container(
                       width: double.infinity,
@@ -88,7 +88,7 @@ class _ResultContent extends StatelessWidget {
                     _EndReasonMessage(
                       icon: Icons.menu_book_outlined,
                       iconColor: c.warning,
-                      message: 'Hãy ôn lại bài học trước khi thử lại',
+                      message: 'Review the lesson before trying again',
                       bgColor: c.warning.withAlpha(12),
                     ),
                   ],
@@ -98,7 +98,7 @@ class _ResultContent extends StatelessWidget {
                       icon: Icons.warning_amber_rounded,
                       iconColor: c.error,
                       message:
-                          'Hội thoại đã kết thúc do nội dung không phù hợp',
+                          'Conversation ended due to inappropriate content',
                       bgColor: c.error.withAlpha(12),
                     ),
                   ],
@@ -126,7 +126,7 @@ class _ResultContent extends StatelessWidget {
                   onPressed: () => context.push(
                     '/practice/scenarios/${result.scenarioId}/select-character?characterId=${result.chosenCharacterId}',
                   ),
-                  label: 'Chơi lại',
+                  label: 'Play again',
                   isFullWidth: true,
                 ),
               if (result.canReplay) const SizedBox(height: AppSpacing.sm),
@@ -135,7 +135,7 @@ class _ResultContent extends StatelessWidget {
                 onPressed: () => context.push(
                   '/practice/sessions/${result.sessionId}?history=true&fromResult=true',
                 ),
-                label: 'Xem lại hội thoại',
+                label: 'Review conversation',
                 isFullWidth: true,
               ),
             ],
@@ -185,7 +185,7 @@ class _TotalScoreDisplay extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Điểm tổng kết',
+            'Overall score',
             style: GoogleFonts.inter(
               fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,
@@ -442,7 +442,7 @@ class _ResultError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Kết quả mô phỏng')),
+      appBar: AppAppBar(title: const Text('Simulation result')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -452,7 +452,7 @@ class _ResultError extends StatelessWidget {
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
               const Text(
-                'Không thể tải kết quả',
+                'Unable to load result',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -460,7 +460,7 @@ class _ResultError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Thử lại',
+                label: 'Retry',
               ),
             ],
           ),

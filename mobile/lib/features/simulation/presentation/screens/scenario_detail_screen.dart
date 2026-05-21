@@ -93,7 +93,7 @@ class _ScenarioDetailContent extends ConsumerWidget {
                   ),
                   if (detail.scoringCriteria.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'Tiêu chí chấm điểm'),
+                    _SectionHeader(title: 'Grading criteria'),
                     const SizedBox(height: AppSpacing.md),
                     ...detail.scoringCriteria.map(
                       (criterion) => _ScoringCriterionItem(criterion: criterion),
@@ -101,7 +101,7 @@ class _ScenarioDetailContent extends ConsumerWidget {
                   ],
                   if (detail.characters.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'Nhân vật'),
+                    _SectionHeader(title: 'Characters'),
                     const SizedBox(height: AppSpacing.md),
                     ...detail.characters.map(
                       (character) => _CharacterItem(character: character),
@@ -123,20 +123,25 @@ class _ScenarioDetailContent extends ConsumerWidget {
         ],
       ),
       bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.lg,
-            AppSpacing.sm,
-            AppSpacing.lg,
-            AppSpacing.lg,
-          ),
-          child: AppButton(
-            variant: AppButtonVariant.primary,
-            onPressed: () => context
-                .push('/practice/scenarios/${detail.id}/select-character'),
-            label: 'Bắt đầu',
-            isFullWidth: true,
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.sm,
+                AppSpacing.lg,
+                AppSpacing.lg,
+              ),
+              child: AppButton(
+                variant: AppButtonVariant.primary,
+                onPressed: () => context
+                    .push('/practice/scenarios/${detail.id}/select-character'),
+                label: 'Start',
+                isFullWidth: true,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -494,7 +499,7 @@ class _ScenarioDetailError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Tình huống')),
+      appBar: AppAppBar(title: const Text('Scenario')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -504,7 +509,7 @@ class _ScenarioDetailError extends StatelessWidget {
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
               const Text(
-                'Không thể tải tình huống',
+                'Unable to load scenario',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -512,7 +517,7 @@ class _ScenarioDetailError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Thử lại',
+                label: 'Retry',
               ),
             ],
           ),
@@ -553,14 +558,14 @@ class _MiniHistorySection extends StatelessWidget {
         const SizedBox(height: AppSpacing.xl),
         Row(
           children: [
-            const _SectionHeader(title: 'Lịch sử kết quả'),
+            const _SectionHeader(title: 'Result history'),
             const Spacer(),
             GestureDetector(
               onTap: () => context.push(
                 '/practice/history?scenarioId=${results.first.scenarioId}',
               ),
               child: Text(
-                'Xem tất cả',
+                'See all',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: c.primary,
                   fontWeight: FontWeight.w600,
