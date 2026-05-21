@@ -46,7 +46,10 @@ class _CharacterSelectionScreenState
 
       if (!mounted) return;
 
-      context.push('/practice/sessions/${response.session.id}');
+      setState(() => _isCreating = false);
+      context.go(
+        '/practice/sessions/${response.session.id}?fromCharacterSelection=true',
+      );
     } catch (e) {
       if (!mounted) return;
 

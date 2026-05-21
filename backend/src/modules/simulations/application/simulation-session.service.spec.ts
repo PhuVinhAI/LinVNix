@@ -325,6 +325,48 @@ describe('SimulationSessionService', () => {
         service.getSessionWithMessages('user-1', 'session-1'),
       ).rejects.toThrow(ForbiddenException);
     });
+
+    it('enriches persisted messages with speakerName from scenario characters', async () => {
+      const session = makeSession({
+        status: SimulationSessionStatus.ACTIVE,
+        scenario: makeScenario(),
+        chosenCharacter: { id: 'ch-1', name: 'Khách hàng' },
+        messages: [
+          {
+            id: 'msg-0',
+            speakerCharacterId: null,
+            isLearner: false,
+            content: 'Chào mừng đến chợ!',
+            orderIndex: 0,
+          },
+          {
+            id: 'msg-1',
+            speakerCharacterId: 'ch-2',
+            isLearner: false,
+            content: 'Chào em!',
+            orderIndex: 1,
+          },
+          {
+            id: 'msg-2',
+            speakerCharacterId: 'ch-1',
+            isLearner: true,
+            content: 'Chào chị!',
+            orderIndex: 2,
+          },
+        ],
+      });
+      sessionsRepo.findByIdWithMessages.mockResolvedValue(session);
+
+      const result = await service.getSessionWithMessages(
+        'user-1',
+        'session-1',
+      );
+
+      expect(result.messages).toHaveLength(3);
+      expect(result.messages[0].speakerName).toBe('');
+      expect(result.messages[1].speakerName).toBe('Chị Lan');
+      expect(result.messages[2].speakerName).toBe('Khách hàng');
+    });
   });
 
   // ─── cancelSession ────────────────────────────────────────────────────────

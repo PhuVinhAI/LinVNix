@@ -62,9 +62,19 @@ export interface CreateSessionResult {
   openingMessage: SimulationMessage | null;
 }
 
+export interface ClientSimulationMessage {
+  id: string;
+  speakerCharacterId: string | null;
+  speakerName: string;
+  isLearner: boolean;
+  content: string;
+  feedback: SimulationMessage['feedback'];
+  orderIndex: number;
+}
+
 export interface SessionWithMessages {
   session: SimulationSession;
-  messages: SimulationMessage[];
+  messages: ClientSimulationMessage[];
 }
 
 export interface SendMessageResult {
@@ -176,9 +186,19 @@ export class SimulationSessionService {
       session.nextTurnCharacterId = session.chosenCharacterId;
     }
 
+    const characterNames = new Map<string, string>();
+    for (const character of session.scenario?.characters ?? []) {
+      characterNames.set(character.id, character.name);
+    }
+    if (session.chosenCharacter) {
+      characterNames.set(session.chosenCharacter.id, session.chosenCharacter.name);
+    }
+
     return {
       session,
-      messages: session.messages ?? [],
+      messages: (session.messages ?? []).map((message) =>
+        this.mapMessageForClient(message, characterNames),
+      ),
     };
   }
 
@@ -361,6 +381,29 @@ export class SimulationSessionService {
         speechStyle: c.speechStyle,
         isPlayable: c.isPlayable,
       })),
+    };
+  }
+
+  private mapMessageForClient(
+    message: SimulationMessage,
+    characterNames: Map<string, string>,
+  ): ClientSimulationMessage {
+    let speakerName = '';
+    if (message.speakerCharacterId) {
+      speakerName =
+        message.speakerCharacter?.name ??
+        characterNames.get(message.speakerCharacterId) ??
+        '';
+    }
+
+    return {
+      id: message.id,
+      speakerCharacterId: message.speakerCharacterId,
+      speakerName,
+      isLearner: message.isLearner,
+      content: message.content,
+      feedback: message.feedback,
+      orderIndex: message.orderIndex,
     };
   }
 

@@ -13,16 +13,19 @@ const Set<String> _hiddenLocations = {
   '/',
   '/courses',
   '/profile',
+  '/practice',
   '/settings',
 };
 
 /// Pure visibility check used by `GlobalAssistantShell` and unit-tested in
-/// isolation. The bar is hidden until the router has emitted a location
-/// (initial null), on the flows above, and on the three bottom-nav tabs;
-/// visible everywhere else, including all nested exercise-play routes.
+/// isolation. The shell hides the bar on one-time flows, bottom-nav tabs,
+/// practice surfaces (tab + character pick + live conversation), where a
+/// persistent compose/input must sit flush above the keyboard.
 bool isAssistantBarVisible(String? location) {
   if (location == null || location.isEmpty) return false;
   // Strip the query string so e.g. `/verify-email?email=...` still matches.
   final pathOnly = location.split('?').first;
+  if (pathOnly.endsWith('/select-character')) return false;
+  if (pathOnly.startsWith('/practice/sessions/')) return false;
   return !_hiddenLocations.contains(pathOnly);
 }

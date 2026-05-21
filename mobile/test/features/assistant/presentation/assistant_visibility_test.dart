@@ -16,6 +16,7 @@ void main() {
       '/courses',
       '/profile',
       '/settings',
+      '/practice',
     ];
 
     for (final loc in hiddenLocations) {
@@ -41,6 +42,35 @@ void main() {
         expect(isAssistantBarVisible(loc), isTrue);
       });
     }
+
+    test(
+      'hidden on practice conversation session routes',
+      () {
+        expect(
+          isAssistantBarVisible('/practice/sessions/abc-123'),
+          isFalse,
+        );
+        expect(
+          isAssistantBarVisible(
+            '/practice/sessions/abc-123?fromCharacterSelection=true',
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    test('hidden on practice character selection', () {
+      expect(
+        isAssistantBarVisible('/practice/scenarios/sc-1/select-character'),
+        isFalse,
+      );
+      expect(
+        isAssistantBarVisible(
+          '/practice/scenarios/sc-1/select-character?characterId=ch-1',
+        ),
+        isFalse,
+      );
+    });
 
     test('hidden when location is null (e.g. before router has emitted)', () {
       expect(isAssistantBarVisible(null), isFalse);

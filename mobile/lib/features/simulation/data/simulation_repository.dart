@@ -16,6 +16,13 @@ class SimulationRepository {
   SimulationRepository(this._dio);
   final Dio _dio;
 
+  /// Backend gọi AI trong practice có thể rất lâu — tắt timeout mặc định của Dio.
+  static final Options _aiRequestOptions = Options(
+    connectTimeout: Duration.zero,
+    receiveTimeout: Duration.zero,
+    sendTimeout: Duration.zero,
+  );
+
   Future<List<ScenarioCategory>> listCategories() async {
     try {
       final response = await _dio.get<List<dynamic>>('/simulations/categories');
@@ -71,10 +78,7 @@ class SimulationRepository {
           'scenarioId': scenarioId,
           'chosenCharacterId': chosenCharacterId,
         },
-        options: Options(
-          receiveTimeout: const Duration(seconds: 15),
-          sendTimeout: const Duration(seconds: 15),
-        ),
+        options: _aiRequestOptions,
       );
       return CreateSessionResponse.fromJson(
         response.data as Map<String, dynamic>,
@@ -92,10 +96,7 @@ class SimulationRepository {
       final response = await _dio.post<Map<String, dynamic>>(
         '/simulations/sessions/$sessionId/messages',
         data: {'content': content},
-        options: Options(
-          receiveTimeout: const Duration(seconds: 15),
-          sendTimeout: const Duration(seconds: 15),
-        ),
+        options: _aiRequestOptions,
       );
       return SendMessageResponse.fromJson(
         response.data as Map<String, dynamic>,

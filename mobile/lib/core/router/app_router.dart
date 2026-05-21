@@ -245,7 +245,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/practice/scenarios/:id',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
-          return ScenarioDetailScreen(scenarioId: id);
+          final fromConversation =
+              state.uri.queryParameters['fromConversation'] == 'true';
+          return ScenarioDetailScreen(
+            scenarioId: id,
+            fromConversation: fromConversation,
+          );
         },
       ),
       GoRoute(
@@ -265,7 +270,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           final id = state.pathParameters['id']!;
           final isHistory = state.uri.queryParameters['history'] == 'true';
           final fromResult = state.uri.queryParameters['fromResult'] == 'true';
-          return ChatScreen(sessionId: id, isHistory: isHistory, fromResult: fromResult);
+          final fromCharacterSelection =
+              state.uri.queryParameters['fromCharacterSelection'] == 'true';
+          return ChatScreen(
+            sessionId: id,
+            isHistory: isHistory,
+            fromResult: fromResult,
+            fromCharacterSelection: fromCharacterSelection,
+          );
         },
       ),
       GoRoute(

@@ -19,11 +19,13 @@ class ChatScreen extends ConsumerStatefulWidget {
     required this.sessionId,
     this.isHistory = false,
     this.fromResult = false,
+    this.fromCharacterSelection = false,
   });
 
   final String sessionId;
   final bool isHistory;
   final bool fromResult;
+  final bool fromCharacterSelection;
 
   @override
   ConsumerState<ChatScreen> createState() => _ChatScreenState();
@@ -56,16 +58,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final sessionAsync = ref.read(simulationSessionProvider(widget.sessionId));
 
     await sessionAsync.when(
-      data: (data) {
+      data: (data) async {
         if (!mounted) return;
-        _applySessionData(data);
+        await _applySessionData(data);
       },
       loading: () async {
         final repo = ref.read(simulationRepositoryProvider);
         try {
           final data = await repo.getSession(widget.sessionId);
           if (!mounted) return;
-          _applySessionData(data);
+          await _applySessionData(data);
         } catch (e) {
           if (!mounted) return;
           AppToast.show(
@@ -80,7 +82,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         try {
           final data = await repo.getSession(widget.sessionId);
           if (!mounted) return;
-          _applySessionData(data);
+          await _applySessionData(data);
         } catch (_) {
           if (!mounted) return;
           AppToast.show(
@@ -93,23 +95,79 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  void _applySessionData(SessionWithMessages data) {
+  Future<void> _applySessionData(SessionWithMessages data) async {
+    final messages = await _enrichMessageSpeakerNames(
+      data.messages,
+      data.session.scenarioId,
+    );
+
     final notifier = ref.read(simulationChatProvider.notifier);
     if (widget.isHistory) {
       notifier.loadExistingSession(
         session: data.session,
-        messages: data.messages,
+        messages: messages,
       );
     } else {
       notifier.initSession(
         sessionId: data.session.id,
         chosenCharacterId: data.session.chosenCharacterId,
-        initialMessages: data.messages,
+        initialMessages: messages,
         nextTurnCharacterId: data.session.nextTurnCharacterId,
         scenarioId: data.session.scenarioId,
       );
     }
     _scrollToBottom();
+  }
+
+  Future<List<SimulationMessage>> _enrichMessageSpeakerNames(
+    List<SimulationMessage> messages,
+    String scenarioId,
+  ) async {
+    final needsEnrichment = messages.any(
+      (m) =>
+          !m.isLearner &&
+          m.speakerCharacterId != null &&
+          m.speakerCharacterId!.isNotEmpty &&
+          m.speakerName.isEmpty,
+    );
+    if (!needsEnrichment || scenarioId.isEmpty) return messages;
+
+    try {
+      final scenario =
+          await ref.read(simulationRepositoryProvider).getScenario(scenarioId);
+      final characterNames = {
+        for (final character in scenario.characters) character.id: character.name,
+      };
+
+      return messages
+          .map((message) => _withResolvedSpeakerName(message, characterNames))
+          .toList();
+    } catch (_) {
+      return messages;
+    }
+  }
+
+  SimulationMessage _withResolvedSpeakerName(
+    SimulationMessage message,
+    Map<String, String> characterNames,
+  ) {
+    if (message.speakerName.isNotEmpty) return message;
+
+    final characterId = message.speakerCharacterId;
+    if (characterId == null || characterId.isEmpty) return message;
+
+    final name = characterNames[characterId];
+    if (name == null || name.isEmpty) return message;
+
+    return SimulationMessage(
+      id: message.id,
+      speakerCharacterId: message.speakerCharacterId,
+      speakerName: name,
+      isLearner: message.isLearner,
+      content: message.content,
+      feedback: message.feedback,
+      orderIndex: message.orderIndex,
+    );
   }
 
   void _scrollToBottom() {
@@ -139,6 +197,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       notifier.cancelSession();
     }
     ref.invalidate(pausedSessionProvider);
+    if (widget.fromCharacterSelection) {
+      context.go('/practice');
+      return;
+    }
     context.pop();
   }
 
@@ -146,47 +208,27 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final chatState = ref.read(simulationChatProvider);
     final c = AppTheme.colors(context);
 
-    AppBottomSheet.show(
-      context,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Text(
-                'Session options',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.cancel_outlined, color: c.error),
-              title: Text(
-                'End session',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: c.error,
-                    ),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                _confirmCancelSession();
-              },
-            ),
-            if (chatState.scenarioId.isNotEmpty)
-              ListTile(
-                leading: Icon(Icons.description_outlined, color: c.foreground),
-                title: const Text('View scenario'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  context.push('/practice/scenarios/${chatState.scenarioId}');
-                },
-              ),
-            const SizedBox(height: AppSpacing.md),
-          ],
-        ),
+    final items = <AppMenuBottomSheetItem>[
+      AppMenuBottomSheetItem(
+        label: 'End session',
+        icon: Icons.cancel_outlined,
+        foregroundColor: c.error,
+        onTap: _confirmCancelSession,
       ),
+      if (chatState.scenarioId.isNotEmpty)
+        AppMenuBottomSheetItem(
+          label: 'View scenario',
+          icon: Icons.description_outlined,
+          onTap: () => context.push(
+            '/practice/scenarios/${chatState.scenarioId}?fromConversation=true',
+          ),
+        ),
+    ];
+
+    AppMenuBottomSheet.show(
+      context,
+      title: 'Session options',
+      items: items,
     );
   }
 
@@ -254,6 +296,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final isCompleted = chatState.sessionEnded && !widget.isHistory;
     final showCompletedBanner = isCompleted;
     final showHistoryBanner = widget.isHistory;
+    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
 
     return PopScope(
       canPop: false,
@@ -262,6 +305,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         _onBack();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: const Text('Conversation'),
           leading: IconButton(
@@ -276,31 +320,38 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ),
           ],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: chatState.sessionId.isEmpty
-                  ? const Center(child: AppSpinner())
-                  : _MessageList(
-                      messages: chatState.messages,
-                      isWaitingForResponse:
-                          chatState.status == SimulationChatStatus.sending,
-                      scrollController: _scrollController,
-                    ),
-            ),
-            if (showCompletedBanner)
-              _CompletedBanner(onViewResult: _navigateToResult),
-            if (showHistoryBanner)
-              _HistoryBanner(showViewResult: !widget.fromResult, onViewResult: _navigateToResult),
-            if (!chatState.sessionEnded && !widget.isHistory)
-              _ComposeBar(
-                controller: _inputController,
-                focusNode: _inputFocusNode,
-                enabled: chatState.isLearnerTurn &&
-                    chatState.status == SimulationChatStatus.idle,
-                onSend: _onSend,
+        body: SafeArea(
+          top: false,
+          bottom: !keyboardOpen,
+          child: Column(
+            children: [
+              Expanded(
+                child: chatState.sessionId.isEmpty
+                    ? const Center(child: AppSpinner())
+                    : _MessageList(
+                        messages: chatState.messages,
+                        isWaitingForResponse:
+                            chatState.status == SimulationChatStatus.sending,
+                        scrollController: _scrollController,
+                      ),
               ),
-          ],
+              if (showCompletedBanner)
+                _CompletedBanner(onViewResult: _navigateToResult),
+              if (showHistoryBanner)
+                _HistoryBanner(
+                  showViewResult: !widget.fromResult,
+                  onViewResult: _navigateToResult,
+                ),
+              if (!chatState.sessionEnded && !widget.isHistory)
+                _ComposeBar(
+                  controller: _inputController,
+                  focusNode: _inputFocusNode,
+                  enabled: chatState.isLearnerTurn &&
+                      chatState.status == SimulationChatStatus.idle,
+                  onSend: _onSend,
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -458,7 +509,8 @@ class _MessageBubble extends StatelessWidget {
     if (message.isLearner) {
       return _LearnerBubble(message: message);
     }
-    if (message.speakerName.isEmpty && !message.isLearner) {
+    final characterId = message.speakerCharacterId;
+    if (characterId == null || characterId.isEmpty) {
       return _SystemMessage(message: message);
     }
     return _NpcBubble(message: message);
@@ -708,63 +760,64 @@ class _ComposeBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-
     final hint = enabled ? 'Your turn' : 'Thinking...';
 
-    return Container(
-      decoration: BoxDecoration(
-        color: enabled ? c.muted.withAlpha(100) : c.muted.withAlpha(60),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      padding: const EdgeInsets.only(
-        left: AppSpacing.lg,
-        right: AppSpacing.sm,
-        top: AppSpacing.sm,
-        bottom: AppSpacing.sm,
-      ),
-      margin: EdgeInsets.fromLTRB(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
         AppSpacing.sm,
         AppSpacing.lg,
-        AppSpacing.md + MediaQuery.of(context).viewPadding.bottom,
+        AppSpacing.sm,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextField(
-            controller: controller,
-            focusNode: focusNode,
-            enabled: enabled,
-            maxLines: 5,
-            minLines: 1,
-            textCapitalization: TextCapitalization.sentences,
-            style: GoogleFonts.inter(
-              fontSize: AppTypography.bodyMedium,
-              color: enabled ? c.foreground : c.mutedForeground,
-            ),
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: GoogleFonts.inter(
+      child: Container(
+        decoration: BoxDecoration(
+          color: enabled
+              ? c.muted.withValues(alpha: 0.4)
+              : c.muted.withValues(alpha: 0.25),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        padding: const EdgeInsets.only(
+          left: AppSpacing.lg,
+          right: AppSpacing.sm,
+          top: AppSpacing.sm,
+          bottom: AppSpacing.sm,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: controller,
+              focusNode: focusNode,
+              enabled: enabled,
+              maxLines: 5,
+              minLines: 1,
+              textCapitalization: TextCapitalization.sentences,
+              style: GoogleFonts.inter(
                 fontSize: AppTypography.bodyMedium,
-                color: c.mutedForeground,
+                color: enabled ? c.foreground : c.mutedForeground,
               ),
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              contentPadding: EdgeInsets.zero,
-              isDense: true,
-              filled: false,
-              fillColor: Colors.transparent,
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyMedium,
+                  color: c.mutedForeground,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
+                isDense: true,
+                filled: false,
+                fillColor: Colors.transparent,
+              ),
+              onSubmitted: enabled ? (_) => onSend() : null,
             ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: enabled ? onSend : null,
-              child: Opacity(
-                opacity: enabled ? 1 : 0.38,
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: enabled ? onSend : null,
                 child: Container(
                   width: 36,
                   height: 36,
@@ -780,8 +833,8 @@ class _ComposeBar extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

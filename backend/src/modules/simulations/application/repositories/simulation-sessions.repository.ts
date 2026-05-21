@@ -58,7 +58,13 @@ export class SimulationSessionsRepository {
   ): Promise<SimulationSession | null> {
     return this.repository.findOne({
       where: { id: sessionId, deletedAt: IsNull() },
-      relations: ['messages'],
+      relations: [
+        'messages',
+        'messages.speakerCharacter',
+        'chosenCharacter',
+        'scenario',
+        'scenario.characters',
+      ],
       order: {
         messages: { orderIndex: 'ASC' },
       },

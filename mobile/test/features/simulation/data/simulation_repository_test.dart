@@ -64,7 +64,7 @@ void main() {
         expect(result.nextTurnCharacterId, chosenCharacterId);
       });
 
-      test('sends correct body and uses extended timeout', () async {
+      test('sends correct body and disables request timeout', () async {
         when(() => mockDio.post<Map<String, dynamic>>(
               any(),
               data: any(named: 'data'),
@@ -143,7 +143,7 @@ void main() {
       const sessionId = 'session-1';
       const content = 'Xin chào';
 
-      test('calls POST /simulations/sessions/:id/messages with extended timeout',
+      test('calls POST /simulations/sessions/:id/messages without request timeout',
           () async {
         when(() => mockDio.post<Map<String, dynamic>>(
               any(),

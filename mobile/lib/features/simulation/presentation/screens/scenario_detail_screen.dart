@@ -39,8 +39,13 @@ String _getDifficultyLabel(String difficulty) {
 }
 
 class ScenarioDetailScreen extends ConsumerWidget {
-  const ScenarioDetailScreen({super.key, required this.scenarioId});
+  const ScenarioDetailScreen({
+    super.key,
+    required this.scenarioId,
+    this.fromConversation = false,
+  });
   final String scenarioId;
+  final bool fromConversation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,14 +56,21 @@ class ScenarioDetailScreen extends ConsumerWidget {
       error: (error, stack) => _ScenarioDetailError(
         onRetry: () => ref.invalidate(scenarioDetailProvider(scenarioId)),
       ),
-      data: (detail) => _ScenarioDetailContent(detail: detail),
+      data: (detail) => _ScenarioDetailContent(
+        detail: detail,
+        fromConversation: fromConversation,
+      ),
     );
   }
 }
 
 class _ScenarioDetailContent extends ConsumerWidget {
-  const _ScenarioDetailContent({required this.detail});
+  const _ScenarioDetailContent({
+    required this.detail,
+    this.fromConversation = false,
+  });
   final ScenarioDetail detail;
+  final bool fromConversation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -122,28 +134,31 @@ class _ScenarioDetailContent extends ConsumerWidget {
           ),
         ],
       ),
-      bottomNavigationBar: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.sm,
-                AppSpacing.lg,
-                AppSpacing.lg,
-              ),
-              child: AppButton(
-                variant: AppButtonVariant.primary,
-                onPressed: () => context
-                    .push('/practice/scenarios/${detail.id}/select-character'),
-                label: 'Start',
-                isFullWidth: true,
+      bottomNavigationBar: fromConversation
+          ? null
+          : SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.lg,
+                      AppSpacing.sm,
+                      AppSpacing.lg,
+                      AppSpacing.lg,
+                    ),
+                    child: AppButton(
+                      variant: AppButtonVariant.primary,
+                      onPressed: () => context.push(
+                        '/practice/scenarios/${detail.id}/select-character',
+                      ),
+                      label: 'Start',
+                      isFullWidth: true,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
