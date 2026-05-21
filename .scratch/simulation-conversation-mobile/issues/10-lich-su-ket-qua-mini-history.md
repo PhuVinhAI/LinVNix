@@ -8,11 +8,11 @@ Status: ready-for-agent
 
 Build the **Lịch sử kết quả** screen and the mini history section on the scenario detail screen.
 
-**Results history screen:** Route: `/practice/history` (outside shell, push). Accessible from AppBar history icon on tab landing. Shows list of result cards (`AppCard` outlined) newest-first: score, end reason, date, scenario title, character name. Tap card → push result detail screen. Optional filter by scenario (dropdown or filter bottom sheet).
+**Results history screen:** Route: `/practice/history` (outside shell, push). Accessible from AppBar history icon on tab landing. Shows list of result cards (`AppCard` outlined) newest-first: score, end reason, date, scenario title, character name. Tap card → push result detail screen. Optional filter by scenario (dropdown or filter bottom sheet). AppBar title: "Results History".
 
 **Tab landing AppBar:** Add history icon button that pushes to `/practice/history`.
 
-**Mini history on scenario detail:** At the bottom of scenario detail (above sticky "Bắt đầu" button), if past results exist for this scenario, show a compact section listing past scores with dates. Tap a result → push result detail.
+**Mini history on scenario detail:** At the bottom of scenario detail (above sticky "Start" button), if past results exist for this scenario, show a compact section listing past scores with dates. Tap a result → push result detail.
 
 Add `listResults({String? scenarioId})` to `SimulationRepository`. Create `SimulationResultSummary` model (fromJson: id, totalScore, endReason, createdAt, scenarioTitle, characterName). Create `simulationResultsProvider` (AsyncNotifier with optional scenarioId filter).
 

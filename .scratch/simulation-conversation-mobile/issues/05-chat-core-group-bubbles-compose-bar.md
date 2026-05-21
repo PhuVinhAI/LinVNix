@@ -17,9 +17,9 @@ Build the core chat interaction: group chat screen with NPC/learner bubbles, pil
 
 **Send/receive cycle via `SimulationChatNotifier` (plain Provider like AssistantChatNotifier):**
 1. Learner types + taps send → call `sendMessage(sessionId, content)` → input disabled
-2. Show typing indicator: `AppSpinner` + "Đang suy nghĩ..." centered, input hint "[NPC name] đang nhập..."
+2. Show typing indicator: `AppSpinner` + "Thinking..." centered, input hint "[NPC name] is typing..."
 3. Response arrives: remove indicator, insert NPC bubbles with staggered 300ms slide-in animation
-4. If `nextTurnCharacterId` = learner → input active with "Lượt bạn" hint; if NPC → auto-call API for next AI turn (repeat step 2-3)
+4. If `nextTurnCharacterId` = learner → input active with "Your turn" hint; if NPC → auto-call API for next AI turn (repeat step 2-3)
 5. If `sessionEnded: true` → transition to COMPLETED state (handled in slice 07)
 
 **Turn coordination:** Chat screen reads `nextTurnCharacterId` from response. If it matches the learner's character ID → enable input. If it's an NPC ID → auto-trigger next send. If multiple NPC messages arrive in one response, render all with stagger.
@@ -30,8 +30,8 @@ Add `sendMessage(String sessionId, String content)` and `getSession(String sessi
 
 - [ ] Chat screen renders NPC bubbles left-aligned with avatar + name + card-colored bubble
 - [ ] Chat screen renders learner bubbles right-aligned with primary-tinted bubble, no avatar/name
-- [ ] Pill-shaped compose bar matches assistant pattern; disabled state shows NPC hint, enabled shows "Lượt bạn"
-- [ ] Sending a message: input disables, typing indicator shows, input shows "[NPC name] đang nhập..."
+- [ ] Pill-shaped compose bar matches assistant pattern; disabled state shows NPC hint, enabled shows "Your turn"
+- [ ] Sending a message: input disables, typing indicator shows, input shows "[NPC name] is typing..."
 - [ ] AI response: typing indicator removed, NPC bubbles appear with 300ms stagger animation
 - [ ] `nextTurnCharacterId` correctly toggles input enabled/disabled; auto-triggers next API call for NPC turns
 - [ ] Multiple NPC messages in one response all render in order with stagger

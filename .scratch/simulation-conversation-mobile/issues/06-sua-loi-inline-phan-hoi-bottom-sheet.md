@@ -20,8 +20,8 @@ Add **Sửa lỗi inline** (correction underlines) on learner chat bubbles and t
 **Feedback icon:** Left side of learner bubble (only when `reviewAvailable: true` or corrections exist). Icon 16px `c.mutedForeground`. Tap opens feedback bottom sheet from top.
 
 **Feedback bottom sheet** — `AppBottomSheet.show` with `DraggableScrollableSheet` (0.4/0.6/0.9):
-- Header: "Phản hồi" (titleSmall/w600) + close icon
-- Section 1 — Corrections: list of items, each: original word (strikethrough, `c.error`) → arrow → corrected word (`c.success`, w600) + `AppBadge` for type (Chính tả/Ngữ pháp)
+- Header: "Feedback" (titleSmall/w600) + close icon
+- Section 1 — Corrections: list of items, each: original word (strikethrough, `c.error`) → arrow → corrected word (`c.success`, w600) + `AppBadge` for type (Spelling/Grammar)
 - Divider
 - Section 2 — Review: AI commentary text (bodyMedium/c.foreground). Only shown when `reviewAvailable: true` and `review != null`
 
@@ -36,7 +36,7 @@ When opened by tapping a specific correction on a bubble, scroll to that correct
 - [ ] Learner bubble renders corrections as underlined text via RichText
 - [ ] Tapping a correction on bubble opens feedback bottom sheet scrolled to that correction
 - [ ] Feedback icon (16px) appears left of learner bubble only when corrections or review exist; tapping opens sheet from top
-- [ ] Feedback bottom sheet lists corrections with original (strikethrough red) → corrected (green bold) + type badge
+- [ ] Feedback bottom sheet lists corrections with original (strikethrough red) → corrected (green bold) + type badge (Spelling/Grammar)
 - [ ] Review section shows AI commentary when available; hidden when `reviewAvailable: false` or review is null
 - [ ] DraggableScrollableSheet with correct snap sizes (0.4/0.6/0.9)
 - [ ] Unit tests for CorrectionTextSpanBuilder: overlapping ranges, edge cases, mixed severities
