@@ -1,0 +1,6 @@
+export enum SimulationEndReason {
+  COMPLETED = 'COMPLETED',
+  TOO_MANY_ERRORS = 'TOO_MANY_ERRORS',
+  INAPPROPRIATE = 'INAPPROPRIATE',
+  ABUSIVE = 'ABUSIVE',
+}

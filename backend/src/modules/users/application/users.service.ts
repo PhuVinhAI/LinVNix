@@ -39,10 +39,7 @@ export class UsersService implements UserStatsPort {
     return this.usersRepository.findByEmailIncludingDeleted(email);
   }
 
-  async restoreDeletedUser(
-    id: string,
-    data: Partial<User>,
-  ): Promise<User> {
+  async restoreDeletedUser(id: string, data: Partial<User>): Promise<User> {
     await this.usersRepository.restore(id);
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);

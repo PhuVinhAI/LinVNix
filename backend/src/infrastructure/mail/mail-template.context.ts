@@ -8,8 +8,7 @@ export interface MailTemplateContext {
 export function buildMailTemplateContext(): MailTemplateContext {
   return {
     appName: process.env.APP_NAME || 'LinVNix',
-    tagline:
-      process.env.APP_TAGLINE || 'Learn Vietnamese, your way',
+    tagline: process.env.APP_TAGLINE || 'Learn Vietnamese, your way',
     year: new Date().getFullYear(),
     supportEmail:
       process.env.MAIL_FROM_ADDRESS ||

@@ -30,6 +30,7 @@ import { AgentModule } from './modules/agent/agent.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { AiModule } from './modules/ai/ai.module';
 import { DailyGoalsModule } from './modules/daily-goals/daily-goals.module';
+import { SimulationsModule } from './modules/simulations/simulations.module';
 import { CacheModule } from './infrastructure/cache/cache.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
 import { LoggingModule } from './infrastructure/logging/logging.module';
@@ -94,6 +95,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     AdminModule,
     AiModule,
     DailyGoalsModule,
+    SimulationsModule,
   ],
   providers: [
     {

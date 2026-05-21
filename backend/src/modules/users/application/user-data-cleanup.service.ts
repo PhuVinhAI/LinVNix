@@ -29,14 +29,12 @@ export class UserDataCleanupService implements TransactionalHost {
     const qr = this.queryRunner!;
     await this.deleteLearningData(qr, userId);
     await qr.query(`DELETE FROM refresh_tokens WHERE user_id = $1`, [userId]);
-    await qr.query(
-      `DELETE FROM email_verification_tokens WHERE user_id = $1`,
-      [userId],
-    );
-    await qr.query(
-      `DELETE FROM password_reset_tokens WHERE user_id = $1`,
-      [userId],
-    );
+    await qr.query(`DELETE FROM email_verification_tokens WHERE user_id = $1`, [
+      userId,
+    ]);
+    await qr.query(`DELETE FROM password_reset_tokens WHERE user_id = $1`, [
+      userId,
+    ]);
     await qr.query(`DELETE FROM user_roles WHERE user_id = $1`, [userId]);
     await qr.query(
       `UPDATE users SET
@@ -64,17 +62,15 @@ export class UserDataCleanupService implements TransactionalHost {
     );
     await qr.query(`DELETE FROM conversations WHERE user_id = $1`, [userId]);
     await qr.query(`DELETE FROM bookmarks WHERE user_id = $1`, [userId]);
-    await qr.query(
-      `DELETE FROM user_exercise_results WHERE user_id = $1`,
-      [userId],
-    );
+    await qr.query(`DELETE FROM user_exercise_results WHERE user_id = $1`, [
+      userId,
+    ]);
     await qr.query(`DELETE FROM user_progress WHERE user_id = $1`, [userId]);
     await qr.query(`DELETE FROM course_progress WHERE user_id = $1`, [userId]);
     await qr.query(`DELETE FROM module_progress WHERE user_id = $1`, [userId]);
-    await qr.query(
-      `DELETE FROM daily_goal_progress WHERE user_id = $1`,
-      [userId],
-    );
+    await qr.query(`DELETE FROM daily_goal_progress WHERE user_id = $1`, [
+      userId,
+    ]);
     await qr.query(`DELETE FROM daily_goals WHERE user_id = $1`, [userId]);
     await qr.query(`DELETE FROM daily_streaks WHERE user_id = $1`, [userId]);
   }

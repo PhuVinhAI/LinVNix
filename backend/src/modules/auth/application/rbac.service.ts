@@ -289,6 +289,11 @@ export class RbacService implements OnModuleInit {
         description: 'Xem lịch sử chat AI',
         category: 'ai',
       },
+      {
+        name: PermissionEnum.SIMULATION_ACCESS,
+        description: 'Truy cập tính năng hội thoại mô phỏng',
+        category: 'simulation',
+      },
 
       // System permissions
       {
@@ -347,6 +352,7 @@ export class RbacService implements OnModuleInit {
       PermissionEnum.AI_GENERATE_EXERCISE,
       PermissionEnum.AI_CORRECT_GRAMMAR,
       PermissionEnum.AI_VIEW_CONVERSATIONS,
+      PermissionEnum.SIMULATION_ACCESS,
     ]
       .map((p) => permissionMap.get(p))
       .filter((p): p is Permission => p !== undefined);

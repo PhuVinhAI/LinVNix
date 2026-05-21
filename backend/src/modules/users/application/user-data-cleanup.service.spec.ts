@@ -7,7 +7,12 @@ describe('UserDataCleanupService', () => {
   let mockQueryRunner: jest.Mocked<
     Pick<
       QueryRunner,
-      'connect' | 'startTransaction' | 'commitTransaction' | 'rollbackTransaction' | 'release' | 'query'
+      | 'connect'
+      | 'startTransaction'
+      | 'commitTransaction'
+      | 'rollbackTransaction'
+      | 'release'
+      | 'query'
     >
   >;
   let mockDataSource: jest.Mocked<Pick<DataSource, 'createQueryRunner'>>;
@@ -26,7 +31,9 @@ describe('UserDataCleanupService', () => {
       createQueryRunner: jest.fn().mockReturnValue(mockQueryRunner),
     };
 
-    service = new UserDataCleanupService(mockDataSource as unknown as DataSource);
+    service = new UserDataCleanupService(
+      mockDataSource as unknown as DataSource,
+    );
   });
 
   it('deletes all learner data for the user in a transaction', async () => {
@@ -52,7 +59,9 @@ describe('UserDataCleanupService', () => {
   it('rolls back when a delete fails', async () => {
     mockQuery.mockRejectedValueOnce(new Error('db error'));
 
-    await expect(service.clearAllUserData('user-123')).rejects.toThrow('db error');
+    await expect(service.clearAllUserData('user-123')).rejects.toThrow(
+      'db error',
+    );
 
     expect(mockQueryRunner.rollbackTransaction).toHaveBeenCalledTimes(1);
     expect(mockQueryRunner.commitTransaction).not.toHaveBeenCalled();
