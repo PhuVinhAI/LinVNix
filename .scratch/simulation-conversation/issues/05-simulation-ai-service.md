@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 # 05 — SimulationAiService — prompt construction, response parsing, turn orchestration
 
@@ -53,16 +53,28 @@ Implement the AI integration service that handles prompt construction, structure
 
 ## Acceptance criteria
 
-- [ ] `SimulationAiService` constructs prompts from scenario templates with all variables substituted
-- [ ] Learner progress data (level, native language) is injected into prompts via `ProgressService`
-- [ ] Conversation history is included as context for multi-turn conversations
-- [ ] AI responses are parsed into the typed response shape
-- [ ] Malformed AI responses are handled gracefully (retry or error, not crash)
-- [ ] Prompt template file `simulation-conversation.yaml` exists in `infrastructure/genai/prompts/`
-- [ ] Gemini JSON mode or response schema is used to enforce structured output
-- [ ] Unit tests cover prompt building, response parsing, and edge cases
-- [ ] `bun run typecheck` passes
+- [x] `SimulationAiService` constructs prompts from scenario templates with all variables substituted
+- [x] Learner progress data (level, native language) is injected into prompts via `ProgressService`
+- [x] Conversation history is included as context for multi-turn conversations
+- [x] AI responses are parsed into the typed response shape
+- [x] Malformed AI responses are handled gracefully (retry or error, not crash)
+- [x] Prompt template file `simulation-conversation.yaml` exists in `infrastructure/genai/prompts/`
+- [x] Gemini JSON mode or response schema is used to enforce structured output
+- [x] Unit tests cover prompt building, response parsing, and edge cases
+- [x] `bun run typecheck` passes
 
 ## Blocked by
 
 - [01 — Enums, entities, and module scaffold](./01-enums-entities-module-scaffold.md)
+
+## Implementation notes
+
+### Files created
+
+- `backend/src/infrastructure/genai/prompts/simulation-conversation.yaml` — Prompt template with system instruction for simulation AI: scenario context, learner profile, character descriptions, turn orchestration rules, feedback rules, session end rules, scoring criteria, and JSON response format spec
+- `backend/src/modules/simulations/application/simulation-ai.service.ts` — `SimulationAiService` with `processTurn()`, `buildSystemInstruction()`, `buildChatMessages()`, `parseAiResponse()`, `buildPromptContext()`; uses GenaiService.renderPrompt + chatStructured with Gemini JSON mode response schema; Zod validation for response parsing; exports typed interfaces (SimulationAiTurnRequest, SimulationAiTurnResponse, SimulationMessageFeedback, etc.)
+- `backend/src/modules/simulations/application/simulation-ai.service.spec.ts` — 28 unit tests covering prompt construction (5), chat message building (4), response parsing (11), processTurn integration (5), buildPromptContext (3)
+
+### Files modified
+
+- `backend/src/modules/simulations/simulations.module.ts` — Added `SimulationAiService` to providers/exports; imported `forwardRef(() => UsersModule)` for learner data access
