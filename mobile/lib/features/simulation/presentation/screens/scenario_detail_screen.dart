@@ -72,6 +72,52 @@ class _ScenarioDetailContent extends ConsumerWidget {
   final ScenarioDetail detail;
   final bool fromConversation;
 
+  Future<void> _handleStartTap(BuildContext context, WidgetRef ref) async {
+    final activeSession =
+        ref.read(pausedSessionProvider).whenOrNull(data: (s) => s);
+
+    if (activeSession != null) {
+      final confirmed = await AppDialog.show<bool>(
+        context,
+        builder: (ctx) => AppDialog(
+          title: 'End conversation?',
+          content:
+              'You have an active session for "${activeSession.scenarioTitle}". '
+              'End it to start this scenario? Progress cannot be recovered.',
+          actions: [
+            AppDialogAction(
+              label: 'No',
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            AppDialogAction(
+              label: 'End session',
+              isPrimary: true,
+              onPressed: () => Navigator.of(ctx).pop(true),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true || !context.mounted) return;
+
+      try {
+        final repo = ref.read(simulationRepositoryProvider);
+        await repo.cancelSession(activeSession.id);
+        await ref.read(pausedSessionProvider.notifier).refresh();
+      } catch (_) {
+        if (!context.mounted) return;
+        AppToast.show(
+          context,
+          message: 'Unable to end the current session',
+          type: AppToastType.error,
+        );
+        return;
+      }
+    }
+
+    if (!context.mounted) return;
+    context.push('/practice/scenarios/${detail.id}/select-character');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = AppTheme.colors(context);
@@ -149,9 +195,7 @@ class _ScenarioDetailContent extends ConsumerWidget {
                     ),
                     child: AppButton(
                       variant: AppButtonVariant.primary,
-                      onPressed: () => context.push(
-                        '/practice/scenarios/${detail.id}/select-character',
-                      ),
+                      onPressed: () => _handleStartTap(context, ref),
                       label: 'Start',
                       isFullWidth: true,
                     ),
@@ -171,45 +215,31 @@ class _ScenarioInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final theme = Theme.of(context);
+    final metaStyle = theme.textTheme.bodySmall?.copyWith(
+      color: c.mutedForeground,
+      height: 1.2,
+    );
 
-    return Wrap(
-      spacing: AppSpacing.sm,
-      runSpacing: AppSpacing.sm,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AppBadge(
           label: detail.requiredLevel,
           color: _getLevelColor(detail.requiredLevel, c),
         ),
+        const SizedBox(width: AppSpacing.xs),
         AppBadge(
           label: _getDifficultyLabel(detail.difficulty),
           color: _getDifficultyColor(detail.difficulty, c),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.access_time_rounded, size: 14, color: c.mutedForeground),
-            const SizedBox(width: AppSpacing.xs),
-            Text(
-              '${detail.estimatedMinutes}m',
-              style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.people_outline, size: 14, color: c.mutedForeground),
-            const SizedBox(width: AppSpacing.xs),
-            Text(
-              '${detail.characterCount}',
-              style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
-            ),
-          ],
-        ),
+        const Spacer(),
+        Icon(Icons.access_time_rounded, size: 14, color: c.mutedForeground),
+        const SizedBox(width: AppSpacing.xs),
+        Text('${detail.estimatedMinutes}m', style: metaStyle),
+        const SizedBox(width: AppSpacing.md),
+        Icon(Icons.people_outline, size: 14, color: c.mutedForeground),
+        const SizedBox(width: AppSpacing.xs),
+        Text('${detail.characterCount}', style: metaStyle),
       ],
     );
   }

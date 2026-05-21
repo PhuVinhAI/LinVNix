@@ -242,6 +242,46 @@ export class SimulationSessionService {
     await this.sessionsRepository.softDelete(sessionId);
   }
 
+  /**
+   * Removes the last learner message when a send did not complete (AI error
+   * or client abandoned the in-flight request). No-op if nothing to revert.
+   */
+  async revertPendingLearnerMessage(
+    userId: string,
+    sessionId: string,
+  ): Promise<void> {
+    const session =
+      await this.sessionsRepository.findByIdWithMessages(sessionId);
+
+    if (!session) {
+      throw new NotFoundException(`Session with ID ${sessionId} not found`);
+    }
+
+    if (session.userId !== userId) {
+      throw new ForbiddenException('You do not have access to this session');
+    }
+
+    if (session.status !== SimulationSessionStatus.ACTIVE) {
+      return;
+    }
+
+    const messages = session.messages ?? [];
+    if (messages.length === 0) {
+      return;
+    }
+
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage.isLearner) {
+      return;
+    }
+
+    if (session.nextTurnCharacterId !== session.chosenCharacterId) {
+      return;
+    }
+
+    await this.messagesRepository.softDelete(lastMessage.id);
+  }
+
   async sendMessage(
     userId: string,
     sessionId: string,
@@ -282,86 +322,91 @@ export class SimulationSessionService {
       orderIndex: nextOrderIndex,
     });
 
-    const scenario = await this.scenariosRepository.findById(
-      session.scenarioId,
-    );
-    if (!scenario) {
-      throw new NotFoundException('Scenario not found');
-    }
-
-    const aiScenario = this.buildAiScenario(scenario);
-    const aiMessages = this.mapMessagesForAi(existingMessages);
-    const learnerMessageCount =
-      existingMessages.filter((m) => m.isLearner).length + 1;
-    const forceWrapUp =
-      scenario.maxTurns !== null && learnerMessageCount >= scenario.maxTurns;
-
-    const aiResponse = await this.aiService.processTurn({
-      scenario: aiScenario,
-      chosenCharacterId: session.chosenCharacterId,
-      messages: aiMessages,
-      learnerMessage: content,
-      userId,
-      forceWrapUp,
-    });
-
-    let currentOrderIndex = nextOrderIndex + 1;
-    const returnedMessages: SendMessageResult['messages'] = [];
-
-    for (const msg of aiResponse.messages) {
-      const aiMsg = await this.messagesRepository.create({
-        sessionId: session.id,
-        speakerCharacterId: msg.speakerCharacterId,
-        isLearner: false,
-        content: msg.content,
-        orderIndex: currentOrderIndex++,
-      });
-      returnedMessages.push({
-        id: aiMsg.id,
-        speakerCharacterId: msg.speakerCharacterId,
-        speakerName: msg.speakerName,
-        content: msg.content,
-        orderIndex: aiMsg.orderIndex,
-      });
-    }
-
-    if (aiResponse.feedback) {
-      await this.messagesRepository.updateFeedback(
-        learnerMessage.id,
-        aiResponse.feedback,
+    try {
+      const scenario = await this.scenariosRepository.findById(
+        session.scenarioId,
       );
-      learnerMessage.feedback = aiResponse.feedback;
-    }
+      if (!scenario) {
+        throw new NotFoundException('Scenario not found');
+      }
 
-    const nextTurnCharacterId = aiResponse.sessionEnded
-      ? aiResponse.nextTurnCharacterId
-      : session.chosenCharacterId;
+      const aiScenario = this.buildAiScenario(scenario);
+      const aiMessages = this.mapMessagesForAi(existingMessages);
+      const learnerMessageCount =
+        existingMessages.filter((m) => m.isLearner).length + 1;
+      const forceWrapUp =
+        scenario.maxTurns !== null && learnerMessageCount >= scenario.maxTurns;
 
-    await this.sessionsRepository.updateNextTurnCharacterId(
-      session.id,
-      nextTurnCharacterId,
-    );
+      const aiResponse = await this.aiService.processTurn({
+        scenario: aiScenario,
+        chosenCharacterId: session.chosenCharacterId,
+        messages: aiMessages,
+        learnerMessage: content,
+        userId,
+        forceWrapUp,
+      });
 
-    if (aiResponse.tokenCount) {
-      await this.sessionsRepository.incrementTokens(
+      let currentOrderIndex = nextOrderIndex + 1;
+      const returnedMessages: SendMessageResult['messages'] = [];
+
+      for (const msg of aiResponse.messages) {
+        const aiMsg = await this.messagesRepository.create({
+          sessionId: session.id,
+          speakerCharacterId: msg.speakerCharacterId,
+          isLearner: false,
+          content: msg.content,
+          orderIndex: currentOrderIndex++,
+        });
+        returnedMessages.push({
+          id: aiMsg.id,
+          speakerCharacterId: msg.speakerCharacterId,
+          speakerName: msg.speakerName,
+          content: msg.content,
+          orderIndex: aiMsg.orderIndex,
+        });
+      }
+
+      if (aiResponse.feedback) {
+        await this.messagesRepository.updateFeedback(
+          learnerMessage.id,
+          aiResponse.feedback,
+        );
+        learnerMessage.feedback = aiResponse.feedback;
+      }
+
+      const nextTurnCharacterId = aiResponse.sessionEnded
+        ? aiResponse.nextTurnCharacterId
+        : session.chosenCharacterId;
+
+      await this.sessionsRepository.updateNextTurnCharacterId(
         session.id,
-        aiResponse.tokenCount,
+        nextTurnCharacterId,
       );
-    }
 
-    let result: SimulationResult | undefined;
-    if (aiResponse.sessionEnded) {
-      result = await this.completeSession(session, scenario, aiResponse);
-    }
+      if (aiResponse.tokenCount) {
+        await this.sessionsRepository.incrementTokens(
+          session.id,
+          aiResponse.tokenCount,
+        );
+      }
 
-    return {
-      messages: returnedMessages,
-      nextTurnCharacterId,
-      feedback: aiResponse.feedback,
-      sessionEnded: aiResponse.sessionEnded,
-      endReason: aiResponse.endReason,
-      result,
-    };
+      let result: SimulationResult | undefined;
+      if (aiResponse.sessionEnded) {
+        result = await this.completeSession(session, scenario, aiResponse);
+      }
+
+      return {
+        messages: returnedMessages,
+        nextTurnCharacterId,
+        feedback: aiResponse.feedback,
+        sessionEnded: aiResponse.sessionEnded,
+        endReason: aiResponse.endReason,
+        result,
+      };
+    } catch (error) {
+      await this.messagesRepository.softDelete(learnerMessage.id);
+      throw error;
+    }
   }
 
   private buildAiScenario(scenario: any): SimulationAiTurnRequest['scenario'] {

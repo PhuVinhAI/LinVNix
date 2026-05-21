@@ -168,26 +168,37 @@ class _CorrectionItemState extends State<_CorrectionItem>
             vertical: AppSpacing.sm,
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.correction.original,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyMedium,
-                  color: c.error,
-                  decoration: TextDecoration.lineThrough,
-                  decorationColor: c.error,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-                child: Icon(Icons.arrow_forward, size: 16, color: c.mutedForeground),
-              ),
-              Text(
-                widget.correction.corrected,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyMedium,
-                  fontWeight: FontWeight.w600,
-                  color: c.success,
+              Expanded(
+                child: Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.xs,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      widget.correction.original,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyMedium,
+                        color: c.error,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: c.error,
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward,
+                      size: 16,
+                      color: c.mutedForeground,
+                    ),
+                    Text(
+                      widget.correction.corrected,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyMedium,
+                        fontWeight: FontWeight.w600,
+                        color: c.success,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),

@@ -19,6 +19,7 @@ class SimulationChatState {
     this.sessionEnded = false,
     this.endReason,
     this.error,
+    this.failedOutboundContent,
     this.scenarioId = '',
     this.resultId,
   });
@@ -32,6 +33,7 @@ class SimulationChatState {
   final bool sessionEnded;
   final String? endReason;
   final String? error;
+  final String? failedOutboundContent;
   final String scenarioId;
   final String? resultId;
 
@@ -61,6 +63,7 @@ class SimulationChatState {
     bool? sessionEnded,
     String? endReason,
     String? error,
+    String? failedOutboundContent,
     String? chosenCharacterName,
     String? scenarioId,
     String? resultId,
@@ -75,6 +78,8 @@ class SimulationChatState {
       sessionEnded: sessionEnded ?? this.sessionEnded,
       endReason: endReason ?? this.endReason,
       error: error,
+      failedOutboundContent:
+          failedOutboundContent ?? this.failedOutboundContent,
       scenarioId: scenarioId ?? this.scenarioId,
       resultId: resultId ?? this.resultId,
     );
@@ -82,6 +87,12 @@ class SimulationChatState {
 }
 
 class SimulationChatNotifier extends Notifier<SimulationChatState> {
+  String? _outboundMessageId;
+
+  bool get isAwaitingAiResponse =>
+      _outboundMessageId != null ||
+      state.status == SimulationChatStatus.sending;
+
   @override
   SimulationChatState build() {
     return const SimulationChatState(
@@ -108,6 +119,7 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
         ? chosenCharacterName
         : _characterNameFromMessages(chosenCharacterId, initialMessages);
 
+    _outboundMessageId = null;
     state = SimulationChatState(
       sessionId: sessionId,
       chosenCharacterId: chosenCharacterId,
@@ -134,22 +146,73 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
       orderIndex: state.messages.length,
     );
 
+    _outboundMessageId = learnerMessage.id;
+
     state = state.copyWith(
       messages: [...state.messages, learnerMessage],
       status: SimulationChatStatus.sending,
       error: null,
+      failedOutboundContent: null,
     );
 
     try {
       final repo = ref.read(simulationRepositoryProvider);
       final response = await repo.sendMessage(state.sessionId, trimmed);
+      if (_outboundMessageId != learnerMessage.id) return;
+
+      _outboundMessageId = null;
       _applySendResponse(response, learnerMessageIndex: state.messages.length - 1);
     } catch (e) {
+      if (_outboundMessageId != learnerMessage.id) return;
+
+      _outboundMessageId = null;
+      await _revertPendingLearnerOnServer();
       state = state.copyWith(
+        messages: _messagesWithoutId(state.messages, learnerMessage.id),
         status: SimulationChatStatus.idle,
         error: e.toString(),
+        failedOutboundContent: trimmed,
       );
     }
+  }
+
+  /// Drops the in-flight learner turn (UI + DB) when send/AI has not finished.
+  Future<void> discardPendingOutboundMessage() async {
+    if (state.sessionId.isEmpty || !isAwaitingAiResponse) return;
+
+    final outboundId = _outboundMessageId;
+    _outboundMessageId = null;
+    await _revertPendingLearnerOnServer();
+
+    var messages = state.messages;
+    if (outboundId != null) {
+      messages = _messagesWithoutId(messages, outboundId);
+    } else if (messages.isNotEmpty && messages.last.isLearner) {
+      messages = messages.sublist(0, messages.length - 1);
+    }
+
+    state = state.copyWith(
+      messages: messages,
+      status: SimulationChatStatus.idle,
+      error: null,
+      failedOutboundContent: null,
+    );
+  }
+
+  Future<void> _revertPendingLearnerOnServer() async {
+    if (state.sessionId.isEmpty) return;
+
+    try {
+      final repo = ref.read(simulationRepositoryProvider);
+      await repo.revertPendingLearnerMessage(state.sessionId);
+    } catch (_) {}
+  }
+
+  List<SimulationMessage> _messagesWithoutId(
+    List<SimulationMessage> messages,
+    String messageId,
+  ) {
+    return messages.where((m) => m.id != messageId).toList();
   }
 
   void _applySendResponse(
@@ -207,6 +270,7 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
       await repo.cancelSession(state.sessionId);
     } catch (_) {}
 
+    _outboundMessageId = null;
     state = const SimulationChatState(
       sessionId: '',
       chosenCharacterId: '',
@@ -255,6 +319,7 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
         ? chosenCharacterName
         : _characterNameFromMessages(session.chosenCharacterId, messages);
 
+    _outboundMessageId = null;
     state = SimulationChatState(
       sessionId: session.id,
       chosenCharacterId: session.chosenCharacterId,

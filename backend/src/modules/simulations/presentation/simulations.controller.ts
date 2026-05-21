@@ -308,6 +308,33 @@ export class SimulationsController {
     await this.sessionService.cancelSession(user.id, sessionId);
   }
 
+  @Delete('sessions/:id/messages/pending-learner')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @RequirePermissions(Permission.SIMULATION_ACCESS)
+  @ApiOperation({
+    summary: 'Hoàn tác tin nhắn học viên chưa gửi xong',
+    description:
+      'Soft-delete tin nhắn học viên cuối cùng khi lượt AI chưa hoàn tất (lỗi hoặc client hủy). Không làm gì nếu không có tin cần hoàn tác.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của phiên mô phỏng',
+    example: 'uuid-string',
+  })
+  @ApiResponse({ status: 204, description: 'Đã hoàn tác hoặc không có tin cần xóa' })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  @ApiResponse({
+    status: 403,
+    description: 'Phiên không thuộc về người dùng này',
+  })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy phiên' })
+  async revertPendingLearnerMessage(
+    @CurrentUser() user: { id: string },
+    @Param('id') sessionId: string,
+  ) {
+    await this.sessionService.revertPendingLearnerMessage(user.id, sessionId);
+  }
+
   @Post('sessions/:id/messages')
   @RequirePermissions(Permission.SIMULATION_ACCESS)
   @ApiOperation({

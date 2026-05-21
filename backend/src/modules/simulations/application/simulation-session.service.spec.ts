@@ -102,6 +102,7 @@ describe('SimulationSessionService', () => {
       create: jest.fn(),
       findBySessionId: jest.fn(),
       updateFeedback: jest.fn(),
+      softDelete: jest.fn(),
     };
     const resultsMock = {
       create: jest.fn(),
@@ -410,6 +411,63 @@ describe('SimulationSessionService', () => {
     });
   });
 
+  // ─── revertPendingLearnerMessage ─────────────────────────────────────────
+
+  describe('revertPendingLearnerMessage', () => {
+    it('soft-deletes the last learner message when turn is still pending', async () => {
+      const session = makeSession({
+        messages: [
+          {
+            id: 'msg-0',
+            orderIndex: 0,
+            isLearner: false,
+            content: 'Chào!',
+          },
+          {
+            id: 'msg-1',
+            orderIndex: 1,
+            isLearner: true,
+            content: 'Xin chào',
+          },
+        ],
+        nextTurnCharacterId: 'ch-1',
+        chosenCharacterId: 'ch-1',
+      });
+      sessionsRepo.findByIdWithMessages.mockResolvedValue(session);
+      messagesRepo.softDelete.mockResolvedValue(undefined);
+
+      await service.revertPendingLearnerMessage('user-1', 'session-1');
+
+      expect(messagesRepo.softDelete).toHaveBeenCalledWith('msg-1');
+    });
+
+    it('does nothing when the last message is not from the learner', async () => {
+      const session = makeSession({
+        messages: [
+          {
+            id: 'msg-0',
+            orderIndex: 0,
+            isLearner: true,
+            content: 'Xin chào',
+          },
+          {
+            id: 'msg-1',
+            orderIndex: 1,
+            isLearner: false,
+            content: 'Chào bạn!',
+          },
+        ],
+        nextTurnCharacterId: 'ch-1',
+        chosenCharacterId: 'ch-1',
+      });
+      sessionsRepo.findByIdWithMessages.mockResolvedValue(session);
+
+      await service.revertPendingLearnerMessage('user-1', 'session-1');
+
+      expect(messagesRepo.softDelete).not.toHaveBeenCalled();
+    });
+  });
+
   // ─── sendMessage ─────────────────────────────────────────────────────────
 
   describe('sendMessage', () => {
@@ -423,6 +481,7 @@ describe('SimulationSessionService', () => {
       messagesRepo.create.mockImplementation((data: any) =>
         Promise.resolve({ id: `msg-${data.orderIndex}`, ...data }),
       );
+      messagesRepo.softDelete.mockResolvedValue(undefined);
       messagesRepo.updateFeedback.mockResolvedValue(undefined);
       sessionsRepo.updateNextTurnCharacterId.mockResolvedValue(undefined);
       sessionsRepo.incrementTokens.mockResolvedValue(undefined);
@@ -488,6 +547,17 @@ describe('SimulationSessionService', () => {
           orderIndex: 0,
         }),
       );
+    });
+
+    it('soft-deletes learner message when AI processing fails', async () => {
+      setupSendMessage();
+      aiService.processTurn.mockRejectedValue(new Error('AI unavailable'));
+
+      await expect(
+        service.sendMessage('user-1', 'session-1', 'Xin chào'),
+      ).rejects.toThrow('AI unavailable');
+
+      expect(messagesRepo.softDelete).toHaveBeenCalledWith('msg-0');
     });
 
     it('uses correct orderIndex when session has existing messages', async () => {

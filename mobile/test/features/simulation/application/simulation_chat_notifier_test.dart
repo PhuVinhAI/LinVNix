@@ -444,6 +444,8 @@ void main() {
     test('error during send sets error and returns to idle', () async {
       when(() => mockRepo.sendMessage('session-1', 'test'))
           .thenThrow(Exception('Network error'));
+      when(() => mockRepo.revertPendingLearnerMessage('session-1'))
+          .thenAnswer((_) async {});
 
       final notifier = getNotifier();
       notifier.initSession(
@@ -458,6 +460,46 @@ void main() {
       final state = getState();
       expect(state.status, SimulationChatStatus.idle);
       expect(state.error, isNotNull);
+      expect(state.messages, isEmpty);
+      expect(state.failedOutboundContent, 'test');
+      verify(() => mockRepo.revertPendingLearnerMessage('session-1')).called(1);
+    });
+
+    test('discardPendingOutboundMessage removes optimistic learner message', () async {
+      when(() => mockRepo.revertPendingLearnerMessage('session-1'))
+          .thenAnswer((_) async {});
+      when(() => mockRepo.sendMessage('session-1', 'Xin chào')).thenAnswer(
+        (_) async {
+          await Future<void>.delayed(const Duration(milliseconds: 50));
+          return const SendMessageResponse(
+            messages: [],
+            nextTurnCharacterId: 'char-learner',
+            sessionEnded: false,
+          );
+        },
+      );
+
+      final notifier = getNotifier();
+      notifier.initSession(
+        sessionId: 'session-1',
+        chosenCharacterId: 'char-learner',
+        initialMessages: const [],
+        nextTurnCharacterId: 'char-learner',
+      );
+
+      final sendFuture = notifier.sendMessage('Xin chào');
+      expect(getState().messages, hasLength(1));
+      expect(getState().status, SimulationChatStatus.sending);
+
+      await notifier.discardPendingOutboundMessage();
+
+      final state = getState();
+      expect(state.messages, isEmpty);
+      expect(state.status, SimulationChatStatus.idle);
+      verify(() => mockRepo.revertPendingLearnerMessage('session-1')).called(1);
+
+      await sendFuture;
+      expect(getState().messages, isEmpty);
     });
   });
 }

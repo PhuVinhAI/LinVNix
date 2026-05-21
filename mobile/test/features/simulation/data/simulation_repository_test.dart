@@ -233,6 +233,29 @@ void main() {
       });
     });
 
+    group('revertPendingLearnerMessage', () {
+      const sessionId = 'session-1';
+
+      test('calls DELETE pending-learner endpoint', () async {
+        when(() => mockDio.delete<void>(any())).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(
+              path:
+                  '/simulations/sessions/$sessionId/messages/pending-learner',
+            ),
+            statusCode: 204,
+            data: null,
+          ),
+        );
+
+        await repository.revertPendingLearnerMessage(sessionId);
+
+        verify(() => mockDio.delete<void>(
+              '/simulations/sessions/$sessionId/messages/pending-learner',
+            )).called(1);
+      });
+    });
+
     group('cancelSession', () {
       const sessionId = 'session-1';
 

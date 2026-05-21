@@ -114,6 +114,16 @@ class SimulationRepository {
     }
   }
 
+  Future<void> revertPendingLearnerMessage(String sessionId) async {
+    try {
+      await _dio.delete<void>(
+        '/simulations/sessions/$sessionId/messages/pending-learner',
+      );
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<ActiveSession?> getActiveSession() async {
     try {
       final response = await _dio.get<Map<String, dynamic>?>(

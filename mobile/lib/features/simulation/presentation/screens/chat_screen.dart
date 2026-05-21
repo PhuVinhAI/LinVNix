@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -54,6 +56,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   void dispose() {
+    if (!widget.isHistory) {
+      final notifier = ref.read(simulationChatProvider.notifier);
+      if (notifier.isAwaitingAiResponse) {
+        notifier.discardPendingOutboundMessage();
+      }
+    }
     _scrollController.dispose();
     _inputController.dispose();
     _inputFocusNode.dispose();
@@ -226,7 +234,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _scrollToBottom();
   }
 
-  void _onBack() {
+  Future<void> _onBack() async {
+    if (!widget.isHistory) {
+      final notifier = ref.read(simulationChatProvider.notifier);
+      if (notifier.isAwaitingAiResponse) {
+        await notifier.discardPendingOutboundMessage();
+      }
+    }
+
+    if (!mounted) return;
     ref.invalidate(pausedSessionProvider);
     if (widget.fromCharacterSelection) {
       context.go('/practice');
@@ -316,6 +332,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         _scrollToBottom();
       }
       if (next.error != null && next.error != prev?.error) {
+        final failedContent = next.failedOutboundContent;
+        if (failedContent != null && failedContent.isNotEmpty) {
+          _inputController.text = failedContent;
+          _inputController.selection = TextSelection.collapsed(
+            offset: failedContent.length,
+          );
+          _inputFocusNode.requestFocus();
+        }
         AppToast.show(
           context,
           message: 'Unable to send message. Please try again.',
@@ -333,7 +357,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
-        _onBack();
+        unawaited(_onBack());
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -799,7 +823,6 @@ class _ComposeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
     final hint = enabled ? 'Your turn' : 'Thinking...';
 
     return Padding(
@@ -809,72 +832,13 @@ class _ComposeBar extends StatelessWidget {
         AppSpacing.lg,
         AppSpacing.sm,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: enabled
-              ? c.muted.withValues(alpha: 0.4)
-              : c.muted.withValues(alpha: 0.25),
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-        ),
-        padding: const EdgeInsets.only(
-          left: AppSpacing.lg,
-          right: AppSpacing.sm,
-          top: AppSpacing.sm,
-          bottom: AppSpacing.sm,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: controller,
-              focusNode: focusNode,
-              enabled: enabled,
-              maxLines: 5,
-              minLines: 1,
-              textCapitalization: TextCapitalization.sentences,
-              style: GoogleFonts.inter(
-                fontSize: AppTypography.bodyMedium,
-                color: enabled ? c.foreground : c.mutedForeground,
-              ),
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyMedium,
-                  color: c.mutedForeground,
-                ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
-                isDense: true,
-                filled: false,
-                fillColor: Colors.transparent,
-              ),
-              onSubmitted: enabled ? (_) => onSend() : null,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: enabled ? onSend : null,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: enabled ? c.primary : c.muted,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.arrow_upward_rounded,
-                    color: enabled ? c.primaryForeground : c.mutedForeground,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+      child: AppChatComposeField(
+        controller: controller,
+        focusNode: focusNode,
+        hintText: hint,
+        enabled: enabled,
+        onSend: enabled ? onSend : null,
+        onSubmitted: enabled ? (_) => onSend() : null,
       ),
     );
   }

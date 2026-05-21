@@ -35,4 +35,8 @@ export class SimulationMessagesRepository {
   ): Promise<void> {
     await this.repository.update({ id: messageId }, { feedback });
   }
+
+  async softDelete(id: string): Promise<void> {
+    await this.repository.softDelete(id);
+  }
 }
