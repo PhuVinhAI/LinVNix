@@ -23,6 +23,7 @@
     "test:integration:auth": "bun run scripts/test/suites/auth.test.ts",
     "test:integration:bookmarks": "bun run scripts/test/suites/bookmarks.test.ts",
     "test:integration:search-vocabulary": "bun run scripts/test/suites/search-vocabulary.test.ts",
+    "test:integration:simulations-seed": "bun run scripts/test/suites/simulations-seed.test.ts",
     "test:integration:courses": "bun run scripts/test/suites/courses.test.ts",
     "test:integration:vocabularies": "bun run scripts/test/suites/vocabularies.test.ts",
     "test:integration:dialect": "bun run scripts/test/run-dialect-test.ts",
@@ -37,7 +38,8 @@
     "test:scenario:progress": "bun run scripts/test/scenarios/03-progress.scenario.ts",
     "test:manual:google-oauth": "bun run scripts/test/manual/google-oauth.test.ts",
     "docs:generate": "bun run scripts/generate-api-docs.ts",
-    "admin:create": "bun run scripts/create-admin.ts"
+    "admin:create": "bun run scripts/create-admin.ts",
+    "seed:simulations": "bun run scripts/seed-simulations.ts"
   },
   "dependencies": {
     "@google/genai": "^2.0.1",
