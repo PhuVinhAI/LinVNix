@@ -948,7 +948,7 @@ describe('SimulationSessionService', () => {
       );
     });
 
-    it('fills default criteriaScores when AI returns empty array', async () => {
+    it('distributes totalScore when AI returns empty criteriaScores', async () => {
       setupSendMessage();
       const aiResponse = makeAiResponse({
         sessionEnded: true,
@@ -966,11 +966,91 @@ describe('SimulationSessionService', () => {
       expect(resultsRepo.create).toHaveBeenCalledWith(
         expect.objectContaining({
           criteriaScores: [
-            { name: 'Vocabulary', score: 0, maxScore: 50, comment: '' },
-            { name: 'Grammar', score: 0, maxScore: 50, comment: '' },
+            { name: 'Vocabulary', score: 10, maxScore: 50, comment: '' },
+            { name: 'Grammar', score: 10, maxScore: 50, comment: '' },
           ],
           endReason: SimulationEndReason.TOO_MANY_ERRORS,
           aiSummary: 'Study more before trying again.',
+        }),
+      );
+    });
+
+    it('matches criteriaScores by position when names differ but counts align', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.COMPLETED,
+        totalScore: 80,
+        criteriaScores: [
+          {
+            name: 'Communication',
+            score: 40,
+            maxScore: 50,
+            comment: 'Good vocabulary',
+          },
+          {
+            name: 'Grammar accuracy',
+            score: 35,
+            maxScore: 50,
+            comment: 'Minor issues',
+          },
+        ],
+        aiSummary: 'Nice work!',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([{ id: 'msg-0' } as any]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      await service.sendMessage('user-1', 'session-1', 'Cảm ơn chị');
+
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          criteriaScores: [
+            {
+              name: 'Vocabulary',
+              score: 40,
+              maxScore: 50,
+              comment: 'Good vocabulary',
+            },
+            {
+              name: 'Grammar',
+              score: 35,
+              maxScore: 50,
+              comment: 'Minor issues',
+            },
+          ],
+        }),
+      );
+    });
+
+    it('distributes totalScore when AI criteria names do not match', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.COMPLETED,
+        totalScore: 60,
+        criteriaScores: [
+          {
+            name: 'Fluency',
+            score: 0,
+            maxScore: 100,
+            comment: 'Ignored due to name mismatch',
+          },
+        ],
+        aiSummary: 'Done!',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([{ id: 'msg-0' } as any]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      await service.sendMessage('user-1', 'session-1', 'Cảm ơn chị');
+
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          criteriaScores: [
+            { name: 'Vocabulary', score: 30, maxScore: 50, comment: '' },
+            { name: 'Grammar', score: 30, maxScore: 50, comment: '' },
+          ],
         }),
       );
     });

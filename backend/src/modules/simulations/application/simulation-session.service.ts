@@ -21,6 +21,83 @@ import {
   SimulationEndReason,
 } from '../../../common/enums';
 
+function normalizeCriteriaName(name: string): string {
+  return name
+    .normalize('NFC')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ' ');
+}
+
+function scaleCriterionScore(
+  score: number,
+  aiMaxScore: number,
+  criterionWeight: number,
+): number {
+  const safeScore = Number.isFinite(score) ? score : 0;
+  const safeMax =
+    Number.isFinite(aiMaxScore) && aiMaxScore > 0 ? aiMaxScore : criterionWeight;
+  const scaled = Math.round((safeScore / safeMax) * criterionWeight);
+  return Math.min(criterionWeight, Math.max(0, scaled));
+}
+
+function distributeTotalScoreByWeight(
+  totalScore: number,
+  scoringCriteria: Array<{ name: string; description: string; weight: number }>,
+): Array<{ name: string; score: number; maxScore: number; comment: string }> {
+  const boundedTotal = Math.min(100, Math.max(0, Math.round(totalScore)));
+  const totalWeight =
+    scoringCriteria.reduce((sum, criterion) => sum + criterion.weight, 0) || 100;
+
+  const entries = scoringCriteria.map((criterion) => ({
+    criterion,
+    exact: (boundedTotal * criterion.weight) / totalWeight,
+    score: 0,
+  }));
+
+  let allocated = 0;
+  for (const entry of entries) {
+    entry.score = Math.floor(entry.exact);
+    allocated += entry.score;
+  }
+
+  const remainder = boundedTotal - allocated;
+  const sorted = [...entries].sort(
+    (a, b) => b.exact - b.score - (a.exact - a.score),
+  );
+  for (let i = 0; i < remainder && i < sorted.length; i++) {
+    sorted[i].score += 1;
+  }
+
+  return entries.map((entry) => ({
+    name: entry.criterion.name,
+    score: entry.score,
+    maxScore: entry.criterion.weight,
+    comment: '',
+  }));
+}
+
+function findCriteriaMatchIndex(
+  criterionName: string,
+  criteriaScores: Array<{ name: string }>,
+  usedIndices: Set<number>,
+): number {
+  const normalized = normalizeCriteriaName(criterionName);
+
+  for (let i = 0; i < criteriaScores.length; i++) {
+    if (usedIndices.has(i)) continue;
+    if (normalizeCriteriaName(criteriaScores[i].name) === normalized) return i;
+  }
+
+  for (let i = 0; i < criteriaScores.length; i++) {
+    if (usedIndices.has(i)) continue;
+    const aiName = normalizeCriteriaName(criteriaScores[i].name);
+    if (aiName.includes(normalized) || normalized.includes(aiName)) return i;
+  }
+
+  return -1;
+}
+
 function alignCriteriaScores(
   criteriaScores: Array<{
     name: string;
@@ -29,27 +106,53 @@ function alignCriteriaScores(
     comment: string;
   }>,
   scoringCriteria: Array<{ name: string; description: string; weight: number }>,
+  totalScore?: number,
 ): Array<{ name: string; score: number; maxScore: number; comment: string }> {
-  if (!criteriaScores || criteriaScores.length === 0) {
-    return scoringCriteria.map((criterion) => ({
-      name: criterion.name,
-      score: 0,
-      maxScore: criterion.weight,
-      comment: '',
-    }));
+  if (!scoringCriteria || scoringCriteria.length === 0) {
+    return criteriaScores ?? [];
   }
 
-  return scoringCriteria.map((criterion) => {
-    const match = criteriaScores.find((cs) => cs.name === criterion.name);
-    return (
-      match ?? {
+  const usedIndices = new Set<number>();
+  const aligned = scoringCriteria.map((criterion, index) => {
+    let matchIndex = findCriteriaMatchIndex(
+      criterion.name,
+      criteriaScores,
+      usedIndices,
+    );
+
+    if (
+      matchIndex === -1 &&
+      criteriaScores.length === scoringCriteria.length &&
+      !usedIndices.has(index)
+    ) {
+      matchIndex = index;
+    }
+
+    if (matchIndex === -1) {
+      return {
         name: criterion.name,
         score: 0,
         maxScore: criterion.weight,
         comment: '',
-      }
-    );
+      };
+    }
+
+    usedIndices.add(matchIndex);
+    const match = criteriaScores[matchIndex];
+    return {
+      name: criterion.name,
+      score: scaleCriterionScore(match.score, match.maxScore, criterion.weight),
+      maxScore: criterion.weight,
+      comment: match.comment ?? '',
+    };
   });
+
+  const summed = aligned.reduce((sum, item) => sum + item.score, 0);
+  if (summed === 0 && (totalScore ?? 0) > 0) {
+    return distributeTotalScoreByWeight(totalScore!, scoringCriteria);
+  }
+
+  return aligned;
 }
 
 export interface CreateSessionDto {
@@ -488,6 +591,7 @@ export class SimulationSessionService {
       criteriaScores: alignCriteriaScores(
         aiResponse.criteriaScores ?? [],
         scenario.scoringCriteria,
+        aiResponse.totalScore,
       ),
       endReason: aiResponse.endReason ?? SimulationEndReason.COMPLETED,
       aiSummary: aiResponse.aiSummary ?? '',

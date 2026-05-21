@@ -65,7 +65,9 @@ simulation-conversation:
          on the platform. Score should be 0.
     - When ending the session, provide:
       - totalScore: integer 0-100 overall score (no decimals)
-      - criteriaScores: array of scores per criterion (from the scoring criteria)
+      - criteriaScores: array with one entry per scoring criterion below
+      - Use the EXACT criterion name from Scoring criteria (copy verbatim)
+      - score: 0 to that criterion's weight; maxScore: same as the weight
       - aiSummary: a brief overall commentary in the learner's native language
 
     ## Scoring criteria
@@ -96,7 +98,7 @@ simulation-conversation:
       "endReason": "COMPLETED" | "TOO_MANY_ERRORS" | "INAPPROPRIATE" | "ABUSIVE" | undefined,
       "totalScore": 0-100 | undefined,
       "criteriaScores": [
-        { "name": "...", "score": 0, "maxScore": 0, "comment": "..." }
+        { "name": "<exact criterion name>", "score": 0, "maxScore": 0, "comment": "..." }
       ] | undefined,
       "aiSummary": "..." | undefined
     }
