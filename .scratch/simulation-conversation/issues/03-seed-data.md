@@ -61,13 +61,13 @@ Create a seeder that populates the database with a complete set of simulation sc
 1. **[seed-simulations.ts](file:///c:/Users/tomis/Docs/LinVNix/backend/scripts/seed-simulations.ts)**:
    - Database seeder script that bootstraps NestJS and leverages TypeORM repositories.
    - Populates the database with **6 categories** and **exactly 15 scenarios** (spanning CEFR levels A1-B2 and difficulties Easy-Hard).
-   - Seeds **2 characters** per scenario (exactly 1 playable + 1 AI NPC).
+   - Seeds **2-3 characters** per scenario (including support for group chats and multiple selectable playable options, totaling 34 characters).
    - Configures **3-5 scoring criteria** per scenario whose weights sum to exactly 100.
    - Uses transactional checking/saving and character recreation to guarantee complete idempotency.
 
 2. **[simulations-seed.test.ts](file:///c:/Users/tomis/Docs/LinVNix/backend/scripts/test/suites/simulations-seed.test.ts)**:
    - Live integration test suite connecting to the actual Postgres database.
-   - Asserts exact scenario counts (15), category counts (6), character counts (30), and playable character constraints.
+   - Asserts exact scenario counts (15), category counts (6), and ensures characters count per scenario >= 2.
    - Verifies scoring criteria properties and checks that all weights sum to exactly 100.
    - Asserts seeder idempotency by running the seed function twice and verifying record counts do not duplicate.
 
