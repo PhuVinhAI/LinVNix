@@ -18,6 +18,37 @@ import {
   SimulationEndReason,
 } from '../../../common/enums';
 
+function alignCriteriaScores(
+  criteriaScores: Array<{
+    name: string;
+    score: number;
+    maxScore: number;
+    comment: string;
+  }>,
+  scoringCriteria: Array<{ name: string; description: string; weight: number }>,
+): Array<{ name: string; score: number; maxScore: number; comment: string }> {
+  if (!criteriaScores || criteriaScores.length === 0) {
+    return scoringCriteria.map((criterion) => ({
+      name: criterion.name,
+      score: 0,
+      maxScore: criterion.weight,
+      comment: '',
+    }));
+  }
+
+  return scoringCriteria.map((criterion) => {
+    const match = criteriaScores.find((cs) => cs.name === criterion.name);
+    return (
+      match ?? {
+        name: criterion.name,
+        score: 0,
+        maxScore: criterion.weight,
+        comment: '',
+      }
+    );
+  });
+}
+
 export interface CreateSessionDto {
   scenarioId: string;
   chosenCharacterId: string;
@@ -224,12 +255,18 @@ export class SimulationSessionService {
       feedback: m.feedback,
     }));
 
+    const learnerMessageCount =
+      existingMessages.filter((m: any) => m.isLearner).length + 1;
+    const forceWrapUp =
+      scenario.maxTurns !== null && learnerMessageCount >= scenario.maxTurns;
+
     const aiResponse = await this.aiService.processTurn({
       scenario: aiScenario,
       chosenCharacterId: session.chosenCharacterId,
       messages: aiMessages,
       learnerMessage: content,
       userId,
+      forceWrapUp,
     });
 
     let currentOrderIndex = nextOrderIndex + 1;
@@ -283,7 +320,10 @@ export class SimulationSessionService {
         scenarioId: session.scenarioId,
         chosenCharacterId: session.chosenCharacterId,
         totalScore: aiResponse.totalScore ?? 0,
-        criteriaScores: aiResponse.criteriaScores ?? [],
+        criteriaScores: alignCriteriaScores(
+          aiResponse.criteriaScores ?? [],
+          scenario.scoringCriteria,
+        ),
         endReason: aiResponse.endReason ?? SimulationEndReason.COMPLETED,
         aiSummary: aiResponse.aiSummary ?? '',
         totalMessages: allMessages.length,

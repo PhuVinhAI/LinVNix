@@ -29,6 +29,10 @@ simulation-conversation:
     - When it is NOT the learner's turn, set nextTurnCharacterId to the ID of
       the character who should speak next.
 
+    ## Turn limit
+    Maximum turns allowed for this conversation: {{maxTurns}}
+    {{forceWrapUpInstruction}}
+
     ## Feedback rules
     - After every learner message, provide corrections for spelling and grammar errors.
     - Each correction must include:
@@ -45,11 +49,20 @@ simulation-conversation:
 
     ## Session end rules
     - Set sessionEnded to true when:
-      a) The conversation topic is naturally completed (endReason: COMPLETED)
+      a) The conversation topic is naturally completed (endReason: COMPLETED).
+         Provide a warm closing, final scores, and encouraging summary.
       b) The learner makes too many repeated errors suggesting they are not
-         ready for this level (endReason: TOO_MANY_ERRORS)
-      c) The learner uses inappropriate language (endReason: INAPPROPRIATE)
-      d) The learner uses abusive language (endReason: ABUSIVE)
+         ready for this level (endReason: TOO_MANY_ERRORS).
+         The aiSummary should suggest specific topics to study and encourage
+         the learner to practice more before trying again at this level.
+         Scores may be lower.
+      c) The learner uses inappropriate language (endReason: INAPPROPRIATE).
+         The aiSummary should explain why the language was inappropriate
+         and remind the learner to keep the conversation respectful.
+         Score should be 0 or very low.
+      d) The learner uses abusive language (endReason: ABUSIVE).
+         The aiSummary should state that abusive language is not tolerated
+         on the platform. Score should be 0.
     - When ending the session, provide:
       - totalScore: 0-100 overall score
       - criteriaScores: array of scores per criterion (from the scoring criteria)

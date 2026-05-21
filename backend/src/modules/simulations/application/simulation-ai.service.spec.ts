@@ -192,6 +192,79 @@ describe('SimulationAiService', () => {
       expect(callArgs.learner.level).toBe('B1');
       expect(callArgs.learner.nativeLanguage).toBe('Japanese');
     });
+
+    it('includes maxTurns in prompt variables', () => {
+      const scenario = makeScenario({ maxTurns: 5 });
+      const learner = {
+        nativeLanguage: 'English',
+        level: 'A1',
+        preferredDialect: 'STANDARD',
+      };
+
+      service.buildSystemInstruction(scenario, 'ch-1', learner);
+
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
+      expect(callArgs.maxTurns).toBe('5');
+    });
+
+    it('includes "unlimited" maxTurns when scenario maxTurns is null', () => {
+      const scenario = makeScenario({ maxTurns: null });
+      const learner = {
+        nativeLanguage: 'English',
+        level: 'A1',
+        preferredDialect: 'STANDARD',
+      };
+
+      service.buildSystemInstruction(scenario, 'ch-1', learner);
+
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
+      expect(callArgs.maxTurns).toBe('unlimited');
+    });
+
+    it('includes forceWrapUpInstruction when forceWrapUp is true', () => {
+      const scenario = makeScenario({ maxTurns: 10 });
+      const learner = {
+        nativeLanguage: 'English',
+        level: 'A1',
+        preferredDialect: 'STANDARD',
+      };
+
+      service.buildSystemInstruction(scenario, 'ch-1', learner, true);
+
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
+      expect(callArgs.forceWrapUpInstruction).toContain(
+        'reached the maximum number of turns',
+      );
+      expect(callArgs.forceWrapUpInstruction).toContain('10');
+    });
+
+    it('includes empty forceWrapUpInstruction when forceWrapUp is false', () => {
+      const scenario = makeScenario({ maxTurns: 10 });
+      const learner = {
+        nativeLanguage: 'English',
+        level: 'A1',
+        preferredDialect: 'STANDARD',
+      };
+
+      service.buildSystemInstruction(scenario, 'ch-1', learner, false);
+
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
+      expect(callArgs.forceWrapUpInstruction).toBe('');
+    });
+
+    it('includes empty forceWrapUpInstruction when forceWrapUp is not provided', () => {
+      const scenario = makeScenario({ maxTurns: 10 });
+      const learner = {
+        nativeLanguage: 'English',
+        level: 'A1',
+        preferredDialect: 'STANDARD',
+      };
+
+      service.buildSystemInstruction(scenario, 'ch-1', learner);
+
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
+      expect(callArgs.forceWrapUpInstruction).toBe('');
+    });
   });
 
   describe('buildChatMessages', () => {
@@ -680,6 +753,26 @@ describe('SimulationAiService', () => {
           userId: 'user-1',
         }),
       ).rejects.toThrow(BadRequestException);
+    });
+
+    it('passes forceWrapUp to buildSystemInstruction', async () => {
+      const scenario = makeScenario();
+      usersService.findById.mockResolvedValue(makeUser());
+      genaiService.chatStructured.mockResolvedValue(makeAiResponse());
+
+      await service.processTurn({
+        scenario,
+        chosenCharacterId: 'ch-1',
+        messages: [],
+        learnerMessage: 'Hello',
+        userId: 'user-1',
+        forceWrapUp: true,
+      });
+
+      const callArgs = genaiService.renderPrompt.mock.calls[0][1]!;
+      expect(callArgs.forceWrapUpInstruction).toContain(
+        'reached the maximum number of turns',
+      );
     });
   });
 

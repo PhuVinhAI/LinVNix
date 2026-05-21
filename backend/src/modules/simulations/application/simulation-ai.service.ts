@@ -56,6 +56,7 @@ export interface SimulationAiTurnRequest {
   messages: SimulationAiMessage[];
   learnerMessage: string;
   userId: string;
+  forceWrapUp?: boolean;
 }
 
 export interface SimulationAiTurnResponse {
@@ -237,6 +238,7 @@ export class SimulationAiService {
         level: user.currentLevel,
         preferredDialect: user.preferredDialect,
       },
+      request.forceWrapUp,
     );
 
     const chatMessages = this.buildChatMessages(
@@ -268,6 +270,7 @@ export class SimulationAiService {
       level: string;
       preferredDialect: string;
     },
+    forceWrapUp?: boolean,
   ): string {
     const chosenCharacter = scenario.characters.find(
       (c) => c.id === chosenCharacterId,
@@ -289,6 +292,10 @@ export class SimulationAiService {
       .map((c) => `- ${c.name} (weight: ${c.weight}%): ${c.description}`)
       .join('\n');
 
+    const forceWrapUpInstruction = forceWrapUp
+      ? `IMPORTANT: The learner has reached the maximum number of turns (${scenario.maxTurns}). You MUST end the session now. Set sessionEnded to true, endReason to "COMPLETED", and provide final scores and summary. Wrap up the conversation naturally before scoring.`
+      : '';
+
     return this.genaiService.renderPrompt('simulation-conversation', {
       scenario: {
         systemPrompt: scenario.systemPrompt,
@@ -306,6 +313,8 @@ export class SimulationAiService {
         role: chosenCharacter.role,
       },
       scoringCriteriaDescription,
+      maxTurns: scenario.maxTurns?.toString() ?? 'unlimited',
+      forceWrapUpInstruction,
     });
   }
 

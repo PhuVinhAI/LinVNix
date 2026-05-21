@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 # 07 — Session completion — AI-triggered end, SimulationResult, end reasons
 
@@ -37,17 +37,39 @@ Implement the session completion flow that creates a `SimulationResult` when the
 
 ## Acceptance criteria
 
-- [ ] When AI returns `sessionEnded: true`, session status transitions to `COMPLETED`
-- [ ] A `SimulationResult` is created with correct `totalScore`, `criteriaScores`, `endReason`, and `aiSummary`
-- [ ] `criteriaScores` align with the scenario's `scoringCriteria` definitions
-- [ ] `totalMessages` correctly counts all messages in the session
-- [ ] `maxTurns` safety net triggers forced completion when reached
-- [ ] `TOO_MANY_ERRORS` end reason produces appropriate AI feedback suggesting the learner study more
-- [ ] `INAPPROPRIATE`/`ABUSIVE` end reasons produce appropriate AI feedback
-- [ ] Unique constraint on `SimulationResult.sessionId` prevents duplicate results
-- [ ] The result is included in the message endpoint response when `sessionEnded: true`
-- [ ] `bun run typecheck` passes
+- [x] When AI returns `sessionEnded: true`, session status transitions to `COMPLETED`
+- [x] A `SimulationResult` is created with correct `totalScore`, `criteriaScores`, `endReason`, and `aiSummary`
+- [x] `criteriaScores` align with the scenario's `scoringCriteria` definitions
+- [x] `totalMessages` correctly counts all messages in the session
+- [x] `maxTurns` safety net triggers forced completion when reached
+- [x] `TOO_MANY_ERRORS` end reason produces appropriate AI feedback suggesting the learner study more
+- [x] `INAPPROPRIATE`/`ABUSIVE` end reasons produce appropriate AI feedback
+- [x] Unique constraint on `SimulationResult.sessionId` prevents duplicate results
+- [x] The result is included in the message endpoint response when `sessionEnded: true`
+- [x] `bun run typecheck` passes
 
 ## Blocked by
 
 - [06 — Send message endpoint](./06-send-message-endpoint.md)
+
+## Implementation notes
+
+### Files modified
+
+- `backend/src/modules/simulations/application/simulation-session.service.ts` — Added `alignCriteriaScores()` function to normalize criteria scores against scenario scoring criteria; added learner message count check with `forceWrapUp` flag passed to AI when `maxTurns` is reached; uses `alignCriteriaScores()` when creating SimulationResult to ensure criteria names match
+- `backend/src/modules/simulations/application/simulation-ai.service.ts` — Added `forceWrapUp?: boolean` to `SimulationAiTurnRequest` interface; passed `forceWrapUp` through `processTurn()` to `buildSystemInstruction()`; added `forceWrapUp` parameter to `buildSystemInstruction()` with `forceWrapUpInstruction` and `maxTurns` template variables
+- `backend/src/infrastructure/genai/prompts/simulation-conversation.yaml` — Added `{{maxTurns}}` and `{{forceWrapUpInstruction}}` template variables in new "Turn limit" section; enhanced session end rules with specific guidance per end reason (TOO_MANY_ERRORS suggests studying more, INAPPROPRIATE explains why language was inappropriate, ABUSIVE states zero tolerance)
+- `backend/src/modules/simulations/application/simulation-session.service.spec.ts` — Added 8 new tests: `forceWrapUp=true` when learner reaches maxTurns, no forceWrapUp below maxTurns, no forceWrapUp when maxTurns is null, criteriaScores alignment with missing criteria filled with zeros, default criteriaScores when AI returns empty array, TOO_MANY_ERRORS end reason creates correct result, INAPPROPRIATE end reason creates correct result, ABUSIVE end reason creates correct result
+- `backend/src/modules/simulations/application/simulation-ai.service.spec.ts` — Added 6 new tests: maxTurns in prompt variables, "unlimited" when maxTurns is null, forceWrapUpInstruction when forceWrapUp is true, empty forceWrapUpInstruction when false, empty when not provided, processTurn passes forceWrapUp through to buildSystemInstruction
+
+### Files created
+
+(none)
+
+### Files deleted
+
+(none)
+
+### Test results
+
+669 tests passing across 44 suites. lint: 0 errors. typecheck: passes.

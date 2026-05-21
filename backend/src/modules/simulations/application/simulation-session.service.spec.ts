@@ -743,5 +743,223 @@ describe('SimulationSessionService', () => {
         sessionEnded: false,
       });
     });
+
+    it('passes forceWrapUp=true when learner reaches maxTurns', async () => {
+      setupSendMessage({
+        messages: [
+          { id: 'msg-0', orderIndex: 0, isLearner: true, content: 'Turn 1' },
+          { id: 'msg-1', orderIndex: 1, isLearner: false, content: 'Reply 1' },
+          { id: 'msg-2', orderIndex: 2, isLearner: true, content: 'Turn 2' },
+          { id: 'msg-3', orderIndex: 3, isLearner: false, content: 'Reply 2' },
+        ],
+      });
+      scenariosRepo.findById.mockResolvedValue(makeScenario({ maxTurns: 3 }));
+
+      await service.sendMessage('user-1', 'session-1', 'Turn 3');
+
+      expect(aiService.processTurn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          forceWrapUp: true,
+        }),
+      );
+    });
+
+    it('does not set forceWrapUp when learner has not reached maxTurns', async () => {
+      setupSendMessage({
+        messages: [
+          { id: 'msg-0', orderIndex: 0, isLearner: true, content: 'Turn 1' },
+          { id: 'msg-1', orderIndex: 1, isLearner: false, content: 'Reply 1' },
+        ],
+      });
+
+      await service.sendMessage('user-1', 'session-1', 'Turn 2');
+
+      expect(aiService.processTurn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          forceWrapUp: false,
+        }),
+      );
+    });
+
+    it('does not set forceWrapUp when scenario maxTurns is null', async () => {
+      setupSendMessage({
+        messages: [
+          { id: 'msg-0', orderIndex: 0, isLearner: true, content: 'Turn 1' },
+          { id: 'msg-1', orderIndex: 1, isLearner: false, content: 'Reply 1' },
+          { id: 'msg-2', orderIndex: 2, isLearner: true, content: 'Turn 2' },
+        ],
+      });
+      scenariosRepo.findById.mockResolvedValue(
+        makeScenario({ maxTurns: null }),
+      );
+
+      await service.sendMessage('user-1', 'session-1', 'Turn 3');
+
+      expect(aiService.processTurn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          forceWrapUp: false,
+        }),
+      );
+    });
+
+    it('aligns criteriaScores with scenario scoringCriteria', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.COMPLETED,
+        totalScore: 60,
+        criteriaScores: [
+          { name: 'Vocabulary', score: 35, maxScore: 50, comment: 'Good' },
+        ],
+        aiSummary: 'Well done!',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([
+        { id: 'msg-0' } as any,
+        { id: 'msg-1' } as any,
+      ]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      await service.sendMessage('user-1', 'session-1', 'Cảm ơn chị');
+
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          criteriaScores: [
+            { name: 'Vocabulary', score: 35, maxScore: 50, comment: 'Good' },
+            { name: 'Grammar', score: 0, maxScore: 50, comment: '' },
+          ],
+        }),
+      );
+    });
+
+    it('fills default criteriaScores when AI returns empty array', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.TOO_MANY_ERRORS,
+        totalScore: 20,
+        criteriaScores: [],
+        aiSummary: 'Study more before trying again.',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([{ id: 'msg-0' } as any]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      await service.sendMessage('user-1', 'session-1', 'Xin chào');
+
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          criteriaScores: [
+            { name: 'Vocabulary', score: 0, maxScore: 50, comment: '' },
+            { name: 'Grammar', score: 0, maxScore: 50, comment: '' },
+          ],
+          endReason: SimulationEndReason.TOO_MANY_ERRORS,
+          aiSummary: 'Study more before trying again.',
+        }),
+      );
+    });
+
+    it('creates SimulationResult with TOO_MANY_ERRORS end reason', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.TOO_MANY_ERRORS,
+        totalScore: 25,
+        criteriaScores: [
+          {
+            name: 'Vocabulary',
+            score: 15,
+            maxScore: 50,
+            comment: 'Needs work',
+          },
+          { name: 'Grammar', score: 10, maxScore: 50, comment: 'Many errors' },
+        ],
+        aiSummary:
+          'You are making too many errors. Study vocabulary and grammar more before trying again.',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([{ id: 'msg-0' } as any]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      const result = await service.sendMessage(
+        'user-1',
+        'session-1',
+        'Xin chào',
+      );
+
+      expect(result.endReason).toBe(SimulationEndReason.TOO_MANY_ERRORS);
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endReason: SimulationEndReason.TOO_MANY_ERRORS,
+          totalScore: 25,
+        }),
+      );
+    });
+
+    it('creates SimulationResult with INAPPROPRIATE end reason', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.INAPPROPRIATE,
+        totalScore: 0,
+        criteriaScores: [
+          { name: 'Vocabulary', score: 0, maxScore: 50, comment: '' },
+          { name: 'Grammar', score: 0, maxScore: 50, comment: '' },
+        ],
+        aiSummary:
+          'Your language was inappropriate. Please keep the conversation respectful.',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([{ id: 'msg-0' } as any]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      const result = await service.sendMessage(
+        'user-1',
+        'session-1',
+        'Bad message',
+      );
+
+      expect(result.endReason).toBe(SimulationEndReason.INAPPROPRIATE);
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endReason: SimulationEndReason.INAPPROPRIATE,
+          totalScore: 0,
+          aiSummary:
+            'Your language was inappropriate. Please keep the conversation respectful.',
+        }),
+      );
+    });
+
+    it('creates SimulationResult with ABUSIVE end reason', async () => {
+      setupSendMessage();
+      const aiResponse = makeAiResponse({
+        sessionEnded: true,
+        endReason: SimulationEndReason.ABUSIVE,
+        totalScore: 0,
+        criteriaScores: [
+          { name: 'Vocabulary', score: 0, maxScore: 50, comment: '' },
+          { name: 'Grammar', score: 0, maxScore: 50, comment: '' },
+        ],
+        aiSummary: 'Abusive language is not tolerated on this platform.',
+      });
+      aiService.processTurn.mockResolvedValue(aiResponse);
+      messagesRepo.findBySessionId.mockResolvedValue([{ id: 'msg-0' } as any]);
+      resultsRepo.create.mockResolvedValue({ id: 'result-1' } as any);
+
+      const result = await service.sendMessage(
+        'user-1',
+        'session-1',
+        'Abusive message',
+      );
+
+      expect(result.endReason).toBe(SimulationEndReason.ABUSIVE);
+      expect(resultsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endReason: SimulationEndReason.ABUSIVE,
+          totalScore: 0,
+          aiSummary: 'Abusive language is not tolerated on this platform.',
+        }),
+      );
+    });
   });
 });
