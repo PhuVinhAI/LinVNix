@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 ## Parent
 
@@ -28,19 +28,36 @@ Add `sendMessage(String sessionId, String content)` and `getSession(String sessi
 
 ## Acceptance criteria
 
-- [ ] Chat screen renders NPC bubbles left-aligned with avatar + name + card-colored bubble
-- [ ] Chat screen renders learner bubbles right-aligned with primary-tinted bubble, no avatar/name
-- [ ] Pill-shaped compose bar matches assistant pattern; disabled state shows NPC hint, enabled shows "Your turn"
-- [ ] Sending a message: input disables, typing indicator shows, input shows "[NPC name] is typing..."
-- [ ] AI response: typing indicator removed, NPC bubbles appear with 300ms stagger animation
-- [ ] `nextTurnCharacterId` correctly toggles input enabled/disabled; auto-triggers next API call for NPC turns
-- [ ] Multiple NPC messages in one response all render in order with stagger
-- [ ] `SimulationRepository.sendMessage()` calls `POST /simulations/sessions/:id/messages` with extended timeout
-- [ ] `SimulationRepository.getSession()` calls `GET /simulations/sessions/:id`
-- [ ] `SendMessageResponse` model parses all fields including nullable feedback, endReason, result
-- [ ] `SimulationChatNotifier` manages state transitions: idle → sending → receiving → idle/completed
-- [ ] Auto-scroll to latest message on send/receive
+- [x] Chat screen renders NPC bubbles left-aligned with avatar + name + card-colored bubble
+- [x] Chat screen renders learner bubbles right-aligned with primary-tinted bubble, no avatar/name
+- [x] Pill-shaped compose bar matches assistant pattern; disabled state shows NPC hint, enabled shows "Your turn"
+- [x] Sending a message: input disables, typing indicator shows, input shows "[NPC name] is typing..."
+- [x] AI response: typing indicator removed, NPC bubbles appear with 300ms stagger animation
+- [x] `nextTurnCharacterId` correctly toggles input enabled/disabled; auto-triggers next API call for NPC turns
+- [x] Multiple NPC messages in one response all render in order with stagger
+- [x] `SimulationRepository.sendMessage()` calls `POST /simulations/sessions/:id/messages` with extended timeout
+- [x] `SimulationRepository.getSession()` calls `GET /simulations/sessions/:id`
+- [x] `SendMessageResponse` model parses all fields including nullable feedback, endReason, result
+- [x] `SimulationChatNotifier` manages state transitions: idle → sending → receiving → idle/completed
+- [x] Auto-scroll to latest message on send/receive
 
 ## Blocked by
 
 - `.scratch/simulation-conversation-mobile/issues/04-character-selection-session-creation.md`
+
+## Implementation notes
+
+### Files created
+
+- `mobile/lib/features/simulation/domain/send_message_response.dart` — `SendMessageResponse` model parsing messages[], nextTurnCharacterId, feedback?, sessionEnded, endReason?, result?
+- `mobile/lib/features/simulation/application/simulation_chat_notifier.dart` — `SimulationChatNotifier` (Riverpod Notifier) managing chat state transitions (idle→sending→receiving→idle/completed), `SimulationChatState` with turn coordination logic, `simulationChatProvider` and `simulationSessionProvider` providers
+- `mobile/lib/features/simulation/presentation/screens/chat_screen.dart` — Full chat screen with `_NpcBubble`, `_LearnerBubble`, `_SystemMessage`, `_ComposeBar`, `_TypingIndicator`, `_CompletedBanner`, `_HistoryBanner`, staggered slide-in animation via `_AnimatedBubble`
+- `mobile/test/features/simulation/domain/send_message_response_test.dart` — 5 unit tests for SendMessageResponse model (all fields, sessionEnded, nullable defaults, toJson, null messages)
+- `mobile/test/features/simulation/application/simulation_chat_notifier_test.dart` — 10 unit tests for SimulationChatNotifier (initSession, sendMessage flow, completed transition, empty content guard, ended session guard, loadExistingSession, npcSpeakerName, multiple NPC messages, error handling)
+
+### Files modified
+
+- `mobile/lib/features/simulation/data/simulation_repository.dart` — Added `sendMessage(sessionId, content)` with 15s timeout calling `POST /simulations/sessions/:id/messages`, added `getSession(sessionId)` calling `GET /simulations/sessions/:id`, added `SessionWithMessages` helper class
+- `mobile/lib/features/simulation/data/simulation_providers.dart` — No changes (providers referenced from chat_notifier)
+- `mobile/lib/core/router/app_router.dart` — Added route `/practice/sessions/:id` with optional `?history=true` query param, imported `ChatScreen`
+- `mobile/test/features/simulation/data/simulation_repository_test.dart` — Added 6 tests for `sendMessage` (API contract, timeout, sessionEnded+endReason+result parsing, NetworkException) and 3 tests for `getSession` (API contract, response without messages, NetworkException)

@@ -26,6 +26,7 @@ import '../../features/lessons/presentation/screens/exercise_play_screen.dart';
 import '../../features/simulation/presentation/screens/practice_screen.dart';
 import '../../features/simulation/presentation/screens/scenario_detail_screen.dart';
 import '../../features/simulation/presentation/screens/character_selection_screen.dart';
+import '../../features/simulation/presentation/screens/chat_screen.dart';
 import '../presentation/shell_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -250,6 +251,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           return CharacterSelectionScreen(scenarioId: id);
+        },
+      ),
+      GoRoute(
+        path: '/practice/sessions/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final isHistory = state.uri.queryParameters['history'] == 'true';
+          return ChatScreen(sessionId: id, isHistory: isHistory);
         },
       ),
       ShellRoute(

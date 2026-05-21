@@ -137,5 +137,184 @@ void main() {
         );
       });
     });
+
+    group('sendMessage', () {
+      const sessionId = 'session-1';
+      const content = 'Xin chào';
+
+      test('calls POST /simulations/sessions/:id/messages with extended timeout',
+          () async {
+        when(() => mockDio.post<Map<String, dynamic>>(
+              any(),
+              data: any(named: 'data'),
+              options: any(named: 'options'),
+            )).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(
+                path: '/simulations/sessions/$sessionId/messages'),
+            statusCode: 200,
+            data: {
+              'messages': [
+                {
+                  'id': 'msg-1',
+                  'speakerCharacterId': 'npc-1',
+                  'speakerName': 'Lan',
+                  'isLearner': false,
+                  'content': 'Chào bạn!',
+                  'orderIndex': 0,
+                },
+              ],
+              'nextTurnCharacterId': 'char-learner',
+              'sessionEnded': false,
+            },
+          ),
+        );
+
+        final result = await repository.sendMessage(sessionId, content);
+
+        verify(() => mockDio.post<Map<String, dynamic>>(
+              '/simulations/sessions/$sessionId/messages',
+              data: {'content': content},
+              options: any(named: 'options'),
+            )).called(1);
+
+        expect(result.messages, hasLength(1));
+        expect(result.messages[0].speakerName, 'Lan');
+        expect(result.nextTurnCharacterId, 'char-learner');
+        expect(result.sessionEnded, false);
+      });
+
+      test('throws NetworkException on connection timeout', () async {
+        when(() => mockDio.post<Map<String, dynamic>>(
+              any(),
+              data: any(named: 'data'),
+              options: any(named: 'options'),
+            )).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(
+                path: '/simulations/sessions/$sessionId/messages'),
+            type: DioExceptionType.connectionTimeout,
+          ),
+        );
+
+        expect(
+          () => repository.sendMessage(sessionId, content),
+          throwsA(isA<NetworkException>()),
+        );
+      });
+
+      test('parses sessionEnded with endReason and result', () async {
+        when(() => mockDio.post<Map<String, dynamic>>(
+              any(),
+              data: any(named: 'data'),
+              options: any(named: 'options'),
+            )).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(
+                path: '/simulations/sessions/$sessionId/messages'),
+            statusCode: 200,
+            data: {
+              'messages': [],
+              'nextTurnCharacterId': '',
+              'sessionEnded': true,
+              'endReason': 'COMPLETED',
+              'result': {'totalScore': 85},
+            },
+          ),
+        );
+
+        final result = await repository.sendMessage(sessionId, content);
+
+        expect(result.sessionEnded, true);
+        expect(result.endReason, 'COMPLETED');
+        expect(result.result, isNotNull);
+        expect(result.result!['totalScore'], 85);
+      });
+    });
+
+    group('getSession', () {
+      const sessionId = 'session-1';
+
+      test('calls GET /simulations/sessions/:id and returns SessionWithMessages',
+          () async {
+        when(() => mockDio.get<Map<String, dynamic>>(any()))
+            .thenAnswer(
+          (_) async => Response(
+            requestOptions:
+                RequestOptions(path: '/simulations/sessions/$sessionId'),
+            statusCode: 200,
+            data: {
+              'session': {
+                'id': sessionId,
+                'scenarioId': 'scenario-1',
+                'chosenCharacterId': 'char-1',
+                'status': 'ACTIVE',
+                'nextTurnCharacterId': 'char-1',
+              },
+              'messages': [
+                {
+                  'id': 'msg-1',
+                  'speakerCharacterId': 'npc-1',
+                  'speakerName': 'Lan',
+                  'isLearner': false,
+                  'content': 'Chào!',
+                  'orderIndex': 0,
+                },
+              ],
+            },
+          ),
+        );
+
+        final result = await repository.getSession(sessionId);
+
+        verify(() => mockDio.get<Map<String, dynamic>>(
+              '/simulations/sessions/$sessionId',
+            )).called(1);
+
+        expect(result.session.id, sessionId);
+        expect(result.session.status, 'ACTIVE');
+        expect(result.messages, hasLength(1));
+        expect(result.messages[0].content, 'Chào!');
+      });
+
+      test('handles response without messages array', () async {
+        when(() => mockDio.get<Map<String, dynamic>>(any()))
+            .thenAnswer(
+          (_) async => Response(
+            requestOptions:
+                RequestOptions(path: '/simulations/sessions/$sessionId'),
+            statusCode: 200,
+            data: {
+              'id': sessionId,
+              'scenarioId': 'scenario-1',
+              'chosenCharacterId': 'char-1',
+              'status': 'PAUSED',
+              'nextTurnCharacterId': 'char-1',
+            },
+          ),
+        );
+
+        final result = await repository.getSession(sessionId);
+
+        expect(result.session.id, sessionId);
+        expect(result.session.status, 'PAUSED');
+        expect(result.messages, isEmpty);
+      });
+
+      test('throws NetworkException on connection timeout', () async {
+        when(() => mockDio.get<Map<String, dynamic>>(any())).thenThrow(
+          DioException(
+            requestOptions:
+                RequestOptions(path: '/simulations/sessions/$sessionId'),
+            type: DioExceptionType.connectionTimeout,
+          ),
+        );
+
+        expect(
+          () => repository.getSession(sessionId),
+          throwsA(isA<NetworkException>()),
+        );
+      });
+    });
   });
 }
