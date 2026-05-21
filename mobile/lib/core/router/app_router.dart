@@ -27,6 +27,7 @@ import '../../features/simulation/presentation/screens/practice_screen.dart';
 import '../../features/simulation/presentation/screens/scenario_detail_screen.dart';
 import '../../features/simulation/presentation/screens/character_selection_screen.dart';
 import '../../features/simulation/presentation/screens/chat_screen.dart';
+import '../../features/simulation/presentation/screens/simulation_result_screen.dart';
 import '../presentation/shell_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -250,7 +251,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/practice/scenarios/:id/select-character',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
-          return CharacterSelectionScreen(scenarioId: id);
+          final characterId = state.uri.queryParameters['characterId'];
+          return CharacterSelectionScreen(
+            scenarioId: id,
+            preselectedCharacterId: characterId,
+          );
         },
       ),
       GoRoute(
@@ -260,6 +265,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           final isHistory = state.uri.queryParameters['history'] == 'true';
           final fromResult = state.uri.queryParameters['fromResult'] == 'true';
           return ChatScreen(sessionId: id, isHistory: isHistory, fromResult: fromResult);
+        },
+      ),
+      GoRoute(
+        path: '/practice/results/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return SimulationResultScreen(resultId: id);
         },
       ),
       ShellRoute(

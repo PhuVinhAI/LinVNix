@@ -7,6 +7,7 @@ import '../domain/scenario_detail.dart';
 import '../domain/scenario_summary.dart';
 import '../domain/send_message_response.dart';
 import '../domain/simulation_message.dart';
+import '../domain/simulation_result_detail.dart';
 import '../domain/simulation_session.dart';
 
 class SimulationRepository {
@@ -117,6 +118,19 @@ class SimulationRepository {
       );
       if (response.data == null) return null;
       return ActiveSession.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<SimulationResultDetail> getResult(String id) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '/simulations/results/$id',
+      );
+      return SimulationResultDetail.fromJson(
+        response.data as Map<String, dynamic>,
+      );
     } on DioException catch (e) {
       throw mapDioException(e);
     }

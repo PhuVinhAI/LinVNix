@@ -8,8 +8,13 @@ import '../../data/simulation_providers.dart';
 import '../../domain/scenario_character.dart';
 
 class CharacterSelectionScreen extends ConsumerStatefulWidget {
-  const CharacterSelectionScreen({super.key, required this.scenarioId});
+  const CharacterSelectionScreen({
+    super.key,
+    required this.scenarioId,
+    this.preselectedCharacterId,
+  });
   final String scenarioId;
+  final String? preselectedCharacterId;
 
   @override
   ConsumerState<CharacterSelectionScreen> createState() =>
@@ -20,6 +25,12 @@ class _CharacterSelectionScreenState
     extends ConsumerState<CharacterSelectionScreen> {
   String? _selectedCharacterId;
   bool _isCreating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCharacterId = widget.preselectedCharacterId;
+  }
 
   Future<void> _createSession() async {
     if (_selectedCharacterId == null || _isCreating) return;

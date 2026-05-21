@@ -6,6 +6,7 @@ import '../domain/active_session.dart';
 import '../domain/scenario_category.dart';
 import '../domain/scenario_detail.dart';
 import '../domain/scenario_summary.dart';
+import '../domain/simulation_result_detail.dart';
 
 final simulationRepositoryProvider = Provider<SimulationRepository>((ref) {
   return SimulationRepository(ref.watch(dioProvider));
@@ -126,6 +127,12 @@ final scenarioDetailProvider =
     FutureProvider.family<ScenarioDetail, String>((ref, id) async {
   final repo = ref.read(simulationRepositoryProvider);
   return repo.getScenario(id);
+});
+
+final simulationResultDetailProvider =
+    FutureProvider.family<SimulationResultDetail, String>((ref, id) async {
+  final repo = ref.read(simulationRepositoryProvider);
+  return repo.getResult(id);
 });
 
 class PausedSessionNotifier extends AsyncNotifier<ActiveSession?> {
