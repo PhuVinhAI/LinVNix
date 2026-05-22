@@ -141,7 +141,6 @@ hf spaces secrets add tomisakae/linvnix \
   -s 'REDIS_URL=rediss://default:<password>@<host>.upstash.io:6379' \
   -s 'NODE_ENV=production' \
   -s 'DATABASE_SYNCHRONIZE=true' \
-  -s 'UPLOADS_DIR=/data/uploads' \
   -s 'BASE_URL=https://tomisakae-linvnix.hf.space' \
   -s 'JWT_SECRET=<random-64-char-string>' \
   -s 'API_PREFIX=api' \
@@ -152,8 +151,10 @@ hf spaces secrets ls tomisakae/linvnix
 ```
 
 **Secrets bắt buộc**: `DATABASE_URL`, `REDIS_URL`, `JWT_SECRET`, `GENAI_API_KEYS`.
-**Bắt buộc cho production**: `NODE_ENV=production`, `BASE_URL`, `UPLOADS_DIR=/data/uploads`.
-**Bắt buộc khi deploy lần đầu**: `DATABASE_SYNCHRONIZE=true` (TypeORM sync schema). Sau khi schema ổn thì xóa: `hf spaces secrets delete tomisakae/linvnix DATABASE_SYNCHRONIZE`.
+**Bắt buộc cho production**: `NODE_ENV=production`, `BASE_URL`.
+**Bắt buộc khi deploy lần đầu**: `DATABASE_SYNCHRONIZE=true` (TypeORM sync schema). Sau khi schema ổn thì xóa: `hf spaces secrets delete tomisakae/linvnix DATABASE_SYNCHRONIZE --yes`.
+
+> ⚠️ **KHÔNG set `UPLOADS_DIR=/data/uploads` ngay lúc deploy đầu** — `/data` chỉ tồn tại khi đã attach persistent storage. Set sai → `GET /uploads/...` trả 500 (`path must be absolute or specify root`). Cứ để code dùng default `/app/backend/uploads` (ephemeral, nhưng seed audio baked sẵn vào Docker image vẫn phục vụ được). Xem mục **18.A** để bật persistent storage khi cần.
 
 **Generate JWT_SECRET**:
 ```bash
@@ -161,6 +162,65 @@ bun -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
 # hoặc:
 openssl rand -base64 48
 ```
+
+## 8.A. Setup Google OAuth (nếu dùng Google Sign-In)
+
+Backend có route `/api/v1/auth/google` (redirect) và `/api/v1/auth/google/callback` (callback). Mobile dùng `google_sign_in` package gọi `serverClientId` (Web client ID).
+
+### Google Cloud Console
+
+https://console.cloud.google.com/apis/credentials
+
+**1. OAuth 2.0 Client ID — loại Web application** (đã có, edit để thêm URL HF):
+
+| Field | Thêm value |
+|-------|-----------|
+| Authorized JavaScript origins | `https://tomisakae-linvnix.hf.space` |
+| Authorized redirect URIs | `https://tomisakae-linvnix.hf.space/api/v1/auth/google/callback` |
+
+Giữ `http://localhost:3000` + callback localhost để dev local vẫn chạy.
+
+**2. OAuth 2.0 Client ID — loại Android** (cho APK):
+
+| Field | Value |
+|-------|-------|
+| Package name | `com.linvnix.app` |
+| SHA-1 | Lấy bằng `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android` |
+
+Khi build APK release thật bằng upload keystore (mục 19), thêm SHA-1 keystore đó nữa.
+
+**3. OAuth consent screen** (`Credentials/consent`):
+- **Testing mode**: chỉ email trong "Test users" mới đăng nhập được → add list email muốn cho test.
+- **Production**: cần publish app. Scope `email + profile` thường không cần Google verification.
+
+### Update HF secret
+
+```bash
+hf spaces secrets add tomisakae/linvnix \
+  -s 'GOOGLE_CALLBACK_URL=https://tomisakae-linvnix.hf.space/api/v1/auth/google/callback'
+hf spaces restart tomisakae/linvnix
+```
+
+`GOOGLE_CLIENT_ID` và `GOOGLE_CLIENT_SECRET` thường đã được upload từ `backend/.env` (bước 8 mục Cách 1).
+
+### Verify
+
+```bash
+curl -sI https://tomisakae-linvnix.hf.space/api/v1/auth/google 2>&1 | head -3
+# Expected: HTTP/1.1 302 Found với Location về accounts.google.com,
+# redirect_uri=https%3A%2F%2Ftomisakae-linvnix.hf.space%2Fapi%2Fv1%2Fauth%2Fgoogle%2Fcallback
+```
+
+### Mobile build với Google Sign-In
+
+```bash
+cd mobile
+flutter build apk --release \
+  --dart-define=API_URL=https://tomisakae-linvnix.hf.space \
+  --dart-define=GOOGLE_CLIENT_ID=<WEB_CLIENT_ID>.apps.googleusercontent.com
+```
+
+> Dùng **Web Client ID** (KHÔNG phải Android Client ID) cho `--dart-define=GOOGLE_CLIENT_ID`. Android Client ID chỉ được Google dùng nội bộ để verify SHA-1.
 
 ## 9. Push code lên Space
 
@@ -412,10 +472,10 @@ hf spaces restart <space-id>
 
 # 4. Seed lại data
 DATABASE_URL='<new-url>' bun run seed:lessons
-DATABASE_URL='<new-url>' REDIS_URL='<...>' bun run seed:simulations
+DATABASE_URL='<new-url>' bun run seed:simulations:direct
 
 # 5. Sau khi confirm OK, xóa synchronize
-hf spaces secrets delete <space-id> DATABASE_SYNCHRONIZE
+hf spaces secrets delete <space-id> DATABASE_SYNCHRONIZE --yes
 ```
 
 ### Upstash account mới
@@ -453,6 +513,45 @@ hf spaces restart <space-id>
 ### MP3 user upload mất sau redeploy
 - Chưa attach Storage Bucket / Volume. Truy cập HF Space Settings UI → Storage → Attach persistent storage (free tier có small bucket khi đã upgrade hardware; CPU Basic free thường không có /data persistent).
 - Workaround: chuyển sang Cloudflare R2 (S3-compatible, 10GB free) — refactor `storage.service.ts` dùng S3 SDK.
+
+### Runtime: `GET /uploads/...` trả 500 "path must be absolute or specify root to res.sendFile"
+- `UPLOADS_DIR` được set tới một thư mục KHÔNG TỒN TẠI trong container (thường là `/data/uploads` khi chưa attach persistent storage).
+- ServeStaticModule init với rootPath không hợp lệ → mọi request file bị 500.
+- Fix nhanh: xóa secret để fallback về `/app/backend/uploads` (đã có seed audio baked vào image):
+  ```bash
+  hf spaces secrets delete tomisakae/linvnix UPLOADS_DIR --yes
+  hf spaces restart tomisakae/linvnix
+  ```
+- Fix đúng (cho persistent): xem mục **20 — Bật persistent storage cho MP3**.
+
+### Google Sign-In: `redirect_uri_mismatch` hoặc `invalid_client`
+- Cloud Console chưa add URL HF Space vào OAuth client. Xem mục **8.A**.
+- Hoặc HF secret `GOOGLE_CALLBACK_URL` chưa update — vẫn trỏ `http://localhost:3000/...`:
+  ```bash
+  hf spaces secrets add tomisakae/linvnix \
+    -s 'GOOGLE_CALLBACK_URL=https://tomisakae-linvnix.hf.space/api/v1/auth/google/callback'
+  hf spaces restart tomisakae/linvnix
+  ```
+
+### Mobile login Google trả lỗi `DEVELOPER_ERROR` (code 10) trên Android
+- SHA-1 của keystore ký APK chưa được add vào Android OAuth Client. Lấy SHA-1:
+  ```bash
+  keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+  ```
+- Add vào Google Cloud Console → Credentials → Android OAuth Client → SHA-1 fingerprints.
+- Build APK release với upload keystore → cần thêm SHA-1 của upload keystore nữa.
+
+### `findAll` API vẫn trả `[]` sau khi seed thành công
+- CacheService cache 1h TTL trên Upstash Redis. Kết quả `[]` từ lần gọi trước (DB rỗng) bị cache.
+- Flush cache:
+  ```bash
+  REDIS_URL='rediss://...' bun -e "
+  const Redis = require('ioredis');
+  const u = new URL(process.env.REDIS_URL);
+  const r = new Redis({ host: u.hostname, port: +u.port, password: decodeURIComponent(u.password), tls: {} });
+  await r.flushdb(); console.log('Flushed'); await r.quit();
+  "
+  ```
 
 ### Space stuck "BUILDING" hơn 15 phút
 - Bun install kéo dài. Check build log: `hf spaces logs <space-id> --build --follow`.
@@ -584,6 +683,81 @@ Backup keystore + key.properties ở nơi an toàn (không cloud không versioni
 - Cho bản thân: copy `app-release.apk` qua USB / Drive / Email → cài đặt
 - Cho beta tester: dùng Firebase App Distribution, TestFlight (iOS), hoặc Google Play Internal Testing
 - Public: upload App Bundle lên Google Play Console
+
+## 20. Bật persistent storage cho MP3 runtime upload (optional)
+
+Mặc định MP3 baked vào Docker image (seed) phục vụ OK; MP3 user upload runtime nằm trong `/app/backend/uploads` (ephemeral, mất khi rebuild). Để giữ runtime uploads:
+
+### Option A — HF Space Storage Bucket (free tier có 5 GB private)
+
+1. https://huggingface.co/spaces/tomisakae/linvnix/settings → tab **Storage** → **Attach storage bucket**
+2. Tạo Bucket mới hoặc chọn existing, mount path = `/data`
+3. Sau khi attach (Space auto-restart), set lại `UPLOADS_DIR`:
+   ```bash
+   hf spaces secrets add tomisakae/linvnix -s 'UPLOADS_DIR=/data/uploads'
+   hf spaces restart tomisakae/linvnix
+   ```
+4. Trong container, code tự tạo `/data/uploads` nhờ `storage.service.ts:ensureUploadDir()`.
+
+Verify:
+```bash
+# Upload thử qua API (cần JWT)
+curl -X POST https://tomisakae-linvnix.hf.space/api/v1/vocabularies/upload-audio \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "file=@./test.mp3"
+# → trả URL kiểu /uploads/audio/<uuid>.mp3
+
+# Restart Space:
+hf spaces restart tomisakae/linvnix
+# → file vẫn truy cập được nhờ /data persistent
+```
+
+### Option B — Migrate seed audio sang /data sau khi attach Bucket
+
+Sau khi attach Bucket nhưng `/data` rỗng → seed audio (đang ở `/app/backend/uploads` baked image) không serve được nữa nếu set `UPLOADS_DIR=/data/uploads`.
+
+Cần copy seed audio sang `/data` lần đầu. Có 2 cách:
+
+**Cách 1 — Build-time copy** (sửa Dockerfile):
+```dockerfile
+# Trong runner stage, thêm vào CMD entrypoint hoặc script:
+CMD sh -c "mkdir -p /data/uploads && cp -rn /app/backend/uploads/* /data/uploads/ 2>/dev/null; bun dist/main.js"
+```
+`-n` flag = no-clobber: không ghi đè file đã có trên /data.
+
+**Cách 2 — Upload qua hf sync** (sau khi attach Bucket):
+```bash
+# hf CLI có thể sync files vào Space Bucket
+hf sync ./backend/uploads/ hf://spaces/tomisakae/linvnix:/data/uploads/ --apply
+```
+
+### Option C — Cloudflare R2 (S3-compatible, 10 GB free, no egress fee)
+
+Phù hợp khi audio nhiều, không muốn phụ thuộc HF storage.
+
+1. https://dash.cloudflare.com → R2 → Create bucket `linvnix-uploads`
+2. Tạo API token: R2 → Manage R2 API Tokens → Create → permissions: Object Read+Write
+3. Lấy `Access Key ID`, `Secret Access Key`, `Endpoint` (`https://<account>.r2.cloudflarestorage.com`)
+4. **Refactor cần làm** (chưa có trong code):
+   - Cài `@aws-sdk/client-s3`
+   - Sửa `storage.service.ts` thay vì `fs.writeFile` thì gọi `s3.send(new PutObjectCommand(...))`
+   - Đổi URL trả về: dùng presigned URL hoặc public R2 URL nếu bucket public
+   - Thay `ServeStaticModule.forRoot({rootPath: ...})` bằng redirect controller proxy đến R2
+5. Set HF secrets:
+   ```bash
+   hf spaces secrets add tomisakae/linvnix \
+     -s 'R2_ACCESS_KEY_ID=...' \
+     -s 'R2_SECRET_ACCESS_KEY=...' \
+     -s 'R2_BUCKET=linvnix-uploads' \
+     -s 'R2_ENDPOINT=https://<account>.r2.cloudflarestorage.com'
+   hf spaces restart tomisakae/linvnix
+   ```
+
+R2 ưu thế dài hạn (no egress fee → stream MP3 thoải mái), nhưng đòi 1 đợt refactor.
+
+---
+
+Nếu MVP còn nhỏ và seed audio đủ dùng → cứ ephemeral, bỏ qua mục này.
 
 ---
 
