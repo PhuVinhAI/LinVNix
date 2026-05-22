@@ -1,5 +1,6 @@
 export function normalizeVietnamese(text: string): string {
   return text
+    .normalize('NFC')
     .trim()
     .toLowerCase()
     .replace(/\s+/g, ' ')

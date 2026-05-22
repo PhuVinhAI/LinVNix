@@ -333,5 +333,13 @@ describe('AnswerAssessment - CheckerAdapters', () => {
       );
       expect(result.isCorrect).toBe(true);
     });
+
+    it('matches identical text across NFC and NFD Unicode forms', () => {
+      const result = checker.check(
+        { transcript: 'xin chào'.normalize('NFD') } as SpeakingAnswer,
+        { transcript: 'Xin chào'.normalize('NFC') } as SpeakingAnswer,
+      );
+      expect(result.isCorrect).toBe(true);
+    });
   });
 });
