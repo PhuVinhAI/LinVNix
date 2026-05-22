@@ -1,0 +1,45 @@
+# Build context = monorepo root. Excludes apply to every workspace.
+
+# Dependencies / build output
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+**/.cache
+**/.eslintcache
+
+# Env / secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs / runtime data
+**/logs
+**/uploads
+**/debug
+**/coverage
+**/*.log
+
+# VCS / IDE
+.git
+.gitignore
+.gitattributes
+.vscode
+.idea
+.DS_Store
+.claude
+
+# Tests
+**/test
+**/*.spec.ts
+**/*.test.ts
+
+# Workspaces not needed by backend image
+admin
+mobile
+docs
+
+# Docker artefacts themselves
+docker-compose.yml
+docker-compose.*.yml
+**/Dockerfile*
+.dockerignore
