@@ -1,12 +1,13 @@
 # Exercise Generation Module Prompt Template
 # Variables: {{questionCount}}, {{label}}, {{focusAreaDescription}}, {{preferredTypes}},
-#            {{moduleTitle}}, {{lessonCount}}, {{lessonContexts}}, {{userPromptSection}}
+#            {{moduleTitle}}, {{lessonCount}}, {{lessonContexts}}, {{userPromptSection}},
+#            {{languageMixGuidelines}}, {{exerciseTypeShapes}}
 
 exercise-generation-module:
   description: "Generate Vietnamese language exercises for module-level custom practice emphasizing cross-lesson integrative questions"
   template: |
     Generate {{questionCount}} Vietnamese language exercises for {{label}} ({{focusAreaDescription}}).
-    Preferred exercise types: {{preferredTypes}}.
+    Use ONLY these exercise types: {{preferredTypes}}.
 
     ## Module: {{moduleTitle}} ({{lessonCount}} lessons)
 
@@ -19,20 +20,13 @@ exercise-generation-module:
     - Do NOT simply repeat per-lesson exercises — the goal is integrative review
 
     Each exercise must:
+    - Use one of the allowed exercise types listed above
     - Test different vocabulary or grammar from the module
     - Be unique (not duplicating existing exercises)
     - Mix Vietnamese and English naturally per exercise type
-      - matching: Vietnamese↔English pairs
-      - translation: either direction (Vietnamese→English or English→Vietnamese)
-      - fill_blank / multiple_choice / ordering: Vietnamese questions
-      - listening: Vietnamese audio (provide transcript, set audioUrl to empty string)
+    {{languageMixGuidelines}}
 
     Also provide a short descriptive title (5-8 words) for this exercise set, and an optional brief description (1-2 sentences) summarizing what it covers.
 
-    Exercise-type option/answer shapes:
-    - multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}
-    - fill_blank: options={blanks:1,acceptedAnswers:[["answer1","answer2"]]}, correctAnswer={answers:["answer1"]}
-    - matching: options={pairs:[{left:"Vi",right:"En"}]}, correctAnswer={matches:[{left:"Vi",right:"En"}]}
-    - ordering: options={items:["C","A","B"]}, correctAnswer={orderedItems:["A","B","C"]}
-    - translation: options={sourceLanguage:"vi",targetLanguage:"en",acceptedTranslations:["Hello"]}, correctAnswer={translation:"Hello"}
-    - listening: options={audioUrl:"",transcriptType:"exact",keywords:["keyword"]}, correctAnswer={transcript:"text"}
+    Exercise-type option/answer shapes (use only the types listed above):
+    {{exerciseTypeShapes}}

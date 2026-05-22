@@ -32,6 +32,17 @@ class CustomSetConfigDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsEnum(ExerciseType, { each: true })
+  @ValidateBy({
+    name: 'noListeningInCustomPractice',
+    validator: {
+      validate(value: ExerciseType[]) {
+        return !value?.includes(ExerciseType.LISTENING);
+      },
+      defaultMessage() {
+        return 'Listening exercises are not supported in custom practice';
+      },
+    },
+  })
   exerciseTypes: ExerciseType[];
 
   @ApiProperty({

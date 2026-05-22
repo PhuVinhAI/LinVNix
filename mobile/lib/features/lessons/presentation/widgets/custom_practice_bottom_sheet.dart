@@ -83,7 +83,13 @@ class _CreationFormState extends State<_CreationForm> {
   late final TextEditingController _userPromptController;
   bool _isSubmitting = false;
 
-  static const _allExerciseTypes = ExerciseType.values;
+  static const _selectableExerciseTypes = [
+    ExerciseType.multipleChoice,
+    ExerciseType.fillBlank,
+    ExerciseType.matching,
+    ExerciseType.ordering,
+    ExerciseType.translation,
+  ];
   static const _maxUserPromptLength = 500;
 
   @override
@@ -176,7 +182,7 @@ class _CreationFormState extends State<_CreationForm> {
                   Wrap(
                     spacing: AppSpacing.sm,
                     runSpacing: AppSpacing.sm,
-                    children: _allExerciseTypes.map((type) {
+                    children: _selectableExerciseTypes.map((type) {
                       final selected = _selectedTypes.contains(type.value);
                       return AppChip(
                         label: _typeDisplayName(type),
@@ -252,7 +258,7 @@ class _CreationFormState extends State<_CreationForm> {
       ExerciseType.ordering => 'Ordering',
       ExerciseType.translation => 'Translation',
       ExerciseType.listening => 'Listening',
-    };
+    }; // listening excluded from custom practice selection
   }
 
   Future<void> _handleSubmit() async {

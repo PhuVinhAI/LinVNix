@@ -381,8 +381,84 @@ describe('ExerciseGenerationService', () => {
           label: 'Custom (vocabulary)',
           lessonTitle: 'Greetings',
           userPromptSection: '\n### User Request\nFocus on greetings\n',
+          languageMixGuidelines: expect.stringContaining('matching'),
+          exerciseTypeShapes: expect.stringContaining('matching'),
         }),
       );
+    });
+
+    it('injects only selected exercise type info into prompt', async () => {
+      const customSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [
+            ExerciseType.MULTIPLE_CHOICE,
+            ExerciseType.FILL_BLANK,
+          ],
+          focusArea: 'vocabulary',
+        },
+        title: 'Custom Practice',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(customSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      await service.generateCustom('set-1', 'user-1');
+
+      const renderArgs = genaiService.renderPrompt.mock.calls[0]?.[1];
+      expect(renderArgs).toBeDefined();
+      expect(renderArgs!.languageMixGuidelines).toContain('multiple_choice');
+      expect(renderArgs!.languageMixGuidelines).toContain('fill_blank');
+      expect(renderArgs!.languageMixGuidelines).not.toContain('listening');
+      expect(renderArgs!.exerciseTypeShapes).toContain('multiple_choice');
+      expect(renderArgs!.exerciseTypeShapes).toContain('fill_blank');
+      expect(renderArgs!.exerciseTypeShapes).not.toContain('listening');
+    });
+
+    it('passes response schema restricted to selected exercise types', async () => {
+      const customSet = {
+        id: 'set-1',
+        lessonId: 'lesson-1',
+        isCustom: true,
+        customConfig: {
+          questionCount: 5,
+          exerciseTypes: [ExerciseType.MATCHING],
+          focusArea: 'vocabulary',
+        },
+        title: 'Custom Practice',
+      };
+      exerciseSetsRepo.findById.mockResolvedValue(customSet as any);
+      exercisesRepo.findBySetId.mockResolvedValue([]);
+      exercisesRepo.create.mockResolvedValue({ id: 'ex-1' } as any);
+      exerciseSetsRepo.update.mockResolvedValue({} as any);
+      contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
+
+      genaiService.chatStructured.mockResolvedValue({
+        text: validAiResponse,
+      } as any);
+
+      await service.generateCustom('set-1', 'user-1');
+
+      const schema =
+        genaiService.chatStructured.mock.calls[0][0].responseSchema;
+      const exerciseTypeDesc =
+        schema.properties.exercises.items.properties.exerciseType.description;
+      expect(exerciseTypeDesc).toBe('One of: matching');
+      expect(
+        schema.properties.exercises.items.properties.options.properties,
+      ).toHaveProperty('pairs');
+      expect(
+        schema.properties.exercises.items.properties.options.properties,
+      ).not.toHaveProperty('choices');
     });
 
     it('omits userPromptSection when no userPrompt on set', async () => {

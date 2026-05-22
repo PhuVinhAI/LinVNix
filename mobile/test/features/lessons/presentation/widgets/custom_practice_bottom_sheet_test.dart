@@ -37,7 +37,7 @@ void main() {
       expect(find.text('Matching'), findsOneWidget);
       expect(find.text('Ordering'), findsOneWidget);
       expect(find.text('Translation'), findsOneWidget);
-      expect(find.text('Listening'), findsOneWidget);
+      expect(find.text('Listening'), findsNothing);
       expect(find.text('Focus'), findsOneWidget);
       expect(find.text('Vocabulary'), findsOneWidget);
       expect(find.text('Grammar'), findsOneWidget);

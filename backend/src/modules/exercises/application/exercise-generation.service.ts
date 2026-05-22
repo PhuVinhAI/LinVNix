@@ -54,7 +54,77 @@ const GenerationResponseSchema = z.object({
   exercises: z.array(GeneratedExerciseSchema).min(1),
 });
 
-const EXERCISE_RESPONSE_SCHEMA = {
+const CUSTOM_PRACTICE_EXCLUDED_TYPES = [ExerciseType.LISTENING];
+
+const EXERCISE_TYPE_PROMPT_META: Record<
+  ExerciseType,
+  { languageMix: string; shape: string }
+> = {
+  [ExerciseType.MULTIPLE_CHOICE]: {
+    languageMix: '  - multiple_choice: Vietnamese questions',
+    shape:
+      '- multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}',
+  },
+  [ExerciseType.FILL_BLANK]: {
+    languageMix: '  - fill_blank: Vietnamese questions',
+    shape:
+      '- fill_blank: options={blanks:1,acceptedAnswers:[["answer1","answer2"]]}, correctAnswer={answers:["answer1"]}',
+  },
+  [ExerciseType.MATCHING]: {
+    languageMix: '  - matching: Vietnamese↔English pairs',
+    shape:
+      '- matching: options={pairs:[{left:"Vi",right:"En"}]}, correctAnswer={matches:[{left:"Vi",right:"En"}]}',
+  },
+  [ExerciseType.ORDERING]: {
+    languageMix: '  - ordering: Vietnamese questions',
+    shape:
+      '- ordering: options={items:["C","A","B"]}, correctAnswer={orderedItems:["A","B","C"]}',
+  },
+  [ExerciseType.TRANSLATION]: {
+    languageMix:
+      '  - translation: either direction (Vietnamese→English or English→Vietnamese)',
+    shape:
+      '- translation: options={sourceLanguage:"vi",targetLanguage:"en",acceptedTranslations:["Hello"]}, correctAnswer={translation:"Hello"}',
+  },
+  [ExerciseType.LISTENING]: {
+    languageMix:
+      '  - listening: Vietnamese audio (provide transcript, set audioUrl to empty string)',
+    shape:
+      '- listening: options={audioUrl:"",transcriptType:"exact",keywords:["keyword"]}, correctAnswer={transcript:"text"}',
+  },
+};
+
+const EXERCISE_TYPE_SCHEMA_FIELDS: Record<
+  ExerciseType,
+  { options: string[]; correctAnswer: string[] }
+> = {
+  [ExerciseType.MULTIPLE_CHOICE]: {
+    options: ['choices'],
+    correctAnswer: ['selectedChoice'],
+  },
+  [ExerciseType.FILL_BLANK]: {
+    options: ['blanks', 'acceptedAnswers'],
+    correctAnswer: ['answers'],
+  },
+  [ExerciseType.MATCHING]: {
+    options: ['pairs'],
+    correctAnswer: ['matches'],
+  },
+  [ExerciseType.ORDERING]: {
+    options: ['items'],
+    correctAnswer: ['orderedItems'],
+  },
+  [ExerciseType.TRANSLATION]: {
+    options: ['sourceLanguage', 'targetLanguage', 'acceptedTranslations'],
+    correctAnswer: ['translation'],
+  },
+  [ExerciseType.LISTENING]: {
+    options: ['audioUrl', 'transcriptType', 'keywords'],
+    correctAnswer: ['transcript'],
+  },
+};
+
+const EXERCISE_RESPONSE_SCHEMA_BASE = {
   type: Type.OBJECT,
   properties: {
     title: {
@@ -242,6 +312,80 @@ const EXERCISE_RESPONSE_SCHEMA = {
   required: ['title', 'exercises'],
 };
 
+function buildExerciseResponseSchema(allowedTypes: ExerciseType[]) {
+  const allowedOptionFields = new Set<string>();
+  const allowedAnswerFields = new Set<string>();
+  for (const type of allowedTypes) {
+    const fields = EXERCISE_TYPE_SCHEMA_FIELDS[type];
+    fields.options.forEach((f) => allowedOptionFields.add(f));
+    fields.correctAnswer.forEach((f) => allowedAnswerFields.add(f));
+  }
+
+  const baseOptionsProps =
+    EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items.properties.options
+      .properties;
+  const baseAnswerProps =
+    EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items.properties
+      .correctAnswer.properties;
+
+  const filteredOptionsProps = Object.fromEntries(
+    Object.entries(baseOptionsProps).filter(([key]) =>
+      allowedOptionFields.has(key),
+    ),
+  );
+  const filteredAnswerProps = Object.fromEntries(
+    Object.entries(baseAnswerProps).filter(([key]) =>
+      allowedAnswerFields.has(key),
+    ),
+  );
+
+  const allowedTypeList = allowedTypes.join(', ');
+
+  return {
+    ...EXERCISE_RESPONSE_SCHEMA_BASE,
+    properties: {
+      ...EXERCISE_RESPONSE_SCHEMA_BASE.properties,
+      exercises: {
+        ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises,
+        items: {
+          ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items,
+          properties: {
+            ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
+              .properties,
+            exerciseType: {
+              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
+                .properties.exerciseType,
+              description: `One of: ${allowedTypeList}`,
+            },
+            options: {
+              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
+                .properties.options,
+              properties: filteredOptionsProps,
+            },
+            correctAnswer: {
+              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
+                .properties.correctAnswer,
+              properties: filteredAnswerProps,
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildLanguageMixGuidelines(types: ExerciseType[]): string {
+  return types.map((t) => EXERCISE_TYPE_PROMPT_META[t].languageMix).join('\n');
+}
+
+function buildExerciseTypeShapes(types: ExerciseType[]): string {
+  return types.map((t) => EXERCISE_TYPE_PROMPT_META[t].shape).join('\n');
+}
+
+function filterCustomPracticeTypes(types: ExerciseType[]): ExerciseType[] {
+  return types.filter((t) => !CUSTOM_PRACTICE_EXCLUDED_TYPES.includes(t));
+}
+
 @Injectable()
 export class ExerciseGenerationService {
   private readonly logger = new Logger(ExerciseGenerationService.name);
@@ -387,9 +531,15 @@ export class ExerciseGenerationService {
     if (set.isCustom && set.customConfig) {
       const config = set.customConfig;
       label = `Custom (${config.focusArea})`;
+      const exerciseTypes = filterCustomPracticeTypes(config.exerciseTypes);
+      if (exerciseTypes.length === 0) {
+        throw new BadRequestException(
+          'At least one supported exercise type must be selected',
+        );
+      }
       guidelines = {
         questionCount: config.questionCount,
-        preferredTypes: config.exerciseTypes,
+        preferredTypes: exerciseTypes,
         description: this.getFocusAreaDescription(config.focusArea),
       };
     } else {
@@ -403,6 +553,23 @@ export class ExerciseGenerationService {
     const userPromptSection = effectiveUserPrompt
       ? `\n### User Request\n${effectiveUserPrompt}\n`
       : '';
+
+    const languageMixGuidelines = buildLanguageMixGuidelines(
+      guidelines.preferredTypes,
+    );
+    const exerciseTypeShapes = buildExerciseTypeShapes(
+      guidelines.preferredTypes,
+    );
+    const responseSchema = buildExerciseResponseSchema(guidelines.preferredTypes);
+    const promptVariables = {
+      questionCount: String(guidelines.questionCount),
+      label,
+      focusAreaDescription: guidelines.description,
+      preferredTypes: guidelines.preferredTypes.join(', '),
+      languageMixGuidelines,
+      exerciseTypeShapes,
+      userPromptSection,
+    };
 
     let prompt: string;
     let lessonContextForExercises: LessonContext | null = null;
@@ -436,14 +603,10 @@ export class ExerciseGenerationService {
       );
 
       prompt = this.genaiService.renderPrompt('exercise-generation-course', {
-        questionCount: String(guidelines.questionCount),
-        label,
-        focusAreaDescription: guidelines.description,
-        preferredTypes: guidelines.preferredTypes.join(', '),
+        ...promptVariables,
         courseTitle: course.title,
         moduleCount: String(completedModuleIds.length),
         lessonContexts: lessonContextsStr,
-        userPromptSection,
       });
     } else if (set.moduleId) {
       const module = await this.modulesRepository.findById(set.moduleId);
@@ -467,14 +630,10 @@ export class ExerciseGenerationService {
       );
 
       prompt = this.genaiService.renderPrompt('exercise-generation-module', {
-        questionCount: String(guidelines.questionCount),
-        label,
-        focusAreaDescription: guidelines.description,
-        preferredTypes: guidelines.preferredTypes.join(', '),
+        ...promptVariables,
         moduleTitle: module.title,
         lessonCount: String(completedLessonIds.length),
         lessonContexts: lessonContextsStr,
-        userPromptSection,
       });
     } else if (set.lessonId) {
       lessonContextForExercises =
@@ -486,14 +645,10 @@ export class ExerciseGenerationService {
       );
 
       prompt = this.genaiService.renderPrompt('exercise-generation-lesson', {
-        questionCount: String(guidelines.questionCount),
-        label,
-        focusAreaDescription: guidelines.description,
-        preferredTypes: guidelines.preferredTypes.join(', '),
+        ...promptVariables,
         lessonTitle: lessonContextForExercises.lessonTitle,
         lessonContext,
         existingExercises,
-        userPromptSection,
       });
     } else {
       throw new BadRequestException(
@@ -508,14 +663,14 @@ export class ExerciseGenerationService {
     const debugId = `${set.id}-${Date.now()}`;
     fs.writeFileSync(
       path.join(debugDir, `prompt-${debugId}.txt`),
-      `=== SYSTEM INSTRUCTION ===\n${systemInstruction}\n\n=== USER PROMPT ===\n${prompt}\n\n=== SCHEMA ===\n${JSON.stringify(EXERCISE_RESPONSE_SCHEMA, null, 2)}`,
+      `=== SYSTEM INSTRUCTION ===\n${systemInstruction}\n\n=== USER PROMPT ===\n${prompt}\n\n=== SCHEMA ===\n${JSON.stringify(responseSchema, null, 2)}`,
     );
     this.logger.log(`Debug prompt written to debug/prompt-${debugId}.txt`);
 
     const response = await this.genaiService.chatStructured({
       messages: [{ role: 'user', content: prompt }],
       systemInstruction,
-      responseSchema: EXERCISE_RESPONSE_SCHEMA,
+      responseSchema,
     });
 
     const generated = this.parseResponse(response.text);
