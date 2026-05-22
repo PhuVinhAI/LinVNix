@@ -50,18 +50,23 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
   Future<void> _send([String? prompt]) async {
     final text = (prompt ?? _inputController.text).trim();
     if (text.isEmpty) return;
+    if (!ref.read(imageDiscoveryProvider).hasImage) return;
     if (prompt == null) _inputController.clear();
     await ref.read(imageDiscoveryProvider.notifier).sendPrompt(text);
     _scrollToBottom();
   }
 
-  Future<void> _sendQuickAction(String prompt) async {
-    _inputController.text = prompt;
-    _inputController.selection = TextSelection.collapsed(
-      offset: _inputController.text.length,
-    );
-    await _send(prompt);
+  void _resetSession() {
+    _inputController.clear();
+    _focusNode.unfocus();
+    ref.read(imageDiscoveryProvider.notifier).reset();
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
   }
+
+  bool _canReset(ImageDiscoveryState state) =>
+      state.hasImage || state.messages.isNotEmpty || state.error != null;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +82,17 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text('Image Discovery')),
+      appBar: AppBar(
+        title: const Text('Image Discovery'),
+        actions: [
+          if (_canReset(state))
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              tooltip: 'Reset session',
+              onPressed: _resetSession,
+            ),
+        ],
+      ),
       body: SafeArea(
         top: false,
         bottom: false,
@@ -104,14 +119,16 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
               ),
             ),
             if (state.error != null) _ErrorBanner(message: state.error!),
-            _QuickActions(
-              enabled: state.hasImage && !state.isLoading,
-              onPrompt: _sendQuickAction,
-            ),
+            if (state.hasImage)
+              _QuickActions(
+                enabled: !state.isLoading,
+                onPrompt: _send,
+              ),
             _ComposeBar(
               controller: _inputController,
               focusNode: _focusNode,
-              enabled: !state.isLoading,
+              isLoading: state.isLoading,
+              hasImage: state.hasImage,
               onSend: () => unawaited(_send()),
             ),
           ],
@@ -173,6 +190,8 @@ class _ImageActions extends StatelessWidget {
 class _ImageGrid extends StatelessWidget {
   const _ImageGrid({required this.images, required this.onRemove});
 
+  static const _thumbnailSize = 96.0;
+
   final List<ImageDiscoveryImage> images;
   final ValueChanged<String> onRemove;
 
@@ -187,51 +206,52 @@ class _ImageGrid extends StatelessWidget {
         AppSpacing.lg,
         AppSpacing.sm,
       ),
-      child: GridView.builder(
-        key: const ValueKey('image_discovery_image_grid'),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: images.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: AppSpacing.sm,
-          mainAxisSpacing: AppSpacing.sm,
-          childAspectRatio: 1,
-        ),
-        itemBuilder: (context, index) {
-          final image = images[index];
+      child: SizedBox(
+        height: _thumbnailSize,
+        child: ListView.separated(
+          key: const ValueKey('image_discovery_image_grid'),
+          scrollDirection: Axis.horizontal,
+          itemCount: images.length,
+          separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
+          itemBuilder: (context, index) {
+            final image = images[index];
 
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.memory(image.bytes, fit: BoxFit.cover),
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: c.card.withValues(alpha: 0.88),
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.close, color: c.foreground),
-                      tooltip: 'Remove image',
-                      iconSize: 18,
-                      constraints: const BoxConstraints.tightFor(
-                        width: 32,
-                        height: 32,
+            return SizedBox(
+              width: _thumbnailSize,
+              height: _thumbnailSize,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.memory(image.bytes, fit: BoxFit.cover),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: c.card.withValues(alpha: 0.88),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.close, color: c.foreground),
+                          tooltip: 'Remove image',
+                          iconSize: 18,
+                          constraints: const BoxConstraints.tightFor(
+                            width: 32,
+                            height: 32,
+                          ),
+                          padding: EdgeInsets.zero,
+                          onPressed: () => onRemove(image.id),
+                        ),
                       ),
-                      padding: EdgeInsets.zero,
-                      onPressed: () => onRemove(image.id),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -431,19 +451,19 @@ class _QuickActions extends StatelessWidget {
 
   static const _actions = <({String label, String prompt})>[
     (
-      label: 'Phân tích ảnh',
+      label: 'Analyze image',
       prompt: 'Analyze these images and explain what they show.',
     ),
     (
-      label: 'Tìm từ vựng',
+      label: 'Find vocabulary',
       prompt: 'Find useful Vietnamese vocabulary in these images.',
     ),
     (
-      label: 'Dịch text',
+      label: 'Translate text',
       prompt: 'Translate any visible Vietnamese text in these images.',
     ),
     (
-      label: 'Giải thích nội dung',
+      label: 'Explain content',
       prompt: 'Explain the context and meaning of these images.',
     ),
   ];
@@ -479,14 +499,24 @@ class _ComposeBar extends StatelessWidget {
   const _ComposeBar({
     required this.controller,
     required this.focusNode,
-    required this.enabled,
+    required this.isLoading,
+    required this.hasImage,
     required this.onSend,
   });
 
   final TextEditingController controller;
   final FocusNode focusNode;
-  final bool enabled;
+  final bool isLoading;
+  final bool hasImage;
   final VoidCallback onSend;
+
+  bool get canSend => hasImage && !isLoading;
+
+  String get hintText {
+    if (isLoading) return 'Analyzing...';
+    if (!hasImage) return 'Add at least one photo to send a message';
+    return 'Ask about the image...';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -500,10 +530,10 @@ class _ComposeBar extends StatelessWidget {
       child: AppChatComposeField(
         controller: controller,
         focusNode: focusNode,
-        hintText: enabled ? 'Ask about the image...' : 'Analyzing...',
-        enabled: enabled,
-        onSend: enabled ? onSend : null,
-        onSubmitted: enabled ? (_) => onSend() : null,
+        hintText: hintText,
+        enabled: !isLoading,
+        onSend: canSend ? onSend : null,
+        onSubmitted: canSend ? (_) => onSend() : null,
       ),
     );
   }

@@ -93,8 +93,15 @@ class ImageDiscoveryState {
 }
 
 class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
+  int _session = 0;
+
   @override
   ImageDiscoveryState build() => const ImageDiscoveryState();
+
+  void reset() {
+    _session += 1;
+    state = const ImageDiscoveryState();
+  }
 
   Future<void> pickImage(ImageSource source) async {
     try {
@@ -181,6 +188,8 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
       error: null,
     );
 
+    final session = _session;
+
     try {
       final api = ref.read(imageAnalysisApiProvider);
       final response = await api.analyze(
@@ -190,6 +199,7 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
             .map((message) => message.toChatHistoryMessage())
             .toList(),
       );
+      if (session != _session) return;
       final assistantMessage = ImageDiscoveryMessage(
         id: 'assistant-${DateTime.now().microsecondsSinceEpoch}',
         role: ImageDiscoveryMessageRole.assistant,
@@ -202,6 +212,7 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
         error: null,
       );
     } catch (_) {
+      if (session != _session) return;
       state = state.copyWith(
         isLoading: false,
         error: 'Unable to analyze image. Please try again.',

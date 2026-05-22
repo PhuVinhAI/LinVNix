@@ -15,6 +15,7 @@ describe('BookmarksRepository', () => {
       where: jest.fn().mockReturnThis(),
       andWhere: jest.fn().mockReturnThis(),
       leftJoin: jest.fn().mockReturnThis(),
+      innerJoin: jest.fn().mockReturnThis(),
       leftJoinAndSelect: jest.fn().mockReturnThis(),
       select: jest.fn().mockReturnThis(),
       addSelect: jest.fn().mockReturnThis(),
@@ -33,6 +34,7 @@ describe('BookmarksRepository', () => {
       save: jest.fn(),
       findOne: jest.fn(),
       delete: jest.fn(),
+      count: jest.fn(),
       createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
     } as any;
 
@@ -195,28 +197,26 @@ describe('BookmarksRepository', () => {
 
   describe('getStats', () => {
     it('returns total and breakdown by partOfSpeech', async () => {
-      const rawResults = [
-        { partOfSpeech: 'noun', count: '12' },
-        { partOfSpeech: 'verb', count: '8' },
-        { partOfSpeech: 'adjective', count: '5' },
-      ];
-      mockQueryBuilder.getRawMany.mockResolvedValue(rawResults);
+      mockRepo.count.mockResolvedValue(25);
+      mockQueryBuilder.getRawMany
+        .mockResolvedValueOnce([
+          { partOfSpeech: 'noun', count: '12' },
+          { partOfSpeech: 'verb', count: '8' },
+        ])
+        .mockResolvedValueOnce([{ partOfSpeech: 'adjective', count: '5' }]);
 
       const result = await repository.getStats('user-1');
 
-      expect(mockRepo.createQueryBuilder).toHaveBeenCalledWith('bookmark');
-      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledWith(
+      expect(mockRepo.count).toHaveBeenCalledWith({ where: { userId: 'user-1' } });
+      expect(mockRepo.createQueryBuilder).toHaveBeenCalledTimes(2);
+      expect(mockQueryBuilder.innerJoin).toHaveBeenCalledWith(
         'bookmark.vocabulary',
         'vocabulary',
       );
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith(
-        'bookmark.userId = :userId',
-        { userId: 'user-1' },
+      expect(mockQueryBuilder.innerJoin).toHaveBeenCalledWith(
+        'bookmark.personalVocabulary',
+        'personalVocabulary',
       );
-      expect(mockQueryBuilder.groupBy).toHaveBeenCalledWith(
-        'vocabulary.partOfSpeech',
-      );
-      expect(mockQueryBuilder.select).toHaveBeenCalled();
       expect(result).toEqual({
         total: 25,
         byPartOfSpeech: {
@@ -228,11 +228,12 @@ describe('BookmarksRepository', () => {
     });
 
     it('returns zeros when user has no bookmarks', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValue([]);
+      mockRepo.count.mockResolvedValue(0);
 
       const result = await repository.getStats('user-1');
 
       expect(result).toEqual({ total: 0, byPartOfSpeech: {} });
+      expect(mockRepo.createQueryBuilder).not.toHaveBeenCalled();
     });
   });
 

@@ -22,12 +22,17 @@ import {
   Dialect,
 } from '../../../src/common/enums';
 import { ListBookmarksTool } from '../../../src/modules/agent/tools/list-bookmarks.tool';
+import { BookmarksRepository } from '../../../src/modules/vocabularies/application/repositories/bookmarks.repository';
+import { PersonalVocabulariesService } from '../../../src/modules/personal-vocabularies/application/personal-vocabularies.service';
+import { PersonalVocabulary } from '../../../src/modules/personal-vocabularies/domain/personal-vocabulary.entity';
 import type { ToolContext } from '@linvnix/shared';
 import { bootstrapAppContext, AppContext } from './helpers/app-context';
 import { describe, it, expect, runRegisteredTests } from './helpers/test-runner';
 
 let ctx: AppContext;
 let listTool: ListBookmarksTool;
+let bookmarksRepository: BookmarksRepository;
+let personalVocabulariesService: PersonalVocabulariesService;
 
 const suffix = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 const testEmail = `bookmarks-int-${suffix}@test.com`;
@@ -42,6 +47,8 @@ let vocabBId: string;
 async function setup(): Promise<void> {
   ctx = await bootstrapAppContext();
   listTool = ctx.app.get(ListBookmarksTool);
+  bookmarksRepository = ctx.app.get(BookmarksRepository);
+  personalVocabulariesService = ctx.app.get(PersonalVocabulariesService);
 
   const userRepo = ctx.dataSource.getRepository(User);
   const courseRepo = ctx.dataSource.getRepository(Course);
@@ -122,9 +129,12 @@ async function teardown(): Promise<void> {
   const moduleRepo = ctx.dataSource.getRepository(Module);
   const courseRepo = ctx.dataSource.getRepository(Course);
   const userRepo = ctx.dataSource.getRepository(User);
+  const personalVocabularyRepo =
+    ctx.dataSource.getRepository(PersonalVocabulary);
 
   if (testUser?.id) {
     await bookmarkRepo.delete({ userId: testUser.id });
+    await personalVocabularyRepo.delete({ userId: testUser.id });
   }
   if (vocabAId) await vocabRepo.delete({ id: vocabAId });
   if (vocabBId) await vocabRepo.delete({ id: vocabBId });
@@ -181,6 +191,20 @@ describe('list_bookmarks (real DB)', () => {
     }
     expect(listed.data.length).toBe(1);
     expect(listed.data[0].vocabulary.id).toBe(vocabAId);
+  });
+
+  it('includes personal vocabulary bookmarks in stats', async () => {
+    await personalVocabulariesService.createFromAnalysis(testUser.id, {
+      word: `cam-int-${suffix}`,
+      translation: 'forbidden',
+      partOfSpeech: 'phrase',
+    });
+
+    const stats = await bookmarksRepository.getStats(testUser.id);
+
+    expect(stats.total).toBe(3);
+    expect(stats.byPartOfSpeech.phrase).toBe(1);
+    expect(stats.byPartOfSpeech.noun).toBe(2);
   });
 });
 

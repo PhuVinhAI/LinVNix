@@ -18,6 +18,86 @@ final _pngBytes = base64Decode(
 );
 
 void main() {
+  testWidgets('hides quick actions and disables send until an image is added', (
+    tester,
+  ) async {
+    final api = _FakeImageAnalysisApi();
+    final container = ProviderContainer(
+      overrides: [imageAnalysisApiProvider.overrideWithValue(api)],
+    );
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          theme: AppTheme.light(),
+          home: const ImageDiscoveryScreen(),
+        ),
+      ),
+    );
+
+    expect(find.text('Analyze image'), findsNothing);
+    expect(find.text('Find vocabulary'), findsNothing);
+    expect(find.text('Translate text'), findsNothing);
+    expect(find.text('Explain content'), findsNothing);
+    expect(
+      find.text('Add at least one photo to send a message'),
+      findsOneWidget,
+    );
+
+    await tester.enterText(find.byType(TextField), 'Hello');
+    await tester.tap(find.byIcon(Icons.arrow_upward_rounded));
+    await tester.pumpAndSettle();
+
+    expect(api.capturedPrompt, isNull);
+    expect(find.byTooltip('Reset session'), findsNothing);
+  });
+
+  testWidgets('reset clears images, chat history, and input', (tester) async {
+    final api = _FakeImageAnalysisApi();
+    final container = ProviderContainer(
+      overrides: [imageAnalysisApiProvider.overrideWithValue(api)],
+    );
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          theme: AppTheme.light(),
+          home: const ImageDiscoveryScreen(),
+        ),
+      ),
+    );
+
+    await container
+        .read(imageDiscoveryProvider.notifier)
+        .setImage(
+          XFile.fromData(_pngBytes, name: 'photo.png', mimeType: 'image/png'),
+        );
+    await tester.pump();
+
+    await tester.enterText(find.byType(TextField), 'What does this say?');
+    await tester.tap(find.byIcon(Icons.arrow_upward_rounded));
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('Reset session'), findsOneWidget);
+    expect(find.text('What does this say?'), findsOneWidget);
+    expect(find.byKey(const ValueKey('image_discovery_image_grid')), findsOne);
+
+    await tester.tap(find.byTooltip('Reset session'));
+    await tester.pumpAndSettle();
+
+    final state = container.read(imageDiscoveryProvider);
+    expect(state.images, isEmpty);
+    expect(state.messages, isEmpty);
+    expect(state.error, isNull);
+    expect(find.byTooltip('Reset session'), findsNothing);
+    expect(find.byKey(const ValueKey('image_discovery_image_grid')), findsNothing);
+    expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, '');
+  });
+
   testWidgets('sends all selected images and prior chat history', (
     tester,
   ) async {
@@ -71,7 +151,7 @@ void main() {
     expect(find.text('cấm đỗ xe'), findsWidgets);
     expect(find.text('no parking'), findsWidgets);
 
-    await tester.tap(find.text('＋ Thêm').last);
+    await tester.tap(find.text('Thêm').last);
     await tester.pump();
     await tester.pumpAndSettle();
 
@@ -117,7 +197,7 @@ void main() {
     expect(find.byTooltip('Remove image'), findsNWidgets(2));
   });
 
-  testWidgets('quick action chips pre-fill the prompt and trigger analysis', (
+  testWidgets('quick action chips send the prompt without filling the input', (
     tester,
   ) async {
     final api = _FakeImageAnalysisApi();
@@ -143,12 +223,12 @@ void main() {
         );
     await tester.pump();
 
-    expect(find.text('Phân tích ảnh'), findsOneWidget);
-    expect(find.text('Tìm từ vựng'), findsOneWidget);
-    expect(find.text('Dịch text'), findsOneWidget);
-    expect(find.text('Giải thích nội dung'), findsOneWidget);
+    expect(find.text('Analyze image'), findsOneWidget);
+    expect(find.text('Find vocabulary'), findsOneWidget);
+    expect(find.text('Translate text'), findsOneWidget);
+    expect(find.text('Explain content'), findsOneWidget);
 
-    await tester.tap(find.text('Tìm từ vựng'));
+    await tester.tap(find.text('Find vocabulary'));
     await tester.pump();
     await tester.pumpAndSettle();
 
@@ -160,6 +240,7 @@ void main() {
       find.text('Find useful Vietnamese vocabulary in these images.'),
       findsOneWidget,
     );
+    expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, '');
   });
 
   testWidgets('shows an error message when analysis fails', (tester) async {

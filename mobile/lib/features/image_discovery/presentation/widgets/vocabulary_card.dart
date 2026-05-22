@@ -142,7 +142,7 @@ class _VocabularyCardState extends State<VocabularyCard> {
           Align(
             alignment: Alignment.centerRight,
             child: AppButton(
-              label: _isAdded ? 'Đã thêm' : '＋ Thêm',
+              label: _isAdded ? 'Đã thêm' : 'Thêm',
               icon: Icon(_isAdded ? Icons.check : Icons.add),
               variant: _isAdded
                   ? AppButtonVariant.secondary

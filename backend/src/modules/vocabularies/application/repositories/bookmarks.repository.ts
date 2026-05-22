@@ -62,23 +62,35 @@ export class BookmarksRepository {
     total: number;
     byPartOfSpeech: Record<string, number>;
   }> {
-    const rawResults = await this.repository
+    const total = await this.repository.count({ where: { userId } });
+    if (total === 0) {
+      return { total: 0, byPartOfSpeech: {} };
+    }
+
+    const systemRows = await this.repository
       .createQueryBuilder('bookmark')
-      .leftJoin('bookmark.vocabulary', 'vocabulary')
+      .innerJoin('bookmark.vocabulary', 'vocabulary')
       .select('vocabulary.partOfSpeech', 'partOfSpeech')
       .addSelect('COUNT(*)', 'count')
       .where('bookmark.userId = :userId', { userId })
-      .andWhere('bookmark.vocabularyId IS NOT NULL')
       .groupBy('vocabulary.partOfSpeech')
       .getRawMany();
 
-    let total = 0;
-    const byPartOfSpeech: Record<string, number> = {};
+    const personalRows = await this.repository
+      .createQueryBuilder('bookmark')
+      .innerJoin('bookmark.personalVocabulary', 'personalVocabulary')
+      .select('personalVocabulary.partOfSpeech', 'partOfSpeech')
+      .addSelect('COUNT(*)', 'count')
+      .where('bookmark.userId = :userId', { userId })
+      .groupBy('personalVocabulary.partOfSpeech')
+      .getRawMany();
 
-    for (const row of rawResults) {
+    const byPartOfSpeech: Record<string, number> = {};
+    for (const row of [...systemRows, ...personalRows]) {
       const count = parseInt(row.count, 10);
-      byPartOfSpeech[row.partOfSpeech] = count;
-      total += count;
+      const partOfSpeech = row.partOfSpeech ?? 'unknown';
+      byPartOfSpeech[partOfSpeech] =
+        (byPartOfSpeech[partOfSpeech] ?? 0) + count;
     }
 
     return { total, byPartOfSpeech };

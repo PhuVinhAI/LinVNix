@@ -112,9 +112,9 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
   Widget _buildTrailing(AppColors c) {
     final canTap = widget.trailingEnabled && widget.onSend != null;
     final bg = widget.trailingColor ??
-        (widget.enabled ? c.primary : c.muted);
+        (widget.enabled && canTap ? c.primary : c.muted);
     final fg = widget.trailingIconColor ??
-        (widget.enabled ? c.primaryForeground : c.mutedForeground);
+        (widget.enabled && canTap ? c.primaryForeground : c.mutedForeground);
 
     return GestureDetector(
       onTap: canTap ? widget.onSend : null,

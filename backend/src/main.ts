@@ -1,15 +1,20 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { LoggingService } from './infrastructure/logging/logging.service';
 import { LoggingInterceptor } from './infrastructure/logging/logging.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
   });
+
+  // Image discovery sends base64 images; default Express limit is 100kb.
+  app.useBodyParser('json', { limit: Infinity });
+  app.useBodyParser('urlencoded', { extended: true, limit: Infinity });
 
   const configService = app.get(ConfigService);
   const loggingService = app.get(LoggingService);

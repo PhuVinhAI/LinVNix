@@ -38,9 +38,9 @@ void main() {
     expect(find.text('no parking'), findsOneWidget);
     expect(find.text('/kam doh seh/'), findsOneWidget);
     expect(find.text('phrase'), findsOneWidget);
-    expect(find.text('＋ Thêm'), findsOneWidget);
+    expect(find.text('Thêm'), findsOneWidget);
 
-    await tester.tap(find.text('＋ Thêm'));
+    await tester.tap(find.text('Thêm'));
     await tester.pump();
     await tester.pumpAndSettle();
 
