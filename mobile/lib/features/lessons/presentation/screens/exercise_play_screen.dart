@@ -48,6 +48,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
   bool _initialResumeFlowScheduled = false;
   bool _resumeGateDone = false;
+  bool _sessionDeleted = false;
 
   LessonExercisesArgs get _args => LessonExercisesArgs(
     lessonId: widget.lessonId ?? widget.moduleId ?? '',
@@ -62,6 +63,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         oldWidget.setId != widget.setId) {
       _initialResumeFlowScheduled = false;
       _resumeGateDone = false;
+      _sessionDeleted = false;
       _exercises = [];
       _currentIndex = 0;
       _answers.clear();
@@ -202,6 +204,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   Future<void> _saveSession() async {
     final setId = widget.setId;
     if (_exercises.isEmpty) return;
+    if (_sessionDeleted) return;
 
     final service = ref.read(exerciseSessionServiceProvider);
     final session = ExerciseSession(
@@ -226,6 +229,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     final setId = widget.setId;
     final service = ref.read(exerciseSessionServiceProvider);
     await service.delete(setId);
+    _sessionDeleted = true;
   }
 
   bool get _isValid {

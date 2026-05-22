@@ -145,7 +145,7 @@ class SetProgress {
   final double percentComplete;
   final double percentCorrect;
 
-  bool get isCompleted => percentComplete == 100 && percentCorrect >= 80;
+  bool get isCompleted => percentComplete == 100;
   bool get isInProgress => attempted > 0 && !isCompleted;
   bool get isNotStarted => attempted == 0;
 }
