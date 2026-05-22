@@ -29,6 +29,7 @@
     "test:integration:dialect": "bun run scripts/test/run-dialect-test.ts",
     "test:integration:exercises": "bun run scripts/test/suites/exercises.test.ts",
     "test:integration:progress": "bun run scripts/test/suites/progress.test.ts",
+    "test:integration:personal-vocabularies": "bun run scripts/test/suites/personal-vocabularies.test.ts",
     "test:integration:refresh-token": "bun run scripts/test/run-refresh-token-test.ts",
     "test:integration:archiving": "bun run scripts/test/run-archiving-test.ts",
     "test:integration:email-queue": "bun run scripts/test/run-email-queue-test.ts",

@@ -77,6 +77,7 @@ describe('ListBookmarksTool', () => {
         {
           bookmarkedAt: new Date('2026-05-15T10:00:00Z'),
           vocabulary: { id: 'voc-1', word: 'xe đạp', translation: 'bicycle' },
+          type: 'system' as const,
         },
       ],
       meta: { total: 1, page: 1, limit: 20, totalPages: 1 },

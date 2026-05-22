@@ -5,6 +5,8 @@ import { Bookmark } from '../../domain/bookmark.entity';
 import { BookmarkSort } from '../../dto/bookmark-query.dto';
 import { PaginatedResult } from '../../../../common/interfaces/paginated-result.interface';
 
+export type BookmarkType = 'system' | 'personal';
+
 @Injectable()
 export class BookmarksRepository {
   constructor(
@@ -23,6 +25,15 @@ export class BookmarksRepository {
   ): Promise<Bookmark | null> {
     return this.repository.findOne({
       where: { userId, vocabularyId },
+    });
+  }
+
+  async findByUserAndPersonalVocabulary(
+    userId: string,
+    personalVocabularyId: string,
+  ): Promise<Bookmark | null> {
+    return this.repository.findOne({
+      where: { userId, personalVocabularyId },
     });
   }
 
@@ -57,6 +68,7 @@ export class BookmarksRepository {
       .select('vocabulary.partOfSpeech', 'partOfSpeech')
       .addSelect('COUNT(*)', 'count')
       .where('bookmark.userId = :userId', { userId })
+      .andWhere('bookmark.vocabularyId IS NOT NULL')
       .groupBy('vocabulary.partOfSpeech')
       .getRawMany();
 
@@ -84,11 +96,12 @@ export class BookmarksRepository {
     const qb = this.repository
       .createQueryBuilder('bookmark')
       .leftJoinAndSelect('bookmark.vocabulary', 'vocabulary')
+      .leftJoinAndSelect('bookmark.personalVocabulary', 'personalVocabulary')
       .where('bookmark.userId = :userId', { userId });
 
     if (search) {
       qb.andWhere(
-        '(vocabulary.word ILIKE :search OR vocabulary.translation ILIKE :search)',
+        '(vocabulary.word ILIKE :search OR vocabulary.translation ILIKE :search OR personalVocabulary.word ILIKE :search OR personalVocabulary.translation ILIKE :search)',
         { search: `%${search}%` },
       );
     }
@@ -98,10 +111,13 @@ export class BookmarksRepository {
         qb.orderBy('bookmark.createdAt', 'ASC');
         break;
       case BookmarkSort.AZ:
-        qb.orderBy('vocabulary.word', 'ASC');
+        qb.orderBy('COALESCE(vocabulary.word, personalVocabulary.word)', 'ASC');
         break;
       case BookmarkSort.ZA:
-        qb.orderBy('vocabulary.word', 'DESC');
+        qb.orderBy(
+          'COALESCE(vocabulary.word, personalVocabulary.word)',
+          'DESC',
+        );
         break;
       case BookmarkSort.DIFFICULTY:
         qb.orderBy('vocabulary.difficultyLevel', 'ASC');

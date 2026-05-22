@@ -121,8 +121,13 @@ export class VocabulariesController {
   async toggleBookmark(
     @CurrentUser() user: User,
     @Param('vocabularyId') vocabularyId: string,
+    @Body() body?: { personalVocabularyId?: string },
   ) {
-    return this.bookmarksService.toggle(user.id, vocabularyId);
+    return this.bookmarksService.toggle(
+      user.id,
+      vocabularyId,
+      body?.personalVocabularyId,
+    );
   }
 
   @Public()

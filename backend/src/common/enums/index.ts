@@ -14,3 +14,4 @@ export * from './goal-type.enum';
 export * from './difficulty.enum';
 export * from './simulation-session-status.enum';
 export * from './simulation-end-reason.enum';
+export * from './personal-vocabulary-source.enum';

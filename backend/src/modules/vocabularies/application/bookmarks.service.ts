@@ -1,8 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { BookmarksRepository } from './repositories/bookmarks.repository';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  BookmarksRepository,
+  BookmarkType,
+} from './repositories/bookmarks.repository';
 import { BookmarkSort } from '../dto/bookmark-query.dto';
 import { Bookmark } from '../domain/bookmark.entity';
 import { PaginatedResult } from '../../../common/interfaces/paginated-result.interface';
+import { PersonalVocabulariesService } from '../../personal-vocabularies/application/personal-vocabularies.service';
 
 export interface BookmarkToggleResult {
   isBookmarked: boolean;
@@ -11,6 +15,8 @@ export interface BookmarkToggleResult {
 export interface BookmarkListItem {
   bookmarkedAt: Date;
   vocabulary: any;
+  type: BookmarkType;
+  personalVocabularyId?: string;
 }
 
 export interface BookmarkListResult {
@@ -25,7 +31,10 @@ export interface BookmarkStatsResult {
 
 @Injectable()
 export class BookmarksService {
-  constructor(private readonly bookmarksRepository: BookmarksRepository) {}
+  constructor(
+    private readonly bookmarksRepository: BookmarksRepository,
+    private readonly personalVocabulariesService: PersonalVocabulariesService,
+  ) {}
 
   async getStats(userId: string): Promise<BookmarkStatsResult> {
     return this.bookmarksRepository.getStats(userId);
@@ -33,20 +42,59 @@ export class BookmarksService {
 
   async toggle(
     userId: string,
-    vocabularyId: string,
+    vocabularyId?: string,
+    personalVocabularyId?: string,
   ): Promise<BookmarkToggleResult> {
-    const existing = await this.bookmarksRepository.findByUserAndVocabulary(
-      userId,
-      vocabularyId,
-    );
-
-    if (existing) {
-      await this.bookmarksRepository.delete(existing.id);
-      return { isBookmarked: false };
+    if (vocabularyId && personalVocabularyId) {
+      throw new BadRequestException(
+        'Cannot bookmark both vocabularyId and personalVocabularyId at the same time',
+      );
+    }
+    if (!vocabularyId && !personalVocabularyId) {
+      throw new BadRequestException(
+        'Either vocabularyId or personalVocabularyId is required',
+      );
     }
 
-    await this.bookmarksRepository.create({ userId, vocabularyId });
-    return { isBookmarked: true };
+    if (vocabularyId) {
+      const existing = await this.bookmarksRepository.findByUserAndVocabulary(
+        userId,
+        vocabularyId,
+      );
+
+      if (existing) {
+        await this.bookmarksRepository.delete(existing.id);
+        return { isBookmarked: false };
+      }
+
+      await this.bookmarksRepository.create({ userId, vocabularyId });
+      return { isBookmarked: true };
+    }
+
+    if (personalVocabularyId) {
+      const existing =
+        await this.bookmarksRepository.findByUserAndPersonalVocabulary(
+          userId,
+          personalVocabularyId,
+        );
+
+      if (existing) {
+        await this.bookmarksRepository.delete(existing.id);
+        await this.personalVocabulariesService.delete(
+          personalVocabularyId,
+          userId,
+        );
+        return { isBookmarked: false };
+      }
+
+      await this.bookmarksRepository.create({
+        userId,
+        personalVocabularyId,
+      });
+      return { isBookmarked: true };
+    }
+
+    return { isBookmarked: false };
   }
 
   async list(
@@ -66,7 +114,11 @@ export class BookmarksService {
     return {
       data: result.data.map((bookmark) => ({
         bookmarkedAt: bookmark.createdAt,
-        vocabulary: bookmark.vocabulary,
+        vocabulary: bookmark.vocabulary || bookmark.personalVocabulary,
+        type: bookmark.personalVocabularyId ? 'personal' : 'system',
+        ...(bookmark.personalVocabularyId
+          ? { personalVocabularyId: bookmark.personalVocabularyId }
+          : {}),
       })),
       meta: result.meta,
     };

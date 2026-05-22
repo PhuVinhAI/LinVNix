@@ -67,6 +67,23 @@ describe('BookmarksRepository', () => {
       expect(mockRepo.save).toHaveBeenCalledWith(created);
       expect(result).toEqual(created);
     });
+
+    it('creates a bookmark with personalVocabularyId', async () => {
+      const data = { userId: 'user-1', personalVocabularyId: 'pv-1' };
+      const created = {
+        id: 'bm-2',
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as Bookmark;
+      mockRepo.create.mockReturnValue(created);
+      mockRepo.save.mockResolvedValue(created);
+
+      const result = await repository.create(data);
+
+      expect(mockRepo.create).toHaveBeenCalledWith(data);
+      expect(result).toEqual(created);
+    });
   });
 
   describe('findByUserAndVocabulary', () => {
@@ -95,6 +112,38 @@ describe('BookmarksRepository', () => {
       const result = await repository.findByUserAndVocabulary(
         'user-1',
         'vocab-999',
+      );
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('findByUserAndPersonalVocabulary', () => {
+    it('returns bookmark when found', async () => {
+      const bookmark = {
+        id: 'bm-2',
+        userId: 'user-1',
+        personalVocabularyId: 'pv-1',
+      } as Bookmark;
+      mockRepo.findOne.mockResolvedValue(bookmark);
+
+      const result = await repository.findByUserAndPersonalVocabulary(
+        'user-1',
+        'pv-1',
+      );
+
+      expect(mockRepo.findOne).toHaveBeenCalledWith({
+        where: { userId: 'user-1', personalVocabularyId: 'pv-1' },
+      });
+      expect(result).toEqual(bookmark);
+    });
+
+    it('returns null when not found', async () => {
+      mockRepo.findOne.mockResolvedValue(null);
+
+      const result = await repository.findByUserAndPersonalVocabulary(
+        'user-1',
+        'pv-999',
       );
 
       expect(result).toBeNull();
@@ -212,6 +261,17 @@ describe('BookmarksRepository', () => {
       expect(result.meta.limit).toBe(20);
     });
 
+    it('left joins personalVocabulary', async () => {
+      mockQueryBuilder.getManyAndCount.mockResolvedValue([[], 0]);
+
+      await repository.findPaginated(defaultArgs);
+
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'bookmark.personalVocabulary',
+        'personalVocabulary',
+      );
+    });
+
     it('sorts by oldest (createdAt ASC)', async () => {
       mockQueryBuilder.getManyAndCount.mockResolvedValue([[], 0]);
 
@@ -232,7 +292,7 @@ describe('BookmarksRepository', () => {
       await repository.findPaginated({ ...defaultArgs, sort: BookmarkSort.AZ });
 
       expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(
-        'vocabulary.word',
+        'COALESCE(vocabulary.word, personalVocabulary.word)',
         'ASC',
       );
     });
@@ -243,7 +303,7 @@ describe('BookmarksRepository', () => {
       await repository.findPaginated({ ...defaultArgs, sort: BookmarkSort.ZA });
 
       expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(
-        'vocabulary.word',
+        'COALESCE(vocabulary.word, personalVocabulary.word)',
         'DESC',
       );
     });
@@ -262,13 +322,13 @@ describe('BookmarksRepository', () => {
       );
     });
 
-    it('applies search filter on word and translation', async () => {
+    it('applies search filter on word and translation for both vocabulary and personalVocabulary', async () => {
       mockQueryBuilder.getManyAndCount.mockResolvedValue([[], 0]);
 
       await repository.findPaginated({ ...defaultArgs, search: 'xin' });
 
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
-        '(vocabulary.word ILIKE :search OR vocabulary.translation ILIKE :search)',
+        '(vocabulary.word ILIKE :search OR vocabulary.translation ILIKE :search OR personalVocabulary.word ILIKE :search OR personalVocabulary.translation ILIKE :search)',
         { search: '%xin%' },
       );
     });

@@ -70,6 +70,9 @@ export class User extends BaseEntity {
   @OneToMany('RefreshToken', 'user')
   refreshTokens: any[];
 
+  @OneToMany('PersonalVocabulary', 'user')
+  personalVocabularies: any[];
+
   @Column({ name: 'notification_enabled', default: false })
   notificationEnabled: boolean;
 

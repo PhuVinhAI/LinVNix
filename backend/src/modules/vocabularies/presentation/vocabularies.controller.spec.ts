@@ -56,9 +56,14 @@ describe('VocabulariesController - Bookmark endpoints', () => {
       const result = await controller.toggleBookmark(
         mockUser as any,
         'vocab-1',
+        {},
       );
 
-      expect(bookmarksService.toggle).toHaveBeenCalledWith('user-1', 'vocab-1');
+      expect(bookmarksService.toggle).toHaveBeenCalledWith(
+        'user-1',
+        'vocab-1',
+        undefined,
+      );
       expect(result).toEqual({ isBookmarked: true });
     });
 
@@ -68,9 +73,24 @@ describe('VocabulariesController - Bookmark endpoints', () => {
       const result = await controller.toggleBookmark(
         mockUser as any,
         'vocab-1',
+        {},
       );
 
       expect(result).toEqual({ isBookmarked: false });
+    });
+
+    it('passes personalVocabularyId when provided', async () => {
+      bookmarksService.toggle.mockResolvedValue({ isBookmarked: true });
+
+      await controller.toggleBookmark(mockUser as any, undefined as any, {
+        personalVocabularyId: 'pv-1',
+      });
+
+      expect(bookmarksService.toggle).toHaveBeenCalledWith(
+        'user-1',
+        undefined,
+        'pv-1',
+      );
     });
   });
 

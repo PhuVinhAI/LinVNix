@@ -3,14 +3,18 @@ import { BookmarksService } from './bookmarks.service';
 import { BookmarksRepository } from './repositories/bookmarks.repository';
 import { Bookmark } from '../domain/bookmark.entity';
 import { BookmarkSort } from '../dto/bookmark-query.dto';
+import { PersonalVocabulariesService } from '../../personal-vocabularies/application/personal-vocabularies.service';
+import { BadRequestException } from '@nestjs/common';
 
 describe('BookmarksService', () => {
   let service: BookmarksService;
   let repository: jest.Mocked<BookmarksRepository>;
+  let personalVocabulariesService: jest.Mocked<PersonalVocabulariesService>;
 
   beforeEach(async () => {
     const repoMock = {
       findByUserAndVocabulary: jest.fn(),
+      findByUserAndPersonalVocabulary: jest.fn(),
       create: jest.fn(),
       delete: jest.fn(),
       findByVocabularyIds: jest.fn(),
@@ -18,15 +22,24 @@ describe('BookmarksService', () => {
       getStats: jest.fn(),
     };
 
+    const pvServiceMock = {
+      delete: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BookmarksService,
         { provide: BookmarksRepository, useValue: repoMock },
+        {
+          provide: PersonalVocabulariesService,
+          useValue: pvServiceMock,
+        },
       ],
     }).compile();
 
     service = module.get<BookmarksService>(BookmarksService);
     repository = module.get(BookmarksRepository);
+    personalVocabulariesService = module.get(PersonalVocabulariesService);
   });
 
   describe('toggle', () => {
@@ -60,10 +73,62 @@ describe('BookmarksService', () => {
       expect(result).toEqual({ isBookmarked: false });
       expect(repository.delete).toHaveBeenCalledWith('bm-1');
     });
+
+    it('creates bookmark with personalVocabularyId when provided', async () => {
+      repository.findByUserAndPersonalVocabulary.mockResolvedValue(null);
+      const created = {
+        id: 'bm-2',
+        userId: 'user-1',
+        personalVocabularyId: 'pv-1',
+      };
+      repository.create.mockResolvedValue(created as Bookmark);
+
+      const result = await service.toggle('user-1', undefined, 'pv-1');
+
+      expect(result).toEqual({ isBookmarked: true });
+      expect(repository.create).toHaveBeenCalledWith({
+        userId: 'user-1',
+        personalVocabularyId: 'pv-1',
+      });
+    });
+
+    it('deletes bookmark and soft-deletes personal vocabulary when un-bookmarking personal', async () => {
+      const existing = {
+        id: 'bm-2',
+        userId: 'user-1',
+        personalVocabularyId: 'pv-1',
+      };
+      repository.findByUserAndPersonalVocabulary.mockResolvedValue(
+        existing as Bookmark,
+      );
+      repository.delete.mockResolvedValue(undefined);
+      personalVocabulariesService.delete.mockResolvedValue(undefined);
+
+      const result = await service.toggle('user-1', undefined, 'pv-1');
+
+      expect(result).toEqual({ isBookmarked: false });
+      expect(repository.delete).toHaveBeenCalledWith('bm-2');
+      expect(personalVocabulariesService.delete).toHaveBeenCalledWith(
+        'pv-1',
+        'user-1',
+      );
+    });
+
+    it('throws BadRequestException when both vocabularyId and personalVocabularyId provided', async () => {
+      await expect(service.toggle('user-1', 'vocab-1', 'pv-1')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('throws BadRequestException when neither vocabularyId nor personalVocabularyId provided', async () => {
+      await expect(
+        service.toggle('user-1', undefined, undefined),
+      ).rejects.toThrow(BadRequestException);
+    });
   });
 
   describe('list', () => {
-    it('returns paginated bookmarked vocabularies', async () => {
+    it('returns paginated bookmarked vocabularies with type field', async () => {
       const paginatedResult = {
         data: [
           {
@@ -71,9 +136,19 @@ describe('BookmarksService', () => {
             userId: 'user-1',
             vocabularyId: 'vocab-1',
             vocabulary: { word: 'xin chào' },
+            personalVocabularyId: null,
+            createdAt: new Date(),
+          },
+          {
+            id: 'bm-2',
+            userId: 'user-1',
+            vocabularyId: null,
+            personalVocabularyId: 'pv-1',
+            personalVocabulary: { word: 'bàn' },
+            createdAt: new Date(),
           },
         ],
-        meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
+        meta: { total: 2, page: 1, limit: 20, totalPages: 1 },
       };
       repository.findPaginated.mockResolvedValue(paginatedResult as any);
 
@@ -90,7 +165,10 @@ describe('BookmarksService', () => {
         search: undefined,
         sort: BookmarkSort.NEWEST,
       });
-      expect(result.meta.total).toBe(1);
+      expect(result.meta.total).toBe(2);
+      expect(result.data[0].type).toBe('system');
+      expect(result.data[1].type).toBe('personal');
+      expect(result.data[1].personalVocabularyId).toBe('pv-1');
     });
 
     it('passes search and sort params to repository', async () => {
@@ -123,6 +201,7 @@ describe('BookmarksService', () => {
             id: 'bm-1',
             createdAt: bookmarkedAt,
             vocabulary: { word: 'xin chào', translation: 'hello' },
+            personalVocabularyId: null,
           },
         ],
         meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
