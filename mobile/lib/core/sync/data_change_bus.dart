@@ -5,6 +5,8 @@ part 'data_change_bus.g.dart';
 
 @Riverpod(keepAlive: true)
 class DataChangeBus extends _$DataChangeBus {
+  int _sequence = 0;
+
   @override
   DataChanged? build() => null;
 
@@ -13,7 +15,7 @@ class DataChangeBus extends _$DataChangeBus {
     // same tag set would compare equal and Riverpod may skip notifying listeners,
     // so tier summaries and other subscribers never refetch. A synthetic tag makes
     // each emission distinct while still intersecting real watch tag sets.
-    final stamp = DateTime.now().microsecondsSinceEpoch;
+    final stamp = _sequence++;
     state = DataChanged(tags: {...tags, '__emit:$stamp'});
   }
 }

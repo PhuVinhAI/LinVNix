@@ -10,6 +10,7 @@ const Set<String> _hiddenLocations = {
   '/reset-password',
   '/reset-password-otp',
   '/onboarding',
+  '/camera',
   '/',
   '/courses',
   '/profile',

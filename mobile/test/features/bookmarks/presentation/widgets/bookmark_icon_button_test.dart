@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:linvnix/core/theme/app_theme.dart';
 import 'package:linvnix/features/bookmarks/presentation/widgets/bookmark_icon_button.dart';
 
 void main() {
   group('BookmarkIconButton', () {
-    testWidgets('shows outlined bookmark icon when not bookmarked',
-        (tester) async {
+    testWidgets('shows outlined bookmark icon when not bookmarked', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
+          theme: AppTheme.light(),
           home: Scaffold(
             body: BookmarkIconButton(
               vocabularyId: 'v1',
@@ -26,6 +28,7 @@ void main() {
     testWidgets('shows filled bookmark icon when bookmarked', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          theme: AppTheme.light(),
           home: Scaffold(
             body: BookmarkIconButton(
               vocabularyId: 'v1',
@@ -44,6 +47,7 @@ void main() {
       String? toggledId;
       await tester.pumpWidget(
         MaterialApp(
+          theme: AppTheme.light(),
           home: Scaffold(
             body: BookmarkIconButton(
               vocabularyId: 'v1',

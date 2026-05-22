@@ -33,6 +33,7 @@ class GlobalAssistantShell extends ConsumerStatefulWidget {
 
 class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   late final GoRouter _router;
+  late final ScreenUiSnapshotCoordinator _snapshotCoordinator;
   final _snapshotHostKey = GlobalKey<ScreenUiSnapshotHostState>();
 
   bool _listening = false;
@@ -41,6 +42,7 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   void initState() {
     super.initState();
     _router = ref.read(routerProvider);
+    _snapshotCoordinator = ref.read(screenUiSnapshotCoordinatorProvider);
     // Defer subscribing until AFTER the very first frame commits so that
     // `setInitialRoutePath` (which runs during the initial route widget's
     // didChangeDependencies) doesn't fire our listener mid-build, and so
@@ -59,8 +61,9 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   void dispose() {
     if (_listening) {
       _router.routeInformationProvider.removeListener(_scheduleRouteSync);
+      _router.routerDelegate.removeListener(_scheduleRouteSync);
     }
-    ref.read(screenUiSnapshotCoordinatorProvider).detach(_snapshotHostKey);
+    _snapshotCoordinator.detach(_snapshotHostKey);
     super.dispose();
   }
 
@@ -101,7 +104,7 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
   }
 
   void _syncScreenUiSnapshotNow() {
-    final snapshot = ref.read(screenUiSnapshotCoordinatorProvider).captureNow();
+    final snapshot = _snapshotCoordinator.captureNow();
     if (snapshot == null) return;
     _storeScreenUiSnapshot(snapshot);
   }
@@ -117,7 +120,7 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
 
   @override
   Widget build(BuildContext context) {
-    ref.read(screenUiSnapshotCoordinatorProvider).attach(_snapshotHostKey);
+    _snapshotCoordinator.attach(_snapshotHostKey);
 
     final match = ref.watch(currentRouteMatchProvider);
     final assistantState = ref.watch(assistantStateMachineProvider);
@@ -150,14 +153,16 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
             ),
           ),
         ),
-        AssistantBar(onOpen: () {
-          final match = ref.read(currentRouteMatchProvider);
-          if (match != null) {
-            _syncScreenUiSnapshotIfNeeded(match);
-          } else {
-            _syncScreenUiSnapshotNow();
-          }
-        }),
+        AssistantBar(
+          onOpen: () {
+            final match = ref.read(currentRouteMatchProvider);
+            if (match != null) {
+              _syncScreenUiSnapshotIfNeeded(match);
+            } else {
+              _syncScreenUiSnapshotNow();
+            }
+          },
+        ),
       ],
     );
   }

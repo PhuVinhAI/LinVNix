@@ -432,6 +432,49 @@ describe('GenaiService', () => {
       expect(result.usageMetadata.totalTokenCount).toBe(8);
     });
 
+    it('includes inlineData parts when structured messages include image attachments', async () => {
+      mockClient.models.generateContent.mockResolvedValue({
+        text: '{"name":"Alice"}',
+        usageMetadata: {},
+      });
+
+      await service.chatStructured({
+        messages: [
+          {
+            role: 'user',
+            content: 'What is in this photo?',
+            attachments: [
+              {
+                type: 'image',
+                mimeType: 'image/png',
+                data: 'base64-image-data',
+              },
+            ],
+          },
+        ],
+        responseSchema: testSchema,
+      });
+
+      expect(mockClient.models.generateContent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: 'What is in this photo?' },
+                {
+                  inlineData: {
+                    mimeType: 'image/png',
+                    data: 'base64-image-data',
+                  },
+                },
+              ],
+            },
+          ],
+        }),
+      );
+    });
+
     it('passes system instruction via config', async () => {
       mockClient.models.generateContent.mockResolvedValue({
         text: '{"name":"Bob"}',

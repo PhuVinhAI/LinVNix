@@ -1,0 +1,159 @@
+import {
+  BadRequestException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ImageAnalysisService } from './image-analysis.service';
+import { GenaiService } from '../../../infrastructure/genai/genai.service';
+
+describe('ImageAnalysisService', () => {
+  let service: ImageAnalysisService;
+  let genaiService: jest.Mocked<GenaiService>;
+
+  const user = {
+    id: 'user-1',
+    nativeLanguage: 'English',
+    currentLevel: 'A1',
+    preferredDialect: 'STANDARD',
+  };
+
+  const request = {
+    images: [{ base64: 'base64-image-data', mimeType: 'image/png' }],
+    prompt: 'What does this sign say?',
+  };
+
+  beforeEach(async () => {
+    const genaiMock = {
+      renderPrompt: jest.fn().mockReturnValue('rendered image prompt'),
+      chatStructured: jest.fn(),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ImageAnalysisService,
+        { provide: GenaiService, useValue: genaiMock },
+      ],
+    }).compile();
+
+    service = module.get(ImageAnalysisService);
+    genaiService = module.get(GenaiService);
+  });
+
+  it('builds a multimodal structured chat request and returns validated output', async () => {
+    genaiService.chatStructured.mockResolvedValue({
+      text: JSON.stringify({
+        text: '**Biển này** có nghĩa là không đỗ xe.',
+        vocabularies: [
+          {
+            word: 'cấm đỗ xe',
+            translation: 'no parking',
+            phonetic: 'kam doh seh',
+            partOfSpeech: 'phrase',
+            exampleSentence: 'Ở đây cấm đỗ xe.',
+            exampleTranslation: 'Parking is forbidden here.',
+            classifier: null,
+          },
+        ],
+      }),
+      usageMetadata: { totalTokenCount: 42 },
+    } as any);
+
+    const result = await service.analyze(request, user);
+
+    expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      'image-discovery',
+      expect.objectContaining({
+        user: expect.objectContaining({
+          nativeLanguage: 'English',
+          currentLevel: 'A1',
+          preferredDialect: 'STANDARD',
+        }),
+      }),
+    );
+    expect(genaiService.chatStructured).toHaveBeenCalledWith(
+      expect.objectContaining({
+        systemInstruction: 'rendered image prompt',
+        responseSchema: expect.any(Object),
+        messages: [
+          {
+            role: 'user',
+            content: 'What does this sign say?',
+            attachments: [
+              {
+                type: 'image',
+                mimeType: 'image/png',
+                data: 'base64-image-data',
+              },
+            ],
+          },
+        ],
+      }),
+    );
+    expect(result).toEqual({
+      text: '**Biển này** có nghĩa là không đỗ xe.',
+      vocabularies: [
+        {
+          word: 'cấm đỗ xe',
+          translation: 'no parking',
+          phonetic: 'kam doh seh',
+          partOfSpeech: 'phrase',
+          exampleSentence: 'Ở đây cấm đỗ xe.',
+          exampleTranslation: 'Parking is forbidden here.',
+          classifier: null,
+        },
+      ],
+    });
+  });
+
+  it('rejects an empty prompt', async () => {
+    await expect(
+      service.analyze({ ...request, prompt: '   ' }, user),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('rejects more than one image in this slice', async () => {
+    await expect(
+      service.analyze(
+        {
+          ...request,
+          images: [
+            { base64: 'one', mimeType: 'image/png' },
+            { base64: 'two', mimeType: 'image/png' },
+          ],
+        },
+        user,
+      ),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('rejects unsupported image mime types', async () => {
+    await expect(
+      service.analyze(
+        {
+          ...request,
+          images: [{ base64: 'abc', mimeType: 'application/pdf' }],
+        },
+        user,
+      ),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('throws BadRequestException when the AI response fails schema validation', async () => {
+    genaiService.chatStructured.mockResolvedValue({
+      text: JSON.stringify({ text: '', vocabularies: [] }),
+      usageMetadata: {},
+    } as any);
+
+    await expect(service.analyze(request, user)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('returns a service error when the AI call fails', async () => {
+    genaiService.chatStructured.mockRejectedValue(new Error('AI unavailable'));
+
+    await expect(service.analyze(request, user)).rejects.toThrow(
+      ServiceUnavailableException,
+    );
+  });
+});

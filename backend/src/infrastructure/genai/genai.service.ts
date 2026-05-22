@@ -14,9 +14,16 @@ import {
 } from './ai.exceptions';
 import { KeyPool } from './key-pool';
 
+interface AiAttachment {
+  type: 'image';
+  mimeType: string;
+  data: string;
+}
+
 interface AiChatMessage {
   role: 'user' | 'assistant' | 'system' | 'function';
   content: string;
+  attachments?: AiAttachment[];
   functionCall?: { id?: string; name: string; arguments: Record<string, any> };
   functionResult?: { callId?: string; name: string; result: any };
 }
@@ -34,7 +41,11 @@ interface AiChatRequest {
 }
 
 interface AiChatStructuredRequest {
-  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
+  messages: Array<{
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+    attachments?: AiAttachment[];
+  }>;
   systemInstruction?: string;
   responseSchema: Record<string, any>;
   model?: string;
@@ -612,14 +623,10 @@ export class GenaiService implements IAiProvider, OnModuleInit {
         } as any);
         continue;
       }
+      const content = this.mapMessageToInteractionContent(msg);
       steps.push({
         type: msg.role === 'user' ? 'user_input' : 'model_output',
-        content: [
-          {
-            type: 'text',
-            text: msg.content,
-          },
-        ],
+        content,
       } as any);
     }
     return steps;
@@ -679,13 +686,74 @@ export class GenaiService implements IAiProvider, OnModuleInit {
     return call;
   }
 
-  private mapMessagesToContents(
-    messages: AiChatRequest['messages'],
-  ): Array<{ role: string; parts: Array<{ text: string }> }> {
+  private mapMessagesToContents(messages: AiChatRequest['messages']): Array<{
+    role: string;
+    parts: Array<
+      { text: string } | { inlineData: { mimeType: string; data: string } }
+    >;
+  }> {
     return messages.map((msg) => ({
       role: msg.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: msg.content }],
+      parts: this.mapMessageToContentParts(msg),
     }));
+  }
+
+  private mapMessageToContentParts(
+    msg: AiChatMessage,
+  ): Array<
+    { text: string } | { inlineData: { mimeType: string; data: string } }
+  > {
+    const parts: Array<
+      { text: string } | { inlineData: { mimeType: string; data: string } }
+    > = [];
+
+    if (msg.content) {
+      parts.push({ text: msg.content });
+    }
+
+    for (const attachment of msg.attachments ?? []) {
+      if (attachment.type === 'image') {
+        parts.push({
+          inlineData: {
+            mimeType: attachment.mimeType,
+            data: attachment.data,
+          },
+        });
+      }
+    }
+
+    return parts;
+  }
+
+  private mapMessageToInteractionContent(
+    msg: AiChatMessage,
+  ): Array<
+    | { type: 'text'; text: string }
+    | { type: 'image'; data: string; mime_type: string }
+  > {
+    const content: Array<
+      | { type: 'text'; text: string }
+      | { type: 'image'; data: string; mime_type: string }
+    > = [];
+
+    if (msg.content) {
+      content.push({
+        type: 'text',
+        text: msg.content,
+      });
+    }
+
+    for (const attachment of msg.attachments ?? []) {
+      if (attachment.type === 'image') {
+        content.push({
+          type: 'image',
+          data: attachment.data,
+          mime_type: attachment.mimeType,
+        });
+      }
+    }
+
+    return content;
   }
 
   private mapResponseToAiChatResponse(response: any): AiChatResponse {

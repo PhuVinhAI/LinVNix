@@ -29,6 +29,7 @@ import '../../features/simulation/presentation/screens/character_selection_scree
 import '../../features/simulation/presentation/screens/chat_screen.dart';
 import '../../features/simulation/presentation/screens/simulation_result_screen.dart';
 import '../../features/simulation/presentation/screens/results_history_screen.dart';
+import '../../features/image_discovery/presentation/screens/image_discovery_screen.dart';
 import '../presentation/shell_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -36,9 +37,9 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 class _RouterListenable extends ChangeNotifier {
   _RouterListenable(Ref ref) {
-    ref.listen(authStateProvider, (_, __) => notifyListeners());
-    ref.listen(onboardingCompletedProvider, (_, __) => notifyListeners());
-    ref.listen(userProfileProvider, (_, __) => notifyListeners());
+    ref.listen(authStateProvider, (_, _) => notifyListeners());
+    ref.listen(onboardingCompletedProvider, (_, _) => notifyListeners());
+    ref.listen(userProfileProvider, (_, _) => notifyListeners());
   }
 }
 
@@ -90,11 +91,13 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       final isAuthRoute = location == '/login' || location == '/register';
 
-      final isPasswordResetRoute = location == '/forgot-password' ||
+      final isPasswordResetRoute =
+          location == '/forgot-password' ||
           location == '/reset-password' ||
           location == '/reset-password-otp';
 
-      final isPublicRoute = location == '/verify-email' ||
+      final isPublicRoute =
+          location == '/verify-email' ||
           location.startsWith('/courses') ||
           location.startsWith('/modules');
 
@@ -130,10 +133,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/splash',
         builder: (context, state) => const SplashScreen(),
       ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
@@ -153,8 +153,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/reset-password-otp',
         builder: (context, state) {
           final email = state.uri.queryParameters['email'] ?? '';
-          final fromSettings =
-              state.uri.queryParameters['from'] == 'settings';
+          final fromSettings = state.uri.queryParameters['from'] == 'settings';
           return ResetPasswordOtpScreen(
             email: email,
             fromSettings: fromSettings,
@@ -165,17 +164,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/reset-password',
         builder: (context, state) {
           final token = state.uri.queryParameters['token'];
-          final fromSettings =
-              state.uri.queryParameters['from'] == 'settings';
-          return ResetPasswordScreen(
-            token: token,
-            fromSettings: fromSettings,
-          );
+          final fromSettings = state.uri.queryParameters['from'] == 'settings';
+          return ResetPasswordScreen(token: token, fromSettings: fromSettings);
         },
       ),
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/camera',
+        builder: (context, state) => const ImageDiscoveryScreen(),
       ),
       GoRoute(
         path: '/courses/:id',
@@ -310,27 +309,23 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: '/',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: HomeScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: HomeScreen()),
           ),
           GoRoute(
             path: '/courses',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: CoursesScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: CoursesScreen()),
           ),
           GoRoute(
             path: '/practice',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: PracticeScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: PracticeScreen()),
           ),
           GoRoute(
             path: '/profile',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ProfileScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ProfileScreen()),
           ),
         ],
       ),

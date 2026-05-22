@@ -95,14 +95,18 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(userProfileProvider, (_, __) => _updateNotificationSchedule());
-    ref.listen(dailyGoalProgressProvider, (_, __) => _updateNotificationSchedule());
+    ref.listen(userProfileProvider, (_, _) => _updateNotificationSchedule());
+    ref.listen(
+      dailyGoalProgressProvider,
+      (_, _) => _updateNotificationSchedule(),
+    );
 
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: AppNavBar(
         selectedIndex: _getCurrentIndex(context),
         onDestinationSelected: (index) => _onTap(context, index),
+        onCenterAction: () => context.push('/camera'),
         destinations: [
           const AppNavBarDestination(
             icon: Icons.home_outlined,
