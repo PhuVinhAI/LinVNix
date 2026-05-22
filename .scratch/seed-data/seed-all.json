@@ -191,7 +191,7 @@
                   "vietnamese_text": "'Cảm ơn' dùng để bày tỏ lòng biết ơn. 'Xin lỗi' dùng khi muốn xin lỗi hoặc muốn xin phép đi qua, xin phép hỏi gì đó. 'Xin mời' dùng khi mời ai đó đi trước hoặc mời ai dùng cơm nước."
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/greeting-dialogue.mp3",
                   "content_type": "dialogue",
                   "image_url": null,
                   "notes": null,
@@ -207,7 +207,7 @@
               "title": "Từ vựng chào hỏi cơ bản",
               "vocabularies": [
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/xin-chao.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -227,7 +227,7 @@
                   "word": "xin chào"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/cam-on.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -247,7 +247,7 @@
                   "word": "cảm ơn"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/tam-biet.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -267,7 +267,7 @@
                   "word": "tạm biệt"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/xin-loi.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -287,7 +287,7 @@
                   "word": "xin lỗi"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/xin-moi.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -307,7 +307,7 @@
                   "word": "xin mời"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/chao-buoi-sang.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -327,7 +327,7 @@
                   "word": "chào buổi sáng"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/chao-buoi-chieu.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -347,7 +347,7 @@
                   "word": "chào buổi chiều"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/chao-buoi-toi.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -367,8 +367,13 @@
                   "word": "chào buổi tối"
                 },
                 {
-                  "audio_url": null,
-                  "audio_urls": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/vang.mp3",
+                  "audio_urls": {
+                    "NORTHERN": "/uploads/audio/seed/a1/lesson-001/vang.mp3",
+                    "SOUTHERN": "/uploads/audio/seed/a1/lesson-001/da.mp3",
+                    "CENTRAL": "/uploads/audio/seed/a1/lesson-001/da.mp3",
+                    "STANDARD": "/uploads/audio/seed/a1/lesson-001/vang.mp3"
+                  },
                   "classifier": null,
                   "dialect_variants": {
                     "CENTRAL": "dạ",
@@ -387,7 +392,7 @@
                   "word": "vâng"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/khong.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -407,7 +412,7 @@
                   "word": "không"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/rat-vui.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -427,7 +432,7 @@
                   "word": "rất vui"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/hen-gap-lai.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -447,7 +452,7 @@
                   "word": "hẹn gặp lại"
                 },
                 {
-                  "audio_url": null,
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/duoc.mp3",
                   "audio_urls": null,
                   "classifier": null,
                   "dialect_variants": {
@@ -465,6 +470,170 @@
                   "region": "STANDARD",
                   "translation": "can / okay",
                   "word": "được"
+                }
+              ]
+            },
+            {
+              "__uuid": "lesson-a1-001-001-listen",
+              "description": "Luyện nghe hiểu qua hội thoại chào hỏi và giới thiệu — ôn lại từ vựng bài \"Từ vựng chào hỏi cơ bản\".",
+              "estimated_duration": 15,
+              "exercises": [
+                {
+                  "correct_answer": {
+                    "transcript": "bạn",
+                    "type": "listening"
+                  },
+                  "difficulty_level": 1,
+                  "exercise_type": "listening",
+                  "explanation": "Lan nói: 'Chào bạn! Tôi là Lan.'",
+                  "options": {
+                    "audioUrl": "/uploads/audio/seed/a1/lesson-001/greeting-dialogue.mp3",
+                    "keywords": [
+                      "chào",
+                      "bạn",
+                      "Lan",
+                      "Nam"
+                    ],
+                    "transcriptType": "keywords",
+                    "type": "listening"
+                  },
+                  "order_index": 1,
+                  "question": "Nghe hội thoại Nam và Lan. Điền từ còn thiếu: Lan: Chào ___! Tôi là Lan.",
+                  "question_audio_url": null
+                },
+                {
+                  "correct_answer": {
+                    "selectedChoice": "Rất vui được gặp bạn",
+                    "type": "multiple_choice"
+                  },
+                  "difficulty_level": 1,
+                  "exercise_type": "multiple_choice",
+                  "explanation": "Lan nói: 'Rất vui được gặp bạn.'",
+                  "options": {
+                    "choices": [
+                      "Tạm biệt",
+                      "Xin lỗi",
+                      "Rất vui được gặp bạn",
+                      "Không, cảm ơn"
+                    ],
+                    "type": "multiple_choice"
+                  },
+                  "order_index": 2,
+                  "question": "Theo hội thoại, Lan nói gì sau khi giới thiệu tên?",
+                  "question_audio_url": null
+                },
+                {
+                  "correct_answer": {
+                    "transcript": "Cảm ơn",
+                    "type": "listening"
+                  },
+                  "difficulty_level": 1,
+                  "exercise_type": "listening",
+                  "explanation": "Nam đáp: 'Cảm ơn! Tôi cũng rất vui.'",
+                  "options": {
+                    "audioUrl": "/uploads/audio/seed/a1/lesson-001/greeting-dialogue.mp3",
+                    "keywords": [
+                      "cảm",
+                      "ơn",
+                      "Nam"
+                    ],
+                    "transcriptType": "keywords",
+                    "type": "listening"
+                  },
+                  "order_index": 3,
+                  "question": "Nghe lại đoạn cuối. Nam nói gì? Viết cụm từ Nam dùng để cảm ơn.",
+                  "question_audio_url": null
+                }
+              ],
+              "grammar_rules": [],
+              "is_assessment": false,
+              "lesson_contents": [
+                {
+                  "audio_url": null,
+                  "content_type": "text",
+                  "image_url": null,
+                  "notes": null,
+                  "order_index": 1,
+                  "phonetic": null,
+                  "translation": "In this lesson you will listen to a short greeting dialogue between Nam and Lan. Focus on hello phrases, introductions, and polite responses from lesson 1.",
+                  "video_url": null,
+                  "vietnamese_text": "Trong bài này, bạn sẽ nghe một hội thoại chào hỏi ngắn giữa Nam và Lan. Hãy chú ý các cụm chào hỏi, giới thiệu và đáp lịch sự từ bài từ vựng trước."
+                },
+                {
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/greeting-dialogue.mp3",
+                  "content_type": "dialogue",
+                  "image_url": null,
+                  "notes": null,
+                  "order_index": 2,
+                  "phonetic": null,
+                  "translation": "Nam: Hello! I am Nam.\nLan: Hello! I am Lan. Very nice to meet you.\nNam: Thank you! Me too.",
+                  "video_url": null,
+                  "vietnamese_text": "Nam: Xin chào! Tôi là Nam.\nLan: Chào bạn! Tôi là Lan. Rất vui được gặp bạn.\nNam: Cảm ơn! Tôi cũng rất vui."
+                }
+              ],
+              "lesson_type": "listening",
+              "order_index": 2,
+              "title": "Luyện nghe: Chào hỏi cơ bản",
+              "vocabularies": [
+                {
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/xin-chao.mp3",
+                  "audio_urls": null,
+                  "classifier": null,
+                  "dialect_variants": {
+                    "CENTRAL": "xin chào",
+                    "NORTHERN": "xin chào",
+                    "SOUTHERN": "xin chào",
+                    "STANDARD": "xin chào"
+                  },
+                  "difficulty_level": 1,
+                  "example_sentence": "Xin chào, tôi là Nam.",
+                  "example_translation": "Hello, I am Nam.",
+                  "image_url": null,
+                  "part_of_speech": "phrase",
+                  "phonetic": "sin chow",
+                  "region": "STANDARD",
+                  "translation": "hello",
+                  "word": "xin chào"
+                },
+                {
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/cam-on.mp3",
+                  "audio_urls": null,
+                  "classifier": null,
+                  "dialect_variants": {
+                    "CENTRAL": "cảm ơn",
+                    "NORTHERN": "cảm ơn",
+                    "SOUTHERN": "cảm ơn",
+                    "STANDARD": "cảm ơn"
+                  },
+                  "difficulty_level": 1,
+                  "example_sentence": "Cảm ơn rất nhiều!",
+                  "example_translation": "Thank you very much!",
+                  "image_url": null,
+                  "part_of_speech": "phrase",
+                  "phonetic": "gam uhn",
+                  "region": "STANDARD",
+                  "translation": "thank you",
+                  "word": "cảm ơn"
+                },
+                {
+                  "audio_url": "/uploads/audio/seed/a1/lesson-001/rat-vui.mp3",
+                  "audio_urls": null,
+                  "classifier": null,
+                  "dialect_variants": {
+                    "CENTRAL": "rất vui",
+                    "NORTHERN": "rất vui",
+                    "SOUTHERN": "rất vui",
+                    "STANDARD": "rất vui"
+                  },
+                  "difficulty_level": 1,
+                  "example_sentence": "Rất vui được gặp bạn!",
+                  "example_translation": "Very nice to meet you!",
+                  "image_url": null,
+                  "part_of_speech": "phrase",
+                  "phonetic": "ret vooy",
+                  "region": "STANDARD",
+                  "translation": "very happy / pleased",
+                  "word": "rất vui"
                 }
               ]
             },
@@ -753,7 +922,7 @@
                 }
               ],
               "lesson_type": "grammar",
-              "order_index": 2,
+              "order_index": 3,
               "title": "Ngữ pháp: Câu cơ bản SVO và đại từ nhân xưng",
               "vocabularies": [
                 {
@@ -1088,7 +1257,7 @@
                 }
               ],
               "lesson_type": "pronunciation",
-              "order_index": 3,
+              "order_index": 4,
               "title": "Phát âm cơ bản",
               "vocabularies": [
                 {
@@ -1281,7 +1450,7 @@
                 }
               ],
               "lesson_type": "culture",
-              "order_index": 4,
+              "order_index": 5,
               "title": "Văn hóa: Cách chào hỏi của người Việt",
               "vocabularies": [
                 {

@@ -40,10 +40,12 @@
     "test:manual:google-oauth": "bun run scripts/test/manual/google-oauth.test.ts",
     "docs:generate": "bun run scripts/generate-api-docs.ts",
     "admin:create": "bun run scripts/create-admin.ts",
-    "seed:simulations": "bun run scripts/seed-simulations.ts"
+    "seed:simulations": "bun run scripts/seed-simulations.ts",
+    "generate:a1-lesson1-audio": "bun run scripts/generate-a1-lesson1-audio.ts"
   },
   "dependencies": {
     "@google/genai": "^2.0.1",
+    "@linvnix/shared": "workspace:*",
     "@nestjs-modules/mailer": "^2.3.4",
     "@nestjs/bull": "^11.0.4",
     "@nestjs/cache-manager": "^3.1.0",
@@ -77,8 +79,8 @@
     "swagger-ui-express": "^5.0.1",
     "typeorm": "^0.3.28",
     "uuid": "^13.0.0",
-    "zod": "^3.23.0",
-    "@linvnix/shared": "workspace:*"
+    "ws": "^8.20.1",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -98,6 +100,7 @@
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^11.0.0",
+    "@types/ws": "^8.18.1",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
