@@ -162,10 +162,9 @@ const AiResponseSchema = z.object({
       SimulationEndReason.ABUSIVE,
     ])
     .optional(),
-  totalScore: z.preprocess(
-    roundBoundedScore,
-    z.number().int().min(0).max(100),
-  ).optional(),
+  totalScore: z
+    .preprocess(roundBoundedScore, z.number().int().min(0).max(100))
+    .optional(),
   criteriaScores: z.array(CriteriaScoreSchema).optional(),
   aiSummary: z.string().optional(),
 });

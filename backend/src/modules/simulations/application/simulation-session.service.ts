@@ -22,11 +22,7 @@ import {
 } from '../../../common/enums';
 
 function normalizeCriteriaName(name: string): string {
-  return name
-    .normalize('NFC')
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, ' ');
+  return name.normalize('NFC').trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
 function scaleCriterionScore(
@@ -36,7 +32,9 @@ function scaleCriterionScore(
 ): number {
   const safeScore = Number.isFinite(score) ? score : 0;
   const safeMax =
-    Number.isFinite(aiMaxScore) && aiMaxScore > 0 ? aiMaxScore : criterionWeight;
+    Number.isFinite(aiMaxScore) && aiMaxScore > 0
+      ? aiMaxScore
+      : criterionWeight;
   const scaled = Math.round((safeScore / safeMax) * criterionWeight);
   return Math.min(criterionWeight, Math.max(0, scaled));
 }
@@ -47,7 +45,8 @@ function distributeTotalScoreByWeight(
 ): Array<{ name: string; score: number; maxScore: number; comment: string }> {
   const boundedTotal = Math.min(100, Math.max(0, Math.round(totalScore)));
   const totalWeight =
-    scoringCriteria.reduce((sum, criterion) => sum + criterion.weight, 0) || 100;
+    scoringCriteria.reduce((sum, criterion) => sum + criterion.weight, 0) ||
+    100;
 
   const entries = scoringCriteria.map((criterion) => ({
     criterion,
@@ -294,7 +293,10 @@ export class SimulationSessionService {
       characterNames.set(character.id, character.name);
     }
     if (session.chosenCharacter) {
-      characterNames.set(session.chosenCharacter.id, session.chosenCharacter.name);
+      characterNames.set(
+        session.chosenCharacter.id,
+        session.chosenCharacter.name,
+      );
     }
 
     return {

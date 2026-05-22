@@ -321,7 +321,10 @@ export class SimulationsController {
     description: 'ID của phiên mô phỏng',
     example: 'uuid-string',
   })
-  @ApiResponse({ status: 204, description: 'Đã hoàn tác hoặc không có tin cần xóa' })
+  @ApiResponse({
+    status: 204,
+    description: 'Đã hoàn tác hoặc không có tin cần xóa',
+  })
   @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
   @ApiResponse({
     status: 403,
