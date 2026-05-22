@@ -125,7 +125,7 @@ export class VocabulariesController {
   ) {
     return this.bookmarksService.toggle(
       user.id,
-      vocabularyId,
+      body?.personalVocabularyId ? undefined : vocabularyId,
       body?.personalVocabularyId,
     );
   }

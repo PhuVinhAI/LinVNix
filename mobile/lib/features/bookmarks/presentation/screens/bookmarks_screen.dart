@@ -480,6 +480,10 @@ class _BookmarkTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
+                    if (item.isPersonal) ...[
+                      Icon(Icons.auto_awesome, size: 18, color: c.primary),
+                      const SizedBox(width: AppSpacing.xs),
+                    ],
                     Text(
                       displayedWord,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -516,14 +520,10 @@ class _BookmarkTile extends StatelessWidget {
           IconButton(
             onPressed: () => onToggle(item),
             icon: Icon(
-              item.isPersonal
-                  ? Icons.auto_awesome
-                  : (isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+              isBookmarked ? Icons.bookmark : Icons.bookmark_border,
               color: isBookmarked ? c.primary : c.mutedForeground,
             ),
-            tooltip: item.isPersonal
-                ? 'Personal vocabulary'
-                : 'Toggle saved word',
+            tooltip: 'Remove saved word',
           ),
         ],
       ),
@@ -540,6 +540,7 @@ class _BookmarkDetailSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
 
     final String displayedWord;
     if (preferredDialect != null &&
@@ -551,92 +552,132 @@ class _BookmarkDetailSheet extends StatelessWidget {
       displayedWord = item.word;
     }
 
-    return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      minChildSize: 0.4,
-      maxChildSize: 0.9,
-      expand: false,
-      builder: (context, scrollController) {
-        return SingleChildScrollView(
-          controller: scrollController,
-          padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: c.border,
-                    borderRadius: BorderRadius.circular(2),
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.sm,
+                AppSpacing.sm,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Word details',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: c.foreground,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Text(
-                displayedWord,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              if (item.phonetic != null) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  '/${item.phonetic}/',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: c.mutedForeground),
-                ),
-              ],
-              const SizedBox(height: AppSpacing.lg),
-              Text(
-                item.translation,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              if (item.partOfSpeech != null) ...[
-                const SizedBox(height: AppSpacing.sm),
-                AppChip(
-                  label:
-                      kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ??
-                      item.partOfSpeech!,
-                  color: c.info,
-                ),
-              ],
-              if (item.classifier != null) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  'Classifier: ${item.classifier}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
-              if (item.exampleSentence != null) ...[
-                const SizedBox(height: AppSpacing.lg),
-                Text(
-                  'Example:',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  item.exampleSentence!,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic),
-                ),
-                if (item.exampleTranslation != null) ...[
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    item.exampleTranslation!,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
+                  IconButton(
+                    tooltip: 'Close',
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close, color: c.mutedForeground),
+                    style: IconButton.styleFrom(
+                      foregroundColor: c.mutedForeground,
+                      minimumSize: const Size(48, 48),
+                      fixedSize: const Size(48, 48),
+                    ),
                   ),
                 ],
-              ],
-            ],
-          ),
-        );
-      },
+              ),
+            ),
+            Divider(height: 1, color: c.border),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.xl,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (item.isPersonal) ...[
+                        Icon(Icons.auto_awesome, size: 20, color: c.primary),
+                        const SizedBox(width: AppSpacing.sm),
+                      ],
+                      Expanded(
+                        child: Text(
+                          displayedWord,
+                          style: theme.textTheme.headlineMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (item.phonetic != null) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      '/${item.phonetic}/',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: c.mutedForeground,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(
+                    item.translation,
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  if (item.partOfSpeech != null) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    AppChip(
+                      label:
+                          kPartOfSpeechViLabels[item.partOfSpeech!
+                              .toLowerCase()] ??
+                          item.partOfSpeech!,
+                      color: c.info,
+                    ),
+                  ],
+                  if (item.classifier != null) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      'Classifier: ${item.classifier}',
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                  ],
+                  if (item.exampleSentence != null) ...[
+                    const SizedBox(height: AppSpacing.lg),
+                    Text(
+                      'Example:',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      item.exampleSentence!,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    if (item.exampleTranslation != null) ...[
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        item.exampleTranslation!,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: c.mutedForeground,
+                        ),
+                      ),
+                    ],
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

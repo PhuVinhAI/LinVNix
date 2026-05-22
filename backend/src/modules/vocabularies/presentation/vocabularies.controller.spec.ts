@@ -79,10 +79,10 @@ describe('VocabulariesController - Bookmark endpoints', () => {
       expect(result).toEqual({ isBookmarked: false });
     });
 
-    it('passes personalVocabularyId when provided', async () => {
-      bookmarksService.toggle.mockResolvedValue({ isBookmarked: true });
+    it('passes only personalVocabularyId when body includes it (ignores path param)', async () => {
+      bookmarksService.toggle.mockResolvedValue({ isBookmarked: false });
 
-      await controller.toggleBookmark(mockUser as any, undefined as any, {
+      await controller.toggleBookmark(mockUser as any, 'pv-1', {
         personalVocabularyId: 'pv-1',
       });
 

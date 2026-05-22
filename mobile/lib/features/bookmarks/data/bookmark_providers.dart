@@ -4,6 +4,20 @@ import '../../../core/sync/sync.dart';
 import '../data/bookmark_repository.dart';
 import '../domain/bookmark_models.dart';
 
+void _notifyBookmarkDependents(
+  Ref ref, {
+  String? vocabularyId,
+  String? personalVocabularyId,
+}) {
+  final tags = <String>{'bookmark'};
+  if (vocabularyId != null) tags.add('vocabulary-$vocabularyId');
+  if (personalVocabularyId != null) {
+    tags.add('personal-vocabulary-$personalVocabularyId');
+  }
+  ref.read(dataChangeBusProvider.notifier).emit(tags);
+  ref.invalidate(flashcardBookmarksProvider);
+}
+
 final bookmarkIdsProvider =
     AsyncNotifierProvider<BookmarkIdsNotifier, Set<String>>(
       BookmarkIdsNotifier.new,
@@ -56,6 +70,7 @@ class BookmarkIdsNotifier extends CachedRepository<Set<String>>
       },
       emitTags: {'bookmark', 'vocabulary-$vocabularyId'},
     );
+    ref.invalidate(flashcardBookmarksProvider);
   }
 }
 
@@ -180,6 +195,7 @@ class BookmarksNotifier extends AsyncNotifier<BookmarksPage>
   }) async {
     if (personalVocabularyId == null) {
       await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
+      ref.invalidateSelf();
       return;
     }
 
@@ -188,10 +204,12 @@ class BookmarksNotifier extends AsyncNotifier<BookmarksPage>
       vocabularyId,
       personalVocabularyId: personalVocabularyId,
     );
-    ref.read(dataChangeBusProvider.notifier).emit({
-      'bookmark',
-      'personal-vocabulary-$personalVocabularyId',
-    });
+    _notifyBookmarkDependents(
+      ref,
+      vocabularyId: vocabularyId,
+      personalVocabularyId: personalVocabularyId,
+    );
+    ref.invalidateSelf();
   }
 }
 
@@ -205,7 +223,7 @@ class FlashcardBookmarksNotifier
     extends CachedRepository<List<BookmarkWithVocabulary>>
     with DataChangeBusSubscriber<List<BookmarkWithVocabulary>> {
   @override
-  Duration get ttl => const Duration(minutes: 2);
+  Duration get ttl => Duration.zero;
 
   @override
   Future<List<BookmarkWithVocabulary>> fetchFromApi() async {

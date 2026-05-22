@@ -92,11 +92,18 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
           if (items.isEmpty) {
             return _buildEmpty(c);
           }
-          _items = items;
-          if (_currentIndex >= items.length) {
-            _currentIndex = 0;
+          final safeIndex = _currentIndex.clamp(0, items.length - 1);
+          if (safeIndex != _currentIndex) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
+              setState(() => _currentIndex = safeIndex);
+              if (_pageController.hasClients) {
+                _pageController.jumpToPage(safeIndex);
+              }
+            });
           }
-          return _buildCardStack(items, preferredDialect);
+          _items = items;
+          return _buildCardStack(items, preferredDialect, safeIndex);
         },
         loading: () => const _FlashcardLoading(),
         error: (e, _) => Center(
@@ -176,8 +183,13 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
     );
   }
 
-  Widget _buildCardStack(List<BookmarkWithVocabulary> items, String? preferredDialect) {
+  Widget _buildCardStack(
+    List<BookmarkWithVocabulary> items,
+    String? preferredDialect,
+    int activeIndex,
+  ) {
     return PageView.builder(
+      key: ValueKey(items.map((i) => i.id).join(',')),
       controller: _pageController,
       itemCount: items.length,
       onPageChanged: _onPageChanged,
@@ -185,9 +197,9 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen>
         final item = items[index];
         return _Flashcard(
           item: item,
-          isFlipped: index == _currentIndex && _isFlipped,
+          isFlipped: index == activeIndex && _isFlipped,
           flipController: _flipController,
-          isActive: index == _currentIndex,
+          isActive: index == activeIndex,
           onFlip: _flip,
           onPlayAudio: item.audioUrl != null ? () => _playAudio(item.audioUrl!) : null,
           preferredDialect: preferredDialect,
