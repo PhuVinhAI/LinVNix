@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../application/image_discovery_notifier.dart';
-import '../../domain/image_analysis_models.dart';
+import '../widgets/vocabulary_card.dart';
 
 class ImageDiscoveryScreen extends ConsumerStatefulWidget {
   const ImageDiscoveryScreen({super.key});
@@ -92,9 +92,8 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
             if (state.images.isNotEmpty)
               _ImageGrid(
                 images: state.images,
-                onRemove: (id) => ref
-                    .read(imageDiscoveryProvider.notifier)
-                    .removeImage(id),
+                onRemove: (id) =>
+                    ref.read(imageDiscoveryProvider.notifier).removeImage(id),
               )
             else
               Divider(color: c.border, height: 1),
@@ -329,13 +328,13 @@ class _MessageBubble extends StatelessWidget {
   }
 }
 
-class _AssistantMessage extends StatelessWidget {
+class _AssistantMessage extends ConsumerWidget {
   const _AssistantMessage({required this.message});
 
   final ImageDiscoveryMessage message;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -345,100 +344,16 @@ class _AssistantMessage extends StatelessWidget {
           ...message.vocabularies.map(
             (vocabulary) => Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-              child: _VocabularyCard(vocabulary: vocabulary),
+              child: VocabularyCard(
+                vocabulary: vocabulary,
+                onAdd: (vocabulary) => ref
+                    .read(imageDiscoveryProvider.notifier)
+                    .addVocabularyFromAnalysis(vocabulary),
+              ),
             ),
           ),
         ],
       ],
-    );
-  }
-}
-
-class _VocabularyCard extends StatelessWidget {
-  const _VocabularyCard({required this.vocabulary});
-
-  final ImageAnalysisVocabulary vocabulary;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: c.card,
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: c.border),
-      ),
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.auto_awesome, size: 18, color: c.primary),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  vocabulary.word,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              if (vocabulary.partOfSpeech != null)
-                AppChip(
-                  label: vocabulary.partOfSpeech!,
-                  fontSize: AppTypography.caption,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.sm,
-                    vertical: 4,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            vocabulary.translation,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: c.mutedForeground,
-            ),
-          ),
-          if (vocabulary.phonetic != null) ...[
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              '/${vocabulary.phonetic}/',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
-          ],
-          if (vocabulary.classifier != null) ...[
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              'Classifier: ${vocabulary.classifier}',
-              style: theme.textTheme.bodySmall,
-            ),
-          ],
-          if (vocabulary.exampleSentence != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              vocabulary.exampleSentence!,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            if (vocabulary.exampleTranslation != null)
-              Text(
-                vocabulary.exampleTranslation!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: c.mutedForeground,
-                ),
-              ),
-          ],
-        ],
-      ),
     );
   }
 }

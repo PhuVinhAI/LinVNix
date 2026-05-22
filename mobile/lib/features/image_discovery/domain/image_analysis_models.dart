@@ -7,10 +7,7 @@ class ImageAnalysisRequestImage {
   final String base64;
   final String mimeType;
 
-  Map<String, dynamic> toJson() => {
-        'base64': base64,
-        'mimeType': mimeType,
-      };
+  Map<String, dynamic> toJson() => {'base64': base64, 'mimeType': mimeType};
 }
 
 class ImageAnalysisChatHistoryMessage {
@@ -22,10 +19,7 @@ class ImageAnalysisChatHistoryMessage {
   final String role;
   final String content;
 
-  Map<String, dynamic> toJson() => {
-        'role': role,
-        'content': content,
-      };
+  Map<String, dynamic> toJson() => {'role': role, 'content': content};
 }
 
 class ImageAnalysisVocabulary {
@@ -58,13 +52,20 @@ class ImageAnalysisVocabulary {
       classifier: json['classifier'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'word': word,
+    'translation': translation,
+    if (phonetic != null) 'phonetic': phonetic,
+    if (partOfSpeech != null) 'partOfSpeech': partOfSpeech,
+    if (exampleSentence != null) 'exampleSentence': exampleSentence,
+    if (exampleTranslation != null) 'exampleTranslation': exampleTranslation,
+    if (classifier != null) 'classifier': classifier,
+  };
 }
 
 class ImageAnalysisResponse {
-  const ImageAnalysisResponse({
-    required this.text,
-    required this.vocabularies,
-  });
+  const ImageAnalysisResponse({required this.text, required this.vocabularies});
 
   final String text;
   final List<ImageAnalysisVocabulary> vocabularies;
@@ -73,8 +74,10 @@ class ImageAnalysisResponse {
     return ImageAnalysisResponse(
       text: json['text'] as String,
       vocabularies: (json['vocabularies'] as List<dynamic>? ?? [])
-          .map((item) =>
-              ImageAnalysisVocabulary.fromJson(item as Map<String, dynamic>))
+          .map(
+            (item) =>
+                ImageAnalysisVocabulary.fromJson(item as Map<String, dynamic>),
+          )
           .toList(),
     );
   }

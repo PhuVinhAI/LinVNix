@@ -28,10 +28,27 @@ enum BookmarkSort {
   }
 }
 
+enum BookmarkType {
+  system('system'),
+  personal('personal');
+
+  const BookmarkType(this.value);
+  final String value;
+
+  static BookmarkType fromString(String? value) {
+    return BookmarkType.values.firstWhere(
+      (type) => type.value == value,
+      orElse: () => BookmarkType.system,
+    );
+  }
+}
+
 class BookmarkWithVocabulary {
   BookmarkWithVocabulary({
     required this.id,
     required this.vocabularyId,
+    this.personalVocabularyId,
+    this.type = BookmarkType.system,
     required this.word,
     required this.translation,
     this.phonetic,
@@ -49,6 +66,8 @@ class BookmarkWithVocabulary {
 
   final String id;
   final String vocabularyId;
+  final String? personalVocabularyId;
+  final BookmarkType type;
   final String word;
   final String translation;
   final String? phonetic;
@@ -63,11 +82,26 @@ class BookmarkWithVocabulary {
   final int? difficultyLevel;
   final DateTime bookmarkedAt;
 
+  bool get isPersonal => type == BookmarkType.personal;
+
   factory BookmarkWithVocabulary.fromJson(Map<String, dynamic> json) {
     final vocab = json['vocabulary'] as Map<String, dynamic>? ?? json;
+    final personalVocabularyId = json['personalVocabularyId'] as String?;
+    final inferredType = personalVocabularyId != null
+        ? BookmarkType.personal
+        : BookmarkType.fromString(json['type'] as String?);
+    final resolvedPersonalVocabularyId = inferredType == BookmarkType.personal
+        ? (personalVocabularyId ?? vocab['id']) as String
+        : null;
+    final vocabularyId =
+        resolvedPersonalVocabularyId ??
+        ((json['vocabularyId'] ?? vocab['id']) as String);
+
     return BookmarkWithVocabulary(
       id: (json['id'] ?? vocab['id']) as String,
-      vocabularyId: (json['vocabularyId'] ?? vocab['id']) as String,
+      vocabularyId: vocabularyId,
+      personalVocabularyId: resolvedPersonalVocabularyId,
+      type: inferredType,
       word: vocab['word'] as String,
       translation: vocab['translation'] as String,
       phonetic: vocab['phonetic'] as String?,
@@ -77,12 +111,16 @@ class BookmarkWithVocabulary {
       audioUrl: vocab['audioUrl'] as String?,
       imageUrl: vocab['imageUrl'] as String?,
       classifier: vocab['classifier'] as String?,
-      dialectVariants: (vocab['dialectVariants'] as Map<String, dynamic>?)
-          ?.map((k, v) => MapEntry(k, v as String)),
-      audioUrls: (vocab['audioUrls'] as Map<String, dynamic>?)
-          ?.map((k, v) => MapEntry(k, v as String)),
+      dialectVariants: (vocab['dialectVariants'] as Map<String, dynamic>?)?.map(
+        (k, v) => MapEntry(k, v as String),
+      ),
+      audioUrls: (vocab['audioUrls'] as Map<String, dynamic>?)?.map(
+        (k, v) => MapEntry(k, v as String),
+      ),
       difficultyLevel: vocab['difficultyLevel'] as int?,
-      bookmarkedAt: DateTime.parse((json['bookmarkedAt'] ?? vocab['createdAt']) as String),
+      bookmarkedAt: DateTime.parse(
+        (json['bookmarkedAt'] ?? vocab['createdAt']) as String,
+      ),
     );
   }
 }
@@ -103,13 +141,14 @@ class BookmarksPage {
   final int totalItems;
 
   factory BookmarksPage.fromJson(Map<String, dynamic> json) {
-    final itemsRaw = json['items'] as List<dynamic>? ??
-        json['data'] as List<dynamic>;
+    final itemsRaw =
+        json['items'] as List<dynamic>? ?? json['data'] as List<dynamic>;
     final meta = json['meta'] as Map<String, dynamic>? ?? json;
     return BookmarksPage(
       items: itemsRaw
-          .map((e) =>
-              BookmarkWithVocabulary.fromJson(e as Map<String, dynamic>))
+          .map(
+            (e) => BookmarkWithVocabulary.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
       page: (meta['page'] ?? json['page']) as int,
       limit: (meta['limit'] ?? json['limit']) as int,
@@ -120,10 +159,7 @@ class BookmarksPage {
 }
 
 class BookmarkStats {
-  BookmarkStats({
-    required this.total,
-    required this.byPartOfSpeech,
-  });
+  BookmarkStats({required this.total, required this.byPartOfSpeech});
 
   final int total;
   final Map<String, int> byPartOfSpeech;
@@ -131,8 +167,9 @@ class BookmarkStats {
   factory BookmarkStats.fromJson(Map<String, dynamic> json) {
     return BookmarkStats(
       total: (json['total'] as num).toInt(),
-      byPartOfSpeech: (json['byPartOfSpeech'] as Map<String, dynamic>)
-          .map((k, v) => MapEntry(k, (v as num).toInt())),
+      byPartOfSpeech: (json['byPartOfSpeech'] as Map<String, dynamic>).map(
+        (k, v) => MapEntry(k, (v as num).toInt()),
+      ),
     );
   }
 }

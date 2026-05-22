@@ -17,11 +17,19 @@ class ImageAnalysisApi {
       data: {
         'images': images.map((image) => image.toJson()).toList(),
         'prompt': prompt,
-        'chatHistory':
-            chatHistory.map((message) => message.toJson()).toList(),
+        'chatHistory': chatHistory.map((message) => message.toJson()).toList(),
       },
     );
 
     return ImageAnalysisResponse.fromJson(response.data!);
+  }
+
+  Future<void> addVocabularyFromAnalysis(
+    ImageAnalysisVocabulary vocabulary,
+  ) async {
+    await _dio.post<Map<String, dynamic>>(
+      '/personal-vocabularies/from-analysis',
+      data: vocabulary.toJson(),
+    );
   }
 }

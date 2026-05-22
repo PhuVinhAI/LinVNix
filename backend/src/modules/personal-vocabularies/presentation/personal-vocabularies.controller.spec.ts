@@ -13,6 +13,7 @@ describe('PersonalVocabulariesController', () => {
   beforeEach(async () => {
     const serviceMock = {
       create: jest.fn(),
+      createFromAnalysis: jest.fn(),
       findById: jest.fn(),
       list: jest.fn(),
       delete: jest.fn(),
@@ -44,6 +45,32 @@ describe('PersonalVocabulariesController', () => {
       const result = await controller.create(mockUser as any, dto as any);
 
       expect(service.create).toHaveBeenCalledWith('user-1', dto);
+      expect(result).toEqual(created);
+    });
+  });
+
+  describe('POST /personal-vocabularies/from-analysis', () => {
+    it('creates a personal vocabulary and bookmark from AI analysis', async () => {
+      const dto = {
+        word: 'cấm đỗ xe',
+        translation: 'no parking',
+        phonetic: 'kam doh seh',
+        partOfSpeech: 'phrase',
+      };
+      const created = {
+        id: 'pv-1',
+        userId: 'user-1',
+        source: PersonalVocabularySource.IMAGE_DISCOVERY,
+        ...dto,
+      };
+      service.createFromAnalysis.mockResolvedValue(created as any);
+
+      const result = await controller.createFromAnalysis(
+        mockUser as any,
+        dto as any,
+      );
+
+      expect(service.createFromAnalysis).toHaveBeenCalledWith('user-1', dto);
       expect(result).toEqual(created);
     });
   });

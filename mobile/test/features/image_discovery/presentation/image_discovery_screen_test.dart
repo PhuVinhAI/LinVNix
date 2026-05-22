@@ -18,64 +18,66 @@ final _pngBytes = base64Decode(
 );
 
 void main() {
-  testWidgets(
-    'sends all selected images and prior chat history',
-    (tester) async {
-      final api = _FakeImageAnalysisApi();
-      final container = ProviderContainer(
-        overrides: [imageAnalysisApiProvider.overrideWithValue(api)],
-      );
-      addTearDown(container.dispose);
+  testWidgets('sends all selected images and prior chat history', (
+    tester,
+  ) async {
+    final api = _FakeImageAnalysisApi();
+    final container = ProviderContainer(
+      overrides: [imageAnalysisApiProvider.overrideWithValue(api)],
+    );
+    addTearDown(container.dispose);
 
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: MaterialApp(
-            theme: AppTheme.light(),
-            home: const ImageDiscoveryScreen(),
-          ),
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          theme: AppTheme.light(),
+          home: const ImageDiscoveryScreen(),
         ),
-      );
+      ),
+    );
 
-      await container
-          .read(imageDiscoveryProvider.notifier)
-          .addImage(
-            XFile.fromData(_pngBytes, name: 'photo.png', mimeType: 'image/png'),
-          );
-      await container
-          .read(imageDiscoveryProvider.notifier)
-          .addImage(
-            XFile.fromData(
-              _pngBytes,
-              name: 'second.jpg',
-              mimeType: 'image/jpeg',
-            ),
-          );
-      await tester.pump();
+    await container
+        .read(imageDiscoveryProvider.notifier)
+        .addImage(
+          XFile.fromData(_pngBytes, name: 'photo.png', mimeType: 'image/png'),
+        );
+    await container
+        .read(imageDiscoveryProvider.notifier)
+        .addImage(
+          XFile.fromData(_pngBytes, name: 'second.jpg', mimeType: 'image/jpeg'),
+        );
+    await tester.pump();
 
-      await tester.enterText(find.byType(TextField), 'What does this say?');
-      await tester.tap(find.byIcon(Icons.arrow_upward_rounded));
-      await tester.pump();
-      await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'What does this say?');
+    await tester.tap(find.byIcon(Icons.arrow_upward_rounded));
+    await tester.pump();
+    await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), 'What else is visible?');
-      await tester.tap(find.byIcon(Icons.arrow_upward_rounded));
-      await tester.pump();
-      await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'What else is visible?');
+    await tester.tap(find.byIcon(Icons.arrow_upward_rounded));
+    await tester.pump();
+    await tester.pumpAndSettle();
 
-      expect(api.capturedPrompt, 'What else is visible?');
-      expect(api.capturedImages, hasLength(2));
-      expect(api.capturedImages.first.mimeType, 'image/png');
-      expect(api.capturedImages.first.base64, base64Encode(_pngBytes));
-      expect(api.capturedImages.last.mimeType, 'image/jpeg');
-      expect(api.capturedChatHistory.map((message) => message.toJson()), [
-        {'role': 'user', 'content': 'What does this say?'},
-        {'role': 'assistant', 'content': '**cấm đỗ xe** means no parking.'},
-      ]);
-      expect(find.text('cấm đỗ xe'), findsWidgets);
-      expect(find.text('no parking'), findsWidgets);
-    },
-  );
+    expect(api.capturedPrompt, 'What else is visible?');
+    expect(api.capturedImages, hasLength(2));
+    expect(api.capturedImages.first.mimeType, 'image/png');
+    expect(api.capturedImages.first.base64, base64Encode(_pngBytes));
+    expect(api.capturedImages.last.mimeType, 'image/jpeg');
+    expect(api.capturedChatHistory.map((message) => message.toJson()), [
+      {'role': 'user', 'content': 'What does this say?'},
+      {'role': 'assistant', 'content': '**cấm đỗ xe** means no parking.'},
+    ]);
+    expect(find.text('cấm đỗ xe'), findsWidgets);
+    expect(find.text('no parking'), findsWidgets);
+
+    await tester.tap(find.text('＋ Thêm').last);
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(api.addedVocabulary?.word, 'cấm đỗ xe');
+    expect(find.text('Đã thêm'), findsOneWidget);
+  });
 
   testWidgets('gallery upload renders a removable image grid', (tester) async {
     final api = _FakeImageAnalysisApi();
@@ -202,6 +204,7 @@ class _FakeImageAnalysisApi extends ImageAnalysisApi {
   final bool shouldFail;
   List<ImageAnalysisRequestImage> capturedImages = const [];
   List<ImageAnalysisChatHistoryMessage> capturedChatHistory = const [];
+  ImageAnalysisVocabulary? addedVocabulary;
   String? capturedPrompt;
 
   @override
@@ -226,6 +229,13 @@ class _FakeImageAnalysisApi extends ImageAnalysisApi {
         ),
       ],
     );
+  }
+
+  @override
+  Future<void> addVocabularyFromAnalysis(
+    ImageAnalysisVocabulary vocabulary,
+  ) async {
+    addedVocabulary = vocabulary;
   }
 }
 

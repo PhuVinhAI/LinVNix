@@ -20,6 +20,7 @@ import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/domain/user.entity';
 import { PersonalVocabulariesService } from '../application/personal-vocabularies.service';
 import { CreatePersonalVocabularyDto } from '../dto/create-personal-vocabulary.dto';
+import { CreatePersonalVocabularyFromAnalysisDto } from '../dto/create-personal-vocabulary-from-analysis.dto';
 import {
   PersonalVocabularyQueryDto,
   PersonalVocabularySort,
@@ -47,6 +48,27 @@ export class PersonalVocabulariesController {
     @Body() createDto: CreatePersonalVocabularyDto,
   ) {
     return this.personalVocabulariesService.create(user.id, createDto);
+  }
+
+  @Post('from-analysis')
+  @ApiOperation({
+    summary: 'Tạo từ vựng cá nhân từ phân tích ảnh AI',
+    description:
+      'Tạo từ vựng cá nhân và bookmark trong cùng một transaction từ kết quả AI image discovery.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Tạo từ vựng cá nhân từ phân tích ảnh thành công',
+  })
+  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
+  async createFromAnalysis(
+    @CurrentUser() user: User,
+    @Body() createDto: CreatePersonalVocabularyFromAnalysisDto,
+  ) {
+    return this.personalVocabulariesService.createFromAnalysis(
+      user.id,
+      createDto,
+    );
   }
 
   @Get()

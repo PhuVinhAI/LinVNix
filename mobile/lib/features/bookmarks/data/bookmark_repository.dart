@@ -17,11 +17,22 @@ class BookmarkRepository {
     }
   }
 
-  Future<bool> toggleBookmark(String vocabularyId) async {
+  Future<bool> toggleBookmark(
+    String vocabularyId, {
+    String? personalVocabularyId,
+  }) async {
     try {
-      final response = await _dio.post<Map<String, dynamic>>(
-        '/vocabularies/$vocabularyId/bookmark',
-      );
+      final Response<Map<String, dynamic>> response;
+      if (personalVocabularyId == null) {
+        response = await _dio.post<Map<String, dynamic>>(
+          '/vocabularies/$vocabularyId/bookmark',
+        );
+      } else {
+        response = await _dio.post<Map<String, dynamic>>(
+          '/vocabularies/$vocabularyId/bookmark',
+          data: {'personalVocabularyId': personalVocabularyId},
+        );
+      }
       return response.data!['isBookmarked'] as bool;
     } on DioException catch (e) {
       throw mapDioException(e);
@@ -40,7 +51,7 @@ class BookmarkRepository {
         queryParameters: {
           'page': page,
           'limit': limit,
-          if (search != null) 'search': search,
+          'search': ?search,
           'sort': sort.value,
         },
       );

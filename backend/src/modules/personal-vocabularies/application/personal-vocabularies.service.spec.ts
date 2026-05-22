@@ -3,10 +3,14 @@ import { PersonalVocabulariesRepository } from './repositories/personal-vocabula
 import { PersonalVocabularySource } from '../../../common/enums';
 import { PersonalVocabularySort } from '../dto/personal-vocabulary-query.dto';
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
+import { DataSource, EntityManager, QueryRunner } from 'typeorm';
+import { PersonalVocabulary } from '../domain/personal-vocabulary.entity';
+import { Bookmark } from '../../vocabularies/domain/bookmark.entity';
 
 describe('PersonalVocabulariesService', () => {
   let service: PersonalVocabulariesService;
   let repository: jest.Mocked<PersonalVocabulariesRepository>;
+  let dataSource: jest.Mocked<Pick<DataSource, 'createQueryRunner'>>;
 
   beforeEach(() => {
     repository = {
@@ -16,8 +20,39 @@ describe('PersonalVocabulariesService', () => {
       softDelete: jest.fn(),
       findPaginated: jest.fn(),
     } as unknown as jest.Mocked<PersonalVocabulariesRepository>;
-    service = new PersonalVocabulariesService(repository);
+    dataSource = {
+      createQueryRunner: jest.fn(),
+    };
+    service = new PersonalVocabulariesService(
+      repository,
+      dataSource as unknown as DataSource,
+    );
   });
+
+  function useTransactionalManager(manager: Partial<EntityManager>) {
+    const queryRunner = {
+      manager,
+      connect: jest.fn().mockResolvedValue(undefined),
+      startTransaction: jest.fn().mockResolvedValue(undefined),
+      commitTransaction: jest.fn().mockResolvedValue(undefined),
+      rollbackTransaction: jest.fn().mockResolvedValue(undefined),
+      release: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<
+      Pick<
+        QueryRunner,
+        | 'manager'
+        | 'connect'
+        | 'startTransaction'
+        | 'commitTransaction'
+        | 'rollbackTransaction'
+        | 'release'
+      >
+    >;
+    dataSource.createQueryRunner.mockReturnValue(
+      queryRunner as unknown as QueryRunner,
+    );
+    return queryRunner;
+  }
 
   describe('create', () => {
     it('creates a personal vocabulary scoped to the user', async () => {
@@ -61,6 +96,96 @@ describe('PersonalVocabulariesService', () => {
         ...data,
         userId: 'user-1',
       });
+    });
+  });
+
+  describe('createFromAnalysis', () => {
+    it('creates a personal vocabulary and bookmark in one transaction', async () => {
+      const manager = {
+        create: jest.fn((_entity, data) => data),
+        save: jest.fn(),
+      };
+      const queryRunner = useTransactionalManager(manager);
+      const savedVocabulary = {
+        id: 'pv-1',
+        userId: 'user-1',
+        word: 'cấm đỗ xe',
+        translation: 'no parking',
+        source: PersonalVocabularySource.IMAGE_DISCOVERY,
+      };
+      manager.save
+        .mockResolvedValueOnce(savedVocabulary)
+        .mockResolvedValueOnce({
+          id: 'bm-1',
+          userId: 'user-1',
+          personalVocabularyId: 'pv-1',
+        });
+
+      const result = await service.createFromAnalysis('user-1', {
+        word: 'cấm đỗ xe',
+        translation: 'no parking',
+        phonetic: 'kam doh seh',
+        partOfSpeech: 'phrase',
+      });
+
+      expect(manager.create).toHaveBeenNthCalledWith(1, PersonalVocabulary, {
+        word: 'cấm đỗ xe',
+        translation: 'no parking',
+        phonetic: 'kam doh seh',
+        partOfSpeech: 'phrase',
+        userId: 'user-1',
+        source: PersonalVocabularySource.IMAGE_DISCOVERY,
+      });
+      expect(manager.save).toHaveBeenNthCalledWith(
+        1,
+        PersonalVocabulary,
+        expect.objectContaining({
+          word: 'cấm đỗ xe',
+          userId: 'user-1',
+        }),
+      );
+      expect(manager.create).toHaveBeenNthCalledWith(2, Bookmark, {
+        userId: 'user-1',
+        personalVocabularyId: 'pv-1',
+      });
+      expect(manager.save).toHaveBeenNthCalledWith(
+        2,
+        Bookmark,
+        expect.objectContaining({
+          userId: 'user-1',
+          personalVocabularyId: 'pv-1',
+        }),
+      );
+      expect(queryRunner.commitTransaction).toHaveBeenCalledTimes(1);
+      expect(queryRunner.rollbackTransaction).not.toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalledTimes(1);
+      expect(result).toEqual(savedVocabulary);
+    });
+
+    it('rolls back if bookmark creation fails', async () => {
+      const manager = {
+        create: jest.fn((_entity, data) => data),
+        save: jest.fn(),
+      };
+      const queryRunner = useTransactionalManager(manager);
+      manager.save
+        .mockResolvedValueOnce({
+          id: 'pv-1',
+          userId: 'user-1',
+          word: 'cấm đỗ xe',
+        })
+        .mockRejectedValueOnce(new Error('bookmark insert failed'));
+
+      await expect(
+        service.createFromAnalysis('user-1', {
+          word: 'cấm đỗ xe',
+          translation: 'no parking',
+        }),
+      ).rejects.toThrow('bookmark insert failed');
+
+      expect(queryRunner.rollbackTransaction).toHaveBeenCalledTimes(1);
+      expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalledTimes(1);
     });
   });
 

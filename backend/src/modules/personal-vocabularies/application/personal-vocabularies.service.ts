@@ -3,15 +3,26 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
+import { DataSource, QueryRunner } from 'typeorm';
 import { PersonalVocabulariesRepository } from './repositories/personal-vocabularies.repository';
 import { PersonalVocabulary } from '../domain/personal-vocabulary.entity';
 import { PersonalVocabularySort } from '../dto/personal-vocabulary-query.dto';
 import { PaginatedResult } from '../../../common/interfaces/paginated-result.interface';
+import { PersonalVocabularySource } from '../../../common/enums/personal-vocabulary-source.enum';
+import {
+  Transactional,
+  TransactionalHost,
+} from '../../../common/decorators/transactional.decorator';
+import { Bookmark } from '../../vocabularies/domain/bookmark.entity';
+import { CreatePersonalVocabularyFromAnalysisDto } from '../dto/create-personal-vocabulary-from-analysis.dto';
 
 @Injectable()
-export class PersonalVocabulariesService {
+export class PersonalVocabulariesService implements TransactionalHost {
+  queryRunner?: QueryRunner;
+
   constructor(
     private readonly personalVocabulariesRepository: PersonalVocabulariesRepository,
+    readonly dataSource: DataSource,
   ) {}
 
   async create(
@@ -22,6 +33,34 @@ export class PersonalVocabulariesService {
       ...data,
       userId,
     });
+  }
+
+  @Transactional()
+  async createFromAnalysis(
+    userId: string,
+    data: CreatePersonalVocabularyFromAnalysisDto,
+  ): Promise<PersonalVocabulary> {
+    const manager = this.queryRunner
+      ? this.queryRunner.manager
+      : this.dataSource.manager;
+
+    const personalVocabulary = manager.create(PersonalVocabulary, {
+      ...data,
+      userId,
+      source: PersonalVocabularySource.IMAGE_DISCOVERY,
+    });
+    const savedVocabulary = await manager.save(
+      PersonalVocabulary,
+      personalVocabulary,
+    );
+
+    const bookmark = manager.create(Bookmark, {
+      userId,
+      personalVocabularyId: savedVocabulary.id,
+    });
+    await manager.save(Bookmark, bookmark);
+
+    return savedVocabulary;
   }
 
   async findById(id: string, userId: string): Promise<PersonalVocabulary> {

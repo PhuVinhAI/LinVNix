@@ -24,10 +24,7 @@ void main() {
     ).thenAnswer(
       (_) async => Response(
         requestOptions: RequestOptions(path: '/image-analysis/analyze'),
-        data: {
-          'text': 'Done',
-          'vocabularies': <dynamic>[],
-        },
+        data: {'text': 'Done', 'vocabularies': <dynamic>[]},
       ),
     );
 
@@ -49,12 +46,14 @@ void main() {
       ],
     );
 
-    final captured = verify(
-      () => dio.post<Map<String, dynamic>>(
-        '/image-analysis/analyze',
-        data: captureAny(named: 'data'),
-      ),
-    ).captured.single as Map<String, dynamic>;
+    final captured =
+        verify(
+              () => dio.post<Map<String, dynamic>>(
+                '/image-analysis/analyze',
+                data: captureAny(named: 'data'),
+              ),
+            ).captured.single
+            as Map<String, dynamic>;
 
     expect(captured['images'], [
       {'base64': 'one', 'mimeType': 'image/png'},
@@ -65,5 +64,52 @@ void main() {
       {'role': 'user', 'content': 'What does this say?'},
       {'role': 'assistant', 'content': 'It says no parking.'},
     ]);
+  });
+
+  test('posts AI vocabulary to the from-analysis endpoint', () async {
+    when(
+      () => dio.post<Map<String, dynamic>>(
+        '/personal-vocabularies/from-analysis',
+        data: any(named: 'data'),
+      ),
+    ).thenAnswer(
+      (_) async => Response(
+        requestOptions: RequestOptions(
+          path: '/personal-vocabularies/from-analysis',
+        ),
+        data: {'id': 'pv-1'},
+      ),
+    );
+
+    await api.addVocabularyFromAnalysis(
+      const ImageAnalysisVocabulary(
+        word: 'cấm đỗ xe',
+        translation: 'no parking',
+        phonetic: 'kam doh seh',
+        partOfSpeech: 'phrase',
+        exampleSentence: 'Ở đây cấm đỗ xe.',
+        exampleTranslation: 'Parking is forbidden here.',
+        classifier: 'biển',
+      ),
+    );
+
+    final captured =
+        verify(
+              () => dio.post<Map<String, dynamic>>(
+                '/personal-vocabularies/from-analysis',
+                data: captureAny(named: 'data'),
+              ),
+            ).captured.single
+            as Map<String, dynamic>;
+
+    expect(captured, {
+      'word': 'cấm đỗ xe',
+      'translation': 'no parking',
+      'phonetic': 'kam doh seh',
+      'partOfSpeech': 'phrase',
+      'exampleSentence': 'Ở đây cấm đỗ xe.',
+      'exampleTranslation': 'Parking is forbidden here.',
+      'classifier': 'biển',
+    });
   });
 }

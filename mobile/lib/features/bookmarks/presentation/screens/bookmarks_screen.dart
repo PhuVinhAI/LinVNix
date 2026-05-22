@@ -6,7 +6,6 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/bookmark_providers.dart';
 import '../../domain/bookmark_models.dart';
-import '../widgets/bookmark_icon_button.dart';
 import '../../../profile/data/profile_providers.dart';
 
 class BookmarksScreen extends ConsumerStatefulWidget {
@@ -42,9 +41,9 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
 
   void _onSearchChanged(String value) {
     final trimmed = value.trim();
-    ref.read(bookmarkSearchProvider.notifier).setSearch(
-          trimmed.isEmpty ? null : trimmed,
-        );
+    ref
+        .read(bookmarkSearchProvider.notifier)
+        .setSearch(trimmed.isEmpty ? null : trimmed);
   }
 
   void _onSortChanged(BookmarkSort sort) {
@@ -55,16 +54,19 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
     await ref.read(bookmarksProvider.notifier).refresh();
   }
 
-  Future<void> _onToggleBookmark(String vocabularyId) async {
+  Future<void> _onToggleBookmark(BookmarkWithVocabulary item) async {
     final bookmarkIdsValue = ref.read(bookmarkIdsProvider).value;
-    final isCurrentlyBookmarked = bookmarkIdsValue?.contains(vocabularyId) ?? false;
+    final isCurrentlyBookmarked =
+        item.isPersonal ||
+        (bookmarkIdsValue?.contains(item.vocabularyId) ?? true);
 
     if (isCurrentlyBookmarked) {
       final confirmed = await AppDialog.show<bool>(
         context,
         builder: (ctx) => AppDialog(
           title: 'Remove Saved Word',
-          content: 'Are you sure you want to remove this word from your saved words?',
+          content:
+              'Are you sure you want to remove this word from your saved words?',
           actions: [
             AppDialogAction(
               label: 'Cancel',
@@ -81,9 +83,16 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
       if (confirmed != true) return;
     }
 
-    await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
-    final isBookmarked =
-        ref.read(bookmarkIdsProvider).value?.contains(vocabularyId) ?? false;
+    await ref
+        .read(bookmarksProvider.notifier)
+        .toggleBookmark(
+          item.vocabularyId,
+          personalVocabularyId: item.personalVocabularyId,
+        );
+    final isBookmarked = item.isPersonal
+        ? false
+        : ref.read(bookmarkIdsProvider).value?.contains(item.vocabularyId) ??
+              false;
     if (!isBookmarked && mounted) {
       AppToast.show(context, message: 'Word removed', type: AppToastType.info);
     }
@@ -93,10 +102,8 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
     AppBottomSheet.show(
       context,
       isScrollControlled: true,
-      builder: (context) => _BookmarkDetailSheet(
-        item: item,
-        preferredDialect: preferredDialect,
-      ),
+      builder: (context) =>
+          _BookmarkDetailSheet(item: item, preferredDialect: preferredDialect),
     );
   }
 
@@ -123,7 +130,12 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, 0),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.sm,
+              AppSpacing.lg,
+              0,
+            ),
             child: AppInput(
               controller: _searchController,
               hint: 'Search words or meanings...',
@@ -141,7 +153,12 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.sm),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.sm,
+              AppSpacing.lg,
+              AppSpacing.sm,
+            ),
             child: AppDropdownField<BookmarkSort>(
               label: 'Sort by',
               value: currentSort,
@@ -158,7 +175,9 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
               },
             ),
           ),
-          Expanded(child: _buildBody(bookmarksAsync, bookmarkIds, preferredDialect)),
+          Expanded(
+            child: _buildBody(bookmarksAsync, bookmarkIds, preferredDialect),
+          ),
         ],
       ),
     );
@@ -193,16 +212,16 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
                 Text(
                   'No saved words yet',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: c.foreground,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: c.foreground,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   'Save your favorite words from lessons',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: c.mutedForeground,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
                 ),
               ],
             ),
@@ -214,7 +233,9 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
           child: ListView.builder(
             controller: _scrollController,
             padding: const EdgeInsets.all(AppSpacing.sm),
-            itemCount: page.items.length + (page.items.length < page.totalItems ? 1 : 0),
+            itemCount:
+                page.items.length +
+                (page.items.length < page.totalItems ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == page.items.length) {
                 return const _BookmarkPageFooterSkeleton();
@@ -223,7 +244,9 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
               final item = page.items[index];
               return _BookmarkTile(
                 item: item,
-                isBookmarked: bookmarkIds?.contains(item.vocabularyId) ?? true,
+                isBookmarked:
+                    item.isPersonal ||
+                    (bookmarkIds?.contains(item.vocabularyId) ?? true),
                 onToggle: _onToggleBookmark,
                 onTap: () => _showDetail(item, preferredDialect),
                 preferredDialect: preferredDialect,
@@ -254,9 +277,9 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
               const SizedBox(height: AppSpacing.lg),
               Text(
                 error.toString(),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: c.mutedForeground,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -287,7 +310,10 @@ class _BookmarksLoading extends StatelessWidget {
         return AppCard(
           variant: AppCardVariant.outlined,
           borderRadius: AppRadius.lg,
-          margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs, horizontal: AppSpacing.sm),
+          margin: const EdgeInsets.symmetric(
+            vertical: AppSpacing.xs,
+            horizontal: AppSpacing.sm,
+          ),
           child: Row(
             children: [
               Expanded(
@@ -317,7 +343,9 @@ class _BookmarksLoading extends StatelessWidget {
                             height: 18,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(AppRadius.full),
+                              borderRadius: BorderRadius.circular(
+                                AppRadius.full,
+                              ),
                             ),
                           ),
                         ),
@@ -383,23 +411,23 @@ class _BookmarkPageFooterSkeleton extends StatelessWidget {
                   AppShimmerBox(
                     width: 120,
                     height: 18,
-                    borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppRadius.sm),
+                    ),
                   ),
                   SizedBox(height: AppSpacing.md),
                   AppShimmerBox(
                     width: 200,
                     height: 14,
-                    borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppRadius.sm),
+                    ),
                   ),
                 ],
               ),
             ),
             SizedBox(width: AppSpacing.md),
-            AppShimmerBox(
-              width: 32,
-              height: 32,
-              shape: BoxShape.circle,
-            ),
+            AppShimmerBox(width: 32, height: 32, shape: BoxShape.circle),
           ],
         ),
       ),
@@ -418,7 +446,7 @@ class _BookmarkTile extends StatelessWidget {
 
   final BookmarkWithVocabulary item;
   final bool isBookmarked;
-  final Future<void> Function(String vocabularyId) onToggle;
+  final Future<void> Function(BookmarkWithVocabulary item) onToggle;
   final VoidCallback onTap;
   final String? preferredDialect;
 
@@ -439,7 +467,10 @@ class _BookmarkTile extends StatelessWidget {
     return AppCard(
       variant: AppCardVariant.outlined,
       borderRadius: AppRadius.lg,
-      margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs, horizontal: AppSpacing.sm),
+      margin: const EdgeInsets.symmetric(
+        vertical: AppSpacing.xs,
+        horizontal: AppSpacing.sm,
+      ),
       onTap: onTap,
       child: Row(
         children: [
@@ -452,16 +483,22 @@ class _BookmarkTile extends StatelessWidget {
                     Text(
                       displayedWord,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     if (item.partOfSpeech != null) ...[
                       const SizedBox(width: AppSpacing.sm),
                       AppChip(
-                        label: kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ?? item.partOfSpeech!,
+                        label:
+                            kPartOfSpeechViLabels[item.partOfSpeech!
+                                .toLowerCase()] ??
+                            item.partOfSpeech!,
                         color: c.info,
                         fontSize: AppTypography.caption,
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                       ),
                     ],
                   ],
@@ -469,17 +506,24 @@ class _BookmarkTile extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   item.translation,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: c.mutedForeground,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
                 ),
               ],
             ),
           ),
-          BookmarkIconButton(
-            vocabularyId: item.vocabularyId,
-            isBookmarked: isBookmarked,
-            onToggle: (_) => onToggle(item.vocabularyId),
+          IconButton(
+            onPressed: () => onToggle(item),
+            icon: Icon(
+              item.isPersonal
+                  ? Icons.auto_awesome
+                  : (isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+              color: isBookmarked ? c.primary : c.mutedForeground,
+            ),
+            tooltip: item.isPersonal
+                ? 'Personal vocabulary'
+                : 'Toggle saved word',
           ),
         ],
       ),
@@ -488,10 +532,7 @@ class _BookmarkTile extends StatelessWidget {
 }
 
 class _BookmarkDetailSheet extends StatelessWidget {
-  const _BookmarkDetailSheet({
-    required this.item,
-    this.preferredDialect,
-  });
+  const _BookmarkDetailSheet({required this.item, this.preferredDialect});
 
   final BookmarkWithVocabulary item;
   final String? preferredDialect;
@@ -541,9 +582,9 @@ class _BookmarkDetailSheet extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   '/${item.phonetic}/',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: c.mutedForeground,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: c.mutedForeground),
                 ),
               ],
               const SizedBox(height: AppSpacing.lg),
@@ -554,7 +595,9 @@ class _BookmarkDetailSheet extends StatelessWidget {
               if (item.partOfSpeech != null) ...[
                 const SizedBox(height: AppSpacing.sm),
                 AppChip(
-                  label: kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ?? item.partOfSpeech!,
+                  label:
+                      kPartOfSpeechViLabels[item.partOfSpeech!.toLowerCase()] ??
+                      item.partOfSpeech!,
                   color: c.info,
                 ),
               ],
@@ -569,24 +612,24 @@ class _BookmarkDetailSheet extends StatelessWidget {
                 const SizedBox(height: AppSpacing.lg),
                 Text(
                   'Example:',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   item.exampleSentence!,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontStyle: FontStyle.italic,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic),
                 ),
                 if (item.exampleTranslation != null) ...[
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     item.exampleTranslation!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: c.mutedForeground,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
                   ),
                 ],
               ],

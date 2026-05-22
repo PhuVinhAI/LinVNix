@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/sync/sync.dart';
 import '../data/image_analysis_providers.dart';
 import '../domain/image_analysis_models.dart';
 
@@ -128,17 +129,12 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
     await addImages([file], replace: false);
   }
 
-  Future<void> addImages(
-    List<XFile> files, {
-    bool replace = false,
-  }) async {
+  Future<void> addImages(List<XFile> files, {bool replace = false}) async {
     if (files.isEmpty) return;
     final existing = replace ? <ImageDiscoveryImage>[] : state.images;
     final slots = maxImageDiscoveryImages - existing.length;
     if (slots <= 0) {
-      state = state.copyWith(
-        error: 'You can analyze up to 5 images at once',
-      );
+      state = state.copyWith(error: 'You can analyze up to 5 images at once');
       return;
     }
 
@@ -210,6 +206,21 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
         isLoading: false,
         error: 'Unable to analyze image. Please try again.',
       );
+    }
+  }
+
+  Future<void> addVocabularyFromAnalysis(
+    ImageAnalysisVocabulary vocabulary,
+  ) async {
+    try {
+      final api = ref.read(imageAnalysisApiProvider);
+      await api.addVocabularyFromAnalysis(vocabulary);
+      ref.read(dataChangeBusProvider.notifier).emit({'bookmark'});
+    } catch (_) {
+      state = state.copyWith(
+        error: 'Unable to save vocabulary. Please try again.',
+      );
+      rethrow;
     }
   }
 

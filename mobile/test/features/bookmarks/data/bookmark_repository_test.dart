@@ -23,9 +23,9 @@ void main() {
   group('BookmarkRepository', () {
     group('toggleBookmark', () {
       test('returns true when bookmarked', () async {
-        when(() => mockDio.post<Map<String, dynamic>>(
-              '/vocabularies/v1/bookmark',
-            )).thenAnswer(
+        when(
+          () => mockDio.post<Map<String, dynamic>>('/vocabularies/v1/bookmark'),
+        ).thenAnswer(
           (_) async => Response(
             requestOptions: RequestOptions(path: '/vocabularies/v1/bookmark'),
             statusCode: 201,
@@ -38,9 +38,9 @@ void main() {
       });
 
       test('returns false when unbookmarked', () async {
-        when(() => mockDio.post<Map<String, dynamic>>(
-              '/vocabularies/v1/bookmark',
-            )).thenAnswer(
+        when(
+          () => mockDio.post<Map<String, dynamic>>('/vocabularies/v1/bookmark'),
+        ).thenAnswer(
           (_) async => Response(
             requestOptions: RequestOptions(path: '/vocabularies/v1/bookmark'),
             statusCode: 200,
@@ -52,15 +52,45 @@ void main() {
         expect(result, false);
       });
 
+      test('passes personalVocabularyId for personal bookmarks', () async {
+        when(
+          () => mockDio.post<Map<String, dynamic>>(
+            '/vocabularies/pv-1/bookmark',
+            data: any(named: 'data'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(path: '/vocabularies/pv-1/bookmark'),
+            statusCode: 200,
+            data: {'isBookmarked': false},
+          ),
+        );
+
+        final result = await repository.toggleBookmark(
+          'pv-1',
+          personalVocabularyId: 'pv-1',
+        );
+
+        final captured =
+            verify(
+                  () => mockDio.post<Map<String, dynamic>>(
+                    '/vocabularies/pv-1/bookmark',
+                    data: captureAny(named: 'data'),
+                  ),
+                ).captured.single
+                as Map<String, dynamic>;
+        expect(captured, {'personalVocabularyId': 'pv-1'});
+        expect(result, false);
+      });
+
       test('throws AuthException on 401', () async {
-        when(() => mockDio.post<Map<String, dynamic>>(
-              '/vocabularies/v1/bookmark',
-            )).thenThrow(
+        when(
+          () => mockDio.post<Map<String, dynamic>>('/vocabularies/v1/bookmark'),
+        ).thenThrow(
           DioException(
             requestOptions: RequestOptions(path: '/vocabularies/v1/bookmark'),
             response: Response(
-              requestOptions:
-                  RequestOptions(path: '/vocabularies/v1/bookmark'),
+              requestOptions: RequestOptions(path: '/vocabularies/v1/bookmark'),
               statusCode: 401,
               data: {'message': 'Unauthorized'},
             ),
@@ -77,13 +107,14 @@ void main() {
 
     group('getBookmarks', () {
       test('returns BookmarksPage with items', () async {
-        when(() => mockDio.get<Map<String, dynamic>>(
-              '/vocabularies/bookmarks',
-              queryParameters: any(named: 'queryParameters'),
-            )).thenAnswer(
+        when(
+          () => mockDio.get<Map<String, dynamic>>(
+            '/vocabularies/bookmarks',
+            queryParameters: any(named: 'queryParameters'),
+          ),
+        ).thenAnswer(
           (_) async => Response(
-            requestOptions:
-                RequestOptions(path: '/vocabularies/bookmarks'),
+            requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
             statusCode: 200,
             data: {
               'data': [
@@ -97,12 +128,7 @@ void main() {
                   },
                 },
               ],
-              'meta': {
-                'total': 1,
-                'page': 1,
-                'limit': 20,
-                'totalPages': 1,
-              },
+              'meta': {'total': 1, 'page': 1, 'limit': 20, 'totalPages': 1},
             },
           ),
         );
@@ -115,27 +141,23 @@ void main() {
       });
 
       test('passes search and sort params', () async {
-        when(() => mockDio.get<Map<String, dynamic>>(
-              '/vocabularies/bookmarks',
-              queryParameters: {
-                'page': 1,
-                'limit': 20,
-                'search': 'mèo',
-                'sort': 'az',
-              },
-            )).thenAnswer(
+        when(
+          () => mockDio.get<Map<String, dynamic>>(
+            '/vocabularies/bookmarks',
+            queryParameters: {
+              'page': 1,
+              'limit': 20,
+              'search': 'mèo',
+              'sort': 'az',
+            },
+          ),
+        ).thenAnswer(
           (_) async => Response(
-            requestOptions:
-                RequestOptions(path: '/vocabularies/bookmarks'),
+            requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
             statusCode: 200,
             data: {
               'data': [],
-              'meta': {
-                'total': 0,
-                'page': 1,
-                'limit': 20,
-                'totalPages': 0,
-              },
+              'meta': {'total': 0, 'page': 1, 'limit': 20, 'totalPages': 0},
             },
           ),
         );
@@ -145,6 +167,43 @@ void main() {
           sort: BookmarkSort.az,
         );
         expect(result.items, isEmpty);
+      });
+
+      test('parses personal bookmark type and id', () async {
+        when(
+          () => mockDio.get<Map<String, dynamic>>(
+            '/vocabularies/bookmarks',
+            queryParameters: any(named: 'queryParameters'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(path: '/vocabularies/bookmarks'),
+            statusCode: 200,
+            data: {
+              'data': [
+                {
+                  'bookmarkedAt': '2026-01-01T00:00:00.000Z',
+                  'type': 'personal',
+                  'personalVocabularyId': 'pv-1',
+                  'vocabulary': {
+                    'id': 'pv-1',
+                    'word': 'cấm đỗ xe',
+                    'translation': 'no parking',
+                    'partOfSpeech': 'phrase',
+                  },
+                },
+              ],
+              'meta': {'total': 1, 'page': 1, 'limit': 20, 'totalPages': 1},
+            },
+          ),
+        );
+
+        final result = await repository.getBookmarks();
+
+        expect(result.items.single.type, BookmarkType.personal);
+        expect(result.items.single.isPersonal, isTrue);
+        expect(result.items.single.vocabularyId, 'pv-1');
+        expect(result.items.single.personalVocabularyId, 'pv-1');
       });
     });
   });

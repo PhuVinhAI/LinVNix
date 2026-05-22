@@ -4,9 +4,10 @@ import '../../../core/sync/sync.dart';
 import '../data/bookmark_repository.dart';
 import '../domain/bookmark_models.dart';
 
-final bookmarkIdsProvider = AsyncNotifierProvider<BookmarkIdsNotifier, Set<String>>(
-  BookmarkIdsNotifier.new,
-);
+final bookmarkIdsProvider =
+    AsyncNotifierProvider<BookmarkIdsNotifier, Set<String>>(
+      BookmarkIdsNotifier.new,
+    );
 
 class BookmarkIdsNotifier extends CachedRepository<Set<String>>
     with DataChangeBusSubscriber<Set<String>> {
@@ -25,7 +26,10 @@ class BookmarkIdsNotifier extends CachedRepository<Set<String>>
       if (page >= result.totalPages) break;
       page++;
     }
-    return allItems.map((i) => i.vocabularyId).toSet();
+    return allItems
+        .where((item) => item.type == BookmarkType.system)
+        .map((i) => i.vocabularyId)
+        .toSet();
   }
 
   Future<void> toggle(String vocabularyId) async {
@@ -55,9 +59,10 @@ class BookmarkIdsNotifier extends CachedRepository<Set<String>>
   }
 }
 
-final bookmarkStatsProvider = AsyncNotifierProvider<BookmarkStatsNotifier, BookmarkStats>(
-  BookmarkStatsNotifier.new,
-);
+final bookmarkStatsProvider =
+    AsyncNotifierProvider<BookmarkStatsNotifier, BookmarkStats>(
+      BookmarkStatsNotifier.new,
+    );
 
 class BookmarkStatsNotifier extends CachedRepository<BookmarkStats>
     with DataChangeBusSubscriber<BookmarkStats> {
@@ -88,9 +93,10 @@ class BookmarkSortNotifier extends Notifier<BookmarkSort> {
   void setSort(BookmarkSort sort) => state = sort;
 }
 
-final bookmarkSortProvider = NotifierProvider<BookmarkSortNotifier, BookmarkSort>(
-  BookmarkSortNotifier.new,
-);
+final bookmarkSortProvider =
+    NotifierProvider<BookmarkSortNotifier, BookmarkSort>(
+      BookmarkSortNotifier.new,
+    );
 
 class BookmarkSearchNotifier extends Notifier<String?> {
   @override
@@ -99,13 +105,15 @@ class BookmarkSearchNotifier extends Notifier<String?> {
   void setSearch(String? search) => state = search;
 }
 
-final bookmarkSearchProvider = NotifierProvider<BookmarkSearchNotifier, String?>(
-  BookmarkSearchNotifier.new,
-);
+final bookmarkSearchProvider =
+    NotifierProvider<BookmarkSearchNotifier, String?>(
+      BookmarkSearchNotifier.new,
+    );
 
-final bookmarksProvider = AsyncNotifierProvider<BookmarksNotifier, BookmarksPage>(
-  BookmarksNotifier.new,
-);
+final bookmarksProvider =
+    AsyncNotifierProvider<BookmarksNotifier, BookmarksPage>(
+      BookmarksNotifier.new,
+    );
 
 class BookmarksNotifier extends AsyncNotifier<BookmarksPage>
     with DataChangeBusSubscriber<BookmarksPage> {
@@ -129,7 +137,12 @@ class BookmarksNotifier extends AsyncNotifier<BookmarksPage>
     BookmarkSort sort = BookmarkSort.newest,
   }) async {
     final repo = ref.read(bookmarkRepositoryProvider);
-    return repo.getBookmarks(page: page, limit: _limit, search: search, sort: sort);
+    return repo.getBookmarks(
+      page: page,
+      limit: _limit,
+      search: search,
+      sort: sort,
+    );
   }
 
   Future<void> loadMore() async {
@@ -143,13 +156,15 @@ class BookmarksNotifier extends AsyncNotifier<BookmarksPage>
       final nextPage = await _loadPage(_page + 1, search: search, sort: sort);
       _page++;
       _hasMore = nextPage.items.length >= _limit;
-      state = AsyncData(BookmarksPage(
-        items: [...current.items, ...nextPage.items],
-        page: nextPage.page,
-        limit: nextPage.limit,
-        totalPages: nextPage.totalPages,
-        totalItems: nextPage.totalItems,
-      ));
+      state = AsyncData(
+        BookmarksPage(
+          items: [...current.items, ...nextPage.items],
+          page: nextPage.page,
+          limit: nextPage.limit,
+          totalPages: nextPage.totalPages,
+          totalItems: nextPage.totalItems,
+        ),
+      );
     } catch (e, st) {
       state = AsyncError(e, st);
     }
@@ -159,17 +174,35 @@ class BookmarksNotifier extends AsyncNotifier<BookmarksPage>
     ref.invalidateSelf();
   }
 
-  Future<void> toggleBookmark(String vocabularyId) async {
-    await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
+  Future<void> toggleBookmark(
+    String vocabularyId, {
+    String? personalVocabularyId,
+  }) async {
+    if (personalVocabularyId == null) {
+      await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
+      return;
+    }
+
+    final repo = ref.read(bookmarkRepositoryProvider);
+    await repo.toggleBookmark(
+      vocabularyId,
+      personalVocabularyId: personalVocabularyId,
+    );
+    ref.read(dataChangeBusProvider.notifier).emit({
+      'bookmark',
+      'personal-vocabulary-$personalVocabularyId',
+    });
   }
 }
 
 final flashcardBookmarksProvider =
-    AsyncNotifierProvider<FlashcardBookmarksNotifier, List<BookmarkWithVocabulary>>(
-  FlashcardBookmarksNotifier.new,
-);
+    AsyncNotifierProvider<
+      FlashcardBookmarksNotifier,
+      List<BookmarkWithVocabulary>
+    >(FlashcardBookmarksNotifier.new);
 
-class FlashcardBookmarksNotifier extends CachedRepository<List<BookmarkWithVocabulary>>
+class FlashcardBookmarksNotifier
+    extends CachedRepository<List<BookmarkWithVocabulary>>
     with DataChangeBusSubscriber<List<BookmarkWithVocabulary>> {
   @override
   Duration get ttl => const Duration(minutes: 2);
