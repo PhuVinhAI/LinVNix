@@ -76,6 +76,19 @@ export interface ListeningAnswer {
   transcript: string;
 }
 
+// Speaking Options
+export interface SpeakingOptions extends BaseExerciseOptions {
+  type: ExerciseType.SPEAKING;
+  promptText?: string;
+  promptAudioUrl: string;
+  transcriptType: 'exact' | 'keywords';
+  keywords?: string[];
+}
+
+export interface SpeakingAnswer {
+  transcript: string;
+}
+
 // Discriminated Union cho tất cả options
 export type ExerciseOptions =
   | MultipleChoiceOptions
@@ -83,7 +96,8 @@ export type ExerciseOptions =
   | MatchingOptions
   | OrderingOptions
   | TranslationOptions
-  | ListeningOptions;
+  | ListeningOptions
+  | SpeakingOptions;
 
 // Discriminated Union cho tất cả answers
 export type ExerciseAnswer =
@@ -92,7 +106,8 @@ export type ExerciseAnswer =
   | MatchingAnswer
   | OrderingAnswer
   | TranslationAnswer
-  | ListeningAnswer;
+  | ListeningAnswer
+  | SpeakingAnswer;
 
 // Type guard helpers
 export function isMultipleChoiceOptions(
@@ -129,4 +144,10 @@ export function isListeningOptions(
   options: ExerciseOptions,
 ): options is ListeningOptions {
   return options.type === ExerciseType.LISTENING;
+}
+
+export function isSpeakingOptions(
+  options: ExerciseOptions,
+): options is SpeakingOptions {
+  return options.type === ExerciseType.SPEAKING;
 }

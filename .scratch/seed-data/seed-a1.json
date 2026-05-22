@@ -152,6 +152,28 @@
                   "order_index": 5,
                   "question": "Bạn muốn nói 'Excuse me' bằng tiếng Việt, bạn nói gì?",
                   "question_audio_url": null
+                },
+                {
+                  "correct_answer": {
+                    "transcript": "xin chào",
+                    "type": "speaking"
+                  },
+                  "difficulty_level": 1,
+                  "exercise_type": "speaking",
+                  "explanation": "Cụm từ cần nói là \"xin chào\".",
+                  "options": {
+                    "promptText": "xin chào",
+                    "promptAudioUrl": "/uploads/audio/seed/a1/lesson-001/xin-chao.mp3",
+                    "transcriptType": "exact",
+                    "keywords": [
+                      "xin",
+                      "chào"
+                    ],
+                    "type": "speaking"
+                  },
+                  "order_index": 6,
+                  "question": "Bấm loa để nghe mẫu, sau đó nói lại: xin chào",
+                  "question_audio_url": "/uploads/audio/seed/a1/lesson-001/xin-chao.mp3"
                 }
               ],
               "grammar_rules": [],

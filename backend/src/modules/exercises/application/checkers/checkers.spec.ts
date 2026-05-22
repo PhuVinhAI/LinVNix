@@ -6,6 +6,7 @@ import type {
   OrderingAnswer,
   TranslationAnswer,
   ListeningAnswer,
+  SpeakingAnswer,
 } from '../../domain/exercise-options.types';
 import { MultipleChoiceChecker } from './multiple-choice.checker';
 import { FillBlankChecker } from './fill-blank.checker';
@@ -13,6 +14,7 @@ import { MatchingChecker } from './matching.checker';
 import { OrderingChecker } from './ordering.checker';
 import { TranslationChecker } from './translation.checker';
 import { ListeningChecker } from './listening.checker';
+import { SpeakingChecker } from './speaking.checker';
 
 describe('AnswerAssessment - CheckerAdapters', () => {
   describe('MultipleChoiceChecker', () => {
@@ -291,6 +293,43 @@ describe('AnswerAssessment - CheckerAdapters', () => {
       const result = checker.check(
         { transcript: 'xin  chào!' } as ListeningAnswer,
         { transcript: 'xin chào' } as ListeningAnswer,
+      );
+      expect(result.isCorrect).toBe(true);
+    });
+  });
+
+  describe('SpeakingChecker', () => {
+    const checker: CheckerAdapter = new SpeakingChecker();
+
+    it('returns isCorrect true when transcripts match (normalized)', () => {
+      const result = checker.check(
+        { transcript: 'xin chào' } as SpeakingAnswer,
+        { transcript: 'Xin Chào' } as SpeakingAnswer,
+      );
+      expect(result.isCorrect).toBe(true);
+    });
+
+    it('returns isCorrect false when transcripts differ', () => {
+      const result = checker.check(
+        { transcript: 'tạm biệt' } as SpeakingAnswer,
+        { transcript: 'xin chào' } as SpeakingAnswer,
+      );
+      expect(result.isCorrect).toBe(false);
+    });
+
+    it('returns isCorrect false with feedback when transcript is empty', () => {
+      const result = checker.check(
+        { transcript: '' } as SpeakingAnswer,
+        { transcript: 'xin chào' } as SpeakingAnswer,
+      );
+      expect(result.isCorrect).toBe(false);
+      expect(result.feedback).toBeDefined();
+    });
+
+    it('normalizes punctuation and whitespace', () => {
+      const result = checker.check(
+        { transcript: 'xin  chào!' } as SpeakingAnswer,
+        { transcript: 'xin chào' } as SpeakingAnswer,
       );
       expect(result.isCorrect).toBe(true);
     });

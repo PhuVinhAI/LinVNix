@@ -11,6 +11,7 @@ import { MatchingChecker } from './checkers/matching.checker';
 import { OrderingChecker } from './checkers/ordering.checker';
 import { TranslationChecker } from './checkers/translation.checker';
 import { ListeningChecker } from './checkers/listening.checker';
+import { SpeakingChecker } from './checkers/speaking.checker';
 
 @Injectable()
 export class AnswerAssessment {
@@ -24,6 +25,7 @@ export class AnswerAssessment {
     [ExerciseType.ORDERING, new OrderingChecker()],
     [ExerciseType.TRANSLATION, new TranslationChecker()],
     [ExerciseType.LISTENING, new ListeningChecker()],
+    [ExerciseType.SPEAKING, new SpeakingChecker()],
   ]);
 
   assessAnswer(

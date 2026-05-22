@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -48,9 +50,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   bool _resumeGateDone = false;
 
   LessonExercisesArgs get _args => LessonExercisesArgs(
-        lessonId: widget.lessonId ?? widget.moduleId ?? '',
-        setId: widget.setId,
-      );
+    lessonId: widget.lessonId ?? widget.moduleId ?? '',
+    setId: widget.setId,
+  );
 
   @override
   void didUpdateWidget(covariant ExercisePlayScreen oldWidget) {
@@ -126,7 +128,8 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
       if (session == null) return;
 
-      final meaningful = session.currentIndex > 0 ||
+      final meaningful =
+          session.currentIndex > 0 ||
           session.results.isNotEmpty ||
           session.answers.isNotEmpty;
 
@@ -240,6 +243,19 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
   int get _totalCorrect => _results.values.where((r) => r.isCorrect).length;
 
+  void _handleAnswerChanged(dynamic answer) {
+    setState(() => _currentAnswer = answer);
+    if (_currentExercise?.exerciseType == ExerciseType.speaking &&
+        answer is String &&
+        answer.trim().isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_submitted && !_submitting && _isValid) {
+          _submit();
+        }
+      });
+    }
+  }
+
   Future<void> _submit() async {
     if (!_isValid || _submitted || _submitting) return;
 
@@ -330,11 +346,11 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
             ),
             if (correct < total) ...[
               const SizedBox(height: 12),
-              ..._results.entries
-                  .where((e) => !e.value.isCorrect)
-                  .map((e) {
+              ..._results.entries.where((e) => !e.value.isCorrect).map((e) {
                 final idx = e.key;
-                final exercise = idx < _exercises.length ? _exercises[idx] : null;
+                final exercise = idx < _exercises.length
+                    ? _exercises[idx]
+                    : null;
                 if (exercise == null) return const SizedBox.shrink();
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 4),
@@ -371,9 +387,11 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                   await repo.completeLesson(widget.lessonId!);
                 } catch (_) {}
               }
-              ref.read(dataChangeBusProvider.notifier).emit(
-                {'progress', 'exercise', 'exercise-set'},
-              );
+              ref.read(dataChangeBusProvider.notifier).emit({
+                'progress',
+                'exercise',
+                'exercise-set',
+              });
               if (mounted) context.pop();
             },
           ),
@@ -528,10 +546,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         final renderer = getRenderer(exercise.exerciseType);
         final progress = (_currentIndex + 1) / _exercises.length;
 
-        return WillPopScope(
-          onWillPop: () async {
-            await _saveSession();
-            return true;
+        return PopScope(
+          onPopInvokedWithResult: (_, _) {
+            unawaited(_saveSession());
           },
           child: Scaffold(
             appBar: AppAppBar(
@@ -563,9 +580,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                     exercise,
                     context,
                     _currentAnswer,
-                    (answer) {
-                      setState(() => _currentAnswer = answer);
-                    },
+                    _handleAnswerChanged,
                   ),
                   if (_submitError != null) ...[
                     const SizedBox(height: 16),
@@ -578,7 +593,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                           Expanded(
                             child: Text(
                               _submitError!,
-                              style: theme.textTheme.bodySmall?.copyWith(color: c.error),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: c.error,
+                              ),
                             ),
                           ),
                         ],
@@ -651,19 +668,15 @@ class QuestionHeader extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                visuals.icon,
-                size: 14,
-                color: visuals.accent,
-              ),
+              Icon(visuals.icon, size: 14, color: visuals.accent),
               const SizedBox(width: AppSpacing.xs + 2),
               Text(
                 visuals.label,
                 style: theme.textTheme.labelSmall?.copyWith(
-                      color: visuals.accent,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.3,
-                    ),
+                  color: visuals.accent,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                ),
               ),
             ],
           ),
@@ -741,10 +754,7 @@ class ExplanationPanel extends StatelessWidget {
           ],
           if (explanation != null && explanation!.isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(
-              explanation!,
-              style: theme.textTheme.bodyMedium,
-            ),
+            Text(explanation!, style: theme.textTheme.bodyMedium),
           ],
         ],
       ),

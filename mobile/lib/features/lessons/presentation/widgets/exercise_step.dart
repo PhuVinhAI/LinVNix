@@ -32,8 +32,7 @@ class ExerciseStepWidget extends ConsumerStatefulWidget {
   final ValueChanged<ExerciseSubmissionResult>? onResultChanged;
 
   @override
-  ConsumerState<ExerciseStepWidget> createState() =>
-      _ExerciseStepWidgetState();
+  ConsumerState<ExerciseStepWidget> createState() => _ExerciseStepWidgetState();
 }
 
 class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
@@ -46,7 +45,8 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
 
   ExerciseRenderer get _renderer => getRenderer(widget.exercise.exerciseType);
 
-  bool get _isValid => _renderer.validateAnswer(widget.exercise, _currentAnswer);
+  bool get _isValid =>
+      _renderer.validateAnswer(widget.exercise, _currentAnswer);
 
   @override
   void initState() {
@@ -135,6 +135,15 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
   void _handleAnswerChanged(dynamic answer) {
     setState(() => _currentAnswer = answer);
     widget.onAnswerChanged?.call(answer);
+    if (widget.exercise.exerciseType == ExerciseType.speaking &&
+        answer is String &&
+        answer.trim().isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_submitted && !_submitting && _isValid) {
+          _submit();
+        }
+      });
+    }
   }
 
   @override
@@ -181,10 +190,7 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
               color: c.error,
               borderRadius: AppRadius.md,
               padding: const EdgeInsets.all(AppSpacing.md),
-              child: Text(
-                _error!,
-                style: TextStyle(color: c.errorForeground),
-              ),
+              child: Text(_error!, style: TextStyle(color: c.errorForeground)),
             ),
             const SizedBox(height: 16),
           ],
@@ -217,6 +223,7 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
       OrderingAnswer(:final orderedItems) => orderedItems.join(' → '),
       TranslationAnswer(:final translation) => translation,
       ListeningAnswer(:final transcript) => transcript,
+      SpeakingAnswer(:final transcript) => transcript,
     };
   }
 }

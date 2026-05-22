@@ -93,6 +93,19 @@ describe('AnswerNormalizer', () => {
     });
   });
 
+  describe('Speaking', () => {
+    it('converts old string format to SpeakingAnswer', () => {
+      const result = normalizer.normalize(ExerciseType.SPEAKING, 'xin chào');
+      expect(result).toEqual({ transcript: 'xin chào' });
+    });
+
+    it('passes through new format unchanged', () => {
+      const input = { transcript: 'hello' };
+      const result = normalizer.normalize(ExerciseType.SPEAKING, input);
+      expect(result).toEqual({ transcript: 'hello' });
+    });
+  });
+
   describe('edge cases', () => {
     it('returns fallback for unknown exercise type', () => {
       const result = normalizer.normalize('UNKNOWN' as ExerciseType, 'data');
@@ -107,6 +120,11 @@ describe('AnswerNormalizer', () => {
     it('handles undefined input gracefully', () => {
       const result = normalizer.normalize(ExerciseType.FILL_BLANK, undefined);
       expect(result).toEqual({ answers: [] });
+    });
+
+    it('returns empty transcript for null speaking input', () => {
+      const result = normalizer.normalize(ExerciseType.SPEAKING, null);
+      expect(result).toEqual({ transcript: '' });
     });
   });
 });

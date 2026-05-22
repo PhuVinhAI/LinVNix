@@ -6,7 +6,8 @@ enum ExerciseType {
   matching('matching'),
   ordering('ordering'),
   translation('translation'),
-  listening('listening');
+  listening('listening'),
+  speaking('speaking');
 
   const ExerciseType(this.value);
   final String value;
@@ -31,6 +32,8 @@ enum ExerciseType {
       case ExerciseType.translation:
         return 180;
       case ExerciseType.listening:
+        return 180;
+      case ExerciseType.speaking:
         return 180;
     }
   }
@@ -105,7 +108,24 @@ sealed class ExerciseOptions {
     Map<String, dynamic>? json,
   ) {
     if (json == null) {
-      return const MultipleChoiceOptions(choices: []);
+      return switch (type) {
+        ExerciseType.multipleChoice => const MultipleChoiceOptions(choices: []),
+        ExerciseType.fillBlank => const FillBlankOptions(blanks: 1),
+        ExerciseType.matching => const MatchingOptions(pairs: []),
+        ExerciseType.ordering => const OrderingOptions(items: []),
+        ExerciseType.translation => const TranslationOptions(
+          sourceLanguage: '',
+          targetLanguage: '',
+        ),
+        ExerciseType.listening => const ListeningOptions(
+          audioUrl: '',
+          transcriptType: 'exact',
+        ),
+        ExerciseType.speaking => const SpeakingOptions(
+          promptAudioUrl: '',
+          transcriptType: 'exact',
+        ),
+      };
     }
     return switch (type) {
       ExerciseType.multipleChoice => MultipleChoiceOptions.fromJson(json),
@@ -114,6 +134,7 @@ sealed class ExerciseOptions {
       ExerciseType.ordering => OrderingOptions.fromJson(json),
       ExerciseType.translation => TranslationOptions.fromJson(json),
       ExerciseType.listening => ListeningOptions.fromJson(json),
+      ExerciseType.speaking => SpeakingOptions.fromJson(json),
     };
   }
 
@@ -124,7 +145,8 @@ class MultipleChoiceOptions extends ExerciseOptions {
   const MultipleChoiceOptions({required this.choices});
   factory MultipleChoiceOptions.fromJson(Map<String, dynamic> json) {
     return MultipleChoiceOptions(
-      choices: (json['choices'] as List<dynamic>?)
+      choices:
+          (json['choices'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
@@ -142,8 +164,10 @@ class FillBlankOptions extends ExerciseOptions {
     return FillBlankOptions(
       blanks: (json['blanks'] as num?)?.toInt() ?? 1,
       acceptedAnswers: (json['acceptedAnswers'] as List<dynamic>?)
-          ?.map((group) =>
-              (group as List<dynamic>).map((e) => e as String).toList())
+          ?.map(
+            (group) =>
+                (group as List<dynamic>).map((e) => e as String).toList(),
+          )
           .toList(),
     );
   }
@@ -152,16 +176,17 @@ class FillBlankOptions extends ExerciseOptions {
 
   @override
   Map<String, dynamic> toJson() => {
-        'blanks': blanks,
-        'acceptedAnswers': acceptedAnswers,
-      };
+    'blanks': blanks,
+    'acceptedAnswers': acceptedAnswers,
+  };
 }
 
 class MatchingOptions extends ExerciseOptions {
   const MatchingOptions({required this.pairs});
   factory MatchingOptions.fromJson(Map<String, dynamic> json) {
     return MatchingOptions(
-      pairs: (json['pairs'] as List<dynamic>?)
+      pairs:
+          (json['pairs'] as List<dynamic>?)
               ?.map((e) => MatchPair.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -171,17 +196,16 @@ class MatchingOptions extends ExerciseOptions {
 
   @override
   Map<String, dynamic> toJson() => {
-        'pairs': pairs.map((p) => {'left': p.left, 'right': p.right}).toList(),
-      };
+    'pairs': pairs.map((p) => {'left': p.left, 'right': p.right}).toList(),
+  };
 }
 
 class OrderingOptions extends ExerciseOptions {
   const OrderingOptions({required this.items});
   factory OrderingOptions.fromJson(Map<String, dynamic> json) {
     return OrderingOptions(
-      items: (json['items'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
+      items:
+          (json['items'] as List<dynamic>?)?.map((e) => e as String).toList() ??
           [],
     );
   }
@@ -212,10 +236,10 @@ class TranslationOptions extends ExerciseOptions {
 
   @override
   Map<String, dynamic> toJson() => {
-        'sourceLanguage': sourceLanguage,
-        'targetLanguage': targetLanguage,
-        'acceptedTranslations': acceptedTranslations,
-      };
+    'sourceLanguage': sourceLanguage,
+    'targetLanguage': targetLanguage,
+    'acceptedTranslations': acceptedTranslations,
+  };
 }
 
 class ListeningOptions extends ExerciseOptions {
@@ -239,10 +263,41 @@ class ListeningOptions extends ExerciseOptions {
 
   @override
   Map<String, dynamic> toJson() => {
-        'audioUrl': audioUrl,
-        'transcriptType': transcriptType,
-        'keywords': keywords,
-      };
+    'audioUrl': audioUrl,
+    'transcriptType': transcriptType,
+    'keywords': keywords,
+  };
+}
+
+class SpeakingOptions extends ExerciseOptions {
+  const SpeakingOptions({
+    this.promptText,
+    required this.promptAudioUrl,
+    required this.transcriptType,
+    this.keywords,
+  });
+  factory SpeakingOptions.fromJson(Map<String, dynamic> json) {
+    return SpeakingOptions(
+      promptText: json['promptText'] as String?,
+      promptAudioUrl: json['promptAudioUrl'] as String? ?? '',
+      transcriptType: json['transcriptType'] as String? ?? 'exact',
+      keywords: (json['keywords'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+    );
+  }
+  final String? promptText;
+  final String promptAudioUrl;
+  final String transcriptType;
+  final List<String>? keywords;
+
+  @override
+  Map<String, dynamic> toJson() => {
+    'promptText': promptText,
+    'promptAudioUrl': promptAudioUrl,
+    'transcriptType': transcriptType,
+    'keywords': keywords,
+  };
 }
 
 class MatchPair {
@@ -268,7 +323,17 @@ sealed class ExerciseAnswer {
     Map<String, dynamic>? json,
   ) {
     if (json == null) {
-      return const MultipleChoiceAnswer(selectedChoice: '');
+      return switch (type) {
+        ExerciseType.multipleChoice => const MultipleChoiceAnswer(
+          selectedChoice: '',
+        ),
+        ExerciseType.fillBlank => const FillBlankAnswer(answers: []),
+        ExerciseType.matching => const MatchingAnswer(matches: []),
+        ExerciseType.ordering => const OrderingAnswer(orderedItems: []),
+        ExerciseType.translation => const TranslationAnswer(translation: ''),
+        ExerciseType.listening => const ListeningAnswer(transcript: ''),
+        ExerciseType.speaking => const SpeakingAnswer(transcript: ''),
+      };
     }
     return switch (type) {
       ExerciseType.multipleChoice => MultipleChoiceAnswer.fromJson(json),
@@ -277,6 +342,7 @@ sealed class ExerciseAnswer {
       ExerciseType.ordering => OrderingAnswer.fromJson(json),
       ExerciseType.translation => TranslationAnswer.fromJson(json),
       ExerciseType.listening => ListeningAnswer.fromJson(json),
+      ExerciseType.speaking => SpeakingAnswer.fromJson(json),
     };
   }
 
@@ -300,7 +366,8 @@ class FillBlankAnswer extends ExerciseAnswer {
   const FillBlankAnswer({required this.answers});
   factory FillBlankAnswer.fromJson(Map<String, dynamic> json) {
     return FillBlankAnswer(
-      answers: (json['answers'] as List<dynamic>?)
+      answers:
+          (json['answers'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
@@ -316,7 +383,8 @@ class MatchingAnswer extends ExerciseAnswer {
   const MatchingAnswer({required this.matches});
   factory MatchingAnswer.fromJson(Map<String, dynamic> json) {
     return MatchingAnswer(
-      matches: (json['matches'] as List<dynamic>?)
+      matches:
+          (json['matches'] as List<dynamic>?)
               ?.map((e) => MatchPair.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -326,15 +394,16 @@ class MatchingAnswer extends ExerciseAnswer {
 
   @override
   Map<String, dynamic> toJson() => {
-        'matches': matches.map((m) => {'left': m.left, 'right': m.right}).toList(),
-      };
+    'matches': matches.map((m) => {'left': m.left, 'right': m.right}).toList(),
+  };
 }
 
 class OrderingAnswer extends ExerciseAnswer {
   const OrderingAnswer({required this.orderedItems});
   factory OrderingAnswer.fromJson(Map<String, dynamic> json) {
     return OrderingAnswer(
-      orderedItems: (json['orderedItems'] as List<dynamic>?)
+      orderedItems:
+          (json['orderedItems'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
@@ -349,9 +418,7 @@ class OrderingAnswer extends ExerciseAnswer {
 class TranslationAnswer extends ExerciseAnswer {
   const TranslationAnswer({required this.translation});
   factory TranslationAnswer.fromJson(Map<String, dynamic> json) {
-    return TranslationAnswer(
-      translation: json['translation'] as String? ?? '',
-    );
+    return TranslationAnswer(translation: json['translation'] as String? ?? '');
   }
   final String translation;
 
@@ -362,9 +429,18 @@ class TranslationAnswer extends ExerciseAnswer {
 class ListeningAnswer extends ExerciseAnswer {
   const ListeningAnswer({required this.transcript});
   factory ListeningAnswer.fromJson(Map<String, dynamic> json) {
-    return ListeningAnswer(
-      transcript: json['transcript'] as String? ?? '',
-    );
+    return ListeningAnswer(transcript: json['transcript'] as String? ?? '');
+  }
+  final String transcript;
+
+  @override
+  Map<String, dynamic> toJson() => {'transcript': transcript};
+}
+
+class SpeakingAnswer extends ExerciseAnswer {
+  const SpeakingAnswer({required this.transcript});
+  factory SpeakingAnswer.fromJson(Map<String, dynamic> json) {
+    return SpeakingAnswer(transcript: json['transcript'] as String? ?? '');
   }
   final String transcript;
 

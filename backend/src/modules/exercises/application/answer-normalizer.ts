@@ -10,6 +10,7 @@ import type { ExerciseAnswer } from '../domain/exercise-options.types';
  * - Ordering: string[] → { orderedItems }
  * - Translation: string → { translation }
  * - Listening: string → { transcript }
+ * - Speaking: string → { transcript }
  *
  * New formats pass through unchanged.
  *
@@ -34,6 +35,8 @@ export class AnswerNormalizer {
         return this.normalizeTranslation(raw);
       case ExerciseType.LISTENING:
         return this.normalizeListening(raw);
+      case ExerciseType.SPEAKING:
+        return this.normalizeSpeaking(raw);
       default:
         return {} as ExerciseAnswer;
     }
@@ -78,6 +81,13 @@ export class AnswerNormalizer {
     return raw as ExerciseAnswer;
   }
 
+  private normalizeSpeaking(raw: unknown) {
+    if (typeof raw === 'string') {
+      return { transcript: raw };
+    }
+    return raw as ExerciseAnswer;
+  }
+
   private defaultFor(exerciseType: ExerciseType): ExerciseAnswer {
     switch (exerciseType) {
       case ExerciseType.MULTIPLE_CHOICE:
@@ -91,6 +101,7 @@ export class AnswerNormalizer {
       case ExerciseType.TRANSLATION:
         return { translation: '' };
       case ExerciseType.LISTENING:
+      case ExerciseType.SPEAKING:
         return { transcript: '' };
       default:
         return {} as ExerciseAnswer;

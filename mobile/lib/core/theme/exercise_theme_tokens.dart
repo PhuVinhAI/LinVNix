@@ -16,6 +16,8 @@ class ExerciseThemeTokens extends ThemeExtension<ExerciseThemeTokens> {
     required this.orderingSurface,
     required this.translationAccent,
     required this.translationSurface,
+    required this.speakingAccent,
+    required this.speakingSurface,
   });
 
   // ── Multiple Choice — Indigo family ──
@@ -38,6 +40,9 @@ class ExerciseThemeTokens extends ThemeExtension<ExerciseThemeTokens> {
   final Color translationAccent;
   final Color translationSurface;
 
+  final Color speakingAccent;
+  final Color speakingSurface;
+
   // ── Light palette ──
   static const light = ExerciseThemeTokens(
     multipleChoiceAccent: Color(0xFF6366F1), // Indigo-500
@@ -50,6 +55,8 @@ class ExerciseThemeTokens extends ThemeExtension<ExerciseThemeTokens> {
     orderingSurface: Color(0xFFECFDF5), // Emerald-50
     translationAccent: Color(0xFF8B5CF6), // Violet-500
     translationSurface: Color(0xFFF5F3FF), // Violet-50
+    speakingAccent: Color(0xFFE11D48), // Rose-600
+    speakingSurface: Color(0xFFFFF1F2), // Rose-50
   );
 
   // ── Dark palette ──
@@ -64,6 +71,8 @@ class ExerciseThemeTokens extends ThemeExtension<ExerciseThemeTokens> {
     orderingSurface: Color(0xFF022C22), // Emerald-950
     translationAccent: Color(0xFFA78BFA), // Violet-400
     translationSurface: Color(0xFF2E1065), // Violet-950
+    speakingAccent: Color(0xFFFB7185), // Rose-400
+    speakingSurface: Color(0xFF4C0519), // Rose-950
   );
 
   @override
@@ -78,10 +87,13 @@ class ExerciseThemeTokens extends ThemeExtension<ExerciseThemeTokens> {
     Color? orderingSurface,
     Color? translationAccent,
     Color? translationSurface,
+    Color? speakingAccent,
+    Color? speakingSurface,
   }) {
     return ExerciseThemeTokens(
       multipleChoiceAccent: multipleChoiceAccent ?? this.multipleChoiceAccent,
-      multipleChoiceSurface: multipleChoiceSurface ?? this.multipleChoiceSurface,
+      multipleChoiceSurface:
+          multipleChoiceSurface ?? this.multipleChoiceSurface,
       fillBlankAccent: fillBlankAccent ?? this.fillBlankAccent,
       fillBlankSurface: fillBlankSurface ?? this.fillBlankSurface,
       matchingAccent: matchingAccent ?? this.matchingAccent,
@@ -90,6 +102,8 @@ class ExerciseThemeTokens extends ThemeExtension<ExerciseThemeTokens> {
       orderingSurface: orderingSurface ?? this.orderingSurface,
       translationAccent: translationAccent ?? this.translationAccent,
       translationSurface: translationSurface ?? this.translationSurface,
+      speakingAccent: speakingAccent ?? this.speakingAccent,
+      speakingSurface: speakingSurface ?? this.speakingSurface,
     );
   }
 
@@ -97,16 +111,38 @@ class ExerciseThemeTokens extends ThemeExtension<ExerciseThemeTokens> {
   ExerciseThemeTokens lerp(ExerciseThemeTokens? other, double t) {
     if (other is! ExerciseThemeTokens) return this;
     return ExerciseThemeTokens(
-      multipleChoiceAccent: Color.lerp(multipleChoiceAccent, other.multipleChoiceAccent, t)!,
-      multipleChoiceSurface: Color.lerp(multipleChoiceSurface, other.multipleChoiceSurface, t)!,
+      multipleChoiceAccent: Color.lerp(
+        multipleChoiceAccent,
+        other.multipleChoiceAccent,
+        t,
+      )!,
+      multipleChoiceSurface: Color.lerp(
+        multipleChoiceSurface,
+        other.multipleChoiceSurface,
+        t,
+      )!,
       fillBlankAccent: Color.lerp(fillBlankAccent, other.fillBlankAccent, t)!,
-      fillBlankSurface: Color.lerp(fillBlankSurface, other.fillBlankSurface, t)!,
+      fillBlankSurface: Color.lerp(
+        fillBlankSurface,
+        other.fillBlankSurface,
+        t,
+      )!,
       matchingAccent: Color.lerp(matchingAccent, other.matchingAccent, t)!,
       matchingSurface: Color.lerp(matchingSurface, other.matchingSurface, t)!,
       orderingAccent: Color.lerp(orderingAccent, other.orderingAccent, t)!,
       orderingSurface: Color.lerp(orderingSurface, other.orderingSurface, t)!,
-      translationAccent: Color.lerp(translationAccent, other.translationAccent, t)!,
-      translationSurface: Color.lerp(translationSurface, other.translationSurface, t)!,
+      translationAccent: Color.lerp(
+        translationAccent,
+        other.translationAccent,
+        t,
+      )!,
+      translationSurface: Color.lerp(
+        translationSurface,
+        other.translationSurface,
+        t,
+      )!,
+      speakingAccent: Color.lerp(speakingAccent, other.speakingAccent, t)!,
+      speakingSurface: Color.lerp(speakingSurface, other.speakingSurface, t)!,
     );
   }
 }

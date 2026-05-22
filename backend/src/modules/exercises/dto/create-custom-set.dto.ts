@@ -33,13 +33,15 @@ class CustomSetConfigDto {
   @ArrayMinSize(1)
   @IsEnum(ExerciseType, { each: true })
   @ValidateBy({
-    name: 'noListeningInCustomPractice',
+    name: 'noAudioDrivenTypesInCustomPractice',
     validator: {
       validate(value: ExerciseType[]) {
-        return !value?.includes(ExerciseType.LISTENING);
+        return !value?.some((type) =>
+          [ExerciseType.LISTENING, ExerciseType.SPEAKING].includes(type),
+        );
       },
       defaultMessage() {
-        return 'Listening exercises are not supported in custom practice';
+        return 'Listening and speaking exercises are not supported in custom practice';
       },
     },
   })

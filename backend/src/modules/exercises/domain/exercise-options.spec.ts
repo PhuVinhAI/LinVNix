@@ -3,9 +3,11 @@ import {
   ExerciseOptions,
   MultipleChoiceOptions,
   FillBlankOptions,
+  SpeakingOptions,
   isMultipleChoiceOptions,
   isFillBlankOptions,
   isMatchingOptions,
+  isSpeakingOptions,
 } from './exercise-options.types';
 
 describe('Exercise Options Types', () => {
@@ -32,6 +34,18 @@ describe('Exercise Options Types', () => {
 
       expect(options.type).toBe(ExerciseType.FILL_BLANK);
       expect(options.blanks).toBe(2);
+    });
+
+    it('should enforce correct structure for Speaking', () => {
+      const options: SpeakingOptions = {
+        type: ExerciseType.SPEAKING,
+        promptText: 'Xin chào',
+        promptAudioUrl: '/uploads/audio/seed/a1/lesson-001/xin-chao.mp3',
+        transcriptType: 'exact',
+      };
+
+      expect(options.type).toBe(ExerciseType.SPEAKING);
+      expect(options.promptText).toBe('Xin chào');
     });
   });
 
@@ -70,6 +84,17 @@ describe('Exercise Options Types', () => {
       };
 
       expect(isMatchingOptions(options)).toBe(false);
+    });
+
+    it('should correctly identify Speaking options', () => {
+      const options: ExerciseOptions = {
+        type: ExerciseType.SPEAKING,
+        promptText: 'Xin chào',
+        promptAudioUrl: '/uploads/audio/seed/a1/lesson-001/xin-chao.mp3',
+        transcriptType: 'exact',
+      };
+
+      expect(isSpeakingOptions(options)).toBe(true);
     });
   });
 

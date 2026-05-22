@@ -6,6 +6,7 @@ import 'exercise_renderers/matching_renderer.dart';
 import 'exercise_renderers/ordering_renderer.dart';
 import 'exercise_renderers/translation_renderer.dart';
 import 'exercise_renderers/listening_renderer.dart';
+import 'exercise_renderers/speaking_renderer.dart';
 
 const _renderers = <ExerciseType, ExerciseRenderer>{
   ExerciseType.multipleChoice: MultipleChoiceRenderer(),
@@ -14,6 +15,7 @@ const _renderers = <ExerciseType, ExerciseRenderer>{
   ExerciseType.ordering: OrderingRenderer(),
   ExerciseType.translation: TranslationRenderer(),
   ExerciseType.listening: ListeningRenderer(),
+  ExerciseType.speaking: SpeakingRenderer(),
 };
 
 ExerciseRenderer getRenderer(ExerciseType type) {

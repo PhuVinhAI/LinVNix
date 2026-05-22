@@ -5,4 +5,5 @@ export enum ExerciseType {
   ORDERING = 'ordering',
   TRANSLATION = 'translation',
   LISTENING = 'listening',
+  SPEAKING = 'speaking',
 }

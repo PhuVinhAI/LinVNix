@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>LinVNix uses the microphone to turn your spoken Vietnamese into text during speaking practice.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>LinVNix uses speech recognition to check your spoken Vietnamese answers.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

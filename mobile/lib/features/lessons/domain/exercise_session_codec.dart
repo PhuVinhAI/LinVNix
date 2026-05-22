@@ -75,6 +75,7 @@ class ExerciseSessionCodec {
       case ExerciseType.multipleChoice:
       case ExerciseType.translation:
       case ExerciseType.listening:
+      case ExerciseType.speaking:
         return answer;
     }
   }
@@ -84,7 +85,9 @@ class ExerciseSessionCodec {
       case ExerciseType.matching:
         if (raw is List) {
           return raw
-              .map((e) => MatchPair.fromJson(Map<String, dynamic>.from(e as Map)))
+              .map(
+                (e) => MatchPair.fromJson(Map<String, dynamic>.from(e as Map)),
+              )
               .toList();
         }
         return raw;
@@ -97,6 +100,7 @@ class ExerciseSessionCodec {
       case ExerciseType.multipleChoice:
       case ExerciseType.translation:
       case ExerciseType.listening:
+      case ExerciseType.speaking:
         return raw;
     }
   }

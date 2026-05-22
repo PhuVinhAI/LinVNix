@@ -54,7 +54,10 @@ const GenerationResponseSchema = z.object({
   exercises: z.array(GeneratedExerciseSchema).min(1),
 });
 
-const CUSTOM_PRACTICE_EXCLUDED_TYPES = [ExerciseType.LISTENING];
+const CUSTOM_PRACTICE_EXCLUDED_TYPES = [
+  ExerciseType.LISTENING,
+  ExerciseType.SPEAKING,
+];
 
 const EXERCISE_TYPE_PROMPT_META: Record<
   ExerciseType,
@@ -92,6 +95,12 @@ const EXERCISE_TYPE_PROMPT_META: Record<
     shape:
       '- listening: options={audioUrl:"",transcriptType:"exact",keywords:["keyword"]}, correctAnswer={transcript:"text"}',
   },
+  [ExerciseType.SPEAKING]: {
+    languageMix:
+      '  - speaking: Vietnamese speaking prompt (provide promptText, set promptAudioUrl to empty string)',
+    shape:
+      '- speaking: options={promptText:"Xin chào",promptAudioUrl:"",transcriptType:"exact"}, correctAnswer={transcript:"Xin chào"}',
+  },
 };
 
 const EXERCISE_TYPE_SCHEMA_FIELDS: Record<
@@ -120,6 +129,10 @@ const EXERCISE_TYPE_SCHEMA_FIELDS: Record<
   },
   [ExerciseType.LISTENING]: {
     options: ['audioUrl', 'transcriptType', 'keywords'],
+    correctAnswer: ['transcript'],
+  },
+  [ExerciseType.SPEAKING]: {
+    options: ['promptText', 'promptAudioUrl', 'transcriptType', 'keywords'],
     correctAnswer: ['transcript'],
   },
 };
@@ -235,10 +248,21 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
                 description: 'listening: "exact" or "keyword"',
                 nullable: true,
               },
+              promptText: {
+                type: Type.STRING,
+                description: 'speaking: phrase or sentence to say',
+                nullable: true,
+              },
+              promptAudioUrl: {
+                type: Type.STRING,
+                description:
+                  'speaking: prompt audio URL (empty string if no audio)',
+                nullable: true,
+              },
               keywords: {
                 type: Type.ARRAY,
                 items: { type: Type.STRING, nullable: false },
-                description: 'listening: key words to listen for',
+                description: 'listening/speaking: key words to listen for',
                 nullable: true,
               },
             },
@@ -294,7 +318,7 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
               },
               transcript: {
                 type: Type.STRING,
-                description: 'listening: full transcript text',
+                description: 'listening/speaking: full transcript text',
                 nullable: true,
               },
             },
@@ -560,7 +584,9 @@ export class ExerciseGenerationService {
     const exerciseTypeShapes = buildExerciseTypeShapes(
       guidelines.preferredTypes,
     );
-    const responseSchema = buildExerciseResponseSchema(guidelines.preferredTypes);
+    const responseSchema = buildExerciseResponseSchema(
+      guidelines.preferredTypes,
+    );
     const promptVariables = {
       questionCount: String(guidelines.questionCount),
       label,

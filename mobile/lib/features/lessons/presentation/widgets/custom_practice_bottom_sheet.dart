@@ -11,13 +11,13 @@ class CustomPracticeBottomSheet extends StatelessWidget {
     super.key,
     this.initialUserPrompt,
     required this.onSubmit,
-  })  : mode = CustomPracticeSheetMode.creation,
-        progress = null,
-        onPlay = null,
-        onRegenerate = null,
-        onReset = null,
-        onDelete = null,
-        onCancel = null;
+  }) : mode = CustomPracticeSheetMode.creation,
+       progress = null,
+       onPlay = null,
+       onRegenerate = null,
+       onReset = null,
+       onDelete = null,
+       onCancel = null;
 
   const CustomPracticeBottomSheet.info({
     super.key,
@@ -27,9 +27,9 @@ class CustomPracticeBottomSheet extends StatelessWidget {
     required this.onReset,
     required this.onDelete,
     this.onCancel,
-  })  : mode = CustomPracticeSheetMode.info,
-        initialUserPrompt = null,
-        onSubmit = null;
+  }) : mode = CustomPracticeSheetMode.info,
+       initialUserPrompt = null,
+       onSubmit = null;
 
   final CustomPracticeSheetMode mode;
   final String? initialUserPrompt;
@@ -45,26 +45,23 @@ class CustomPracticeBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (mode) {
       CustomPracticeSheetMode.creation => _CreationForm(
-          initialUserPrompt: initialUserPrompt,
-          onSubmit: onSubmit!,
-        ),
+        initialUserPrompt: initialUserPrompt,
+        onSubmit: onSubmit!,
+      ),
       CustomPracticeSheetMode.info => _InfoView(
-          progress: progress!,
-          onPlay: onPlay!,
-          onRegenerate: onRegenerate!,
-          onReset: onReset!,
-          onDelete: onDelete!,
-          onCancel: onCancel,
-        ),
+        progress: progress!,
+        onPlay: onPlay!,
+        onRegenerate: onRegenerate!,
+        onReset: onReset!,
+        onDelete: onDelete!,
+        onCancel: onCancel,
+      ),
     };
   }
 }
 
 class _CreationForm extends StatefulWidget {
-  const _CreationForm({
-    this.initialUserPrompt,
-    required this.onSubmit,
-  });
+  const _CreationForm({this.initialUserPrompt, required this.onSubmit});
 
   final String? initialUserPrompt;
   final Future<void> Function(CustomSetConfig config) onSubmit;
@@ -95,7 +92,9 @@ class _CreationFormState extends State<_CreationForm> {
   @override
   void initState() {
     super.initState();
-    _userPromptController = TextEditingController(text: widget.initialUserPrompt ?? '');
+    _userPromptController = TextEditingController(
+      text: widget.initialUserPrompt ?? '',
+    );
   }
 
   @override
@@ -176,7 +175,9 @@ class _CreationFormState extends State<_CreationForm> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     'Exercise types',
-                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
@@ -202,7 +203,9 @@ class _CreationFormState extends State<_CreationForm> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     'Focus',
-                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
@@ -221,7 +224,9 @@ class _CreationFormState extends State<_CreationForm> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     'Prompt (optional)',
-                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   AppInput(
@@ -237,7 +242,9 @@ class _CreationFormState extends State<_CreationForm> {
                   AppButton(
                     label: _isSubmitting ? 'Creating...' : 'Create exercises',
                     variant: AppButtonVariant.primary,
-                    onPressed: _selectedTypes.isEmpty || _isSubmitting ? null : _handleSubmit,
+                    onPressed: _selectedTypes.isEmpty || _isSubmitting
+                        ? null
+                        : _handleSubmit,
                     icon: const Icon(Icons.auto_awesome),
                     isFullWidth: true,
                   ),
@@ -258,7 +265,8 @@ class _CreationFormState extends State<_CreationForm> {
       ExerciseType.ordering => 'Ordering',
       ExerciseType.translation => 'Translation',
       ExerciseType.listening => 'Listening',
-    }; // listening excluded from custom practice selection
+      ExerciseType.speaking => 'Speaking',
+    }; // audio-driven types are excluded from custom practice selection
   }
 
   Future<void> _handleSubmit() async {
@@ -368,13 +376,15 @@ class _InfoView extends StatelessWidget {
                     label: progress.isNotStarted
                         ? 'Start practice'
                         : progress.isInProgress
-                            ? 'Continue practice'
-                            : 'Practice again',
+                        ? 'Continue practice'
+                        : 'Practice again',
                     variant: AppButtonVariant.primary,
                     onPressed: onPlay,
-                    icon: Icon(progress.isNotStarted
-                        ? Icons.play_arrow
-                        : Icons.arrow_forward),
+                    icon: Icon(
+                      progress.isNotStarted
+                          ? Icons.play_arrow
+                          : Icons.arrow_forward,
+                    ),
                     isFullWidth: true,
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -455,11 +465,7 @@ class _ConfigSummary extends StatelessWidget {
           if (progress.userPrompt != null &&
               progress.userPrompt!.isNotEmpty) ...[
             const SizedBox(width: AppSpacing.sm),
-            Container(
-              width: 1,
-              height: 14,
-              color: c.border,
-            ),
+            Container(width: 1, height: 14, color: c.border),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(

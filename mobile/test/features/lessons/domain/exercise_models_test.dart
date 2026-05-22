@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:linvnix/features/lessons/domain/exercise_models.dart';
-import 'package:linvnix/features/lessons/domain/exercise_renderer.dart';
 import 'package:linvnix/features/lessons/domain/exercise_renderer_registry.dart';
 import 'package:linvnix/features/lessons/domain/exercise_renderers/multiple_choice_renderer.dart';
 import 'package:linvnix/features/lessons/domain/exercise_renderers/fill_blank_renderer.dart';
@@ -8,6 +7,7 @@ import 'package:linvnix/features/lessons/domain/exercise_renderers/matching_rend
 import 'package:linvnix/features/lessons/domain/exercise_renderers/ordering_renderer.dart';
 import 'package:linvnix/features/lessons/domain/exercise_renderers/translation_renderer.dart';
 import 'package:linvnix/features/lessons/domain/exercise_renderers/listening_renderer.dart';
+import 'package:linvnix/features/lessons/domain/exercise_renderers/speaking_renderer.dart';
 
 Exercise _makeExercise(
   ExerciseType type,
@@ -29,12 +29,16 @@ Exercise _makeExercise(
 void main() {
   group('ExerciseType', () {
     test('fromString parses all types', () {
-      expect(ExerciseType.fromString('multiple_choice'), ExerciseType.multipleChoice);
+      expect(
+        ExerciseType.fromString('multiple_choice'),
+        ExerciseType.multipleChoice,
+      );
       expect(ExerciseType.fromString('fill_blank'), ExerciseType.fillBlank);
       expect(ExerciseType.fromString('matching'), ExerciseType.matching);
       expect(ExerciseType.fromString('ordering'), ExerciseType.ordering);
       expect(ExerciseType.fromString('translation'), ExerciseType.translation);
       expect(ExerciseType.fromString('listening'), ExerciseType.listening);
+      expect(ExerciseType.fromString('speaking'), ExerciseType.speaking);
     });
 
     test('fromString defaults to multipleChoice for unknown', () {
@@ -48,6 +52,7 @@ void main() {
       expect(ExerciseType.ordering.timerSeconds, 120);
       expect(ExerciseType.translation.timerSeconds, 180);
       expect(ExerciseType.listening.timerSeconds, 180);
+      expect(ExerciseType.speaking.timerSeconds, 180);
     });
   });
 
@@ -71,9 +76,16 @@ void main() {
       expect(exercise.exerciseType, ExerciseType.multipleChoice);
       expect(exercise.question, 'What does xin chào mean?');
       expect(exercise.options, isA<MultipleChoiceOptions>());
-      expect((exercise.options as MultipleChoiceOptions).choices, ['Hello', 'Goodbye', 'Thank you']);
+      expect((exercise.options as MultipleChoiceOptions).choices, [
+        'Hello',
+        'Goodbye',
+        'Thank you',
+      ]);
       expect(exercise.correctAnswer, isA<MultipleChoiceAnswer>());
-      expect((exercise.correctAnswer as MultipleChoiceAnswer).selectedChoice, 'Hello');
+      expect(
+        (exercise.correctAnswer as MultipleChoiceAnswer).selectedChoice,
+        'Hello',
+      );
       expect(exercise.explanation, 'Xin chào means Hello');
     });
 
@@ -89,7 +101,9 @@ void main() {
             ['là', 'la'],
           ],
         },
-        'correctAnswer': {'answers': ['là']},
+        'correctAnswer': {
+          'answers': ['là'],
+        },
       };
 
       final exercise = Exercise.fromJson(json);
@@ -148,7 +162,11 @@ void main() {
 
       expect(exercise.exerciseType, ExerciseType.ordering);
       expect(exercise.options, isA<OrderingOptions>());
-      expect((exercise.options as OrderingOptions).items, ['Xin', 'chào', 'bạn']);
+      expect((exercise.options as OrderingOptions).items, [
+        'Xin',
+        'chào',
+        'bạn',
+      ]);
     });
 
     test('parses translation exercise', () {
@@ -197,9 +215,37 @@ void main() {
       expect(opts.keywords, ['xin', 'chào']);
     });
 
-    test('handles null options gracefully', () {
+    test('parses speaking exercise', () {
       final json = {
         'id': 'e7',
+        'exerciseType': 'speaking',
+        'question': 'Say the phrase',
+        'questionAudioUrl': 'https://example.com/prompt.mp3',
+        'options': {
+          'type': 'speaking',
+          'promptText': 'Xin chào',
+          'promptAudioUrl': 'https://example.com/prompt.mp3',
+          'transcriptType': 'exact',
+          'keywords': ['xin', 'chào'],
+        },
+        'correctAnswer': {'transcript': 'Xin chào'},
+      };
+
+      final exercise = Exercise.fromJson(json);
+
+      expect(exercise.exerciseType, ExerciseType.speaking);
+      expect(exercise.options, isA<SpeakingOptions>());
+      final opts = exercise.options as SpeakingOptions;
+      expect(opts.promptText, 'Xin chào');
+      expect(opts.promptAudioUrl, 'https://example.com/prompt.mp3');
+      expect(opts.transcriptType, 'exact');
+      expect(opts.keywords, ['xin', 'chào']);
+      expect(exercise.correctAnswer, isA<SpeakingAnswer>());
+    });
+
+    test('handles null options gracefully', () {
+      final json = {
+        'id': 'e8',
         'exerciseType': 'multiple_choice',
         'question': 'Test',
       };
@@ -266,14 +312,17 @@ void main() {
       expect(renderer.type, ExerciseType.fillBlank);
     });
 
-    test('validateAnswer accepts correct-length list with non-empty values', () {
-      final exercise = _makeExercise(
-        ExerciseType.fillBlank,
-        const FillBlankOptions(blanks: 2),
-        const FillBlankAnswer(answers: ['a', 'b']),
-      );
-      expect(renderer.validateAnswer(exercise, ['hello', 'world']), true);
-    });
+    test(
+      'validateAnswer accepts correct-length list with non-empty values',
+      () {
+        final exercise = _makeExercise(
+          ExerciseType.fillBlank,
+          const FillBlankOptions(blanks: 2),
+          const FillBlankAnswer(answers: ['a', 'b']),
+        );
+        expect(renderer.validateAnswer(exercise, ['hello', 'world']), true);
+      },
+    );
 
     test('validateAnswer rejects wrong-length list', () {
       final exercise = _makeExercise(
@@ -303,7 +352,9 @@ void main() {
     });
 
     test('buildAnswerPayload wraps answers correctly', () {
-      expect(renderer.buildAnswerPayload(['a', 'b']), {'answers': ['a', 'b']});
+      expect(renderer.buildAnswerPayload(['a', 'b']), {
+        'answers': ['a', 'b'],
+      });
     });
   });
 
@@ -317,14 +368,18 @@ void main() {
     test('validateAnswer accepts correct number of pairs', () {
       final exercise = _makeExercise(
         ExerciseType.matching,
-        const MatchingOptions(pairs: [
-          MatchPair(left: 'A', right: '1'),
-          MatchPair(left: 'B', right: '2'),
-        ]),
-        const MatchingAnswer(matches: [
-          MatchPair(left: 'A', right: '1'),
-          MatchPair(left: 'B', right: '2'),
-        ]),
+        const MatchingOptions(
+          pairs: [
+            MatchPair(left: 'A', right: '1'),
+            MatchPair(left: 'B', right: '2'),
+          ],
+        ),
+        const MatchingAnswer(
+          matches: [
+            MatchPair(left: 'A', right: '1'),
+            MatchPair(left: 'B', right: '2'),
+          ],
+        ),
       );
       expect(
         renderer.validateAnswer(exercise, [
@@ -338,14 +393,18 @@ void main() {
     test('validateAnswer rejects wrong number of pairs', () {
       final exercise = _makeExercise(
         ExerciseType.matching,
-        const MatchingOptions(pairs: [
-          MatchPair(left: 'A', right: '1'),
-          MatchPair(left: 'B', right: '2'),
-        ]),
-        const MatchingAnswer(matches: [
-          MatchPair(left: 'A', right: '1'),
-          MatchPair(left: 'B', right: '2'),
-        ]),
+        const MatchingOptions(
+          pairs: [
+            MatchPair(left: 'A', right: '1'),
+            MatchPair(left: 'B', right: '2'),
+          ],
+        ),
+        const MatchingAnswer(
+          matches: [
+            MatchPair(left: 'A', right: '1'),
+            MatchPair(left: 'B', right: '2'),
+          ],
+        ),
       );
       expect(
         renderer.validateAnswer(exercise, [
@@ -436,7 +495,9 @@ void main() {
     });
 
     test('buildAnswerPayload trims and wraps correctly', () {
-      expect(renderer.buildAnswerPayload('  hello  '), {'translation': 'hello'});
+      expect(renderer.buildAnswerPayload('  hello  '), {
+        'translation': 'hello',
+      });
     });
   });
 
@@ -450,7 +511,10 @@ void main() {
     test('validateAnswer accepts non-empty string', () {
       final exercise = _makeExercise(
         ExerciseType.listening,
-        const ListeningOptions(audioUrl: 'https://a.mp3', transcriptType: 'exact'),
+        const ListeningOptions(
+          audioUrl: 'https://a.mp3',
+          transcriptType: 'exact',
+        ),
         const ListeningAnswer(transcript: 'Xin chào'),
       );
       expect(renderer.validateAnswer(exercise, 'Xin chào'), true);
@@ -459,25 +523,72 @@ void main() {
     test('validateAnswer rejects empty string', () {
       final exercise = _makeExercise(
         ExerciseType.listening,
-        const ListeningOptions(audioUrl: 'https://a.mp3', transcriptType: 'exact'),
+        const ListeningOptions(
+          audioUrl: 'https://a.mp3',
+          transcriptType: 'exact',
+        ),
         const ListeningAnswer(transcript: 'Xin chào'),
       );
       expect(renderer.validateAnswer(exercise, ''), false);
     });
 
     test('buildAnswerPayload trims and wraps correctly', () {
-      expect(renderer.buildAnswerPayload('  Xin chào  '), {'transcript': 'Xin chào'});
+      expect(renderer.buildAnswerPayload('  Xin chào  '), {
+        'transcript': 'Xin chào',
+      });
+    });
+  });
+
+  group('SpeakingRenderer', () {
+    const renderer = SpeakingRenderer();
+
+    test('has correct type', () {
+      expect(renderer.type, ExerciseType.speaking);
+    });
+
+    test('validateAnswer accepts non-empty string', () {
+      final exercise = _makeExercise(
+        ExerciseType.speaking,
+        const SpeakingOptions(
+          promptAudioUrl: 'https://a.mp3',
+          transcriptType: 'exact',
+        ),
+        const SpeakingAnswer(transcript: 'Xin chào'),
+      );
+      expect(renderer.validateAnswer(exercise, 'Xin chào'), true);
+    });
+
+    test('validateAnswer rejects empty string', () {
+      final exercise = _makeExercise(
+        ExerciseType.speaking,
+        const SpeakingOptions(
+          promptAudioUrl: 'https://a.mp3',
+          transcriptType: 'exact',
+        ),
+        const SpeakingAnswer(transcript: 'Xin chào'),
+      );
+      expect(renderer.validateAnswer(exercise, ''), false);
+    });
+
+    test('buildAnswerPayload trims and wraps correctly', () {
+      expect(renderer.buildAnswerPayload('  Xin chào  '), {
+        'transcript': 'Xin chào',
+      });
     });
   });
 
   group('getRenderer', () {
     test('returns correct renderer for each type', () {
-      expect(getRenderer(ExerciseType.multipleChoice), isA<MultipleChoiceRenderer>());
+      expect(
+        getRenderer(ExerciseType.multipleChoice),
+        isA<MultipleChoiceRenderer>(),
+      );
       expect(getRenderer(ExerciseType.fillBlank), isA<FillBlankRenderer>());
       expect(getRenderer(ExerciseType.matching), isA<MatchingRenderer>());
       expect(getRenderer(ExerciseType.ordering), isA<OrderingRenderer>());
       expect(getRenderer(ExerciseType.translation), isA<TranslationRenderer>());
       expect(getRenderer(ExerciseType.listening), isA<ListeningRenderer>());
+      expect(getRenderer(ExerciseType.speaking), isA<SpeakingRenderer>());
     });
   });
 
@@ -502,10 +613,7 @@ void main() {
     });
 
     test('handles missing optional fields', () {
-      final json = {
-        'id': 'result-2',
-        'isCorrect': false,
-      };
+      final json = {'id': 'result-2', 'isCorrect': false};
 
       final result = ExerciseSubmissionResult.fromJson(json);
 
@@ -517,24 +625,22 @@ void main() {
 
   group('ExerciseAnswer toJson', () {
     test('MultipleChoiceAnswer serializes correctly', () {
-      expect(
-        const MultipleChoiceAnswer(selectedChoice: 'Hello').toJson(),
-        {'selectedChoice': 'Hello'},
-      );
+      expect(const MultipleChoiceAnswer(selectedChoice: 'Hello').toJson(), {
+        'selectedChoice': 'Hello',
+      });
     });
 
     test('FillBlankAnswer serializes correctly', () {
-      expect(
-        const FillBlankAnswer(answers: ['a', 'b']).toJson(),
-        {'answers': ['a', 'b']},
-      );
+      expect(const FillBlankAnswer(answers: ['a', 'b']).toJson(), {
+        'answers': ['a', 'b'],
+      });
     });
 
     test('MatchingAnswer serializes correctly', () {
       expect(
-        const MatchingAnswer(matches: [
-          MatchPair(left: 'A', right: '1'),
-        ]).toJson(),
+        const MatchingAnswer(
+          matches: [MatchPair(left: 'A', right: '1')],
+        ).toJson(),
         {
           'matches': [
             {'left': 'A', 'right': '1'},
@@ -544,24 +650,27 @@ void main() {
     });
 
     test('OrderingAnswer serializes correctly', () {
-      expect(
-        const OrderingAnswer(orderedItems: ['X', 'Y']).toJson(),
-        {'orderedItems': ['X', 'Y']},
-      );
+      expect(const OrderingAnswer(orderedItems: ['X', 'Y']).toJson(), {
+        'orderedItems': ['X', 'Y'],
+      });
     });
 
     test('TranslationAnswer serializes correctly', () {
-      expect(
-        const TranslationAnswer(translation: 'Hello').toJson(),
-        {'translation': 'Hello'},
-      );
+      expect(const TranslationAnswer(translation: 'Hello').toJson(), {
+        'translation': 'Hello',
+      });
     });
 
     test('ListeningAnswer serializes correctly', () {
-      expect(
-        const ListeningAnswer(transcript: 'Xin chào').toJson(),
-        {'transcript': 'Xin chào'},
-      );
+      expect(const ListeningAnswer(transcript: 'Xin chào').toJson(), {
+        'transcript': 'Xin chào',
+      });
+    });
+
+    test('SpeakingAnswer serializes correctly', () {
+      expect(const SpeakingAnswer(transcript: 'Xin chào').toJson(), {
+        'transcript': 'Xin chào',
+      });
     });
   });
 }

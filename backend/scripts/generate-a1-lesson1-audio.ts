@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * Generate TTS audio for A1 module 1 lesson 1 vocabulary (lesson-a1-001-001)
- * and ensure the companion listening lesson exists in seed JSON.
+ * and ensure the companion listening/speaking exercises exist in seed JSON.
  *
  * Uses Google Translate TTS by default (fast, free, keeps Vietnamese diacritics).
  * Pass --edge for slower Microsoft Edge neural voices.
@@ -263,6 +263,54 @@ function ensureListeningLesson(mod: {
   return true;
 }
 
+function buildSpeakingExercise(
+  generated: Map<string, string>,
+): Record<string, unknown> {
+  const promptAudioUrl =
+    generated.get('xin-chao') ?? `${AUDIO_URL_PREFIX}/xin-chao.mp3`;
+
+  return {
+    correct_answer: {
+      transcript: 'xin chào',
+      type: 'speaking',
+    },
+    difficulty_level: 1,
+    exercise_type: 'speaking',
+    explanation: 'Cụm từ cần nói là "xin chào".',
+    options: {
+      promptText: 'xin chào',
+      promptAudioUrl,
+      transcriptType: 'exact',
+      keywords: ['xin', 'chào'],
+      type: 'speaking',
+    },
+    order_index: 6,
+    question: 'Bấm loa để nghe mẫu, sau đó nói lại: xin chào',
+    question_audio_url: promptAudioUrl,
+  };
+}
+
+function ensureSpeakingExercise(
+  lesson: Record<string, unknown>,
+  generated: Map<string, string>,
+): boolean {
+  const exercises = lesson.exercises as Array<Record<string, unknown>>;
+  if (!Array.isArray(exercises)) return false;
+
+  const hasSpeaking = exercises.some(
+    (exercise) => exercise.exercise_type === 'speaking',
+  );
+  if (hasSpeaking) return false;
+
+  exercises.push(buildSpeakingExercise(generated));
+  exercises.sort(
+    (a, b) =>
+      ((a.order_index as number | undefined) ?? 0) -
+      ((b.order_index as number | undefined) ?? 0),
+  );
+  return true;
+}
+
 function patchVocabLessonAudio(
   lesson: Record<string, unknown>,
   generated: Map<string, string>,
@@ -434,6 +482,13 @@ function processSeedFile(fileName: string, generated: Map<string, string>): void
 
   if (vocabLesson && generated.size > 0) {
     patchVocabLessonAudio(vocabLesson, generated);
+  }
+
+  if (vocabLesson) {
+    const insertedSpeaking = ensureSpeakingExercise(vocabLesson, generated);
+    if (insertedSpeaking) {
+      console.log(`  ${fileName}: inserted speaking exercise`);
+    }
   }
 
   if (!dryRun) {

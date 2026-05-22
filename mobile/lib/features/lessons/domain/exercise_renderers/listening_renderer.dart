@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import '../../../../core/network/media_url.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../exercise_models.dart';
@@ -25,9 +26,9 @@ class ListeningRenderer extends ExerciseRenderer {
   Widget buildQuestion(Exercise exercise, BuildContext context) {
     return Text(
       exercise.question,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
     );
   }
 
@@ -72,7 +73,7 @@ class _ListeningInputState extends State<_ListeningInput> {
 
   Future<void> _initPlayer() async {
     try {
-      await _player!.setUrl(widget.audioUrl);
+      await _player!.setUrl(resolveMediaUrl(widget.audioUrl));
     } catch (_) {}
   }
 
@@ -111,9 +112,9 @@ class _ListeningInputState extends State<_ListeningInput> {
               Expanded(
                 child: Text(
                   'Listen and type what you hear',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: c.mutedForeground,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
                 ),
               ),
             ],
