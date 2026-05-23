@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum GoalType {
   exercises('EXERCISES'),
-  studyMinutes('STUDY_MINUTES'),
+  simulations('SIMULATIONS'),
   lessons('LESSONS');
 
   const GoalType(this.value);
@@ -17,37 +17,37 @@ enum GoalType {
 
   String get label => switch (this) {
         GoalType.exercises => 'Exercises',
-        GoalType.studyMinutes => 'Study minutes',
+        GoalType.simulations => 'Simulations',
         GoalType.lessons => 'Lessons',
       };
 
   String get unit => switch (this) {
         GoalType.exercises => 'exercises',
-        GoalType.studyMinutes => 'minutes',
+        GoalType.simulations => 'simulations',
         GoalType.lessons => 'lessons',
       };
 
   int get defaultTarget => switch (this) {
         GoalType.exercises => 10,
-        GoalType.studyMinutes => 15,
+        GoalType.simulations => 3,
         GoalType.lessons => 2,
       };
 
   (int, int) get range => switch (this) {
         GoalType.exercises => (1, 50),
-        GoalType.studyMinutes => (5, 120),
+        GoalType.simulations => (1, 10),
         GoalType.lessons => (1, 10),
       };
 
   int get step => switch (this) {
         GoalType.exercises => 1,
-        GoalType.studyMinutes => 5,
+        GoalType.simulations => 1,
         GoalType.lessons => 1,
       };
 
   IconData get icon => switch (this) {
         GoalType.exercises => Icons.fitness_center,
-        GoalType.studyMinutes => Icons.timer,
+        GoalType.simulations => Icons.forum,
         GoalType.lessons => Icons.menu_book,
       };
 }

@@ -18,9 +18,6 @@ export class DailyGoalProgress extends BaseEntity {
   @Column({ name: 'exercises_completed', default: 0 })
   exercisesCompleted: number;
 
-  @Column({ name: 'study_minutes', default: 0 })
-  studyMinutes: number;
-
   @Column({ name: 'lessons_completed', default: 0 })
   lessonsCompleted: number;
 }

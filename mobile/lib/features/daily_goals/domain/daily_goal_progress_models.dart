@@ -41,7 +41,7 @@ class DailyGoalProgress {
   const DailyGoalProgress({
     required this.date,
     required this.exercisesCompleted,
-    required this.studyMinutes,
+    required this.simulationsCompleted,
     required this.lessonsCompleted,
     required this.allGoalsMet,
     required this.goals,
@@ -53,7 +53,8 @@ class DailyGoalProgress {
     return DailyGoalProgress(
       date: json['date'] as String,
       exercisesCompleted: (json['exercisesCompleted'] as num).toInt(),
-      studyMinutes: (json['studyMinutes'] as num).toInt(),
+      simulationsCompleted:
+          (json['simulationsCompleted'] as num?)?.toInt() ?? 0,
       lessonsCompleted: (json['lessonsCompleted'] as num).toInt(),
       allGoalsMet: json['allGoalsMet'] as bool,
       goals: (json['goals'] as List<dynamic>)
@@ -66,7 +67,7 @@ class DailyGoalProgress {
 
   final String date;
   final int exercisesCompleted;
-  final int studyMinutes;
+  final int simulationsCompleted;
   final int lessonsCompleted;
   final bool allGoalsMet;
   final List<GoalProgress> goals;
@@ -77,7 +78,7 @@ class DailyGoalProgress {
     return {
       'date': date,
       'exercisesCompleted': exercisesCompleted,
-      'studyMinutes': studyMinutes,
+      'simulationsCompleted': simulationsCompleted,
       'lessonsCompleted': lessonsCompleted,
       'allGoalsMet': allGoalsMet,
       'goals': goals.map((g) => g.toJson()).toList(),

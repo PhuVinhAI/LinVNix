@@ -16,15 +16,4 @@ class DailyGoalProgressRepository {
       throw mapDioException(e);
     }
   }
-
-  Future<void> syncStudyMinutes(int studyMinutes) async {
-    try {
-      await _dio.patch<Map<String, dynamic>>(
-        '/daily-goals/progress/study-minutes',
-        data: {'studyMinutes': studyMinutes},
-      );
-    } on DioException catch (e) {
-      throw mapDioException(e);
-    }
-  }
 }

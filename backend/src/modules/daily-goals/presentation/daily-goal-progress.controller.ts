@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -9,7 +9,6 @@ import { DailyGoalProgressService } from '../application/daily-goal-progress.ser
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/domain/user.entity';
-import { SyncStudyMinutesDto } from '../dto/sync-study-minutes.dto';
 
 @ApiTags('Daily Goals Progress')
 @ApiBearerAuth()
@@ -28,19 +27,5 @@ export class DailyGoalProgressController {
   @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
   getTodayProgress(@CurrentUser() user: User) {
     return this.progressService.getTodayProgress(user.id);
-  }
-
-  @Patch('study-minutes')
-  @ApiOperation({
-    summary: 'Sync phút học từ mobile',
-    description: 'Upsert studyMinutes cho hôm nay',
-  })
-  @ApiResponse({ status: 200, description: 'Sync thành công' })
-  @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
-  syncStudyMinutes(
-    @CurrentUser() user: User,
-    @Body() dto: SyncStudyMinutesDto,
-  ) {
-    return this.progressService.syncStudyMinutes(user.id, dto.studyMinutes);
   }
 }

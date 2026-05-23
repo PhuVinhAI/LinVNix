@@ -42,6 +42,11 @@ import { UsersModule } from '../users/users.module';
     SimulationMessagesRepository,
     SimulationResultsRepository,
   ],
-  exports: [ScenariosService, SimulationSessionService, SimulationAiService],
+  exports: [
+    ScenariosService,
+    SimulationSessionService,
+    SimulationAiService,
+    SimulationResultsRepository,
+  ],
 })
 export class SimulationsModule {}

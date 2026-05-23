@@ -190,12 +190,12 @@ void main() {
 
       expect(find.text('Set daily goals'), findsOneWidget);
       expect(find.text('Exercises'), findsOneWidget);
-      expect(find.text('Study minutes'), findsOneWidget);
+      expect(find.text('Simulations'), findsOneWidget);
       expect(find.text('Lessons'), findsOneWidget);
       expect(find.byType(AppSwitch), findsNWidgets(3));
       expect(find.byType(Slider), findsNWidgets(2));
       expect(find.text('10 exercises/day'), findsOneWidget);
-      expect(find.text('15 minutes/day'), findsOneWidget);
+      expect(find.text('3 simulations/day'), findsOneWidget);
     });
 
     testWidgets(
@@ -237,7 +237,7 @@ void main() {
 
       verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
           .called(1);
-      verify(() => mockGoalsRepo.createGoal(GoalType.studyMinutes, 15))
+      verify(() => mockGoalsRepo.createGoal(GoalType.simulations, 3))
           .called(1);
       verifyNever(() => mockGoalsRepo.createGoal(GoalType.lessons, any()));
 
@@ -267,7 +267,7 @@ void main() {
 
       verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
           .called(1);
-      verify(() => mockGoalsRepo.createGoal(GoalType.studyMinutes, 15))
+      verify(() => mockGoalsRepo.createGoal(GoalType.simulations, 3))
           .called(1);
 
       expect(prefsService.isOnboardingCompleted, isTrue);
@@ -356,7 +356,7 @@ void main() {
 
       verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
           .called(1);
-      verify(() => mockGoalsRepo.createGoal(GoalType.studyMinutes, 15))
+      verify(() => mockGoalsRepo.createGoal(GoalType.simulations, 3))
           .called(1);
     });
   });

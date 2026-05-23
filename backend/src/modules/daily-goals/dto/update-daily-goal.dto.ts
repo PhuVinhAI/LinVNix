@@ -8,6 +8,6 @@ export class UpdateDailyGoalDto {
   })
   @IsNumber()
   @Min(1)
-  @Max(120)
+  @Max(50)
   targetValue: number;
 }

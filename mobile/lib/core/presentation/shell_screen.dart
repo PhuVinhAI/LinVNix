@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/widgets/widgets.dart';
-import '../../features/daily_goals/data/app_session_timer.dart';
 import '../../features/daily_goals/data/notification_service.dart';
 import '../../features/daily_goals/data/daily_goal_progress_providers.dart';
 import '../../features/profile/data/profile_providers.dart';
@@ -17,29 +16,16 @@ class ShellScreen extends ConsumerStatefulWidget {
 
 class _ShellScreenState extends ConsumerState<ShellScreen>
     with WidgetsBindingObserver {
-  late final AppSessionTimer _sessionTimer;
-
   @override
   void initState() {
     super.initState();
-    _sessionTimer = ref.read(appSessionTimerProvider);
     WidgetsBinding.instance.addObserver(this);
-    if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
-      _sessionTimer.onAppResumed();
-    }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        _sessionTimer.onAppResumed();
-        _updateNotificationSchedule();
-      case AppLifecycleState.paused:
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.detached:
-      case AppLifecycleState.hidden:
-        _sessionTimer.onAppPaused();
+    if (state == AppLifecycleState.resumed) {
+      _updateNotificationSchedule();
     }
   }
 
@@ -88,7 +74,6 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
 
   @override
   void dispose() {
-    _sessionTimer.onAppPaused();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -128,7 +113,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
                 AppNavBarDestination(
                   icon: Icons.chat_bubble_outline,
                   selectedIcon: Icons.chat_bubble,
-                  label: 'Practice',
+                  label: 'Chat',
                 ),
                 AppNavBarDestination(
                   icon: Icons.person_outlined,

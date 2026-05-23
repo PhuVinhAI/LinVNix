@@ -266,9 +266,9 @@ describe('isProposalPayload', () => {
     const payload = {
       kind: 'create_daily_goal',
       title: 'Tạo mục tiêu?',
-      description: 'Đặt mục tiêu 30 phút',
+      description: 'Đặt mục tiêu 3 hội thoại',
       endpoint: 'POST /api/v1/daily-goals',
-      payload: { goalType: 'STUDY_MINUTES', targetValue: 30 },
+      payload: { goalType: 'SIMULATIONS', targetValue: 3 },
     };
     expect(isProposalPayload(payload)).toBe(true);
   });

@@ -33,7 +33,7 @@ export class DailyGoalProgressResponseDto {
 
   @Expose()
   @ApiProperty()
-  studyMinutes: number;
+  simulationsCompleted: number;
 
   @Expose()
   @ApiProperty()

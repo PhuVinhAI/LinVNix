@@ -27,7 +27,7 @@ void main() {
 
   group('DailyGoalsNotifier migration', () {
     test(
-        'auto-creates EXERCISES and STUDY_MINUTES defaults when onboarding completed and goals empty',
+        'auto-creates EXERCISES and SIMULATIONS defaults when onboarding completed and goals empty',
         () async {
       when(() => mockRepo.getGoals()).thenAnswer((_) async => []);
       when(() => mockRepo.createGoal(any(), any())).thenAnswer(
@@ -51,11 +51,11 @@ void main() {
       final goals = await container.read(dailyGoalsProvider.future);
 
       verify(() => mockRepo.createGoal(GoalType.exercises, 10)).called(1);
-      verify(() => mockRepo.createGoal(GoalType.studyMinutes, 15)).called(1);
+      verify(() => mockRepo.createGoal(GoalType.simulations, 3)).called(1);
       verifyNever(() => mockRepo.createGoal(GoalType.lessons, any()));
       expect(goals, hasLength(2));
       expect(goals.any((g) => g.goalType == GoalType.exercises), isTrue);
-      expect(goals.any((g) => g.goalType == GoalType.studyMinutes), isTrue);
+      expect(goals.any((g) => g.goalType == GoalType.simulations), isTrue);
 
       expect(prefsService.isDailyGoalsMigrated, isTrue);
     });

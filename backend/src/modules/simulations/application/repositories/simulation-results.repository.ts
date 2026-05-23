@@ -63,4 +63,17 @@ export class SimulationResultsRepository {
       averageScore: parseFloat(result?.averageScore ?? '0') || 0,
     };
   }
+
+  async countByUserIdAndDateRange(
+    userId: string,
+    start: Date,
+    end: Date,
+  ): Promise<number> {
+    return this.repository
+      .createQueryBuilder('r')
+      .where('r.userId = :userId', { userId })
+      .andWhere('r.createdAt >= :start', { start })
+      .andWhere('r.createdAt <= :end', { end })
+      .getCount();
+  }
 }

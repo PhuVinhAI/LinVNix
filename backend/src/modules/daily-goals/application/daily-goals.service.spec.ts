@@ -93,22 +93,22 @@ describe('DailyGoalsService', () => {
       expect(valid).toBeDefined();
     });
 
-    it('validates STUDY_MINUTES range 5-120', async () => {
+    it('validates SIMULATIONS range 1-10', async () => {
       repository.findByUserIdAndGoalType.mockResolvedValue(null);
 
       await expect(
-        service.create('user-1', GoalType.STUDY_MINUTES, 4),
+        service.create('user-1', GoalType.SIMULATIONS, 0),
       ).rejects.toThrow(BadRequestException);
 
       await expect(
-        service.create('user-1', GoalType.STUDY_MINUTES, 121),
+        service.create('user-1', GoalType.SIMULATIONS, 11),
       ).rejects.toThrow(BadRequestException);
 
       repository.create.mockResolvedValue({
         ...mockGoal,
-        goalType: GoalType.STUDY_MINUTES,
+        goalType: GoalType.SIMULATIONS,
       });
-      const valid = await service.create('user-1', GoalType.STUDY_MINUTES, 5);
+      const valid = await service.create('user-1', GoalType.SIMULATIONS, 1);
       expect(valid).toBeDefined();
     });
 
@@ -136,7 +136,7 @@ describe('DailyGoalsService', () => {
       repository.create.mockResolvedValue(mockGoal);
 
       await service.create('user-1', GoalType.EXERCISES, 10);
-      await service.create('user-1', GoalType.STUDY_MINUTES, 30);
+      await service.create('user-1', GoalType.SIMULATIONS, 3);
       await service.create('user-1', GoalType.LESSONS, 3);
 
       expect(repository.create).toHaveBeenCalledTimes(3);
@@ -150,8 +150,8 @@ describe('DailyGoalsService', () => {
         {
           ...mockGoal,
           id: 'goal-2',
-          goalType: GoalType.STUDY_MINUTES,
-          targetValue: 30,
+          goalType: GoalType.SIMULATIONS,
+          targetValue: 3,
         },
       ];
       repository.findByUserId.mockResolvedValue(goals);

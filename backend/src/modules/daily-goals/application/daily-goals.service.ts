@@ -9,7 +9,7 @@ import { GoalType } from '../../../common/enums';
 
 const GOAL_RANGES: Record<GoalType, { min: number; max: number }> = {
   [GoalType.EXERCISES]: { min: 1, max: 50 },
-  [GoalType.STUDY_MINUTES]: { min: 5, max: 120 },
+  [GoalType.SIMULATIONS]: { min: 1, max: 10 },
   [GoalType.LESSONS]: { min: 1, max: 10 },
 };
 

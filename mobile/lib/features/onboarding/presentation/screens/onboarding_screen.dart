@@ -27,12 +27,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   final _goalEnabled = <GoalType, bool>{
     GoalType.exercises: true,
-    GoalType.studyMinutes: true,
+    GoalType.simulations: true,
     GoalType.lessons: false,
   };
   final _goalTargets = <GoalType, int>{
     GoalType.exercises: 10,
-    GoalType.studyMinutes: 15,
+    GoalType.simulations: 3,
     GoalType.lessons: 2,
   };
 

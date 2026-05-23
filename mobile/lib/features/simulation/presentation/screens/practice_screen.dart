@@ -54,7 +54,7 @@ class PracticeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppAppBar(
-        title: const Text('Practice'),
+        title: const Text('Chat'),
         actions: [
           IconButton(
             onPressed: () => context.push('/practice/history'),

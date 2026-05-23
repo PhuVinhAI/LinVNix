@@ -43,7 +43,7 @@ export class DailyGoalsController {
   @ApiOperation({
     summary: 'Tạo mục tiêu ngày mới',
     description:
-      'Tạo mục tiêu ngày. Mỗi goalType chỉ có 1 goal per user. Range: EXERCISES 1-50, STUDY_MINUTES 5-120, LESSONS 1-10',
+      'Tạo mục tiêu ngày. Mỗi goalType chỉ có 1 goal per user. Range: EXERCISES 1-50, SIMULATIONS 1-10, LESSONS 1-10',
   })
   @ApiResponse({ status: 201, description: 'Tạo thành công' })
   @ApiResponse({

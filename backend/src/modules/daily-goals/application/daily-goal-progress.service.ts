@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { DailyGoalProgressRepository } from './daily-goal-progress.repository';
 import { DailyGoalsRepository } from './daily-goals.repository';
 import { DailyStreakService } from './daily-streak.service';
 import { UserExerciseResultsRepository } from '../../exercises/application/repositories/user-exercise-results.repository';
 import { ProgressRepository } from '../../progress/application/progress.repository';
+import { SimulationResultsRepository } from '../../simulations/application/repositories/simulation-results.repository';
 import { GoalType } from '../../../common/enums';
 import {
   GoalProgressDto,
@@ -15,11 +15,11 @@ const VN_TIMEZONE = 'Asia/Ho_Chi_Minh';
 @Injectable()
 export class DailyGoalProgressService {
   constructor(
-    private readonly progressRepository: DailyGoalProgressRepository,
     private readonly goalsRepository: DailyGoalsRepository,
     private readonly streakService: DailyStreakService,
     private readonly exerciseResultsRepository: UserExerciseResultsRepository,
     private readonly userProgressRepository: ProgressRepository,
+    private readonly simulationResultsRepository: SimulationResultsRepository,
   ) {}
 
   async getTodayProgress(
@@ -41,18 +41,18 @@ export class DailyGoalProgressService {
         start,
         end,
       );
-
-    const existingProgress = await this.progressRepository.findByUserIdAndDate(
-      userId,
-      today,
-    );
-    const studyMinutes = existingProgress?.studyMinutes ?? 0;
+    const simulationsCompleted =
+      await this.simulationResultsRepository.countByUserIdAndDateRange(
+        userId,
+        start,
+        end,
+      );
 
     const goalProgresses: GoalProgressDto[] = goals.map((goal) => {
       const currentValue = this.getProgressForGoalType(
         goal.goalType,
         exercisesCompleted,
-        studyMinutes,
+        simulationsCompleted,
         lessonsCompleted,
       );
       return {
@@ -74,7 +74,7 @@ export class DailyGoalProgressService {
     return {
       date: today,
       exercisesCompleted,
-      studyMinutes,
+      simulationsCompleted,
       lessonsCompleted,
       allGoalsMet,
       goals: goalProgresses,
@@ -83,22 +83,17 @@ export class DailyGoalProgressService {
     };
   }
 
-  async syncStudyMinutes(userId: string, studyMinutes: number): Promise<void> {
-    const today = this.getVnToday();
-    await this.progressRepository.upsert(userId, today, { studyMinutes });
-  }
-
   getProgressForGoalType(
     goalType: GoalType,
     exercisesCompleted: number,
-    studyMinutes: number,
+    simulationsCompleted: number,
     lessonsCompleted: number,
   ): number {
     switch (goalType) {
       case GoalType.EXERCISES:
         return exercisesCompleted;
-      case GoalType.STUDY_MINUTES:
-        return studyMinutes;
+      case GoalType.SIMULATIONS:
+        return simulationsCompleted;
       case GoalType.LESSONS:
         return lessonsCompleted;
     }

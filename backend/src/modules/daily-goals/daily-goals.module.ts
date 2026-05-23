@@ -13,12 +13,14 @@ import { DailyGoalsController } from './presentation/daily-goals.controller';
 import { DailyGoalProgressController } from './presentation/daily-goal-progress.controller';
 import { ExercisesModule } from '../exercises/exercises.module';
 import { ProgressModule } from '../progress/progress.module';
+import { SimulationsModule } from '../simulations/simulations.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([DailyGoal, DailyGoalProgress, DailyStreak]),
     forwardRef(() => ExercisesModule),
     forwardRef(() => ProgressModule),
+    forwardRef(() => SimulationsModule),
   ],
   controllers: [DailyGoalsController, DailyGoalProgressController],
   providers: [
