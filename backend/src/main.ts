@@ -3,9 +3,16 @@ import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { types as pgTypes } from 'pg';
 import { AppModule } from './app.module';
 import { LoggingService } from './infrastructure/logging/logging.service';
 import { LoggingInterceptor } from './infrastructure/logging/logging.interceptor';
+
+// CockroachDB defaults INT columns to BIGINT (INT8). pg driver returns BIGINT as
+// string to preserve 64-bit precision, but our domain values (orderIndex, counts,
+// progress) all fit in JS Number safely — and mobile models parse as num.
+// OID 20 = INT8/BIGINT. Safe because all our int columns are within 2^53.
+pgTypes.setTypeParser(20, (v) => parseInt(v, 10));
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {

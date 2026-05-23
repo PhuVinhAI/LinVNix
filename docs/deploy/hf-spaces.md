@@ -1,8 +1,10 @@
-# Deploy backend lên Hugging Face Spaces + Neon Postgres + Upstash Redis
+# Deploy backend lên Hugging Face Spaces + CockroachDB + Aiven Valkey
 
-Hướng dẫn end-to-end để deploy NestJS backend của LinVNix lên Hugging Face Spaces, dùng Neon (Postgres free) và Upstash (Redis free). Tất cả 3 service đều free tier, không cần thẻ tín dụng.
+Hướng dẫn end-to-end để deploy NestJS backend của LinVNix lên Hugging Face Spaces, dùng **CockroachDB Serverless/Standard** (Postgres-compatible) và **Aiven for Valkey** (Redis-compatible). Tất cả 3 service đều có free tier không cần thẻ tín dụng, hoặc trial credit nếu cần plan paid trong 30 ngày.
 
 > Tài liệu này sẽ giúp bạn deploy lại từ đầu nếu phải đổi account (lỡ bị limit/ban), update code mới, hay debug khi build fail. Đọc theo thứ tự lần đầu, sau đó nhảy đến mục liên quan khi cần.
+
+> **Lịch sử**: Stack cũ dùng Neon (0.5 GB) + Upstash (256 MB / 500K cmds-month). Đã migrate sang CockroachDB + Aiven Valkey vì: (a) CockroachDB Basic free 10 GB không sleep idle (vs Neon 0.5 GB + 5 phút sleep); (b) Aiven Valkey default `noeviction` đúng cho Bull queue (Upstash dùng `allkeys-lru` có bug evict job silently); (c) Aiven throughput-based pricing phù hợp Bull polling, Upstash command-based đốt quota nhanh.
 
 ## 1. Kiến trúc
 
@@ -16,15 +18,17 @@ Hướng dẫn end-to-end để deploy NestJS backend của LinVNix lên Hugging
                        ┌─────────────────┼─────────────────┐
                        ▼                 ▼                 ▼
                 ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-                │ Neon         │  │ Upstash      │  │ HF Space     │
-                │ Postgres     │  │ Redis        │  │ /data        │
-                │ (0.5 GB free)│  │ (256 MB free)│  │ (uploads MP3)│
+                │ CockroachDB  │  │ Aiven Valkey │  │ HF Space     │
+                │ Postgres-    │  │ Redis-compat │  │ /data        │
+                │ compat 26257 │  │ TLS 16xxx    │  │ (uploads MP3)│
+                │ Basic 10 GB  │  │ Free or paid │  │              │
                 └──────────────┘  └──────────────┘  └──────────────┘
 ```
 
 - **Code repo**: HF Space `tomisakae/linvnix` (git repo, public). Push code → HF tự build Docker, deploy.
 - **Secrets**: lưu trong HF Space settings (KHÔNG trong code repo). Inject thành env var khi container chạy.
-- **Persistent storage**: Docker image bake sẵn seed audio (A1.1). MP3 user upload runtime ephemeral — mất khi rebuild trừ khi attach Storage Bucket (cần làm tay ở HF Settings UI).
+- **Persistent storage**: Docker image bake sẵn seed audio (A1.1) qua `COPY --from=builder /app/backend/uploads ./backend/uploads`. MP3 user upload runtime ephemeral — mất khi rebuild trừ khi attach Storage Bucket (cần làm tay ở HF Settings UI).
+- **CockroachDB compat**: dùng `type: 'postgres'` trong TypeORM, wire protocol tương thích. PK `@PrimaryGeneratedColumn('uuid')` thay vì SERIAL (CockroachDB SERIAL ≠ Postgres SERIAL).
 
 ## 2. Yêu cầu trước khi bắt đầu
 
@@ -57,61 +61,112 @@ hf auth login --token <YOUR_TOKEN> --add-to-git-credential
 hf auth whoami    # in ra username
 ```
 
-## 4. Tạo Neon Postgres (free)
+## 4. Tạo CockroachDB Postgres-compatible
 
-1. https://console.neon.tech/signup → sign in GitHub
-2. **New Project**:
-   - Name: `linvnix`
-   - Postgres version: 17
-   - **Region: AWS us-east-2 (Ohio)** — match region HF Spaces US East cho latency thấp
-3. Trang Dashboard → box **Connection string**:
-   - Dropdown chọn **Pooled connection** (NestJS pool connections, không cần thêm pgbouncer)
-   - Copy URL dạng `postgresql://neondb_owner:<password>@ep-xxx-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require`
-4. Lưu URL này ở nơi an toàn (1Password, Bitwarden...). Sẽ dùng làm `DATABASE_URL` secret.
+CockroachDB Cloud có 3 plan:
+- **Basic** (serverless): 10 GB storage + 50M RU/tháng free forever, không cần card, không sleep.
+- **Standard**: dedicated capacity, không throttle, charge theo vCPU. Free trial $400/30 ngày.
+- **Advanced**: enterprise, không dùng cho project nhỏ.
 
-**Free tier limits**:
-- 0.5 GB storage
-- 1 project, 10 branches
-- Branch sleep sau 5 phút idle → cold start ~1s
-- Không giới hạn computed time
+### 4.A. Basic plan (recommended cho production dài hạn free)
 
-**Reset password** (khi cần rotate): Neon Console → Project → **Settings** → **Reset password** → URL mới.
+1. https://cockroachlabs.cloud/signup → sign in GitHub (no card)
+2. **Create cluster**:
+   - Plan: **Basic**
+   - Cloud: **AWS**
+   - Region: **N. Virginia (us-east-1)** — match HF Spaces US East cho latency thấp
+   - Spend limit: **$0** (chỉ dùng free resources, vượt là throttle, không charge)
+3. **Finalize**:
+   - Cluster name: `linvnix-prod`
+   - SQL user: `linvnix`
+   - Password: **Generate & save** → copy lưu 1Password ngay (chỉ hiện 1 lần)
+4. Sau khi cluster RUNNING → tab **Connect** → **General connection string** → copy URL dạng:
+   ```
+   postgresql://linvnix:<password>@<cluster>.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full
+   ```
+5. **Sửa `sslmode=verify-full` → `sslmode=require`** trước khi paste vào HF secret (code dùng `rejectUnauthorized: false` nên không cần root.crt trong container).
 
-## 5. Tạo Upstash Redis (free)
+**Free Basic limits**:
+- 10 GB storage
+- 50M Request Units/tháng
+- Không sleep, không hết hạn
+- Single region
 
-1. https://console.upstash.com/login → sign in GitHub
-2. **Create Database**:
-   - Name: `linvnix-redis`
-   - Type: **Redis**
-   - Primary region: **US-EAST-1 (N. Virginia)** — gần HF
-   - Variant: **Regional** (free, đủ dùng)
-   - Eviction: ✅ enable, policy `allkeys-lru` (cache + queue, không cần TTL strict)
-3. Tab **Connect to your database** → **Redis CLI** → copy phần URL:
-   - **QUAN TRỌNG**: đổi `redis://` thành `rediss://` (s = TLS). Upstash bắt buộc TLS.
-   - Format cuối: `rediss://default:<password>@<host>.upstash.io:6379`
-4. Lưu URL — sẽ dùng làm `REDIS_URL` secret.
+### 4.B. Standard plan (nếu cần dedicated capacity test 30 ngày)
 
-**Free tier limits**:
-- 256 MB storage
-- 10k commands/ngày
-- 500 daily connections
+Tương tự Basic nhưng chọn **Standard** + 2-4 vCPUs. $400 trial credit chạy được ~30 ngày tùy size.
 
-**Regenerate password** (khi cần rotate): Upstash Console → DB → **Reset password** → URL mới.
+⚠️ **Trial expire = cluster có thể bị charge $165-330/tháng** nếu đã add card, hoặc bị paused/deleted nếu chưa. **Đặt reminder 2 ngày trước expire** → downgrade về Basic hoặc migrate.
+
+**Reset password** (khi cần rotate): CockroachDB Console → cluster → **SQL Users** → user → **Reset password** → URL mới.
+
+## 5. Tạo Aiven for Valkey (Redis-compatible)
+
+Aiven Valkey có 2 plan phù hợp:
+- **Free**: indefinite free, no card, ~1 GB, throttle 125 KB/s. Tự shutdown khi idle dài.
+- **Hobbyist/Startup/Business** (paid): có $300 trial credit / 30 ngày. No throttle.
+
+> **Tại sao Valkey không phải Redis?** Valkey = fork open-source của Redis (sau khi Redis Inc đổi license 2024). Wire-compatible 100% với Redis 7.2, ioredis/Bull/BullMQ chạy unchanged.
+
+### 5.A. Free plan (recommended cho production dài hạn)
+
+1. https://console.aiven.io/signup → sign in GitHub/Google (no card)
+2. **Create service**:
+   - Service: **Aiven for Valkey**
+   - Tier: **Free**
+   - Cloud: **AWS**
+   - Region: **us-east-1** (N. Virginia) — match HF + CockroachDB
+   - Service name: `linvnix-valkey`
+   - Version: Valkey 9.0 (default, OK)
+3. Đợi RUNNING (~2-3 phút)
+4. Tab **Overview** → **Connection information** → copy **Service URI**:
+   ```
+   rediss://default:<password>@linvnix-valkey-<project>.aivencloud.com:<random-port>
+   ```
+   - `rediss://` (s = TLS, Aiven bắt buộc)
+   - Port random Aiven (vd 16642), KHÔNG phải 6379
+
+5. **Verify eviction policy = `noeviction`** (BullMQ yêu cầu):
+   ```bash
+   REDIS_URL='rediss://...' bun -e "
+   const Redis = require('ioredis');
+   const r = new Redis(process.env.REDIS_URL, { tls: {} });
+   console.log(await r.config('GET', 'maxmemory-policy'));
+   await r.quit();
+   "
+   # Expected: [ 'maxmemory-policy', 'noeviction' ]
+   ```
+   Nếu khác → Aiven Console → service → **Advanced configuration** → add `valkey_maxmemory_policy` = `noeviction` → Save.
+
+### 5.B. Paid plan (Business-4 cho test 30 ngày)
+
+Bước 2 đổi:
+- Tier: **Professional** → click **Use trial credits**
+- Plan family: **Business**
+- Plan size: **Business-4** (~$250/mo, vừa khít $300 trial)
+
+⚠️ **Cùng warning với CockroachDB Standard trial**: hết 30 ngày phải delete/downgrade trước khi bị charge.
+
+**Reset password** (khi cần rotate): Aiven Console → service → tab **Users** → user `default` → **Reset password** → URL mới.
 
 ## 6. Code adaptation (đã làm sẵn trong repo)
 
-Backend đã được sửa để hỗ trợ HF deploy. Các file đã sửa:
+Backend đã được sửa để hỗ trợ HF deploy + CockroachDB + Aiven Valkey. Các file đã sửa:
 
-- `backend/src/config/database.config.ts` — đọc `DATABASE_URL` (fallback HOST/PORT/...) + auto-detect SSL từ `sslmode=require` query
+- `backend/src/config/database.config.ts` — đọc `DATABASE_URL` (fallback HOST/PORT/...) + auto-detect SSL từ `sslmode=require`. Dùng `ssl: { rejectUnauthorized: false }` để bypass strict cert verify (CockroachDB Cloud cert hợp lệ nhưng container không có root.crt).
 - `backend/src/config/redis.config.ts` — đọc `REDIS_URL` (fallback HOST/PORT/...) + auto-bật TLS khi scheme là `rediss://`
 - `backend/src/infrastructure/queue/queue.module.ts` — propagate `tls` cho Bull
 - `backend/src/infrastructure/cache/cache.service.ts` — propagate `tls` cho ioredis
 - `backend/src/infrastructure/storage/storage.service.ts` — đọc `UPLOADS_DIR` env
 - `backend/src/app.module.ts` — `ServeStaticModule.rootPath` đọc `UPLOADS_DIR`
 - `backend/scripts/seed-lessons.ts` — đọc `DATABASE_URL` + SSL
+- `backend/scripts/seed-simulations-direct.ts` — bypass Bull để seed từ local Windows (xem mục 11)
 - `packages/shared/tsconfig.json` — exclude `*.spec.ts` khỏi build (nếu không HF builder fail)
+- `Dockerfile` (root, copy từ `backend/Dockerfile` khi sync) — `COPY --from=builder /app/backend/uploads ./backend/uploads` để bake seed audio vào image runner
 
 Trừ khi muốn refactor, không cần sửa thêm gì. Chỉ cần secrets đúng.
+
+**TypeORM compatibility note**: dialect `type: 'postgres'` chạy wire-compatible với CockroachDB. PK dùng `@PrimaryGeneratedColumn('uuid')` (đã setup trong `base.entity.ts`), KHÔNG dùng `SERIAL` vì CockroachDB SERIAL = `unique_rowid()` (8 bytes int) khác Postgres SERIAL (auto-increment).
 
 ## 7. Tạo HF Space
 
@@ -137,14 +192,19 @@ hf spaces secrets add tomisakae/linvnix --secrets-file backend/.env
 
 # Cách 2 — override / thêm từng key
 hf spaces secrets add tomisakae/linvnix \
-  -s 'DATABASE_URL=postgresql://neondb_owner:<password>@ep-xxx-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require' \
-  -s 'REDIS_URL=rediss://default:<password>@<host>.upstash.io:6379' \
+  -s 'DATABASE_URL=postgresql://linvnix:<password>@<cluster>.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=require' \
+  -s 'REDIS_URL=rediss://default:<password>@<host>.aivencloud.com:<port>' \
   -s 'NODE_ENV=production' \
   -s 'DATABASE_SYNCHRONIZE=true' \
   -s 'BASE_URL=https://tomisakae-linvnix.hf.space' \
   -s 'JWT_SECRET=<random-64-char-string>' \
   -s 'API_PREFIX=api' \
   -s 'API_VERSION=v1'
+
+# Cleanup: xóa secrets legacy split-format (nếu trước đó dùng Neon/Upstash HOST/PORT)
+for k in DATABASE_HOST DATABASE_PORT DATABASE_USER DATABASE_PASSWORD DATABASE_NAME REDIS_HOST REDIS_PORT REDIS_PASSWORD REDIS_DB; do
+  hf spaces secrets delete tomisakae/linvnix "$k" --yes 2>/dev/null
+done
 
 # Liệt kê secrets đã set
 hf spaces secrets ls tomisakae/linvnix
@@ -154,7 +214,7 @@ hf spaces secrets ls tomisakae/linvnix
 **Bắt buộc cho production**: `NODE_ENV=production`, `BASE_URL`.
 **Bắt buộc khi deploy lần đầu**: `DATABASE_SYNCHRONIZE=true` (TypeORM sync schema). Sau khi schema ổn thì xóa: `hf spaces secrets delete tomisakae/linvnix DATABASE_SYNCHRONIZE --yes`.
 
-> ⚠️ **KHÔNG set `UPLOADS_DIR=/data/uploads` ngay lúc deploy đầu** — `/data` chỉ tồn tại khi đã attach persistent storage. Set sai → `GET /uploads/...` trả 500 (`path must be absolute or specify root`). Cứ để code dùng default `/app/backend/uploads` (ephemeral, nhưng seed audio baked sẵn vào Docker image vẫn phục vụ được). Xem mục **18.A** để bật persistent storage khi cần.
+> ⚠️ **KHÔNG set `UPLOADS_DIR=/data/uploads` ngay lúc deploy đầu** — `/data` chỉ tồn tại khi đã attach persistent storage. Set sai → `GET /uploads/...` trả 500 (`path must be absolute or specify root`). Cứ để code dùng default `/app/backend/uploads` (ephemeral, nhưng seed audio baked sẵn vào Docker image vẫn phục vụ được). Xem mục **20** để bật persistent storage khi cần.
 
 **Generate JWT_SECRET**:
 ```bash
@@ -318,13 +378,13 @@ hf spaces info tomisakae/linvnix --json | python -c "import sys,json; print('pri
 curl -sI https://tomisakae-linvnix.hf.space/api/v1/courses    # phải trả 200 OK, không 404
 ```
 
-## 11. Seed dữ liệu vào Neon
+## 11. Seed dữ liệu vào CockroachDB
 
 Sau khi backend lần đầu khởi động (schema được TypeORM sync), seed dữ liệu:
 
 ```bash
 cd backend
-export DATABASE_URL='postgresql://neondb_owner:<password>@ep-xxx-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require'
+export DATABASE_URL='postgresql://linvnix:<password>@<cluster>.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=require'
 
 # 1) Courses + modules + lessons + vocab + grammar + exercises (raw pg client, không bootstrap NestJS)
 bun run seed:lessons
@@ -337,17 +397,21 @@ bun run seed:simulations:direct
 >
 > Trong production container (Linux + Bun), Bull chạy bình thường. Lỗi chỉ xảy ra khi seed từ local Windows.
 
-### 11.1 Flush Redis cache sau khi seed
+> **CockroachDB note**: TypeORM dialect `postgres` + driver `pg` chạy ngon với CockroachDB qua wire protocol. Port 26257 (KHÔNG phải 5432). Warning `SSL modes 'require' treated as 'verify-full'` từ pg-connection-string là cảnh báo deprecation, không ảnh hưởng functionality.
+
+### 11.1 Flush Aiven Valkey cache sau khi seed
 
 Backend cache 1h TTL. Nếu trước đó API đã được gọi (DB rỗng), kết quả `[]` bị cache. Sau seed phải flush:
 
 ```bash
-REDIS_URL='rediss://default:<password>@<host>.upstash.io:6379' bun -e "
+cd backend  # cần để bun resolve ioredis dependency
+REDIS_URL='rediss://default:<password>@<host>.aivencloud.com:<port>' bun -e "
 const Redis = require('ioredis');
-const u = new URL(process.env.REDIS_URL);
-const r = new Redis({ host: u.hostname, port: +u.port, password: decodeURIComponent(u.password), tls: {} });
+const r = new Redis(process.env.REDIS_URL, { tls: {} });
+const before = await r.dbsize();
 await r.flushdb();
-console.log('Flushed');
+const after = await r.dbsize();
+console.log('Flushed:', before, '->', after);
 await r.quit();
 "
 ```
@@ -367,7 +431,7 @@ curl -s -H "Authorization: Bearer $TOKEN" https://tomisakae-linvnix.hf.space/api
   | python -c "import sys,json; print(len(json.load(sys.stdin)['data']), 'categories')"
 ```
 
-Expected: 6 courses · 6 categories · 15 scenarios · 34 characters.
+Expected: 6 courses · 30 modules · 106 lessons · 677 vocab · 411 exercises · 6 categories · 15 scenarios · 34 characters.
 
 ## 12. Update code (deploy lần thứ 2 trở đi)
 
@@ -409,18 +473,18 @@ hf spaces logs tomisakae/linvnix --build
 hf auth login --token <NEW_TOKEN> --force --add-to-git-credential
 ```
 
-### Neon DB password
+### CockroachDB password
 ```bash
-# 1. Neon Console → Project → Settings → Reset password → copy URL mới
+# 1. CockroachDB Console → cluster → SQL Users → user `linvnix` → Reset password → copy URL mới
 # 2. Update HF secret
 hf spaces secrets add tomisakae/linvnix -s 'DATABASE_URL=<new-url>'
-# 3. HF tự restart Space (~1 phút)
-hf spaces restart tomisakae/linvnix   # hoặc force restart
+# 3. Restart Space
+hf spaces restart tomisakae/linvnix
 ```
 
-### Upstash Redis password
+### Aiven Valkey password
 ```bash
-# 1. Upstash Console → DB → Reset password → copy URL mới (giữ rediss://)
+# 1. Aiven Console → service `linvnix-valkey` → Users → user `default` → Reset password → copy URL mới (giữ rediss://)
 # 2. Update HF secret
 hf spaces secrets add tomisakae/linvnix -s 'REDIS_URL=<new-url>'
 # 3. Restart Space
@@ -434,7 +498,7 @@ hf spaces restart tomisakae/linvnix
 hf spaces secrets add tomisakae/linvnix -s 'GENAI_API_KEYS=key1,key2,key3'
 ```
 
-## 14. Migrate sang account mới (HF/Neon/Upstash bị limit/ban)
+## 14. Migrate sang account mới (HF/CockroachDB/Aiven bị limit/ban)
 
 ### HF account mới
 ```bash
@@ -451,7 +515,6 @@ hf spaces secrets add <new-username>/linvnix \
   -s 'REDIS_URL=<...>' \
   -s 'NODE_ENV=production' \
   -s 'BASE_URL=https://<new-username>-linvnix.hf.space' \
-  -s 'UPLOADS_DIR=/data/uploads' \
   -s 'DATABASE_SYNCHRONIZE=true' \
   -s 'JWT_SECRET=<...>'
 
@@ -461,10 +524,10 @@ hf spaces secrets add <new-username>/linvnix \
 # Mobile dùng --dart-define API_URL=https://<new-username>-linvnix.hf.space khi build APK
 ```
 
-### Neon account mới
+### CockroachDB account mới
 ```bash
-# 1. Sign up Neon account mới, tạo project mới (region us-east-2)
-# 2. Lấy DATABASE_URL mới
+# 1. Sign up CockroachDB account mới, tạo cluster mới (region us-east-1, Basic plan)
+# 2. Lấy DATABASE_URL mới (sửa sslmode=verify-full → require)
 # 3. Update HF secret
 hf spaces secrets add <space-id> -s 'DATABASE_URL=<new-url>'
 hf spaces secrets add <space-id> -s 'DATABASE_SYNCHRONIZE=true'   # bật lại để sync schema
@@ -478,10 +541,11 @@ DATABASE_URL='<new-url>' bun run seed:simulations:direct
 hf spaces secrets delete <space-id> DATABASE_SYNCHRONIZE --yes
 ```
 
-### Upstash account mới
+### Aiven Valkey account mới
 ```bash
-# 1. Sign up Upstash account mới, tạo Redis DB
-# 2. Update HF secret
+# 1. Sign up Aiven account mới (GitHub/Google, no card), tạo Valkey service Free plan
+# 2. Verify maxmemory-policy=noeviction (mục 5.A bước 5)
+# 3. Update HF secret
 hf spaces secrets add <space-id> -s 'REDIS_URL=<new-rediss-url>'
 hf spaces restart <space-id>
 ```
@@ -501,8 +565,13 @@ hf spaces restart <space-id>
 - Set `REDIS_URL=rediss://...` và restart.
 
 ### Runtime: Postgres "self signed certificate" / SSL error
-- Neon yêu cầu SSL. Code đã auto-detect khi URL có `sslmode=require`.
-- Nếu URL không có `sslmode=require`, set thêm: `hf spaces secrets add <space-id> -s 'DATABASE_SSL=true'`.
+- CockroachDB yêu cầu SSL. Code đã auto-detect khi URL có `sslmode=require` hoặc `verify-full`.
+- Code dùng `ssl: { rejectUnauthorized: false }` để bypass cert verification — không cần root.crt trong container.
+- Nếu URL không có `sslmode=*`, set thêm: `hf spaces secrets add <space-id> -s 'DATABASE_SSL=true'`.
+
+### Log: "SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'"
+- Cảnh báo deprecation từ `pg-connection-string@2.x`. Không phải lỗi, app vẫn boot OK.
+- Sẽ break ở pg v9.0 — lúc đó upgrade dependency thì sửa.
 
 ### API trả 404 cho anonymous request
 - Space đang Private. Xem mục 10 để chuyển Public.
@@ -542,16 +611,35 @@ hf spaces restart <space-id>
 - Build APK release với upload keystore → cần thêm SHA-1 của upload keystore nữa.
 
 ### `findAll` API vẫn trả `[]` sau khi seed thành công
-- CacheService cache 1h TTL trên Upstash Redis. Kết quả `[]` từ lần gọi trước (DB rỗng) bị cache.
+- CacheService cache 1h TTL trên Aiven Valkey. Kết quả `[]` từ lần gọi trước (DB rỗng) bị cache.
 - Flush cache:
   ```bash
+  cd backend
   REDIS_URL='rediss://...' bun -e "
   const Redis = require('ioredis');
-  const u = new URL(process.env.REDIS_URL);
-  const r = new Redis({ host: u.hostname, port: +u.port, password: decodeURIComponent(u.password), tls: {} });
+  const r = new Redis(process.env.REDIS_URL, { tls: {} });
   await r.flushdb(); console.log('Flushed'); await r.quit();
   "
   ```
+
+### Aiven Valkey "ETIMEDOUT" hoặc "Connection is closed"
+- Aiven Free tier shutdown nếu idle dài → service POWER_OFF state.
+- Vào Aiven Console → service → click **Power on**. Service quay lại RUNNING sau 1-2 phút.
+- Workaround: setup cron ping mỗi 30 phút, hoặc upgrade lên paid plan.
+
+### Bull job mất silently sau khi enqueue
+- Eviction policy SAI (`allkeys-lru` thay vì `noeviction`).
+- Verify config:
+  ```bash
+  REDIS_URL='rediss://...' bun -e "
+  const Redis = require('ioredis');
+  const r = new Redis(process.env.REDIS_URL, { tls: {} });
+  console.log(await r.config('GET', 'maxmemory-policy'));
+  await r.quit();
+  "
+  # Expected: [ 'maxmemory-policy', 'noeviction' ]
+  ```
+- Aiven default đã đúng. Nếu khác → Advanced configuration → set `valkey_maxmemory_policy=noeviction`.
 
 ### Space stuck "BUILDING" hơn 15 phút
 - Bun install kéo dài. Check build log: `hf spaces logs <space-id> --build --follow`.
@@ -568,17 +656,32 @@ hf spaces restart <space-id>
 
 | Service | Free tier limit | Cảnh báo khi |
 |---------|----------------|--------------|
-| Neon | 0.5 GB DB | DB ~400 MB → tính giải pháp upgrade hoặc archive |
-| Upstash | 10k cmds/ngày, 256 MB | Bull queue có thể chạm trần nếu nhiều email/job |
+| CockroachDB Basic | 10 GB + 50M RU/tháng | RU sắp chạm 40M → check hot queries, tăng cache TTL |
+| CockroachDB Standard (trial) | $400 credit / 30 ngày | Credit < $50 hoặc <5 ngày → quyết định downgrade/migrate |
+| Aiven Valkey Free | ~1 GB + 125 KB/s throughput | Throughput sustained > 100 KB/s → cân nhắc paid |
+| Aiven Valkey paid (trial) | $300 credit / 30 ngày | Credit < $50 → quyết định downgrade/migrate |
 | Gemini | $0.X/1M token (có miễn phí ban đầu) | Set quota alert trong Google Cloud Console |
 | HF Spaces | CPU Basic, không ngủ | Hardware ổn — không lo |
 | HF Storage (Bucket) | 5 GB private free | MP3 upload nhiều → cân nhắc R2 |
 
 Check usage:
-- Neon: Console → Project → **Monitoring**
-- Upstash: Console → DB → **Metrics**
+- CockroachDB: Console → cluster → **Monitoring** + **Billing → Usage**
+- Aiven: Console → service → **Metrics** + organization **Billing**
 - HF: Settings → **Billing**
 - Gemini: Google AI Studio → **API key usage**
+
+### ⚠️ Trial expiration reminders
+
+Nếu dùng paid trial (CockroachDB Standard / Aiven Business), **đặt Google Calendar reminder 2 ngày trước expire**:
+- CockroachDB Standard trial: ~30 ngày từ ngày tạo
+- Aiven Business trial: ~30 ngày từ ngày tạo
+
+Trước expire phải làm 1 trong:
+1. **Downgrade về Free plan** trong UI (giữ data, miễn phí forever)
+2. **Migrate sang account/service free khác** (xem mục 14)
+3. **Add card** (chấp nhận charge ~$200-330/tháng)
+
+Bỏ qua = service bị paused/deleted hoặc bị charge tự động (nếu đã add card).
 
 ## 17. Tham khảo lệnh hf nhanh
 
