@@ -48,7 +48,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       );
 
       if (mounted) {
-        context.go('/verify-email?email=${Uri.encodeComponent(_emailController.text.trim())}');
+        context.push('/verify-email?email=${Uri.encodeComponent(_emailController.text.trim())}');
       }
     } on AppException catch (e) {
       if (mounted) {
