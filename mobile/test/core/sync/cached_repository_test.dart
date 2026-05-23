@@ -44,7 +44,8 @@ void main() {
       expect(repo.fetchCallCount, 1);
     });
 
-    test('data past TTL refetches from API', () async {
+    test('data past TTL returns cached immediately and refetches in background',
+        () async {
       final container = ProviderContainer();
       final repo = container.read(_testCachedRepoProvider.notifier);
 
@@ -54,10 +55,16 @@ void main() {
       repo.forceExpire();
       container.invalidate(_testCachedRepoProvider);
 
-      final secondRead = await container.read(_testCachedRepoProvider.future);
+      final immediateRead =
+          await container.read(_testCachedRepoProvider.future);
+      expect(immediateRead, 101);
 
-      expect(secondRead, 102);
+      for (var i = 0; i < 5; i++) {
+        await Future<void>.delayed(Duration.zero);
+      }
+
       expect(repo.fetchCallCount, 2);
+      expect(repo.state.value, 102);
     });
   });
 

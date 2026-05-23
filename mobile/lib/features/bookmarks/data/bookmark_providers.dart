@@ -75,7 +75,7 @@ class BookmarkIdsNotifier extends CachedRepository<Set<String>>
 }
 
 final bookmarkStatsProvider =
-    AsyncNotifierProvider.autoDispose<BookmarkStatsNotifier, BookmarkStats>(
+    AsyncNotifierProvider<BookmarkStatsNotifier, BookmarkStats>(
       BookmarkStatsNotifier.new,
     );
 

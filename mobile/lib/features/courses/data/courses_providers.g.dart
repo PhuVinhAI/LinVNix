@@ -20,7 +20,7 @@ final class CourseDetailProvider
   }) : super(
          retry: null,
          name: r'courseDetailProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -50,7 +50,7 @@ final class CourseDetailProvider
   }
 }
 
-String _$courseDetailHash() => r'de522e75fd5b3722380b5b32a6a440f2e3587c21';
+String _$courseDetailHash() => r'70ccbc11a89e5d6b0a6e49046516c1319b689031';
 
 final class CourseDetailFamily extends $Family
     with
@@ -67,7 +67,7 @@ final class CourseDetailFamily extends $Family
         name: r'courseDetailProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   CourseDetailProvider call(String id) =>
@@ -109,7 +109,7 @@ final class ModuleDetailProvider
   }) : super(
          retry: null,
          name: r'moduleDetailProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -139,7 +139,7 @@ final class ModuleDetailProvider
   }
 }
 
-String _$moduleDetailHash() => r'2d1f24837633f185f25f27a4436f71df51696b40';
+String _$moduleDetailHash() => r'9e9f15d034440536678e3431e4f4ac03fa539d25';
 
 final class ModuleDetailFamily extends $Family
     with
@@ -156,7 +156,7 @@ final class ModuleDetailFamily extends $Family
         name: r'moduleDetailProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   ModuleDetailProvider call(String id) =>

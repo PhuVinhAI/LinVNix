@@ -26,18 +26,22 @@ final coursesProvider = AsyncNotifierProvider<CoursesNotifier, List<Course>>(
   CoursesNotifier.new,
 );
 
-@riverpod
+@Riverpod(keepAlive: true)
 class CourseDetail extends _$CourseDetail {
   Course? _cachedData;
   DateTime? _lastFetchedAt;
+  bool _isRefreshing = false;
   static const _ttl = Duration(minutes: 30);
 
   @override
   Future<Course> build(String id) async {
     final now = DateTime.now();
-    if (_cachedData != null &&
-        _lastFetchedAt != null &&
-        now.difference(_lastFetchedAt!) < _ttl) {
+    if (_cachedData != null) {
+      final isFresh = _lastFetchedAt != null &&
+          now.difference(_lastFetchedAt!) < _ttl;
+      if (!isFresh) {
+        Future.microtask(() => _refreshInBackground(id));
+      }
       return _cachedData!;
     }
     final repo = ref.read(coursesRepositoryProvider);
@@ -47,24 +51,44 @@ class CourseDetail extends _$CourseDetail {
     return data;
   }
 
+  Future<void> _refreshInBackground(String id) async {
+    if (_isRefreshing) return;
+    _isRefreshing = true;
+    try {
+      final repo = ref.read(coursesRepositoryProvider);
+      final fresh = await repo.getCourseById(id);
+      _cachedData = fresh;
+      _lastFetchedAt = DateTime.now();
+      state = AsyncData(fresh);
+    } catch (_) {
+      // Keep stale cached data.
+    } finally {
+      _isRefreshing = false;
+    }
+  }
+
   Future<void> refresh() async {
     _lastFetchedAt = null;
     ref.invalidateSelf();
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ModuleDetail extends _$ModuleDetail {
   CourseModule? _cachedData;
   DateTime? _lastFetchedAt;
+  bool _isRefreshing = false;
   static const _ttl = Duration(minutes: 30);
 
   @override
   Future<CourseModule> build(String id) async {
     final now = DateTime.now();
-    if (_cachedData != null &&
-        _lastFetchedAt != null &&
-        now.difference(_lastFetchedAt!) < _ttl) {
+    if (_cachedData != null) {
+      final isFresh = _lastFetchedAt != null &&
+          now.difference(_lastFetchedAt!) < _ttl;
+      if (!isFresh) {
+        Future.microtask(() => _refreshInBackground(id));
+      }
       return _cachedData!;
     }
     final repo = ref.read(coursesRepositoryProvider);
@@ -72,6 +96,22 @@ class ModuleDetail extends _$ModuleDetail {
     _cachedData = data;
     _lastFetchedAt = now;
     return data;
+  }
+
+  Future<void> _refreshInBackground(String id) async {
+    if (_isRefreshing) return;
+    _isRefreshing = true;
+    try {
+      final repo = ref.read(coursesRepositoryProvider);
+      final fresh = await repo.getModuleById(id);
+      _cachedData = fresh;
+      _lastFetchedAt = DateTime.now();
+      state = AsyncData(fresh);
+    } catch (_) {
+      // Keep stale cached data.
+    } finally {
+      _isRefreshing = false;
+    }
   }
 
   Future<void> refresh() async {

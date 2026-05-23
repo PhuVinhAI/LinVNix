@@ -4,6 +4,7 @@ import 'data_change_bus.dart';
 abstract class CachedRepository<T> extends AsyncNotifier<T> {
   T? _cachedData;
   DateTime? _lastFetchedAt;
+  bool _isRefreshing = false;
 
   Duration get ttl;
 
@@ -12,15 +13,33 @@ abstract class CachedRepository<T> extends AsyncNotifier<T> {
   @override
   Future<T> build() async {
     final now = DateTime.now();
-    if (_cachedData != null &&
-        _lastFetchedAt != null &&
-        now.difference(_lastFetchedAt!) < ttl) {
+    if (_cachedData != null) {
+      final isFresh = _lastFetchedAt != null &&
+          now.difference(_lastFetchedAt!) < ttl;
+      if (!isFresh) {
+        Future.microtask(_refreshInBackground);
+      }
       return _cachedData!;
     }
     final data = await fetchFromApi();
     _cachedData = data;
     _lastFetchedAt = now;
     return data;
+  }
+
+  Future<void> _refreshInBackground() async {
+    if (_isRefreshing) return;
+    _isRefreshing = true;
+    try {
+      final fresh = await fetchFromApi();
+      _cachedData = fresh;
+      _lastFetchedAt = DateTime.now();
+      state = AsyncData(fresh);
+    } catch (_) {
+      // Keep stale cached data; do not flip state to AsyncError.
+    } finally {
+      _isRefreshing = false;
+    }
   }
 
   Future<void> mutate({
@@ -63,18 +82,37 @@ abstract class CachedRepository<T> extends AsyncNotifier<T> {
 mixin CachedNotifierMixin<T> on AsyncNotifier<T> {
   T? _cachedData;
   DateTime? _lastFetchedAt;
+  bool _isRefreshing = false;
 
   Future<T> fetchCached(Future<T> Function() fetcher, Duration ttl) async {
     final now = DateTime.now();
-    if (_cachedData != null &&
-        _lastFetchedAt != null &&
-        now.difference(_lastFetchedAt!) < ttl) {
+    if (_cachedData != null) {
+      final isFresh = _lastFetchedAt != null &&
+          now.difference(_lastFetchedAt!) < ttl;
+      if (!isFresh) {
+        Future.microtask(() => _refreshInBackground(fetcher));
+      }
       return _cachedData!;
     }
     final data = await fetcher();
     _cachedData = data;
     _lastFetchedAt = now;
     return data;
+  }
+
+  Future<void> _refreshInBackground(Future<T> Function() fetcher) async {
+    if (_isRefreshing) return;
+    _isRefreshing = true;
+    try {
+      final fresh = await fetcher();
+      _cachedData = fresh;
+      _lastFetchedAt = DateTime.now();
+      state = AsyncData(fresh);
+    } catch (_) {
+      // Keep stale cached data; do not flip state to AsyncError.
+    } finally {
+      _isRefreshing = false;
+    }
   }
 
   Future<void> mutateCached({
