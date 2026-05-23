@@ -124,17 +124,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   // Branding - centered
                   Center(
-                    child: Container(
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        color: c.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppRadius.xl),
-                      ),
-                      child: Icon(
-                        Icons.translate_rounded,
-                        size: 36,
-                        color: c.primary,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(AppRadius.xl),
+                      child: Image.asset(
+                        'assets/branding/app_icon.png',
+                        width: 72,
+                        height: 72,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
