@@ -1,11 +1,11 @@
 {
-    "name": "mobile",
-    "short_name": "mobile",
+    "name": "LinVNix",
+    "short_name": "LinVNix",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#6366F1",
+    "theme_color": "#6366F1",
+    "description": "Learn Vietnamese with AI-powered conversations, interactive lessons, and real-time pronunciation feedback.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

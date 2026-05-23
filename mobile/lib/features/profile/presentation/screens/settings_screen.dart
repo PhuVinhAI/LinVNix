@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/constants/app_info.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/assistant_bar_provider.dart';
 import '../../../../core/providers/auth_state_provider.dart';
@@ -101,6 +102,15 @@ class SettingsScreen extends ConsumerWidget {
               variant: AppButtonVariant.outline,
               icon: const Icon(Icons.logout),
               onPressed: () => _showLogoutDialog(context, ref),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Center(
+              child: Text(
+                '$appName v$appVersion',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppTheme.colors(context).mutedForeground,
+                    ),
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
           ],
