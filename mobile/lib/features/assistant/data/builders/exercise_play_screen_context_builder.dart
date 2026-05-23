@@ -11,6 +11,11 @@ import '../route_match.dart';
 /// Pulls the current exercise question + the learner's tentative
 /// `userAnswer` from `currentExerciseAttemptProvider`, which the
 /// `ExercisePlayScreen` keeps in sync from its own `setState` callbacks.
+///
+/// Type-specific payload (listening `audioUrl`, speaking `promptText`,
+/// multiple-choice `choices`, ...) is forwarded verbatim under `options`
+/// so the AI can ground hints like "you only heard the audio once, try
+/// again" or "the prompt asks you to say X".
 ScreenContext exercisePlayScreenContextBuilder(Ref ref, RouteMatch match) {
   final attempt = ref.watch(currentExerciseAttemptProvider);
   final setId = match.pathParameters['setId'] ?? '';
@@ -43,6 +48,12 @@ ScreenContext exercisePlayScreenContextBuilder(Ref ref, RouteMatch match) {
       'userAnswer': attempt?.userAnswer,
       'exerciseIndex': attempt?.exerciseIndex,
       'totalExercises': attempt?.totalExercises,
+      'options': ?attempt?.options,
+      'submitted': attempt?.submitted ?? false,
+      'isCorrect': ?attempt?.isCorrect,
+      'score': ?attempt?.score,
+      'correctAnswer': ?attempt?.correctAnswer,
+      'explanation': ?attempt?.explanation,
     },
   );
 }

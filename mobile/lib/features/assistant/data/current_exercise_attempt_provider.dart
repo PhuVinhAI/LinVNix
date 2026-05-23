@@ -20,6 +20,12 @@ class CurrentExerciseAttempt {
     this.userAnswer,
     this.exerciseIndex,
     this.totalExercises,
+    this.options,
+    this.correctAnswer,
+    this.explanation,
+    this.submitted = false,
+    this.isCorrect,
+    this.score,
   });
 
   final String setId;
@@ -38,6 +44,26 @@ class CurrentExerciseAttempt {
   final int? exerciseIndex;
   final int? totalExercises;
 
+  /// JSON-serialisable type-specific options (e.g. listening `audioUrl`,
+  /// speaking `promptText` + `promptAudioUrl`, multiple-choice `choices`).
+  /// Sourced from `Exercise.options.toJson()`; null until the question is
+  /// loaded.
+  final Map<String, dynamic>? options;
+
+  /// JSON-serialisable correct-answer payload (from
+  /// `Exercise.correctAnswer.toJson()`). Only meaningful after the learner
+  /// has submitted — the AI uses it to explain mistakes.
+  final Map<String, dynamic>? correctAnswer;
+
+  final String? explanation;
+
+  /// Whether the learner has tapped Submit on this question.
+  final bool submitted;
+
+  /// Server-side grading result, only set when [submitted] is true.
+  final bool? isCorrect;
+  final int? score;
+
   Map<String, dynamic> toJson() => <String, dynamic>{
         'setId': setId,
         'lessonId': ?lessonId,
@@ -49,6 +75,12 @@ class CurrentExerciseAttempt {
         'userAnswer': ?userAnswer,
         'exerciseIndex': ?exerciseIndex,
         'totalExercises': ?totalExercises,
+        'options': ?options,
+        'correctAnswer': ?correctAnswer,
+        'explanation': ?explanation,
+        'submitted': submitted,
+        'isCorrect': ?isCorrect,
+        'score': ?score,
       };
 
   @override
@@ -64,7 +96,13 @@ class CurrentExerciseAttempt {
           question == other.question &&
           _userAnswerEquals(userAnswer, other.userAnswer) &&
           exerciseIndex == other.exerciseIndex &&
-          totalExercises == other.totalExercises;
+          totalExercises == other.totalExercises &&
+          mapEquals(options, other.options) &&
+          mapEquals(correctAnswer, other.correctAnswer) &&
+          explanation == other.explanation &&
+          submitted == other.submitted &&
+          isCorrect == other.isCorrect &&
+          score == other.score;
 
   @override
   int get hashCode => Object.hash(
@@ -82,6 +120,12 @@ class CurrentExerciseAttempt {
                 : userAnswer,
         exerciseIndex,
         totalExercises,
+        options == null ? null : Object.hashAllUnordered(options!.entries),
+        correctAnswer == null
+            ? null
+            : Object.hashAllUnordered(correctAnswer!.entries),
+        explanation,
+        Object.hash(submitted, isCorrect, score),
       );
 }
 

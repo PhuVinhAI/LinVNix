@@ -143,6 +143,148 @@ void main() {
         expect(ctx.data['userAnswer'], isNull);
       },
     );
+
+    test(
+      'forwards listening-exercise options (audioUrl, transcriptType) so the '
+      'AI can ground hints in the audio prompt',
+      () {
+        const attempt = CurrentExerciseAttempt(
+          setId: 'set-listen',
+          lessonId: 'lesson-1',
+          exerciseId: 'ex-listen-1',
+          exerciseType: 'listening',
+          question: 'Nghe và viết lại câu sau',
+          userAnswer: 'xin chào',
+          exerciseIndex: 0,
+          totalExercises: 3,
+          options: {
+            'audioUrl': '/media/listen-1.mp3',
+            'transcriptType': 'exact',
+            'keywords': ['chào'],
+          },
+        );
+
+        final container = ProviderContainer(
+          overrides: [
+            currentExerciseAttemptProvider
+                .overrideWith(() => _StubAttemptNotifier(attempt)),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        container.read(currentRouteMatchProvider.notifier).update(
+              const RouteMatch(
+                routePattern: '/lessons/:id/exercises/play/:setId',
+                location: '/lessons/lesson-1/exercises/play/set-listen',
+                pathParameters: {'id': 'lesson-1', 'setId': 'set-listen'},
+              ),
+            );
+
+        final ctx = container.read(currentScreenContextProvider);
+        expect(ctx.data['exerciseType'], 'listening');
+        final options = ctx.data['options'] as Map<String, dynamic>;
+        expect(options['audioUrl'], '/media/listen-1.mp3');
+        expect(options['transcriptType'], 'exact');
+        expect(options['keywords'], ['chào']);
+        expect(ctx.data['submitted'], false);
+      },
+    );
+
+    test(
+      'forwards speaking-exercise options (promptText, promptAudioUrl) and '
+      'records that the learner has not submitted yet',
+      () {
+        const attempt = CurrentExerciseAttempt(
+          setId: 'set-speak',
+          lessonId: 'lesson-1',
+          exerciseId: 'ex-speak-1',
+          exerciseType: 'speaking',
+          question: 'Đọc to câu sau',
+          userAnswer: '',
+          exerciseIndex: 1,
+          totalExercises: 4,
+          options: {
+            'promptText': 'Xin chào, tôi tên là Nam',
+            'promptAudioUrl': '/media/speak-1.mp3',
+            'transcriptType': 'exact',
+          },
+        );
+
+        final container = ProviderContainer(
+          overrides: [
+            currentExerciseAttemptProvider
+                .overrideWith(() => _StubAttemptNotifier(attempt)),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        container.read(currentRouteMatchProvider.notifier).update(
+              const RouteMatch(
+                routePattern: '/lessons/:id/exercises/play/:setId',
+                location: '/lessons/lesson-1/exercises/play/set-speak',
+                pathParameters: {'id': 'lesson-1', 'setId': 'set-speak'},
+              ),
+            );
+
+        final ctx = container.read(currentScreenContextProvider);
+        expect(ctx.data['exerciseType'], 'speaking');
+        final options = ctx.data['options'] as Map<String, dynamic>;
+        expect(options['promptText'], contains('Xin chào'));
+        expect(options['promptAudioUrl'], '/media/speak-1.mp3');
+        expect(ctx.data['submitted'], false);
+        expect(ctx.data['isCorrect'], isNull);
+      },
+    );
+
+    test(
+      'after submit, exposes correctAnswer + explanation + grading so the AI '
+      'can explain mistakes',
+      () {
+        const attempt = CurrentExerciseAttempt(
+          setId: 'set-listen',
+          lessonId: 'lesson-1',
+          exerciseId: 'ex-listen-1',
+          exerciseType: 'listening',
+          question: 'Nghe và viết lại câu sau',
+          userAnswer: 'xin chao',
+          exerciseIndex: 0,
+          totalExercises: 3,
+          options: {
+            'audioUrl': '/media/listen-1.mp3',
+            'transcriptType': 'exact',
+          },
+          submitted: true,
+          isCorrect: false,
+          score: 0,
+          correctAnswer: {'transcript': 'xin chào'},
+          explanation: 'Đừng quên dấu huyền trên "chào"',
+        );
+
+        final container = ProviderContainer(
+          overrides: [
+            currentExerciseAttemptProvider
+                .overrideWith(() => _StubAttemptNotifier(attempt)),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        container.read(currentRouteMatchProvider.notifier).update(
+              const RouteMatch(
+                routePattern: '/lessons/:id/exercises/play/:setId',
+                location: '/lessons/lesson-1/exercises/play/set-listen',
+                pathParameters: {'id': 'lesson-1', 'setId': 'set-listen'},
+              ),
+            );
+
+        final ctx = container.read(currentScreenContextProvider);
+        expect(ctx.data['submitted'], true);
+        expect(ctx.data['isCorrect'], false);
+        expect(ctx.data['score'], 0);
+        final correct = ctx.data['correctAnswer'] as Map<String, dynamic>;
+        expect(correct['transcript'], 'xin chào');
+        expect(ctx.data['explanation'], contains('dấu huyền'));
+      },
+    );
   });
 }
 

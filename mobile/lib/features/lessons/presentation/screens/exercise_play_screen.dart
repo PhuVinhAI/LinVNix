@@ -8,6 +8,7 @@ import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../assistant/data/current_exercise_attempt_provider.dart';
+import '../../../assistant/data/exercise_context_sanitizer.dart';
 import '../../data/lesson_providers.dart';
 import '../../domain/exercise_models.dart';
 import '../../domain/exercise_session.dart';
@@ -412,6 +413,8 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       notifier.clear();
       return;
     }
+    final result = _result;
+    final submitted = _submitted;
     notifier.update(
       CurrentExerciseAttempt(
         setId: widget.setId,
@@ -421,9 +424,21 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         exerciseId: exercise.id,
         exerciseType: exercise.exerciseType.value,
         question: exercise.question,
-        userAnswer: _currentAnswer,
+        userAnswer: userAnswerForAssistantContext(
+          exercise.exerciseType,
+          _currentAnswer,
+        ),
         exerciseIndex: _currentIndex,
         totalExercises: _exercises.length,
+        options: optionsForAssistantContext(
+          exercise,
+          revealAnswers: submitted,
+        ),
+        submitted: submitted,
+        correctAnswer: submitted ? exercise.correctAnswer.toJson() : null,
+        explanation: submitted ? exercise.explanation : null,
+        isCorrect: result?.isCorrect,
+        score: result?.score,
       ),
     );
   }
