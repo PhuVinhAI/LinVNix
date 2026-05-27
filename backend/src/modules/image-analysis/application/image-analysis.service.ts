@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { z } from 'zod';
 import {
-  GenaiService,
+  GenaiProvider,
   Type,
-} from '../../../infrastructure/genai/genai.service';
+} from '../../../infrastructure/genai/genai-provider';
 import {
   AnalyzeImageDto,
   SUPPORTED_IMAGE_MIME_TYPES,
@@ -101,7 +101,7 @@ const IMAGE_ANALYSIS_RESPONSE_SCHEMA = {
 export class ImageAnalysisService {
   private readonly logger = new Logger(ImageAnalysisService.name);
 
-  constructor(private readonly genaiService: GenaiService) {}
+  constructor(private readonly genaiService: GenaiProvider) {}
 
   async analyze(
     dto: AnalyzeImageDto,

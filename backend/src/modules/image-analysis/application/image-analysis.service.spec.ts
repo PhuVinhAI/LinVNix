@@ -4,11 +4,11 @@ import {
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ImageAnalysisService } from './image-analysis.service';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
 
 describe('ImageAnalysisService', () => {
   let service: ImageAnalysisService;
-  let genaiService: jest.Mocked<GenaiService>;
+  let genaiService: jest.Mocked<GenaiProvider>;
 
   const user = {
     id: 'user-1',
@@ -38,12 +38,12 @@ describe('ImageAnalysisService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ImageAnalysisService,
-        { provide: GenaiService, useValue: genaiMock },
+        { provide: GenaiProvider, useValue: genaiMock },
       ],
     }).compile();
 
     service = module.get(ImageAnalysisService);
-    genaiService = module.get(GenaiService);
+    genaiService = module.get(GenaiProvider);
   });
 
   it('builds a multimodal structured chat request and returns validated output', async () => {

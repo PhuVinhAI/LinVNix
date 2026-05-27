@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { ExerciseGenerationService } from './exercise-generation.service';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseContextLoader } from './exercise-context-loader';
@@ -13,7 +13,7 @@ import { ModulesRepository } from '../../courses/application/repositories/module
 
 describe('ExerciseGenerationService', () => {
   let service: ExerciseGenerationService;
-  let genaiService: jest.Mocked<GenaiService>;
+  let genaiService: jest.Mocked<GenaiProvider>;
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let contextLoader: jest.Mocked<ExerciseContextLoader>;
@@ -101,7 +101,7 @@ describe('ExerciseGenerationService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ExerciseGenerationService,
-        { provide: GenaiService, useValue: genaiService },
+        { provide: GenaiProvider, useValue: genaiService },
         { provide: ExerciseSetsRepository, useValue: exerciseSetsRepo },
         { provide: ExercisesRepository, useValue: exercisesRepo },
         { provide: ExerciseContextLoader, useValue: contextLoader },
@@ -349,7 +349,7 @@ describe('ExerciseGenerationService', () => {
   });
 
   describe('renderPrompt usage', () => {
-    it('uses GenaiService.renderPrompt with exercise-generation-lesson template', async () => {
+    it('uses GenaiProvider.renderPrompt with exercise-generation-lesson template', async () => {
       const customSet = {
         id: 'set-1',
         lessonId: 'lesson-1',

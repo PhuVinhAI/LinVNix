@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AgentService, AI_TOOL_MAX_ITERATIONS } from './agent.service';
 import { ConversationService } from '../../conversations/application/conversation.service';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
 import { UsersService } from '../../users/application/users.service';
 import { ConversationMessageRole } from '../../../common/enums';
 import { ZodError } from 'zod';
@@ -39,7 +39,7 @@ describe('AgentService', () => {
     generateImage: jest.Mock;
   };
   let conversationService: jest.Mocked<ConversationService>;
-  let genaiService: jest.Mocked<GenaiService>;
+  let genaiService: jest.Mocked<GenaiProvider>;
   let usersService: jest.Mocked<UsersService>;
   let mockTool: MockTool & {
     parameters: { parse: jest.Mock };
@@ -100,7 +100,7 @@ describe('AgentService', () => {
         AgentService,
         { provide: 'AI_PROVIDER', useValue: aiProvider },
         { provide: ConversationService, useValue: conversationService },
-        { provide: GenaiService, useValue: genaiService },
+        { provide: GenaiProvider, useValue: genaiService },
         { provide: UsersService, useValue: usersService },
         { provide: 'TOOLS', useValue: [mockTool] },
       ],

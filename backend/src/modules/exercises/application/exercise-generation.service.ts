@@ -3,9 +3,9 @@ import { z } from 'zod';
 import * as fs from 'fs';
 import * as path from 'path';
 import {
-  GenaiService,
+  GenaiProvider,
   Type,
-} from '../../../infrastructure/genai/genai.service';
+} from '../../../infrastructure/genai/genai-provider';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseContextLoader } from './exercise-context-loader';
@@ -415,7 +415,7 @@ export class ExerciseGenerationService {
   private readonly logger = new Logger(ExerciseGenerationService.name);
 
   constructor(
-    private readonly genaiService: GenaiService,
+    private readonly genaiService: GenaiProvider,
     private readonly exerciseSetsRepository: ExerciseSetsRepository,
     private readonly exercisesRepository: ExercisesRepository,
     private readonly exerciseContextLoader: ExerciseContextLoader,

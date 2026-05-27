@@ -3,7 +3,7 @@ import { ForbiddenException, MessageEvent } from '@nestjs/common';
 import { AiController } from './ai.controller';
 import { ConversationService } from '../../conversations/application/conversation.service';
 import { AgentService } from '../../agent/application/agent.service';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
 import { Observable } from 'rxjs';
 import type { StreamEvent } from '../../agent/application/stream-event';
 
@@ -11,7 +11,7 @@ describe('AiController', () => {
   let controller: AiController;
   let conversationService: jest.Mocked<ConversationService>;
   let agentService: jest.Mocked<AgentService>;
-  let genaiService: jest.Mocked<GenaiService>;
+  let genaiService: jest.Mocked<GenaiProvider>;
 
   const mockUser = { id: 'user-1' };
   const mockConversation = {
@@ -84,7 +84,7 @@ describe('AiController', () => {
       providers: [
         { provide: ConversationService, useValue: conversationService },
         { provide: AgentService, useValue: agentService },
-        { provide: GenaiService, useValue: genaiService },
+        { provide: GenaiProvider, useValue: genaiService },
       ],
     }).compile();
 

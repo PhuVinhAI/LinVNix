@@ -1,9 +1,9 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { z } from 'zod';
 import {
-  GenaiService,
+  GenaiProvider,
   Type,
-} from '../../../infrastructure/genai/genai.service';
+} from '../../../infrastructure/genai/genai-provider';
 import { UsersService } from '../../users/application/users.service';
 import { ScenariosRepository } from './repositories/scenarios.repository';
 import { SimulationEndReason } from '../../../common/enums';
@@ -262,7 +262,7 @@ export class SimulationAiService {
   private readonly logger = new Logger(SimulationAiService.name);
 
   constructor(
-    private readonly genaiService: GenaiService,
+    private readonly genaiService: GenaiProvider,
     private readonly usersService: UsersService,
     private readonly scenariosRepository: ScenariosRepository,
   ) {}

@@ -9,7 +9,7 @@ import type {
 } from '@linvnix/shared';
 import { BaseTool } from '@linvnix/shared';
 import { ConversationService } from '../../conversations/application/conversation.service';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
 import { UsersService } from '../../users/application/users.service';
 import { ConversationMessageRole } from '../../../common/enums';
 import { ZodError } from 'zod';
@@ -30,7 +30,7 @@ export class AgentService {
     @Inject('AI_PROVIDER')
     private readonly aiProvider: IAiProvider,
     private readonly conversationService: ConversationService,
-    private readonly genaiService: GenaiService,
+    private readonly genaiService: GenaiProvider,
     private readonly usersService: UsersService,
     // Inject all BaseTool subclasses; they are registered as providers in AgentModule
     @Inject('TOOLS')

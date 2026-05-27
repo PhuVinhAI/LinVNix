@@ -39,3 +39,9 @@ export class AiServiceUnavailableException extends AiException {
     super(message, 503, 'AI_SERVICE_UNAVAILABLE');
   }
 }
+
+export class MethodNotSupportedException extends AiException {
+  constructor(message = 'Method not supported by this AI provider') {
+    super(message, 501, 'AI_METHOD_NOT_SUPPORTED');
+  }
+}

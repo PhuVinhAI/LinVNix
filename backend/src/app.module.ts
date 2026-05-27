@@ -39,7 +39,7 @@ import { LoggingModule } from './infrastructure/logging/logging.module';
 import { MailModule } from './infrastructure/mail/mail.module';
 import { QueueModule } from './infrastructure/queue/queue.module';
 import { ArchivingModule } from './infrastructure/archiving/archiving.module';
-import { GenaiModule } from './infrastructure/genai/genai.module';
+import { AiModule as AiInfraModule } from './infrastructure/genai/ai.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -83,7 +83,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     MailModule,
     QueueModule,
     ArchivingModule,
-    GenaiModule,
+    AiInfraModule,
     AuthModule,
     UsersModule,
     CoursesModule,

@@ -33,7 +33,7 @@ import { SkipTransform } from '../../../common/decorators/skip-transform.decorat
 import { Permission } from '../../../common/enums';
 import { ConversationService } from '../../conversations/application/conversation.service';
 import { AgentService } from '../../agent/application/agent.service';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
 import { CreateConversationDto } from '../../conversations/dto/create-conversation.dto';
 import { AiChatRequestDto } from '../dto/ai-chat-request.dto';
 import { AiChatStreamRequestDto } from '../dto/ai-chat-stream-request.dto';
@@ -52,7 +52,7 @@ export class AiController {
   constructor(
     private readonly conversationService: ConversationService,
     private readonly agentService: AgentService,
-    private readonly genaiService: GenaiService,
+    private readonly genaiService: GenaiProvider,
   ) {}
 
   @Post('chat/stream')

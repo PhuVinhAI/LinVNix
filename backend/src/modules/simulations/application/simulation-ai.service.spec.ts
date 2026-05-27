@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { SimulationAiService } from './simulation-ai.service';
-import { GenaiService } from '../../../infrastructure/genai/genai.service';
+import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
 import { UsersService } from '../../users/application/users.service';
 import { ScenariosRepository } from './repositories/scenarios.repository';
 import { SimulationEndReason, UserLevel } from '../../../common/enums';
@@ -69,7 +69,7 @@ const makeAiResponse = (overrides: any = {}) => ({
 
 describe('SimulationAiService', () => {
   let service: SimulationAiService;
-  let genaiService: jest.Mocked<GenaiService>;
+  let genaiService: jest.Mocked<GenaiProvider>;
   let usersService: jest.Mocked<UsersService>;
   let scenariosRepo: jest.Mocked<ScenariosRepository>;
 
@@ -89,14 +89,14 @@ describe('SimulationAiService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SimulationAiService,
-        { provide: GenaiService, useValue: genaiMock },
+        { provide: GenaiProvider, useValue: genaiMock },
         { provide: UsersService, useValue: usersMock },
         { provide: ScenariosRepository, useValue: scenariosMock },
       ],
     }).compile();
 
     service = module.get<SimulationAiService>(SimulationAiService);
-    genaiService = module.get(GenaiService);
+    genaiService = module.get(GenaiProvider);
     usersService = module.get(UsersService);
     scenariosRepo = module.get(ScenariosRepository);
   });
@@ -667,7 +667,7 @@ describe('SimulationAiService', () => {
   });
 
   describe('processTurn', () => {
-    it('calls GenaiService.chatStructured with rendered system instruction and chat messages', async () => {
+    it('calls GenaiProvider.chatStructured with rendered system instruction and chat messages', async () => {
       const scenario = makeScenario();
       usersService.findById.mockResolvedValue(makeUser());
       genaiService.chatStructured.mockResolvedValue(makeAiResponse());

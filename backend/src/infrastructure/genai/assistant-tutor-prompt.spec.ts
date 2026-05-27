@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { ConfigService } from '@nestjs/config';
-import { GenaiService } from './genai.service';
-import { KeyPool } from './key-pool';
+import { GenaiProvider } from './genai-provider';
+import { KeyPool } from '../ai/key-pool';
 
 jest.mock('@google/genai', () => ({
   GoogleGenAI: jest.fn().mockImplementation(() => ({
@@ -18,6 +18,8 @@ jest.mock('@google/genai', () => ({
     OBJECT: 'OBJECT',
   },
 }));
+
+// KeyPool is now a plain class — no ConfigService needed
 
 function createConfigService() {
   return {
@@ -39,9 +41,7 @@ function createConfigService() {
 
 function createMockKeyPool() {
   return {
-    getKey: jest
-      .fn()
-      .mockReturnValue({ key: 'test', client: { interactions: {} } }),
+    getKey: jest.fn().mockReturnValue({ key: 'test' }),
     markCooldown: jest.fn(),
     isExhausted: jest.fn().mockReturnValue(false),
     updateStats: jest.fn(),
@@ -52,10 +52,10 @@ function createMockKeyPool() {
 // assistant-tutor.yaml file from disk so the test catches breakage if the
 // template file is renamed, malformed, or stripped of a placeholder.
 describe('assistant-tutor prompt template', () => {
-  let service: GenaiService;
+  let service: GenaiProvider;
 
   beforeAll(() => {
-    service = new GenaiService(createConfigService(), createMockKeyPool());
+    service = new GenaiProvider(createConfigService(), createMockKeyPool());
     service.onModuleInit();
   });
 

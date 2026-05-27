@@ -82,3 +82,22 @@ export interface ToolDeclaration {
   description: string;
   parameters: Record<string, any>;
 }
+
+export interface AiAttachment {
+  type: 'image';
+  mimeType: string;
+  data: string;
+}
+
+export interface AiStructuredMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  attachments?: AiAttachment[];
+}
+
+export interface AiChatStructuredRequest {
+  messages: AiStructuredMessage[];
+  systemInstruction?: string;
+  responseSchema: Record<string, any>;
+  model?: string;
+}
