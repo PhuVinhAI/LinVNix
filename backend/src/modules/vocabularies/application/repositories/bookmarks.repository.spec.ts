@@ -207,7 +207,9 @@ describe('BookmarksRepository', () => {
 
       const result = await repository.getStats('user-1');
 
-      expect(mockRepo.count).toHaveBeenCalledWith({ where: { userId: 'user-1' } });
+      expect(mockRepo.count).toHaveBeenCalledWith({
+        where: { userId: 'user-1' },
+      });
       expect(mockRepo.createQueryBuilder).toHaveBeenCalledTimes(2);
       expect(mockQueryBuilder.innerJoin).toHaveBeenCalledWith(
         'bookmark.vocabulary',

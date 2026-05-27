@@ -7,8 +7,12 @@ export default registerAs('redis', () => {
     return {
       host: parsed.hostname,
       port: parseInt(parsed.port || '6379', 10),
-      username: parsed.username ? decodeURIComponent(parsed.username) : undefined,
-      password: parsed.password ? decodeURIComponent(parsed.password) : undefined,
+      username: parsed.username
+        ? decodeURIComponent(parsed.username)
+        : undefined,
+      password: parsed.password
+        ? decodeURIComponent(parsed.password)
+        : undefined,
       db: parseInt(process.env.REDIS_DB || '0', 10),
       tls: parsed.protocol === 'rediss:' ? {} : undefined,
     };

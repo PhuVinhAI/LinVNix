@@ -51,6 +51,8 @@ export class MailRenderer implements OnModuleInit {
     for (const c of candidates) {
       if (existsSync(c)) return c;
     }
-    throw new Error(`Mail template dir not found. Tried: ${candidates.join(', ')}`);
+    throw new Error(
+      `Mail template dir not found. Tried: ${candidates.join(', ')}`,
+    );
   }
 }

@@ -225,7 +225,9 @@ describe('DailyGoalProgressService', () => {
 
       const result = await service.getTodayProgress('user-1');
 
-      expect(simulationResultsRepo.countByUserIdAndDateRange).toHaveBeenCalled();
+      expect(
+        simulationResultsRepo.countByUserIdAndDateRange,
+      ).toHaveBeenCalled();
       expect(result.simulationsCompleted).toBe(2);
       expect(result.goals[0].currentValue).toBe(2);
       expect(result.goals[0].met).toBe(true);
@@ -320,9 +322,7 @@ describe('DailyGoalProgressService', () => {
     });
 
     it('returns lessonsCompleted for LESSONS', () => {
-      expect(service.getProgressForGoalType(GoalType.LESSONS, 8, 2, 3)).toBe(
-        3,
-      );
+      expect(service.getProgressForGoalType(GoalType.LESSONS, 8, 2, 3)).toBe(3);
     });
   });
 
