@@ -12,6 +12,7 @@ import jwtConfig from './config/jwt.config';
 import redisConfig from './config/redis.config';
 import mailConfig from './config/mail.config';
 import genaiConfig from './config/genai.config';
+import aiRouterConfig from './config/ai-router.config';
 
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -53,6 +54,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         redisConfig,
         mailConfig,
         genaiConfig,
+        aiRouterConfig,
       ],
     }),
     TypeOrmModule.forRootAsync({

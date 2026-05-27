@@ -3,8 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { KeyPool } from '../ai/key-pool';
 import { GenaiProvider } from './genai-provider';
 import { isGenaiRateLimitError, getGenaiCooldownMs } from './genai-errors';
-
-export const AI_PROVIDER = 'AI_PROVIDER';
+import { AiProviderRouter } from '../ai/ai-provider-router';
 
 @Global()
 @Module({
@@ -31,11 +30,8 @@ export const AI_PROVIDER = 'AI_PROVIDER';
       inject: [ConfigService],
     },
     GenaiProvider,
-    {
-      provide: AI_PROVIDER,
-      useExisting: GenaiProvider,
-    },
+    AiProviderRouter,
   ],
-  exports: [KeyPool, GenaiProvider, AI_PROVIDER],
+  exports: [KeyPool, GenaiProvider, AiProviderRouter],
 })
 export class AiModule {}

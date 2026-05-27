@@ -31,13 +31,6 @@ class MockTool extends BaseTool<{ input: string }, { output: string }> {
 
 describe('AgentService', () => {
   let service: AgentService;
-  let aiProvider: {
-    chat: jest.Mock;
-    chatStream: jest.Mock;
-    embed: jest.Mock;
-    uploadFile: jest.Mock;
-    generateImage: jest.Mock;
-  };
   let conversationService: jest.Mocked<ConversationService>;
   let genaiService: jest.Mocked<GenaiProvider>;
   let usersService: jest.Mocked<UsersService>;
@@ -56,14 +49,6 @@ describe('AgentService', () => {
   };
 
   beforeEach(async () => {
-    aiProvider = {
-      chat: jest.fn(),
-      chatStream: jest.fn(),
-      embed: jest.fn(),
-      uploadFile: jest.fn(),
-      generateImage: jest.fn(),
-    };
-
     conversationService = {
       findById: jest.fn(),
       addMessage: jest.fn(),
@@ -75,6 +60,8 @@ describe('AgentService', () => {
     } as any;
 
     genaiService = {
+      chat: jest.fn(),
+      chatStream: jest.fn(),
       renderPrompt: jest.fn(),
     } as any;
 
@@ -98,9 +85,8 @@ describe('AgentService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AgentService,
-        { provide: 'AI_PROVIDER', useValue: aiProvider },
-        { provide: ConversationService, useValue: conversationService },
         { provide: GenaiProvider, useValue: genaiService },
+        { provide: ConversationService, useValue: conversationService },
         { provide: UsersService, useValue: usersService },
         { provide: 'TOOLS', useValue: [mockTool] },
       ],
@@ -146,11 +132,11 @@ describe('AgentService', () => {
           totalTokenCount: 15,
         },
       };
-      aiProvider.chat.mockResolvedValue(response);
+      genaiService.chat.mockResolvedValue(response);
 
       const result = await service.runTurn(conversationId, userMessage);
 
-      expect(aiProvider.chat).toHaveBeenCalledTimes(1);
+      expect(genaiService.chat).toHaveBeenCalledTimes(1);
       expect(result).toEqual(response);
       expect(conversationService.addMessage).toHaveBeenCalledWith(
         conversationId,
@@ -175,7 +161,7 @@ describe('AgentService', () => {
     });
 
     it('loads the conversation owner exactly once per turn', async () => {
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -209,7 +195,7 @@ describe('AgentService', () => {
         },
       };
 
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce(firstResponse)
         .mockResolvedValueOnce(secondResponse);
 
@@ -218,7 +204,7 @@ describe('AgentService', () => {
 
       const result = await service.runTurn(conversationId, userMessage);
 
-      expect(aiProvider.chat).toHaveBeenCalledTimes(2);
+      expect(genaiService.chat).toHaveBeenCalledTimes(2);
       expect(mockTool.parameters.parse).toHaveBeenCalledWith({ input: 'test' });
       expect(conversationService.addMessage).toHaveBeenCalledWith(
         conversationId,
@@ -244,7 +230,7 @@ describe('AgentService', () => {
         text: 'done',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce(firstResp)
         .mockResolvedValueOnce(secondResp);
       mockTool.parameters.parse.mockReturnValue({ input: 'first' });
@@ -276,7 +262,7 @@ describe('AgentService', () => {
         text: 'done',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce(firstResp)
         .mockResolvedValueOnce(secondResp);
       mockTool.parameters.parse.mockImplementation((args: any) => args);
@@ -311,7 +297,7 @@ describe('AgentService', () => {
       } as any);
 
       const fc = { name: 'mock_tool', arguments: { x: 1 } };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce({
           text: '',
           functionCalls: [fc],
@@ -347,13 +333,13 @@ describe('AgentService', () => {
         },
       };
 
-      aiProvider.chat.mockResolvedValue(infiniteResponse);
+      genaiService.chat.mockResolvedValue(infiniteResponse);
       mockTool.parameters.parse.mockReturnValue({ input: 'loop' });
       mockTool.execute.mockResolvedValue({ output: 'processed: loop' });
 
       const result = await service.runTurn(conversationId, userMessage);
 
-      expect(aiProvider.chat).toHaveBeenCalledTimes(AI_TOOL_MAX_ITERATIONS);
+      expect(genaiService.chat).toHaveBeenCalledTimes(AI_TOOL_MAX_ITERATIONS);
       expect(result).toEqual(infiniteResponse);
     });
 
@@ -380,7 +366,7 @@ describe('AgentService', () => {
         },
       };
 
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce(response)
         .mockResolvedValueOnce(finalResponse);
 
@@ -425,7 +411,7 @@ describe('AgentService', () => {
         },
       };
 
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce(response)
         .mockResolvedValueOnce(finalResponse);
 
@@ -475,11 +461,11 @@ describe('AgentService', () => {
           totalTokenCount: 15,
         },
       };
-      aiProvider.chat.mockResolvedValue(response);
+      genaiService.chat.mockResolvedValue(response);
 
       await service.runTurn(conversationId, userMessage);
 
-      const chatCall = aiProvider.chat.mock.calls[0][0];
+      const chatCall = genaiService.chat.mock.calls[0][0];
       expect(chatCall.systemInstruction).toContain('lesson-123');
     });
 
@@ -507,7 +493,7 @@ describe('AgentService', () => {
         },
       };
 
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce(firstResponse)
         .mockResolvedValueOnce(secondResponse);
 
@@ -597,8 +583,8 @@ describe('AgentService', () => {
         messages: [],
       } as any);
 
-      aiProvider.chatStream.mockImplementation(async function* (request) {
-        const response = await aiProvider.chat(request);
+      genaiService.chatStream.mockImplementation(async function* (request) {
+        const response = await genaiService.chat(request);
         if (response.text) {
           yield { text: response.text };
         }
@@ -615,7 +601,7 @@ describe('AgentService', () => {
     });
 
     it('yields conversation_started + text_chunk + done for a plain text response (no tool calls)', async () => {
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'Bạn đang học rất tốt!',
         usageMetadata: { promptTokenCount: 5, candidatesTokenCount: 3 },
       });
@@ -632,7 +618,7 @@ describe('AgentService', () => {
     });
 
     it('emits conversation_started as the very first event for a lazily-created conversation', async () => {
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'hi',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -648,7 +634,7 @@ describe('AgentService', () => {
     });
 
     it('persists the user message before invoking the AI provider', async () => {
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -667,7 +653,7 @@ describe('AgentService', () => {
     });
 
     it('persists the final assistant message with interrupted=false on a clean turn', async () => {
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'Tóm tắt: streak 3 ngày.',
         usageMetadata: { promptTokenCount: 4, candidatesTokenCount: 6 },
       });
@@ -689,7 +675,7 @@ describe('AgentService', () => {
 
     it('yields tool_start + tool_result + text_chunk + done for a single-tool turn', async () => {
       const fc = { name: 'mock_tool', arguments: { input: 'hello' } };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce({
           text: '',
           functionCalls: [fc],
@@ -723,7 +709,7 @@ describe('AgentService', () => {
 
     it('emits tool_result with ok=false when the tool returns an error result', async () => {
       const fc = { name: 'mock_tool', arguments: { input: 'oops' } };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce({
           text: '',
           functionCalls: [fc],
@@ -749,7 +735,7 @@ describe('AgentService', () => {
 
     it('emits tool_result with ok=false when the tool throws', async () => {
       const fc = { name: 'mock_tool', arguments: { input: 'x' } };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce({
           text: '',
           functionCalls: [fc],
@@ -776,7 +762,7 @@ describe('AgentService', () => {
     it('drives a multi-iteration tool loop and yields events in order', async () => {
       const fcA = { name: 'mock_tool', arguments: { input: 'a' } };
       const fcB = { name: 'mock_tool', arguments: { input: 'b' } };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce({
           text: '',
           functionCalls: [fcA],
@@ -808,11 +794,11 @@ describe('AgentService', () => {
       expect(events[events.length - 1]).toEqual(
         expect.objectContaining({ type: 'done', interrupted: false }),
       );
-      expect(aiProvider.chat).toHaveBeenCalledTimes(3);
+      expect(genaiService.chat).toHaveBeenCalledTimes(3);
     });
 
     it('lazy-creates the conversation when conversationId is null and snapshots screenContext', async () => {
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'hi',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -835,7 +821,7 @@ describe('AgentService', () => {
 
     it('passes the lazily-created conversationId to addMessage and tool ctx', async () => {
       const fc = { name: 'mock_tool', arguments: { input: 'x' } };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce({
           text: '',
           functionCalls: [fc],
@@ -877,7 +863,7 @@ describe('AgentService', () => {
         .fn()
         .mockReturnValue('RENDERED ASSISTANT TUTOR PROMPT');
 
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -904,7 +890,7 @@ describe('AgentService', () => {
           }),
         }),
       );
-      expect(aiProvider.chat).toHaveBeenCalledWith(
+      expect(genaiService.chat).toHaveBeenCalledWith(
         expect.objectContaining({
           systemInstruction: 'RENDERED ASSISTANT TUTOR PROMPT',
         }),
@@ -945,7 +931,7 @@ describe('AgentService', () => {
       genaiService.renderPrompt = jest
         .fn()
         .mockReturnValue('PROMPT WITH LATEST SCREEN');
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -991,7 +977,7 @@ describe('AgentService', () => {
       } as any);
       genaiService.renderPrompt = jest.fn();
 
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -1001,7 +987,7 @@ describe('AgentService', () => {
       );
 
       expect(genaiService.renderPrompt).not.toHaveBeenCalled();
-      expect(aiProvider.chat).toHaveBeenCalledWith(
+      expect(genaiService.chat).toHaveBeenCalledWith(
         expect.objectContaining({ systemInstruction: 'Default tutor.' }),
       );
     });
@@ -1019,7 +1005,7 @@ describe('AgentService', () => {
         },
       };
       genaiService.renderPrompt = jest.fn().mockReturnValue('DEBUG PROMPT');
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });
@@ -1063,7 +1049,7 @@ describe('AgentService', () => {
     it('persists a partial assistant message with interrupted=true when aborted mid-loop', async () => {
       const abortController = new AbortController();
       const fc = { name: 'mock_tool', arguments: { input: 'a' } };
-      aiProvider.chat.mockImplementation(async () => {
+      genaiService.chat.mockImplementation(async () => {
         // Trigger abort before the second iteration would fire — this models
         // "mid-stream" cancellation arriving while the agent is between
         // boundaries.
@@ -1103,7 +1089,7 @@ describe('AgentService', () => {
 
     it('persists streamed partial text when aborted during provider streaming', async () => {
       const abortController = new AbortController();
-      aiProvider.chatStream.mockImplementation(async function* () {
+      genaiService.chatStream.mockImplementation(async function* () {
         yield { text: 'partial answer' };
         abortController.abort();
         yield { text: ' should not be processed' };
@@ -1136,7 +1122,7 @@ describe('AgentService', () => {
 
     it('persists partial text when the provider aborts with an error', async () => {
       const abortController = new AbortController();
-      aiProvider.chatStream.mockImplementation(async function* () {
+      genaiService.chatStream.mockImplementation(async function* () {
         yield { text: 'partial answer' };
         abortController.abort();
         throw new Error('The operation was aborted');
@@ -1181,14 +1167,14 @@ describe('AgentService', () => {
         ),
       );
 
-      expect(aiProvider.chat).not.toHaveBeenCalled();
+      expect(genaiService.chat).not.toHaveBeenCalled();
       const done = events.find((e: any) => e.type === 'done') as any;
       expect(done.interrupted).toBe(true);
     });
 
     it('passes a fully-populated ToolContext to tool.execute (mirrors runTurn)', async () => {
       const fc = { name: 'mock_tool', arguments: { input: 'first' } };
-      aiProvider.chat
+      genaiService.chat
         .mockResolvedValueOnce({
           text: '',
           functionCalls: [fc],
@@ -1217,7 +1203,7 @@ describe('AgentService', () => {
     });
 
     it('emits done with the messageId of the persisted final assistant message', async () => {
-      aiProvider.chat.mockResolvedValue({
+      genaiService.chat.mockResolvedValue({
         text: 'final',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
       });

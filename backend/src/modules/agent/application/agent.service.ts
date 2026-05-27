@@ -1,6 +1,5 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
 import type {
-  IAiProvider,
   AiChatRequest,
   AiChatResponse,
   AiMessage,
@@ -27,10 +26,8 @@ export class AgentService {
   private readonly toolMap: Map<string, BaseTool<any, any>> = new Map();
 
   constructor(
-    @Inject('AI_PROVIDER')
-    private readonly aiProvider: IAiProvider,
-    private readonly conversationService: ConversationService,
     private readonly genaiService: GenaiProvider,
+    private readonly conversationService: ConversationService,
     private readonly usersService: UsersService,
     // Inject all BaseTool subclasses; they are registered as providers in AgentModule
     @Inject('TOOLS')
@@ -86,7 +83,7 @@ export class AgentService {
         ...(iterations === 1 ? { tools: toolDeclarations } : {}),
       };
 
-      const response = await this.aiProvider.chat(request);
+      const response = await this.genaiService.chat(request);
       finalResponse = response;
 
       const assistantTokenCount =
@@ -333,7 +330,7 @@ export class AgentService {
       const calls: NonNullable<AiChatResponse['functionCalls']> = [];
 
       try {
-        for await (const chunk of this.aiProvider.chatStream(request)) {
+        for await (const chunk of this.genaiService.chatStream(request)) {
           if (abortSignal?.aborted) {
             interrupted = true;
             interruptedResponseText = responseText;

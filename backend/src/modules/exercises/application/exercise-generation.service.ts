@@ -2,10 +2,8 @@ import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { z } from 'zod';
 import * as fs from 'fs';
 import * as path from 'path';
-import {
-  GenaiProvider,
-  Type,
-} from '../../../infrastructure/genai/genai-provider';
+import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
+import { Type } from '../../../infrastructure/genai/genai-provider';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseContextLoader } from './exercise-context-loader';
@@ -415,7 +413,7 @@ export class ExerciseGenerationService {
   private readonly logger = new Logger(ExerciseGenerationService.name);
 
   constructor(
-    private readonly genaiService: GenaiProvider,
+    private readonly router: AiProviderRouter,
     private readonly exerciseSetsRepository: ExerciseSetsRepository,
     private readonly exercisesRepository: ExercisesRepository,
     private readonly exerciseContextLoader: ExerciseContextLoader,
@@ -628,7 +626,7 @@ export class ExerciseGenerationService {
         mergedContextForExercises,
       );
 
-      prompt = this.genaiService.renderPrompt('exercise-generation-course', {
+      prompt = this.router.renderPrompt('exercise-generation-course', {
         ...promptVariables,
         courseTitle: course.title,
         moduleCount: String(completedModuleIds.length),
@@ -655,7 +653,7 @@ export class ExerciseGenerationService {
         mergedContextForExercises,
       );
 
-      prompt = this.genaiService.renderPrompt('exercise-generation-module', {
+      prompt = this.router.renderPrompt('exercise-generation-module', {
         ...promptVariables,
         moduleTitle: module.title,
         lessonCount: String(completedLessonIds.length),
@@ -670,7 +668,7 @@ export class ExerciseGenerationService {
         lessonContextForExercises.existingExercises,
       );
 
-      prompt = this.genaiService.renderPrompt('exercise-generation-lesson', {
+      prompt = this.router.renderPrompt('exercise-generation-lesson', {
         ...promptVariables,
         lessonTitle: lessonContextForExercises.lessonTitle,
         lessonContext,
@@ -693,13 +691,20 @@ export class ExerciseGenerationService {
     );
     this.logger.log(`Debug prompt written to debug/prompt-${debugId}.txt`);
 
-    const response = await this.genaiService.chatStructured({
+    const response = await this.router.forFeature('exercise').chatStructured({
       messages: [{ role: 'user', content: prompt }],
       systemInstruction,
       responseSchema,
     });
 
-    const generated = this.parseResponse(response.text);
+    // GenaiProvider returns { text: "..." } while OpenaiProvider returns the parsed object directly.
+    const rawText =
+      response !== null &&
+      typeof response === 'object' &&
+      'text' in (response as object)
+        ? response.text
+        : JSON.stringify(response);
+    const generated = this.parseResponse(rawText);
 
     const exercises = await this.persistExercises(generated, set);
 

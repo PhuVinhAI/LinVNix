@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { ExerciseGenerationService } from './exercise-generation.service';
-import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
+import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
 import { ExerciseContextLoader } from './exercise-context-loader';
@@ -13,7 +13,8 @@ import { ModulesRepository } from '../../courses/application/repositories/module
 
 describe('ExerciseGenerationService', () => {
   let service: ExerciseGenerationService;
-  let genaiService: jest.Mocked<GenaiProvider>;
+  let router: jest.Mocked<AiProviderRouter>;
+  let fakeProvider: { chatStructured: jest.Mock };
   let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
   let contextLoader: jest.Mocked<ExerciseContextLoader>;
@@ -57,8 +58,12 @@ describe('ExerciseGenerationService', () => {
   };
 
   beforeEach(async () => {
-    genaiService = {
+    fakeProvider = {
       chatStructured: jest.fn(),
+    };
+
+    router = {
+      forFeature: jest.fn().mockReturnValue(fakeProvider),
       renderPrompt: jest.fn().mockReturnValue('rendered prompt'),
     } as any;
 
@@ -101,7 +106,7 @@ describe('ExerciseGenerationService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ExerciseGenerationService,
-        { provide: GenaiProvider, useValue: genaiService },
+        { provide: AiProviderRouter, useValue: router },
         { provide: ExerciseSetsRepository, useValue: exerciseSetsRepo },
         { provide: ExercisesRepository, useValue: exercisesRepo },
         { provide: ExerciseContextLoader, useValue: contextLoader },
@@ -134,7 +139,7 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
@@ -194,7 +199,7 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
@@ -232,13 +237,13 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
       await service.generate('set-1', 'user-1', 'override prompt');
 
-      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      expect(router.renderPrompt).toHaveBeenCalledWith(
         'exercise-generation-lesson',
         expect.objectContaining({
           userPromptSection: '\n### User Request\noverride prompt\n',
@@ -349,7 +354,7 @@ describe('ExerciseGenerationService', () => {
   });
 
   describe('renderPrompt usage', () => {
-    it('uses GenaiProvider.renderPrompt with exercise-generation-lesson template', async () => {
+    it('uses AiProviderRouter.renderPrompt with exercise-generation-lesson template', async () => {
       const customSet = {
         id: 'set-1',
         lessonId: 'lesson-1',
@@ -368,13 +373,13 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
       await service.generateCustom('set-1', 'user-1');
 
-      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      expect(router.renderPrompt).toHaveBeenCalledWith(
         'exercise-generation-lesson',
         expect.objectContaining({
           questionCount: '5',
@@ -408,13 +413,13 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
       await service.generateCustom('set-1', 'user-1');
 
-      const renderArgs = genaiService.renderPrompt.mock.calls[0]?.[1];
+      const renderArgs = router.renderPrompt.mock.calls[0]?.[1];
       expect(renderArgs).toBeDefined();
       expect(renderArgs!.languageMixGuidelines).toContain('multiple_choice');
       expect(renderArgs!.languageMixGuidelines).toContain('fill_blank');
@@ -442,14 +447,14 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
       await service.generateCustom('set-1', 'user-1');
 
       const schema =
-        genaiService.chatStructured.mock.calls[0][0].responseSchema;
+        fakeProvider.chatStructured.mock.calls[0][0].responseSchema;
       const exerciseTypeDesc =
         schema.properties.exercises.items.properties.exerciseType.description;
       expect(exerciseTypeDesc).toBe('One of: matching');
@@ -479,13 +484,13 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
       await service.generateCustom('set-1', 'user-1');
 
-      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      expect(router.renderPrompt).toHaveBeenCalledWith(
         'exercise-generation-lesson',
         expect.objectContaining({
           userPromptSection: '',
@@ -541,7 +546,7 @@ describe('ExerciseGenerationService', () => {
       ] as any);
       contextLoader.loadModuleContext.mockResolvedValue(mockMergedContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
@@ -550,7 +555,7 @@ describe('ExerciseGenerationService', () => {
       expect(contextLoader.loadModuleContext).toHaveBeenCalledWith([
         'lesson-1',
       ]);
-      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      expect(router.renderPrompt).toHaveBeenCalledWith(
         'exercise-generation-module',
         expect.objectContaining({
           moduleTitle: 'Greetings Module',
@@ -642,7 +647,7 @@ describe('ExerciseGenerationService', () => {
       ] as any);
       contextLoader.loadCourseContext.mockResolvedValue(mockMergedContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
@@ -652,7 +657,7 @@ describe('ExerciseGenerationService', () => {
         'lesson-1',
         'lesson-2',
       ]);
-      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      expect(router.renderPrompt).toHaveBeenCalledWith(
         'exercise-generation-course',
         expect.objectContaining({
           courseTitle: 'A1 Course',
@@ -700,7 +705,7 @@ describe('ExerciseGenerationService', () => {
       ] as any);
       contextLoader.loadCourseContext.mockResolvedValue(mockMergedContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
@@ -757,7 +762,7 @@ describe('ExerciseGenerationService', () => {
       exerciseSetsRepo.update.mockResolvedValue({} as any);
       contextLoader.loadLessonContext.mockResolvedValue(mockLessonContext);
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: validAiResponse,
       } as any);
 
@@ -801,7 +806,7 @@ describe('ExerciseGenerationService', () => {
         ],
       });
 
-      genaiService.chatStructured.mockResolvedValue({
+      fakeProvider.chatStructured.mockResolvedValue({
         text: responseNoDesc,
       } as any);
 
