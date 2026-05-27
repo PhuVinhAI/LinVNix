@@ -116,11 +116,33 @@ Kiến trúc thực thi:
 - **Bộ bài tập do AI sinh** = Custom Exercise Set, cá nhân học viên
 - **Khám phá ảnh** = ephemeral, KHÁC Trợ lý AI
 
+## AI Provider Configuration
+
+Backend hỗ trợ 3 chế độ vận hành AI:
+
+1. **Default Gemini** — Không set bất kỳ `AI_*_PROVIDER` nào. Mọi feature dùng chung Gemini KeyPool global (`GENAI_API_KEYS`). Backwards-compatible 100%.
+2. **Per-feature OpenAI** — Set `AI_<FEATURE>_PROVIDER=openai` cho feature muốn override. Feature đó dùng OpenAI-compatible gateway (OpenRouter, LiteLLM, Ollama, vLLM…) với URL/key/model riêng.
+3. **Mix** — Một số feature dùng OpenAI, còn lại vẫn Gemini. Mỗi feature cấu hình độc lập.
+
+### Feature × Provider support
+
+| Feature | Gemini | OpenAI-compatible | Ghi chú |
+|---------|--------|-------------------|---------|
+| `exercise` | ✅ | ✅ | Sinh bài tập tùy chỉnh |
+| `simulation` | ✅ | ✅ | Hội thoại mô phỏng |
+| `assistant` | ✅ | ✅ | Trợ lý AI — xem caveat bên dưới |
+| `image_analysis` | ✅ | ❌ locked | Khám phá ảnh — Gemini multimodal |
+
+> **Lưu ý `assistant`**: Nếu gateway OpenAI không hỗ trợ tool calling, Trợ lý AI sẽ chạy ở chế độ text-only (agent loop kết thúc sớm sau turn đầu). Xem warning trong `backend/.env.example`.
+
+Xem cấu hình chi tiết trong `backend/.env.example`. Xem quyết định kiến trúc tại [`docs/adr/0001-multi-provider-ai-routing.md`](docs/adr/0001-multi-provider-ai-routing.md).
+
 ## Tài liệu
 
 - [`CONTEXT.md`](CONTEXT.md) — domain language + nghi vấn đã giải quyết
 - [`AGENTS.md`](AGENTS.md) — quy ước cho coding agent (commands, guards, decorators, style)
 - [`docs/`](docs/) — ADR + agent skill docs
+- [`docs/adr/0001-multi-provider-ai-routing.md`](docs/adr/0001-multi-provider-ai-routing.md) — Multi-provider AI routing ADR
 - [`backend/README.md`](backend/README.md) — chi tiết backend
 - [`mobile/README.md`](mobile/README.md) — chi tiết mobile
 
