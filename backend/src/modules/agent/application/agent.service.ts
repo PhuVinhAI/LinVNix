@@ -8,7 +8,7 @@ import type {
 } from '@linvnix/shared';
 import { BaseTool } from '@linvnix/shared';
 import { ConversationService } from '../../conversations/application/conversation.service';
-import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
+import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
 import { UsersService } from '../../users/application/users.service';
 import { ConversationMessageRole } from '../../../common/enums';
 import { ZodError } from 'zod';
@@ -26,7 +26,7 @@ export class AgentService {
   private readonly toolMap: Map<string, BaseTool<any, any>> = new Map();
 
   constructor(
-    private readonly genaiService: GenaiProvider,
+    private readonly router: AiProviderRouter,
     private readonly conversationService: ConversationService,
     private readonly usersService: UsersService,
     // Inject all BaseTool subclasses; they are registered as providers in AgentModule
@@ -83,7 +83,7 @@ export class AgentService {
         ...(iterations === 1 ? { tools: toolDeclarations } : {}),
       };
 
-      const response = await this.genaiService.chat(request);
+      const response = await this.router.forFeature('assistant').chat(request);
       finalResponse = response;
 
       const assistantTokenCount =
@@ -330,7 +330,9 @@ export class AgentService {
       const calls: NonNullable<AiChatResponse['functionCalls']> = [];
 
       try {
-        for await (const chunk of this.genaiService.chatStream(request)) {
+        for await (const chunk of this.router
+          .forFeature('assistant')
+          .chatStream(request)) {
           if (abortSignal?.aborted) {
             interrupted = true;
             interruptedResponseText = responseText;
@@ -589,7 +591,7 @@ export class AgentService {
       // The assistant-tutor template uses `{{screenContext.data}}` as a flat
       // placeholder, so the renderer needs `data` pre-serialized to a JSON
       // string before substitution (see prompts/assistant-tutor.yaml).
-      return this.genaiService.renderPrompt('assistant-tutor', {
+      return this.router.renderPrompt('assistant-tutor', {
         user: {
           nativeLanguage: user?.nativeLanguage?.trim() || 'English',
           currentLevel: user?.currentLevel ?? '',

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AgentService, AI_TOOL_MAX_ITERATIONS } from './agent.service';
 import { ConversationService } from '../../conversations/application/conversation.service';
-import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
+import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
 import { UsersService } from '../../users/application/users.service';
 import { ConversationMessageRole } from '../../../common/enums';
 import { ZodError } from 'zod';
@@ -32,7 +32,12 @@ class MockTool extends BaseTool<{ input: string }, { output: string }> {
 describe('AgentService', () => {
   let service: AgentService;
   let conversationService: jest.Mocked<ConversationService>;
-  let genaiService: jest.Mocked<GenaiProvider>;
+  let genaiService: {
+    chat: jest.Mock;
+    chatStream: jest.Mock;
+    renderPrompt: jest.Mock;
+  };
+  let router: { forFeature: jest.Mock; renderPrompt: jest.Mock };
   let usersService: jest.Mocked<UsersService>;
   let mockTool: MockTool & {
     parameters: { parse: jest.Mock };
@@ -63,7 +68,12 @@ describe('AgentService', () => {
       chat: jest.fn(),
       chatStream: jest.fn(),
       renderPrompt: jest.fn(),
-    } as any;
+    };
+
+    router = {
+      forFeature: jest.fn().mockReturnValue(genaiService),
+      renderPrompt: jest.fn(),
+    };
 
     usersService = {
       findById: jest.fn().mockResolvedValue(mockUser),
@@ -85,7 +95,7 @@ describe('AgentService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AgentService,
-        { provide: GenaiProvider, useValue: genaiService },
+        { provide: AiProviderRouter, useValue: router },
         { provide: ConversationService, useValue: conversationService },
         { provide: UsersService, useValue: usersService },
         { provide: 'TOOLS', useValue: [mockTool] },
@@ -859,9 +869,7 @@ describe('AgentService', () => {
     });
 
     it('renders the assistant-tutor prompt as system instruction when screenContext is non-empty', async () => {
-      genaiService.renderPrompt = jest
-        .fn()
-        .mockReturnValue('RENDERED ASSISTANT TUTOR PROMPT');
+      router.renderPrompt.mockReturnValue('RENDERED ASSISTANT TUTOR PROMPT');
 
       genaiService.chat.mockResolvedValue({
         text: 'ok',
@@ -872,7 +880,7 @@ describe('AgentService', () => {
         service.runTurnStream('user-1', conversationId, userMessage),
       );
 
-      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      expect(router.renderPrompt).toHaveBeenCalledWith(
         'assistant-tutor',
         expect.objectContaining({
           user: expect.objectContaining({
@@ -928,9 +936,7 @@ describe('AgentService', () => {
         totalCompletionTokens: 0,
         messages: [],
       } as any);
-      genaiService.renderPrompt = jest
-        .fn()
-        .mockReturnValue('PROMPT WITH LATEST SCREEN');
+      router.renderPrompt.mockReturnValue('PROMPT WITH LATEST SCREEN');
       genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
@@ -949,7 +955,7 @@ describe('AgentService', () => {
         conversationId,
         latestScreenContext,
       );
-      expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+      expect(router.renderPrompt).toHaveBeenCalledWith(
         'assistant-tutor',
         expect.objectContaining({
           screenContext: expect.objectContaining({
@@ -975,7 +981,6 @@ describe('AgentService', () => {
         totalCompletionTokens: 0,
         messages: [],
       } as any);
-      genaiService.renderPrompt = jest.fn();
 
       genaiService.chat.mockResolvedValue({
         text: 'ok',
@@ -986,7 +991,7 @@ describe('AgentService', () => {
         service.runTurnStream('user-1', conversationId, userMessage),
       );
 
-      expect(genaiService.renderPrompt).not.toHaveBeenCalled();
+      expect(router.renderPrompt).not.toHaveBeenCalled();
       expect(genaiService.chat).toHaveBeenCalledWith(
         expect.objectContaining({ systemInstruction: 'Default tutor.' }),
       );
@@ -1004,7 +1009,7 @@ describe('AgentService', () => {
           },
         },
       };
-      genaiService.renderPrompt = jest.fn().mockReturnValue('DEBUG PROMPT');
+      router.renderPrompt.mockReturnValue('DEBUG PROMPT');
       genaiService.chat.mockResolvedValue({
         text: 'ok',
         usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },

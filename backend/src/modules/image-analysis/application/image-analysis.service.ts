@@ -101,6 +101,8 @@ const IMAGE_ANALYSIS_RESPONSE_SCHEMA = {
 export class ImageAnalysisService {
   private readonly logger = new Logger(ImageAnalysisService.name);
 
+  // ImageAnalysisService injects GenaiProvider directly (not via AiProviderRouter).
+  // Vision is locked to Gemini multimodal; OpenAI vision is out of scope for v1.
   constructor(private readonly genaiService: GenaiProvider) {}
 
   async analyze(
