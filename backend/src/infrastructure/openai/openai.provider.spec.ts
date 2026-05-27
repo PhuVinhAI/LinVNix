@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import type { AiChatChunk } from '@linvnix/shared';
 import { OpenaiProvider } from './openai.provider';
 import {
   AiRateLimitException,
@@ -331,17 +332,296 @@ describe('OpenaiProvider', () => {
     });
   });
 
-  describe('unsupported methods', () => {
-    it('chatStream() throws MethodNotSupportedException', async () => {
+  describe('chatStream()', () => {
+    function makeStream(chunks: object[]): Generator<object> {
+      return (function* () {
+        for (const chunk of chunks) {
+          yield chunk;
+        }
+      })();
+    }
+
+    function makeStreamWithError(
+      chunks: object[],
+      error: unknown,
+    ): Generator<object> {
+      return (function* () {
+        for (const chunk of chunks) {
+          yield chunk;
+        }
+        throw error;
+      })();
+    }
+
+    it('emits 3 text chunks immediately as they arrive', async () => {
+      mockCreate.mockResolvedValue(
+        makeStream([
+          { choices: [{ delta: { content: 'Hello' }, finish_reason: null }] },
+          { choices: [{ delta: { content: ' world' }, finish_reason: null }] },
+          { choices: [{ delta: { content: '!' }, finish_reason: 'stop' }] },
+        ]),
+      );
+
+      const chunks: AiChatChunk[] = [];
+      for await (const chunk of provider.chatStream({
+        messages: [{ role: 'user', content: 'test' }],
+      })) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toHaveLength(3);
+      expect(chunks[0].text).toBe('Hello');
+      expect(chunks[1].text).toBe(' world');
+      expect(chunks[2].text).toBe('!');
+    });
+
+    it('accumulates 1 tool call delta and emits on finish_reason: tool_calls', async () => {
+      mockCreate.mockResolvedValue(
+        makeStream([
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    {
+                      index: 0,
+                      id: 'call_1',
+                      type: 'function',
+                      function: { name: 'search', arguments: '' },
+                    },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [{ index: 0, function: { arguments: '{"q' } }],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    { index: 0, function: { arguments: 'uery":"test"}' } },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          { choices: [{ delta: {}, finish_reason: 'tool_calls' }] },
+        ]),
+      );
+
+      const chunks: AiChatChunk[] = [];
+      for await (const chunk of provider.chatStream({
+        messages: [{ role: 'user', content: 'search something' }],
+      })) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toHaveLength(1);
+      expect(chunks[0].functionCalls).toEqual([
+        { id: 'call_1', name: 'search', arguments: { query: 'test' } },
+      ]);
+    });
+
+    it('accumulates 2 parallel tool calls by index in correct order', async () => {
+      mockCreate.mockResolvedValue(
+        makeStream([
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    {
+                      index: 0,
+                      id: 'call_0',
+                      type: 'function',
+                      function: { name: 'search', arguments: '' },
+                    },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    {
+                      index: 1,
+                      id: 'call_1',
+                      type: 'function',
+                      function: { name: 'analyze', arguments: '' },
+                    },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    { index: 0, function: { arguments: '{"query":"a"}' } },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    { index: 1, function: { arguments: '{"text":"b"}' } },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          { choices: [{ delta: {}, finish_reason: 'tool_calls' }] },
+        ]),
+      );
+
+      const chunks: AiChatChunk[] = [];
+      for await (const chunk of provider.chatStream({
+        messages: [{ role: 'user', content: 'do two things' }],
+      })) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toHaveLength(1);
+      expect(chunks[0].functionCalls).toHaveLength(2);
+      expect(chunks[0].functionCalls![0]).toEqual({
+        id: 'call_0',
+        name: 'search',
+        arguments: { query: 'a' },
+      });
+      expect(chunks[0].functionCalls![1]).toEqual({
+        id: 'call_1',
+        name: 'analyze',
+        arguments: { text: 'b' },
+      });
+    });
+
+    it('emits text chunks immediately and tool call chunk on finish', async () => {
+      mockCreate.mockResolvedValue(
+        makeStream([
+          {
+            choices: [
+              { delta: { content: 'Thinking...' }, finish_reason: null },
+            ],
+          },
+          {
+            choices: [
+              { delta: { content: ' Let me search.' }, finish_reason: null },
+            ],
+          },
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    {
+                      index: 0,
+                      id: 'call_1',
+                      type: 'function',
+                      function: { name: 'search', arguments: '{"query":"x"}' },
+                    },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          { choices: [{ delta: {}, finish_reason: 'tool_calls' }] },
+        ]),
+      );
+
+      const chunks: AiChatChunk[] = [];
+      for await (const chunk of provider.chatStream({
+        messages: [{ role: 'user', content: 'test' }],
+      })) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toHaveLength(3);
+      expect(chunks[0].text).toBe('Thinking...');
+      expect(chunks[1].text).toBe(' Let me search.');
+      expect(chunks[2].functionCalls).toEqual([
+        { id: 'call_1', name: 'search', arguments: { query: 'x' } },
+      ]);
+    });
+
+    it('throws AiRateLimitException when stream errors with 429', async () => {
+      const error = Object.assign(new Error('Rate limited'), { status: 429 });
+      mockCreate.mockResolvedValue(
+        makeStreamWithError(
+          [{ choices: [{ delta: { content: 'Hello' }, finish_reason: null }] }],
+          error,
+        ),
+      );
+
       await expect(async () => {
         for await (const _ of provider.chatStream({
           messages: [{ role: 'user', content: 'test' }],
         })) {
-          // empty
+          // no-op — only testing that the generator throws
         }
-      }).rejects.toThrow(MethodNotSupportedException);
+      }).rejects.toThrow(AiRateLimitException);
     });
 
+    it('throws AiInvalidRequestException for malformed tool call JSON arguments', async () => {
+      mockCreate.mockResolvedValue(
+        makeStream([
+          {
+            choices: [
+              {
+                delta: {
+                  tool_calls: [
+                    {
+                      index: 0,
+                      id: 'call_1',
+                      type: 'function',
+                      function: { name: 'search', arguments: '{invalid' },
+                    },
+                  ],
+                },
+                finish_reason: null,
+              },
+            ],
+          },
+          { choices: [{ delta: {}, finish_reason: 'tool_calls' }] },
+        ]),
+      );
+
+      await expect(async () => {
+        for await (const _ of provider.chatStream({
+          messages: [{ role: 'user', content: 'test' }],
+        })) {
+          // no-op — only testing that the generator throws
+        }
+      }).rejects.toThrow(AiInvalidRequestException);
+    });
+  });
+
+  describe('unsupported methods', () => {
     it('embed() throws MethodNotSupportedException', async () => {
       await expect(provider.embed(['text'])).rejects.toThrow(
         MethodNotSupportedException,

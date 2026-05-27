@@ -3,6 +3,7 @@ import { KeyPool } from '../ai/key-pool';
 import {
   MethodNotSupportedException,
   AiServiceUnavailableException,
+  AiInvalidRequestException,
 } from '../genai/ai.exceptions';
 import {
   isOpenaiRateLimitError,
@@ -108,10 +109,60 @@ export class OpenaiProvider implements IAiProvider {
     });
   }
 
-  chatStream(_req: AiChatRequest): AsyncIterable<AiChatChunk> {
-    throw new MethodNotSupportedException(
-      'chatStream() is not yet implemented for OpenaiProvider',
-    );
+  async *chatStream(req: AiChatRequest): AsyncGenerator<AiChatChunk> {
+    const { key } = this.keyPool.getKey();
+    const client = this.getClientForKey(key);
+
+    const model = req.model || this.model;
+    const messages = this.convertMessages(req.messages);
+    if (req.systemInstruction) {
+      messages.unshift({ role: 'system', content: req.systemInstruction });
+    }
+    const tools = req.tools?.length ? this.convertTools(req.tools) : undefined;
+
+    const toolCallBuilders = new Map<
+      number,
+      { id: string; name: string; argumentsBuffer: string }
+    >();
+
+    let stream: AsyncIterable<OpenAI.Chat.ChatCompletionChunk>;
+    try {
+      stream = (await client.chat.completions.create({
+        model,
+        messages,
+        ...(tools ? { tools } : {}),
+        stream: true,
+      })) as AsyncIterable<OpenAI.Chat.ChatCompletionChunk>;
+    } catch (error: any) {
+      if (isOpenaiRateLimitError(error)) this.keyPool.markCooldown(key, error);
+      throw mapOpenaiError(error);
+    }
+
+    try {
+      for await (const chunk of stream) {
+        const choice = chunk.choices[0];
+        if (!choice) continue;
+
+        if (choice.delta.content) {
+          yield { text: choice.delta.content };
+        }
+
+        if (choice.delta.tool_calls?.length) {
+          this.accumulateToolCalls(toolCallBuilders, choice.delta.tool_calls);
+        }
+
+        // Break on tool_calls finish — emit chunk outside this try/catch so JSON
+        // parse errors aren't swallowed by the SDK error handler below.
+        if (choice.finish_reason === 'tool_calls') break;
+      }
+    } catch (error: any) {
+      if (isOpenaiRateLimitError(error)) this.keyPool.markCooldown(key, error);
+      throw mapOpenaiError(error);
+    }
+
+    if (toolCallBuilders.size > 0) {
+      yield this.buildToolCallChunk(toolCallBuilders);
+    }
   }
 
   async embed(_texts: string[]): Promise<AiEmbedding[]> {
@@ -130,6 +181,52 @@ export class OpenaiProvider implements IAiProvider {
     throw new MethodNotSupportedException(
       'generateImage() is not supported by OpenaiProvider',
     );
+  }
+
+  private accumulateToolCalls(
+    builders: Map<
+      number,
+      { id: string; name: string; argumentsBuffer: string }
+    >,
+    deltas: Array<{
+      index: number;
+      id?: string | null;
+      function?: { name?: string | null; arguments?: string | null } | null;
+    }>,
+  ): void {
+    for (const delta of deltas) {
+      if (!builders.has(delta.index)) {
+        builders.set(delta.index, { id: '', name: '', argumentsBuffer: '' });
+      }
+      const b = builders.get(delta.index)!;
+      if (delta.id) b.id = delta.id;
+      if (delta.function?.name) b.name += delta.function.name;
+      if (delta.function?.arguments)
+        b.argumentsBuffer += delta.function.arguments;
+    }
+  }
+
+  private buildToolCallChunk(
+    builders: Map<
+      number,
+      { id: string; name: string; argumentsBuffer: string }
+    >,
+  ): AiChatChunk {
+    const functionCalls = Array.from(builders.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([, b]) => {
+        let args: Record<string, any>;
+        try {
+          args = JSON.parse(b.argumentsBuffer || '{}');
+        } catch {
+          throw new AiInvalidRequestException(
+            `Provider returned malformed JSON for tool "${b.name}": ${b.argumentsBuffer}`,
+          );
+        }
+        return { id: b.id, name: b.name, arguments: args };
+      });
+
+    return { text: '', functionCalls };
   }
 
   private async executeWithRetry<T>(
