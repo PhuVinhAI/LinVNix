@@ -7,6 +7,7 @@ import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/profile_providers.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
 import '../../../bookmarks/domain/bookmark_models.dart';
+import '../../../daily_goals/data/daily_goal_progress_providers.dart';
 import '../../../simulation/data/simulation_providers.dart';
 import '../../../user/domain/user_profile.dart';
 
@@ -34,6 +35,7 @@ class ProfileScreen extends ConsumerWidget {
           await ref.read(exerciseStatsProvider.notifier).refresh();
           await ref.read(bookmarkStatsProvider.notifier).refresh();
           await ref.read(simulationStatsProvider.notifier).refresh();
+          await ref.read(dailyGoalProgressProvider.notifier).refresh();
         },
         child: ListView(
           padding: AppNavBar.scrollPadding(
@@ -51,6 +53,8 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             const _StatsSection(),
+            const SizedBox(height: AppSpacing.md),
+            const _StreakSection(),
             const SizedBox(height: AppSpacing.md),
             const _SimulationStatsSection(),
             const SizedBox(height: AppSpacing.md),
@@ -601,6 +605,43 @@ class _VocabStatsSectionLoading extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StreakSection extends ConsumerWidget {
+  const _StreakSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
+    final progressAsync = ref.watch(dailyGoalProgressProvider);
+
+    return progressAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+      data: (progress) {
+        if (progress.longestStreak <= 0) return const SizedBox.shrink();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Daily goal',
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            _StatCard(
+              icon: Icons.emoji_events,
+              label: 'Longest streak',
+              value: '${progress.longestStreak} days',
+              color: c.primary,
+            ),
+          ],
+        );
+      },
     );
   }
 }
