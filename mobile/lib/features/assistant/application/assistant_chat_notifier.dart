@@ -43,6 +43,12 @@ class AssistantChatNotifier {
   String? _conversationId;
   bool _userCancelled = false;
 
+  // Paused session — preserved across a single bar-close/reopen cycle
+  // when the screen (route location) has not changed.
+  String? _pausedConversationId;
+  AssistantState? _pausedState;
+  String? _pausedLocation;
+
   @visibleForTesting
   String? get conversationIdForTesting => _conversationId;
 
@@ -50,15 +56,27 @@ class AssistantChatNotifier {
   /// load conversation messages.
   String? get conversationId => _conversationId;
 
-  /// Bar tap / drag-up: Collapsed → MidCompose. Idempotent on already-open
-  /// states (no-op if not Collapsed) so the bar can be safely re-tapped
-  /// in race conditions.
+  /// Bar tap / drag-up: Collapsed → MidCompose (fresh) or restores the
+  /// paused session if the current screen matches the screen where the bar
+  /// was last closed. Idempotent on already-open states.
   void openBar() {
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     if (_ref.read(assistantStateMachineProvider) is! AssistantCollapsed) {
       return;
     }
-    sm.openBar();
+    final currentLocation = _ref.read(currentRouteMatchProvider)?.location;
+    if (_pausedConversationId != null &&
+        _pausedState != null &&
+        currentLocation != null &&
+        currentLocation == _pausedLocation) {
+      _conversationId = _pausedConversationId;
+      final savedState = _pausedState!;
+      _clearPausedSession();
+      sm.restoreSession(savedState);
+    } else {
+      _clearPausedSession();
+      sm.openBar();
+    }
   }
 
   /// User tapped Send. Cancels any in-flight stream (rapid-send), drives
@@ -147,29 +165,25 @@ class AssistantChatNotifier {
     _ref.read(assistantStateMachineProvider.notifier).composeAgain();
   }
 
-  /// User tapped "Reset". Drops the cached `conversationId` and returns
-  /// to Compose; the next send creates a brand-new Conversation with the
-  /// now-current `screenContext`.
+  /// User tapped "Reset". Drops the cached `conversationId` and paused
+  /// session, returns to Compose; the next send creates a brand-new
+  /// Conversation with the now-current `screenContext`.
   Future<void> reset() async {
     await _cancelInFlight();
     _conversationId = null;
-    final sm = _ref.read(assistantStateMachineProvider.notifier);
-    final current = _ref.read(assistantStateMachineProvider);
-    if (current is AssistantFull) {
-      sm.reset();
-    } else {
-      sm.reset();
-    }
+    _clearPausedSession();
+    _ref.read(assistantStateMachineProvider.notifier).reset();
   }
 
   /// User dismissed the sheet (`−` button, backdrop tap, drag-down).
-  /// Drops `conversationId` per PRD §"Conversation lifecycle" — each
-  /// new bar-open session starts a fresh Conversation on first send.
+  /// Pauses the current session (if a conversation is active) so it can
+  /// be restored when the bar is reopened on the same screen.
   Future<void> collapse() async {
     if (_ref.read(assistantStateMachineProvider) is AssistantFull) {
       return;
     }
     await _cancelInFlight();
+    _savePausedSession(_ref.read(assistantStateMachineProvider));
     _conversationId = null;
     _ref.read(assistantStateMachineProvider.notifier).collapse();
   }
@@ -184,10 +198,12 @@ class AssistantChatNotifier {
   /// Back gesture or close button from Full → Collapsed.
   /// Returns `true` when the state machine actually exited Full.
   bool exitFull() {
-    if (_ref.read(assistantStateMachineProvider) is! AssistantFull) {
+    final rawState = _ref.read(assistantStateMachineProvider);
+    if (rawState is! AssistantFull) {
       return false;
     }
     unawaited(_cancelInFlight());
+    _savePausedSession(rawState);
     _conversationId = null;
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     sm.exitFull();
@@ -351,6 +367,42 @@ class AssistantChatNotifier {
       return;
     }
     notifier.update(snapshot.toJson());
+  }
+
+  void _savePausedSession(AssistantState currentState) {
+    if (_conversationId == null) {
+      _clearPausedSession();
+      return;
+    }
+    _pausedConversationId = _conversationId;
+    _pausedState = _sanitizeForPause(currentState);
+    _pausedLocation = _ref.read(currentRouteMatchProvider)?.location;
+  }
+
+  void _clearPausedSession() {
+    _pausedConversationId = null;
+    _pausedState = null;
+    _pausedLocation = null;
+  }
+
+  AssistantState _sanitizeForPause(AssistantState state) {
+    if (state is AssistantFull) {
+      return _sanitizeForPause(state.priorState ?? const AssistantCollapsed());
+    }
+    if (state is AssistantMidLoading) {
+      // Can't resume a loading state; restore to Compose.
+      return const AssistantMidCompose();
+    }
+    if (state is AssistantMidReading && state.streaming) {
+      // Mark interrupted — the stream is gone.
+      return AssistantMidReading(
+        partial: state.partial,
+        streaming: false,
+        interrupted: true,
+        messageId: state.messageId,
+      );
+    }
+    return state;
   }
 
   Future<void> _cancelInFlight() async {

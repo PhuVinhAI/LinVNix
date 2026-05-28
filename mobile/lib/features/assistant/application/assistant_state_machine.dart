@@ -24,6 +24,16 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     state = const AssistantMidCompose();
   }
 
+  /// Restores a paused session directly from [AssistantCollapsed].
+  /// [savedState] must already be sanitized by the caller (no streaming,
+  /// no loading — only Compose, Reading(done), or Error).
+  void restoreSession(AssistantState savedState) {
+    if (state is! AssistantCollapsed) {
+      throw _invalid('restoreSession');
+    }
+    state = savedState;
+  }
+
   /// Send tapped: MidCompose → MidLoading. Also valid as a retry from
   /// MidError so the chat notifier can re-issue with the cached input
   /// without manually clearing the error state first.
