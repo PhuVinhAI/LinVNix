@@ -156,7 +156,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ triết học với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -176,7 +176,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Freedom of thought is a prerequisite for scientific creativity.'",
+                  "question": "Freedom of thought is a prerequisite for scientific creativity.",
                   "question_audio_url": null
                 }
               ],
@@ -587,7 +587,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'It is commonly held that cognition reflects the objective world.'",
+                  "question": "It is commonly held that cognition reflects the objective world.",
                   "question_audio_url": null
                 },
                 {
@@ -908,7 +908,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'The essence of humaneness is to bring peace to the people.'",
+                  "question": "The essence of humaneness is to bring peace to the people.",
                   "question_audio_url": null
                 },
                 {
@@ -1145,7 +1145,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Furthermore, through practice, humans not only cognize but also transform the world.'",
+                  "question": "Furthermore, through practice, humans not only cognize but also transform the world.",
                   "question_audio_url": null
                 },
                 {
@@ -1343,7 +1343,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thuật ngữ luật pháp",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1405,7 +1405,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'The defendant has the right to hire a defense attorney.'",
+                  "question": "The defendant has the right to hire a defense attorney.",
                   "question_audio_url": null
                 }
               ],
@@ -1817,7 +1817,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Although regulations are clear, the actual situation is still complex.'",
+                  "question": "Although regulations are clear, the actual situation is still complex.",
                   "question_audio_url": null
                 },
                 {
@@ -2124,7 +2124,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'based on the provisions of Article 15'",
+                  "question": "based on the provisions of Article 15",
                   "question_audio_url": null
                 }
               ],
@@ -2301,7 +2301,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thuật ngữ y khoa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2363,7 +2363,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Antibiotic abuse leads to drug resistance.'",
+                  "question": "Antibiotic abuse leads to drug resistance.",
                   "question_audio_url": null
                 }
               ],
@@ -2802,7 +2802,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'This medication may cause side effects in some patients.'",
+                  "question": "This medication may cause side effects in some patients.",
                   "question_audio_url": null
                 }
               ],
@@ -3200,7 +3200,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ lịch sử",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -3262,7 +3262,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Peace is the eternal aspiration of the Vietnamese nation.'",
+                  "question": "Peace is the eternal aspiration of the Vietnamese nation.",
                   "question_audio_url": null
                 }
               ],
@@ -3673,7 +3673,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'In 938, the Southern Han was defeated at the Bach Dang River.'",
+                  "question": "In 938, the Southern Han was defeated at the Bach Dang River.",
                   "question_audio_url": null
                 },
                 {
@@ -3968,7 +3968,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối di sản với loại hình",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4160,7 +4160,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'The country was peaceful, the people joyful, commerce prosperous'",
+                  "question": "The country was peaceful, the people joyful, commerce prosperous",
                   "question_audio_url": null
                 }
               ],
@@ -4337,7 +4337,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối trào lưu văn học",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4399,7 +4399,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Critical realist literature exposed colonial society.'",
+                  "question": "Critical realist literature exposed colonial society.",
                   "question_audio_url": null
                 }
               ],
@@ -4863,7 +4863,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối tu từ với cơ chế",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4883,7 +4883,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch và cho biết tu từ: 'Gió thu thì thầm bên tai'",
+                  "question": "Gió thu thì thầm bên tai",
                   "question_audio_url": null
                 }
               ],
@@ -5195,7 +5195,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch và cho biết tu từ: 'Áo nâu cất cao tiếng hát'",
+                  "question": "Áo nâu cất cao tiếng hát",
                   "question_audio_url": null
                 }
               ],
@@ -5404,7 +5404,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối tác giả với tác phẩm",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {

@@ -58,7 +58,7 @@
                     "type": "fill_blank"
                   },
                   "order_index": 2,
-                  "question": "Điền từ thiếu: Xin ___ ! Tôi là Nam.",
+                  "question": "Xin ___ ! Tôi là Nam.",
                   "question_audio_url": null
                 },
                 {
@@ -108,7 +108,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ tiếng Việt với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -129,7 +129,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch câu sau sang tiếng Việt: 'Good morning!'",
+                  "question": "Good morning!",
                   "question_audio_url": null
                 },
                 {
@@ -172,7 +172,7 @@
                     "type": "speaking"
                   },
                   "order_index": 6,
-                  "question": "Bấm loa để nghe mẫu, sau đó nói lại: xin chào",
+                  "question": "",
                   "question_audio_url": "/uploads/audio/seed/a1/lesson-001/xin-chao.mp3"
                 }
               ],
@@ -750,7 +750,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'I don't understand.'",
+                  "question": "I don't understand.",
                   "question_audio_url": null
                 },
                 {
@@ -1182,7 +1182,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối thanh điệu với dấu tương ứng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1430,7 +1430,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt (kính trọng): 'Hello, grandmother!'",
+                  "question": "Hello, grandmother!",
                   "question_audio_url": null
                 }
               ],
@@ -1599,7 +1599,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối số tiếng Việt với số Ả Rập",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1641,7 +1641,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'seven'",
+                  "question": "seven",
                   "question_audio_url": null
                 },
                 {
@@ -2099,7 +2099,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'Three books'",
+                  "question": "Three books",
                   "question_audio_url": null
                 },
                 {
@@ -2536,7 +2536,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với thanh điệu đúng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2789,7 +2789,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thành viên gia đình với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2854,7 +2854,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'My mother is a doctor.'",
+                  "question": "My mother is a doctor.",
                   "question_audio_url": null
                 },
                 {
@@ -3327,7 +3327,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'Do you have older sisters?'",
+                  "question": "Do you have older sisters?",
                   "question_audio_url": null
                 },
                 {
@@ -3603,7 +3603,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ với bên gia đình",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -3624,7 +3624,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'maternal grandmother'",
+                  "question": "maternal grandmother",
                   "question_audio_url": null
                 }
               ],
@@ -3793,7 +3793,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối món ăn với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -3835,7 +3835,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'I want to eat pho.'",
+                  "question": "I want to eat pho.",
                   "question_audio_url": null
                 },
                 {
@@ -4329,7 +4329,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'I like pho.'",
+                  "question": "I like pho.",
                   "question_audio_url": null
                 },
                 {
@@ -4665,7 +4665,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch sang tiếng Việt: 'Give me a bowl of pho.'",
+                  "question": "Give me a bowl of pho.",
                   "question_audio_url": null
                 },
                 {
@@ -4942,7 +4942,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4984,7 +4984,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'Turn left'",
+                  "question": "Turn left",
                   "question_audio_url": null
                 },
                 {
@@ -5412,7 +5412,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch sang tiếng Việt: 'Where is the market?'",
+                  "question": "Where is the market?",
                   "question_audio_url": null
                 },
                 {
@@ -5505,7 +5505,7 @@
                     "type": "translation"
                   },
                   "order_index": 5,
-                  "question": "Dịch sang tiếng Việt: 'Go straight, then turn right.'",
+                  "question": "Go straight, then turn right.",
                   "question_audio_url": null
                 }
               ],
@@ -5848,7 +5848,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'The nearest bus station'",
+                  "question": "The nearest bus station",
                   "question_audio_url": null
                 },
                 {

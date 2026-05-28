@@ -58,7 +58,7 @@
                     "type": "fill_blank"
                   },
                   "order_index": 2,
-                  "question": "Điền từ thiếu: Xin ___ ! Tôi là Nam.",
+                  "question": "Xin ___ ! Tôi là Nam.",
                   "question_audio_url": null
                 },
                 {
@@ -108,7 +108,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ tiếng Việt với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -129,7 +129,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch câu sau sang tiếng Việt: 'Good morning!'",
+                  "question": "Good morning!",
                   "question_audio_url": null
                 },
                 {
@@ -172,7 +172,7 @@
                     "type": "speaking"
                   },
                   "order_index": 6,
-                  "question": "Bấm loa để nghe mẫu, sau đó nói lại: xin chào",
+                  "question": "",
                   "question_audio_url": "/uploads/audio/seed/a1/lesson-001/xin-chao.mp3"
                 }
               ],
@@ -750,7 +750,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'I don't understand.'",
+                  "question": "I don't understand.",
                   "question_audio_url": null
                 },
                 {
@@ -1182,7 +1182,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối thanh điệu với dấu tương ứng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1430,7 +1430,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt (kính trọng): 'Hello, grandmother!'",
+                  "question": "Hello, grandmother!",
                   "question_audio_url": null
                 }
               ],
@@ -1599,7 +1599,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối số tiếng Việt với số Ả Rập",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1641,7 +1641,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'seven'",
+                  "question": "seven",
                   "question_audio_url": null
                 },
                 {
@@ -2099,7 +2099,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'Three books'",
+                  "question": "Three books",
                   "question_audio_url": null
                 },
                 {
@@ -2536,7 +2536,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với thanh điệu đúng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2789,7 +2789,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thành viên gia đình với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2854,7 +2854,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'My mother is a doctor.'",
+                  "question": "My mother is a doctor.",
                   "question_audio_url": null
                 },
                 {
@@ -3327,7 +3327,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'Do you have older sisters?'",
+                  "question": "Do you have older sisters?",
                   "question_audio_url": null
                 },
                 {
@@ -3603,7 +3603,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ với bên gia đình",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -3624,7 +3624,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'maternal grandmother'",
+                  "question": "maternal grandmother",
                   "question_audio_url": null
                 }
               ],
@@ -3793,7 +3793,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối món ăn với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -3835,7 +3835,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'I want to eat pho.'",
+                  "question": "I want to eat pho.",
                   "question_audio_url": null
                 },
                 {
@@ -4329,7 +4329,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'I like pho.'",
+                  "question": "I like pho.",
                   "question_audio_url": null
                 },
                 {
@@ -4665,7 +4665,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch sang tiếng Việt: 'Give me a bowl of pho.'",
+                  "question": "Give me a bowl of pho.",
                   "question_audio_url": null
                 },
                 {
@@ -4942,7 +4942,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4984,7 +4984,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'Turn left'",
+                  "question": "Turn left",
                   "question_audio_url": null
                 },
                 {
@@ -5412,7 +5412,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch sang tiếng Việt: 'Where is the market?'",
+                  "question": "Where is the market?",
                   "question_audio_url": null
                 },
                 {
@@ -5505,7 +5505,7 @@
                     "type": "translation"
                   },
                   "order_index": 5,
-                  "question": "Dịch sang tiếng Việt: 'Go straight, then turn right.'",
+                  "question": "Go straight, then turn right.",
                   "question_audio_url": null
                 }
               ],
@@ -5848,7 +5848,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'The nearest bus station'",
+                  "question": "The nearest bus station",
                   "question_audio_url": null
                 },
                 {
@@ -6095,7 +6095,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ tiếng Việt với nghĩa tiếng Anh tương ứng.",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -6117,7 +6117,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch câu sau sang tiếng Việt: 'How much is this?'",
+                  "question": "How much is this?",
                   "question_audio_url": null
                 }
               ],
@@ -6571,7 +6571,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'I want to buy a little beef.'",
+                  "question": "I want to buy a little beef.",
                   "question_audio_url": null
                 },
                 {
@@ -6880,7 +6880,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Dịch sang tiếng Việt: 'Give me a kilo of tomatoes.'",
+                  "question": "Give me a kilo of tomatoes.",
                   "question_audio_url": null
                 },
                 {
@@ -7086,7 +7086,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'I spend about one hundred thousand dong each time.'",
+                  "question": "I spend about one hundred thousand dong each time.",
                   "question_audio_url": null
                 }
               ],
@@ -7235,7 +7235,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ tiếng Việt với nghĩa tiếng Anh.",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -7304,7 +7304,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'I have to go to the hospital.'",
+                  "question": "I have to go to the hospital.",
                   "question_audio_url": null
                 }
               ],
@@ -7679,7 +7679,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'I can go to the pharmacy after work.'",
+                  "question": "I can go to the pharmacy after work.",
                   "question_audio_url": null
                 },
                 {
@@ -8166,7 +8166,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối mùa với nghĩa tiếng Anh.",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -8231,7 +8231,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'Winter in Hanoi is very cold.'",
+                  "question": "Winter in Hanoi is very cold.",
                   "question_audio_url": null
                 }
               ],
@@ -8652,7 +8652,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'It's sunny today.'",
+                  "question": "It's sunny today.",
                   "question_audio_url": null
                 }
               ],
@@ -9048,7 +9048,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với nghĩa tiếng Anh.",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -9091,7 +9091,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'I rent an apartment near the university.'",
+                  "question": "I rent an apartment near the university.",
                   "question_audio_url": null
                 },
                 {
@@ -9537,7 +9537,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'There is a garden behind the house.'",
+                  "question": "There is a garden behind the house.",
                   "question_audio_url": null
                 }
               ],
@@ -9755,7 +9755,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối hoạt động với nghĩa tiếng Anh.",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -9797,7 +9797,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'I like listening to music and reading books.'",
+                  "question": "I like listening to music and reading books.",
                   "question_audio_url": null
                 },
                 {
@@ -10225,7 +10225,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Dịch sang tiếng Việt: 'I like it but I don't have time.'",
+                  "question": "I like it but I don't have time.",
                   "question_audio_url": null
                 },
                 {
@@ -10524,7 +10524,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Dịch sang tiếng Việt: 'I like swimming and playing football with friends.'",
+                  "question": "I like swimming and playing football with friends.",
                   "question_audio_url": null
                 },
                 {
@@ -10751,7 +10751,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ tiếng Việt với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -10772,7 +10772,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: I applied for the project manager position.",
+                  "question": "I applied for the project manager position.",
                   "question_audio_url": null
                 },
                 {
@@ -11249,7 +11249,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: I was fired by the company.",
+                  "question": "I was fired by the company.",
                   "question_audio_url": null
                 },
                 {
@@ -11604,7 +11604,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate: She was required to submit the report earlier than expected.",
+                  "question": "She was required to submit the report earlier than expected.",
                   "question_audio_url": null
                 }
               ],
@@ -11778,7 +11778,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate: Younger staff should call the boss sếp or anh/chị + name.",
+                  "question": "Younger staff should call the boss sếp or anh/chị + name.",
                   "question_audio_url": null
                 }
               ],
@@ -11955,7 +11955,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -12020,7 +12020,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: I have to retake the Math exam.",
+                  "question": "I have to retake the Math exam.",
                   "question_audio_url": null
                 }
               ],
@@ -12469,7 +12469,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: If you don't submit the assignment on time, points will be deducted.",
+                  "question": "If you don't submit the assignment on time, points will be deducted.",
                   "question_audio_url": null
                 },
                 {
@@ -12767,7 +12767,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate: If there are no scholarships, many students cannot continue studying.",
+                  "question": "If there are no scholarships, many students cannot continue studying.",
                   "question_audio_url": null
                 }
               ],
@@ -12936,7 +12936,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -13001,7 +13001,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: I booked a hotel room online.",
+                  "question": "I booked a hotel room online.",
                   "question_audio_url": null
                 }
               ],
@@ -13383,7 +13383,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: After exiting the airport, call a taxi.",
+                  "question": "After exiting the airport, call a taxi.",
                   "question_audio_url": null
                 },
                 {
@@ -13860,7 +13860,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate: Go straight, pass the intersection, then turn right.",
+                  "question": "Go straight, pass the intersection, then turn right.",
                   "question_audio_url": null
                 }
               ],
@@ -14049,7 +14049,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -14115,7 +14115,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: We've been dating for three years.",
+                  "question": "We've been dating for three years.",
                   "question_audio_url": null
                 }
               ],
@@ -14518,7 +14518,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: It is trust that keeps love lasting long.",
+                  "question": "It is trust that keeps love lasting long.",
                   "question_audio_url": null
                 },
                 {
@@ -14813,7 +14813,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate: It is understanding that is the most important thing in love.",
+                  "question": "It is understanding that is the most important thing in love.",
                   "question_audio_url": null
                 }
               ],
@@ -14990,7 +14990,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -15055,7 +15055,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: Wear a helmet when riding a motorbike.",
+                  "question": "Wear a helmet when riding a motorbike.",
                   "question_audio_url": null
                 }
               ],
@@ -15477,7 +15477,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: Don't drink and drive!",
+                  "question": "Don't drink and drive!",
                   "question_audio_url": null
                 },
                 {
@@ -15798,7 +15798,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate: Don't drink and drive, obey traffic laws.",
+                  "question": "Don't drink and drive, obey traffic laws.",
                   "question_audio_url": null
                 }
               ],
@@ -16024,7 +16024,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ kinh tế với nghĩa tiếng Anh tương ứng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -16045,7 +16045,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'The company must compete to gain market share.'",
+                  "question": "The company must compete to gain market share.",
                   "question_audio_url": null
                 },
                 {
@@ -16496,7 +16496,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'Only when the bank lowers interest rates can enterprises borrow capital.'",
+                  "question": "Only when the bank lowers interest rates can enterprises borrow capital.",
                   "question_audio_url": null
                 },
                 {
@@ -16837,7 +16837,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'If the government had provided timely support, many enterprises would not have gone bankrupt.'",
+                  "question": "If the government had provided timely support, many enterprises would not have gone bankrupt.",
                   "question_audio_url": null
                 }
               ],
@@ -17038,7 +17038,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'If fuel prices continue to rise, profit margins will shrink.'",
+                  "question": "If fuel prices continue to rise, profit margins will shrink.",
                   "question_audio_url": null
                 }
               ],
@@ -17207,7 +17207,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ chính trị với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -17272,7 +17272,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'The government issued a new policy to encourage foreign investment.'",
+                  "question": "The government issued a new policy to encourage foreign investment.",
                   "question_audio_url": null
                 }
               ],
@@ -17661,7 +17661,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'How could we remain silent before injustice?'",
+                  "question": "How could we remain silent before injustice?",
                   "question_audio_url": null
                 },
                 {
@@ -17879,7 +17879,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Translate into Vietnamese: 'Although I agree that social justice is important, raising taxes isn't the only way.'",
+                  "question": "Although I agree that social justice is important, raising taxes isn't the only way.",
                   "question_audio_url": null
                 },
                 {
@@ -18121,7 +18121,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối thuật ngữ chính trị với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 }
               ],
@@ -18298,7 +18298,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ khoa học công nghệ với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -18363,7 +18363,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'The new algorithm helps increase processing speed.'",
+                  "question": "The new algorithm helps increase processing speed.",
                   "question_audio_url": null
                 }
               ],
@@ -18737,7 +18737,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese (reduced clause style): 'After analyzing the data, the scientists concluded that the proposed model is more effective.'",
+                  "question": "After analyzing the data, the scientists concluded that the proposed model is more effective.",
                   "question_audio_url": null
                 },
                 {
@@ -18999,7 +18999,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese (scientific style): 'Data collected from over 10,000 patients was analyzed using a deep learning model.'",
+                  "question": "Data collected from over 10,000 patients was analyzed using a deep learning model.",
                   "question_audio_url": null
                 }
               ],
@@ -19156,7 +19156,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ nghệ thuật văn học với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -19221,7 +19221,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'This work is considered a masterpiece of modern literature.'",
+                  "question": "This work is considered a masterpiece of modern literature.",
                   "question_audio_url": null
                 }
               ],
@@ -19650,7 +19650,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'The work is both profound and subtle.'",
+                  "question": "The work is both profound and subtle.",
                   "question_audio_url": null
                 },
                 {
@@ -19911,7 +19911,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate into Vietnamese: 'The work is both classical and richly folk-inspired.'",
+                  "question": "The work is both classical and richly folk-inspired.",
                   "question_audio_url": null
                 },
                 {
@@ -20117,7 +20117,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối thành ngữ với giá trị văn hóa",
+                  "question": "",
                   "question_audio_url": null
                 }
               ],
@@ -20294,7 +20294,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ môi trường với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -20359,7 +20359,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'Recycling waste helps reduce environmental pollution.'",
+                  "question": "Recycling waste helps reduce environmental pollution.",
                   "question_audio_url": null
                 }
               ],
@@ -20773,7 +20773,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'Not only does it reduce pollution, but it also saves costs.'",
+                  "question": "Not only does it reduce pollution, but it also saves costs.",
                   "question_audio_url": null
                 },
                 {
@@ -21054,7 +21054,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'Therefore, sustainable development is not just a choice but a mandatory requirement.'",
+                  "question": "Therefore, sustainable development is not just a choice but a mandatory requirement.",
                   "question_audio_url": null
                 }
               ],
@@ -21528,7 +21528,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ triết học với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -21548,7 +21548,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Freedom of thought is a prerequisite for scientific creativity.'",
+                  "question": "Freedom of thought is a prerequisite for scientific creativity.",
                   "question_audio_url": null
                 }
               ],
@@ -21959,7 +21959,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'It is commonly held that cognition reflects the objective world.'",
+                  "question": "It is commonly held that cognition reflects the objective world.",
                   "question_audio_url": null
                 },
                 {
@@ -22280,7 +22280,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'The essence of humaneness is to bring peace to the people.'",
+                  "question": "The essence of humaneness is to bring peace to the people.",
                   "question_audio_url": null
                 },
                 {
@@ -22517,7 +22517,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Furthermore, through practice, humans not only cognize but also transform the world.'",
+                  "question": "Furthermore, through practice, humans not only cognize but also transform the world.",
                   "question_audio_url": null
                 },
                 {
@@ -22715,7 +22715,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thuật ngữ luật pháp",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -22777,7 +22777,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'The defendant has the right to hire a defense attorney.'",
+                  "question": "The defendant has the right to hire a defense attorney.",
                   "question_audio_url": null
                 }
               ],
@@ -23189,7 +23189,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Although regulations are clear, the actual situation is still complex.'",
+                  "question": "Although regulations are clear, the actual situation is still complex.",
                   "question_audio_url": null
                 },
                 {
@@ -23496,7 +23496,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'based on the provisions of Article 15'",
+                  "question": "based on the provisions of Article 15",
                   "question_audio_url": null
                 }
               ],
@@ -23673,7 +23673,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thuật ngữ y khoa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -23735,7 +23735,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Antibiotic abuse leads to drug resistance.'",
+                  "question": "Antibiotic abuse leads to drug resistance.",
                   "question_audio_url": null
                 }
               ],
@@ -24174,7 +24174,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'This medication may cause side effects in some patients.'",
+                  "question": "This medication may cause side effects in some patients.",
                   "question_audio_url": null
                 }
               ],
@@ -24572,7 +24572,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ lịch sử",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -24634,7 +24634,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Peace is the eternal aspiration of the Vietnamese nation.'",
+                  "question": "Peace is the eternal aspiration of the Vietnamese nation.",
                   "question_audio_url": null
                 }
               ],
@@ -25045,7 +25045,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'In 938, the Southern Han was defeated at the Bach Dang River.'",
+                  "question": "In 938, the Southern Han was defeated at the Bach Dang River.",
                   "question_audio_url": null
                 },
                 {
@@ -25340,7 +25340,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối di sản với loại hình",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -25532,7 +25532,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'The country was peaceful, the people joyful, commerce prosperous'",
+                  "question": "The country was peaceful, the people joyful, commerce prosperous",
                   "question_audio_url": null
                 }
               ],
@@ -25709,7 +25709,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối trào lưu văn học",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -25771,7 +25771,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch: 'Critical realist literature exposed colonial society.'",
+                  "question": "Critical realist literature exposed colonial society.",
                   "question_audio_url": null
                 }
               ],
@@ -26235,7 +26235,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối tu từ với cơ chế",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -26255,7 +26255,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch và cho biết tu từ: 'Gió thu thì thầm bên tai'",
+                  "question": "Gió thu thì thầm bên tai",
                   "question_audio_url": null
                 }
               ],
@@ -26567,7 +26567,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Dịch và cho biết tu từ: 'Áo nâu cất cao tiếng hát'",
+                  "question": "Áo nâu cất cao tiếng hát",
                   "question_audio_url": null
                 }
               ],
@@ -26776,7 +26776,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối tác giả với tác phẩm",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -27008,7 +27008,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ phương ngữ với vùng miền",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -27053,7 +27053,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate to Vietnamese using Southern dialect: \"What is this?\"",
+                  "question": "What is this?",
                   "question_audio_url": null
                 }
               ],
@@ -27455,7 +27455,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate to Central Vietnamese: \"Sao hôm nay nóng vậy?\"",
+                  "question": "Sao hôm nay nóng vậy?",
                   "question_audio_url": null
                 },
                 {
@@ -27830,7 +27830,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối trợ từ với vùng miền",
+                  "question": "",
                   "question_audio_url": null
                 }
               ],
@@ -28158,7 +28158,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối hậu tố Hán Việt với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -28201,7 +28201,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate using Sino-Vietnamese: \"modernize\"",
+                  "question": "modernize",
                   "question_audio_url": null
                 }
               ],
@@ -28655,7 +28655,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ Hán Việt với loại cấu trúc",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -28860,7 +28860,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Translate to everyday Vietnamese: \"Căn cứ Hiến pháp\"",
+                  "question": "Căn cứ Hiến pháp",
                   "question_audio_url": null
                 },
                 {
@@ -28910,7 +28910,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ Hán Việt với nghĩa Việt thuần",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -29111,7 +29111,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ mượn với ngôn ngữ gốc",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -29306,7 +29306,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thể văn với chức năng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -29640,7 +29640,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate to native Vietnamese word order: \"bạch mã\"",
+                  "question": "bạch mã",
                   "question_audio_url": null
                 },
                 {
@@ -30197,7 +30197,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ lóng với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -30247,7 +30247,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: \"He speaks very wittily\"",
+                  "question": "He speaks very wittily",
                   "question_audio_url": null
                 }
               ],
@@ -30929,7 +30929,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ uyển chuyển với nghĩa trực tiếp",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -30951,7 +30951,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate using a euphemism: \"She passed away last year\"",
+                  "question": "She passed away last year",
                   "question_audio_url": null
                 }
               ],
@@ -31100,7 +31100,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối loại văn dân gian với đặc điểm",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -31165,7 +31165,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate the proverb: \"Lá lành đùm lá rách\"",
+                  "question": "Lá lành đùm lá rách",
                   "question_audio_url": null
                 }
               ],
@@ -31485,7 +31485,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối vế đối ngẫu",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -31529,7 +31529,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate the proverb: \"Muốn sang thì bắc cầu kiều\"",
+                  "question": "Muốn sang thì bắc cầu kiều",
                   "question_audio_url": null
                 }
               ],
@@ -31713,7 +31713,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate to Vietnamese using a proverb: \"We should help those less fortunate\"",
+                  "question": "We should help those less fortunate",
                   "question_audio_url": null
                 },
                 {
@@ -31896,7 +31896,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối dân ca với vùng miền",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {

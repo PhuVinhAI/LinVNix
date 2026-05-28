@@ -108,7 +108,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ kinh tế với nghĩa tiếng Anh tương ứng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -129,7 +129,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'The company must compete to gain market share.'",
+                  "question": "The company must compete to gain market share.",
                   "question_audio_url": null
                 },
                 {
@@ -580,7 +580,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'Only when the bank lowers interest rates can enterprises borrow capital.'",
+                  "question": "Only when the bank lowers interest rates can enterprises borrow capital.",
                   "question_audio_url": null
                 },
                 {
@@ -921,7 +921,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'If the government had provided timely support, many enterprises would not have gone bankrupt.'",
+                  "question": "If the government had provided timely support, many enterprises would not have gone bankrupt.",
                   "question_audio_url": null
                 }
               ],
@@ -1122,7 +1122,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'If fuel prices continue to rise, profit margins will shrink.'",
+                  "question": "If fuel prices continue to rise, profit margins will shrink.",
                   "question_audio_url": null
                 }
               ],
@@ -1291,7 +1291,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ chính trị với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1356,7 +1356,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'The government issued a new policy to encourage foreign investment.'",
+                  "question": "The government issued a new policy to encourage foreign investment.",
                   "question_audio_url": null
                 }
               ],
@@ -1745,7 +1745,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'How could we remain silent before injustice?'",
+                  "question": "How could we remain silent before injustice?",
                   "question_audio_url": null
                 },
                 {
@@ -1963,7 +1963,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Translate into Vietnamese: 'Although I agree that social justice is important, raising taxes isn't the only way.'",
+                  "question": "Although I agree that social justice is important, raising taxes isn't the only way.",
                   "question_audio_url": null
                 },
                 {
@@ -2205,7 +2205,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối thuật ngữ chính trị với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 }
               ],
@@ -2382,7 +2382,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ khoa học công nghệ với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2447,7 +2447,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'The new algorithm helps increase processing speed.'",
+                  "question": "The new algorithm helps increase processing speed.",
                   "question_audio_url": null
                 }
               ],
@@ -2821,7 +2821,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese (reduced clause style): 'After analyzing the data, the scientists concluded that the proposed model is more effective.'",
+                  "question": "After analyzing the data, the scientists concluded that the proposed model is more effective.",
                   "question_audio_url": null
                 },
                 {
@@ -3083,7 +3083,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese (scientific style): 'Data collected from over 10,000 patients was analyzed using a deep learning model.'",
+                  "question": "Data collected from over 10,000 patients was analyzed using a deep learning model.",
                   "question_audio_url": null
                 }
               ],
@@ -3240,7 +3240,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ nghệ thuật văn học với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -3305,7 +3305,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'This work is considered a masterpiece of modern literature.'",
+                  "question": "This work is considered a masterpiece of modern literature.",
                   "question_audio_url": null
                 }
               ],
@@ -3734,7 +3734,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'The work is both profound and subtle.'",
+                  "question": "The work is both profound and subtle.",
                   "question_audio_url": null
                 },
                 {
@@ -3995,7 +3995,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate into Vietnamese: 'The work is both classical and richly folk-inspired.'",
+                  "question": "The work is both classical and richly folk-inspired.",
                   "question_audio_url": null
                 },
                 {
@@ -4201,7 +4201,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối thành ngữ với giá trị văn hóa",
+                  "question": "",
                   "question_audio_url": null
                 }
               ],
@@ -4378,7 +4378,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối từ môi trường với nghĩa tiếng Anh",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4443,7 +4443,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate into Vietnamese: 'Recycling waste helps reduce environmental pollution.'",
+                  "question": "Recycling waste helps reduce environmental pollution.",
                   "question_audio_url": null
                 }
               ],
@@ -4857,7 +4857,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'Not only does it reduce pollution, but it also saves costs.'",
+                  "question": "Not only does it reduce pollution, but it also saves costs.",
                   "question_audio_url": null
                 },
                 {
@@ -5138,7 +5138,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate into Vietnamese: 'Therefore, sustainable development is not just a choice but a mandatory requirement.'",
+                  "question": "Therefore, sustainable development is not just a choice but a mandatory requirement.",
                   "question_audio_url": null
                 }
               ],

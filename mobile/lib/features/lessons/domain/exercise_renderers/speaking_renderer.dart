@@ -29,14 +29,8 @@ class SpeakingRenderer extends ExerciseRenderer {
   }
 
   @override
-  Widget buildQuestion(Exercise exercise, BuildContext context) {
-    return Text(
-      exercise.question,
-      style: Theme.of(
-        context,
-      ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
-    );
-  }
+  Widget buildQuestion(Exercise exercise, BuildContext context) =>
+      const SizedBox.shrink();
 
   @override
   Widget buildInput(

@@ -93,7 +93,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ phương ngữ với vùng miền",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -138,7 +138,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate to Vietnamese using Southern dialect: \"What is this?\"",
+                  "question": "What is this?",
                   "question_audio_url": null
                 }
               ],
@@ -540,7 +540,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate to Central Vietnamese: \"Sao hôm nay nóng vậy?\"",
+                  "question": "Sao hôm nay nóng vậy?",
                   "question_audio_url": null
                 },
                 {
@@ -915,7 +915,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối trợ từ với vùng miền",
+                  "question": "",
                   "question_audio_url": null
                 }
               ],
@@ -1243,7 +1243,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối hậu tố Hán Việt với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1286,7 +1286,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate using Sino-Vietnamese: \"modernize\"",
+                  "question": "modernize",
                   "question_audio_url": null
                 }
               ],
@@ -1740,7 +1740,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "Nối từ Hán Việt với loại cấu trúc",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -1945,7 +1945,7 @@
                     "type": "translation"
                   },
                   "order_index": 1,
-                  "question": "Translate to everyday Vietnamese: \"Căn cứ Hiến pháp\"",
+                  "question": "Căn cứ Hiến pháp",
                   "question_audio_url": null
                 },
                 {
@@ -1995,7 +1995,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ Hán Việt với nghĩa Việt thuần",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2196,7 +2196,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ mượn với ngôn ngữ gốc",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2391,7 +2391,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối thể văn với chức năng",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -2725,7 +2725,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate to native Vietnamese word order: \"bạch mã\"",
+                  "question": "bạch mã",
                   "question_audio_url": null
                 },
                 {
@@ -3282,7 +3282,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ lóng với nghĩa",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -3332,7 +3332,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate: \"He speaks very wittily\"",
+                  "question": "He speaks very wittily",
                   "question_audio_url": null
                 }
               ],
@@ -4014,7 +4014,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối từ uyển chuyển với nghĩa trực tiếp",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4036,7 +4036,7 @@
                     "type": "translation"
                   },
                   "order_index": 3,
-                  "question": "Translate using a euphemism: \"She passed away last year\"",
+                  "question": "She passed away last year",
                   "question_audio_url": null
                 }
               ],
@@ -4185,7 +4185,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "Nối loại văn dân gian với đặc điểm",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4250,7 +4250,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate the proverb: \"Lá lành đùm lá rách\"",
+                  "question": "Lá lành đùm lá rách",
                   "question_audio_url": null
                 }
               ],
@@ -4570,7 +4570,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối vế đối ngẫu",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
@@ -4614,7 +4614,7 @@
                     "type": "translation"
                   },
                   "order_index": 4,
-                  "question": "Translate the proverb: \"Muốn sang thì bắc cầu kiều\"",
+                  "question": "Muốn sang thì bắc cầu kiều",
                   "question_audio_url": null
                 }
               ],
@@ -4798,7 +4798,7 @@
                     "type": "translation"
                   },
                   "order_index": 2,
-                  "question": "Translate to Vietnamese using a proverb: \"We should help those less fortunate\"",
+                  "question": "We should help those less fortunate",
                   "question_audio_url": null
                 },
                 {
@@ -4981,7 +4981,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "Nối dân ca với vùng miền",
+                  "question": "",
                   "question_audio_url": null
                 },
                 {
