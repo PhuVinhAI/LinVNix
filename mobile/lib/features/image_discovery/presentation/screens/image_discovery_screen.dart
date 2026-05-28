@@ -607,7 +607,7 @@ class _ComposeBar extends StatelessWidget {
 
   String get hintText {
     if (isLoading) return 'Analyzing...';
-    if (!hasImage) return 'Add at least one photo to send a message';
+    if (!hasImage) return 'Add a photo first';
     return 'Ask about the image...';
   }
 
