@@ -14,7 +14,7 @@ const maxImageDiscoveryImages = 5;
 final imagePickerProvider = Provider<ImagePicker>((ref) => ImagePicker());
 
 final imageDiscoveryProvider =
-    NotifierProvider.autoDispose<ImageDiscoveryNotifier, ImageDiscoveryState>(
+    NotifierProvider<ImageDiscoveryNotifier, ImageDiscoveryState>(
       ImageDiscoveryNotifier.new,
     );
 

@@ -23,25 +23,26 @@ class TextContentWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (content.translation != null)
+            _ContentTranslation(text: content.translation!, topSpacing: 0),
+          SizedBox(height: content.translation != null ? 8 : 0),
           Text(
             content.vietnameseText,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              height: 1.6,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: c.mutedForeground,
+              height: 1.5,
             ),
           ),
           if (content.phonetic != null) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               content.phonetic!,
-              style: theme.textTheme.bodyLarge?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: c.mutedForeground,
                 fontStyle: FontStyle.italic,
               ),
             ),
           ],
-          if (content.translation != null)
-            _ContentTranslation(text: content.translation!),
           if (content.notes != null) ...[
             const SizedBox(height: 16),
             Text(
@@ -79,25 +80,26 @@ class _AudioContentWidgetState extends State<AudioContentWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (widget.content.translation != null)
+            _ContentTranslation(text: widget.content.translation!, topSpacing: 0),
+          SizedBox(height: widget.content.translation != null ? 8 : 0),
           Text(
             widget.content.vietnameseText,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              height: 1.6,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: c.mutedForeground,
+              height: 1.5,
             ),
           ),
           if (widget.content.phonetic != null) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               widget.content.phonetic!,
-              style: theme.textTheme.bodyLarge?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: c.mutedForeground,
                 fontStyle: FontStyle.italic,
               ),
             ),
           ],
-          if (widget.content.translation != null)
-            _ContentTranslation(text: widget.content.translation!),
           const SizedBox(height: 24),
           if (widget.content.audioUrl != null) ...[
             AppCard(
@@ -154,6 +156,9 @@ class ImageContentWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (content.translation != null)
+            _ContentTranslation(text: content.translation!, topSpacing: 0),
+          SizedBox(height: content.translation != null ? 8 : 0),
           if (content.imageUrl != null) ...[
             ClipRRect(
               borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -187,13 +192,11 @@ class ImageContentWidget extends StatelessWidget {
           ],
           Text(
             content.vietnameseText,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              height: 1.6,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: c.mutedForeground,
+              height: 1.5,
             ),
           ),
-          if (content.translation != null)
-            _ContentTranslation(text: content.translation!, topSpacing: 8),
         ],
       ),
     );
@@ -211,6 +214,7 @@ class VideoContentWidget extends StatefulWidget {
 class _VideoContentWidgetState extends State<VideoContentWidget> {
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
@@ -218,6 +222,12 @@ class _VideoContentWidgetState extends State<VideoContentWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (widget.content.translation != null)
+            _ContentTranslation(
+              text: widget.content.translation!,
+              topSpacing: 0,
+            ),
+          SizedBox(height: widget.content.translation != null ? 8 : 0),
           if (widget.content.videoUrl != null) ...[
             Container(
               height: 220,
@@ -235,16 +245,11 @@ class _VideoContentWidgetState extends State<VideoContentWidget> {
           ],
           Text(
             widget.content.vietnameseText,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              height: 1.6,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: c.mutedForeground,
+              height: 1.5,
             ),
           ),
-          if (widget.content.translation != null)
-            _ContentTranslation(
-              text: widget.content.translation!,
-              topSpacing: 8,
-            ),
         ],
       ),
     );
@@ -502,7 +507,7 @@ class _ChatBubble extends StatelessWidget {
   }
 }
 
-/// English translation line below Vietnamese lesson content (no card chrome).
+/// English translation — displayed as the primary/large text.
 class _ContentTranslation extends StatelessWidget {
   const _ContentTranslation({
     required this.text,
@@ -514,16 +519,15 @@ class _ContentTranslation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
     final theme = Theme.of(context);
 
     return Padding(
       padding: EdgeInsets.only(top: topSpacing),
       child: Text(
         text,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: c.mutedForeground,
-          height: 1.5,
+        style: theme.textTheme.headlineSmall?.copyWith(
+          fontWeight: FontWeight.w600,
+          height: 1.6,
         ),
       ),
     );
