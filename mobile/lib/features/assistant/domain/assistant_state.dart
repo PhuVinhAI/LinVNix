@@ -29,16 +29,23 @@ class AssistantCollapsed extends AssistantState {
 
 /// Compose phase of the Mid (Hỏi) state — textarea visible, Send tappable.
 class AssistantMidCompose extends AssistantState {
-  const AssistantMidCompose();
+  const AssistantMidCompose({this.pendingInput});
+
+  /// When non-null, the compose input should be pre-filled with this text.
+  /// Set by [AssistantStateMachine.composeWithInput] after a failed turn
+  /// so the learner can edit and retry without re-typing.
+  final String? pendingInput;
 
   @override
-  bool operator ==(Object other) => other is AssistantMidCompose;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AssistantMidCompose && pendingInput == other.pendingInput;
 
   @override
-  int get hashCode => 0;
+  int get hashCode => pendingInput.hashCode;
 
   @override
-  String toString() => 'AssistantMidCompose';
+  String toString() => 'AssistantMidCompose(pendingInput: $pendingInput)';
 }
 
 /// Loading phase — spinner + per-tool status text + Stop. Entered when

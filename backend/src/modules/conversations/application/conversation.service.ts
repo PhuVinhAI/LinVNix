@@ -98,4 +98,9 @@ export class ConversationService {
     await this.findById(id);
     await this.conversationsRepository.softDeleteConversation(id);
   }
+
+  async deleteLastUserMessage(conversationId: string): Promise<void> {
+    await this.findById(conversationId);
+    await this.conversationsRepository.deleteLastUserMessage(conversationId);
+  }
 }

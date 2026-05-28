@@ -3,6 +3,7 @@ import { z } from 'zod';
 import * as fs from 'fs';
 import * as path from 'path';
 import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
+import { withParseRetry } from '../../../infrastructure/ai/ai-parse-retry';
 import { Type } from '../../../infrastructure/genai/genai-provider';
 import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
@@ -691,20 +692,17 @@ export class ExerciseGenerationService {
     );
     this.logger.log(`Debug prompt written to debug/prompt-${debugId}.txt`);
 
-    const response = await this.router.forFeature('exercise').chatStructured({
-      messages: [{ role: 'user', content: prompt }],
-      systemInstruction,
-      responseSchema,
-    });
-
-    // GenaiProvider returns { text: "..." } while OpenaiProvider returns the parsed object directly.
-    const rawText =
-      response !== null &&
-      typeof response === 'object' &&
-      'text' in (response as object)
-        ? response.text
-        : JSON.stringify(response);
-    const generated = this.parseResponse(rawText);
+    const { result: generated } = await withParseRetry(
+      () =>
+        this.router.forFeature('exercise').chatStructured({
+          messages: [{ role: 'user', content: prompt }],
+          systemInstruction,
+          responseSchema,
+        }),
+      (rawText) => this.parseResponse(rawText),
+      this.logger,
+      'ExerciseGeneration',
+    );
 
     const exercises = await this.persistExercises(generated, set);
 

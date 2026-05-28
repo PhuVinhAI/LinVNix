@@ -7,6 +7,12 @@ class ImageAnalysisApi {
 
   final Dio _dio;
 
+  static final _aiRequestOptions = Options(
+    connectTimeout: Duration.zero,
+    receiveTimeout: Duration.zero,
+    sendTimeout: Duration.zero,
+  );
+
   Future<ImageAnalysisResponse> analyze({
     required List<ImageAnalysisRequestImage> images,
     required String prompt,
@@ -19,6 +25,7 @@ class ImageAnalysisApi {
         'prompt': prompt,
         'chatHistory': chatHistory.map((message) => message.toJson()).toList(),
       },
+      options: _aiRequestOptions,
     );
 
     return ImageAnalysisResponse.fromJson(response.data!);

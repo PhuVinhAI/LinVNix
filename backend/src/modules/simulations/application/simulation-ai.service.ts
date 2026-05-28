@@ -2,6 +2,10 @@ import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { z } from 'zod';
 import { Type } from '../../../infrastructure/genai/genai-provider';
 import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
+import {
+  withParseRetry,
+  extractTokenCount,
+} from '../../../infrastructure/ai/ai-parse-retry';
 import { UsersService } from '../../users/application/users.service';
 import { ScenariosRepository } from './repositories/scenarios.repository';
 import { SimulationEndReason } from '../../../common/enums';
@@ -253,8 +257,6 @@ const SIMULATION_RESPONSE_SCHEMA = {
   required: ['messages', 'nextTurnCharacterId', 'sessionEnded'],
 };
 
-const _MAX_PARSE_RETRIES = 2;
-
 @Injectable()
 export class SimulationAiService {
   private readonly logger = new Logger(SimulationAiService.name);
@@ -287,55 +289,23 @@ export class SimulationAiService {
       request.scenario.characters,
     );
 
-    let lastError: Error | null = null;
-    const maxAttempts = _MAX_PARSE_RETRIES + 1;
-
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      const response = await this.router
-        .forFeature('simulation')
-        .chatStructured({
+    const { result: parsed, response } = await withParseRetry(
+      () =>
+        this.router.forFeature('simulation').chatStructured({
           messages: chatMessages,
           systemInstruction,
           responseSchema: SIMULATION_RESPONSE_SCHEMA,
-        });
-
-      // GenaiProvider returns { text: "...", usageMetadata: {...} }, OpenaiProvider returns the parsed object directly.
-      const rawText =
-        response !== null &&
-        typeof response === 'object' &&
-        'text' in (response as object)
-          ? response.text
-          : JSON.stringify(response);
-
-      const tokenCount =
-        response !== null &&
-        typeof response === 'object' &&
-        'usageMetadata' in (response as object)
-          ? response.usageMetadata?.totalTokenCount
-          : undefined;
-
-      try {
-        const parsed = this.parseAiResponse(rawText);
-        return {
-          ...parsed,
-          feedback: parsed.feedback ?? null,
-          tokenCount,
-        };
-      } catch (error) {
-        lastError = error instanceof Error ? error : new Error(String(error));
-        if (attempt < maxAttempts - 1) {
-          this.logger.warn(
-            `Simulation AI response parse failed (attempt ${attempt + 1}/${maxAttempts}), retrying`,
-          );
-          continue;
-        }
-      }
-    }
-
-    throw (
-      lastError ??
-      new BadRequestException('AI response parse failed. Please try again.')
+        }),
+      (rawText) => this.parseAiResponse(rawText),
+      this.logger,
+      'Simulation',
     );
+
+    return {
+      ...parsed,
+      feedback: parsed.feedback ?? null,
+      tokenCount: extractTokenCount(response),
+    };
   }
 
   buildSystemInstruction(

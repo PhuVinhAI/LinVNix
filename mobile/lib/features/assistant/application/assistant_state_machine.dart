@@ -211,6 +211,16 @@ class AssistantStateMachine extends Notifier<AssistantState> {
     _setActiveState(const AssistantMidCompose());
   }
 
+  /// Error recovery — transitions to Compose with [input] pre-filled so
+  /// the learner can edit and retry without re-typing. Valid from MidError.
+  void composeWithInput(String input) {
+    final s = _activeState;
+    if (s is! AssistantMidError) {
+      throw _invalid('composeWithInput');
+    }
+    _setActiveState(AssistantMidCompose(pendingInput: input));
+  }
+
   /// "Reset" button — drops the current conversation and returns to
   /// Compose. Valid from any non-Collapsed state. The chat notifier
   /// separately clears its cached `conversationId`.

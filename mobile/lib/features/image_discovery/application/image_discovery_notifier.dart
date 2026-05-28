@@ -67,12 +67,14 @@ class ImageDiscoveryState {
     this.messages = const [],
     this.isLoading = false,
     this.error,
+    this.failedOutboundContent,
   });
 
   final List<ImageDiscoveryImage> images;
   final List<ImageDiscoveryMessage> messages;
   final bool isLoading;
   final String? error;
+  final String? failedOutboundContent;
 
   bool get hasImage => images.isNotEmpty;
   bool get canAddImages => images.length < maxImageDiscoveryImages;
@@ -82,12 +84,16 @@ class ImageDiscoveryState {
     List<ImageDiscoveryMessage>? messages,
     bool? isLoading,
     Object? error = _unsetError,
+    Object? failedOutboundContent = _unsetError,
   }) {
     return ImageDiscoveryState(
       images: images ?? this.images,
       messages: messages ?? this.messages,
       isLoading: isLoading ?? this.isLoading,
       error: identical(error, _unsetError) ? this.error : error as String?,
+      failedOutboundContent: identical(failedOutboundContent, _unsetError)
+          ? this.failedOutboundContent
+          : failedOutboundContent as String?,
     );
   }
 }
@@ -214,8 +220,10 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
     } catch (_) {
       if (session != _session) return;
       state = state.copyWith(
+        messages: previousMessages,
         isLoading: false,
         error: 'Unable to analyze image. Please try again.',
+        failedOutboundContent: trimmed,
       );
     }
   }

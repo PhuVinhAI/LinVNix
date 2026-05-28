@@ -67,9 +67,22 @@ class _AssistantQuestionSheetState
     // without an extra tap.
     ref.listen(assistantStateMachineProvider, (prev, next) {
       if (next is AssistantMidCompose && prev is! AssistantMidCompose) {
+        final pending = next.pendingInput;
+        if (pending != null && pending.isNotEmpty) {
+          _controller.text = pending;
+          _controller.selection =
+              TextSelection.collapsed(offset: pending.length);
+        }
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _focusNode.requestFocus();
         });
+      }
+      if (next is AssistantMidError && prev is! AssistantMidError) {
+        AppToast.show(
+          context,
+          message: next.message,
+          type: AppToastType.error,
+        );
       }
       // Defensive: if anything transitions us to Collapsed (e.g.
       // programmatic flow) and the sheet is still mounted, dismiss it.

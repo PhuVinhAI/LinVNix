@@ -213,12 +213,26 @@ class AssistantChatNotifier {
     }
   }
 
-  /// User tapped "Thử lại" on a pre-token error. Re-sends the cached
-  /// `lastInput` so the learner doesn't lose their question.
+  /// User tapped "Thử lại" on a pre-token error. Deletes the orphaned
+  /// user message from the backend (best-effort), then restores the
+  /// input to Compose so the learner can edit and resend.
   Future<void> retry() async {
     final s = _activeState(_ref.read(assistantStateMachineProvider));
     if (s is! AssistantMidError) return;
-    await sendMessage(s.lastInput);
+    final lastInput = s.lastInput;
+    if (_conversationId != null) {
+      unawaited(_deleteLastUserMessage(_conversationId!));
+    }
+    _ref
+        .read(assistantStateMachineProvider.notifier)
+        .composeWithInput(lastInput);
+  }
+
+  Future<void> _deleteLastUserMessage(String conversationId) async {
+    try {
+      final api = _ref.read(aiApiProvider);
+      await api.deleteLastUserMessage(conversationId);
+    } catch (_) {}
   }
 
   void _handleEvent(AssistantEvent event) {

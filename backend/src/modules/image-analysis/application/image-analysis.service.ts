@@ -9,6 +9,7 @@ import {
   GenaiProvider,
   Type,
 } from '../../../infrastructure/genai/genai-provider';
+import { withParseRetry } from '../../../infrastructure/ai/ai-parse-retry';
 import {
   AnalyzeImageDto,
   SUPPORTED_IMAGE_MIME_TYPES,
@@ -154,39 +155,32 @@ export class ImageAnalysisService {
       },
     );
 
-    const response = await this.callAi(
-      prompt,
-      images,
-      chatHistory,
-      systemInstruction,
-    );
-    return this.parseResponse(response.text);
-  }
-
-  private async callAi(
-    prompt: string,
-    images: AnalyzeImageDto['images'],
-    chatHistory: NonNullable<AnalyzeImageDto['chatHistory']>,
-    systemInstruction: string,
-  ) {
     try {
-      return await this.genaiService.chatStructured({
-        messages: [
-          ...chatHistory,
-          {
-            role: 'user',
-            content: prompt,
-            attachments: images.map((image) => ({
-              type: 'image' as const,
-              mimeType: image.mimeType,
-              data: image.base64.trim(),
-            })),
-          },
-        ],
-        systemInstruction,
-        responseSchema: IMAGE_ANALYSIS_RESPONSE_SCHEMA,
-      });
+      const { result } = await withParseRetry(
+        () =>
+          this.genaiService.chatStructured({
+            messages: [
+              ...chatHistory,
+              {
+                role: 'user',
+                content: prompt,
+                attachments: images.map((image) => ({
+                  type: 'image' as const,
+                  mimeType: image.mimeType,
+                  data: image.base64.trim(),
+                })),
+              },
+            ],
+            systemInstruction,
+            responseSchema: IMAGE_ANALYSIS_RESPONSE_SCHEMA,
+          }),
+        (rawText) => this.parseResponse(rawText),
+        this.logger,
+        'ImageAnalysis',
+      );
+      return result;
     } catch (error) {
+      if (error instanceof BadRequestException) throw error;
       this.logger.error(
         `Image analysis AI call failed: ${(error as Error).message}`,
         (error as Error).stack,

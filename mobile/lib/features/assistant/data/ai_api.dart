@@ -54,6 +54,9 @@ class AiApi {
         headers: const {
           'Accept': 'text/event-stream',
         },
+        connectTimeout: Duration.zero,
+        receiveTimeout: Duration.zero,
+        sendTimeout: Duration.zero,
       ),
       cancelToken: cancelToken,
     );
@@ -109,5 +112,14 @@ class AiApi {
   /// Deletes a conversation.
   Future<void> deleteConversation(String id) async {
     await _dio.delete<void>('/ai/conversations/$id');
+  }
+
+  /// Hard-deletes the most recent user message in a conversation.
+  /// Fire-and-forget safe — a 404 or network error is silently ignored
+  /// by the caller since the rollback is best-effort.
+  Future<void> deleteLastUserMessage(String conversationId) async {
+    await _dio.delete<void>(
+      '/ai/conversations/$conversationId/messages/last-user',
+    );
   }
 }

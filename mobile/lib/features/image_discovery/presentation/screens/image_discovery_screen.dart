@@ -78,6 +78,20 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
           previous?.isLoading != next.isLoading) {
         _scrollToBottom();
       }
+      if (next.error != null && next.error != previous?.error) {
+        final failed = next.failedOutboundContent;
+        if (failed != null && failed.isNotEmpty) {
+          _inputController.text = failed;
+          _inputController.selection =
+              TextSelection.collapsed(offset: failed.length);
+          _focusNode.requestFocus();
+        }
+        AppToast.show(
+          context,
+          message: next.error!,
+          type: AppToastType.error,
+        );
+      }
     });
 
     return Scaffold(
@@ -118,7 +132,6 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
                 scrollController: _scrollController,
               ),
             ),
-            if (state.error != null) _ErrorBanner(message: state.error!),
             if (state.hasImage)
               _QuickActions(
                 enabled: !state.isLoading,
@@ -399,45 +412,6 @@ class _LoadingMessage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ErrorBanner extends StatelessWidget {
-  const _ErrorBanner({required this.message});
-
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: c.error.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: c.error.withValues(alpha: 0.24)),
-        ),
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Row(
-          children: [
-            Icon(Icons.error_outline, color: c.error, size: 18),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: Text(
-                message,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodySmall,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -79,4 +79,14 @@ export class ConversationsRepository {
   async softDeleteConversation(id: string): Promise<void> {
     await this.conversationRepo.softDelete(id);
   }
+
+  async deleteLastUserMessage(conversationId: string): Promise<void> {
+    const message = await this.messageRepo.findOne({
+      where: { conversationId, role: 'user' as any },
+      order: { createdAt: 'DESC' },
+    });
+    if (message) {
+      await this.messageRepo.delete(message.id);
+    }
+  }
 }
