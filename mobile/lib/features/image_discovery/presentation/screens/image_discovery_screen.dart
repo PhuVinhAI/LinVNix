@@ -47,6 +47,25 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
     await ref.read(imageDiscoveryProvider.notifier).pickImage(source);
   }
 
+  void _openAddImageSheet() {
+    AppMenuBottomSheet.show(
+      context,
+      title: 'Add a photo',
+      items: [
+        AppMenuBottomSheetItem(
+          label: 'Take Photo',
+          icon: Icons.camera_alt_outlined,
+          onTap: () => unawaited(_pick(ImageSource.camera)),
+        ),
+        AppMenuBottomSheetItem(
+          label: 'Upload from Library',
+          icon: Icons.image_outlined,
+          onTap: () => unawaited(_pick(ImageSource.gallery)),
+        ),
+      ],
+    );
+  }
+
   Future<void> _send([String? prompt]) async {
     final text = (prompt ?? _inputController.text).trim();
     if (text.isEmpty) return;
@@ -68,10 +87,22 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
   bool _canReset(ImageDiscoveryState state) =>
       state.hasImage || state.messages.isNotEmpty || state.error != null;
 
+  void _openImagesViewer(List<ImageDiscoveryImage> images) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => _ImagesViewerScreen(images: images),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(imageDiscoveryProvider);
     final c = AppTheme.colors(context);
+    final preSend = state.messages.isEmpty;
+    final showImageStrip = preSend && state.hasImage;
+    final showCenteredPlaceholder = preSend && !state.hasImage;
+    final showHeaderImagesIcon = !preSend && state.hasImage;
 
     ref.listen(imageDiscoveryProvider, (previous, next) {
       if (previous?.messages.length != next.messages.length ||
@@ -99,6 +130,11 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
       appBar: AppBar(
         title: const Text('Image Discovery'),
         actions: [
+          if (showHeaderImagesIcon)
+            _HeaderImagesAction(
+              count: state.images.length,
+              onTap: () => _openImagesViewer(state.images),
+            ),
           if (_canReset(state))
             IconButton(
               icon: const Icon(Icons.refresh),
@@ -112,27 +148,29 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
         bottom: false,
         child: Column(
           children: [
-            _ImageActions(
-              isLoading: state.isLoading,
-              onCamera: () => _pick(ImageSource.camera),
-              onGallery: () => _pick(ImageSource.gallery),
-              canAddImages: state.canAddImages,
-            ),
-            if (state.images.isNotEmpty)
-              _ImageGrid(
+            if (showImageStrip)
+              _ImageStrip(
                 images: state.images,
+                canAddImages: state.canAddImages,
+                isLoading: state.isLoading,
+                onAdd: _openAddImageSheet,
                 onRemove: (id) =>
                     ref.read(imageDiscoveryProvider.notifier).removeImage(id),
               )
-            else
+            else if (!showCenteredPlaceholder)
               Divider(color: c.border, height: 1),
             Expanded(
-              child: _MessageList(
-                state: state,
-                scrollController: _scrollController,
-              ),
+              child: showCenteredPlaceholder
+                  ? _CenteredPlaceholder(
+                      enabled: !state.isLoading,
+                      onTap: _openAddImageSheet,
+                    )
+                  : _MessageList(
+                      state: state,
+                      scrollController: _scrollController,
+                    ),
             ),
-            if (state.hasImage)
+            if (showImageStrip)
               _QuickActions(
                 enabled: !state.isLoading,
                 onPrompt: _send,
@@ -151,82 +189,153 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
   }
 }
 
-class _ImageActions extends StatelessWidget {
-  const _ImageActions({
-    required this.isLoading,
-    required this.onCamera,
-    required this.onGallery,
-    required this.canAddImages,
-  });
+class _HeaderImagesAction extends StatelessWidget {
+  const _HeaderImagesAction({required this.count, required this.onTap});
 
-  final bool isLoading;
-  final VoidCallback onCamera;
-  final VoidCallback onGallery;
-  final bool canAddImages;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.lg,
-        AppSpacing.sm,
-        AppSpacing.lg,
-        AppSpacing.sm,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: AppButton(
-              variant: AppButtonVariant.secondary,
-              icon: const Icon(Icons.camera_alt_outlined),
-              label: 'Take Photo',
-              onPressed: isLoading || !canAddImages ? null : onCamera,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(
-            child: AppButton(
-              variant: AppButtonVariant.secondary,
-              icon: const Icon(Icons.image_outlined),
-              label: 'Upload',
-              onPressed: isLoading || !canAddImages ? null : onGallery,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ImageGrid extends StatelessWidget {
-  const _ImageGrid({required this.images, required this.onRemove});
-
-  static const _thumbnailSize = 96.0;
-
-  final List<ImageDiscoveryImage> images;
-  final ValueChanged<String> onRemove;
+  final int count;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
 
+    return IconButton(
+      tooltip: 'View attached photos ($count)',
+      onPressed: onTap,
+      icon: SizedBox(
+        width: 28,
+        height: 24,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            const Positioned(
+              left: 0,
+              top: 0,
+              child: Icon(Icons.photo_library_outlined),
+            ),
+            Positioned(
+              right: -4,
+              top: -4,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                constraints: const BoxConstraints(
+                  minWidth: 16,
+                  minHeight: 16,
+                ),
+                decoration: BoxDecoration(
+                  color: c.primary,
+                  borderRadius: BorderRadius.circular(AppRadius.full),
+                  border: Border.all(color: c.background, width: 1.5),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '$count',
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: c.primaryForeground,
+                    height: 1.1,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CenteredPlaceholder extends StatelessWidget {
+  const _CenteredPlaceholder({required this.enabled, required this.onTap});
+
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: GestureDetector(
+          onTap: enabled ? onTap : null,
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              color: c.muted.withValues(alpha: 0.4),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1.5),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add_rounded, size: 56, color: c.mutedForeground),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  'Add a photo',
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
+                    color: c.mutedForeground,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ImageStrip extends StatelessWidget {
+  const _ImageStrip({
+    required this.images,
+    required this.canAddImages,
+    required this.isLoading,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  static const _thumbnailSize = 96.0;
+
+  final List<ImageDiscoveryImage> images;
+  final bool canAddImages;
+  final bool isLoading;
+  final VoidCallback onAdd;
+  final ValueChanged<String> onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final itemCount = images.length + (canAddImages ? 1 : 0);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
-        0,
+        AppSpacing.sm,
         AppSpacing.lg,
         AppSpacing.sm,
       ),
       child: SizedBox(
         height: _thumbnailSize,
         child: ListView.separated(
-          key: const ValueKey('image_discovery_image_grid'),
+          key: const ValueKey('image_discovery_image_strip'),
           scrollDirection: Axis.horizontal,
-          itemCount: images.length,
-          separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
+          itemCount: itemCount,
+          separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
           itemBuilder: (context, index) {
+            if (index >= images.length) {
+              return _AddTile(
+                size: _thumbnailSize,
+                enabled: !isLoading,
+                onTap: onAdd,
+              );
+            }
+
             final image = images[index];
 
             return SizedBox(
@@ -270,6 +379,37 @@ class _ImageGrid extends StatelessWidget {
   }
 }
 
+class _AddTile extends StatelessWidget {
+  const _AddTile({
+    required this.size,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final double size;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: c.muted.withValues(alpha: 0.4),
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(color: c.border, width: 1.5),
+        ),
+        child: Icon(Icons.add_rounded, size: 32, color: c.mutedForeground),
+      ),
+    );
+  }
+}
+
 class _MessageList extends StatelessWidget {
   const _MessageList({required this.state, required this.scrollController});
 
@@ -278,10 +418,6 @@ class _MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state.messages.isEmpty && !state.isLoading) {
-      return const _EmptyImageDiscoveryState();
-    }
-
     return ListView.builder(
       controller: scrollController,
       padding: const EdgeInsets.symmetric(
@@ -296,23 +432,6 @@ class _MessageList extends StatelessWidget {
 
         return _MessageBubble(message: state.messages[index]);
       },
-    );
-  }
-}
-
-class _EmptyImageDiscoveryState extends StatelessWidget {
-  const _EmptyImageDiscoveryState();
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-
-    return Center(
-      child: Icon(
-        Icons.photo_camera_outlined,
-        size: 72,
-        color: c.mutedForeground.withValues(alpha: 0.6),
-      ),
     );
   }
 }
@@ -508,6 +627,33 @@ class _ComposeBar extends StatelessWidget {
         enabled: !isLoading,
         onSend: canSend ? onSend : null,
         onSubmitted: canSend ? (_) => onSend() : null,
+      ),
+    );
+  }
+}
+
+class _ImagesViewerScreen extends StatelessWidget {
+  const _ImagesViewerScreen({required this.images});
+
+  final List<ImageDiscoveryImage> images;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Attached photos (${images.length})')),
+      body: SafeArea(
+        child: ListView.separated(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          itemCount: images.length,
+          separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.md),
+          itemBuilder: (context, index) {
+            final image = images[index];
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              child: Image.memory(image.bytes, fit: BoxFit.cover),
+            );
+          },
+        ),
       ),
     );
   }
