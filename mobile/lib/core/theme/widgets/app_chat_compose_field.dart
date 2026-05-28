@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 
+import '../../services/speech_recognizer.dart';
 import '../app_theme.dart';
 
 /// Multiline chat composer: send action sits inline on a single line and
 /// moves below the field once the text wraps to two or more lines.
+/// A mic button on the left lets users dictate text via speech-to-text.
 class AppChatComposeField extends StatefulWidget {
   const AppChatComposeField({
     super.key,
@@ -41,10 +46,17 @@ class AppChatComposeField extends StatefulWidget {
 }
 
 class _AppChatComposeFieldState extends State<AppChatComposeField> {
+  final _recognizer = AppSpeechRecognizer.instance;
+  StreamSubscription<String>? _statusSub;
+  StreamSubscription<String>? _errorSub;
+  bool _isListening = false;
+
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_onTextChanged);
+    _statusSub = _recognizer.statuses.listen(_handleStatus);
+    _errorSub = _recognizer.errors.listen(_handleError);
   }
 
   @override
@@ -59,10 +71,52 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
   @override
   void dispose() {
     widget.controller.removeListener(_onTextChanged);
+    _statusSub?.cancel();
+    _errorSub?.cancel();
+    if (_isListening) {
+      unawaited(_recognizer.stop());
+    }
     super.dispose();
   }
 
   void _onTextChanged() => setState(() {});
+
+  void _handleStatus(String status) {
+    if (!mounted) return;
+    final listening = status == 'listening';
+    if (_isListening != listening) {
+      setState(() => _isListening = listening);
+    }
+  }
+
+  void _handleError(String _) {
+    if (!mounted) return;
+    setState(() => _isListening = false);
+  }
+
+  Future<void> _toggleVoice() async {
+    if (!widget.enabled) return;
+
+    if (_isListening) {
+      await _recognizer.stop();
+      return;
+    }
+
+    final ready = await _recognizer.ensureReady();
+    if (!mounted || !ready) return;
+
+    await _recognizer.listen(onResult: _handleSpeechResult);
+    if (mounted) setState(() => _isListening = true);
+  }
+
+  void _handleSpeechResult(SpeechRecognitionResult result) {
+    final transcript = result.recognizedWords.trim();
+    if (!mounted || transcript.isEmpty) return;
+    widget.controller.text = transcript;
+    widget.controller.selection = TextSelection.collapsed(
+      offset: transcript.length,
+    );
+  }
 
   TextStyle _textStyle(AppColors c) => GoogleFonts.inter(
         fontSize: AppTypography.bodyMedium,
@@ -84,8 +138,9 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
     if (text.contains('\n')) return true;
 
     const horizontalPadding = AppSpacing.lg + AppSpacing.sm;
-    const rowReserved =
-        AppChatComposeField._buttonSize + AppChatComposeField._actionGap;
+    // Reserve space for both mic button and send button
+    const rowReserved = AppChatComposeField._buttonSize * 2 +
+        AppChatComposeField._actionGap * 2;
     final rowTextWidth = containerWidth - horizontalPadding - rowReserved;
     if (rowTextWidth <= 0) return false;
 
@@ -108,6 +163,30 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
         filled: false,
         fillColor: Colors.transparent,
       );
+
+  Widget _buildMicButton(AppColors c) {
+    final active = _isListening;
+    final canTap = widget.enabled;
+    final bg = active ? c.primary : c.muted;
+    final fg = active ? c.primaryForeground : c.mutedForeground;
+
+    return GestureDetector(
+      onTap: canTap ? _toggleVoice : null,
+      child: Container(
+        width: AppChatComposeField._buttonSize,
+        height: AppChatComposeField._buttonSize,
+        decoration: BoxDecoration(
+          color: canTap ? bg : c.muted.withValues(alpha: 0.5),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          active ? Icons.stop_rounded : Icons.mic_rounded,
+          color: canTap ? fg : c.mutedForeground.withValues(alpha: 0.4),
+          size: 18,
+        ),
+      ),
+    );
+  }
 
   Widget _buildTrailing(AppColors c) {
     final canTap = widget.trailingEnabled && widget.onSend != null;
@@ -141,6 +220,7 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final multiline = _isMultiline(constraints.maxWidth);
+        final mic = _buildMicButton(c);
         final trailing = _buildTrailing(c);
         final textField = TextField(
           key: const ValueKey('app_chat_compose_field'),
@@ -163,13 +243,11 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
             borderRadius: BorderRadius.circular(AppRadius.lg),
           ),
           padding: const EdgeInsets.only(
-            left: AppSpacing.lg,
+            left: AppSpacing.sm,
             right: AppSpacing.sm,
             top: AppSpacing.sm,
             bottom: AppSpacing.sm,
           ),
-          // Keep the TextField in a stable Row slot so toggling multiline
-          // layout does not dispose it and dismiss the keyboard.
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -177,6 +255,17 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Offstage(offstage: multiline, child: mic),
+                  Offstage(
+                    offstage: multiline,
+                    child: const SizedBox(
+                      width: AppChatComposeField._actionGap,
+                    ),
+                  ),
+                  // Extra left padding when mic is hidden so text aligns
+                  // with the same inset as the right side (AppSpacing.lg).
+                  if (multiline)
+                    const SizedBox(width: AppSpacing.lg - AppSpacing.sm),
                   Expanded(child: textField),
                   if (!multiline) ...[
                     const SizedBox(width: AppChatComposeField._actionGap),
@@ -185,9 +274,9 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
                 ],
               ),
               if (multiline)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: trailing,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [mic, trailing],
                 ),
             ],
           ),

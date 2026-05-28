@@ -288,23 +288,31 @@ class _LoadingBody extends ConsumerWidget {
         color: c.muted.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
-      padding: const EdgeInsets.only(
-        left: AppSpacing.lg,
-        right: AppSpacing.sm,
-        top: AppSpacing.lg,
-        bottom: AppSpacing.sm,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+          // Disabled mic button — visible but non-interactive
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: c.muted.withValues(alpha: 0.5),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.mic_rounded,
+              color: c.mutedForeground.withValues(alpha: 0.4),
+              size: 18,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const AppSpinner(),
-                const SizedBox(width: AppSpacing.md),
+                const SizedBox(width: AppSpacing.sm),
                 Flexible(
                   child: Text(
                     statusText,
@@ -318,22 +326,20 @@ class _LoadingBody extends ConsumerWidget {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: () => ref.read(assistantChatNotifierProvider).stop(),
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: c.error,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.stop_rounded,
-                  color: c.errorForeground,
-                  size: 20,
-                ),
+          const SizedBox(width: AppSpacing.sm),
+          GestureDetector(
+            onTap: () => ref.read(assistantChatNotifierProvider).stop(),
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: c.error,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.stop_rounded,
+                color: c.errorForeground,
+                size: 20,
               ),
             ),
           ),

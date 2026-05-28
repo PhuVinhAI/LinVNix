@@ -668,6 +668,7 @@ class _ComposeBar extends StatelessWidget {
       child: AppChatComposeField(
         controller: controller,
         hintText: 'Type a message...',
+        enabled: !inFlight,
         onSend: inFlight ? onStop : onSend,
         onSubmitted: (_) {
           if (!inFlight) onSend();
@@ -677,6 +678,7 @@ class _ComposeBar extends StatelessWidget {
         trailingColor: inFlight ? AppTheme.colors(context).error : null,
         trailingIconColor:
             inFlight ? AppTheme.colors(context).errorForeground : null,
+        trailingEnabled: true,
       ),
     );
   }
