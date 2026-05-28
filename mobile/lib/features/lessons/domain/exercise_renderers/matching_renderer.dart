@@ -39,27 +39,18 @@ class MatchingRenderer extends ExerciseRenderer {
   ) {
     final options = exercise.options as MatchingOptions;
     final matches = (currentAnswer is List<MatchPair>) ? currentAnswer : <MatchPair>[];
-    final matchedLeft = matches.map((m) => m.left).toSet();
-    final matchedRight = matches.map((m) => m.right).toSet();
-    final shuffledRight = List<String>.from(
-      options.pairs.map((p) => p.right).toList(),
-    )..shuffle();
-
     return _MatchingInput(
       leftItems: options.pairs.map((p) => p.left).toList(),
-      rightItems: shuffledRight,
+      rightItems: options.pairs.map((p) => p.right).toList(),
       matches: matches,
-      matchedLeft: matchedLeft,
-      matchedRight: matchedRight,
+      matchedLeft: matches.map((m) => m.left).toSet(),
+      matchedRight: matches.map((m) => m.right).toSet(),
       onMatchAdded: (left, right) {
-        final updated = List<MatchPair>.from(matches)
-          ..add(MatchPair(left: left, right: right));
-        onAnswerChanged(updated);
+        onAnswerChanged(List<MatchPair>.from(matches)..add(MatchPair(left: left, right: right)));
       },
       onMatchRemoved: (pair) {
-        final updated = List<MatchPair>.from(matches)
-          ..removeWhere((m) => m.left == pair.left && m.right == pair.right);
-        onAnswerChanged(updated);
+        onAnswerChanged(List<MatchPair>.from(matches)
+          ..removeWhere((m) => m.left == pair.left && m.right == pair.right));
       },
     );
   }
@@ -90,6 +81,13 @@ class _MatchingInput extends StatefulWidget {
 
 class _MatchingInputState extends State<_MatchingInput> {
   String? _selectedLeft;
+  late List<String> _shuffledRight;
+
+  @override
+  void initState() {
+    super.initState();
+    _shuffledRight = List<String>.from(widget.rightItems)..shuffle();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +255,7 @@ class _MatchingInputState extends State<_MatchingInput> {
             // Right column
             Expanded(
               child: Column(
-                children: widget.rightItems.map((item) {
+                children: _shuffledRight.map((item) {
                   final isMatched = widget.matchedRight.contains(item);
                   final canSelect = _selectedLeft != null && !isMatched;
 

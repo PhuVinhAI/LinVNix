@@ -253,7 +253,7 @@ class _ListeningInputState extends State<_ListeningInput> {
                   SizedBox.square(
                     dimension: 96,
                     child: CircularProgressIndicator(
-                      value: progress == 0 && !_isPlaying ? null : progress,
+                      value: progress,
                       strokeWidth: 4,
                       color: visuals.accent,
                       backgroundColor: visuals.accent.withValues(alpha: 0.15),
