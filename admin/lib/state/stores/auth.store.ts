@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { User } from '../../core/domain/entities/User';
-import { AuthService } from '../../core/application/services/auth.service';
-import { authRepository } from '../../core/infrastructure/repositories/AuthRepository';
+import { AuthService } from '../../features/auth/application/auth.service';
+import { authRepository } from '../../features/auth/infrastructure/AuthRepository';
 import type { LoginRequest } from '../../core/domain/types/api.types';
 
 /**
