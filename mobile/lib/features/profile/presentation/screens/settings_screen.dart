@@ -43,7 +43,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 AppButton(
-                  label: 'Retry',
+                  label: S.of(context).retryButton,
                   variant: AppButtonVariant.outline,
                   onPressed: () =>
                       ref.read(userProfileProvider.notifier).refresh(),
@@ -85,8 +85,8 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 _SettingsTile(
                   icon: Icons.delete_forever_outlined,
-                  title: 'Delete account',
-                  subtitle: 'Permanently remove your account and data',
+                  title: S.of(context).deleteAccountTitle,
+                  subtitle: S.of(context).permanentlyRemoveAccountData,
                   isDestructive: true,
                   onTap: () => _showDeleteAccountDialog(context, ref),
                 ),
@@ -102,7 +102,7 @@ class SettingsScreen extends ConsumerWidget {
             const DailyGoalSection(),
             const SizedBox(height: AppSpacing.xl),
             AppButton(
-              label: 'Log out',
+              label: S.of(context).logOutLabel,
               variant: AppButtonVariant.outline,
               icon: const Icon(Icons.logout),
               onPressed: () => _showLogoutDialog(context, ref),
@@ -127,15 +127,15 @@ class SettingsScreen extends ConsumerWidget {
     AppDialog.show(
       context,
       builder: (ctx) => AppDialog(
-        title: 'Log out',
-        content: 'Are you sure you want to log out?',
+        title: S.of(context).logOutLabel,
+        content: S.of(context).areYouSureLogOut,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(ctx),
           ),
           AppDialogAction(
-            label: 'Log out',
+            label: S.of(context).logOutLabel,
             isPrimary: true,
             onPressed: () async {
               Navigator.pop(ctx);
@@ -163,14 +163,14 @@ class SettingsScreen extends ConsumerWidget {
       builder: (ctx) => AppDialog(
         title: S.of(context).changePasswordTitle,
         content:
-            'We will send a verification code to ${profile.email}. Continue?',
+            S.of(context).sendVerificationCodeContinueParam(profile.email),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(ctx, false),
           ),
           AppDialogAction(
-            label: 'Continue',
+            label: S.of(context).authContinueHome,
             isPrimary: true,
             onPressed: () => Navigator.pop(ctx, true),
           ),
@@ -196,7 +196,7 @@ class SettingsScreen extends ConsumerWidget {
       if (context.mounted) {
         AppToast.show(
           context,
-          message: 'Could not start password reset',
+          message: S.of(context).couldNotStartPasswordReset,
           type: AppToastType.error,
         );
       }
@@ -209,16 +209,14 @@ class SettingsScreen extends ConsumerWidget {
       builder: (ctx) => AppDialog(
         title: S.of(context).clearDataTitle,
         content:
-            'This permanently deletes all your learning data from our servers: '
-            'progress, exercise results, bookmarks, daily goals, and AI chat history. '
-            'Your account will remain active but you will need to complete onboarding again.',
+            S.of(context).clearDataWarningDesc,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(ctx),
           ),
           AppDialogAction(
-            label: 'Delete data',
+            label: S.of(context).deleteData,
             isPrimary: true,
             onPressed: () async {
               Navigator.pop(ctx);
@@ -254,7 +252,7 @@ class SettingsScreen extends ConsumerWidget {
                 if (context.mounted) {
                   AppToast.show(
                     context,
-                    message: 'All learning data has been deleted',
+                    message: S.of(context).allLearningDataDeleted,
                     type: AppToastType.success,
                   );
                   context.go('/onboarding');
@@ -271,7 +269,7 @@ class SettingsScreen extends ConsumerWidget {
                 if (context.mounted) {
                   AppToast.show(
                     context,
-                    message: 'Could not clear data',
+                    message: S.of(context).couldNotClearData,
                     type: AppToastType.error,
                   );
                 }
@@ -287,17 +285,16 @@ class SettingsScreen extends ConsumerWidget {
     AppDialog.show(
       context,
       builder: (ctx) => AppDialog(
-        title: 'Delete account',
+        title: S.of(context).deleteAccountTitle,
         content:
-            'This will permanently delete your account and all associated data. '
-            'This action cannot be undone.',
+            '${S.of(context).deleteAccountWarningDesc1}${S.of(context).actionCannotBeUndone}',
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(ctx),
           ),
           AppDialogAction(
-            label: 'Delete account',
+            label: S.of(context).deleteAccountTitle,
             isPrimary: true,
             onPressed: () async {
               Navigator.pop(ctx);
@@ -329,7 +326,7 @@ class SettingsScreen extends ConsumerWidget {
                 if (context.mounted) {
                   AppToast.show(
                     context,
-                    message: 'Your account has been deleted',
+                    message: S.of(context).accountDeletedSuccess,
                     type: AppToastType.success,
                   );
                   context.go('/login');
@@ -346,7 +343,7 @@ class SettingsScreen extends ConsumerWidget {
                 if (context.mounted) {
                   AppToast.show(
                     context,
-                    message: 'Could not delete account',
+                    message: S.of(context).couldNotDeleteAccount,
                     type: AppToastType.error,
                   );
                 }
@@ -393,20 +390,31 @@ class SettingsScreen extends ConsumerWidget {
               children: [
                 AppInput(
                   controller: fullNameController,
-                  label: 'Full name',
+                  label: S.of(context).nameLabel,
                 ),
                 const SizedBox(height: 16),
                 AppDropdownField<String>(
-                  label: 'Native language',
+                  label: S.of(context).nativeLanguageLabel,
                   value: selectedLanguage,
                   items: languages,
+                  itemLabelBuilder: (lang) => switch (lang) {
+                    'English' => S.of(context).languageEnglish,
+                    'Chinese' => S.of(context).languageChinese,
+                    'Japanese' => S.of(context).languageJapanese,
+                    'Korean' => S.of(context).languageKorean,
+                    'French' => S.of(context).languageFrench,
+                    'German' => S.of(context).languageGerman,
+                    'Spanish' => S.of(context).languageSpanish,
+                    'Vietnamese' => S.of(context).languageVietnamese,
+                    _ => lang,
+                  },
                   onChanged: (value) {
                     setState(() => selectedLanguage = value);
                   },
                 ),
                 const SizedBox(height: 16),
                 AppDropdownField<String>(
-                  label: 'Current level',
+                  label: S.of(context).currentLevelLabel,
                   value: selectedLevel,
                   items: levels,
                   onChanged: (value) {
@@ -415,10 +423,10 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 AppDropdownField<String>(
-                  label: 'Preferred dialect',
+                  label: S.of(context).preferredDialectLabel,
                   value: selectedDialect,
                   items: dialects,
-                  itemLabelBuilder: formatDialect,
+                  itemLabelBuilder: (val) => formatDialect(context, val),
                   onChanged: (value) {
                     setState(() => selectedDialect = value);
                   },
@@ -428,11 +436,11 @@ class SettingsScreen extends ConsumerWidget {
           ),
           actions: [
             AppDialogAction(
-              label: 'Cancel',
+              label: S.of(context).cancelButton2,
               onPressed: () => Navigator.pop(context),
             ),
             AppDialogAction(
-              label: 'Save',
+              label: S.of(context).saveLabel,
               isPrimary: true,
               onPressed: () async {
                 Navigator.pop(context);
@@ -446,7 +454,7 @@ class SettingsScreen extends ConsumerWidget {
                   if (context.mounted) {
                     AppToast.show(
                       context,
-                      message: 'Profile updated',
+                      message: S.of(context).profileUpdated,
                       type: AppToastType.success,
                     );
                   }
@@ -454,7 +462,7 @@ class SettingsScreen extends ConsumerWidget {
                   if (context.mounted) {
                     AppToast.show(
                       context,
-                      message: 'Failed to update profile: $e',
+                      message: S.of(context).failedToUpdateProfileParam(e.toString()),
                       type: AppToastType.error,
                     );
                   }
@@ -468,16 +476,16 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-String formatDialect(String dialect) {
+String formatDialect(BuildContext context, String dialect) {
   switch (dialect) {
     case 'STANDARD':
-      return 'Standard';
+      return S.of(context).standardDialect;
     case 'NORTHERN':
-      return 'Northern';
+      return S.of(context).northernDialect;
     case 'CENTRAL':
-      return 'Central';
+      return S.of(context).centralDialect;
     case 'SOUTHERN':
-      return 'Southern';
+      return S.of(context).southernDialect;
     default:
       return dialect;
   }
@@ -823,7 +831,7 @@ class _ThemeSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Appearance',
+          S.of(context).appearanceLabel,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -836,21 +844,21 @@ class _ThemeSection extends ConsumerWidget {
             children: [
               _ThemeBlock(
                 icon: Icons.brightness_auto,
-                label: 'System',
+                label: S.of(context).systemTheme,
                 isSelected: currentMode == ThemeMode.system,
                 onTap: () => setMode(ThemeMode.system),
               ),
               const SizedBox(width: AppSpacing.md),
               _ThemeBlock(
                 icon: Icons.light_mode,
-                label: 'Light',
+                label: S.of(context).lightTheme,
                 isSelected: currentMode == ThemeMode.light,
                 onTap: () => setMode(ThemeMode.light),
               ),
               const SizedBox(width: AppSpacing.md),
               _ThemeBlock(
                 icon: Icons.dark_mode,
-                label: 'Dark',
+                label: S.of(context).darkTheme,
                 isSelected: currentMode == ThemeMode.dark,
                 onTap: () => setMode(ThemeMode.dark),
               ),
@@ -920,25 +928,25 @@ class _ThemeBlock extends StatelessWidget {
 class _LanguageSection extends ConsumerWidget {
   const _LanguageSection();
 
-  static const _languages = [
-    ('en', 'English', 'English'),
-    ('vi', 'Tiếng Việt', 'Vietnamese'),
-    ('zh', '中文', 'Chinese'),
-    ('ja', '日本語', 'Japanese'),
-    ('ko', '한국어', 'Korean'),
-    ('fr', 'Français', 'French'),
-    ('es', 'Español', 'Spanish'),
-    ('de', 'Deutsch', 'German'),
-    ('th', 'ภาษาไทย', 'Thai'),
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final languages = [
+      ('en', 'English', S.of(context).languageEnglish),
+      ('vi', S.of(context).languageVietnamese, S.of(context).languageVietnamese),
+      ('zh', '中文', S.of(context).languageChinese),
+      ('ja', '日本語', S.of(context).languageJapanese),
+      ('ko', '한국어', S.of(context).languageKorean),
+      ('fr', 'Français', S.of(context).languageFrench),
+      ('es', 'Español', S.of(context).languageSpanish),
+      ('de', 'Deutsch', S.of(context).languageGerman),
+      ('th', 'ภาษาไทย', S.of(context).languageThai),
+    ];
+
     final theme = Theme.of(context);
     final currentCode = ref.watch(localeProvider)?.languageCode ?? 'en';
-    final current = _languages.firstWhere(
+    final current = languages.firstWhere(
       (l) => l.$1 == currentCode,
-      orElse: () => _languages.first,
+      orElse: () => languages.first,
     );
 
     return Column(
@@ -958,7 +966,7 @@ class _LanguageSection extends ConsumerWidget {
             icon: Icons.translate_outlined,
             title: current.$2,
             subtitle: current.$3,
-            onTap: () => _showLanguagePicker(context, ref, currentCode),
+            onTap: () => _showLanguagePicker(context, ref, currentCode, languages),
           ),
         ),
       ],
@@ -969,11 +977,12 @@ class _LanguageSection extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     String currentCode,
+    List<(String, String, String)> languages,
   ) {
     AppMenuBottomSheet.show(
       context,
       title: S.of(context).languageSection,
-      items: _languages
+      items: languages
           .map(
             (l) => AppMenuBottomSheetItem(
               label: l.$2,

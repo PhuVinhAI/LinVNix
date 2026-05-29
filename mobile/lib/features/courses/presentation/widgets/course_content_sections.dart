@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import 'package:linvnix/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 
@@ -74,7 +75,7 @@ class ContentListHeader extends StatelessWidget {
               children: [
                 if (showCompleteAll)
                   AppButton(
-                    label: isCompletingAll ? '...' : 'Complete All',
+                    label: isCompletingAll ? '...' : S.of(context).completeAll,
                     variant: AppButtonVariant.outline,
                     padding: _compactPadding,
                     fontSize: AppTypography.bodySmall,
@@ -89,7 +90,7 @@ class ContentListHeader extends StatelessWidget {
                   ),
                 if (showReset)
                   AppButton(
-                    label: isResetting ? '...' : 'Reset',
+                    label: isResetting ? '...' : S.of(context).resetLabel,
                     variant: AppButtonVariant.outline,
                     padding: _compactPadding,
                     fontSize: AppTypography.bodySmall,
@@ -153,7 +154,7 @@ class CustomPracticeSection extends StatelessWidget {
               Icon(Icons.auto_awesome, color: c.primary, size: 20),
               const SizedBox(width: 8),
               Text(
-                'Custom Practice',
+                S.of(context).customPracticeLabel,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -178,7 +179,7 @@ class CustomPracticeSection extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: AppButton(
-                  label: 'Generating exercises...',
+                  label: S.of(context).generatingExercises,
                   variant: AppButtonVariant.secondary,
                   onPressed: null,
                   icon: const SizedBox(
@@ -192,7 +193,7 @@ class CustomPracticeSection extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: AppButton(
-                  label: 'Cancel',
+                  label: S.of(context).cancelButton2,
                   variant: AppButtonVariant.outline,
                   onPressed: onCancelCreate,
                 ),
@@ -201,7 +202,7 @@ class CustomPracticeSection extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: AppButton(
-                  label: 'Create Custom Practice',
+                  label: S.of(context).createCustomPractice,
                   variant: AppButtonVariant.primary,
                   onPressed: onCreate,
                   icon: const Icon(Icons.add),

@@ -261,14 +261,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     final items = <AppMenuBottomSheetItem>[
       AppMenuBottomSheetItem(
-        label: 'End session',
+        label: S.of(context).endSession,
         icon: Icons.cancel_outlined,
         foregroundColor: c.error,
         onTap: _confirmCancelSession,
       ),
       if (chatState.scenarioId.isNotEmpty)
         AppMenuBottomSheetItem(
-          label: 'View scenario',
+          label: S.of(context).viewScenario,
           icon: Icons.description_outlined,
           onTap: () => context.push(
             '/practice/scenarios/${chatState.scenarioId}?fromConversation=true',
@@ -287,15 +287,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     AppDialog.show(
       context,
       builder: (context) => AppDialog(
-        title: 'End conversation?',
-        content: 'Conversation progress will be lost and cannot be recovered.',
+        title: S.of(context).endConversationQuestion,
+        content: S.of(context).conversationProgressLost,
         actions: [
           AppDialogAction(
-            label: 'No',
+            label: S.of(context).noLabel,
             onPressed: () => Navigator.of(context).pop(),
           ),
           AppDialogAction(
-            label: 'End session',
+            label: S.of(context).endSession,
             isPrimary: true,
             onPressed: () {
               Navigator.of(context).pop();
@@ -599,31 +599,31 @@ class _NpcBubble extends ConsumerWidget {
       title: message.speakerName,
       items: [
         AppMenuBottomSheetItem(
-          label: 'Read aloud (Vietnamese)',
+          label: S.of(context).readAloudVietnamese,
           icon: Icons.volume_up_outlined,
           onTap: () => tts.speak(message.id, message.content),
         ),
         AppMenuBottomSheetItem(
-          label: 'Copy Vietnamese',
+          label: S.of(context).copyVietnamese,
           icon: Icons.content_copy_outlined,
           onTap: () {
             Clipboard.setData(ClipboardData(text: message.content));
             AppToast.show(
               context,
-              message: 'Copied',
+              message: S.of(context).copiedToast,
               type: AppToastType.success,
             );
           },
         ),
         if (hasEn)
           AppMenuBottomSheetItem(
-            label: 'Copy English',
+            label: S.of(context).copyEnglish,
             icon: Icons.translate_outlined,
             onTap: () {
               Clipboard.setData(ClipboardData(text: message.contentEn!));
               AppToast.show(
                 context,
-                message: 'Copied',
+                message: S.of(context).copiedToast,
                 type: AppToastType.success,
               );
             },
@@ -760,11 +760,12 @@ class _LearnerBubble extends ConsumerWidget {
     final theme = Theme.of(context);
     final chatState = ref.watch(simulationChatProvider);
     final profile = ref.watch(userProfileProvider).value;
-    final displayName = message.speakerName.isNotEmpty
+    final rawDisplayName = message.speakerName.isNotEmpty
         ? message.speakerName
         : (chatState.chosenCharacterName.isNotEmpty
             ? chatState.chosenCharacterName
             : 'You');
+    final displayName = rawDisplayName == 'You' ? S.of(context).youLabel : rawDisplayName;
     final avatarUrl = profile?.avatarUrl;
     final feedback = message.feedback;
     final hasCorrections = feedback != null && feedback.corrections.isNotEmpty;
@@ -916,7 +917,7 @@ class _ComposeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hint = enabled ? 'Your turn' : 'Thinking...';
+    final hint = enabled ? S.of(context).yourTurn : S.of(context).thinking;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(

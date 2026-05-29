@@ -95,7 +95,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
         : ref.read(bookmarkIdsProvider).value?.contains(item.vocabularyId) ??
               false;
     if (!isBookmarked && mounted) {
-      AppToast.show(context, message: 'Word removed', type: AppToastType.info);
+      AppToast.show(context, message: S.of(context).wordRemovedToast, type: AppToastType.info);
     }
   }
 
@@ -123,7 +123,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.school),
-            tooltip: 'Study',
+            tooltip: S.of(context).studyLabel,
             onPressed: () => context.push('/bookmarks/flashcard'),
           ),
         ],
@@ -139,7 +139,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
             ),
             child: AppInput(
               controller: _searchController,
-              hint: 'Search words or meanings...',
+              hint: S.of(context).searchWordsOrMeaningsHint,
               prefixIcon: const Icon(Icons.search),
               suffixIcon: _searchController.text.isNotEmpty
                   ? IconButton(
@@ -161,15 +161,15 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
               AppSpacing.sm,
             ),
             child: AppDropdownField<BookmarkSort>(
-              label: 'Sort by',
+              label: S.of(context).sortBy,
               value: currentSort,
               items: BookmarkSort.values,
               itemLabelBuilder: (sort) => switch (sort) {
-                BookmarkSort.newest => 'Newest',
-                BookmarkSort.oldest => 'Oldest',
-                BookmarkSort.az => 'A-Z',
-                BookmarkSort.za => 'Z-A',
-                BookmarkSort.difficulty => 'Difficulty',
+                BookmarkSort.newest => S.of(context).sortNewest,
+                BookmarkSort.oldest => S.of(context).sortOldest,
+                BookmarkSort.az => S.of(context).sortAZ,
+                BookmarkSort.za => S.of(context).sortZA,
+                BookmarkSort.difficulty => S.of(context).difficultyLabel,
               },
               onChanged: (value) {
                 if (value != null) _onSortChanged(value);
@@ -219,7 +219,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  'Save your favorite words from lessons',
+                  S.of(context).saveFavoriteWordsDescription,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
@@ -524,7 +524,7 @@ class _BookmarkTile extends StatelessWidget {
               isBookmarked ? Icons.bookmark : Icons.bookmark_border,
               color: isBookmarked ? c.primary : c.mutedForeground,
             ),
-            tooltip: 'Remove saved word',
+            tooltip: S.of(context).removeSavedWordTitle,
           ),
         ],
       ),
@@ -571,7 +571,7 @@ class _BookmarkDetailSheet extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Word details',
+                      S.of(context).wordDetailsTitle,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: c.foreground,
@@ -579,7 +579,7 @@ class _BookmarkDetailSheet extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    tooltip: 'Close',
+                    tooltip: S.of(context).closeButton,
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(Icons.close, color: c.mutedForeground),
                     style: IconButton.styleFrom(
@@ -644,14 +644,14 @@ class _BookmarkDetailSheet extends StatelessWidget {
                   if (item.classifier != null) ...[
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Classifier: ${item.classifier}',
+                      S.of(context).classifierDetailLabel(item.classifier!),
                       style: theme.textTheme.bodyLarge,
                     ),
                   ],
                   if (item.exampleSentence != null) ...[
                     const SizedBox(height: AppSpacing.lg),
                     Text(
-                      'Example:',
+                      S.of(context).exampleLabel,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),

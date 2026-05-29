@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -187,7 +188,7 @@ class _Header extends ConsumerWidget {
       children: [
         Expanded(
           child: Text(
-            'AI Assistant · $displayName',
+            '${S.of(context).aiAssistantTitle} · $displayName',
             style: GoogleFonts.inter(
               fontSize: AppTypography.bodySmall,
               fontWeight: FontWeight.w600,
@@ -201,7 +202,7 @@ class _Header extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.open_in_full),
             color: c.mutedForeground,
-            tooltip: 'Full screen',
+            tooltip: S.of(context).fullScreen,
             onPressed: () =>
                 ref.read(assistantChatNotifierProvider).enterFull(),
           ),
@@ -209,13 +210,13 @@ class _Header extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.refresh),
             color: c.mutedForeground,
-            tooltip: 'Reset conversation',
+            tooltip: S.of(context).resetConversation,
             onPressed: () => ref.read(assistantChatNotifierProvider).reset(),
           ),
         IconButton(
           icon: const Icon(Icons.remove),
           color: c.mutedForeground,
-          tooltip: 'Close',
+          tooltip: S.of(context).closeButton,
           onPressed: () => Navigator.of(context).maybePop(),
         ),
       ],
@@ -282,7 +283,7 @@ class _ComposeBody extends StatelessWidget {
     return AppChatComposeField(
       controller: controller,
       focusNode: focusNode,
-      hintText: 'Ask anything...',
+      hintText: S.of(context).askAnythingHint,
       onSend: onSend,
     );
   }
@@ -394,7 +395,7 @@ class _ReadingBody extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 MarkdownBody(
-                  data: partial.isEmpty ? '_(no response)_' : partial,
+                  data: partial.isEmpty ? S.of(context).noResponseLabel : partial,
                   selectable: true,
                 ),
               ],
@@ -405,7 +406,7 @@ class _ReadingBody extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.sm),
             child: Text(
-              'Stopped',
+              S.of(context).stoppedLabel,
               style: GoogleFonts.inter(
                 fontSize: AppTypography.bodySmall,
                 color: c.mutedForeground,
@@ -434,7 +435,7 @@ class _ReadingBody extends ConsumerWidget {
         else if (streaming)
           AppButton(
             onPressed: () => ref.read(assistantChatNotifierProvider).stop(),
-            label: 'Stop',
+            label: S.of(context).stopLabel,
             variant: AppButtonVariant.outline,
             isFullWidth: true,
           )
@@ -442,7 +443,7 @@ class _ReadingBody extends ConsumerWidget {
           AppButton(
             onPressed: () =>
                 ref.read(assistantChatNotifierProvider).composeAgain(),
-            label: 'Compose again',
+            label: S.of(context).composeAgain,
             isFullWidth: true,
           ),
       ],
@@ -483,7 +484,7 @@ class _ErrorBody extends ConsumerWidget {
         ),
         AppButton(
           onPressed: () => ref.read(assistantChatNotifierProvider).retry(),
-          label: 'Retry',
+          label: S.of(context).retryButton,
           isFullWidth: true,
         ),
       ],

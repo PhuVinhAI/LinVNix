@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/exercise_theme_tokens.dart';
@@ -38,43 +39,43 @@ ExerciseTypeVisuals getExerciseVisuals(
       accent: tokens.multipleChoiceAccent,
       surface: tokens.multipleChoiceSurface,
       icon: Icons.radio_button_checked_rounded,
-      label: 'Multiple Choice',
+      label: S.of(context).multipleChoice,
     ),
     ExerciseType.fillBlank => ExerciseTypeVisuals(
       accent: tokens.fillBlankAccent,
       surface: tokens.fillBlankSurface,
       icon: Icons.text_fields_rounded,
-      label: 'Fill in the Blank',
+      label: S.of(context).fillInTheBlank,
     ),
     ExerciseType.matching => ExerciseTypeVisuals(
       accent: tokens.matchingAccent,
       surface: tokens.matchingSurface,
       icon: Icons.compare_arrows_rounded,
-      label: 'Matching',
+      label: S.of(context).matchingExercise,
     ),
     ExerciseType.ordering => ExerciseTypeVisuals(
       accent: tokens.orderingAccent,
       surface: tokens.orderingSurface,
       icon: Icons.sort_rounded,
-      label: 'Ordering',
+      label: S.of(context).orderingExercise,
     ),
     ExerciseType.translation => ExerciseTypeVisuals(
       accent: tokens.translationAccent,
       surface: tokens.translationSurface,
       icon: Icons.translate_rounded,
-      label: 'Translation',
+      label: S.of(context).translationLabel,
     ),
     ExerciseType.listening => ExerciseTypeVisuals(
       accent: tokens.listeningAccent,
       surface: tokens.listeningSurface,
       icon: Icons.headphones_rounded,
-      label: 'Listening',
+      label: S.of(context).listeningExercise,
     ),
     ExerciseType.speaking => ExerciseTypeVisuals(
       accent: tokens.speakingAccent,
       surface: tokens.speakingSurface,
       icon: Icons.mic_rounded,
-      label: 'Speaking',
+      label: S.of(context).speakingExercise,
     ),
   };
 }

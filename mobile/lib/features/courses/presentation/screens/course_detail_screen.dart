@@ -394,16 +394,15 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Level Up Profile?',
-        content:
-            'Congratulations on completing "${course.title}"! Would you like to update your profile level to $targetLevel?',
+        title: S.of(context).levelUpProfileQuestion,
+        content: S.of(context).congratulationsCompleteCourseParam(course.title, targetLevel),
         actions: [
           AppDialogAction(
-            label: 'No, thanks',
+            label: S.of(context).noThanks,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Update Level',
+            label: S.of(context).updateLevel,
             isPrimary: true,
             onPressed: () async {
               Navigator.pop(dialogCtx);
@@ -414,7 +413,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
                 if (mounted) {
                   AppToast.show(
                     context,
-                    message: 'Successfully updated profile level to $targetLevel!',
+                    message: S.of(context).successfullyUpdatedProfileLevelParam(targetLevel),
                     type: AppToastType.success,
                   );
                 }
@@ -422,7 +421,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
                 if (mounted) {
                   AppToast.show(
                     context,
-                    message: 'Failed to update level: $e',
+                    message: S.of(context).failedToUpdateLevelParam(e.toString()),
                     type: AppToastType.error,
                   );
                 }
@@ -482,16 +481,16 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Delete custom set?',
+        title: S.of(context).deleteCustomSetQuestion,
         content:
-            'This set will be removed from your list. You can create a new one anytime.',
+            S.of(context).deleteCustomPracticeSetWarning,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Delete',
+            label: S.of(context).deleteLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -507,16 +506,15 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Reset progress?',
-        content:
-            'Your answers for "$title" will be cleared. You can start over anytime.',
+        title: S.of(context).resetProgressQuestion,
+        content: S.of(context).clearAnswersWarningParam(title),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Reset',
+            label: S.of(context).resetLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -532,16 +530,15 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Regenerate exercises?',
-        content:
-            'This will create a new set replacing "$title" with fresh AI-generated questions.',
+        title: S.of(context).regenerateExercisesQuestion,
+        content: S.of(context).freshAiQuestionsWarningParam(title),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Regenerate',
+            label: S.of(context).regenerateLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -557,16 +554,16 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Mark all lessons as completed?',
+        title: S.of(context).markAllLessonsCompletedQuestion,
         content:
-            'All lessons in this course will be marked as completed. You can reset later if needed.',
+            S.of(context).markCourseCompleteWarning,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Complete All',
+            label: S.of(context).completeAll,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -582,16 +579,16 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Reset all progress?',
+        title: S.of(context).resetAllProgressQuestion,
         content:
-            'Reset all progress? This cannot be undone. All lesson progress, exercise results, and custom practice sets will be removed.',
+            S.of(context).resetCourseProgressWarning,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Reset',
+            label: S.of(context).resetLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -681,11 +678,11 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
     bool hasProgress,
   ) {
     return exerciseSetsAsync.when(
-      loading: () => const SliverToBoxAdapter(
-        child: ContentListHeader(title: 'Modules'),
+      loading: () => SliverToBoxAdapter(
+        child: ContentListHeader(title: S.of(context).modulesTitle),
       ),
-      error: (_, __) => const SliverToBoxAdapter(
-        child: ContentListHeader(title: 'Modules'),
+      error: (_, __) => SliverToBoxAdapter(
+        child: ContentListHeader(title: S.of(context).modulesTitle),
       ),
       data: (summary) {
         final hasBypassProgress = summary.completedModulesCount > 0;
@@ -693,9 +690,11 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
 
         return SliverToBoxAdapter(
           child: ContentListHeader(
-            title: 'Modules',
-            progressText:
-                '${summary.completedModulesCount}/${summary.totalModulesCount} completed',
+            title: S.of(context).modulesTitle,
+            progressText: S.of(context).completedCountParam(
+                  summary.completedModulesCount,
+                  summary.totalModulesCount,
+                ),
             showCompleteAll: showCompleteAll,
             showReset: shouldShowReset,
             isCompletingAll: _busyAction == _BusyAction.completeAll,
@@ -722,9 +721,9 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
           child: CustomPracticeSection(
             eligible: summary.eligible,
             lockedMessage:
-                'Complete at least one module to unlock custom practice.',
+                S.of(context).unlockCustomPracticeCourseHint,
             emptyMessage:
-                'No custom practice sets yet. Create one to review what you\'ve learned.',
+                S.of(context).noCustomPracticeSetsYet,
             isCreating: _isCreatingCustom,
             error: _error,
             onCreate: _showCreationForm,
@@ -1004,7 +1003,7 @@ class _CourseSetCard extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  'Cancel',
+                                  S.of(context).cancelButton2,
                                   style: theme.textTheme.labelSmall
                                       ?.copyWith(
                                     color: c.mutedForeground,

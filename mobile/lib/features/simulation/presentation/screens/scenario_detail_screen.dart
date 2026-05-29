@@ -30,11 +30,11 @@ Color _getDifficultyColor(String difficulty, AppColors c) {
   };
 }
 
-String _getDifficultyLabel(String difficulty) {
+String _getDifficultyLabel(String difficulty, BuildContext context) {
   return switch (difficulty) {
-    'EASY' => 'Easy',
-    'MEDIUM' => 'Medium',
-    'HARD' => 'Hard',
+    'EASY' => S.of(context).difficultyEasy,
+    'MEDIUM' => S.of(context).difficultyMedium,
+    'HARD' => S.of(context).difficultyHard,
     _ => difficulty,
   };
 }
@@ -81,17 +81,15 @@ class _ScenarioDetailContent extends ConsumerWidget {
       final confirmed = await AppDialog.show<bool>(
         context,
         builder: (ctx) => AppDialog(
-          title: 'End conversation?',
-          content:
-              'You have an active session for "${activeSession.scenarioTitle}". '
-              'End it to start this scenario? Progress cannot be recovered.',
+          title: S.of(context).endConversationQuestion,
+          content: S.of(context).endSessionWarningParam(activeSession.scenarioTitle),
           actions: [
             AppDialogAction(
-              label: 'No',
+              label: S.of(context).noLabel,
               onPressed: () => Navigator.of(ctx).pop(false),
             ),
             AppDialogAction(
-              label: 'End session',
+              label: S.of(context).endSession,
               isPrimary: true,
               onPressed: () => Navigator.of(ctx).pop(true),
             ),
@@ -152,7 +150,7 @@ class _ScenarioDetailContent extends ConsumerWidget {
                   ),
                   if (detail.scoringCriteria.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'Grading criteria'),
+                    _SectionHeader(title: S.of(context).gradingCriteria),
                     const SizedBox(height: AppSpacing.md),
                     ...detail.scoringCriteria.map(
                       (criterion) => _ScoringCriterionItem(criterion: criterion),
@@ -160,7 +158,7 @@ class _ScenarioDetailContent extends ConsumerWidget {
                   ],
                   if (detail.characters.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'Characters'),
+                    _SectionHeader(title: S.of(context).charactersTitle),
                     const SizedBox(height: AppSpacing.md),
                     ...detail.characters.map(
                       (character) => _CharacterItem(character: character),
@@ -200,7 +198,7 @@ class _ScenarioDetailContent extends ConsumerWidget {
                     child: AppButton(
                       variant: AppButtonVariant.primary,
                       onPressed: () => _handleStartTap(context, ref),
-                      label: 'Start',
+                      label: S.of(context).startLabel,
                       isFullWidth: true,
                     ),
                   ),
@@ -233,7 +231,7 @@ class _ScenarioInfoRow extends StatelessWidget {
         ),
         const SizedBox(width: AppSpacing.xs),
         AppBadge(
-          label: _getDifficultyLabel(detail.difficulty),
+          label: _getDifficultyLabel(detail.difficulty, context),
           color: _getDifficultyColor(detail.difficulty, c),
         ),
         const Spacer(),
@@ -611,14 +609,14 @@ class _MiniHistorySection extends StatelessWidget {
         const SizedBox(height: AppSpacing.xl),
         Row(
           children: [
-            const _SectionHeader(title: 'Result history'),
+            _SectionHeader(title: S.of(context).resultHistory),
             const Spacer(),
             GestureDetector(
               onTap: () => context.push(
                 '/practice/history?scenarioId=$scenarioId',
               ),
               child: Text(
-                'See all',
+                S.of(context).seeAll,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: c.primary,
                   fontWeight: FontWeight.w600,

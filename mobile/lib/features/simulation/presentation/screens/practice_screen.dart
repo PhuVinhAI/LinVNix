@@ -31,11 +31,11 @@ Color _getDifficultyColor(String difficulty, AppColors c) {
   };
 }
 
-String _getDifficultyLabel(String difficulty) {
+String _getDifficultyLabel(String difficulty, BuildContext context) {
   return switch (difficulty) {
-    'EASY' => 'Easy',
-    'MEDIUM' => 'Medium',
-    'HARD' => 'Hard',
+    'EASY' => S.of(context).difficultyEasy,
+    'MEDIUM' => S.of(context).difficultyMedium,
+    'HARD' => S.of(context).difficultyHard,
     _ => difficulty,
   };
 }
@@ -104,16 +104,16 @@ class PracticeScreen extends ConsumerWidget {
             final confirmed = await AppDialog.show<bool>(
               context,
               builder: (ctx) => AppDialog(
-                title: 'End conversation?',
+                title: S.of(context).endConversationQuestion,
                 content:
-                    'Conversation progress will be lost and cannot be recovered.',
+                    S.of(context).conversationLossWarning,
                 actions: [
                   AppDialogAction(
-                    label: 'No',
+                    label: S.of(context).noLabel,
                     onPressed: () => Navigator.of(ctx).pop(false),
                   ),
                   AppDialogAction(
-                    label: 'End session',
+                    label: S.of(context).endSession,
                     isPrimary: true,
                     onPressed: () => Navigator.of(ctx).pop(true),
                   ),
@@ -196,12 +196,12 @@ class _PracticeContent extends StatelessWidget {
   final VoidCallback onOpenFilter;
   final VoidCallback onCancelSession;
 
-  String get _sectionTitle {
+  String _sectionTitle(BuildContext context) {
     if (filter.categoryId != null) {
       final category = categories.where((c) => c.id == filter.categoryId).firstOrNull;
-      return category?.name ?? 'All scenarios';
+      return category?.name ?? S.of(context).allScenarios;
     }
-    return 'All scenarios';
+    return S.of(context).allScenarios;
   }
 
   @override
@@ -212,7 +212,7 @@ class _PracticeContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Semantics(
-              label: 'No categories icon',
+              label: S.of(context).noCategoriesIcon,
               child: Icon(
                 Icons.category_outlined,
                 size: 64,
@@ -252,7 +252,7 @@ class _PracticeContent extends StatelessWidget {
           if (activeSession != null)
             const SizedBox(height: AppSpacing.lg),
           _CategoryHeader(
-            title: 'Scenario categories',
+            title: S.of(context).scenarioCategories,
             onSeeAll: filter.categoryId != null
                 ? () => onCategoryTap(filter.categoryId!)
                 : null,
@@ -264,7 +264,7 @@ class _PracticeContent extends StatelessWidget {
             onCategoryTap: onCategoryTap,
           ),
           const SizedBox(height: AppSpacing.lg),
-          _SectionHeader(title: _sectionTitle),
+          _SectionHeader(title: _sectionTitle(context)),
           const SizedBox(height: AppSpacing.md),
           scenariosAsync.when(
             loading: () => const _ScenariosLoading(),
@@ -300,7 +300,7 @@ class _CategoryHeader extends StatelessWidget {
           GestureDetector(
             onTap: onSeeAll,
             child: Text(
-              'See all',
+              S.of(context).seeAll,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: c.primary,
                     fontWeight: FontWeight.w600,
@@ -503,7 +503,7 @@ class _ScenarioCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.xs),
               AppBadge(
-                label: _getDifficultyLabel(scenario.difficulty),
+                label: _getDifficultyLabel(scenario.difficulty, context),
                 color: _getDifficultyColor(scenario.difficulty, c),
               ),
               const Spacer(),
@@ -774,7 +774,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Filters',
+                      S.of(context).filtersTitle,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: c.foreground,
@@ -782,7 +782,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                     ),
                   ),
                   IconButton(
-                    tooltip: 'Close',
+                    tooltip: S.of(context).closeButton,
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(Icons.close, color: c.mutedForeground),
                     style: IconButton.styleFrom(
@@ -806,13 +806,13 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _FilterSection(
-                    title: 'Category',
+                    title: S.of(context).categoryTitle,
                     child: Wrap(
                       spacing: AppSpacing.sm,
                       runSpacing: AppSpacing.sm,
                       children: [
                         AppChip(
-                          label: 'All',
+                          label: S.of(context).allLabel,
                           isSelected: _selectedCategoryId == null,
                           onTap: () => setState(() => _selectedCategoryId = null),
                         ),
@@ -829,13 +829,13 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   _FilterSection(
-                    title: 'Level',
+                    title: S.of(context).levelLabel,
                     child: Wrap(
                       spacing: AppSpacing.sm,
                       runSpacing: AppSpacing.sm,
                       children: [
                         AppChip(
-                          label: 'All',
+                          label: S.of(context).allLabel,
                           isSelected: _selectedLevel == null,
                           onTap: () => setState(() => _selectedLevel = null),
                         ),
@@ -852,20 +852,20 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   _FilterSection(
-                    title: 'Difficulty',
+                    title: S.of(context).difficultyLabel,
                     child: Wrap(
                       spacing: AppSpacing.sm,
                       runSpacing: AppSpacing.sm,
                       children: [
                         AppChip(
-                          label: 'All',
+                          label: S.of(context).allLabel,
                           isSelected: _selectedDifficulty == null,
                           onTap: () =>
                               setState(() => _selectedDifficulty = null),
                         ),
                         ..._difficulties.map(
                           (diff) => AppChip(
-                            label: _getDifficultyLabel(diff),
+                            label: _getDifficultyLabel(diff, context),
                             isSelected: _selectedDifficulty == diff,
                             color: _getDifficultyColor(diff, c),
                             onTap: () =>
@@ -879,7 +879,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                   AppButton(
                     variant: AppButtonVariant.primary,
                     onPressed: _apply,
-                    label: 'Apply',
+                    label: S.of(context).applyButton,
                     isFullWidth: true,
                   ),
                 ],
@@ -1027,7 +1027,7 @@ class _PausedSessionBanner extends StatelessWidget {
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
-                  'Session paused',
+                  S.of(context).sessionPaused,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: c.primary,
@@ -1047,7 +1047,7 @@ class _PausedSessionBanner extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Character: ${session.chosenCharacterName}',
+            S.of(context).characterNameParam(session.chosenCharacterName),
             style: theme.textTheme.bodySmall?.copyWith(
               color: c.mutedForeground,
             ),
@@ -1060,7 +1060,7 @@ class _PausedSessionBanner extends StatelessWidget {
               Expanded(
                 child: AppButton(
                   variant: AppButtonVariant.primary,
-                  label: 'Continue',
+                  label: S.of(context).authContinueHome,
                   onPressed: onContinue,
                   isFullWidth: true,
                 ),
@@ -1069,7 +1069,7 @@ class _PausedSessionBanner extends StatelessWidget {
               Expanded(
                 child: AppButton(
                   variant: AppButtonVariant.outline,
-                  label: 'Cancel',
+                  label: S.of(context).cancelButton2,
                   onPressed: onCancel,
                   isFullWidth: true,
                 ),
@@ -1102,7 +1102,7 @@ class _CategoriesError extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Semantics(
-              label: 'Error loading categories',
+              label: S.of(context).errorLoadingCategories,
               child: Icon(Icons.error_outline, size: 64, color: c.error),
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -1113,7 +1113,7 @@ class _CategoriesError extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             Semantics(
-              label: 'Retry loading categories',
+              label: S.of(context).retryLoadingCategories,
               button: true,
               child: AppButton(
                 variant: AppButtonVariant.primary,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/daily_goal_progress_models.dart';
 import '../../data/daily_goal_progress_providers.dart';
 
@@ -101,7 +102,7 @@ class _ProgressData extends StatelessWidget {
               Icon(Icons.flag, size: 18, color: c.primary),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'Today\'s progress',
+                S.of(context).todaysProgress,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -137,14 +138,14 @@ class _CelebratoryState extends StatelessWidget {
               Icon(Icons.flag, size: 18, color: c.primary),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'Today\'s progress',
+                S.of(context).todaysProgress,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const Spacer(),
               AppBadge(
-                label: 'Complete!',
+                label: S.of(context).completeLabel,
                 color: c.success,
               ),
             ],
@@ -153,7 +154,7 @@ class _CelebratoryState extends StatelessWidget {
           Icon(Icons.celebration, size: 48, color: c.success),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Great job! You completed all of today\'s goals!',
+            S.of(context).greatJobCompletedAllGoals,
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: c.success,

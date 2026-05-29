@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -21,7 +22,7 @@ class DailyGoalSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Daily goals',
+          S.of(context).dailyGoals,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -50,7 +51,7 @@ class DailyGoalSection extends ConsumerWidget {
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Could not load goals',
+                    S.of(context).failedToLoadGoals,
                     style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.colors(context).foreground,
@@ -59,7 +60,7 @@ class DailyGoalSection extends ConsumerWidget {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   AppButton(
-                    label: 'Retry',
+                    label: S.of(context).retryButton,
                     variant: AppButtonVariant.outline,
                     onPressed: () =>
                         ref.read(dailyGoalsProvider.notifier).refresh(),
@@ -109,7 +110,7 @@ class _GoalsCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      'No goals set yet',
+                      S.of(context).noGoalsSetYet,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: c.foreground,
@@ -117,7 +118,7 @@ class _GoalsCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Add a goal to track your daily progress!',
+                      S.of(context).addGoalToTrackProgress,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: c.mutedForeground,
                           ),
@@ -137,7 +138,7 @@ class _GoalsCard extends ConsumerWidget {
             ),
             leading: Icon(Icons.add, color: c.primary),
             titleWidget: Text(
-              'Add goal',
+              S.of(context).addGoalTitle,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: c.primary,
                     fontWeight: FontWeight.w600,
@@ -161,7 +162,7 @@ class _GoalsCard extends ConsumerWidget {
 
     if (availableTypes.isEmpty) {
       AppToast.show(context,
-          message: 'You already have all 3 goal types', type: AppToastType.info);
+          message: S.of(context).alreadyHaveAll3GoalTypes, type: AppToastType.info);
       return;
     }
 
@@ -182,14 +183,14 @@ class _GoalsCard extends ConsumerWidget {
       context,
       builder: (dialogCtx) => StatefulBuilder(
         builder: (context, setState) => AppDialog(
-          title: 'Add goal',
+          title: S.of(context).addGoalTitle,
           contentWidget: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (onlyType == null) ...[
                 AppDropdownField<GoalType>(
-                  label: 'Goal type',
+                  label: S.of(context).goalTypeLabel,
                   value: selectedType,
                   items: availableTypes,
                   itemLabelBuilder: (t) => t.label,
@@ -225,11 +226,11 @@ class _GoalsCard extends ConsumerWidget {
           ),
           actions: [
             AppDialogAction(
-              label: 'Cancel',
+              label: S.of(context).cancelButton,
               onPressed: () => Navigator.pop(context),
             ),
             AppDialogAction(
-              label: 'Add',
+              label: S.of(context).addLabel,
               isPrimary: true,
               onPressed: () async {
                 final goalType = onlyType ?? selectedType!;
@@ -241,7 +242,7 @@ class _GoalsCard extends ConsumerWidget {
                 } catch (e) {
                   if (context.mounted) {
                     AppToast.show(context,
-                        message: 'Error: $e',
+                        message: S.of(context).errorParam(e.toString()),
                         type: AppToastType.error);
                   }
                 }
@@ -302,7 +303,7 @@ class _GoalTile extends ConsumerWidget {
       context,
       builder: (dialogCtx) => StatefulBuilder(
         builder: (context, setState) => AppDialog(
-          title: 'Edit ${goal.goalType.label}',
+          title: S.of(context).editGoalTitle(goal.goalType.label),
           contentWidget: _TargetSlider(
             goalType: goal.goalType,
             value: targetValue,
@@ -310,11 +311,11 @@ class _GoalTile extends ConsumerWidget {
           ),
           actions: [
             AppDialogAction(
-              label: 'Cancel',
+              label: S.of(context).cancelButton,
               onPressed: () => Navigator.pop(context),
             ),
             AppDialogAction(
-              label: 'Save',
+              label: S.of(context).saveLabel,
               isPrimary: true,
               onPressed: () async {
                 Navigator.pop(context);
@@ -325,7 +326,7 @@ class _GoalTile extends ConsumerWidget {
                 } catch (e) {
                   if (context.mounted) {
                     AppToast.show(context,
-                        message: 'Error: $e',
+                        message: S.of(context).errorParam(e.toString()),
                         type: AppToastType.error);
                   }
                 }
@@ -341,15 +342,15 @@ class _GoalTile extends ConsumerWidget {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Delete goal',
-        content: 'Delete the "${goal.goalType.label}" goal permanently?',
+        title: S.of(dialogCtx).deleteGoal,
+        content: S.of(dialogCtx).deleteGoalPermanentlyQuestion(goal.goalType.label),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(dialogCtx).cancelButton,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Delete',
+            label: S.of(dialogCtx).deleteLabel,
             isPrimary: true,
             onPressed: () async {
               Navigator.pop(dialogCtx);
@@ -360,7 +361,7 @@ class _GoalTile extends ConsumerWidget {
               } catch (e) {
                 if (dialogCtx.mounted) {
                   AppToast.show(dialogCtx,
-                      message: 'Error: $e',
+                      message: S.of(dialogCtx).errorParam(e.toString()),
                       type: AppToastType.error);
                 }
               }
@@ -461,7 +462,7 @@ class _NotificationSettings extends ConsumerWidget {
               leading: Icon(Icons.notifications_outlined,
                   color: c.primary, size: 20),
               titleWidget: Text(
-                'Goal reminders',
+                S.of(context).goalReminders,
                 style: theme.textTheme.bodyMedium,
               ),
               trailing: AppSwitch(
@@ -479,7 +480,7 @@ class _NotificationSettings extends ConsumerWidget {
                 leading:
                     Icon(Icons.access_time, color: c.primary, size: 20),
                 titleWidget: Text(
-                  'Reminder time',
+                  S.of(context).reminderTime,
                   style: theme.textTheme.bodyMedium,
                 ),
                 subtitleWidget: Text(
@@ -506,7 +507,7 @@ class _NotificationSettings extends ConsumerWidget {
         if (context.mounted) {
           AppToast.show(
             context,
-            message: 'Please enable notifications in device settings',
+            message: S.of(context).pleaseEnableNotificationsSettings,
             type: AppToastType.error,
           );
         }
@@ -532,7 +533,7 @@ class _NotificationSettings extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         AppToast.show(context,
-            message: 'Error: $e', type: AppToastType.error);
+            message: S.of(context).errorParam(e.toString()), type: AppToastType.error);
       }
     }
   }
@@ -569,7 +570,7 @@ class _NotificationSettings extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         AppToast.show(context,
-            message: 'Error: $e', type: AppToastType.error);
+            message: S.of(context).errorParam(e.toString()), type: AppToastType.error);
       }
     }
   }

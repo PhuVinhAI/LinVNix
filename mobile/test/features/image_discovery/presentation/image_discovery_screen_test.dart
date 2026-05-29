@@ -290,6 +290,7 @@ class _FakeImageAnalysisApi extends ImageAnalysisApi {
 
   @override
   Future<ImageAnalysisResponse> analyze({
+    CancelToken? cancelToken,
     required List<ImageAnalysisRequestImage> images,
     required String prompt,
     List<ImageAnalysisChatHistoryMessage> chatHistory = const [],

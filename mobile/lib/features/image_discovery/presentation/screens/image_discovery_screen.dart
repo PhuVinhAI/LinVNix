@@ -121,9 +121,17 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
         }
       }
       if (next.error != null && next.error != previous?.error) {
+        final localizedMsg = switch (next.error!) {
+          'Unable to load image' => S.of(context).unableToLoadImage,
+          'You can analyze up to 5 images at once' => S.of(context).maxImagesAnalysisWarning,
+          'Add a photo first' => S.of(context).addPhotoFirst,
+          'Unable to analyze image. Please try again.' => S.of(context).unableToAnalyzeImage,
+          'Unable to save vocabulary. Please try again.' => S.of(context).unableToSaveVocabulary,
+          _ => next.error!,
+        };
         AppToast.show(
           context,
-          message: next.error!,
+          message: localizedMsg,
           type: AppToastType.error,
         );
       }
@@ -142,7 +150,7 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
           if (_canReset(state))
             IconButton(
               icon: const Icon(Icons.refresh),
-              tooltip: 'Reset session',
+              tooltip: S.of(context).resetSessionButton,
               onPressed: _resetSession,
             ),
         ],
@@ -206,7 +214,7 @@ class _HeaderImagesAction extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return IconButton(
-      tooltip: 'View attached photos ($count)',
+      tooltip: S.of(context).viewAttachedPhotosParam(count.toString()),
       onPressed: onTap,
       icon: SizedBox(
         width: 28,
@@ -363,7 +371,7 @@ class _ImageStrip extends StatelessWidget {
                         ),
                         child: IconButton(
                           icon: Icon(Icons.close, color: c.foreground),
-                          tooltip: 'Remove image',
+                          tooltip: S.of(context).removeImage,
                           iconSize: 18,
                           constraints: const BoxConstraints.tightFor(
                             width: 32,
@@ -548,27 +556,27 @@ class _QuickActions extends StatelessWidget {
   final bool enabled;
   final Future<void> Function(String prompt) onPrompt;
 
-  static const _actions = <({String label, String prompt})>[
-    (
-      label: 'Analyze image',
-      prompt: 'Analyze these images and explain what they show.',
-    ),
-    (
-      label: 'Find vocabulary',
-      prompt: 'Find useful Vietnamese vocabulary in these images.',
-    ),
-    (
-      label: 'Translate text',
-      prompt: 'Translate any visible Vietnamese text in these images.',
-    ),
-    (
-      label: 'Explain content',
-      prompt: 'Explain the context and meaning of these images.',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final actions = <({String label, String prompt})>[
+      (
+        label: S.of(context).analyzeImage,
+        prompt: S.of(context).analyzeImagesPrompt,
+      ),
+      (
+        label: S.of(context).findVocabulary,
+        prompt: S.of(context).findVocabularyPrompt,
+      ),
+      (
+        label: S.of(context).translateText,
+        prompt: S.of(context).translateTextPrompt,
+      ),
+      (
+        label: S.of(context).explainContent,
+        prompt: S.of(context).explainContextPrompt,
+      ),
+    ];
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -579,7 +587,7 @@ class _QuickActions extends StatelessWidget {
       child: Wrap(
         spacing: AppSpacing.sm,
         runSpacing: AppSpacing.sm,
-        children: _actions
+        children: actions
             .map(
               (action) => AppChip(
                 label: action.label,
@@ -613,10 +621,10 @@ class _ComposeBar extends StatelessWidget {
 
   bool get canSend => hasImage && !isLoading;
 
-  String get hintText {
-    if (isLoading) return 'Analyzing...';
-    if (!hasImage) return 'Add a photo first';
-    return 'Ask about the image...';
+  String _getHintText(BuildContext context) {
+    if (isLoading) return S.of(context).analyzingStatus;
+    if (!hasImage) return S.of(context).addPhotoFirst;
+    return S.of(context).askAboutImageHint;
   }
 
   @override
@@ -644,7 +652,7 @@ class _ComposeBar extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      hintText,
+                      _getHintText(context),
                       style: GoogleFonts.inter(
                         fontSize: AppTypography.bodyMedium,
                         color: c.mutedForeground,
@@ -673,7 +681,7 @@ class _ComposeBar extends StatelessWidget {
           : AppChatComposeField(
               controller: controller,
               focusNode: focusNode,
-              hintText: hintText,
+              hintText: _getHintText(context),
               enabled: !isLoading,
               onSend: canSend ? onSend : null,
               onSubmitted: canSend ? (_) => onSend() : null,

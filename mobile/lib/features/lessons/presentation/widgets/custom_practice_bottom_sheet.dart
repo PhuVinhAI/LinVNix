@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -128,7 +129,7 @@ class _CreationFormState extends State<_CreationForm> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Configure custom practice',
+                      S.of(context).configureCustomPractice,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: c.foreground,
@@ -136,7 +137,7 @@ class _CreationFormState extends State<_CreationForm> {
                     ),
                   ),
                   IconButton(
-                    tooltip: 'Close',
+                    tooltip: S.of(context).closeButton,
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(Icons.close, color: c.mutedForeground),
                     style: IconButton.styleFrom(
@@ -160,7 +161,7 @@ class _CreationFormState extends State<_CreationForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Number of questions: ${_questionCount.round()}',
+                    S.of(context).numberOfQuestionsParam(_questionCount.round()),
                     style: theme.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -174,7 +175,7 @@ class _CreationFormState extends State<_CreationForm> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Exercise types',
+                    S.of(context).exerciseTypesLabel,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -202,7 +203,7 @@ class _CreationFormState extends State<_CreationForm> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Focus',
+                    S.of(context).focusLabel,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -223,7 +224,7 @@ class _CreationFormState extends State<_CreationForm> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Prompt (optional)',
+                    S.of(context).promptOptionalLabel,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -231,7 +232,7 @@ class _CreationFormState extends State<_CreationForm> {
                   const SizedBox(height: AppSpacing.sm),
                   AppInput(
                     controller: _userPromptController,
-                    hint: 'Describe what you want to focus on...',
+                    hint: S.of(context).describeFocusHint,
                     maxLines: 3,
                     maxLength: _maxUserPromptLength,
                     keyboardType: TextInputType.multiline,
@@ -240,7 +241,7 @@ class _CreationFormState extends State<_CreationForm> {
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   AppButton(
-                    label: _isSubmitting ? 'Creating...' : 'Create exercises',
+                    label: _isSubmitting ? S.of(context).creatingStatus : S.of(context).createExercisesButton,
                     variant: AppButtonVariant.primary,
                     onPressed: _selectedTypes.isEmpty || _isSubmitting
                         ? null
@@ -259,13 +260,13 @@ class _CreationFormState extends State<_CreationForm> {
 
   String _typeDisplayName(ExerciseType type) {
     return switch (type) {
-      ExerciseType.multipleChoice => 'Multiple choice',
-      ExerciseType.fillBlank => 'Fill in the blank',
-      ExerciseType.matching => 'Matching',
-      ExerciseType.ordering => 'Ordering',
-      ExerciseType.translation => 'Translation',
-      ExerciseType.listening => 'Listening',
-      ExerciseType.speaking => 'Speaking',
+      ExerciseType.multipleChoice => S.of(context).multipleChoice,
+      ExerciseType.fillBlank => S.of(context).fillInTheBlank,
+      ExerciseType.matching => S.of(context).matchingExercise,
+      ExerciseType.ordering => S.of(context).orderingExercise,
+      ExerciseType.translation => S.of(context).translationLabel,
+      ExerciseType.listening => S.of(context).listeningExercise,
+      ExerciseType.speaking => S.of(context).speakingExercise,
     }; // audio-driven types are excluded from custom practice selection
   }
 
@@ -335,7 +336,7 @@ class _InfoView extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    tooltip: 'Close',
+                    tooltip: S.of(context).closeButton,
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(Icons.close, color: c.mutedForeground),
                     style: IconButton.styleFrom(
@@ -374,10 +375,10 @@ class _InfoView extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xl),
                   AppButton(
                     label: progress.isNotStarted
-                        ? 'Start practice'
+                        ? S.of(context).startPracticeLabel
                         : progress.isInProgress
-                        ? 'Continue practice'
-                        : 'Practice again',
+                        ? S.of(context).continuePracticeLabel
+                        : S.of(context).practiceAgainLabel,
                     variant: AppButtonVariant.primary,
                     onPressed: onPlay,
                     icon: Icon(
@@ -389,7 +390,7 @@ class _InfoView extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   AppButton(
-                    label: 'Regenerate exercises',
+                    label: S.of(context).regenerateExercises,
                     variant: AppButtonVariant.secondary,
                     onPressed: onRegenerate,
                     icon: const Icon(Icons.auto_awesome),
@@ -400,7 +401,7 @@ class _InfoView extends StatelessWidget {
                     children: [
                       Expanded(
                         child: AppButton(
-                          label: 'Reset progress',
+                          label: S.of(context).resetProgress,
                           variant: AppButtonVariant.outline,
                           onPressed: onReset,
                           icon: const Icon(Icons.replay),
@@ -409,7 +410,7 @@ class _InfoView extends StatelessWidget {
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: AppButton(
-                          label: 'Delete',
+                          label: S.of(context).deleteLabel,
                           variant: AppButtonVariant.danger,
                           onPressed: onDelete,
                           icon: const Icon(Icons.delete_outline),
@@ -420,7 +421,7 @@ class _InfoView extends StatelessWidget {
                   if (onCancel != null) ...[
                     const SizedBox(height: AppSpacing.sm),
                     AppButton(
-                      label: 'Cancel',
+                      label: S.of(context).cancelButton2,
                       variant: AppButtonVariant.outline,
                       onPressed: onCancel,
                       isFullWidth: true,
@@ -497,7 +498,7 @@ class _ProgressStats extends StatelessWidget {
       children: [
         Expanded(
           child: _StatItem(
-            label: 'Progress',
+            label: S.of(context).progressLabel,
             value: '${progress.percentComplete.round()}%',
             color: c.primary,
           ),
@@ -505,7 +506,7 @@ class _ProgressStats extends StatelessWidget {
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: _StatItem(
-            label: 'Accuracy',
+            label: S.of(context).accuracyLabel,
             value: '${progress.percentCorrect.round()}%',
             color: c.accent,
           ),
@@ -513,7 +514,7 @@ class _ProgressStats extends StatelessWidget {
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: _StatItem(
-            label: 'Completed',
+            label: S.of(context).completedLabel,
             value: '${progress.attempted}/${progress.totalExercises}',
             color: progress.isCompleted ? c.success : c.mutedForeground,
           ),

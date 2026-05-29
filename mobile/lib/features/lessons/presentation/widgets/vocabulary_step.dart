@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import 'package:linvnix/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -33,7 +34,7 @@ class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
       await ref.read(bookmarkIdsProvider.notifier).toggle(vocabularyId);
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'Error: $e', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).errorParam(e.toString()), type: AppToastType.error);
       }
     } finally {
       if (mounted) {
@@ -51,7 +52,7 @@ class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
     final preferredDialect = profileAsync.value?.preferredDialect;
 
     if (widget.vocabularies.isEmpty) {
-      return const Center(child: Text('No vocabulary for this lesson'));
+      return Center(child: Text(S.of(context).noVocabularyForLesson));
     }
 
     return ListView.builder(
@@ -165,7 +166,7 @@ class _VocabularyCard extends StatelessWidget {
                 ),
               if (vocab.classifier != null)
                 AppChip(
-                  label: 'CL: ${vocab.classifier}',
+                  label: S.of(context).classifierLabelParam(vocab.classifier!),
                   fontSize: AppTypography.caption,
                 ),
             ],

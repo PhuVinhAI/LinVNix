@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -99,26 +100,26 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
               selectedIndex: _getCurrentIndex(context),
               onDestinationSelected: (index) => _onTap(context, index),
               onCenterAction: () => context.push('/camera'),
-              destinations: const [
+              destinations: [
                 AppNavBarDestination(
                   icon: Icons.home_outlined,
                   selectedIcon: Icons.home,
-                  label: 'Home',
+                  label: S.of(context).homeNavBar,
                 ),
                 AppNavBarDestination(
                   icon: Icons.school_outlined,
                   selectedIcon: Icons.school,
-                  label: 'Courses',
+                  label: S.of(context).coursesTitle,
                 ),
                 AppNavBarDestination(
                   icon: Icons.chat_bubble_outline,
                   selectedIcon: Icons.chat_bubble,
-                  label: 'Chat',
+                  label: S.of(context).practiceTitle,
                 ),
                 AppNavBarDestination(
                   icon: Icons.person_outlined,
                   selectedIcon: Icons.person,
-                  label: 'Profile',
+                  label: S.of(context).profileTitle,
                 ),
               ],
             ),

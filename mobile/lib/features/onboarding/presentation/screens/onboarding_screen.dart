@@ -180,7 +180,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       if (mounted) {
         AppToast.show(
           context,
-          message: 'An unexpected error occurred',
+          message: S.of(context).unexpectedErrorMessage2,
           type: AppToastType.error,
         );
       }
@@ -259,7 +259,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Row(
                 children: [
                   AppButton(
-                    label: 'Skip',
+                    label: S.of(context).skipLabel,
                     variant: AppButtonVariant.text,
                     onPressed: _isSubmitting ? null : _skipStep,
                   ),
@@ -347,7 +347,7 @@ class _LevelStep extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Select the level that best describes your Vietnamese proficiency.',
+            S.of(context).onboardingSelectLevelDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: c.mutedForeground,
               height: 1.5,
@@ -368,7 +368,7 @@ class _LevelStep extends StatelessWidget {
                 final isSelected = level == selected;
                 return _SelectableCard(
                   label: level,
-                  subtitle: _levelSubtitle(level),
+                  subtitle: _levelSubtitle(context, level),
                   isSelected: isSelected,
                   onTap: () => onSelect(level),
                 );
@@ -380,14 +380,15 @@ class _LevelStep extends StatelessWidget {
     );
   }
 
-  static String _levelSubtitle(String level) {
+  static String _levelSubtitle(BuildContext context, String level) {
+    final s = S.of(context);
     return switch (level) {
-      'A1' => 'Beginner',
-      'A2' => 'Elementary',
-      'B1' => 'Intermediate',
-      'B2' => 'Upper Intermediate',
-      'C1' => 'Advanced',
-      'C2' => 'Proficient',
+      'A1' => s.levelA1,
+      'A2' => s.levelA2,
+      'B1' => s.levelB1,
+      'B2' => s.levelB2,
+      'C1' => s.levelC1,
+      'C2' => s.levelC2,
       _ => '',
     };
   }
@@ -446,7 +447,7 @@ class _DialectStep extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Choose the Vietnamese dialect you want to focus on.',
+            S.of(context).onboardingSelectDialectDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: c.mutedForeground,
               height: 1.5,
@@ -507,7 +508,7 @@ class _DailyGoalStep extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Choose the goals you want to track. You can change them later in Profile.',
+            S.of(context).onboardingSelectGoalsDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: c.mutedForeground,
               height: 1.5,

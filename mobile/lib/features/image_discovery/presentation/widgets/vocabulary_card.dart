@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -112,7 +113,7 @@ class _VocabularyCardState extends State<VocabularyCard> {
                   ),
                 if (vocabulary.classifier != null)
                   AppChip(
-                    label: 'CL: ${vocabulary.classifier}',
+                    label: S.of(context).classifierLabelParam(vocabulary.classifier!),
                     fontSize: AppTypography.caption,
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.sm,
@@ -142,7 +143,7 @@ class _VocabularyCardState extends State<VocabularyCard> {
           Align(
             alignment: Alignment.centerRight,
             child: AppButton(
-              label: _isAdded ? 'Đã thêm' : 'Thêm',
+              label: _isAdded ? S.of(context).addedLabel : 'Thêm',
               icon: Icon(_isAdded ? Icons.check : Icons.add),
               variant: _isAdded
                   ? AppButtonVariant.secondary

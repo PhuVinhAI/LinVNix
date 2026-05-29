@@ -144,16 +144,18 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         context,
         barrierDismissible: false,
         builder: (ctx) => AppDialog(
-          title: 'Resume exercise?',
-          content:
-              'You have unfinished progress at question ${session.currentIndex + 1} of ${_exercises.length}. Continue from there or start over?',
+          title: S.of(context).resumeExerciseQuestion,
+          content: S.of(context).unfinishedProgressQuestionParam(
+            session.currentIndex + 1,
+            _exercises.length,
+          ),
           actions: [
             AppDialogAction(
-              label: 'Start over',
+              label: S.of(context).startOver,
               onPressed: () => Navigator.of(ctx).pop(false),
             ),
             AppDialogAction(
-              label: 'Continue',
+              label: S.of(context).authContinueHome,
               isPrimary: true,
               onPressed: () => Navigator.of(ctx).pop(true),
             ),
@@ -329,13 +331,13 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
           children: [
             Icon(Icons.check_circle, color: c.primary),
             const SizedBox(width: 8),
-            const Text('Exercise Complete!'),
+            Text(S.of(context).exerciseComplete),
           ],
         ),
         contentWidget: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Your score', style: theme.textTheme.bodyLarge),
+            Text(S.of(context).yourScoreLabel, style: theme.textTheme.bodyLarge),
             const SizedBox(height: 8),
             Text(
               '$percent%',
@@ -382,7 +384,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         ),
         actions: [
           AppDialogAction(
-            label: 'Return to practice',
+            label: S.of(context).returnToPractice,
             isPrimary: true,
             onPressed: () async {
               Navigator.of(ctx).pop();
@@ -497,7 +499,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 AppButton(
-                  label: 'Go back',
+                  label: S.of(context).goBack,
                   variant: AppButtonVariant.primary,
                   onPressed: () => context.pop(),
                 ),
@@ -530,7 +532,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     Text(
-                      'No exercises available',
+                      S.of(context).noExercisesAvailable,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: c.foreground,
@@ -589,7 +591,10 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Question ${_currentIndex + 1} of ${_exercises.length}',
+                    S.of(context).questionProgressParam(
+                      _currentIndex + 1,
+                      _exercises.length,
+                    ),
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: c.mutedForeground,
                     ),
@@ -626,7 +631,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                   const SizedBox(height: 24),
                   if (!_submitted)
                     AppButton(
-                      label: _submitting ? 'Submitting...' : 'Submit',
+                      label: _submitting ? S.of(context).submittingStatus : S.of(context).submitLabel,
                       variant: AppButtonVariant.primary,
                       onPressed: _isValid && !_submitting ? _submit : null,
                     ),
@@ -640,13 +645,13 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                     const SizedBox(height: 16),
                     if (_isLastQuestion)
                       AppButton(
-                        label: 'See Summary',
+                        label: S.of(context).seeSummary,
                         variant: AppButtonVariant.primary,
                         onPressed: _showSummary,
                       )
                     else
                       AppButton(
-                        label: 'Next Question',
+                        label: S.of(context).nextQuestion,
                         variant: AppButtonVariant.primary,
                         onPressed: _nextQuestion,
                       ),
@@ -750,7 +755,7 @@ class ExplanationPanel extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                isCorrect ? 'Correct!' : 'Incorrect',
+                isCorrect ? S.of(context).correctLabel : S.of(context).incorrectLabel,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: isCorrect ? Colors.green : c.error,
@@ -770,7 +775,7 @@ class ExplanationPanel extends StatelessWidget {
           if (!isCorrect) ...[
             const SizedBox(height: 8),
             Text(
-              'Correct answer',
+              S.of(context).correctAnswerLabel,
               style: theme.textTheme.labelMedium?.copyWith(
                 color: c.mutedForeground,
               ),

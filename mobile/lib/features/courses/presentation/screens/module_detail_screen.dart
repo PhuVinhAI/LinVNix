@@ -1,4 +1,4 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -377,16 +377,16 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Delete custom set?',
+        title: S.of(context).deleteCustomSetQuestion,
         content:
-            'This set will be removed from your list. You can create a new one anytime.',
+            S.of(context).deleteCustomPracticeSetWarning,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Delete',
+            label: S.of(context).deleteLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -402,16 +402,15 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Reset progress?',
-        content:
-            'Your answers for "$title" will be cleared. You can start over anytime.',
+        title: S.of(context).resetProgressQuestion,
+        content: S.of(context).clearAnswersWarningParam(title),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Reset',
+            label: S.of(context).resetLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -427,16 +426,15 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Regenerate exercises?',
-        content:
-            'This will create a new set replacing "$title" with fresh AI-generated questions.',
+        title: S.of(context).regenerateExercisesQuestion,
+        content: S.of(context).freshAiQuestionsWarningParam(title),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Regenerate',
+            label: S.of(context).regenerateLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -452,16 +450,16 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Mark all lessons as completed?',
+        title: S.of(context).markAllLessonsCompletedQuestion,
         content:
-            'All lessons in this module will be marked as completed. You can reset later if needed.',
+            S.of(context).markModuleCompleteWarning,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Complete All',
+            label: S.of(context).completeAll,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -477,16 +475,16 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Reset all progress?',
+        title: S.of(context).resetAllProgressQuestion,
         content:
-            'Reset all progress? This cannot be undone. All lesson progress, exercise results, and custom practice sets in this module will be removed.',
+            S.of(context).resetModuleProgressWarning,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Reset',
+            label: S.of(context).resetLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -559,11 +557,11 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     bool hasProgress,
   ) {
     return exerciseSetsAsync.when(
-      loading: () => const SliverToBoxAdapter(
-        child: ContentListHeader(title: 'Lessons'),
+      loading: () => SliverToBoxAdapter(
+        child: ContentListHeader(title: S.of(context).lessonsTitle),
       ),
-      error: (_, __) => const SliverToBoxAdapter(
-        child: ContentListHeader(title: 'Lessons'),
+      error: (_, __) => SliverToBoxAdapter(
+        child: ContentListHeader(title: S.of(context).lessonsTitle),
       ),
       data: (summary) {
         final hasBypassProgress = summary.completedLessonsCount > 0;
@@ -571,9 +569,11 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
 
         return SliverToBoxAdapter(
           child: ContentListHeader(
-            title: 'Lessons',
-            progressText:
-                '${summary.completedLessonsCount}/${summary.totalLessonsCount} completed',
+            title: S.of(context).lessonsTitle,
+            progressText: S.of(context).completedCountParam(
+                  summary.completedLessonsCount,
+                  summary.totalLessonsCount,
+                ),
             showCompleteAll: showCompleteAll,
             showReset: shouldShowReset,
             isCompletingAll: _busyAction == _BusyAction.completeAll,
@@ -600,9 +600,9 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
           child: CustomPracticeSection(
             eligible: summary.eligible,
             lockedMessage:
-                'Complete at least one lesson to unlock custom practice.',
+                S.of(context).unlockCustomPracticeModuleHint,
             emptyMessage:
-                'No custom practice sets yet. Create one to review what you\'ve learned.',
+                S.of(context).noCustomPracticeSetsYet,
             isCreating: _isCreatingCustom,
             error: _error,
             onCreate: _showCreationForm,
@@ -790,7 +790,7 @@ class _ModuleSetCard extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  'Cancel',
+                                  S.of(context).cancelButton2,
                                   style: theme.textTheme.labelSmall
                                       ?.copyWith(
                                     color: c.mutedForeground,
@@ -849,11 +849,11 @@ class _LessonCard extends StatelessWidget {
     };
   }
 
-  String _statusLabel(String? status) {
+  String _statusLabel(BuildContext context, String? status) {
     return switch (status) {
-      'completed' => 'Completed',
-      'in_progress' => 'In Progress',
-      _ => 'Not Started',
+      'completed' => S.of(context).completedLabel,
+      'in_progress' => S.of(context).inProgressLabel,
+      _ => S.of(context).notStartedLabel,
     };
   }
 
@@ -899,7 +899,7 @@ class _LessonCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
                 child: Text(
-                  'Quiz',
+                  S.of(context).quizLabel,
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -939,7 +939,7 @@ class _LessonCard extends StatelessWidget {
                     size: 14, color: statusColor),
                 const SizedBox(width: AppSpacing.xs),
                 Text(
-                  _statusLabel(progress?.status),
+                  _statusLabel(context, progress?.status),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: statusColor,
                     fontSize: 11,

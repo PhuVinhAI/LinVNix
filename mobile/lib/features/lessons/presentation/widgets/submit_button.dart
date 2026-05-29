@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -17,7 +18,7 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppButton(
-      label: 'Submit',
+      label: S.of(context).submitLabel,
       onPressed: isEnabled ? onPressed : null,
       isLoading: isLoading,
       isFullWidth: true,

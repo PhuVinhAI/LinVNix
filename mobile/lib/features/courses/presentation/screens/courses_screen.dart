@@ -55,7 +55,7 @@ class _CoursesList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Semantics(
-              label: 'No courses available icon',
+              label: S.of(context).noCoursesAvailableIcon,
               child: Icon(
                 Icons.school_outlined,
                 size: 64,
@@ -277,7 +277,7 @@ class _CoursesError extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Semantics(
-              label: 'Error loading courses',
+              label: S.of(context).errorLoadingCourses,
               child: Icon(Icons.error_outline, size: 64, color: c.error),
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -288,7 +288,7 @@ class _CoursesError extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             Semantics(
-              label: 'Retry loading courses',
+              label: S.of(context).retryLoadingCourses,
               button: true,
               child: AppButton(
                 variant: AppButtonVariant.primary,

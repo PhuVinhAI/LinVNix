@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -97,7 +98,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       alignment: Alignment.center,
       child: Text(
-        'Feedback',
+        S.of(context).feedbackTitle,
         textAlign: TextAlign.center,
         style: GoogleFonts.inter(
           fontSize: AppTypography.titleSmall,
@@ -148,7 +149,7 @@ class _CorrectionItemState extends State<_CorrectionItem>
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final typeLabel = widget.correction.type == 'SPELLING' ? 'Spelling' : 'Grammar';
+    final typeLabel = widget.correction.type == 'SPELLING' ? S.of(context).spellingLabel : S.of(context).grammarTitle;
 
     return AnimatedBuilder(
       animation: _highlightController,

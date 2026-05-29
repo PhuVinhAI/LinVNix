@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -206,7 +207,7 @@ class _FillBlankInputState extends State<_FillBlankInput> {
                       color: c.foreground,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'Type answer here...',
+                      hintText: S.of(context).typeAnswerHint,
                       hintStyle: GoogleFonts.inter(
                         fontSize: AppTypography.bodyMedium,
                         color: c.mutedForeground,

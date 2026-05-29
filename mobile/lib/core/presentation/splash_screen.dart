@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:linvnix/l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -34,7 +35,7 @@ class SplashScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       Text(
-                        'LinVNix',
+                        S.of(context).appName,
                         style: GoogleFonts.inter(
                           fontSize: AppTypography.headlineLarge,
                           fontWeight: FontWeight.w700,
@@ -45,7 +46,7 @@ class SplashScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        'Learn Vietnamese',
+                        S.of(context).learnVietnamese,
                         style: GoogleFonts.inter(
                           fontSize: AppTypography.bodyLarge,
                           color: c.mutedForeground,

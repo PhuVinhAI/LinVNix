@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shimmer/shimmer.dart';
@@ -296,7 +297,7 @@ class DialogueContentWidget extends StatelessWidget {
               Icon(Icons.chat_bubble_outline, size: 20, color: c.primary),
               const SizedBox(width: 8),
               Text(
-                'Dialogue',
+                S.of(context).dialogueTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: c.primary,
@@ -399,7 +400,7 @@ class _DialogueAudioCardState extends State<_DialogueAudioCard> {
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              _hasError ? 'Audio unavailable' : 'Listen to dialogue',
+              _hasError ? S.of(context).audioUnavailable : S.of(context).listenToDialogue,
               style: TextStyle(
                 color: _hasError ? c.error : c.foreground,
               ),

@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -426,7 +427,7 @@ class _ListeningInputState extends State<_ListeningInput> {
                   height: 1.5,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Type what you hear...',
+                  hintText: S.of(context).typeWhatYouHearHint,
                   hintStyle: GoogleFonts.inter(
                     fontSize: AppTypography.bodyMedium,
                     color: c.mutedForeground.withValues(alpha: 0.5),

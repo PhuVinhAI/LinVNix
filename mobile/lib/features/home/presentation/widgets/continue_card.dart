@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -107,12 +108,12 @@ class _ErrorCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Continue Learning',
+            S.of(context).continueSection,
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Unable to load progress',
+            S.of(context).unableToLoadDataMessage,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: c.error,
             ),
@@ -122,7 +123,7 @@ class _ErrorCard extends StatelessWidget {
             variant: AppButtonVariant.outline,
             onPressed: onRetry,
             icon: const Icon(Icons.refresh),
-            label: 'Retry',
+            label: S.of(context).retryButton,
           ),
         ],
       ),
@@ -153,27 +154,27 @@ class _EmptyCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Start a course',
+            S.of(context).startCourseLabel,
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Begin learning Vietnamese today',
+            S.of(context).beginLearningVietnameseToday,
             style: theme.textTheme.bodySmall?.copyWith(
               color: c.mutedForeground,
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
           Semantics(
-            label: 'Browse available courses',
+            label: S.of(context).browseAvailableCourses,
             button: true,
             child: AppButton(
               variant: AppButtonVariant.primary,
               onPressed: () => context.go('/courses'),
               icon: const Icon(Icons.school),
-              label: 'Browse Courses',
+              label: S.of(context).browseCourses,
             ),
           ),
         ],
@@ -202,7 +203,7 @@ class _DataCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBadge(
-            label: isInProgress ? 'In Progress' : 'Completed',
+            label: isInProgress ? S.of(context).inProgressLabel : S.of(context).completedLabel,
             color: isInProgress ? c.primary : c.success,
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -215,15 +216,15 @@ class _DataCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           Semantics(
             label: isInProgress
-                ? 'Continue lesson: ${continueLearning.lessonTitle}'
-                : 'Review lesson: ${continueLearning.lessonTitle}',
+                ? S.of(context).continueLessonTitleParam(continueLearning.lessonTitle)
+                : S.of(context).reviewLessonTitleParam(continueLearning.lessonTitle),
             button: true,
             child: AppButton(
               variant: AppButtonVariant.primary,
               onPressed: () =>
                   context.push('/lessons/${continueLearning.lessonId}'),
               icon: Icon(isInProgress ? Icons.play_arrow : Icons.replay),
-              label: isInProgress ? 'Continue' : 'Review',
+              label: isInProgress ? S.of(context).continueLabel : S.of(context).reviewLabel,
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
@@ -338,16 +339,15 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
       final confirmed = await AppDialog.show<bool>(
         context,
         builder: (ctx) => AppDialog(
-          title: 'Regenerate response?',
-          content:
-              'This message and all messages after it will be deleted. Are you sure?',
+          title: S.of(context).regenerateResponseQuestion,
+          content: S.of(context).deleteMessageChainQuestion,
           actions: [
             AppDialogAction(
-              label: 'Cancel',
+              label: S.of(context).cancelButton2,
               onPressed: () => Navigator.of(ctx).pop(false),
             ),
             AppDialogAction(
-              label: 'Delete and regenerate',
+              label: S.of(context).deleteAndRegenerate,
               isPrimary: true,
               onPressed: () => Navigator.of(ctx).pop(true),
             ),
@@ -415,7 +415,7 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'AI Assistant',
+                S.of(context).aiAssistantTitle,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: c.foreground,
@@ -423,7 +423,7 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                'Start a conversation to get instant explanations, practice translations, or clarify language concepts.',
+                S.of(context).assistantWelcomeMessage,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: c.mutedForeground,
                     ),
@@ -489,12 +489,12 @@ class _Header extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.menu),
             color: c.mutedForeground,
-            tooltip: 'Conversation list',
+            tooltip: S.of(context).conversationList,
             onPressed: onDrawerTap,
           ),
           Expanded(
             child: Text(
-              'AI Assistant · $displayName',
+              '${S.of(context).aiAssistantTitle} · $displayName',
               style: GoogleFonts.inter(
                 fontSize: AppTypography.bodySmall,
                 fontWeight: FontWeight.w600,
@@ -507,13 +507,13 @@ class _Header extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.refresh),
             color: c.mutedForeground,
-            tooltip: 'Reset conversation',
+            tooltip: S.of(context).resetConversation,
             onPressed: onReset,
           ),
           IconButton(
             icon: const Icon(Icons.close),
             color: c.mutedForeground,
-            tooltip: 'Close',
+            tooltip: S.of(context).closeButton,
             onPressed: onClose,
           ),
         ],
@@ -572,7 +572,7 @@ class _MessageBubble extends StatelessWidget {
               MarkdownBody(data: message.content, selectable: true)
             else if (!message.interrupted)
               Text(
-                '_(no response)_',
+                S.of(context).noResponseLabel,
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodySmall,
                   color: c.mutedForeground,
@@ -583,7 +583,7 @@ class _MessageBubble extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: AppSpacing.xs),
                 child: Text(
-                  'Stopped',
+                  S.of(context).stoppedLabel,
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.caption,
                     color: c.mutedForeground,
@@ -652,7 +652,7 @@ class _LiveAssistantTurn extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: AppSpacing.xs),
                     child: Text(
-                      'Stopped',
+                      S.of(context).stoppedLabel,
                       style: GoogleFonts.inter(
                         fontSize: AppTypography.caption,
                         color: c.mutedForeground,
@@ -710,7 +710,7 @@ class _LiveAssistantTurn extends StatelessWidget {
               const SizedBox(height: AppSpacing.md),
               AppButton(
                 onPressed: onRetry,
-                label: 'Retry',
+                label: S.of(context).retryButton,
                 isFullWidth: true,
               ),
             ],
@@ -747,7 +747,7 @@ class _ComposeBar extends StatelessWidget {
       ),
       child: AppChatComposeField(
         controller: controller,
-        hintText: 'Type a message...',
+        hintText: S.of(context).typeMessageHint,
         enabled: !inFlight,
         showMic: !inFlight,
         onSend: inFlight ? onStop : onSend,
@@ -916,9 +916,9 @@ class _MessageActionBarState extends State<_MessageActionBar> {
   String _formatTime(DateTime dt) {
     final now = DateTime.now();
     final diff = now.difference(dt);
-    if (diff.inSeconds < 60) return 'Just now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inSeconds < 60) return S.of(context).justNowLabel;
+    if (diff.inMinutes < 60) return S.of(context).minutesAgoParam(diff.inMinutes);
+    if (diff.inHours < 24) return S.of(context).hoursAgoParam(diff.inHours);
     return DateFormat('dd/MM/yyyy HH:mm').format(dt);
   }
 
@@ -947,20 +947,20 @@ class _MessageActionBarState extends State<_MessageActionBar> {
         children: [
           _ActionChip(
             icon: _copied ? Icons.check : Icons.copy_outlined,
-            tooltip: _copied ? 'Copied' : 'Copy',
+            tooltip: _copied ? S.of(context).copiedToast : S.of(context).copyLabel,
             color: _copied ? c.primary : c.mutedForeground,
             onTap: _onCopy,
           ),
           if (widget.onRegenerate != null)
             _ActionChip(
               icon: Icons.refresh,
-              tooltip: 'Regenerate',
+              tooltip: S.of(context).regenerateLabel,
               color: c.mutedForeground,
               onTap: widget.onRegenerate!,
             ),
           _ActionChip(
             icon: Icons.share_outlined,
-            tooltip: 'Share',
+            tooltip: S.of(context).shareLabel,
             color: c.mutedForeground,
             onTap: _onShare,
           ),

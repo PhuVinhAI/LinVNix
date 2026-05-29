@@ -121,7 +121,7 @@ class _ResultContent extends StatelessWidget {
                   _TotalScoreDisplay(totalScore: result.totalScore),
                   if (result.criteriaScores.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'Grading criteria'),
+                    _SectionHeader(title: S.of(context).gradingCriteria),
                     const SizedBox(height: AppSpacing.md),
                     ...result.criteriaScores.map(
                       (cs) => _CriteriaScoreItem(criteriaScore: cs),
@@ -130,7 +130,7 @@ class _ResultContent extends StatelessWidget {
                   if (result.aiSummary != null &&
                       result.aiSummary!.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
-                    _SectionHeader(title: 'AI feedback'),
+                    _SectionHeader(title: S.of(context).aiFeedback),
                     const SizedBox(height: AppSpacing.md),
                     Container(
                       width: double.infinity,
@@ -152,7 +152,7 @@ class _ResultContent extends StatelessWidget {
                     _EndReasonMessage(
                       icon: Icons.menu_book_outlined,
                       iconColor: c.warning,
-                      message: 'Review the lesson before trying again',
+                      message: S.of(context).reviewLessonBeforeRetry,
                       bgColor: c.warning.withAlpha(12),
                     ),
                   ],
@@ -162,7 +162,7 @@ class _ResultContent extends StatelessWidget {
                       icon: Icons.warning_amber_rounded,
                       iconColor: c.error,
                       message:
-                          'Conversation ended due to inappropriate content',
+                          S.of(context).inappropriateContentEndMessage,
                       bgColor: c.error.withAlpha(12),
                     ),
                   ],
@@ -190,7 +190,7 @@ class _ResultContent extends StatelessWidget {
                   onPressed: () => context.push(
                     '/practice/scenarios/${result.scenarioId}',
                   ),
-                  label: 'Play again',
+                  label: S.of(context).playAgain,
                   isFullWidth: true,
                 ),
               if (result.canReplay) const SizedBox(height: AppSpacing.sm),
@@ -199,7 +199,7 @@ class _ResultContent extends StatelessWidget {
                 onPressed: () => context.push(
                   '/practice/sessions/${result.sessionId}?history=true&fromResult=true',
                 ),
-                label: 'Review conversation',
+                label: S.of(context).reviewConversation,
                 isFullWidth: true,
               ),
             ],
@@ -249,7 +249,7 @@ class _TotalScoreDisplay extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Overall score',
+            S.of(context).overallScoreLabel,
             style: GoogleFonts.inter(
               fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,

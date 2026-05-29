@@ -138,7 +138,7 @@ class _FilterRow extends StatelessWidget {
         Icon(Icons.filter_list, size: 16, color: c.mutedForeground),
         const SizedBox(width: AppSpacing.xs),
         Text(
-          'Filtering by scenario',
+          S.of(context).filteringByScenario,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: c.mutedForeground,
               ),
@@ -147,7 +147,7 @@ class _FilterRow extends StatelessWidget {
         GestureDetector(
           onTap: () => onFilterChanged(null),
           child: Text(
-            'Clear filter',
+            S.of(context).clearFilter,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: c.primary,
                   fontWeight: FontWeight.w600,
@@ -177,12 +177,12 @@ class _ResultCard extends StatelessWidget {
     }
   }
 
-  String _endReasonLabel(String reason) {
+  String _endReasonLabel(BuildContext context, String reason) {
     return switch (reason) {
-      'COMPLETED' => 'Completed',
-      'TOO_MANY_ERRORS' => 'Too many errors',
-      'INAPPROPRIATE' => 'Inappropriate content',
-      'ABUSIVE' => 'Abusive content',
+      'COMPLETED' => S.of(context).completedLabel,
+      'TOO_MANY_ERRORS' => S.of(context).tooManyErrorsLabel,
+      'INAPPROPRIATE' => S.of(context).inappropriateContentLabel,
+      'ABUSIVE' => S.of(context).abusiveContentLabel,
       _ => reason,
     };
   }
@@ -241,7 +241,7 @@ class _ResultCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 AppBadge(
-                  label: _endReasonLabel(result.endReason),
+                  label: _endReasonLabel(context, result.endReason),
                   color: _endReasonColor(result.endReason, c),
                 ),
               ],
@@ -323,7 +323,7 @@ class _ResultsEmpty extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'No results yet',
+              S.of(context).noResultsYet,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: c.foreground,
@@ -332,7 +332,7 @@ class _ResultsEmpty extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Complete a simulation conversation to see results here',
+              S.of(context).completeSimulationToSeeResults,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: c.mutedForeground,
               ),

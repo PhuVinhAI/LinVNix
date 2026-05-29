@@ -65,7 +65,7 @@ class LinVNixApp extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
 
     return MaterialApp.router(
-      title: 'LinVNix',
+      onGenerateTitle: (context) => S.of(context).appName,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: themeMode,

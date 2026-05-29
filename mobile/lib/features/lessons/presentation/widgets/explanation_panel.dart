@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linvnix/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 
@@ -37,7 +38,7 @@ class ExplanationPanel extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                isCorrect ? 'Correct!' : 'Incorrect',
+                isCorrect ? S.of(context).correctLabel : S.of(context).incorrectLabel,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: fgColor,
@@ -46,7 +47,7 @@ class ExplanationPanel extends StatelessWidget {
               if (score != null) ...[
                 const Spacer(),
                 Text(
-                  '+$score pts',
+                  S.of(context).pointsParam(score!),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: fgColor,
@@ -58,7 +59,7 @@ class ExplanationPanel extends StatelessWidget {
           if (!isCorrect) ...[
             const SizedBox(height: 12),
             Text(
-              'Correct answer: $correctAnswer',
+              S.of(context).correctAnswerParam(correctAnswer),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: fgColor,
                     fontWeight: FontWeight.w500,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linvnix/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../domain/lesson_models.dart';
@@ -10,7 +11,7 @@ class GrammarStepWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (grammarRules.isEmpty) {
-      return const Center(child: Text('No grammar rules for this lesson'));
+      return Center(child: Text(S.of(context).noGrammarRulesForLesson));
     }
 
     return ListView.builder(
@@ -71,7 +72,7 @@ class _GrammarRuleCard extends StatelessWidget {
           if (rule.examples.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(
-              'Examples',
+              S.of(context).examplesTitle,
               style: theme.textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w600,
               ),

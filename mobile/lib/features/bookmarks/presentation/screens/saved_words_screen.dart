@@ -81,7 +81,7 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
-          tooltip: 'Exit',
+          tooltip: S.of(context).exitButton,
         ),
         title: Text(
           _items.isNotEmpty ? '${_currentIndex + 1}/${_items.length}' : '',
@@ -174,7 +174,7 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Save favorite words to study with flashcards',
+            S.of(context).saveFavoriteWordsDescription2,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: c.mutedForeground,
                 ),
@@ -372,7 +372,7 @@ class _Flashcard extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.volume_up, size: 32, color: c.primary),
               onPressed: onPlayAudio,
-              tooltip: 'Play pronunciation',
+              tooltip: S.of(context).playPronunciation,
             ),
           ],
           const SizedBox(height: AppSpacing.xl),

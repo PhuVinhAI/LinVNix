@@ -128,7 +128,7 @@ class _CoursesSection extends StatelessWidget {
             TextButton(
               onPressed: () => context.go('/courses'),
               child: Text(
-                'See all',
+                S.of(context).seeAll,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: c.primary,
                   fontWeight: FontWeight.w600,
@@ -253,7 +253,7 @@ class _SimulationSection extends StatelessWidget {
             TextButton(
               onPressed: () => context.go('/practice'),
               child: Text(
-                'See all',
+                S.of(context).seeAll,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: c.primary,
                   fontWeight: FontWeight.w600,
@@ -267,7 +267,7 @@ class _SimulationSection extends StatelessWidget {
           loading: () => const _HomeCoursesLoading(),
           error: (_, _) => Center(
             child: Text(
-              'Unable to load scenarios',
+              S.of(context).unableToLoadScenarios,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: c.mutedForeground,
               ),
@@ -294,7 +294,7 @@ class _SimulationSection extends StatelessWidget {
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Text(
-                        'Start a conversation practice',
+                        S.of(context).startConversationPractice,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

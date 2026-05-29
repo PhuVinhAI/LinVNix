@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class GoogleSignInButton extends StatefulWidget {
   const GoogleSignInButton({
@@ -27,18 +28,21 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       final auth = account.authentication;
       final idToken = auth.idToken;
       if (idToken == null) {
-        throw Exception('Failed to obtain Google ID token');
+        if (mounted) {
+          AppToast.show(context, message: S.of(context).googleTokenFailed, type: AppToastType.error);
+        }
+        return;
       }
       widget.onSuccess(idToken);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled ||
           e.code == GoogleSignInExceptionCode.interrupted) {
       } else if (mounted) {
-        AppToast.show(context, message: 'Google Sign-In failed: ${e.description}', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).googleSignInFailedDescParam(e.description ?? ''), type: AppToastType.error);
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'Google Sign-In failed: $e', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).googleSignInFailedParam(e.toString()), type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);

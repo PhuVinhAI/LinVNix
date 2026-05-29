@@ -25,7 +25,7 @@ class ProfileScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Settings',
+            tooltip: S.of(context).settingsButton,
             onPressed: () => context.push('/settings'),
           ),
         ],
@@ -84,8 +84,8 @@ class _ProfileHeader extends StatelessWidget {
         children: [
           Semantics(
             label: profile.avatarUrl != null
-                ? 'Profile picture of ${profile.fullName}'
-                : 'Default profile picture',
+                ? S.of(context).profilePictureOfParam(profile.fullName)
+                : S.of(context).defaultProfilePictureSemantics,
             child: AppAvatar(
               radius: 50,
               backgroundColor: c.primary.withValues(alpha: 0.08),
@@ -164,7 +164,7 @@ class _StatsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Statistics',
+          S.of(context).statisticsLabel,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -177,17 +177,17 @@ class _StatsSection extends ConsumerWidget {
             child: Column(
               children: [
                 Semantics(
-                  label: 'Error loading statistics',
+                  label: S.of(context).errorLoadingStats,
                   child: Icon(Icons.error_outline, color: c.error),
                 ),
                 const SizedBox(height: 8),
                 Text(S.of(context).failedToLoadSettings, textAlign: TextAlign.center),
                 const SizedBox(height: 8),
                 Semantics(
-                  label: 'Retry loading statistics',
+                  label: S.of(context).retryLoadingStats,
                   button: true,
                   child: AppButton(
-                    label: 'Retry',
+                    label: S.of(context).retryButton,
                     variant: AppButtonVariant.outline,
                     onPressed: () => ref.read(exerciseStatsProvider.notifier).refresh(),
                   ),
@@ -202,7 +202,7 @@ class _StatsSection extends ConsumerWidget {
                   Expanded(
                     child: _StatCard(
                       icon: Icons.check_circle,
-                      label: 'Lessons Completed',
+                      label: S.of(context).lessonsCompleted,
                       value: '${stats.completedExercises}',
                       color: c.primary,
                     ),
@@ -211,7 +211,7 @@ class _StatsSection extends ConsumerWidget {
                   Expanded(
                     child: _StatCard(
                       icon: Icons.task_alt,
-                      label: 'Correct Answers',
+                      label: S.of(context).correctAnswers,
                       value: '${stats.correctAnswers}',
                       color: c.secondary,
                     ),
@@ -224,7 +224,7 @@ class _StatsSection extends ConsumerWidget {
                   Expanded(
                     child: _StatCard(
                       icon: Icons.quiz,
-                      label: 'Exercises Done',
+                      label: S.of(context).exercisesDone,
                       value: '${stats.totalExercises}',
                       color: accent.toneLow,
                     ),
@@ -233,7 +233,7 @@ class _StatsSection extends ConsumerWidget {
                   Expanded(
                     child: _StatCard(
                       icon: Icons.timer,
-                      label: 'Total Time',
+                      label: S.of(context).totalTime,
                       value: _formatTime(stats.totalTimeSpent),
                       color: accent.diacriticColor,
                     ),
@@ -242,7 +242,7 @@ class _StatsSection extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               Semantics(
-                label: 'Accuracy: ${stats.accuracy.toStringAsFixed(1)} percent',
+                label: S.of(context).accuracyPercentParam(stats.accuracy.toStringAsFixed(1)),
                 child: AppCard(
                   variant: AppCardVariant.outlined,
                   padding: const EdgeInsets.symmetric(
@@ -258,7 +258,7 @@ class _StatsSection extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Accuracy',
+                              S.of(context).accuracyLabel,
                               style: theme.textTheme.bodySmall,
                             ),
                             Text(
@@ -313,7 +313,7 @@ class _SimulationStatsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Simulation',
+          S.of(context).simulationLabel,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -326,20 +326,20 @@ class _SimulationStatsSection extends ConsumerWidget {
             child: Column(
               children: [
                 Semantics(
-                  label: 'Error loading simulation statistics',
+                  label: S.of(context).errorLoadingSimulationStats,
                   child: Icon(Icons.error_outline, color: c.error),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Failed to load simulation statistics',
+                Text(
+                  S.of(context).failedToLoadSimulationStats,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Semantics(
-                  label: 'Retry loading simulation statistics',
+                  label: S.of(context).retryLoadingSimulationStats,
                   button: true,
                   child: AppButton(
-                    label: 'Retry',
+                    label: S.of(context).retryButton,
                     variant: AppButtonVariant.outline,
                     onPressed: () =>
                         ref.read(simulationStatsProvider.notifier).refresh(),
@@ -353,7 +353,7 @@ class _SimulationStatsSection extends ConsumerWidget {
               Expanded(
                 child: _StatCard(
                   icon: Icons.forum_outlined,
-                  label: 'Scenarios Tried',
+                  label: S.of(context).scenariosTried,
                   value: '${stats.scenariosAttempted}',
                   color: accent.toneHigh,
                 ),
@@ -362,7 +362,7 @@ class _SimulationStatsSection extends ConsumerWidget {
               Expanded(
                 child: _StatCard(
                   icon: Icons.star_outline,
-                  label: 'Avg. Score',
+                  label: S.of(context).avgScore,
                   value: stats.averageScore.toStringAsFixed(1),
                   color: accent.toneMid,
                 ),
@@ -628,7 +628,7 @@ class _StreakSection extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Daily goal',
+              S.of(context).dailyGoals,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -636,7 +636,7 @@ class _StreakSection extends ConsumerWidget {
             const SizedBox(height: AppSpacing.md),
             _StatCard(
               icon: Icons.emoji_events,
-              label: 'Longest streak',
+              label: S.of(context).longestStreak,
               value: '${progress.longestStreak} days',
               color: c.primary,
             ),
@@ -716,7 +716,7 @@ class _VocabStatsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Bookmarked',
+          S.of(context).bookmarkedLabel,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -730,7 +730,7 @@ class _VocabStatsSection extends ConsumerWidget {
               children: [
                 Icon(Icons.error_outline, color: c.error),
                 const SizedBox(width: AppSpacing.md),
-                const Expanded(child: Text('Unable to load bookmark stats')),
+                Expanded(child: Text(S.of(context).unableToLoadBookmarkStats)),
               ],
             ),
           ),
@@ -775,7 +775,7 @@ class _VocabStatsCard extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Saved words',
+              S.of(context).savedWordsTitle,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: c.mutedForeground,
               ),
@@ -811,7 +811,7 @@ class _VocabStatsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Saved words',
+                S.of(context).savedWordsTitle,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: c.mutedForeground,
                 ),

@@ -203,11 +203,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       return s.authPasswordRequired;
                     }
                     if (value.length < 8) {
-                      return 'Password must be at least 8 characters';
+                      return s.passwordLengthError;
                     }
                     if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)')
                         .hasMatch(value)) {
-                      return 'Must contain uppercase, lowercase, and digit';
+                      return s.passwordComplexityError;
                     }
                     return null;
                   },

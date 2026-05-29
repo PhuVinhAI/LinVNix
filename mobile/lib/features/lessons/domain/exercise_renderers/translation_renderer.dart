@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -85,7 +86,7 @@ class _TranslationInputState extends State<_TranslationInput> {
 
   String _languageLabel(String code) {
     return switch (code.toLowerCase()) {
-      'vi' || 'vietnamese' => 'Tiếng Việt',
+      'vi' || 'vietnamese' => S.of(context).languageVietnamese,
       'en' || 'english' => 'English',
       'fr' || 'french' => 'Français',
       'ja' || 'japanese' => '日本語',
@@ -340,7 +341,7 @@ class _TranslationInputState extends State<_TranslationInput> {
                         height: 1.6,
                       ),
                 decoration: InputDecoration(
-                  hintText: 'Type your translation here...',
+                  hintText: S.of(context).typeYourTranslationHint,
                   hintStyle: GoogleFonts.inter(
                     fontSize: AppTypography.bodyMedium,
                     color: c.mutedForeground.withValues(alpha: 0.5),

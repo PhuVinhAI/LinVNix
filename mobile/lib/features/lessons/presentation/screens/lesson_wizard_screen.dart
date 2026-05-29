@@ -96,19 +96,18 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
       context,
       barrierDismissible: false,
       builder: (ctx) => AppDialog(
-        title: 'Start exercises?',
-        content:
-            'You have finished the lesson content. Would you like to practice with exercises?',
+        title: S.of(context).startExercisesQuestion,
+        content: S.of(context).finishedContentPracticeQuestion,
         actions: [
           AppDialogAction(
-            label: 'Not now',
+            label: S.of(context).notNow,
             onPressed: () {
               Navigator.of(ctx).pop();
               if (mounted) context.pop();
             },
           ),
           AppDialogAction(
-            label: 'Let\'s practice',
+            label: S.of(context).letsPractice,
             isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
@@ -233,7 +232,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
     for (final content in lesson.contents) {
       steps.add(_WizardStep(
         type: _StepType.content,
-        label: _contentLabel(content.contentType),
+        label: _contentLabel(content.contentType, context),
         content: content,
       ));
     }
@@ -241,7 +240,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
     if (vocabs.isNotEmpty) {
       steps.add(_WizardStep(
         type: _StepType.vocabulary,
-        label: 'Vocabulary',
+        label: S.of(context).vocabularyTitle,
         vocabularies: vocabs,
       ));
     }
@@ -249,7 +248,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
     if (lesson.grammarRules.isNotEmpty) {
       steps.add(_WizardStep(
         type: _StepType.grammar,
-        label: 'Grammar',
+        label: S.of(context).grammarTitle,
         grammarRules: lesson.grammarRules,
       ));
     }
@@ -257,7 +256,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
     if (steps.isEmpty) {
       return Scaffold(
         appBar: AppAppBar(title: Text(lesson.title)),
-        body: const Center(child: Text('No content available')),
+        body: Center(child: Text(S.of(context).noContentAvailable)),
       );
     }
 
@@ -283,7 +282,10 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
             child: Row(
               children: [
                 Text(
-                  'Step ${_currentPage + 1} of ${steps.length}',
+                  S.of(context).stepProgressParam(
+                    _currentPage + 1,
+                    steps.length,
+                  ),
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: c.mutedForeground,
                   ),
@@ -317,10 +319,10 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
                 children: [
                   if (_currentPage > 0)
                     Semantics(
-                      label: 'Go to previous step',
+                      label: S.of(context).goToPreviousStep,
                       button: true,
                       child: AppButton(
-                        label: 'Back',
+                        label: S.of(context).backButton,
                         variant: AppButtonVariant.outline,
                         onPressed: () {
                           _pageController?.previousPage(
@@ -335,10 +337,10 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
                   const Spacer(),
                   if (!isLastStep && canGoForward)
                     Semantics(
-                      label: 'Go to next step',
+                      label: S.of(context).goToNextStep,
                       button: true,
                       child: AppButton(
-                        label: 'Next',
+                        label: S.of(context).nextButton,
                         variant: AppButtonVariant.primary,
                         onPressed: () {
                           _pageController?.nextPage(
@@ -350,10 +352,10 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
                     )
                   else if (isLastStep)
                     Semantics(
-                      label: 'Continue to exercises',
+                      label: S.of(context).continueToExercises,
                       button: true,
                       child: AppButton(
-                        label: 'Continue',
+                        label: S.of(context).authContinueHome,
                         variant: AppButtonVariant.primary,
                         onPressed: _showExercisePrompt,
                       ),
@@ -398,14 +400,14 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
     }
   }
 
-  String _contentLabel(String contentType) {
+  String _contentLabel(String contentType, BuildContext context) {
     return switch (contentType) {
-      'text' => 'Reading',
-      'audio' => 'Listening',
-      'image' => 'Image',
-      'video' => 'Video',
-      'dialogue' => 'Dialogue',
-      _ => 'Content',
+      'text' => S.of(context).readingStepLabel,
+      'audio' => S.of(context).listeningExercise,
+      'image' => S.of(context).imageStepLabel,
+      'video' => S.of(context).videoStepLabel,
+      'dialogue' => S.of(context).dialogueTitle,
+      _ => S.of(context).contentStepLabel,
     };
   }
 }

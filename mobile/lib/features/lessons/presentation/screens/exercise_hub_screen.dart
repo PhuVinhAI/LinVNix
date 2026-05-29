@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -318,16 +318,16 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Delete custom set?',
+        title: S.of(context).deleteCustomSetQuestion,
         content:
-            'This set will be removed from your list. You can create a new one anytime.',
+            S.of(context).deleteCustomPracticeSetWarning,
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Delete',
+            label: S.of(context).deleteLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -343,16 +343,15 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Reset progress?',
-        content:
-            'Your answers for "$title" will be cleared. You can start over anytime.',
+        title: S.of(context).resetProgressQuestion,
+        content: S.of(context).clearAnswersWarningParam(title),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Reset',
+            label: S.of(context).resetLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -368,16 +367,15 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Regenerate exercises?',
-        content:
-            'This will create a new set replacing "$title" with fresh AI-generated questions.',
+        title: S.of(context).regenerateExercisesQuestion,
+        content: S.of(context).freshAiQuestionsWarningParam(title),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.pop(dialogCtx),
           ),
           AppDialogAction(
-            label: 'Regenerate',
+            label: S.of(context).regenerateLabel,
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
@@ -453,12 +451,12 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
             children: [
               if (defaultSets.isNotEmpty) ...[
                 Text(
-                  'Lesson Exercises',
+                  S.of(context).lessonExercisesTitle,
                   style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Practice with the lesson\'s built-in exercises',
+                  S.of(context).practiceWithLessonDesc,
                   style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
                 ),
                 const SizedBox(height: 16),
@@ -475,14 +473,14 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                   Icon(Icons.auto_awesome, color: c.primary, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    'Custom Practice',
+                    S.of(context).customPracticeLabel,
                     style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                'Generate AI-powered exercises tailored to your needs',
+                S.of(context).generateAiExercisesTailored,
                 style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
               ),
               const SizedBox(height: 16),
@@ -491,7 +489,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 SizedBox(
                   width: double.infinity,
                   child: AppButton(
-                    label: 'Generating exercises...',
+                    label: S.of(context).generatingExercises,
                     variant: AppButtonVariant.secondary,
                     onPressed: null,
                     icon: const SizedBox(
@@ -505,7 +503,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 SizedBox(
                   width: double.infinity,
                   child: AppButton(
-                    label: 'Cancel',
+                    label: S.of(context).cancelButton2,
                     variant: AppButtonVariant.outline,
                     onPressed: () => _aiCancelToken?.cancel(),
                   ),
@@ -514,7 +512,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 SizedBox(
                   width: double.infinity,
                   child: AppButton(
-                    label: 'Create custom set',
+                    label: S.of(context).createCustomSet,
                     variant: AppButtonVariant.primary,
                     onPressed: _showCreationForm,
                     icon: const Icon(Icons.add),
@@ -560,7 +558,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                         ),
                         const SizedBox(height: AppSpacing.lg),
                         Text(
-                          'No exercises yet',
+                          S.of(context).noExercisesYet,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: c.foreground,
@@ -568,7 +566,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                         ),
                         const SizedBox(height: AppSpacing.xs),
                         Text(
-                          'Create a custom set to start practicing!',
+                          S.of(context).createCustomSetPrompt,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: c.mutedForeground,
                           ),
@@ -811,7 +809,7 @@ class _SetCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Actions',
+                        S.of(context).actionsTitle,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                               color: c.foreground,
@@ -819,7 +817,7 @@ class _SetCard extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Close',
+                      tooltip: S.of(context).closeButton,
                       onPressed: () => Navigator.pop(sheetCtx),
                       icon: Icon(Icons.close, color: c.mutedForeground),
                       style: IconButton.styleFrom(
@@ -835,8 +833,8 @@ class _SetCard extends StatelessWidget {
               if (isCustom && onRegenerate != null)
                 AppListItem(
                   leading: Icon(Icons.auto_awesome, color: c.primary, size: 22),
-                  title: 'Regenerate exercises',
-                  subtitle: 'Replace all questions with new AI content',
+                  title: S.of(context).regenerateExercises,
+                  subtitle: S.of(context).replaceAllQuestionsAI,
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.lg,
                     vertical: AppSpacing.md,
@@ -849,8 +847,8 @@ class _SetCard extends StatelessWidget {
               if (onReset != null)
                 AppListItem(
                   leading: Icon(Icons.replay, color: c.warning, size: 22),
-                  title: 'Reset progress',
-                  subtitle: 'Clear your answers and start over',
+                  title: S.of(context).resetProgress,
+                  subtitle: S.of(context).clearAnswersStartOver,
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.lg,
                     vertical: AppSpacing.md,
@@ -863,8 +861,8 @@ class _SetCard extends StatelessWidget {
               if (isCustom && onDelete != null)
                 AppListItem(
                   leading: Icon(Icons.delete_outline, color: c.error, size: 22),
-                  title: 'Delete set',
-                  subtitle: 'Remove from custom practice list',
+                  title: S.of(context).deleteSet,
+                  subtitle: S.of(context).removeFromCustomPracticeList,
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.lg,
                     vertical: AppSpacing.md,
@@ -988,7 +986,7 @@ class _SetCard extends StatelessWidget {
                         const AppSpinner(size: 20, strokeWidth: 2),
                         const SizedBox(height: 2),
                         Text(
-                          'Cancel',
+                          S.of(context).cancelButton2,
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: c.mutedForeground,
                             fontSize: 10,
@@ -1016,7 +1014,7 @@ class _SetCard extends StatelessWidget {
                                   const AppSpinner(size: 20, strokeWidth: 2),
                                   const SizedBox(height: 2),
                                   Text(
-                                    'Cancel',
+                                    S.of(context).cancelButton2,
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: c.mutedForeground,
                                       fontSize: 10,
@@ -1032,7 +1030,7 @@ class _SetCard extends StatelessWidget {
                     : IconButton(
                         icon: Icon(Icons.keyboard_arrow_down_rounded,
                             color: c.mutedForeground, size: 26),
-                        tooltip: 'Actions',
+                        tooltip: S.of(context).actionsTitle,
                         onPressed: () => _openActionsMenu(context),
                       ),
               ),

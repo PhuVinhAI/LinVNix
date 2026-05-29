@@ -1,3 +1,4 @@
+import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -167,16 +168,16 @@ class _ConversationDrawerState extends ConsumerState<ConversationDrawer> {
       context,
       barrierDismissible: true,
       builder: (ctx) => AppDialog(
-        title: 'Delete conversation',
+        title: S.of(context).deleteConversation,
         content:
-            'Are you sure you want to delete "${conv.displayTitle}"? This action cannot be undone.',
+            S.of(context).deleteConversationWarningParam(conv.displayTitle),
         actions: [
           AppDialogAction(
-            label: 'Cancel',
+            label: S.of(context).cancelButton2,
             onPressed: () => Navigator.of(ctx).pop(false),
           ),
           AppDialogAction(
-            label: 'Delete',
+            label: S.of(context).deleteLabel,
             isPrimary: true,
             onPressed: () => Navigator.of(ctx).pop(true),
           ),
@@ -228,7 +229,7 @@ class _Header extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Conversations',
+                  S.of(context).conversationsTitle,
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.titleSmall,
                     fontWeight: FontWeight.w700,
@@ -239,8 +240,8 @@ class _Header extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   totalCount == 0
-                      ? 'No history yet'
-                      : '$totalCount ${totalCount == 1 ? 'chat' : 'chats'}',
+                      ? S.of(context).noHistoryYet
+                      : S.of(context).chatCountParam(totalCount),
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.caption,
                     color: c.mutedForeground,
@@ -285,7 +286,7 @@ class _NewConversationButton extends StatelessWidget {
                 Icon(Icons.add, size: 18, color: c.primaryForeground),
                 const SizedBox(width: AppSpacing.sm),
                 Text(
-                  'New conversation',
+                  S.of(context).newConversation,
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.bodyMedium,
                     fontWeight: FontWeight.w600,
@@ -340,7 +341,7 @@ class _SearchField extends StatelessWidget {
             color: c.foreground,
           ),
           decoration: InputDecoration(
-            hintText: 'Search conversations',
+            hintText: S.of(context).searchConversations,
             hintStyle: GoogleFonts.inter(
               fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,
@@ -404,7 +405,7 @@ class _GroupedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groups = _groupByDate(items);
+    final groups = _groupByDate(context, items);
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: AppSpacing.lg),
       itemCount: groups.length,
@@ -466,7 +467,7 @@ class _ConversationGroup {
   final List<ConversationSummary> items;
 }
 
-List<_ConversationGroup> _groupByDate(List<ConversationSummary> items) {
+List<_ConversationGroup> _groupByDate(BuildContext context, List<ConversationSummary> items) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final yesterday = today.subtract(const Duration(days: 1));
@@ -496,14 +497,14 @@ List<_ConversationGroup> _groupByDate(List<ConversationSummary> items) {
   }
 
   return [
-    if (todayList.isNotEmpty) _ConversationGroup('Today', todayList),
+    if (todayList.isNotEmpty) _ConversationGroup(S.of(context).todayLabel, todayList),
     if (yesterdayList.isNotEmpty)
-      _ConversationGroup('Yesterday', yesterdayList),
+      _ConversationGroup(S.of(context).yesterdayLabel, yesterdayList),
     if (weekList.isNotEmpty)
-      _ConversationGroup('Previous 7 days', weekList),
+      _ConversationGroup(S.of(context).previous7Days, weekList),
     if (monthList.isNotEmpty)
-      _ConversationGroup('Previous 30 days', monthList),
-    if (olderList.isNotEmpty) _ConversationGroup('Older', olderList),
+      _ConversationGroup(S.of(context).previous30Days, monthList),
+    if (olderList.isNotEmpty) _ConversationGroup(S.of(context).olderLabel, olderList),
   ];
 }
 
@@ -635,7 +636,7 @@ class _ConversationRow extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          _formatDate(conversation.updatedAt),
+                          _formatDate(context, conversation.updatedAt),
                           style: GoogleFonts.inter(
                             fontSize: AppTypography.caption,
                             color: c.mutedForeground,
@@ -658,21 +659,21 @@ class _ConversationRow extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime dt) {
+  String _formatDate(BuildContext context, DateTime dt) {
     final now = DateTime.now();
     final diff = now.difference(dt);
-    if (diff.inMinutes < 1) return 'Just now';
+    if (diff.inMinutes < 1) return S.of(context).justNowLabel;
     if (diff.inHours < 1) {
       final m = diff.inMinutes;
-      return '$m ${m == 1 ? 'minute' : 'minutes'} ago';
+      return S.of(context).minutesAgoParam(m);
     }
     if (diff.inDays < 1) {
       final h = diff.inHours;
-      return '$h ${h == 1 ? 'hour' : 'hours'} ago';
+      return S.of(context).hoursAgoParam(h);
     }
     if (diff.inDays < 7) {
       final d = diff.inDays;
-      return '$d ${d == 1 ? 'day' : 'days'} ago';
+      return S.of(context).daysAgoParam(d);
     }
     return '${dt.day}/${dt.month}/${dt.year}';
   }
@@ -688,7 +689,7 @@ class _RowMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     return PopupMenuButton<String>(
-      tooltip: 'More',
+      tooltip: S.of(context).moreLabel,
       icon: Icon(Icons.more_horiz, size: 18, color: c.mutedForeground),
       padding: EdgeInsets.zero,
       splashRadius: 18,
@@ -715,7 +716,7 @@ class _RowMenu extends StatelessWidget {
               Icon(Icons.edit_outlined, size: 16, color: c.foreground),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'Rename',
+                S.of(context).renameLabel,
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodySmall,
                   color: c.foreground,
@@ -732,7 +733,7 @@ class _RowMenu extends StatelessWidget {
               Icon(Icons.delete_outline, size: 16, color: c.error),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'Delete',
+                S.of(context).deleteLabel,
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodySmall,
                   color: c.error,
@@ -779,7 +780,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              searching ? 'No matches' : 'No conversations yet',
+              searching ? S.of(context).noMatchesFound : S.of(context).noConversationsYet,
               style: GoogleFonts.inter(
                 fontSize: AppTypography.bodyMedium,
                 fontWeight: FontWeight.w600,
@@ -789,8 +790,8 @@ class _EmptyState extends StatelessWidget {
             const SizedBox(height: AppSpacing.xs),
             Text(
               searching
-                  ? 'Try a different search term'
-                  : 'Start a new chat to see it here',
+                  ? S.of(context).tryDifferentSearchTerm
+                  : S.of(context).startNewChatToSeeHere,
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontSize: AppTypography.bodySmall,
@@ -821,7 +822,7 @@ class _ErrorState extends StatelessWidget {
             Icon(Icons.error_outline, color: c.error, size: 32),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Could not load conversations',
+              S.of(context).couldNotLoadConversations,
               style: GoogleFonts.inter(
                 fontSize: AppTypography.bodySmall,
                 color: c.mutedForeground,
@@ -829,7 +830,7 @@ class _ErrorState extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             AppButton(
-              label: 'Retry',
+              label: S.of(context).retryButton,
               onPressed: onRetry,
               variant: AppButtonVariant.outline,
             ),
