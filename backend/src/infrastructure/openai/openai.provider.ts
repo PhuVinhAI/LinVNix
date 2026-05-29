@@ -364,6 +364,15 @@ export class OpenaiProvider implements IAiProvider {
         messages.push({ role: 'system', content: msg.content });
       } else if (msg.role === 'assistant') {
         messages.push({ role: 'assistant', content: msg.content });
+      } else if (msg.attachments?.length) {
+        const parts: OpenAI.Chat.ChatCompletionContentPart[] = [
+          { type: 'text', text: msg.content },
+          ...msg.attachments.map((a) => ({
+            type: 'image_url' as const,
+            image_url: { url: `data:${a.mimeType};base64,${a.data}` },
+          })),
+        ];
+        messages.push({ role: 'user', content: parts });
       } else {
         messages.push({ role: 'user', content: msg.content });
       }

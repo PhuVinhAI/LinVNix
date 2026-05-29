@@ -4,11 +4,12 @@ import {
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ImageAnalysisService } from './image-analysis.service';
-import { GenaiProvider } from '../../../infrastructure/genai/genai-provider';
+import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
 
 describe('ImageAnalysisService', () => {
   let service: ImageAnalysisService;
-  let genaiService: jest.Mocked<GenaiProvider>;
+  let mockProvider: { chatStructured: jest.Mock };
+  let aiRouter: jest.Mocked<Pick<AiProviderRouter, 'forFeature' | 'renderPrompt'>>;
 
   const user = {
     id: 'user-1',
@@ -30,24 +31,25 @@ describe('ImageAnalysisService', () => {
   };
 
   beforeEach(async () => {
-    const genaiMock = {
+    mockProvider = { chatStructured: jest.fn() };
+    const routerMock = {
       renderPrompt: jest.fn().mockReturnValue('rendered image prompt'),
-      chatStructured: jest.fn(),
+      forFeature: jest.fn().mockReturnValue(mockProvider),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ImageAnalysisService,
-        { provide: GenaiProvider, useValue: genaiMock },
+        { provide: AiProviderRouter, useValue: routerMock },
       ],
     }).compile();
 
     service = module.get(ImageAnalysisService);
-    genaiService = module.get(GenaiProvider);
+    aiRouter = module.get(AiProviderRouter);
   });
 
   it('builds a multimodal structured chat request and returns validated output', async () => {
-    genaiService.chatStructured.mockResolvedValue({
+    mockProvider.chatStructured.mockResolvedValue({
       text: JSON.stringify({
         text: '**Biển này** có nghĩa là không đỗ xe.',
         vocabularies: [
@@ -67,7 +69,7 @@ describe('ImageAnalysisService', () => {
 
     const result = await service.analyze(request, user);
 
-    expect(genaiService.renderPrompt).toHaveBeenCalledWith(
+    expect(aiRouter.renderPrompt).toHaveBeenCalledWith(
       'image-discovery',
       expect.objectContaining({
         user: expect.objectContaining({
@@ -77,7 +79,8 @@ describe('ImageAnalysisService', () => {
         }),
       }),
     );
-    expect(genaiService.chatStructured).toHaveBeenCalledWith(
+    expect(aiRouter.forFeature).toHaveBeenCalledWith('image-analysis');
+    expect(mockProvider.chatStructured).toHaveBeenCalledWith(
       expect.objectContaining({
         systemInstruction: 'rendered image prompt',
         responseSchema: expect.any(Object),
@@ -163,7 +166,7 @@ describe('ImageAnalysisService', () => {
   });
 
   it('throws BadRequestException when the AI response fails schema validation', async () => {
-    genaiService.chatStructured.mockResolvedValue({
+    mockProvider.chatStructured.mockResolvedValue({
       text: JSON.stringify({ text: '', vocabularies: [] }),
       usageMetadata: {},
     } as any);
@@ -174,7 +177,7 @@ describe('ImageAnalysisService', () => {
   });
 
   it('returns a service error when the AI call fails', async () => {
-    genaiService.chatStructured.mockRejectedValue(new Error('AI unavailable'));
+    mockProvider.chatStructured.mockRejectedValue(new Error('AI unavailable'));
 
     await expect(service.analyze(request, user)).rejects.toThrow(
       ServiceUnavailableException,

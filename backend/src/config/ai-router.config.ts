@@ -29,4 +29,5 @@ export default registerAs('aiRouter', () => ({
   exercise: featureConfig('AI_EXERCISE'),
   simulation: featureConfig('AI_SIMULATION'),
   assistant: featureConfig('AI_ASSISTANT'),
+  imageAnalysis: featureConfig('AI_IMAGE_ANALYSIS'),
 }));

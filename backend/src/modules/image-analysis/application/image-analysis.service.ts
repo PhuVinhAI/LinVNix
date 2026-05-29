@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { z } from 'zod';
 import {
-  GenaiProvider,
   Type,
 } from '../../../infrastructure/genai/genai-provider';
+import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
 import { withParseRetry } from '../../../infrastructure/ai/ai-parse-retry';
 import {
   AnalyzeImageDto,
@@ -102,9 +102,7 @@ const IMAGE_ANALYSIS_RESPONSE_SCHEMA = {
 export class ImageAnalysisService {
   private readonly logger = new Logger(ImageAnalysisService.name);
 
-  // ImageAnalysisService injects GenaiProvider directly (not via AiProviderRouter).
-  // Vision is locked to Gemini multimodal; OpenAI vision is out of scope for v1.
-  constructor(private readonly genaiService: GenaiProvider) {}
+  constructor(private readonly aiRouter: AiProviderRouter) {}
 
   async analyze(
     dto: AnalyzeImageDto,
@@ -144,7 +142,7 @@ export class ImageAnalysisService {
       content: message.content.trim(),
     }));
 
-    const systemInstruction = this.genaiService.renderPrompt(
+    const systemInstruction = this.aiRouter.renderPrompt(
       'image-discovery',
       {
         user: {
@@ -155,10 +153,12 @@ export class ImageAnalysisService {
       },
     );
 
+    const provider = this.aiRouter.forFeature('image-analysis');
+
     try {
       const { result } = await withParseRetry(
         () =>
-          this.genaiService.chatStructured({
+          provider.chatStructured({
             messages: [
               ...chatHistory,
               {

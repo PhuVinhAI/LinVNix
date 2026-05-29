@@ -4,7 +4,7 @@ import { GenaiProvider } from '../genai/genai-provider';
 import { OpenaiProvider } from '../openai/openai.provider';
 import type { IAiProvider } from '@linvnix/shared';
 
-export type FeatureName = 'exercise' | 'simulation' | 'assistant';
+export type FeatureName = 'exercise' | 'simulation' | 'assistant' | 'image-analysis';
 
 interface FeatureConfig {
   provider: string;
@@ -32,13 +32,14 @@ export class AiProviderRouter implements OnModuleInit {
   ) {}
 
   onModuleInit(): void {
-    const features: FeatureName[] = ['exercise', 'simulation', 'assistant'];
+    const features: FeatureName[] = ['exercise', 'simulation', 'assistant', 'image-analysis'];
     for (const feature of features) {
-      const config = this.getFeatureConfig(feature);
+      const configKey = feature === 'image-analysis' ? 'imageAnalysis' : feature;
+      const config = this.configService.get<FeatureConfig>(`aiRouter.${configKey}`)!;
       if (config.provider === 'openai') {
         if (!config.baseUrl || config.apiKeys.length === 0) {
           throw new Error(
-            `AI_${feature.toUpperCase()}_PROVIDER=openai requires AI_${feature.toUpperCase()}_BASE_URL and AI_${feature.toUpperCase()}_API_KEYS`,
+            `AI_${feature.toUpperCase().replace('-', '_')}_PROVIDER=openai requires AI_${feature.toUpperCase().replace('-', '_')}_BASE_URL and AI_${feature.toUpperCase().replace('-', '_')}_API_KEYS`,
           );
         }
       }
@@ -92,6 +93,7 @@ export class AiProviderRouter implements OnModuleInit {
   }
 
   private getFeatureConfig(feature: FeatureName): FeatureConfig {
-    return this.configService.get<FeatureConfig>(`aiRouter.${feature}`)!;
+    const configKey = feature === 'image-analysis' ? 'imageAnalysis' : feature;
+    return this.configService.get<FeatureConfig>(`aiRouter.${configKey}`)!;
   }
 }
