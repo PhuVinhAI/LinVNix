@@ -96,4 +96,21 @@ export class ConversationsRepository {
     });
     return count > 0;
   }
+
+  async deleteMessagesFrom(
+    conversationId: string,
+    messageId: string,
+  ): Promise<void> {
+    const anchor = await this.messageRepo.findOne({
+      where: { id: messageId, conversationId },
+    });
+    if (!anchor) return;
+
+    await this.messageRepo
+      .createQueryBuilder()
+      .delete()
+      .where('conversation_id = :conversationId', { conversationId })
+      .andWhere('created_at >= :createdAt', { createdAt: anchor.createdAt })
+      .execute();
+  }
 }

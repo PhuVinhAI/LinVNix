@@ -273,6 +273,70 @@ class AssistantChatNotifier {
         .composeWithInput(lastInput);
   }
 
+  /// User tapped Regenerate on an assistant message. Deletes [messageId]
+  /// and all messages after it (the AI turn + any follow-ups), then
+  /// re-sends the preceding user message.
+  ///
+  /// [precedingUserMessage] is the user message immediately before the
+  /// assistant turn being regenerated. [hasMessagesAfter] controls
+  /// whether the caller already confirmed deletion of subsequent messages.
+  Future<void> regenerateFrom({
+    required String messageId,
+    required String precedingUserMessage,
+  }) async {
+    final convId = _conversationId;
+    if (convId == null) return;
+
+    await _cancelInFlight();
+
+    try {
+      final api = _ref.read(aiApiProvider);
+      await api.deleteMessagesFrom(convId, messageId);
+    } catch (_) {
+      // Best-effort — proceed anyway; server will deduplicate.
+    }
+
+    final sm = _ref.read(assistantStateMachineProvider.notifier);
+    final current = _activeState(_ref.read(assistantStateMachineProvider));
+
+    // Bring state machine to a send-accepting state.
+    if (current is AssistantMidReading || current is AssistantMidError) {
+      sm.composeAgain();
+    } else if (current is AssistantCollapsed) {
+      sm.openBar();
+    }
+
+    sm.send(precedingUserMessage);
+
+    final cancelToken = CancelToken();
+    _cancelToken = cancelToken;
+    _userCancelled = false;
+
+    syncCurrentRouteMatch(_ref);
+    final screenContext = screenContextForApi(
+      _ref.read(currentScreenContextProvider),
+    );
+    final api = _ref.read(aiApiProvider);
+
+    try {
+      _subscription = api
+          .chatStream(
+            message: precedingUserMessage,
+            conversationId: _conversationId,
+            screenContext: screenContext,
+            cancelToken: cancelToken,
+          )
+          .listen(
+            _handleEvent,
+            onError: _handleStreamError,
+            onDone: _handleStreamDone,
+            cancelOnError: true,
+          );
+    } catch (e) {
+      _handleStreamError(e);
+    }
+  }
+
   Future<void> _deleteLastUserMessage(String conversationId) async {
     try {
       final api = _ref.read(aiApiProvider);

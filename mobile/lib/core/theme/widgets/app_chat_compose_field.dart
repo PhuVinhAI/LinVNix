@@ -17,6 +17,7 @@ class AppChatComposeField extends StatefulWidget {
     this.focusNode,
     required this.hintText,
     this.enabled = true,
+    this.showMic = true,
     this.maxLines = 5,
     this.onSend,
     this.onSubmitted,
@@ -30,6 +31,7 @@ class AppChatComposeField extends StatefulWidget {
   final FocusNode? focusNode;
   final String hintText;
   final bool enabled;
+  final bool showMic;
   final int maxLines;
   final VoidCallback? onSend;
   final ValueChanged<String>? onSubmitted;
@@ -220,7 +222,7 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final multiline = _isMultiline(constraints.maxWidth);
-        final mic = _buildMicButton(c);
+        final mic = widget.showMic ? _buildMicButton(c) : null;
         final trailing = _buildTrailing(c);
         final textField = TextField(
           key: const ValueKey('app_chat_compose_field'),
@@ -255,16 +257,14 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Offstage(offstage: multiline, child: mic),
-                  Offstage(
-                    offstage: multiline,
-                    child: const SizedBox(
+                  if (mic != null && !multiline) mic,
+                  if (mic != null && !multiline)
+                    const SizedBox(
                       width: AppChatComposeField._actionGap,
                     ),
-                  ),
                   // Extra left padding when mic is hidden so text aligns
                   // with the same inset as the right side (AppSpacing.lg).
-                  if (multiline)
+                  if (mic == null || multiline)
                     const SizedBox(width: AppSpacing.lg - AppSpacing.sm),
                   Expanded(child: textField),
                   if (!multiline) ...[
@@ -276,7 +276,10 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
               if (multiline)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [mic, trailing],
+                  children: [
+                    if (mic != null) mic else const SizedBox.shrink(),
+                    trailing,
+                  ],
                 ),
             ],
           ),

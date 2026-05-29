@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -312,6 +315,63 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
     await _onReset();
   }
 
+  Future<void> _onRegenerate(int assistantMessageIndex) async {
+    // Find the preceding user message.
+    int? userMessageIndex;
+    for (int i = assistantMessageIndex - 1; i >= 0; i--) {
+      if (_messages[i].isUser) {
+        userMessageIndex = i;
+        break;
+      }
+    }
+    if (userMessageIndex == null) return;
+
+    final precedingUserMessage = _messages[userMessageIndex].content;
+    final userMessageId = _messages[userMessageIndex].id;
+
+    // Skip if the user message is a local-only bubble (not yet persisted).
+    if (userMessageId.startsWith('local-')) return;
+
+    final hasMessagesAfter = assistantMessageIndex < _messages.length - 1;
+
+    if (hasMessagesAfter) {
+      final confirmed = await AppDialog.show<bool>(
+        context,
+        builder: (ctx) => AppDialog(
+          title: 'Regenerate response?',
+          content:
+              'This message and all messages after it will be deleted. Are you sure?',
+          actions: [
+            AppDialogAction(
+              label: 'Cancel',
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            AppDialogAction(
+              label: 'Delete and regenerate',
+              isPrimary: true,
+              onPressed: () => Navigator.of(ctx).pop(true),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+    }
+
+    // Keep the user message visible during thinking/streaming.
+    // Cut everything from the assistant message onward; the user message
+    // stays so the UI shows it above the spinner.
+    setState(() {
+      _messages = _messages.sublist(0, userMessageIndex! + 1);
+      _fullTurnInFlight = true;
+    });
+    _scrollToBottom();
+
+    await ref.read(assistantChatNotifierProvider).regenerateFrom(
+          messageId: userMessageId,
+          precedingUserMessage: precedingUserMessage,
+        );
+  }
+
   bool _isFullTurnInFlight(AssistantState state) {
     if (state is! AssistantFull) return false;
     final activeState = state.priorState;
@@ -384,7 +444,13 @@ class _AssistantFullScreenState extends ConsumerState<AssistantFullScreen> {
       itemCount: _messages.length + (showLiveTurn ? 1 : 0),
       itemBuilder: (ctx, i) {
         if (i < _messages.length) {
-          return _MessageBubble(message: _messages[i]);
+          final msg = _messages[i];
+          return _MessageBubble(
+            message: msg,
+            onRegenerate: msg.isAssistant && !msg.id.startsWith('local-')
+                ? () => _onRegenerate(i)
+                : null,
+          );
         }
         return _LiveAssistantTurn(
           state: activeFullState!,
@@ -457,9 +523,10 @@ class _Header extends StatelessWidget {
 }
 
 class _MessageBubble extends StatelessWidget {
-  const _MessageBubble({required this.message});
+  const _MessageBubble({required this.message, this.onRegenerate});
 
   final ConversationMessage message;
+  final VoidCallback? onRegenerate;
 
   @override
   Widget build(BuildContext context) {
@@ -524,6 +591,11 @@ class _MessageBubble extends StatelessWidget {
                   ),
                 ),
               ),
+            _MessageActionBar(
+              content: message.content,
+              createdAt: message.createdAt,
+              onRegenerate: onRegenerate,
+            ),
           ],
         ),
       ),
@@ -568,6 +640,7 @@ class _LiveAssistantTurn extends StatelessWidget {
           AssistantMidReading(
             :final partial,
             :final interrupted,
+            :final streaming,
             :final toolStatusText,
           ) =>
             Column(
@@ -605,6 +678,13 @@ class _LiveAssistantTurn extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+                // Show action bar only when streaming is done.
+                if (!streaming && partial.isNotEmpty)
+                  _MessageActionBar(
+                    content: partial,
+                    createdAt: null,
+                    onRegenerate: null,
                   ),
               ],
             ),
@@ -669,6 +749,7 @@ class _ComposeBar extends StatelessWidget {
         controller: controller,
         hintText: 'Type a message...',
         enabled: !inFlight,
+        showMic: !inFlight,
         onSend: inFlight ? onStop : onSend,
         onSubmitted: (_) {
           if (!inFlight) onSend();
@@ -809,6 +890,151 @@ class _AssistantChatLoading extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MessageActionBar extends StatefulWidget {
+  const _MessageActionBar({
+    required this.content,
+    required this.createdAt,
+    required this.onRegenerate,
+  });
+
+  final String content;
+  final DateTime? createdAt;
+  final VoidCallback? onRegenerate;
+
+  @override
+  State<_MessageActionBar> createState() => _MessageActionBarState();
+}
+
+class _MessageActionBarState extends State<_MessageActionBar> {
+  bool _copied = false;
+
+  String _formatTime(DateTime dt) {
+    final now = DateTime.now();
+    final diff = now.difference(dt);
+    if (diff.inSeconds < 60) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    return DateFormat('dd/MM/yyyy HH:mm').format(dt);
+  }
+
+  Future<void> _onCopy() async {
+    await Clipboard.setData(ClipboardData(text: widget.content));
+    setState(() => _copied = true);
+    await Future<void>.delayed(const Duration(seconds: 2));
+    if (mounted) setState(() => _copied = false);
+  }
+
+  void _onShare() {
+    Share.share(widget.content);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final timeLabel =
+        widget.createdAt != null ? _formatTime(widget.createdAt!) : null;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xs),
+      child: Wrap(
+        spacing: AppSpacing.xs,
+        runSpacing: AppSpacing.xs,
+        children: [
+          _ActionChip(
+            icon: _copied ? Icons.check : Icons.copy_outlined,
+            tooltip: _copied ? 'Copied' : 'Copy',
+            color: _copied ? c.primary : c.mutedForeground,
+            onTap: _onCopy,
+          ),
+          if (widget.onRegenerate != null)
+            _ActionChip(
+              icon: Icons.refresh,
+              tooltip: 'Regenerate',
+              color: c.mutedForeground,
+              onTap: widget.onRegenerate!,
+            ),
+          _ActionChip(
+            icon: Icons.share_outlined,
+            tooltip: 'Share',
+            color: c.mutedForeground,
+            onTap: _onShare,
+          ),
+          if (timeLabel != null)
+            _TimeChip(
+              label: timeLabel,
+              color: c.mutedForeground,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionChip extends StatelessWidget {
+  const _ActionChip({
+    required this.icon,
+    required this.tooltip,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final Color color;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Tooltip(
+      message: tooltip,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            border: Border.all(color: c.border),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+          ),
+          child: Icon(icon, size: 16, color: color),
+        ),
+      ),
+    );
+  }
+}
+
+class _TimeChip extends StatelessWidget {
+  const _TimeChip({
+    required this.label,
+    required this.color,
+  });
+
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: 6,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: c.border),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.inter(
+          fontSize: AppTypography.caption,
+          color: color,
+        ),
       ),
     );
   }

@@ -45,19 +45,23 @@ class ConversationMessage {
     required this.role,
     required this.content,
     this.interrupted = false,
+    this.createdAt,
   });
 
   final String id;
   final String role;
   final String content;
   final bool interrupted;
+  final DateTime? createdAt;
 
   factory ConversationMessage.fromJson(Map<String, dynamic> json) {
+    final createdAtRaw = json['createdAt'] as String?;
     return ConversationMessage(
       id: json['id'] as String,
       role: json['role'] as String,
       content: (json['content'] as String?) ?? '',
       interrupted: (json['interrupted'] as bool?) ?? false,
+      createdAt: createdAtRaw != null ? DateTime.tryParse(createdAtRaw) : null,
     );
   }
 
@@ -75,8 +79,9 @@ class ConversationMessage {
           id == other.id &&
           role == other.role &&
           content == other.content &&
-          interrupted == other.interrupted;
+          interrupted == other.interrupted &&
+          createdAt == other.createdAt;
 
   @override
-  int get hashCode => Object.hash(id, role, content, interrupted);
+  int get hashCode => Object.hash(id, role, content, interrupted, createdAt);
 }

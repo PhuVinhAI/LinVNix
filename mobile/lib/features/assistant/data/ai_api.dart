@@ -122,4 +122,15 @@ class AiApi {
       '/ai/conversations/$conversationId/messages/last-user',
     );
   }
+
+  /// Deletes [messageId] and all messages after it in the conversation.
+  /// Used by regenerate to roll back the AI turn before re-sending.
+  Future<void> deleteMessagesFrom(
+    String conversationId,
+    String messageId,
+  ) async {
+    await _dio.delete<void>(
+      '/ai/conversations/$conversationId/messages/from/$messageId',
+    );
+  }
 }

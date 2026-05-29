@@ -299,4 +299,38 @@ export class AiController {
 
     await this.conversationService.deleteLastUserMessage(id);
   }
+
+  @Delete('conversations/:id/messages/from/:messageId')
+  @HttpCode(204)
+  @RequirePermissions(Permission.AI_CHAT)
+  @ApiOperation({
+    summary: 'Delete message and all subsequent messages',
+    description:
+      'Hard-deletes the specified message and all messages created after it ' +
+      'in the conversation. Used by the regenerate feature to roll back an ' +
+      'AI response and any follow-up messages before re-sending.',
+  })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
+  @ApiParam({ name: 'messageId', description: 'Message ID to delete from' })
+  @ApiResponse({
+    status: 204,
+    description: 'Messages deleted (or no-op if message not found)',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Conversation not found' })
+  async deleteMessagesFrom(
+    @CurrentUser() user: any,
+    @Param('id') id: string,
+    @Param('messageId') messageId: string,
+  ) {
+    const conversation = await this.conversationService.findById(id);
+
+    if (conversation.userId !== user.id) {
+      throw new ForbiddenException(
+        'You do not have access to this conversation',
+      );
+    }
+
+    await this.conversationService.deleteMessagesFrom(id, messageId);
+  }
 }
