@@ -410,7 +410,7 @@
   "noResponseLabel": "_(无回应)_",
   "stoppedLabel": "已停止",
   "copyLabel": "复制",
-  "deleteConversationWarningParam": "您确定要删除"{title}"吗？此操作无法撤销。",
+  "deleteConversationWarningParam": "您确定要删除\"{title}\"吗？此操作无法撤销。",
   "conversationsTitle": "对话",
   "chatCountParam": "{count}个聊天",
   "todayLabel": "今天",
@@ -468,9 +468,9 @@
   "createExercisesButton": "创建练习",
   "feedbackTitle": "反馈",
   "spellingLabel": "拼写",
-  "congratulationsCompleteCourseParam": "恭喜完成"{title}"！您想将个人资料级别更新为{level}吗？",
-  "clearAnswersWarningParam": "您对"{title}"的答案将被清除。您可以随时重新开始。",
-  "freshAiQuestionsWarningParam": "这将创建一个新集合，用新的AI生成问题替换"{title}"。",
+  "congratulationsCompleteCourseParam": "恭喜完成\"{title}\"！您想将个人资料级别更新为{level}吗？",
+  "clearAnswersWarningParam": "您对\"{title}\"的答案将被清除。您可以随时重新开始。",
+  "freshAiQuestionsWarningParam": "这将创建一个新集合，用新的AI生成问题替换\"{title}\"。",
   "quizLabel": "测验",
   "customPracticeLabel": "自定义练习",
   "greatJobCompletedAllGoals": "干得好！您完成了今天所有的目标！",
@@ -527,5 +527,7 @@
   "levelB2": "中高级",
   "levelC1": "高级",
   "levelC2": "精通",
-  "practiceWithLessonDesc": "使用课程内置练习进行练习"
+  "practiceWithLessonDesc": "使用课程内置练习进行练习",
+  "onboardingSelectNativeLanguageTitle": "您的母语是什么？",
+  "onboardingSelectNativeLanguageDescription": "我们将用此信息为您个性化AI回复。"
 }

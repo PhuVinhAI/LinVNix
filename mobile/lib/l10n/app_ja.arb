@@ -527,5 +527,7 @@
   "levelB2": "中上級",
   "levelC1": "上級",
   "levelC2": "熟練",
-  "practiceWithLessonDesc": "レッスンの組み込み練習問題で練習する"
+  "practiceWithLessonDesc": "レッスンの組み込み練習問題で練習する",
+  "onboardingSelectNativeLanguageTitle": "あなたの母国語は何ですか？",
+  "onboardingSelectNativeLanguageDescription": "この情報を使ってAIの返答をパーソナライズします。"
 }

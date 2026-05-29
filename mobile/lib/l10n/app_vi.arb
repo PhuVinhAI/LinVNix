@@ -527,5 +527,7 @@
   "levelB2": "Trên trung cấp",
   "levelC1": "Cao cấp",
   "levelC2": "Thành thạo",
-  "practiceWithLessonDesc": "Luyện tập với các bài tập tích hợp sẵn của bài học"
+  "practiceWithLessonDesc": "Luyện tập với các bài tập tích hợp sẵn của bài học",
+  "onboardingSelectNativeLanguageTitle": "Ngôn ngữ mẹ đẻ của bạn là gì?",
+  "onboardingSelectNativeLanguageDescription": "Chúng tôi sẽ dùng thông tin này để cá nhân hóa phản hồi AI cho bạn."
 }

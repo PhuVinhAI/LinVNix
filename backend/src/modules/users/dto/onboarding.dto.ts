@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsBoolean } from 'class-validator';
+import { IsEnum, IsOptional, IsBoolean, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserLevel, Dialect } from '../../../common/enums';
 
@@ -28,4 +28,13 @@ export class OnboardingDto {
   })
   @IsBoolean()
   completeLowerCourses: boolean;
+
+  @ApiProperty({
+    example: 'Vietnamese',
+    description: 'Learner native language selected during onboarding',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  nativeLanguage?: string;
 }

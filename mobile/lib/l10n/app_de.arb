@@ -527,5 +527,7 @@
   "levelB2": "Obere Mittelstufe",
   "levelC1": "Fortgeschritten",
   "levelC2": "Kompetent",
-  "practiceWithLessonDesc": "Mit den integrierten Übungen der Lektion üben"
+  "practiceWithLessonDesc": "Mit den integrierten Übungen der Lektion üben",
+  "onboardingSelectNativeLanguageTitle": "Was ist Ihre Muttersprache?",
+  "onboardingSelectNativeLanguageDescription": "Wir nutzen diese Information, um KI-Antworten zu personalisieren."
 }

@@ -527,5 +527,7 @@
   "levelB2": "중상급",
   "levelC1": "고급",
   "levelC2": "숙련",
-  "practiceWithLessonDesc": "레슨의 내장 연습 문제로 연습하기"
+  "practiceWithLessonDesc": "레슨의 내장 연습 문제로 연습하기",
+  "onboardingSelectNativeLanguageTitle": "모국어가 무엇인가요?",
+  "onboardingSelectNativeLanguageDescription": "이 정보를 사용하여 AI 응답을 개인화합니다."
 }

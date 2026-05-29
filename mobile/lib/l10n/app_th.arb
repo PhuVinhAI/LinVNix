@@ -527,5 +527,7 @@
   "levelB2": "ระดับกลางสูง",
   "levelC1": "ระดับสูง",
   "levelC2": "ระดับเชี่ยวชาญ",
-  "practiceWithLessonDesc": "ฝึกซ้อมด้วยแบบฝึกหัดในตัวของบทเรียน"
+  "practiceWithLessonDesc": "ฝึกซ้อมด้วยแบบฝึกหัดในตัวของบทเรียน",
+  "onboardingSelectNativeLanguageTitle": "ภาษาแม่ของคุณคืออะไร?",
+  "onboardingSelectNativeLanguageDescription": "เราจะใช้ข้อมูลนี้เพื่อปรับแต่งการตอบสนองของ AI สำหรับคุณ"
 }

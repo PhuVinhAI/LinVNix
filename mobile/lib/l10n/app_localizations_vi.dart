@@ -1717,4 +1717,12 @@ class SVi extends S {
   @override
   String get practiceWithLessonDesc =>
       'Luyện tập với các bài tập tích hợp sẵn của bài học';
+
+  @override
+  String get onboardingSelectNativeLanguageTitle =>
+      'Ngôn ngữ mẹ đẻ của bạn là gì?';
+
+  @override
+  String get onboardingSelectNativeLanguageDescription =>
+      'Chúng tôi sẽ dùng thông tin này để cá nhân hóa phản hồi AI cho bạn.';
 }

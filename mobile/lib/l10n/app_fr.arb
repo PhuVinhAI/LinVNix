@@ -527,5 +527,7 @@
   "levelB2": "Intermédiaire supérieur",
   "levelC1": "Avancé",
   "levelC2": "Maîtrise",
-  "practiceWithLessonDesc": "Pratiquer avec les exercices intégrés de la leçon"
+  "practiceWithLessonDesc": "Pratiquer avec les exercices intégrés de la leçon",
+  "onboardingSelectNativeLanguageTitle": "Quelle est votre langue maternelle ?",
+  "onboardingSelectNativeLanguageDescription": "Nous l'utiliserons pour personnaliser les réponses de l'IA."
 }

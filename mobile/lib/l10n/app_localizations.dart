@@ -3278,6 +3278,18 @@ abstract class S {
   /// In vi, this message translates to:
   /// **'Luyện tập với các bài tập tích hợp sẵn của bài học'**
   String get practiceWithLessonDesc;
+
+  /// No description provided for @onboardingSelectNativeLanguageTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ngôn ngữ mẹ đẻ của bạn là gì?'**
+  String get onboardingSelectNativeLanguageTitle;
+
+  /// No description provided for @onboardingSelectNativeLanguageDescription.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chúng tôi sẽ dùng thông tin này để cá nhân hóa phản hồi AI cho bạn.'**
+  String get onboardingSelectNativeLanguageDescription;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

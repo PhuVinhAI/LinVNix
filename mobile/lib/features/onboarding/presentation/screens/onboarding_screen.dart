@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/exceptions/app_exception.dart';
+import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -30,6 +31,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _pageController = PageController();
   int _currentStep = 0;
+  String? _selectedNativeLanguage;
   String? _selectedLevel;
   String? _selectedDialect;
   bool _isSubmitting = false;
@@ -55,13 +57,28 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     _DialectOption('SOUTHERN'),
   ];
 
+  // Maps nativeLanguage value → locale code for setting app language
+  static const _languageToLocale = {
+    'English': 'en',
+    'Vietnamese': 'vi',
+    'Chinese': 'zh',
+    'Japanese': 'ja',
+    'Korean': 'ko',
+    'French': 'fr',
+    'German': 'de',
+    'Spanish': 'es',
+    'Thai': 'th',
+  };
+
   bool get _canProceed {
     switch (_currentStep) {
       case 0:
-        return _selectedLevel != null;
+        return _selectedNativeLanguage != null;
       case 1:
-        return _selectedDialect != null;
+        return _selectedLevel != null;
       case 2:
+        return _selectedDialect != null;
+      case 3:
         return true;
       default:
         return false;
@@ -69,8 +86,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   void _nextStep() {
-    if (_currentStep < 2) {
-      if (_currentStep == 0 && _selectedLevel != null) {
+    if (_currentStep < 3) {
+      if (_currentStep == 1 && _selectedLevel != null) {
         final selectedIndex = _levels.indexOf(_selectedLevel!);
         if (selectedIndex > _a1Index) {
           _showBypassDialog();
@@ -122,8 +139,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   void _skipStep() {
-    if (_currentStep < 2) {
-      if (_currentStep == 0) {
+    if (_currentStep < 3) {
+      if (_currentStep == 1) {
         setState(() => _completeLowerCourses = false);
       }
       _pageController.nextPage(
@@ -148,6 +165,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       if (_selectedDialect != null) {
         onboardingData['preferredDialect'] = _selectedDialect;
       }
+      if (_selectedNativeLanguage != null) {
+        onboardingData['nativeLanguage'] = _selectedNativeLanguage;
+      }
 
       final repository = ref.read(userRepositoryProvider);
       await repository.submitOnboarding(onboardingData);
@@ -169,6 +189,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final prefs = await ref.read(preferencesProvider.future);
       await prefs.setOnboardingCompleted();
       await prefs.setDailyGoalsMigrated();
+
+      // Set app locale to match the user's native language
+      final localeCode = _languageToLocale[_selectedNativeLanguage];
+      if (localeCode != null) {
+        await ref.read(localeProvider.notifier).setLocale(Locale(localeCode));
+      }
 
       ref.invalidate(dailyGoalProgressProvider);
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
@@ -220,7 +246,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
               child: _DotProgressIndicator(
                 currentStep: _currentStep,
-                totalSteps: 3,
+                totalSteps: 4,
               ),
             ),
             // Page content
@@ -232,6 +258,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   setState(() => _currentStep = index);
                 },
                 children: [
+                  _NativeLanguageStep(
+                    languages: _languageToLocale.keys.toList(),
+                    selected: _selectedNativeLanguage,
+                    onSelect: (lang) {
+                      setState(() => _selectedNativeLanguage = lang);
+                    },
+                  ),
                   _LevelStep(
                     levels: _levels,
                     selected: _selectedLevel,
@@ -274,7 +307,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                   const Spacer(),
                   AppButton(
-                    label: _currentStep < 2 ? S.of(context).nextButton : S.of(context).finishButton,
+                    label: _currentStep < 3 ? S.of(context).nextButton : S.of(context).finishButton,
                     variant: AppButtonVariant.primary,
                     onPressed:
                         _canProceed && !_isSubmitting ? _nextStep : null,
@@ -321,6 +354,78 @@ class _DotProgressIndicator extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+class _NativeLanguageStep extends StatelessWidget {
+  const _NativeLanguageStep({
+    required this.languages,
+    required this.selected,
+    required this.onSelect,
+  });
+
+  final List<String> languages;
+  final String? selected;
+  final ValueChanged<String> onSelect;
+
+  String _label(BuildContext context, String lang) {
+    final s = S.of(context);
+    return switch (lang) {
+      'English' => s.languageEnglish,
+      'Vietnamese' => s.languageVietnamese,
+      'Chinese' => s.languageChinese,
+      'Japanese' => s.languageJapanese,
+      'Korean' => s.languageKorean,
+      'French' => s.languageFrench,
+      'German' => s.languageGerman,
+      'Spanish' => s.languageSpanish,
+      'Thai' => s.languageThai,
+      _ => lang,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            S.of(context).onboardingSelectNativeLanguageTitle,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.5,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            S.of(context).onboardingSelectNativeLanguageDescription,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: c.mutedForeground,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xxl),
+          ...languages.map((lang) {
+            final isSelected = lang == selected;
+            return Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.md),
+              child: _SelectableCard(
+                label: _label(context, lang),
+                isSelected: isSelected,
+                onTap: () => onSelect(lang),
+                isWide: true,
+              ),
+            );
+          }),
+        ],
+      ),
     );
   }
 }

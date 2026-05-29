@@ -1740,4 +1740,12 @@ class SEn extends S {
   @override
   String get practiceWithLessonDesc =>
       'Practice with the lesson\'s built-in exercises';
+
+  @override
+  String get onboardingSelectNativeLanguageTitle =>
+      'What\'s your native language?';
+
+  @override
+  String get onboardingSelectNativeLanguageDescription =>
+      'We\'ll use this to personalise AI responses for you.';
 }

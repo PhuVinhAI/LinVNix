@@ -527,5 +527,7 @@
   "levelB2": "Upper Intermediate",
   "levelC1": "Advanced",
   "levelC2": "Proficient",
-  "practiceWithLessonDesc": "Practice with the lesson's built-in exercises"
+  "practiceWithLessonDesc": "Practice with the lesson's built-in exercises",
+  "onboardingSelectNativeLanguageTitle": "What's your native language?",
+  "onboardingSelectNativeLanguageDescription": "We'll use this to personalise AI responses for you."
 }

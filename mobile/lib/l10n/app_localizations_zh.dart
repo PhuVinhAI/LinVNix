@@ -1259,83 +1259,59 @@ class SZh extends S {
   String get yourTurn => '轮到您';
 
   @override
-  String get noResponseLabel => '_(no response)_';
+  String get noResponseLabel => '_(无回应)_';
 
   @override
-  String get stoppedLabel => 'Stopped';
+  String get stoppedLabel => '已停止';
 
   @override
-  String get copyLabel => 'Copy';
+  String get copyLabel => '复制';
 
   @override
   String deleteConversationWarningParam(Object title) {
-    return 'Are you sure you want to delete \"$title\"? This action cannot be undone.';
+    return '您确定要删除\"$title\"吗？此操作无法撤销。';
   }
 
   @override
-  String get conversationsTitle => 'Conversations';
+  String get conversationsTitle => '对话';
 
   @override
   String chatCountParam(num count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'chats',
-      one: 'chat',
-    );
-    return '$count $_temp0';
+    return '$count个聊天';
   }
 
   @override
-  String get todayLabel => 'Today';
+  String get todayLabel => '今天';
 
   @override
-  String get yesterdayLabel => 'Yesterday';
+  String get yesterdayLabel => '昨天';
 
   @override
-  String get olderLabel => 'Older';
+  String get olderLabel => '更早';
 
   @override
   String minutesAgoParam(num count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'minutes',
-      one: 'minute',
-    );
-    return '$count $_temp0 ago';
+    return '$count分钟前';
   }
 
   @override
   String hoursAgoParam(num count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'hours',
-      one: 'hour',
-    );
-    return '$count $_temp0 ago';
+    return '$count小时前';
   }
 
   @override
   String daysAgoParam(num count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'days',
-      one: 'day',
-    );
-    return '$count $_temp0 ago';
+    return '$count天前';
   }
 
   @override
-  String get renameLabel => 'Rename';
+  String get renameLabel => '重命名';
 
   @override
-  String get sortNewest => 'Newest';
+  String get sortNewest => '最新';
 
   @override
-  String get sortOldest => 'Oldest';
+  String get sortOldest => '最旧';
 
   @override
   String get sortAZ => 'A-Z';
@@ -1345,119 +1321,116 @@ class SZh extends S {
 
   @override
   String classifierDetailLabel(Object classifier) {
-    return 'Classifier: $classifier';
+    return '量词: $classifier';
   }
 
   @override
-  String get filteringByScenario => 'Filtering by scenario';
+  String get filteringByScenario => '按场景筛选';
 
   @override
-  String get clearFilter => 'Clear filter';
+  String get clearFilter => '清除筛选';
 
   @override
-  String get tooManyErrorsLabel => 'Too many errors';
+  String get tooManyErrorsLabel => '错误太多';
 
   @override
-  String get inappropriateContentLabel => 'Inappropriate content';
+  String get inappropriateContentLabel => '不当内容';
 
   @override
-  String get abusiveContentLabel => 'Abusive content';
+  String get abusiveContentLabel => '滥用内容';
 
   @override
-  String get noResultsYet => 'No results yet';
+  String get noResultsYet => '暂无结果';
 
   @override
-  String get completeSimulationToSeeResults =>
-      'Complete a simulation conversation to see results here';
+  String get completeSimulationToSeeResults => '完成模拟对话以在此处查看结果';
 
   @override
-  String get defaultProfilePictureSemantics => 'Default profile picture';
+  String get defaultProfilePictureSemantics => '默认头像';
 
   @override
-  String get statisticsLabel => 'Statistics';
+  String get statisticsLabel => '统计';
 
   @override
-  String get simulationLabel => 'Simulation';
+  String get simulationLabel => '模拟';
 
   @override
-  String get bookmarkedLabel => 'Bookmarked';
+  String get bookmarkedLabel => '已收藏';
 
   @override
   String sendVerificationCodeContinueParam(Object email) {
-    return 'We will send a verification code to $email. Continue?';
+    return '我们将向$email发送验证码。继续？';
   }
 
   @override
-  String get languageChinese => 'Chinese';
+  String get languageChinese => '中文';
 
   @override
-  String get languageJapanese => 'Japanese';
+  String get languageJapanese => '日语';
 
   @override
-  String get languageKorean => 'Korean';
+  String get languageKorean => '韩语';
 
   @override
-  String get languageFrench => 'French';
+  String get languageFrench => '法语';
 
   @override
-  String get languageGerman => 'German';
+  String get languageGerman => '德语';
 
   @override
-  String get languageSpanish => 'Spanish';
+  String get languageSpanish => '西班牙语';
 
   @override
-  String get appearanceLabel => 'Appearance';
+  String get appearanceLabel => '外观';
 
   @override
-  String get failedToLoadGoals => 'Could not load goals';
+  String get failedToLoadGoals => '无法加载目标';
 
   @override
-  String get noGoalsSetYet => 'No goals set yet';
+  String get noGoalsSetYet => '尚未设置目标';
 
   @override
-  String get addGoalToTrackProgress =>
-      'Add a goal to track your daily progress!';
+  String get addGoalToTrackProgress => '添加目标以跟踪您的每日进度！';
 
   @override
-  String get goalReminders => 'Goal reminders';
+  String get goalReminders => '目标提醒';
 
   @override
-  String get reminderTime => 'Reminder time';
+  String get reminderTime => '提醒时间';
 
   @override
-  String get unableToLoadScenarios => 'Unable to load scenarios';
+  String get unableToLoadScenarios => '无法加载场景';
 
   @override
-  String get startConversationPractice => 'Start a conversation practice';
+  String get startConversationPractice => '开始对话练习';
 
   @override
-  String get startCourseLabel => 'Start a course';
+  String get startCourseLabel => '开始课程';
 
   @override
-  String get beginLearningVietnameseToday => 'Begin learning Vietnamese today';
+  String get beginLearningVietnameseToday => '今天开始学习越南语';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => '继续';
 
   @override
-  String get reviewLabel => 'Review';
+  String get reviewLabel => '复习';
 
   @override
   String continueLessonTitleParam(Object title) {
-    return 'Continue lesson: $title';
+    return '继续课程：$title';
   }
 
   @override
   String reviewLessonTitleParam(Object title) {
-    return 'Review lesson: $title';
+    return '复习课程：$title';
   }
 
   @override
-  String get inappropriateContentEndMessage =>
-      'Conversation ended due to inappropriate content';
+  String get inappropriateContentEndMessage => '对话因不当内容而结束';
 
   @override
-  String get overallScoreLabel => 'Overall score';
+  String get overallScoreLabel => '总体评分';
 
   @override
   String get dialogueTitle => '对话';
@@ -1488,216 +1461,209 @@ class SZh extends S {
 
   @override
   String congratulationsCompleteCourseParam(Object level, Object title) {
-    return 'Congratulations on completing \"$title\"! Would you like to update your profile level to $level?';
+    return '恭喜完成\"$title\"！您想将个人资料级别更新为$level吗？';
   }
 
   @override
   String clearAnswersWarningParam(Object title) {
-    return 'Your answers for \"$title\" will be cleared. You can start over anytime.';
+    return '您对\"$title\"的答案将被清除。您可以随时重新开始。';
   }
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'This will create a new set replacing \"$title\" with fresh AI-generated questions.';
+    return '这将创建一个新集合，用新的AI生成问题替换\"$title\"。';
   }
 
   @override
-  String get quizLabel => 'Quiz';
+  String get quizLabel => '测验';
 
   @override
-  String get customPracticeLabel => 'Custom Practice';
+  String get customPracticeLabel => '自定义练习';
 
   @override
-  String get greatJobCompletedAllGoals =>
-      'Great job! You completed all of today\'s goals!';
+  String get greatJobCompletedAllGoals => '干得好！您完成了今天所有的目标！';
 
   @override
-  String get addPhotoFirst => 'Add a photo first';
+  String get addPhotoFirst => '请先添加照片';
 
   @override
-  String get unableToAnalyzeImage =>
-      'Unable to analyze image. Please try again.';
+  String get unableToAnalyzeImage => '无法分析图像。请重试。';
 
   @override
-  String get unableToSaveVocabulary =>
-      'Unable to save vocabulary. Please try again.';
+  String get unableToSaveVocabulary => '无法保存词汇。请重试。';
 
   @override
-  String get analyzeImagesPrompt =>
-      'Analyze these images and explain what they show.';
+  String get analyzeImagesPrompt => '分析这些图像并解释它们显示的内容。';
 
   @override
-  String get findVocabularyPrompt =>
-      'Find useful Vietnamese vocabulary in these images.';
+  String get findVocabularyPrompt => '在这些图像中找到有用的越南语词汇。';
 
   @override
-  String get translateTextPrompt =>
-      'Translate any visible Vietnamese text in these images.';
+  String get translateTextPrompt => '翻译这些图像中可见的越南语文本。';
 
   @override
-  String get explainContextPrompt =>
-      'Explain the context and meaning of these images.';
+  String get explainContextPrompt => '解释这些图像的背景和含义。';
 
   @override
-  String get askAboutImageHint => 'Ask about the image...';
+  String get askAboutImageHint => '询问关于图像的问题...';
 
   @override
   String unfinishedProgressQuestionParam(Object current, Object total) {
-    return 'You have unfinished progress at question $current of $total. Continue from there or start over?';
+    return '您在第$total题中的第$current题有未完成的进度。从那里继续还是重新开始？';
   }
 
   @override
-  String get noExercisesAvailable => 'No exercises available';
+  String get noExercisesAvailable => '没有可用的练习';
 
   @override
   String questionProgressParam(Object current, Object total) {
-    return 'Question $current of $total';
+    return '第$total题中的第$current题';
   }
 
   @override
-  String get incorrectLabel => 'Incorrect';
+  String get incorrectLabel => '错误';
 
   @override
-  String get correctAnswerLabel => 'Correct answer';
+  String get correctAnswerLabel => '正确答案';
 
   @override
   String correctAnswerParam(Object answer) {
-    return 'Correct answer: $answer';
+    return '正确答案：$answer';
   }
 
   @override
   String stepProgressParam(Object current, Object total) {
-    return 'Step $current of $total';
+    return '第$total步中的第$current步';
   }
 
   @override
-  String get finishedContentPracticeQuestion =>
-      'You have finished the lesson content. Would you like to practice with exercises?';
+  String get finishedContentPracticeQuestion => '您已完成课程内容。您想通过练习来练习吗？';
 
   @override
-  String get readingStepLabel => 'Reading';
+  String get readingStepLabel => '阅读';
 
   @override
-  String get imageStepLabel => 'Image';
+  String get imageStepLabel => '图像';
 
   @override
-  String get videoStepLabel => 'Video';
+  String get videoStepLabel => '视频';
 
   @override
-  String get contentStepLabel => 'Content';
+  String get contentStepLabel => '内容';
 
   @override
-  String get configureCustomPractice => 'Configure custom practice';
+  String get configureCustomPractice => '配置自定义练习';
 
   @override
   String numberOfQuestionsParam(Object count) {
-    return 'Number of questions: $count';
+    return '题目数量：$count';
   }
 
   @override
-  String get exerciseTypesLabel => 'Exercise types';
+  String get exerciseTypesLabel => '练习类型';
 
   @override
-  String get focusLabel => 'Focus';
+  String get focusLabel => '专注';
 
   @override
-  String get startPracticeLabel => 'Start practice';
+  String get startPracticeLabel => '开始练习';
 
   @override
-  String get continuePracticeLabel => 'Continue practice';
+  String get continuePracticeLabel => '继续练习';
 
   @override
-  String get practiceAgainLabel => 'Practice again';
+  String get practiceAgainLabel => '再次练习';
 
   @override
-  String get passwordLengthError => 'Password must be at least 8 characters';
+  String get passwordLengthError => '密码必须至少8个字符';
 
   @override
-  String get passwordComplexityError =>
-      'Must contain uppercase, lowercase, and digit';
+  String get passwordComplexityError => '必须包含大写字母、小写字母和数字';
 
   @override
-  String get googleTokenFailed => 'Failed to obtain Google ID token';
+  String get googleTokenFailed => '无法获取Google ID令牌';
 
   @override
-  String get generateAiExercisesTailored =>
-      'Generate AI-powered exercises tailored to your needs';
+  String get generateAiExercisesTailored => '生成针对您需求定制的AI驱动练习';
 
   @override
-  String get analyzingStatus => 'Analyzing...';
+  String get analyzingStatus => '正在分析...';
 
   @override
-  String get submittingStatus => 'Submitting...';
+  String get submittingStatus => '正在提交...';
 
   @override
-  String get correctLabel => 'Correct!';
+  String get correctLabel => '正确！';
 
   @override
-  String get unableToLoadImage => 'Unable to load image';
+  String get unableToLoadImage => '无法加载图像';
 
   @override
-  String get maxImagesAnalysisWarning =>
-      'You can analyze up to 5 images at once';
+  String get maxImagesAnalysisWarning => '您一次最多可以分析5张图像';
 
   @override
-  String get practiceWithLesson => 'Practice with the lesson';
+  String get practiceWithLesson => '随课程练习';
 
   @override
   String pointsParam(Object points) {
-    return '+$points pts';
+    return '+$points分';
   }
 
   @override
-  String get examplesTitle => 'Examples';
+  String get examplesTitle => '示例';
 
   @override
   String profilePictureOfParam(Object name) {
-    return 'Profile picture of $name';
+    return '$name的头像';
   }
 
   @override
-  String get failedToLoadSimulationStats =>
-      'Failed to load simulation statistics';
+  String get failedToLoadSimulationStats => '无法加载模拟统计数据';
 
   @override
-  String get filtersTitle => 'Filters';
+  String get filtersTitle => '筛选';
 
   @override
   String characterNameParam(Object name) {
-    return 'Character: $name';
+    return '角色：$name';
   }
 
   @override
-  String get learnVietnamese => 'Learn Vietnamese';
+  String get learnVietnamese => '学习越南语';
 
   @override
-  String get todaysProgress => 'Today\'s progress';
+  String get todaysProgress => '今日进度';
 
   @override
-  String get languageThai => 'Thai';
+  String get languageThai => '泰语';
 
   @override
-  String get youLabel => 'You';
+  String get youLabel => '你';
 
   @override
-  String get levelA1 => 'Beginner';
+  String get levelA1 => '入门';
 
   @override
-  String get levelA2 => 'Elementary';
+  String get levelA2 => '初级';
 
   @override
-  String get levelB1 => 'Intermediate';
+  String get levelB1 => '中级';
 
   @override
-  String get levelB2 => 'Upper Intermediate';
+  String get levelB2 => '中高级';
 
   @override
-  String get levelC1 => 'Advanced';
+  String get levelC1 => '高级';
 
   @override
-  String get levelC2 => 'Proficient';
+  String get levelC2 => '精通';
 
   @override
-  String get practiceWithLessonDesc =>
-      'Practice with the lesson\'s built-in exercises';
+  String get practiceWithLessonDesc => '使用课程内置练习进行练习';
+
+  @override
+  String get onboardingSelectNativeLanguageTitle => '您的母语是什么？';
+
+  @override
+  String get onboardingSelectNativeLanguageDescription => '我们将用此信息为您个性化AI回复。';
 }
