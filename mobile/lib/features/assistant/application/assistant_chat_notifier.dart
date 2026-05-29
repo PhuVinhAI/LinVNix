@@ -222,7 +222,16 @@ class AssistantChatNotifier {
     if (rawState is! AssistantFull) {
       return false;
     }
+    final priorState = rawState.priorState;
+    final isPreStream = priorState is AssistantMidLoading;
+    final convId = _conversationId;
+
     unawaited(_cancelInFlight());
+
+    if (isPreStream && convId != null) {
+      unawaited(_deleteLastUserMessage(convId));
+    }
+
     _savePausedSession(rawState);
     _conversationId = null;
     final sm = _ref.read(assistantStateMachineProvider.notifier);
@@ -424,8 +433,8 @@ class AssistantChatNotifier {
       return _sanitizeForPause(state.priorState ?? const AssistantCollapsed());
     }
     if (state is AssistantMidLoading) {
-      // Can't resume a loading state; restore to Compose.
-      return const AssistantMidCompose();
+      // Stream was cancelled — restore input so user can resend.
+      return AssistantMidCompose(pendingInput: state.lastInput);
     }
     if (state is AssistantMidReading && state.streaming) {
       // Mark interrupted — the stream is gone.
