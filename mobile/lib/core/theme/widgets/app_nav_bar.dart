@@ -72,28 +72,25 @@ class AppNavBar extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(
+          padding: EdgeInsets.fromLTRB(
             AppSpacing.lg,
             protrusionHeight,
             AppSpacing.lg,
-            AppSpacing.md,
+            MediaQuery.of(context).padding.bottom + AppSpacing.sm,
           ),
-          child: SafeArea(
-            top: false,
-            child: Container(
-              decoration: BoxDecoration(
-                color: c.card,
-                borderRadius: BorderRadius.circular(AppRadius.xl),
-                border: Border.all(color: c.border, width: 1),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.md,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: items,
-              ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              border: Border.all(color: c.border, width: 1),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xs,
+              vertical: AppSpacing.sm + 2,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: items,
             ),
           ),
         ),
@@ -131,18 +128,10 @@ class _AppNavBarDestinationItem extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppRadius.lg),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
+          child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.sm,
-              vertical: AppSpacing.xs,
-            ),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? c.primary.withValues(alpha: 0.12)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
+              horizontal: AppSpacing.xs,
+              vertical: AppSpacing.sm,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
