@@ -2,9 +2,11 @@ import 'package:linvnix/l10n/app_localizations.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../bookmarks/domain/bookmark_models.dart';
 import '../../domain/image_analysis_models.dart';
 
 class VocabularyCard extends StatefulWidget {
@@ -45,121 +47,169 @@ class _VocabularyCardState extends State<VocabularyCard> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-    final vocabulary = widget.vocabulary;
+    final v = widget.vocabulary;
+    final pos = v.partOfSpeech == null
+        ? null
+        : (kPartOfSpeechViLabels[v.partOfSpeech!.toLowerCase()] ??
+            v.partOfSpeech!);
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
         color: c.card,
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: c.border),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
       ),
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.auto_awesome, size: 18, color: c.primary),
-              const SizedBox(width: AppSpacing.sm),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                ),
+                child: Icon(Icons.translate_rounded, size: 20, color: c.primary),
+              ),
+              const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      vocabulary.word,
-                      style: theme.textTheme.bodyLarge?.copyWith(
+                      v.word,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.titleSmall,
                         fontWeight: FontWeight.w700,
+                        color: c.foreground,
+                        height: 1.2,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.xs),
+                    const SizedBox(height: 2),
                     Text(
-                      vocabulary.translation,
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      v.translation,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyMedium,
                         color: c.mutedForeground,
+                        height: 1.3,
                       ),
                     ),
                   ],
                 ),
               ),
+              if (v.phonetic != null) ...[
+                const SizedBox(width: AppSpacing.sm),
+                Text(
+                  '/${v.phonetic}/',
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
+                    color: c.mutedForeground,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
             ],
           ),
-          if (vocabulary.phonetic != null) ...[
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              '/${vocabulary.phonetic}/',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
-          ],
-          if (vocabulary.partOfSpeech != null ||
-              vocabulary.classifier != null) ...[
-            const SizedBox(height: AppSpacing.sm),
+          if (pos != null || v.classifier != null) ...[
+            const SizedBox(height: AppSpacing.md),
             Wrap(
               spacing: AppSpacing.sm,
-              runSpacing: AppSpacing.xs,
+              runSpacing: AppSpacing.sm,
               children: [
-                if (vocabulary.partOfSpeech != null)
-                  AppChip(
-                    label: vocabulary.partOfSpeech!,
-                    fontSize: AppTypography.caption,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                      vertical: 4,
-                    ),
-                  ),
-                if (vocabulary.classifier != null)
-                  AppChip(
-                    label: S.of(context).classifierLabelParam(vocabulary.classifier!),
-                    fontSize: AppTypography.caption,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                      vertical: 4,
-                    ),
+                if (pos != null) _MetaChip(label: pos),
+                if (v.classifier != null)
+                  _MetaChip(
+                    label: S.of(context).classifierLabelParam(v.classifier!),
                   ),
               ],
             ),
           ],
-          if (vocabulary.exampleSentence != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              vocabulary.exampleSentence!,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontStyle: FontStyle.italic,
+          if (v.exampleSentence != null) ...[
+            const SizedBox(height: AppSpacing.md),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: c.muted.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    v.exampleSentence!,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      color: c.foreground,
+                      fontStyle: FontStyle.italic,
+                      height: 1.4,
+                    ),
+                  ),
+                  if (v.exampleTranslation != null) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      v.exampleTranslation!,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodySmall,
+                        color: c.mutedForeground,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            if (vocabulary.exampleTranslation != null)
-              Text(
-                vocabulary.exampleTranslation!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: c.mutedForeground,
-                ),
-              ),
           ],
           const SizedBox(height: AppSpacing.md),
-          Align(
-            alignment: Alignment.centerRight,
-            child: AppButton(
-              label: _isAdded ? S.of(context).addedLabel : 'Thêm',
-              icon: Icon(_isAdded ? Icons.check : Icons.add),
-              variant: _isAdded
-                  ? AppButtonVariant.secondary
-                  : AppButtonVariant.primary,
-              isLoading: _isAdding,
-              onPressed: _isAdded || _isAdding
-                  ? null
-                  : () => unawaited(_handleAdd()),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: 8,
-              ),
-              fontSize: AppTypography.bodySmall,
-            ),
+          AppButton(
+            label: _isAdded ? S.of(context).addedLabel : S.of(context).addLabel,
+            icon: Icon(_isAdded ? Icons.check_rounded : Icons.add_rounded),
+            variant: _isAdded
+                ? AppButtonVariant.secondary
+                : AppButtonVariant.primary,
+            isLoading: _isAdding,
+            isFullWidth: true,
+            onPressed: _isAdded || _isAdding
+                ? null
+                : () => unawaited(_handleAdd()),
+            fontSize: AppTypography.bodySmall,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MetaChip extends StatelessWidget {
+  const _MetaChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.xs + 2,
+      ),
+      decoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.full),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.inter(
+          fontSize: AppTypography.caption,
+          fontWeight: FontWeight.w500,
+          color: c.mutedForeground,
+        ),
       ),
     );
   }

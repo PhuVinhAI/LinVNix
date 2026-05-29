@@ -139,7 +139,7 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
+      appBar: AppAppBar(
         title: Text(S.of(context).imageDiscoveryTitle),
         actions: [
           if (showHeaderImagesIcon)
@@ -273,32 +273,53 @@ class _CenteredPlaceholder extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xl),
-        child: GestureDetector(
-          onTap: enabled ? onTap : null,
-          child: Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              color: c.muted.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: c.border, width: 1.5),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                color: c.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+              ),
+              child: Icon(
+                Icons.add_photo_alternate_outlined,
+                size: 34,
+                color: c.primary,
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.add_rounded, size: 56, color: c.mutedForeground),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  S.of(context).addPhotoTitle,
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.bodyMedium,
-                    color: c.mutedForeground,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              S.of(context).addPhotoTitle,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.titleMedium,
+                fontWeight: FontWeight.w700,
+                color: c.foreground,
+                height: 1.2,
+              ),
             ),
-          ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              S.of(context).maxImagesAnalysisWarning,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                color: c.mutedForeground,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            AppButton(
+              label: S.of(context).addPhotoTitle,
+              icon: const Icon(Icons.add_rounded),
+              onPressed: enabled ? onTap : null,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xl,
+                vertical: 12,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -352,38 +373,40 @@ class _ImageStrip extends StatelessWidget {
 
             final image = images[index];
 
-            return SizedBox(
+            return Container(
               width: _thumbnailSize,
               height: _thumbnailSize,
-              child: ClipRRect(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppRadius.md),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.memory(image.bytes, fit: BoxFit.cover),
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: c.card.withValues(alpha: 0.88),
-                          shape: BoxShape.circle,
+                border: Border.all(color: c.border, width: 1),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.memory(image.bytes, fit: BoxFit.cover),
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: c.card.withValues(alpha: 0.88),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.close, color: c.foreground),
+                        tooltip: S.of(context).removeImage,
+                        iconSize: 18,
+                        constraints: const BoxConstraints.tightFor(
+                          width: 32,
+                          height: 32,
                         ),
-                        child: IconButton(
-                          icon: Icon(Icons.close, color: c.foreground),
-                          tooltip: S.of(context).removeImage,
-                          iconSize: 18,
-                          constraints: const BoxConstraints.tightFor(
-                            width: 32,
-                            height: 32,
-                          ),
-                          padding: EdgeInsets.zero,
-                          onPressed: () => onRemove(image.id),
-                        ),
+                        padding: EdgeInsets.zero,
+                        onPressed: () => onRemove(image.id),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
@@ -414,11 +437,21 @@ class _AddTile extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: c.muted.withValues(alpha: 0.4),
+          color: c.card,
           borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: c.border, width: 1.5),
+          border: Border.all(color: c.border, width: 1),
         ),
-        child: Icon(Icons.add_rounded, size: 32, color: c.mutedForeground),
+        child: Center(
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: c.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppRadius.md),
+            ),
+            child: Icon(Icons.add_rounded, size: 24, color: c.primary),
+          ),
+        ),
       ),
     );
   }
@@ -538,7 +571,7 @@ class _LoadingMessage extends StatelessWidget {
           const AppSpinner(size: 18),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            S.of(context).imageDiscoveryTitle,
+            S.of(context).analyzingStatus,
             style: GoogleFonts.inter(
               fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,
@@ -698,7 +731,11 @@ class _ImagesViewerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${S.of(context).attachedPhotosTitle} (${images.length})')),
+      appBar: AppAppBar(
+        title: Text(
+          '${S.of(context).attachedPhotosTitle} (${images.length})',
+        ),
+      ),
       body: SafeArea(
         child: ListView.separated(
           padding: const EdgeInsets.all(AppSpacing.lg),
@@ -706,8 +743,15 @@ class _ImagesViewerScreen extends StatelessWidget {
           separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.md),
           itemBuilder: (context, index) {
             final image = images[index];
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.md),
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(
+                  color: AppTheme.colors(context).border,
+                  width: 1,
+                ),
+              ),
+              clipBehavior: Clip.antiAlias,
               child: Image.memory(image.bytes, fit: BoxFit.cover),
             );
           },
