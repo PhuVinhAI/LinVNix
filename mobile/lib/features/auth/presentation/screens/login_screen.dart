@@ -196,6 +196,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           : s.authHidePassword,
                       button: true,
                       child: IconButton(
+                        padding: const EdgeInsets.all(AppSpacing.md),
                         icon: Icon(
                           _obscurePassword
                               ? Icons.visibility_outlined

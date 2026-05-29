@@ -35,39 +35,42 @@ class AssistantBar extends ConsumerWidget {
       color: c.card,
       child: SafeArea(
         top: false,
-        child: InkWell(
-          onTap: () => _openSheet(context, ref),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: c.border)),
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.md,
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.auto_awesome, color: c.primary, size: 20),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Text(
-                    displayPlaceholder,
-                    style: GoogleFonts.inter(
-                      fontSize: AppTypography.bodySmall,
-                      color: c.mutedForeground,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Divider(color: c.border, height: 1),
+            InkWell(
+              onTap: () => _openSheet(context, ref),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.md,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.auto_awesome, color: c.primary, size: 20),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Text(
+                        displayPlaceholder,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodySmall,
+                          color: c.mutedForeground,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                    Icon(
+                      Icons.keyboard_arrow_up,
+                      color: c.mutedForeground,
+                      size: 20,
+                    ),
+                  ],
                 ),
-                Icon(
-                  Icons.keyboard_arrow_up,
-                  color: c.mutedForeground,
-                  size: 20,
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

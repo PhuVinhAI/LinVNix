@@ -189,6 +189,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   label: s.passwordLabel,
                   prefixIcon: const Icon(Icons.lock_outlined),
                   suffixIcon: IconButton(
+                    padding: const EdgeInsets.all(AppSpacing.md),
                     icon: Icon(
                       _obscurePassword
                           ? Icons.visibility_outlined
@@ -220,6 +221,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   label: s.confirmPasswordLabel,
                   prefixIcon: const Icon(Icons.lock_outlined),
                   suffixIcon: IconButton(
+                    padding: const EdgeInsets.all(AppSpacing.md),
                     icon: Icon(
                       _obscureConfirmPassword
                           ? Icons.visibility_outlined

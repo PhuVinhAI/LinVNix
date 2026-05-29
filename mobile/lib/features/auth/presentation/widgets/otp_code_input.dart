@@ -139,15 +139,15 @@ class _OtpCodeInputState extends State<OtpCodeInput> {
                     filled: true,
                     fillColor: c.card,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                       borderSide: BorderSide(color: c.border),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                       borderSide: BorderSide(color: c.border),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                       borderSide: BorderSide(color: c.primary, width: 2),
                     ),
                   ),

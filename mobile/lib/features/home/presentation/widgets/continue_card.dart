@@ -142,7 +142,7 @@ class _EmptyCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.xl,
+        vertical: AppSpacing.xxl,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

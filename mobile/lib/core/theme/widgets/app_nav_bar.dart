@@ -75,10 +75,10 @@ class AppNavBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: protrusionHeight),
+            Divider(color: c.border, height: 1),
             DecoratedBox(
               decoration: BoxDecoration(
                 color: c.card,
-                border: Border(top: BorderSide(color: c.border, width: 1)),
               ),
               child: SafeArea(
                 top: false,

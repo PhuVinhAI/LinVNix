@@ -107,21 +107,24 @@ class _AudioContentWidgetState extends State<AudioContentWidget> {
               variant: AppCardVariant.muted,
               padding: const EdgeInsets.all(AppSpacing.lg),
               borderRadius: AppRadius.lg,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.play_arrow),
-                    iconSize: 32,
-                  ),
-                  Expanded(
-                    child: AppSlider(
-                      value: 0,
-                      onChanged: (v) {},
+              child: Opacity(
+                opacity: 0.5,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: null,
+                      icon: const Icon(Icons.play_arrow),
+                      iconSize: 32,
                     ),
-                  ),
-                  const Text('0:00'),
-                ],
+                    Expanded(
+                      child: AppSlider(
+                        value: 0,
+                        onChanged: null,
+                      ),
+                    ),
+                    const Text('0:00'),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 12),

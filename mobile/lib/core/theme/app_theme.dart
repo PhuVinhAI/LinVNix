@@ -390,23 +390,23 @@ class AppTheme {
         filled: true,
         fillColor: c.card,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.inputBorder, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.inputBorder, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.error, width: 1.5),
         ),
         contentPadding: const EdgeInsets.symmetric(
@@ -611,23 +611,23 @@ class AppTheme {
         filled: true,
         fillColor: c.card,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.inputBorder, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.inputBorder, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           borderSide: BorderSide(color: c.error, width: 1.5),
         ),
         contentPadding: const EdgeInsets.symmetric(
