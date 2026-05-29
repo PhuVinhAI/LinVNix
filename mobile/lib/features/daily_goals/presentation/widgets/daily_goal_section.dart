@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -19,68 +19,195 @@ String _goalTypeLabel(BuildContext context, GoalType type) {
   };
 }
 
+// ─── Shared building blocks ──────────────────────────────────────────────
+
+/// A flat card that wraps rows, inserting full-width dividers between them.
+class _GoalsShellCard extends StatelessWidget {
+  const _GoalsShellCard({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) Container(height: 1, color: c.border),
+            children[i],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _GoalRow extends StatelessWidget {
+  const _GoalRow({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.titleColor,
+    this.trailing,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final Color? titleColor;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final accent = c.primary;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                ),
+                child: Icon(icon, color: accent, size: 20),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyMedium,
+                        fontWeight: FontWeight.w600,
+                        color: titleColor ?? c.foreground,
+                        height: 1.2,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodySmall,
+                          color: c.mutedForeground,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              if (trailing != null) ...[
+                const SizedBox(width: AppSpacing.sm),
+                trailing!,
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Section ─────────────────────────────────────────────────────────────
+
 class DailyGoalSection extends ConsumerWidget {
   const DailyGoalSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
     final goalsAsync = ref.watch(dailyGoalsProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(context).dailyGoals,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
+        Padding(
+          padding: const EdgeInsets.only(left: 2, bottom: AppSpacing.md),
+          child: Text(
+            S.of(context).dailyGoals,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.titleSmall,
+              fontWeight: FontWeight.w700,
+              color: c.foreground,
+              height: 1.2,
+            ),
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
         goalsAsync.when(
           loading: () => const _DailyGoalsLoading(),
-          error: (error, stack) => AppCard(
-            variant: AppCardVariant.outlined,
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppTheme.colors(context).error.withValues(alpha: 0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.error_outline_rounded,
-                      size: 40,
-                      color: AppTheme.colors(context).error,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    S.of(context).failedToLoadGoals,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.colors(context).foreground,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  AppButton(
-                    label: S.of(context).retryButton,
-                    variant: AppButtonVariant.outline,
-                    onPressed: () =>
-                        ref.read(dailyGoalsProvider.notifier).refresh(),
-                  ),
-                ],
-              ),
-            ),
+          error: (error, stack) => _GoalsError(
+            onRetry: () => ref.read(dailyGoalsProvider.notifier).refresh(),
           ),
           data: (goals) => _GoalsCard(goals: goals),
         ),
       ],
+    );
+  }
+}
+
+class _GoalsError extends StatelessWidget {
+  const _GoalsError({required this.onRetry});
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: c.error.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.error.withValues(alpha: 0.2), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.error_outline_rounded, color: c.error, size: 20),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Text(
+                  S.of(context).failedToLoadGoals,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
+                    fontWeight: FontWeight.w600,
+                    color: c.foreground,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          AppButton(
+            label: S.of(context).retryButton,
+            variant: AppButtonVariant.outline,
+            onPressed: onRetry,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -93,78 +220,26 @@ class _GoalsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = AppTheme.colors(context);
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          if (goals.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: c.primary.withValues(alpha: 0.08),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.emoji_events_outlined,
-                        size: 48,
-                        color: c.primary,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Text(
-                      S.of(context).noGoalsSetYet,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: c.foreground,
-                          ),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    Text(
-                      S.of(context).addGoalToTrackProgress,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: c.mutedForeground,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            )
-          else
-            ...goals.map((goal) => _GoalTile(goal: goal)),
-          AppDivider(),
-          AppListItem(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
-            ),
-            leading: Icon(Icons.add, color: c.primary),
-            titleWidget: Text(
-              S.of(context).addGoalTitle,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: c.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-            ),
+    return _GoalsShellCard(
+      children: [
+        if (goals.isEmpty)
+          _EmptyGoals(onAdd: () => _showAddGoalDialog(context, ref))
+        else
+          ...goals.map((goal) => _GoalTile(goal: goal)),
+        if (goals.isNotEmpty)
+          _GoalRow(
+            icon: Icons.add,
+            title: S.of(context).addGoalTitle,
+            titleColor: c.primary,
             onTap: () => _showAddGoalDialog(context, ref),
           ),
-          AppDivider(),
-          const _NotificationSettings(),
-        ],
-      ),
+        const _NotificationSettings(),
+      ],
     );
   }
 
   void _showAddGoalDialog(BuildContext context, WidgetRef ref) {
-    final existingTypes =
-        goals.map((g) => g.goalType).toSet();
+    final existingTypes = goals.map((g) => g.goalType).toSet();
     final availableTypes = GoalType.values
         .where((t) => !existingTypes.contains(t))
         .toList();
@@ -264,6 +339,58 @@ class _GoalsCard extends ConsumerWidget {
   }
 }
 
+class _EmptyGoals extends StatelessWidget {
+  const _EmptyGoals({required this.onAdd});
+  final VoidCallback onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      child: Column(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: c.primary.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.emoji_events_outlined, size: 28, color: c.primary),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            S.of(context).noGoalsSetYet,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyMedium,
+              fontWeight: FontWeight.w700,
+              color: c.foreground,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            S.of(context).addGoalToTrackProgress,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodySmall,
+              color: c.mutedForeground,
+              height: 1.3,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          AppButton(
+            label: S.of(context).addGoalTitle,
+            variant: AppButtonVariant.primary,
+            icon: const Icon(Icons.add),
+            onPressed: onAdd,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _GoalTile extends ConsumerWidget {
   const _GoalTile({required this.goal});
   final DailyGoal goal;
@@ -271,37 +398,34 @@ class _GoalTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
-    return AppListItem(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm,
-      ),
-      leading: Icon(goal.goalType.icon, color: c.primary, size: 20),
-      titleWidget: Text(
-        _goalTypeLabel(context, goal.goalType),
-        style: theme.textTheme.bodyMedium,
-      ),
-      subtitleWidget: Text(
-        '${goal.targetValue} ${goal.goalType.unit}/day',
-        style: theme.textTheme.bodySmall?.copyWith(color: c.mutedForeground),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.edit, size: 18),
-            onPressed: () => _showEditDialog(context, ref),
-            visualDensity: VisualDensity.compact,
-          ),
-          IconButton(
-            icon: Icon(Icons.delete_outline, size: 18, color: c.error),
-            onPressed: () => _showDeleteConfirm(context, ref),
-            visualDensity: VisualDensity.compact,
-          ),
-        ],
-      ),
+    return _GoalRow(
+      icon: goal.goalType.icon,
+      title: _goalTypeLabel(context, goal.goalType),
+      subtitle: '${goal.targetValue} ${goal.goalType.unit}/day',
+      onTap: () => _showActions(context, ref),
+      trailing: Icon(Icons.more_vert, size: 20, color: c.mutedForeground),
+    );
+  }
+
+  void _showActions(BuildContext context, WidgetRef ref) {
+    final c = AppTheme.colors(context);
+    AppMenuBottomSheet.show(
+      context,
+      title: _goalTypeLabel(context, goal.goalType),
+      items: [
+        AppMenuBottomSheetItem(
+          label: S.of(context).editGoalTitle(_goalTypeLabel(context, goal.goalType)),
+          icon: Icons.edit_outlined,
+          onTap: () => _showEditDialog(context, ref),
+        ),
+        AppMenuBottomSheetItem(
+          label: S.of(context).deleteLabel,
+          icon: Icons.delete_outline,
+          foregroundColor: c.error,
+          onTap: () => _showDeleteConfirm(context, ref),
+        ),
+      ],
     );
   }
 
@@ -351,6 +475,8 @@ class _GoalTile extends ConsumerWidget {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
+        icon: Icons.delete_outline,
+        iconColor: AppTheme.colors(dialogCtx).error,
         title: S.of(dialogCtx).deleteGoal,
         content: S.of(dialogCtx).deleteGoalPermanentlyQuestion(_goalTypeLabel(dialogCtx, goal.goalType)),
         actions: [
@@ -361,6 +487,7 @@ class _GoalTile extends ConsumerWidget {
           AppDialogAction(
             label: S.of(dialogCtx).deleteLabel,
             isPrimary: true,
+            isDestructive: true,
             onPressed: () async {
               Navigator.pop(dialogCtx);
               try {
@@ -454,54 +581,36 @@ class _NotificationSettings extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final profileAsync = ref.watch(userProfileProvider);
 
     return profileAsync.when(
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
       data: (profile) {
         return Column(
           children: [
-            AppListItem(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.sm,
-              ),
-              leading: Icon(Icons.notifications_outlined,
-                  color: c.primary, size: 20),
-              titleWidget: Text(
-                S.of(context).goalReminders,
-                style: theme.textTheme.bodyMedium,
-              ),
+            _GoalRow(
+              icon: Icons.notifications_outlined,
+              title: S.of(context).goalReminders,
               trailing: AppSwitch(
                 value: profile.notificationEnabled,
                 onChanged: (value) => _onToggle(context, ref, value),
               ),
             ),
-            if (profile.notificationEnabled) ...[
-              AppDivider(),
-              AppListItem(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lg,
-                  vertical: AppSpacing.sm,
-                ),
-                leading:
-                    Icon(Icons.access_time, color: c.primary, size: 20),
-                titleWidget: Text(
-                  S.of(context).reminderTime,
-                  style: theme.textTheme.bodyMedium,
-                ),
-                subtitleWidget: Text(
-                  profile.notificationTime,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
-                ),
-                trailing: const Icon(Icons.chevron_right),
+            if (profile.notificationEnabled)
+              Container(
+                height: 1,
+                color: c.border,
+              ),
+            if (profile.notificationEnabled)
+              _GoalRow(
+                icon: Icons.access_time,
+                title: S.of(context).reminderTime,
+                subtitle: profile.notificationTime,
+                trailing: Icon(Icons.chevron_right,
+                    color: c.mutedForeground, size: 20),
                 onTap: () => _showTimePicker(context, ref, profile),
               ),
-            ],
           ],
         );
       },
@@ -510,6 +619,8 @@ class _NotificationSettings extends ConsumerWidget {
 
   Future<void> _onToggle(
       BuildContext context, WidgetRef ref, bool value) async {
+    final reminderTitle = S.of(context).dailyGoals;
+    final reminderBody = S.of(context).greatJobCompletedAllGoals;
     if (value) {
       final granted = await NotificationService.requestPermissions();
       if (!granted) {
@@ -534,8 +645,8 @@ class _NotificationSettings extends ConsumerWidget {
         if (profile != null) {
           await NotificationService.scheduleDailyReminder(
             notificationTime: profile.notificationTime,
-            title: S.of(context).dailyGoals,
-            body: S.of(context).greatJobCompletedAllGoals,
+            title: reminderTitle,
+            body: reminderBody,
           );
         }
       } else {
@@ -566,6 +677,9 @@ class _NotificationSettings extends ConsumerWidget {
     final minute = picked.minute.toString().padLeft(2, '0');
     final time = '$hour:$minute';
 
+    if (!context.mounted) return;
+    final reminderTitle = S.of(context).dailyGoals;
+    final reminderBody = S.of(context).greatJobCompletedAllGoals;
     try {
       await ref.read(userProfileProvider.notifier).updateProfile(
             notificationTime: time,
@@ -576,8 +690,8 @@ class _NotificationSettings extends ConsumerWidget {
       if (profile != null && profile.notificationEnabled) {
         await NotificationService.scheduleDailyReminder(
           notificationTime: time,
-          title: S.of(context).dailyGoals,
-          body: S.of(context).greatJobCompletedAllGoals,
+          title: reminderTitle,
+          body: reminderBody,
         );
       }
     } catch (e) {
@@ -596,7 +710,7 @@ class _DailyGoalsLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
 
-    Widget buildTileShimmer() {
+    Widget rowShimmer({Widget? trailing}) {
       return Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
@@ -604,16 +718,12 @@ class _DailyGoalsLoading extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Shimmer.fromColors(
-              baseColor: c.muted,
-              highlightColor: c.card,
-              child: Container(
-                width: 24,
-                height: 24,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: c.muted,
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
             ),
             const SizedBox(width: AppSpacing.md),
@@ -621,136 +731,47 @@ class _DailyGoalsLoading extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      width: 100,
-                      height: 14,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
-                      ),
+                  Container(
+                    width: 100,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: c.muted,
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      width: 60,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
-                      ),
+                  Container(
+                    width: 64,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: c.muted,
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
-            Shimmer.fromColors(
-              baseColor: c.muted,
-              highlightColor: c.card,
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
+            ?trailing,
           ],
         ),
       );
     }
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          buildTileShimmer(),
-          AppDivider(),
-          buildTileShimmer(),
-          AppDivider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.md,
+    return _GoalsShellCard(
+      children: [
+        rowShimmer(),
+        rowShimmer(),
+        rowShimmer(
+          trailing: Container(
+            width: 40,
+            height: 24,
+            decoration: BoxDecoration(
+              color: c.muted,
+              borderRadius: BorderRadius.circular(AppRadius.full),
             ),
-            child: Row(
-              children: [
-                Shimmer.fromColors(
-                  baseColor: c.muted,
-                  highlightColor: c.card,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Shimmer.fromColors(
-              baseColor: c.muted,
-              highlightColor: c.card,
-              child: Container(
-                width: 120,
-                height: 14,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
-      AppDivider(),
-      Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
-        ),
-        child: Row(
-          children: [
-            Shimmer.fromColors(
-              baseColor: c.muted,
-              highlightColor: c.card,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Shimmer.fromColors(
-                baseColor: c.muted,
-                highlightColor: c.card,
-                child: Container(
-                  width: 160,
-                  height: 14,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ],
-  ),
-);
+      ],
+    );
   }
 }

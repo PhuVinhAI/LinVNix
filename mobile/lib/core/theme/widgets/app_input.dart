@@ -82,18 +82,23 @@ class AppInput extends StatelessWidget {
         counterText: counterText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderSide: BorderSide(color: c.inputBorder, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderSide: BorderSide(color: c.inputBorder, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderSide: BorderSide(color: c.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderSide: BorderSide(color: c.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderSide: BorderSide(color: c.error, width: 1.5),
         ),
       ),
     );

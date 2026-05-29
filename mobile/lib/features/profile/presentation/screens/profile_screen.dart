@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -11,14 +11,14 @@ import '../../../bookmarks/domain/bookmark_models.dart';
 import '../../../daily_goals/data/daily_goal_progress_providers.dart';
 import '../../../simulation/data/simulation_providers.dart';
 import '../../../user/domain/user_profile.dart';
+import '../../domain/exercise_stats.dart';
+import 'settings_screen.dart' show formatDialect;
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileAsync = ref.watch(userProfileProvider);
-
     return Scaffold(
       appBar: AppAppBar(
         title: Text(S.of(context).profileTitle),
@@ -41,28 +41,19 @@ class ProfileScreen extends ConsumerWidget {
         child: ListView(
           padding: AppNavBar.scrollPadding(
             context,
-            base: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
+            base: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
             ),
           ),
-          children: [
-            profileAsync.when(
-              loading: () => const _ProfileHeaderLoading(),
-              error: (_, __) => const SizedBox.shrink(),
-              data: (profile) => _ProfileHeader(profile: profile),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            const _StatsSection(),
-            const SizedBox(height: AppSpacing.md),
-            const _StreakSection(),
-            const SizedBox(height: AppSpacing.md),
-            const _SimulationStatsSection(),
-            const SizedBox(height: AppSpacing.md),
-            const _VocabStatsSection(),
-            const SizedBox(height: AppSpacing.md),
-            const _SavedWordsSection(),
-            const SizedBox(height: AppSpacing.lg),
+          children: const [
+            _ProfileHero(),
+            SizedBox(height: AppSpacing.xl),
+            _LearningProgressSection(),
+            SizedBox(height: AppSpacing.xl),
+            _VocabularySection(),
           ],
         ),
       ),
@@ -70,77 +61,354 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({required this.profile});
+// ─── Section header ──────────────────────────────────────────────────────
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Padding(
+      padding: const EdgeInsets.only(left: 2, bottom: AppSpacing.md),
+      child: Text(
+        title,
+        style: GoogleFonts.inter(
+          fontSize: AppTypography.titleMedium,
+          fontWeight: FontWeight.w700,
+          color: c.foreground,
+          height: 1.2,
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Hero ────────────────────────────────────────────────────────────────
+
+class _ProfileHero extends ConsumerWidget {
+  const _ProfileHero();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileAsync = ref.watch(userProfileProvider);
+    final progressAsync = ref.watch(dailyGoalProgressProvider);
+    final simStatsAsync = ref.watch(simulationStatsProvider);
+
+    return profileAsync.when(
+      loading: () => const _HeroShimmer(),
+      error: (_, _) => const SizedBox.shrink(),
+      data: (profile) {
+        final currentStreak = progressAsync.when(
+          data: (p) => p.currentStreak,
+          loading: () => 0,
+          error: (_, _) => 0,
+        );
+        final longestStreak = progressAsync.when(
+          data: (p) => p.longestStreak,
+          loading: () => 0,
+          error: (_, _) => 0,
+        );
+        final avgScore = simStatsAsync.when(
+          data: (s) => s.averageScore,
+          loading: () => 0.0,
+          error: (_, _) => 0.0,
+        );
+        return _HeroCard(
+          profile: profile,
+          currentStreak: currentStreak,
+          longestStreak: longestStreak,
+          avgScore: avgScore,
+        );
+      },
+    );
+  }
+}
+
+class _HeroCard extends StatelessWidget {
+  const _HeroCard({
+    required this.profile,
+    required this.currentStreak,
+    required this.longestStreak,
+    required this.avgScore,
+  });
+
+  final UserProfile profile;
+  final int currentStreak;
+  final int longestStreak;
+  final double avgScore;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    final subtitleParts = <String>[];
+    if (profile.currentLevel != null && profile.currentLevel!.isNotEmpty) {
+      subtitleParts.add(profile.currentLevel!);
+    }
+    if (profile.preferredDialect != null &&
+        profile.preferredDialect!.isNotEmpty) {
+      subtitleParts.add(formatDialect(context, profile.preferredDialect!));
+    }
+    final subtitle = subtitleParts.isEmpty
+        ? profile.email
+        : subtitleParts.join(' · ');
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              _Avatar(profile: profile),
+              const SizedBox(width: AppSpacing.lg),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      profile.fullName,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.titleMedium,
+                        fontWeight: FontWeight.w700,
+                        color: c.foreground,
+                        height: 1.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      subtitle,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodySmall,
+                        color: c.mutedForeground,
+                        height: 1.3,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          Container(height: 1, color: c.border),
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            children: [
+              Expanded(
+                child: _MiniStat(
+                  icon: Icons.local_fire_department,
+                  value: '$currentStreak',
+                  label: S.of(context).dailyGoals,
+                ),
+              ),
+              _MiniDivider(),
+              Expanded(
+                child: _MiniStat(
+                  icon: Icons.emoji_events_outlined,
+                  value: '$longestStreak',
+                  label: S.of(context).longestStreak,
+                ),
+              ),
+              _MiniDivider(),
+              Expanded(
+                child: _MiniStat(
+                  icon: Icons.star_outline,
+                  value: avgScore > 0 ? avgScore.toStringAsFixed(1) : '–',
+                  label: S.of(context).avgScore,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Avatar extends StatelessWidget {
+  const _Avatar({required this.profile});
   final UserProfile profile;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final hasAvatar =
+        profile.avatarUrl != null && profile.avatarUrl!.isNotEmpty;
+    final initial = profile.fullName.isNotEmpty
+        ? profile.fullName[0].toUpperCase()
+        : '?';
 
-    return Center(
-      child: Column(
-        children: [
-          Semantics(
-            label: profile.avatarUrl != null
-                ? S.of(context).profilePictureOfParam(profile.fullName)
-                : S.of(context).defaultProfilePictureSemantics,
-            child: AppAvatar(
-              radius: 50,
-              backgroundColor: c.primary.withValues(alpha: 0.08),
-              backgroundImage: profile.avatarUrl != null
-                  ? NetworkImage(profile.avatarUrl!)
-                  : null,
-              child: profile.avatarUrl == null
-                  ? Icon(Icons.person, size: 50, color: c.primary)
-                  : null,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            profile.fullName,
-            style: theme.textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-        ],
+    return Container(
+      width: 72,
+      height: 72,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: hasAvatar ? null : c.primary.withValues(alpha: 0.12),
+        border: Border.all(
+          color: c.primary.withValues(alpha: 0.2),
+          width: 2,
+        ),
+        image: hasAvatar
+            ? DecorationImage(
+                image: NetworkImage(profile.avatarUrl!),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
+      child: hasAvatar
+          ? null
+          : Center(
+              child: Text(
+                initial,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.titleLarge,
+                  fontWeight: FontWeight.w700,
+                  color: c.primary,
+                ),
+              ),
+            ),
     );
   }
 }
 
-class _ProfileHeaderLoading extends StatelessWidget {
-  const _ProfileHeaderLoading();
+class _MiniStat extends StatelessWidget {
+  const _MiniStat({
+    required this.icon,
+    required this.value,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String value;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
+    return Column(
+      children: [
+        Icon(icon, color: c.primary, size: 18),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.titleSmall,
+            fontWeight: FontWeight.w700,
+            color: c.foreground,
+            height: 1.2,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.caption,
+            color: c.mutedForeground,
+            height: 1.2,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+}
 
-    return Center(
+class _MiniDivider extends StatelessWidget {
+  const _MiniDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      width: 1,
+      height: 36,
+      color: c.border,
+      margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+    );
+  }
+}
+
+class _HeroShimmer extends StatelessWidget {
+  const _HeroShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    Widget bar(double w, double h) => Container(
+          width: w,
+          height: h,
+          decoration: BoxDecoration(
+            color: c.muted,
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+          ),
+        );
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: c.border, width: 1),
+      ),
       child: Column(
         children: [
-          Shimmer.fromColors(
-            baseColor: c.muted,
-            highlightColor: c.card,
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
+          Row(
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: c.muted,
+                  shape: BoxShape.circle,
+                ),
               ),
-            ),
+              const SizedBox(width: AppSpacing.lg),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    bar(160, 18),
+                    const SizedBox(height: AppSpacing.xs),
+                    bar(120, 12),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: AppSpacing.md),
-          Shimmer.fromColors(
-            baseColor: c.muted,
-            highlightColor: c.card,
-            child: Container(
-              width: 140,
-              height: 22,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
+          const SizedBox(height: AppSpacing.xl),
+          Container(height: 1, color: c.border),
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              3,
+              (i) => Column(
+                children: [
+                  Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: c.muted,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  bar(28, 16),
+                  const SizedBox(height: 4),
+                  bar(40, 10),
+                ],
               ),
             ),
           ),
@@ -150,141 +418,155 @@ class _ProfileHeaderLoading extends StatelessWidget {
   }
 }
 
-class _StatsSection extends ConsumerWidget {
-  const _StatsSection();
+// ─── Learning Progress ───────────────────────────────────────────────────
+
+class _LearningProgressSection extends ConsumerWidget {
+  const _LearningProgressSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final c = AppTheme.colors(context);
-    final accent = AppTheme.accents(context);
-    final theme = Theme.of(context);
     final statsAsync = ref.watch(exerciseStatsProvider);
+    final simStatsAsync = ref.watch(simulationStatsProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(context).statisticsLabel,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
+        _SectionHeader(title: S.of(context).statisticsLabel),
         statsAsync.when(
-          loading: () => const _StatsSectionLoading(),
-          error: (error, stack) => AppCard(
-            variant: AppCardVariant.outlined,
-            child: Column(
-              children: [
-                Semantics(
-                  label: S.of(context).errorLoadingStats,
-                  child: Icon(Icons.error_outline, color: c.error),
-                ),
-                const SizedBox(height: 8),
-                Text(S.of(context).failedToLoadSettings, textAlign: TextAlign.center),
-                const SizedBox(height: 8),
-                Semantics(
-                  label: S.of(context).retryLoadingStats,
-                  button: true,
-                  child: AppButton(
-                    label: S.of(context).retryButton,
-                    variant: AppButtonVariant.outline,
-                    onPressed: () => ref.read(exerciseStatsProvider.notifier).refresh(),
-                  ),
-                ),
-              ],
-            ),
+          loading: () => const _ProgressLoading(),
+          error: (_, _) => _ProgressError(
+            onRetry: () => ref.read(exerciseStatsProvider.notifier).refresh(),
           ),
-          data: (stats) => Column(
+          data: (stats) {
+            final scenarios = simStatsAsync.when(
+              data: (s) => s.scenariosAttempted,
+              loading: () => 0,
+              error: (_, _) => 0,
+            );
+            return Column(
+              children: [
+                _AccuracyCard(accuracy: stats.accuracy),
+                const SizedBox(height: AppSpacing.md),
+                _StatGrid(stats: stats, scenarios: scenarios),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _AccuracyCard extends StatelessWidget {
+  const _AccuracyCard({required this.accuracy});
+  final double accuracy;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.check_circle,
-                      label: S.of(context).lessonsCompleted,
-                      value: '${stats.completedExercises}',
-                      color: c.primary,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.task_alt,
-                      label: S.of(context).correctAnswers,
-                      value: '${stats.correctAnswers}',
-                      color: c.secondary,
-                    ),
-                  ),
-                ],
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                ),
+                child: Icon(Icons.speed_rounded, color: c.primary, size: 20),
               ),
-              const SizedBox(height: AppSpacing.md),
-              Row(
-                children: [
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.quiz,
-                      label: S.of(context).exercisesDone,
-                      value: '${stats.totalExercises}',
-                      color: accent.toneLow,
-                    ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(
+                  S.of(context).accuracyLabel,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
+                    fontWeight: FontWeight.w600,
+                    color: c.foreground,
+                    height: 1.2,
                   ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.timer,
-                      label: S.of(context).totalTime,
-                      value: _formatTime(stats.totalTimeSpent),
-                      color: accent.diacriticColor,
-                    ),
-                  ),
-                ],
+                ),
               ),
-              const SizedBox(height: AppSpacing.md),
-              Semantics(
-                label: S.of(context).accuracyPercentParam(stats.accuracy.toStringAsFixed(1)),
-                child: AppCard(
-                  variant: AppCardVariant.outlined,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                    vertical: AppSpacing.md,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.speed, color: c.primary),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              S.of(context).accuracyLabel,
-                              style: theme.textTheme.bodySmall,
-                            ),
-                            Text(
-                              '${stats.accuracy.toStringAsFixed(1)}%',
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                color: c.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      AppProgress(
-                        value: stats.accuracy / 100,
-                        isCircular: true,
-                        color: c.primary,
-                        trackColor: c.muted,
-                        radius: 28,
-                        strokeWidth: 5,
-                      ),
-                    ],
-                  ),
+              Text(
+                '${accuracy.toStringAsFixed(1)}%',
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.titleMedium,
+                  fontWeight: FontWeight.w800,
+                  color: c.primary,
+                  height: 1.2,
                 ),
               ),
             ],
           ),
+          const SizedBox(height: AppSpacing.md),
+          AppProgress(
+            value: accuracy / 100,
+            height: 8,
+            color: c.primary,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatGrid extends StatelessWidget {
+  const _StatGrid({required this.stats, required this.scenarios});
+  final ExerciseStats stats;
+  final int scenarios;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _StatTile(
+                icon: Icons.check_circle_outline,
+                value: '${stats.completedExercises}',
+                label: S.of(context).lessonsCompleted,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: _StatTile(
+                icon: Icons.fitness_center,
+                value: '${stats.totalExercises}',
+                label: S.of(context).exercisesDone,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Row(
+          children: [
+            Expanded(
+              child: _StatTile(
+                icon: Icons.forum_outlined,
+                value: '$scenarios',
+                label: S.of(context).scenariosTried,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: _StatTile(
+                icon: Icons.schedule_outlined,
+                value: _formatTime(stats.totalTimeSpent),
+                label: S.of(context).totalTime,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -299,180 +581,61 @@ class _StatsSection extends ConsumerWidget {
   }
 }
 
-class _SimulationStatsSection extends ConsumerWidget {
-  const _SimulationStatsSection();
+class _StatTile extends StatelessWidget {
+  const _StatTile({
+    required this.icon,
+    required this.value,
+    required this.label,
+  });
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = AppTheme.colors(context);
-    final accent = AppTheme.accents(context);
-    final theme = Theme.of(context);
-    final statsAsync = ref.watch(simulationStatsProvider);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          S.of(context).simulationLabel,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        statsAsync.when(
-          loading: () => const _SimulationStatsSectionLoading(),
-          error: (error, stack) => AppCard(
-            variant: AppCardVariant.outlined,
-            child: Column(
-              children: [
-                Semantics(
-                  label: S.of(context).errorLoadingSimulationStats,
-                  child: Icon(Icons.error_outline, color: c.error),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  S.of(context).failedToLoadSimulationStats,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Semantics(
-                  label: S.of(context).retryLoadingSimulationStats,
-                  button: true,
-                  child: AppButton(
-                    label: S.of(context).retryButton,
-                    variant: AppButtonVariant.outline,
-                    onPressed: () =>
-                        ref.read(simulationStatsProvider.notifier).refresh(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          data: (stats) => Row(
-            children: [
-              Expanded(
-                child: _StatCard(
-                  icon: Icons.forum_outlined,
-                  label: S.of(context).scenariosTried,
-                  value: '${stats.scenariosAttempted}',
-                  color: accent.toneHigh,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: _StatCard(
-                  icon: Icons.star_outline,
-                  label: S.of(context).avgScore,
-                  value: stats.averageScore.toStringAsFixed(1),
-                  color: accent.toneMid,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _SimulationStatsSectionLoading extends StatelessWidget {
-  const _SimulationStatsSectionLoading();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(child: _StatCardSkeleton()),
-        const SizedBox(width: AppSpacing.md),
-        Expanded(child: _StatCardSkeleton()),
-      ],
-    );
-  }
-}
-
-class _StatsSectionLoading extends StatelessWidget {
-  const _StatsSectionLoading();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(child: _StatCardSkeleton()),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(child: _StatCardSkeleton()),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.md),
-        Row(
-          children: [
-            Expanded(child: _StatCardSkeleton()),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(child: _StatCardSkeleton()),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.md),
-        const _AccuracyCardSkeleton(),
-      ],
-    );
-  }
-}
-
-class _StatCardSkeleton extends StatelessWidget {
-  const _StatCardSkeleton();
+  final IconData icon;
+  final String value;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      borderRadius: AppRadius.lg,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Shimmer.fromColors(
-            baseColor: c.muted,
-            highlightColor: c.card,
-            child: Row(
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Container(
-                  width: 48,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                ),
-              ],
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: c.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
+            child: Icon(icon, color: c.primary, size: 18),
           ),
-          const SizedBox(height: AppSpacing.xs),
-          Shimmer.fromColors(
-            baseColor: c.muted,
-            highlightColor: c.card,
-            child: Container(
-              width: 90,
-              height: 12,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.titleMedium,
+              fontWeight: FontWeight.w800,
+              color: c.foreground,
+              height: 1.2,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodySmall,
+              color: c.mutedForeground,
+              height: 1.3,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -480,385 +643,292 @@ class _StatCardSkeleton extends StatelessWidget {
   }
 }
 
-class _AccuracyCardSkeleton extends StatelessWidget {
-  const _AccuracyCardSkeleton();
+class _ProgressLoading extends StatelessWidget {
+  const _ProgressLoading();
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
-      ),
-      child: Row(
-        children: [
-          Shimmer.fromColors(
-            baseColor: c.muted,
-            highlightColor: c.card,
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-            ),
+    Widget box({double h = 96}) => Container(
+          height: h,
+          decoration: BoxDecoration(
+            color: c.muted,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
           ),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Shimmer.fromColors(
-                  baseColor: c.muted,
-                  highlightColor: c.card,
-                  child: Container(
-                    width: 64,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppRadius.sm),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Shimmer.fromColors(
-                  baseColor: c.muted,
-                  highlightColor: c.card,
-                  child: Container(
-                    width: 56,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppRadius.sm),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Shimmer.fromColors(
-            baseColor: c.muted,
-            highlightColor: c.card,
-            child: Container(
-              width: 56,
-              height: 56,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _VocabStatsSectionLoading extends StatelessWidget {
-  const _VocabStatsSectionLoading();
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      borderRadius: AppRadius.lg,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
-      ),
-      child: Shimmer.fromColors(
-        baseColor: c.muted,
-        highlightColor: c.card,
-        child: Row(
-          children: [
-            Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Container(
-              width: 32,
-              height: 24,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-            ),
-            const Spacer(),
-            Container(
-              width: 80,
-              height: 12,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StreakSection extends ConsumerWidget {
-  const _StreakSection();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final c = AppTheme.colors(context);
-    final progressAsync = ref.watch(dailyGoalProgressProvider);
-
-    return progressAsync.when(
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
-      data: (progress) {
-        if (progress.longestStreak <= 0) return const SizedBox.shrink();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              S.of(context).dailyGoals,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-            _StatCard(
-              icon: Icons.emoji_events,
-              label: S.of(context).longestStreak,
-              value: '${progress.longestStreak} days',
-              color: c.primary,
-            ),
-          ],
         );
-      },
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-
-    return Semantics(
-      label: '$label: $value',
-      child: AppCard(
-        variant: AppCardVariant.outlined,
-        borderRadius: AppRadius.lg,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: color, size: 20),
-                const SizedBox(width: AppSpacing.sm),
-                Text(
-                  value,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              label,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _VocabStatsSection extends ConsumerWidget {
-  const _VocabStatsSection();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-    final statsAsync = ref.watch(bookmarkStatsProvider);
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(context).bookmarkedLabel,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+        box(h: 80),
+        const SizedBox(height: AppSpacing.md),
+        Row(
+          children: [
+            Expanded(child: box()),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(child: box()),
+          ],
         ),
         const SizedBox(height: AppSpacing.md),
-        statsAsync.when(
-          loading: () => const _VocabStatsSectionLoading(),
-          error: (error, stack) => AppCard(
-            variant: AppCardVariant.outlined,
-            child: Row(
-              children: [
-                Icon(Icons.error_outline, color: c.error),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(child: Text(S.of(context).unableToLoadBookmarkStats)),
-              ],
-            ),
-          ),
-          data: (stats) => _VocabStatsCard(stats: stats),
+        Row(
+          children: [
+            Expanded(child: box()),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(child: box()),
+          ],
         ),
       ],
     );
   }
 }
 
-class _VocabStatsCard extends StatelessWidget {
-  const _VocabStatsCard({required this.stats});
-  final BookmarkStats stats;
+class _ProgressError extends StatelessWidget {
+  const _ProgressError({required this.onRetry});
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-
-    if (stats.total == 0) {
-      return AppCard(
-        variant: AppCardVariant.outlined,
-        borderRadius: AppRadius.lg,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.bookmark_border, color: c.primary, size: 20),
-                const SizedBox(width: AppSpacing.sm),
-                Text(
-                  '0',
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              S.of(context).savedWordsTitle,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    final breakdownItems = stats.byPartOfSpeech.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      borderRadius: AppRadius.lg,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: c.error.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.error.withValues(alpha: 0.2), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.bookmark, color: c.primary, size: 20),
+              Icon(Icons.error_outline, color: c.error, size: 20),
               const SizedBox(width: AppSpacing.sm),
-              Text(
-                '${stats.total}',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: c.primary,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                S.of(context).savedWordsTitle,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: c.mutedForeground,
+              Expanded(
+                child: Text(
+                  S.of(context).failedToLoadSettings,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
+                    color: c.foreground,
+                  ),
                 ),
               ),
             ],
           ),
-          if (breakdownItems.isNotEmpty) ...[
-            AppDivider(),
-            const SizedBox(height: AppSpacing.sm),
-            Wrap(
-              spacing: AppSpacing.sm,
-              runSpacing: AppSpacing.sm,
-              children: breakdownItems.map((entry) {
-                final viLabel = kPartOfSpeechViLabels[entry.key] ?? entry.key;
-                return AppChip(
-                  label: '$viLabel: ${entry.value}',
-                  fontSize: AppTypography.caption,
-                );
-              }).toList(),
-            ),
-          ],
+          const SizedBox(height: AppSpacing.md),
+          AppButton(
+            variant: AppButtonVariant.outline,
+            label: S.of(context).retryButton,
+            onPressed: onRetry,
+          ),
         ],
       ),
     );
   }
 }
 
-class _SavedWordsSection extends StatelessWidget {
-  const _SavedWordsSection();
+// ─── Vocabulary ──────────────────────────────────────────────────────────
+
+class _VocabularySection extends ConsumerWidget {
+  const _VocabularySection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final statsAsync = ref.watch(bookmarkStatsProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionHeader(title: S.of(context).bookmarkedLabel),
+        statsAsync.when(
+          loading: () => const _VocabLoading(),
+          error: (_, _) => const _VocabError(),
+          data: (stats) => _VocabCard(stats: stats),
+        ),
+      ],
+    );
+  }
+}
+
+class _VocabCard extends StatelessWidget {
+  const _VocabCard({required this.stats});
+  final BookmarkStats stats;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final breakdownItems = stats.byPartOfSpeech.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      child: AppListItem(
-        leading: Icon(Icons.bookmark, color: c.primary),
-        titleWidget: Text(
-          S.of(context).viewSavedWordsButton,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w600,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => context.push('/bookmarks'),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: c.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: c.border, width: 1),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: c.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
+                      child: Icon(Icons.bookmark_outline,
+                          color: c.primary, size: 20),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${stats.total}',
+                            style: GoogleFonts.inter(
+                              fontSize: AppTypography.titleMedium,
+                              fontWeight: FontWeight.w800,
+                              color: c.foreground,
+                              height: 1.2,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            S.of(context).savedWordsTitle,
+                            style: GoogleFonts.inter(
+                              fontSize: AppTypography.bodySmall,
+                              color: c.mutedForeground,
+                              height: 1.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward,
+                        color: c.mutedForeground, size: 20),
+                  ],
+                ),
+                if (breakdownItems.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.lg),
+                  Container(height: 1, color: c.border),
+                  const SizedBox(height: AppSpacing.md),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: breakdownItems.take(6).map((entry) {
+                      final viLabel =
+                          kPartOfSpeechViLabels[entry.key] ?? entry.key;
+                      return _PosChip(
+                        label: viLabel,
+                        count: entry.value,
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () => context.push('/bookmarks'),
+      ),
+    );
+  }
+}
+
+class _PosChip extends StatelessWidget {
+  const _PosChip({required this.label, required this.count});
+  final String label;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.xs + 2,
+      ),
+      decoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.full),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              color: c.mutedForeground,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '$count',
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              color: c.foreground,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VocabLoading extends StatelessWidget {
+  const _VocabLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+    );
+  }
+}
+
+class _VocabError extends StatelessWidget {
+  const _VocabError();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: c.error.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.error.withValues(alpha: 0.2), width: 1),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline, color: c.error, size: 20),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Text(
+              S.of(context).unableToLoadBookmarkStats,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.foreground,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

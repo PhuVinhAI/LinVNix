@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/daily_goal_progress_models.dart';
 import '../../domain/daily_goal_models.dart';
@@ -24,67 +24,31 @@ class DailyGoalProgressCard extends ConsumerWidget {
     final progressAsync = ref.watch(dailyGoalProgressProvider);
 
     return progressAsync.when(
-      loading: () => AppCard(
-        variant: AppCardVariant.outlined,
-        borderRadius: AppRadius.lg,
-        clipBehavior: Clip.antiAlias,
-        padding: EdgeInsets.zero,
-        child: const _ProgressShimmer(),
-      ),
-      error: (_, __) => const SizedBox.shrink(),
+      loading: () => const _ProgressShimmer(),
+      error: (_, _) => const SizedBox.shrink(),
       data: (progress) {
         if (progress.goals.isEmpty) return const SizedBox.shrink();
-        return AppCard(
-          variant: AppCardVariant.outlined,
-          borderRadius: AppRadius.lg,
-          clipBehavior: Clip.antiAlias,
-          padding: EdgeInsets.zero,
-          child: _ProgressData(progress: progress),
-        );
+        return _ProgressData(progress: progress);
       },
     );
   }
 }
 
-class _ProgressShimmer extends StatelessWidget {
-  const _ProgressShimmer();
+class _ShellCard extends StatelessWidget {
+  const _ShellCard({required this.child});
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 120,
-            height: 18,
-            decoration: BoxDecoration(
-              color: c.muted,
-              borderRadius: BorderRadius.circular(AppRadius.sm),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Container(
-            width: double.infinity,
-            height: 8,
-            decoration: BoxDecoration(
-              color: c.muted,
-              borderRadius: BorderRadius.circular(AppRadius.xs),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Container(
-            width: double.infinity,
-            height: 8,
-            decoration: BoxDecoration(
-              color: c.muted,
-              borderRadius: BorderRadius.circular(AppRadius.xs),
-            ),
-          ),
-        ],
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
       ),
+      child: child,
     );
   }
 }
@@ -96,175 +60,255 @@ class _ProgressData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
-    if (progress.allGoalsMet) {
-      return _CelebratoryState(progress: progress);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+    return _ShellCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.flag, size: 18, color: c.primary),
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                S.of(context).todaysProgress,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  S.of(context).todaysProgress,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyLarge,
+                    fontWeight: FontWeight.w700,
+                    color: c.foreground,
+                    height: 1.2,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Spacer(),
-              _StreakBadge(streak: progress.currentStreak),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.md),
-          ...progress.goals.map((goal) => _GoalProgressRow(goal: goal)),
-        ],
-      ),
-    );
-  }
-}
-
-class _CelebratoryState extends StatelessWidget {
-  const _CelebratoryState({required this.progress});
-  final DailyGoalProgress progress;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.flag, size: 18, color: c.primary),
               const SizedBox(width: AppSpacing.sm),
-              Text(
-                S.of(context).todaysProgress,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const Spacer(),
-              AppBadge(
-                label: S.of(context).completeLabel,
-                color: c.success,
-              ),
+              if (progress.allGoalsMet)
+                const _CompleteBadge()
+              else
+                _StreakBadge(streak: progress.currentStreak),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          Icon(Icons.celebration, size: 48, color: c.success),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            S.of(context).greatJobCompletedAllGoals,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: c.success,
-            ),
-            textAlign: TextAlign.center,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (int i = 0; i < progress.goals.length; i++) ...[
+                if (i > 0) const SizedBox(width: AppSpacing.sm),
+                Expanded(child: _GoalTile(goal: progress.goals[i])),
+              ],
+            ],
           ),
-          const SizedBox(height: AppSpacing.md),
-          _StreakBadge(streak: progress.currentStreak, centered: true),
         ],
       ),
     );
   }
 }
 
-class _GoalProgressRow extends StatelessWidget {
-  const _GoalProgressRow({required this.goal});
+class _GoalTile extends StatelessWidget {
+  const _GoalTile({required this.goal});
   final GoalProgress goal;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final accent = goal.met ? c.success : c.primary;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Column(
+      children: [
+        SizedBox(
+          width: 56,
+          height: 56,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              Icon(goal.goalType.icon, size: 18, color: c.primary),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  _goalTypeLabel(context, goal.goalType),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+              SizedBox.expand(
+                child: CircularProgressIndicator(
+                  value: goal.progress,
+                  strokeWidth: 4,
+                  color: accent,
+                  backgroundColor: c.muted,
                 ),
               ),
-              Text(
-                goal.label,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: goal.met ? c.success : c.mutedForeground,
-                  fontWeight: FontWeight.w600,
-                ),
+              Icon(
+                goal.met ? Icons.check_rounded : goal.goalType.icon,
+                color: accent,
+                size: 22,
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.xs),
-          AppProgress(
-            value: goal.progress,
-            height: 6,
-            color: goal.met ? c.success : c.primary,
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          '${goal.currentValue}/${goal.targetValue}',
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.bodyMedium,
+            fontWeight: FontWeight.w700,
+            color: c.foreground,
+            height: 1.2,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          _goalTypeLabel(context, goal.goalType),
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.caption,
+            color: c.mutedForeground,
+            height: 1.2,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
 
 class _StreakBadge extends StatelessWidget {
-  const _StreakBadge({required this.streak, this.centered = false});
+  const _StreakBadge({required this.streak});
   final int streak;
-  final bool centered;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-    final child = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.local_fire_department, color: c.primary, size: 16),
-        const SizedBox(width: AppSpacing.xs),
-        Text(
-          '$streak',
-          style: theme.textTheme.bodySmall?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: c.primary,
-          ),
-        ),
-      ],
-    );
-
-    if (centered) {
-      return Center(child: child);
-    }
-
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xs,
+        vertical: 4,
       ),
       decoration: BoxDecoration(
         color: c.primary.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(AppRadius.full),
         border: Border.all(color: c.primary.withValues(alpha: 0.3), width: 1),
       ),
-      child: child,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.local_fire_department, color: c.primary, size: 14),
+          const SizedBox(width: 4),
+          Text(
+            '$streak',
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              fontWeight: FontWeight.w700,
+              color: c.primary,
+              height: 1.2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CompleteBadge extends StatelessWidget {
+  const _CompleteBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: 4,
+      ),
+      decoration: BoxDecoration(
+        color: c.success.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(AppRadius.full),
+        border: Border.all(color: c.success.withValues(alpha: 0.3), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check_circle, color: c.success, size: 14),
+          const SizedBox(width: 4),
+          Text(
+            S.of(context).completeLabel,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              fontWeight: FontWeight.w700,
+              color: c.success,
+              height: 1.2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProgressShimmer extends StatelessWidget {
+  const _ProgressShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return _ShellCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 120,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: c.muted,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+              ),
+              const Spacer(),
+              Container(
+                width: 48,
+                height: 22,
+                decoration: BoxDecoration(
+                  color: c.muted,
+                  borderRadius: BorderRadius.circular(AppRadius.full),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            children: [
+              for (int i = 0; i < 3; i++) ...[
+                if (i > 0) const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: c.muted,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Container(
+                        width: 40,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: c.muted,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 56,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: c.muted,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
