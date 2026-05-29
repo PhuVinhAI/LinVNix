@@ -6,6 +6,7 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/google_sign_in_button.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -56,7 +57,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).unexpectedErrorMessage, type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -89,7 +90,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).unexpectedErrorMessage, type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -100,9 +101,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final c = AppTheme.colors(context);
+    final s = S.of(context);
 
     return Scaffold(
-      appBar: const AppAppBar(title: Text('Create Account')),
+      appBar: AppAppBar(title: Text(s.authCreateAccount)),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -132,7 +134,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Get started',
+                    s.registerTitle,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
@@ -141,7 +143,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'Create your account to begin learning',
+                    s.registerSubtitle,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: c.mutedForeground,
@@ -152,11 +154,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 AppInput(
                   controller: _nameController,
                   textCapitalization: TextCapitalization.words,
-                  label: 'Full Name',
+                  label: s.nameLabel,
                   prefixIcon: const Icon(Icons.person_outlined),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Full name is required';
+                      return s.nameHint;
                     }
                     return null;
                   },
@@ -167,14 +169,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
-                  label: 'Email',
+                  label: s.emailLabel,
                   prefixIcon: const Icon(Icons.email_outlined),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Email is required';
+                      return s.authEmailRequired;
                     }
                     if (!value.contains('@')) {
-                      return 'Enter a valid email';
+                      return s.authEmailInvalid;
                     }
                     return null;
                   },
@@ -184,7 +186,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 AppInput(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
-                  label: 'Password',
+                  label: s.passwordLabel,
                   prefixIcon: const Icon(Icons.lock_outlined),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -198,7 +200,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Password is required';
+                      return s.authPasswordRequired;
                     }
                     if (value.length < 8) {
                       return 'Password must be at least 8 characters';
@@ -215,7 +217,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 AppInput(
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirmPassword,
-                  label: 'Confirm Password',
+                  label: s.confirmPasswordLabel,
                   prefixIcon: const Icon(Icons.lock_outlined),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -231,10 +233,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
+                      return s.authConfirmPasswordRequired;
                     }
                     if (value != _passwordController.text) {
-                      return 'Passwords do not match';
+                      return s.authPasswordMismatch;
                     }
                     return null;
                   },
@@ -246,7 +248,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   isFullWidth: true,
                   onPressed: _isLoading ? null : _handleRegister,
                   isLoading: _isLoading,
-                  label: 'Create Account',
+                  label: s.authCreateAccount,
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 // Divider
@@ -258,7 +260,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         horizontal: AppSpacing.md,
                       ),
                       child: Text(
-                        'or',
+                        s.authOr,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: c.mutedForeground,
                           fontSize: AppTypography.caption,
@@ -280,7 +282,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have an account?',
+                      s.authAlreadyHaveAccount,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: c.mutedForeground,
                       ),
@@ -289,7 +291,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     AppButton(
                       variant: AppButtonVariant.text,
                       onPressed: () => context.pop(),
-                      label: 'Sign in',
+                      label: s.authSignIn,
                     ),
                   ],
                 ),

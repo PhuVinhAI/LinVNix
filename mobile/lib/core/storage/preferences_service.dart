@@ -5,12 +5,20 @@ class PreferencesService {
   PreferencesService(this._prefs);
   final SharedPreferences _prefs;
 
+  static const _localeKey = 'locale';
   static const _onboardingCompletedKey = 'onboarding_completed';
   static const _dailyGoalsMigratedKey = 'daily_goals_migrated';
   static const _themeModeKey = 'theme_mode';
   static const _notificationEnabledKey = 'notification_enabled';
   static const _notificationTimeKey = 'notification_time';
   static const _assistantBarEnabledKey = 'assistant_bar_enabled';
+
+  String? get locale => _prefs.getString(_localeKey);
+
+  Future<void> setLocale(String? languageCode) {
+    if (languageCode == null) return _prefs.remove(_localeKey);
+    return _prefs.setString(_localeKey, languageCode);
+  }
 
   bool get isOnboardingCompleted =>
       _prefs.getBool(_onboardingCompletedKey) ?? false;

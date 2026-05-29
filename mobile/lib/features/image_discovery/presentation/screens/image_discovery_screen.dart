@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../application/image_discovery_notifier.dart';
 import '../widgets/vocabulary_card.dart';
 
@@ -50,15 +51,15 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
   void _openAddImageSheet() {
     AppMenuBottomSheet.show(
       context,
-      title: 'Add a photo',
+      title: S.of(context).addPhotoTitle,
       items: [
         AppMenuBottomSheetItem(
-          label: 'Take Photo',
+          label: S.of(context).takePhotoOption,
           icon: Icons.camera_alt_outlined,
           onTap: () => unawaited(_pick(ImageSource.camera)),
         ),
         AppMenuBottomSheetItem(
-          label: 'Upload from Library',
+          label: S.of(context).uploadFromLibraryOption,
           icon: Icons.image_outlined,
           onTap: () => unawaited(_pick(ImageSource.gallery)),
         ),
@@ -131,7 +132,7 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Image Discovery'),
+        title: Text(S.of(context).imageDiscoveryTitle),
         actions: [
           if (showHeaderImagesIcon)
             _HeaderImagesAction(
@@ -280,7 +281,7 @@ class _CenteredPlaceholder extends StatelessWidget {
                 Icon(Icons.add_rounded, size: 56, color: c.mutedForeground),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'Add a photo',
+                  S.of(context).addPhotoTitle,
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.bodyMedium,
                     color: c.mutedForeground,
@@ -529,7 +530,7 @@ class _LoadingMessage extends StatelessWidget {
           const AppSpinner(size: 18),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Analyzing image...',
+            S.of(context).imageDiscoveryTitle,
             style: GoogleFonts.inter(
               fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,
@@ -689,7 +690,7 @@ class _ImagesViewerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Attached photos (${images.length})')),
+      appBar: AppBar(title: Text('${S.of(context).attachedPhotosTitle} (${images.length})')),
       body: SafeArea(
         child: ListView.separated(
           padding: const EdgeInsets.all(AppSpacing.lg),

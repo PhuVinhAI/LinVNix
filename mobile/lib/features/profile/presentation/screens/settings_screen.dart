@@ -7,10 +7,12 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/assistant_bar_provider.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/providers/providers.dart';
+import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/theme_provider.dart';
 import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../daily_goals/data/notification_service.dart';
 import '../../../daily_goals/presentation/widgets/daily_goal_section.dart';
 import '../../../lessons/data/lesson_providers.dart';
@@ -25,7 +27,7 @@ class SettingsScreen extends ConsumerWidget {
     final profileAsync = ref.watch(userProfileProvider);
 
     return Scaffold(
-      appBar: const AppAppBar(title: Text('Settings')),
+      appBar: AppAppBar(title: Text(S.of(context).settingsTitle)),
       body: profileAsync.when(
         loading: () => const _SettingsLoadingSkeleton(),
         error: (error, _) => Center(
@@ -35,7 +37,7 @@ class SettingsScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Failed to load settings',
+                  S.of(context).failedToLoadSettings,
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -59,25 +61,25 @@ class SettingsScreen extends ConsumerWidget {
             _AccountHeader(profile: profile),
             const SizedBox(height: AppSpacing.lg),
             _SettingsSection(
-              title: 'Account',
+              title: S.of(context).accountSection,
               children: [
                 _SettingsTile(
                   icon: Icons.person_outline,
-                  title: 'Edit profile',
-                  subtitle: 'Name, language, level, dialect',
+                  title: S.of(context).editProfileTitle,
+                  subtitle: S.of(context).editProfileSubtitle,
                   onTap: () => _showEditProfileDialog(context, ref, profile),
                 ),
                 _SettingsTile(
                   icon: Icons.lock_outline,
-                  title: 'Change password',
-                  subtitle: 'Send a verification code to your email',
+                  title: S.of(context).changePasswordTitle,
+                  subtitle: S.of(context).changePasswordSubtitle,
                   onTap: () => _startChangePassword(context, ref, profile),
                 ),
                 _SettingsTile(
                   icon: Icons.cleaning_services_outlined,
-                  title: 'Clear data',
+                  title: S.of(context).clearDataTitle,
                   subtitle:
-                      'Delete all progress, bookmarks, stats, and AI history',
+                      S.of(context).clearDataSubtitle,
                   isDestructive: true,
                   onTap: () => _showClearDataDialog(context, ref),
                 ),
@@ -92,6 +94,8 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             const _ThemeSection(),
+            const SizedBox(height: AppSpacing.lg),
+            const _LanguageSection(),
             const SizedBox(height: AppSpacing.lg),
             const _AssistantBarSection(),
             const SizedBox(height: AppSpacing.lg),
@@ -157,7 +161,7 @@ class SettingsScreen extends ConsumerWidget {
     final confirmed = await AppDialog.show<bool>(
       context,
       builder: (ctx) => AppDialog(
-        title: 'Change password',
+        title: S.of(context).changePasswordTitle,
         content:
             'We will send a verification code to ${profile.email}. Continue?',
         actions: [
@@ -203,7 +207,7 @@ class SettingsScreen extends ConsumerWidget {
     AppDialog.show(
       context,
       builder: (ctx) => AppDialog(
-        title: 'Clear data',
+        title: S.of(context).clearDataTitle,
         content:
             'This permanently deletes all your learning data from our servers: '
             'progress, exercise results, bookmarks, daily goals, and AI chat history. '
@@ -382,7 +386,7 @@ class SettingsScreen extends ConsumerWidget {
       context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setState) => AppDialog(
-          title: 'Edit profile',
+          title: S.of(context).editProfileTitle,
           contentWidget: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -913,6 +917,77 @@ class _ThemeBlock extends StatelessWidget {
   }
 }
 
+class _LanguageSection extends ConsumerWidget {
+  const _LanguageSection();
+
+  static const _languages = [
+    ('en', 'English', 'English'),
+    ('vi', 'Tiếng Việt', 'Vietnamese'),
+    ('zh', '中文', 'Chinese'),
+    ('ja', '日本語', 'Japanese'),
+    ('ko', '한국어', 'Korean'),
+    ('fr', 'Français', 'French'),
+    ('es', 'Español', 'Spanish'),
+    ('de', 'Deutsch', 'German'),
+    ('th', 'ภาษาไทย', 'Thai'),
+  ];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final currentCode = ref.watch(localeProvider)?.languageCode ?? 'en';
+    final current = _languages.firstWhere(
+      (l) => l.$1 == currentCode,
+      orElse: () => _languages.first,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          S.of(context).languageSection,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        AppCard(
+          variant: AppCardVariant.outlined,
+          padding: EdgeInsets.zero,
+          child: _SettingsTile(
+            icon: Icons.translate_outlined,
+            title: current.$2,
+            subtitle: current.$3,
+            onTap: () => _showLanguagePicker(context, ref, currentCode),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showLanguagePicker(
+    BuildContext context,
+    WidgetRef ref,
+    String currentCode,
+  ) {
+    AppMenuBottomSheet.show(
+      context,
+      title: S.of(context).languageSection,
+      items: _languages
+          .map(
+            (l) => AppMenuBottomSheetItem(
+              label: l.$2,
+              sublabel: l.$3,
+              isSelected: l.$1 == currentCode,
+              onTap: () =>
+                  ref.read(localeProvider.notifier).setLocale(Locale(l.$1)),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
 class _AssistantBarSection extends ConsumerWidget {
   const _AssistantBarSection();
 
@@ -926,7 +1001,7 @@ class _AssistantBarSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Assistant',
+          S.of(context).assistantSection,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -942,11 +1017,11 @@ class _AssistantBarSection extends ConsumerWidget {
             ),
             leading: Icon(Icons.auto_awesome, color: c.primary, size: 20),
             titleWidget: Text(
-              'AI assistant bar',
+              S.of(context).aiAssistantBarTitle,
               style: theme.textTheme.bodyMedium,
             ),
             subtitleWidget: Text(
-              'Show on lesson and exercise screens',
+              S.of(context).aiAssistantBarSubtitle,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: c.mutedForeground,
               ),

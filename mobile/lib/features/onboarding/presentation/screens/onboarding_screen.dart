@@ -9,6 +9,7 @@ import '../../../../features/daily_goals/data/daily_goals_providers.dart';
 import '../../../../features/daily_goals/data/daily_goal_progress_providers.dart';
 import '../../../../features/profile/data/profile_providers.dart';
 import '../../../../features/daily_goals/domain/daily_goal_models.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -80,10 +81,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: 'Mark lower-level courses as completed?',
+        title: S.of(context).bypassDialogTitle,
         actions: [
           AppDialogAction(
-            label: 'No',
+            label: S.of(context).continueWithLessonsButton,
             onPressed: () {
               setState(() => _completeLowerCourses = false);
               Navigator.pop(dialogCtx);
@@ -91,7 +92,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             },
           ),
           AppDialogAction(
-            label: 'Yes',
+            label: S.of(context).skipToExercisesButton,
             isPrimary: true,
             onPressed: () {
               setState(() => _completeLowerCourses = true);
@@ -258,13 +259,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Row(
                 children: [
                   AppButton(
-                    label: _currentStep < 2 ? 'Skip' : 'Skip All',
+                    label: 'Skip',
                     variant: AppButtonVariant.text,
                     onPressed: _isSubmitting ? null : _skipStep,
                   ),
                   const Spacer(),
                   AppButton(
-                    label: _currentStep < 2 ? 'Next' : 'Get Started',
+                    label: _currentStep < 2 ? S.of(context).nextButton : S.of(context).finishButton,
                     variant: AppButtonVariant.primary,
                     onPressed:
                         _canProceed && !_isSubmitting ? _nextStep : null,
@@ -338,7 +339,7 @@ class _LevelStep extends StatelessWidget {
         children: [
           const SizedBox(height: AppSpacing.sm),
           Text(
-            "What's your current level?",
+            S.of(context).selectLevelTitle,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
@@ -403,6 +404,28 @@ class _DialectStep extends StatelessWidget {
   final String? selected;
   final ValueChanged<String> onSelect;
 
+  String _getDialectLabel(BuildContext context, String dialectValue) {
+    final s = S.of(context);
+    return switch (dialectValue) {
+      'STANDARD' => s.standardDialect,
+      'NORTHERN' => s.northernDialect,
+      'CENTRAL' => s.centralDialect,
+      'SOUTHERN' => s.southernDialect,
+      _ => dialectValue,
+    };
+  }
+
+  String _getDialectDescription(BuildContext context, String dialectValue) {
+    final s = S.of(context);
+    return switch (dialectValue) {
+      'STANDARD' => s.standardDialectDescription,
+      'NORTHERN' => s.northernDialectDescription,
+      'CENTRAL' => s.centralDialectDescription,
+      'SOUTHERN' => s.southernDialectDescription,
+      _ => '',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -415,7 +438,7 @@ class _DialectStep extends StatelessWidget {
         children: [
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Which dialect do you prefer?',
+            S.of(context).selectDialectTitle,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
@@ -428,15 +451,17 @@ class _DialectStep extends StatelessWidget {
               color: c.mutedForeground,
               height: 1.5,
             ),
-          ),
+          ), // Note: description string, keeping as is
           const SizedBox(height: AppSpacing.xxl),
           ...dialects.map((dialect) {
             final isSelected = dialect.value == selected;
+            final label = _getDialectLabel(context, dialect.value);
+            final description = _getDialectDescription(context, dialect.value);
             return Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.md),
               child: _SelectableCard(
-                label: dialect.label,
-                subtitle: dialect.description,
+                label: label,
+                subtitle: description,
                 isSelected: isSelected,
                 onTap: () => onSelect(dialect.value),
                 isWide: true,
@@ -474,7 +499,7 @@ class _DailyGoalStep extends StatelessWidget {
         children: [
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Set daily goals',
+            S.of(context).selectGoalsTitle,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,

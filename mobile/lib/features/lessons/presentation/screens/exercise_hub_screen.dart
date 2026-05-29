@@ -8,6 +8,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/lesson_providers.dart';
 import '../../data/lesson_repository.dart';
 import '../../data/lesson_time_tracker.dart';
@@ -395,7 +396,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     final summaryAsync = ref.watch(exerciseSetsProvider(widget.lessonId));
 
     return Scaffold(
-      appBar: const AppAppBar(title: Text('Practice')),
+      appBar: AppAppBar(title: Text(S.of(context).exercisesTitle)),
       body: summaryAsync.when(
         loading: () => const _ExerciseHubLoading(),
         error: (e, _) => Center(
@@ -418,7 +419,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Text(
-                  'Failed to load exercises',
+                  S.of(context).failedToLoadLesson,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: c.foreground,
@@ -435,7 +436,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 AppButton(
-                  label: 'Retry',
+                  label: S.of(context).retryButton,
                   variant: AppButtonVariant.primary,
                   onPressed: () => ref.read(exerciseSetsProvider(widget.lessonId).notifier).refresh(),
                 ),

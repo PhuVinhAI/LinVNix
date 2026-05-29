@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/bookmark_providers.dart';
 import '../../domain/bookmark_models.dart';
 import '../../../profile/data/profile_providers.dart';
@@ -64,16 +65,16 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
       final confirmed = await AppDialog.show<bool>(
         context,
         builder: (ctx) => AppDialog(
-          title: 'Remove Saved Word',
+          title: S.of(context).removeSavedWordTitle,
           content:
-              'Are you sure you want to remove this word from your saved words?',
+              S.of(context).removeSavedWordContent,
           actions: [
             AppDialogAction(
-              label: 'Cancel',
+              label: S.of(context).cancelButton,
               onPressed: () => Navigator.pop(ctx, false),
             ),
             AppDialogAction(
-              label: 'Remove',
+              label: S.of(context).removeButton,
               isPrimary: true,
               onPressed: () => Navigator.pop(ctx, true),
             ),
@@ -118,7 +119,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
 
     return Scaffold(
       appBar: AppAppBar(
-        title: const Text('Saved Words'),
+        title: Text(S.of(context).savedWordsTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.school),
@@ -210,7 +211,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Text(
-                  'No saved words yet',
+                  S.of(context).noSavedWords,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: c.foreground,
@@ -284,7 +285,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               AppButton(
-                label: 'Retry',
+                label: S.of(context).retryButton,
                 variant: AppButtonVariant.primary,
                 onPressed: _onRefresh,
               ),

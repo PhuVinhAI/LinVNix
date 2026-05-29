@@ -10,6 +10,7 @@ import '../../../courses/domain/course_models.dart';
 import '../../../daily_goals/presentation/widgets/daily_goal_progress_card.dart';
 import '../../../simulation/data/simulation_providers.dart';
 import '../../../simulation/domain/scenario_summary.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -25,11 +26,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ref.read(simulationScenariosProvider.notifier).refresh();
   }
 
-  String _getGreeting() {
+  String _getGreeting(BuildContext context) {
+    final s = S.of(context);
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
+    if (hour < 12) return s.goodMorning;
+    if (hour < 17) return s.goodAfternoon;
+    return s.goodEvening;
   }
 
   @override
@@ -58,7 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _getGreeting(),
+                      _getGreeting(context),
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: c.foreground,
@@ -66,7 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Ready to learn?',
+                      S.of(context).readyToLearnPrompt,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: c.mutedForeground,
                       ),
@@ -118,7 +120,7 @@ class _CoursesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Explore',
+              S.of(context).coursesSection,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -140,7 +142,7 @@ class _CoursesSection extends StatelessWidget {
           loading: () => const _HomeCoursesLoading(),
           error: (_, _) => Center(
             child: Text(
-              'Unable to load courses',
+              S.of(context).failedToLoadCourses,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: c.mutedForeground,
               ),
@@ -152,7 +154,7 @@ class _CoursesSection extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(AppSpacing.xl),
                   child: Text(
-                    'No courses available yet',
+                    S.of(context).noCoursesAvailable,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: c.mutedForeground,
                     ),
@@ -243,7 +245,7 @@ class _SimulationSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Practice',
+              S.of(context).practiceSection,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -270,7 +272,7 @@ class _SimulationSection extends StatelessWidget {
                 color: c.mutedForeground,
               ),
             ),
-          ),
+          ), // Note: internal error, keeping as is
           data: (scenarios) {
             if (scenarios.isEmpty) {
               return AppCard(

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/lesson_providers.dart';
 import '../../data/lesson_time_tracker.dart';
 import '../../domain/lesson_models.dart';
@@ -57,16 +58,16 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
     AppDialog.show(
       context,
       builder: (ctx) => AppDialog(
-        title: 'Continue lesson?',
+        title: S.of(context).continueLesson,
         content:
-            'You have an in-progress lesson. Would you like to skip to the exercises?',
+            S.of(context).continueLessonContent,
         actions: [
           AppDialogAction(
-            label: 'Start from beginning',
+            label: S.of(context).startFromBeginningButton,
             onPressed: () => Navigator.of(ctx).pop(),
           ),
           AppDialogAction(
-            label: 'Go to exercises',
+            label: S.of(context).goToExercisesButton,
             isPrimary: true,
             onPressed: () {
               Navigator.of(ctx).pop();
@@ -176,14 +177,14 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
                              (vocabAsync.isLoading && vocabAsync.value == null);
     if (isInitialLoading) {
       return Scaffold(
-        appBar: const AppAppBar(title: Text('Lesson')),
+        appBar: AppAppBar(title: Text(S.of(context).lessonTitle)),
         body: const _LessonLoadingSkeleton(),
       );
     }
 
     if (lessonAsync.hasError || vocabAsync.hasError) {
       return Scaffold(
-        appBar: const AppAppBar(title: Text('Lesson')),
+        appBar: AppAppBar(title: Text(S.of(context).lessonTitle)),
         body: _LessonError(
           message: (lessonAsync.error ?? vocabAsync.error!).toString(),
           onRetry: () {
@@ -526,12 +527,12 @@ class _LessonError extends StatelessWidget {
           children: [
             Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
             const SizedBox(height: 16),
-            const Text('Failed to load lesson', textAlign: TextAlign.center),
+            Text(S.of(context).failedToLoadLesson, textAlign: TextAlign.center),
             const SizedBox(height: 8),
             AppButton(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: 'Retry',
+              label: S.of(context).retryButton,
               variant: AppButtonVariant.primary,
             ),
           ],

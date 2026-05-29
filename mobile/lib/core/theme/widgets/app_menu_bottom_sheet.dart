@@ -10,12 +10,16 @@ class AppMenuBottomSheetItem {
     required this.onTap,
     this.icon,
     this.foregroundColor,
+    this.isSelected = false,
+    this.sublabel,
   });
 
   final String label;
   final VoidCallback onTap;
   final IconData? icon;
   final Color? foregroundColor;
+  final bool isSelected;
+  final String? sublabel;
 }
 
 class AppMenuBottomSheet {
@@ -28,41 +32,53 @@ class AppMenuBottomSheet {
   }) {
     return AppBottomSheet.show(
       context,
+      isScrollControlled: true,
       builder: (ctx) {
         final c = AppTheme.colors(ctx);
+        final maxHeight = MediaQuery.of(ctx).size.height * 0.5;
 
         return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lg,
-                  vertical: AppSpacing.lg,
-                ),
-                child: Center(
-                  child: Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
-                      fontSize: AppTypography.titleSmall,
-                      fontWeight: FontWeight.w600,
-                      color: c.foreground,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.lg,
+                  ),
+                  child: Center(
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.titleSmall,
+                        fontWeight: FontWeight.w600,
+                        color: c.foreground,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Divider(height: 1, color: c.border),
-              ...items.map(
-                (item) => _MenuItemRow(
-                  item: item,
-                  onSelected: () {
-                    Navigator.pop(ctx);
-                    item.onTap();
-                  },
+                Divider(height: 1, color: c.border),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: items
+                        .map(
+                          (item) => _MenuItemRow(
+                            item: item,
+                            onSelected: () {
+                              Navigator.pop(ctx);
+                              item.onTap();
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -82,7 +98,9 @@ class _MenuItemRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final color = item.foregroundColor ?? c.foreground;
+    final color = item.isSelected
+        ? c.primary
+        : (item.foregroundColor ?? c.foreground);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -99,15 +117,36 @@ class _MenuItemRow extends StatelessWidget {
               const SizedBox(width: AppSpacing.md),
             ],
             Expanded(
-              child: Text(
-                item.label,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyMedium,
-                  fontWeight: FontWeight.w400,
-                  color: color,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    item.label,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      fontWeight: item.isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w400,
+                      color: color,
+                    ),
+                  ),
+                  if (item.sublabel != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      item.sublabel!,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodySmall,
+                        fontWeight: FontWeight.w400,
+                        color: c.mutedForeground,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
+            if (item.isSelected)
+              Icon(Icons.check, size: 18, color: c.primary),
           ],
         ),
       ),

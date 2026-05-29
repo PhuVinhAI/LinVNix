@@ -5,6 +5,7 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -43,7 +44,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       }
     } catch (_) {
       if (mounted) {
-        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).unexpectedErrorMessage, type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -54,9 +55,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final c = AppTheme.colors(context);
+    final s = S.of(context);
 
     return Scaffold(
-      appBar: const AppAppBar(title: Text('Forgot Password')),
+      appBar: AppAppBar(title: Text(s.authForgotPassword)),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -88,7 +90,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   const SizedBox(height: AppSpacing.xl),
                   // Title
                   Text(
-                    'Reset your password',
+                    s.authResetPassword,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
@@ -98,7 +100,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   const SizedBox(height: AppSpacing.sm),
                   // Description
                   Text(
-                    'Enter your email address and we\'ll send you a code to reset your password.',
+                    s.authResetPasswordDescription,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: c.mutedForeground,
@@ -111,15 +113,15 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
-                  label: 'Email',
+                  label: s.emailLabel,
                   prefixIcon: const Icon(Icons.email_outlined),
-                  hint: 'Enter your email address',
+                  hint: s.authResetPasswordDescription,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Email is required';
+                      return s.authEmailRequired;
                     }
                     if (!value.contains('@')) {
-                      return 'Enter a valid email';
+                      return s.authEmailInvalid;
                     }
                     return null;
                   },
@@ -131,7 +133,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   isFullWidth: true,
                   onPressed: _isLoading ? null : _handleSubmit,
                   isLoading: _isLoading,
-                  label: 'Send Reset Code',
+                  label: s.authSendResetCode,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 // Back link
@@ -139,7 +141,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   variant: AppButtonVariant.text,
                   isFullWidth: true,
                   onPressed: () => context.pop(),
-                  label: 'Back to Sign In',
+                  label: s.authBackToSignIn,
                 ),
               ],
             ),

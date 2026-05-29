@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/bookmark_providers.dart';
 import '../../domain/bookmark_models.dart';
 import '../../../../core/services/audio_player_service.dart';
@@ -134,7 +135,7 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 AppButton(
-                  label: 'Retry',
+                  label: S.of(context).retryButton,
                   variant: AppButtonVariant.primary,
                   onPressed: () => ref.read(flashcardBookmarksProvider.notifier).refresh(),
                 ),
@@ -165,7 +166,7 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
           ),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            'No saved words yet',
+            S.of(context).noSavedWords,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: c.foreground,
@@ -376,7 +377,7 @@ class _Flashcard extends StatelessWidget {
           ],
           const SizedBox(height: AppSpacing.xl),
           Text(
-            'Tap to flip',
+            S.of(context).tapToFlipBack,
             style: theme.textTheme.bodySmall?.copyWith(
                   color: c.mutedForeground,
                 ),
@@ -411,14 +412,14 @@ class _Flashcard extends StatelessWidget {
             if (item.classifier != null) ...[
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'Classifier: ${item.classifier}',
+                '${S.of(context).classifierLabel} ${item.classifier}',
                 style: theme.textTheme.bodyMedium,
               ),
             ],
             if (item.exampleSentence != null) ...[
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'Example:',
+                '${S.of(context).exampleLabel}:',
                 style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -442,7 +443,7 @@ class _Flashcard extends StatelessWidget {
             ],
             const SizedBox(height: AppSpacing.xl),
             Text(
-              'Tap to flip back',
+              S.of(context).tapToFlipBack,
               style: theme.textTheme.bodySmall?.copyWith(
                     color: c.mutedForeground,
                   ),

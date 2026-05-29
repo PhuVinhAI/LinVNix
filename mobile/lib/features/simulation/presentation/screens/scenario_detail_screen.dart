@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/simulation_providers.dart';
 import '../../domain/scenario_detail.dart';
 import '../../domain/simulation_result_summary.dart';
@@ -107,7 +108,7 @@ class _ScenarioDetailContent extends ConsumerWidget {
         if (!context.mounted) return;
         AppToast.show(
           context,
-          message: 'Unable to end the current session',
+          message: S.of(context).unableToCreateSessionMessage,
           type: AppToastType.error,
         );
         return;
@@ -547,7 +548,7 @@ class _ScenarioDetailError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Scenario')),
+      appBar: AppAppBar(title: Text(S.of(context).chooseCharacterTitle)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -556,8 +557,8 @@ class _ScenarioDetailError extends StatelessWidget {
             children: [
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
-              const Text(
-                'Unable to load scenario',
+              Text(
+                S.of(context).unableToLoadDataMessage,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -565,7 +566,7 @@ class _ScenarioDetailError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Retry',
+                label: S.of(context).retryButton,
               ),
             ],
           ),

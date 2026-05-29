@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/profile_providers.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
 import '../../../bookmarks/domain/bookmark_models.dart';
@@ -20,7 +21,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppAppBar(
-        title: const Text('Profile'),
+        title: Text(S.of(context).profileTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined),
@@ -180,7 +181,7 @@ class _StatsSection extends ConsumerWidget {
                   child: Icon(Icons.error_outline, color: c.error),
                 ),
                 const SizedBox(height: 8),
-                const Text('Failed to load statistics', textAlign: TextAlign.center),
+                Text(S.of(context).failedToLoadSettings, textAlign: TextAlign.center),
                 const SizedBox(height: 8),
                 Semantics(
                   label: 'Retry loading statistics',
@@ -851,7 +852,7 @@ class _SavedWordsSection extends StatelessWidget {
       child: AppListItem(
         leading: Icon(Icons.bookmark, color: c.primary),
         titleWidget: Text(
-          'View saved words',
+          S.of(context).viewSavedWordsButton,
           style: theme.textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),

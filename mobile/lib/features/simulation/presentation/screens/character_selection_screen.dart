@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/simulation_providers.dart';
 import '../../domain/scenario_character.dart';
 
@@ -57,7 +58,7 @@ class _CharacterSelectionScreenState
 
       AppToast.show(
         context,
-        message: 'Unable to create conversation session',
+        message: S.of(context).unableToCreateSessionMessage,
         type: AppToastType.error,
       );
     }
@@ -140,7 +141,7 @@ class _CharacterSelectionContent extends StatelessWidget {
                 AppSpacing.sm,
               ),
               child: Text(
-                'Choose your character',
+                S.of(context).chooseCharacterTitle,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: c.mutedForeground,
@@ -189,7 +190,7 @@ class _CharacterSelectionContent extends StatelessWidget {
               child: AppButton(
                 variant: AppButtonVariant.primary,
                 onPressed: selectedCharacterId != null ? onStartTap : null,
-                label: 'Start conversation',
+                label: S.of(context).chatTitle,
                 isFullWidth: true,
               ),
             ),
@@ -280,7 +281,7 @@ class _LoadingOverlay extends StatelessWidget {
               AppSpinner(size: 28),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Preparing conversation...',
+                S.of(context).chatTitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: c.foreground,
                     ),
@@ -387,7 +388,7 @@ class _CharacterSelectionError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Choose character')),
+      appBar: AppAppBar(title: Text(S.of(context).chooseCharacterTitle)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -396,8 +397,8 @@ class _CharacterSelectionError extends StatelessWidget {
             children: [
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
-              const Text(
-                'Unable to load data',
+              Text(
+                S.of(context).unableToLoadDataMessage,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -405,7 +406,7 @@ class _CharacterSelectionError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Retry',
+                label: S.of(context).retryButton,
               ),
             ],
           ),

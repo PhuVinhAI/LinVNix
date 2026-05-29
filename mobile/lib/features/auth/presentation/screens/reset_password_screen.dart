@@ -5,6 +5,7 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
   const ResetPasswordScreen({
@@ -56,7 +57,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       }
     } catch (_) {
       if (mounted) {
-        AppToast.show(context, message: 'An unexpected error occurred', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).unexpectedErrorMessage, type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -67,9 +68,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final c = AppTheme.colors(context);
+    final s = S.of(context);
 
     return Scaffold(
-      appBar: const AppAppBar(title: Text('Reset Password')),
+      appBar: AppAppBar(title: Text(s.authResetPassword)),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -100,7 +102,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     Text(
-                      'Password reset!',
+                      s.authPasswordResetSuccess,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                         letterSpacing: -0.3,
@@ -110,8 +112,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     const SizedBox(height: AppSpacing.sm),
                     Text(
                       widget.fromSettings
-                          ? 'Your password has been changed successfully.'
-                          : 'Your password has been reset successfully. You can now sign in with your new password.',
+                          ? s.authPasswordChangedSuccess
+                          : s.authPasswordResetSuccessMessage,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: c.mutedForeground,
                         height: 1.5,
@@ -125,7 +127,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       onPressed: () => context.go(
                         widget.fromSettings ? '/settings' : '/login',
                       ),
-                      label: widget.fromSettings ? 'Back to Settings' : 'Sign In',
+                      label: widget.fromSettings ? s.authBackToSettings : s.authSignIn,
                     ),
                   ],
                 )
@@ -152,7 +154,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       Text(
-                        'Set new password',
+                        s.authSetNewPassword,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                           letterSpacing: -0.3,
@@ -161,7 +163,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        'Choose a strong password for your account.',
+                        s.authChooseStrongPassword,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: c.mutedForeground,
                           height: 1.5,
@@ -173,7 +175,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       AppInput(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
-                        label: 'New Password',
+                        label: s.authNewPassword,
                         prefixIcon: const Icon(Icons.lock_outlined),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -188,7 +190,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Password is required';
+                            return s.authPasswordRequired;
                           }
                           if (value.length < 8) {
                             return 'Password must be at least 8 characters';
@@ -205,7 +207,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       AppInput(
                         controller: _confirmPasswordController,
                         obscureText: _obscureConfirmPassword,
-                        label: 'Confirm New Password',
+                        label: s.authConfirmPassword,
                         prefixIcon: const Icon(Icons.lock_outlined),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -221,10 +223,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please confirm your password';
+                            return s.authConfirmPasswordRequired;
                           }
                           if (value != _passwordController.text) {
-                            return 'Passwords do not match';
+                            return s.authPasswordMismatch;
                           }
                           return null;
                         },
@@ -235,7 +237,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         isFullWidth: true,
                         onPressed: _isLoading ? null : _handleReset,
                         isLoading: _isLoading,
-                        label: 'Reset Password',
+                        label: s.authResetPassword,
                       ),
                       if (!widget.fromSettings) ...[
                         const SizedBox(height: AppSpacing.md),
@@ -243,7 +245,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                           variant: AppButtonVariant.text,
                           isFullWidth: true,
                           onPressed: () => context.go('/login'),
-                          label: 'Back to Sign In',
+                          label: s.authBackToSignIn,
                         ),
                       ],
                     ],

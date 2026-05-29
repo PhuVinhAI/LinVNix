@@ -6,6 +6,7 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/google_sign_in_button.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -64,7 +65,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'An unexpected error occurred. Please try again.', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).unexpectedErrorMessage, type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -97,7 +98,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'An unexpected error occurred. Please try again.', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).unexpectedErrorMessage, type: AppToastType.error);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -108,6 +109,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final c = AppTheme.colors(context);
+    final s = S.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -136,10 +138,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Semantics(
-                    label: 'LinVNix - Vietnamese Language Learning',
+                    label: s.authAppTitleSemantics,
                     header: true,
                     child: Text(
-                      'LinVNix',
+                      s.appName,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.displaySmall?.copyWith(
                         fontWeight: FontWeight.w700,
@@ -149,7 +151,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'Learn Vietnamese, your way',
+                    s.authAppTagline,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: c.mutedForeground,
@@ -158,21 +160,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: AppSpacing.xxxl),
                 // Email field
                 Semantics(
-                  label: 'Email input field',
+                  label: s.authEmailInputSemantics,
                   textField: true,
                   child: AppInput(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
-                    label: 'Email',
+                    label: s.emailLabel,
                     prefixIcon: const Icon(Icons.email_outlined),
-                    hint: 'Enter your email address',
+                    hint: s.authEmailHint,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Email is required';
+                        return s.authEmailRequired;
                       }
                       if (!value.contains('@')) {
-                        return 'Enter a valid email';
+                        return s.authEmailInvalid;
                       }
                       return null;
                     },
@@ -181,17 +183,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: AppSpacing.lg),
                 // Password field
                 Semantics(
-                  label: 'Password input field',
+                  label: s.authPasswordInputSemantics,
                   textField: true,
                   child: AppInput(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    label: 'Password',
+                    label: s.passwordLabel,
                     prefixIcon: const Icon(Icons.lock_outlined),
                     suffixIcon: Semantics(
                       label: _obscurePassword
-                          ? 'Show password'
-                          : 'Hide password',
+                          ? s.authShowPassword
+                          : s.authHidePassword,
                       button: true,
                       child: IconButton(
                         icon: Icon(
@@ -207,7 +209,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Password is required';
+                        return s.authPasswordRequired;
                       }
                       return null;
                     },
@@ -218,7 +220,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Semantics(
-                    label: 'Forgot password',
+                    label: s.authForgotPasswordSemantics,
                     button: true,
                     child: TextButton(
                       onPressed: () => context.push('/forgot-password'),
@@ -230,7 +232,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'Forgot password?',
+                        s.authForgotPassword,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: c.primary,
                           fontWeight: FontWeight.w500,
@@ -242,7 +244,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: AppSpacing.xl),
                 // Sign in button
                 Semantics(
-                  label: 'Sign in to your account',
+                  label: s.authSignInSemantics,
                   button: true,
                   enabled: !_isLoading,
                   child: AppButton(
@@ -250,19 +252,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     isFullWidth: true,
                     onPressed: _isLoading ? null : _handleLogin,
                     isLoading: _isLoading,
-                    label: 'Sign In',
+                    label: s.authSignIn,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 // Create account button
                 Semantics(
-                  label: 'Create a new account',
+                  label: s.authCreateAccountSemantics,
                   button: true,
                   child: AppButton(
                     variant: AppButtonVariant.outline,
                     isFullWidth: true,
                     onPressed: () => context.push('/register'),
-                    label: 'Create Account',
+                    label: s.authCreateAccount,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
@@ -275,7 +277,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         horizontal: AppSpacing.md,
                       ),
                       child: Text(
-                        'or',
+                        s.authOr,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: c.mutedForeground,
                           fontSize: AppTypography.caption,
@@ -288,7 +290,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: AppSpacing.xl),
                 // Google sign in
                 Semantics(
-                  label: 'Sign in with Google',
+                  label: s.authGoogleSignInSemantics,
                   button: true,
                   enabled: !_isLoading,
                   child: GoogleSignInButton(

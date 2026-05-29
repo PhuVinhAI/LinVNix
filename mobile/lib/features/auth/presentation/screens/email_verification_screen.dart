@@ -6,6 +6,7 @@ import '../../../../core/providers/providers.dart';
 import '../../../../core/providers/auth_state_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/auth_action_skeleton.dart';
 import '../widgets/otp_code_input.dart';
 
@@ -52,7 +53,7 @@ class _EmailVerificationScreenState
     } on AppException catch (e) {
       setState(() => _errorMessage = e.message);
     } catch (_) {
-      setState(() => _errorMessage = 'Verification failed');
+      setState(() => _errorMessage = S.of(context).authVerificationFailed);
     } finally {
       if (mounted) setState(() => _isVerifying = false);
     }
@@ -65,11 +66,11 @@ class _EmailVerificationScreenState
       final dio = ref.read(dioProvider);
       await dio.post('/auth/resend-verification', data: {'email': widget.email});
       if (mounted) {
-        AppToast.show(context, message: 'A new verification code has been sent', type: AppToastType.success);
+        AppToast.show(context, message: S.of(context).authVerificationCodeSent, type: AppToastType.success);
       }
     } catch (_) {
       if (mounted) {
-        AppToast.show(context, message: 'Failed to resend code', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).authResendCodeFailed, type: AppToastType.error);
       }
     }
   }
@@ -78,9 +79,10 @@ class _EmailVerificationScreenState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final c = AppTheme.colors(context);
+    final s = S.of(context);
 
     return Scaffold(
-      appBar: const AppAppBar(title: Text('Email Verification')),
+      appBar: AppAppBar(title: Text(s.authEmailVerification)),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -96,7 +98,7 @@ class _EmailVerificationScreenState
                 const AuthActionSkeleton(),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
-                  'Verifying your email...',
+                  s.authVerifyingCode,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: c.mutedForeground,
                   ),
@@ -121,7 +123,7 @@ class _EmailVerificationScreenState
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
-                  'Email verified!',
+                  s.authEmailVerified,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.3,
@@ -130,7 +132,7 @@ class _EmailVerificationScreenState
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'Your email has been verified successfully. You\'re all set!',
+                  s.authEmailVerifiedSuccess,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: c.mutedForeground,
                     height: 1.5,
@@ -142,7 +144,7 @@ class _EmailVerificationScreenState
                   variant: AppButtonVariant.primary,
                   isFullWidth: true,
                   onPressed: () => context.go('/'),
-                  label: 'Continue to Home',
+                  label: s.authContinueHome,
                 ),
               ] else ...[
                 Center(
@@ -162,7 +164,7 @@ class _EmailVerificationScreenState
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
-                  'Check your email',
+                  s.authCheckEmail,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.3,
@@ -171,7 +173,7 @@ class _EmailVerificationScreenState
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'We sent a 6-digit verification code to\n${widget.email ?? 'your email'}',
+                  '${s.authResetCodeDescription}\n${widget.email ?? 'your email'}',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: c.mutedForeground,
@@ -200,14 +202,14 @@ class _EmailVerificationScreenState
                   variant: AppButtonVariant.primary,
                   isFullWidth: true,
                   onPressed: _code.length == 6 ? _verifyCode : null,
-                  label: 'Verify',
+                  label: s.authVerify,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Didn\'t receive a code?',
+                      s.authDidNotReceiveCode,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: c.mutedForeground,
                       ),
@@ -216,7 +218,7 @@ class _EmailVerificationScreenState
                     AppButton(
                       variant: AppButtonVariant.text,
                       onPressed: _resendCode,
-                      label: 'Resend',
+                      label: s.authResend,
                     ),
                   ],
                 ),

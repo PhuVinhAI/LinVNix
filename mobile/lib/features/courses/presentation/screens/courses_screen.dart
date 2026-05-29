@@ -6,6 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
+import '../../../../l10n/app_localizations.dart';
 
 Color _getLevelColor(String level, AppColors c) {
   return switch (level) {
@@ -27,7 +28,7 @@ class CoursesScreen extends ConsumerWidget {
     final coursesAsync = ref.watch(coursesProvider);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Courses')),
+      appBar: AppAppBar(title: Text(S.of(context).coursesTitle)),
       body: coursesAsync.when(
         loading: () => const _CoursesLoading(),
         error: (error, stack) => _CoursesError(
@@ -63,7 +64,7 @@ class _CoursesList extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'No courses available',
+              S.of(context).noCoursesAvailable,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: c.mutedForeground,
               ),
@@ -281,7 +282,7 @@ class _CoursesError extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Failed to load courses',
+              S.of(context).failedToLoadCourses,
               style: theme.textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
@@ -293,7 +294,7 @@ class _CoursesError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Retry',
+                label: S.of(context).retryButton,
               ),
             ),
           ],

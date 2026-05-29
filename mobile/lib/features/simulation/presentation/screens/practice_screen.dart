@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/simulation_providers.dart';
 import '../../domain/active_session.dart';
 import '../../domain/scenario_category.dart';
@@ -54,7 +55,7 @@ class PracticeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppAppBar(
-        title: const Text('Chat'),
+        title: Text(S.of(context).practiceTitle),
         actions: [
           IconButton(
             onPressed: () => context.push('/practice/history'),
@@ -74,6 +75,7 @@ class PracticeScreen extends ConsumerWidget {
         error: (error, stack) => _CategoriesError(
           onRetry: () =>
               ref.read(simulationCategoriesProvider.notifier).refresh(),
+          errorMessage: S.of(context).failedToLoadCategoriesMessage,
         ),
         data: (categories) => _PracticeContent(
           categories: categories,
@@ -219,7 +221,7 @@ class _PracticeContent extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'No categories yet',
+              S.of(context).failedToLoadCategoriesTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: AppTheme.colors(context).mutedForeground,
                   ),
@@ -562,7 +564,7 @@ class _ScenariosEmpty extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'No scenarios found',
+              S.of(context).failedToLoadCategoriesMessage,
               style: theme.textTheme.bodyMedium?.copyWith(
                     color: c.mutedForeground,
                   ),
@@ -691,7 +693,7 @@ class _ScenariosError extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: c.error),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Failed to load scenarios',
+              S.of(context).failedToLoadCategoriesMessage,
               style: theme.textTheme.bodyMedium?.copyWith(
                     color: c.mutedForeground,
                   ),
@@ -701,7 +703,7 @@ class _ScenariosError extends StatelessWidget {
               variant: AppButtonVariant.primary,
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: 'Retry',
+              label: S.of(context).retryButton,
             ),
           ],
         ),
@@ -1081,8 +1083,12 @@ class _PausedSessionBanner extends StatelessWidget {
 }
 
 class _CategoriesError extends StatelessWidget {
-  const _CategoriesError({required this.onRetry});
+  const _CategoriesError({
+    required this.onRetry,
+    this.errorMessage,
+  });
   final VoidCallback onRetry;
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -1101,7 +1107,7 @@ class _CategoriesError extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Failed to load categories',
+              errorMessage ?? S.of(context).failedToLoadCategoriesMessage,
               style: theme.textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
@@ -1113,7 +1119,7 @@ class _CategoriesError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Retry',
+                label: S.of(context).retryButton,
               ),
             ),
           ],

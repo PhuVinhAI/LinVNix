@@ -13,6 +13,7 @@ import '../../../profile/data/profile_providers.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
 import '../widgets/course_content_sections.dart';
+import '../../../../l10n/app_localizations.dart';
 
 const _levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -1119,7 +1120,7 @@ class _ModuleDetailError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Module')),
+      appBar: AppAppBar(title: Text(S.of(context).moduleDetailTitle)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -1128,13 +1129,13 @@ class _ModuleDetailError extends StatelessWidget {
             children: [
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
-              const Text('Failed to load module', textAlign: TextAlign.center),
+              Text(S.of(context).failedToLoadModule, textAlign: TextAlign.center),
               const SizedBox(height: AppSpacing.sm),
               AppButton(
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Retry',
+                label: S.of(context).retryButton,
               ),
             ],
           ),

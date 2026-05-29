@@ -7,6 +7,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../assistant/data/current_exercise_attempt_provider.dart';
 import '../../../assistant/data/exercise_context_sanitizer.dart';
 import '../../data/lesson_providers.dart';
@@ -458,7 +459,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
     return exercisesAsync.when(
       loading: () => const _ExercisePlayLoading(),
       error: (error, _) => Scaffold(
-        appBar: const AppAppBar(title: Text('Exercise')),
+        appBar: AppAppBar(title: Text(S.of(context).exercisesTitle)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -479,7 +480,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Text(
-                  'Failed to load exercises',
+                  S.of(context).failedToLoadLesson,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: c.foreground,
@@ -508,7 +509,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       data: (exercises) {
         if (exercises.isEmpty) {
           return Scaffold(
-            appBar: const AppAppBar(title: Text('Exercise')),
+            appBar: AppAppBar(title: Text(S.of(context).exercisesTitle)),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -538,7 +539,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     AppButton(
-                      label: 'Go back',
+                      label: S.of(context).retryButton,
                       variant: AppButtonVariant.primary,
                       onPressed: () => context.pop(),
                     ),
@@ -572,7 +573,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
           },
           child: Scaffold(
             appBar: AppAppBar(
-              title: const Text('Exercise'),
+              title: Text(S.of(context).exercisesTitle),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(4),
                 child: AppProgress(
@@ -834,7 +835,7 @@ class _ExercisePlayLoading extends StatelessWidget {
 
     return Scaffold(
       appBar: AppAppBar(
-        title: const Text('Exercise'),
+        title: Text(S.of(context).exercisesTitle),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4),
           child: Shimmer.fromColors(

@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../profile/data/profile_providers.dart';
 import '../../application/simulation_chat_notifier.dart';
 import '../../application/simulation_tts_service.dart';
@@ -86,7 +87,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (!mounted) return;
       AppToast.show(
         context,
-        message: 'Unable to load conversation session',
+        message: S.of(context).unableToCreateSessionMessage,
         type: AppToastType.error,
       );
     }
@@ -277,7 +278,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     AppMenuBottomSheet.show(
       context,
-      title: 'Session options',
+      title: S.of(context).chatTitle,
       items: items,
     );
   }
@@ -350,7 +351,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (next.error != null && next.error != prev?.error) {
         AppToast.show(
           context,
-          message: 'Unable to send message. Please try again.',
+          message: S.of(context).unableToCreateSessionMessage,
           type: AppToastType.error,
         );
       }
@@ -370,7 +371,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: const Text('Conversation'),
+          title: Text(S.of(context).chatTitle),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: _onBack,
@@ -551,7 +552,7 @@ class _TypingIndicator extends StatelessWidget {
                 AppSpinner(size: 16, color: c.mutedForeground),
                 const SizedBox(width: AppSpacing.sm),
                 Text(
-                  'Thinking...',
+                  S.of(context).chatTitle,
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.bodySmall,
                     color: c.mutedForeground,
@@ -925,7 +926,7 @@ class _ComposeBar extends StatelessWidget {
         AppSpacing.sm,
       ),
       child: isSending
-          ? _StopBar(hint: hint, onStop: onStop)
+          ? _StopBar(hint: S.of(context).chatTitle, onStop: onStop)
           : AppChatComposeField(
               controller: controller,
               focusNode: focusNode,
@@ -1014,7 +1015,7 @@ class _CompletedBanner extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Session ended',
+                S.of(context).sessionEndedMessage,
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodyMedium,
                   fontWeight: FontWeight.w600,
@@ -1024,7 +1025,7 @@ class _CompletedBanner extends StatelessWidget {
             ),
             AppButton(
               variant: AppButtonVariant.outline,
-              label: 'View results',
+              label: S.of(context).viewResultsButton,
               onPressed: onViewResult,
             ),
           ],
@@ -1062,7 +1063,7 @@ class _HistoryBanner extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Session ended',
+                S.of(context).sessionEndedMessage,
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodySmall,
                   color: c.mutedForeground,
@@ -1073,7 +1074,7 @@ class _HistoryBanner extends StatelessWidget {
             if (showViewResult && onViewResult != null)
               AppButton(
                 variant: AppButtonVariant.outline,
-                label: 'View results',
+                label: S.of(context).viewResultsButton,
                 onPressed: onViewResult,
               ),
           ],

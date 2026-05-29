@@ -6,6 +6,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/simulation_providers.dart';
 import '../../domain/simulation_result_detail.dart';
 
@@ -105,7 +106,7 @@ class _ResultContent extends StatelessWidget {
         slivers: [
           SliverAppBar(
             pinned: true,
-            title: const Text('Simulation result'),
+            title: Text(S.of(context).simulationResultTitle),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: onPop,
@@ -515,7 +516,7 @@ class _ResultError extends StatelessWidget {
 
     return Scaffold(
       appBar: AppAppBar(
-        title: const Text('Simulation result'),
+        title: Text(S.of(context).simulationResultTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: onPop,
@@ -529,8 +530,8 @@ class _ResultError extends StatelessWidget {
             children: [
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
-              const Text(
-                'Unable to load result',
+              Text(
+                S.of(context).unableToLoadResultMessage,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -538,7 +539,7 @@ class _ResultError extends StatelessWidget {
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Retry',
+                label: S.of(context).retryButton,
               ),
             ],
           ),

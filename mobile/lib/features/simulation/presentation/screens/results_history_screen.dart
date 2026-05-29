@@ -5,6 +5,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/simulation_providers.dart';
 import '../../domain/simulation_result_summary.dart';
 
@@ -47,7 +48,7 @@ class _ResultsHistoryScreenState extends ConsumerState<ResultsHistoryScreen> {
       },
       child: Scaffold(
         appBar: AppAppBar(
-          title: const Text('Conversation history'),
+          title: Text(S.of(context).conversationHistoryTitle),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: _onBack,
@@ -457,7 +458,7 @@ class _ResultsError extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Unable to load history',
+              S.of(context).unableToLoadDataMessage,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: c.foreground,
@@ -469,7 +470,7 @@ class _ResultsError extends StatelessWidget {
               variant: AppButtonVariant.primary,
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: 'Retry',
+              label: S.of(context).retryButton,
             ),
           ],
         ),

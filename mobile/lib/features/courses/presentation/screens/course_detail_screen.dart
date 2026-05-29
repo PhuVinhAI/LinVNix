@@ -15,6 +15,7 @@ import '../../domain/course_models.dart';
 import '../widgets/course_content_sections.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../user/domain/user_profile.dart';
+import '../../../../l10n/app_localizations.dart';
 
 const _levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -431,7 +432,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
         ],
       ),
     );
-  }
+  } // Note: level-up dialog, keeping as is (not in key mapping)
 
   void _showCreationForm({String? initialUserPrompt}) {
     AppBottomSheet.show(
@@ -1182,7 +1183,7 @@ class _CourseDetailError extends StatelessWidget {
     final c = AppTheme.colors(context);
 
     return Scaffold(
-      appBar: AppAppBar(title: const Text('Course')),
+      appBar: AppAppBar(title: Text(S.of(context).courseDetailTitle)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -1191,13 +1192,13 @@ class _CourseDetailError extends StatelessWidget {
             children: [
               Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
               const SizedBox(height: AppSpacing.lg),
-              const Text('Failed to load course', textAlign: TextAlign.center),
+              Text(S.of(context).failedToLoadCourse, textAlign: TextAlign.center),
               const SizedBox(height: AppSpacing.sm),
               AppButton(
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: 'Retry',
+                label: S.of(context).retryButton,
               ),
             ],
           ),

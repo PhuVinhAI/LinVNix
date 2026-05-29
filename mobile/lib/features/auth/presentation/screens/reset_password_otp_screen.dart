@@ -5,6 +5,7 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/providers/providers.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/auth_action_skeleton.dart';
 import '../widgets/otp_code_input.dart';
 
@@ -51,7 +52,7 @@ class _ResetPasswordOtpScreenState
     } on AppException catch (e) {
       setState(() => _errorMessage = e.message);
     } catch (_) {
-      setState(() => _errorMessage = 'Verification failed');
+      setState(() => _errorMessage = S.of(context).authVerificationFailed);
     } finally {
       if (mounted) setState(() => _isVerifying = false);
     }
@@ -62,11 +63,11 @@ class _ResetPasswordOtpScreenState
       final repository = ref.read(authRepositoryProvider);
       await repository.forgotPassword(email: widget.email);
       if (mounted) {
-        AppToast.show(context, message: 'A new reset code has been sent', type: AppToastType.success);
+        AppToast.show(context, message: S.of(context).authResetCodeSent, type: AppToastType.success);
       }
     } catch (_) {
       if (mounted) {
-        AppToast.show(context, message: 'Failed to resend code', type: AppToastType.error);
+        AppToast.show(context, message: S.of(context).authResendCodeFailed, type: AppToastType.error);
       }
     }
   }
@@ -75,9 +76,10 @@ class _ResetPasswordOtpScreenState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final c = AppTheme.colors(context);
+    final s = S.of(context);
 
     return Scaffold(
-      appBar: const AppAppBar(title: Text('Reset Password')),
+      appBar: AppAppBar(title: Text(s.authResetPassword)),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -93,7 +95,7 @@ class _ResetPasswordOtpScreenState
                 const AuthActionSkeleton(),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
-                  'Verifying code...',
+                  s.authVerifyingCode,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: c.mutedForeground,
                   ),
@@ -117,7 +119,7 @@ class _ResetPasswordOtpScreenState
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
-                  'Enter reset code',
+                  s.authEnterResetCode,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.3,
@@ -126,7 +128,7 @@ class _ResetPasswordOtpScreenState
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'We sent a 6-digit code to\n${widget.email}',
+                  '${s.authResetCodeDescription}\n${widget.email}',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: c.mutedForeground,
@@ -155,14 +157,14 @@ class _ResetPasswordOtpScreenState
                   variant: AppButtonVariant.primary,
                   isFullWidth: true,
                   onPressed: _code.length == 6 ? _verifyCode : null,
-                  label: 'Verify Code',
+                  label: s.authVerifyCode,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Didn\'t receive a code?',
+                      s.authDidNotReceiveCode,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: c.mutedForeground,
                       ),
@@ -171,7 +173,7 @@ class _ResetPasswordOtpScreenState
                     AppButton(
                       variant: AppButtonVariant.text,
                       onPressed: _resendCode,
-                      label: 'Resend',
+                      label: s.authResend,
                     ),
                   ],
                 ),
@@ -181,7 +183,7 @@ class _ResetPasswordOtpScreenState
                     variant: AppButtonVariant.text,
                     isFullWidth: true,
                     onPressed: () => context.go('/login'),
-                    label: 'Back to Sign In',
+                    label: s.authBackToSignIn,
                   ),
                 ],
               ],
