@@ -20,23 +20,23 @@ class AppNavBar extends StatelessWidget {
   final IconData centerActionIcon;
   final String centerActionTooltip;
 
-  static const double protrusionHeight = 10;
-  static const double _barVerticalPadding = AppSpacing.sm * 2;
+  static const double protrusionHeight = 16;
+  static const double _barVerticalPadding = AppSpacing.md;
   static const double _destinationHeight =
       AppSpacing.xs * 2 + // item vertical padding
-      AppSpacing.xs * 2 + // icon container vertical padding
-      22 + // icon size
-      2 + // label gap
-      13; // caption line height
+      AppSpacing.sm * 2 + // icon container padding
+      24 + // icon size
+      4 + // label gap
+      12; // caption line height
   static const double barContentHeight =
-      _barVerticalPadding + _destinationHeight;
+      _barVerticalPadding * 2 + _destinationHeight;
 
   /// Full inset needed so scrollable content clears the nav bar overlay.
   static double bottomInset(BuildContext context) {
     return protrusionHeight +
         barContentHeight +
         MediaQuery.paddingOf(context).bottom +
-        AppSpacing.md;
+        AppSpacing.lg;
   }
 
   /// Use as ListView / CustomScrollView bottom padding on tab screens.
@@ -55,7 +55,7 @@ class AppNavBar extends StatelessWidget {
 
     for (var index = 0; index < destinations.length; index++) {
       if (index == centerIndex) {
-        items.add(const SizedBox(width: 44));
+        items.add(const SizedBox(width: 64));
       }
 
       items.add(
@@ -71,24 +71,31 @@ class AppNavBar extends StatelessWidget {
       clipBehavior: Clip.none,
       alignment: Alignment.topCenter,
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: protrusionHeight),
-            Divider(color: c.border, height: 1),
-            DecoratedBox(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            protrusionHeight,
+            AppSpacing.lg,
+            AppSpacing.md,
+          ),
+          child: SafeArea(
+            top: false,
+            child: Container(
               decoration: BoxDecoration(
                 color: c.card,
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+                border: Border.all(color: c.border, width: 1),
               ),
-              child: SafeArea(
-                top: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-                  child: Row(children: items),
-                ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.md,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: items,
               ),
             ),
-          ],
+          ),
         ),
         Positioned(
           top: 0,
@@ -117,44 +124,52 @@ class _AppNavBarDestinationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final itemColor = isSelected ? c.primary : c.mutedForeground;
 
     return Expanded(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.xs,
-                ),
-                decoration: isSelected
-                    ? BoxDecoration(
-                        color: c.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppRadius.full),
-                      )
-                    : null,
-                child: Icon(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
+            ),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? c.primary.withValues(alpha: 0.12)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
                   isSelected ? destination.selectedIcon : destination.icon,
-                  color: itemColor,
-                  size: 22,
+                  color: isSelected ? c.primary : c.mutedForeground,
+                  size: 24,
                 ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                destination.label,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.caption,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: itemColor,
+                const SizedBox(height: 4),
+                AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.caption,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: isSelected ? c.primary : c.mutedForeground,
+                    height: 1.0,
+                  ),
+                  child: Text(
+                    destination.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -183,28 +198,28 @@ class _AppNavBarCenterAction extends StatelessWidget {
       child: Semantics(
         button: true,
         label: tooltip,
-        child: GestureDetector(
-          key: const ValueKey('app_nav_bar_camera_fab'),
-          behavior: HitTestBehavior.opaque,
-          onTap: onTap,
-          child: AnimatedOpacity(
-            opacity: enabled ? 1 : 0.5,
-            duration: const Duration(milliseconds: 120),
-            child: Container(
-              width: 54,
-              height: 54,
-              decoration: BoxDecoration(
-                color: c.primary,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.16),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            key: const ValueKey('app_nav_bar_camera_fab'),
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: AnimatedOpacity(
+              opacity: enabled ? 1 : 0.5,
+              duration: const Duration(milliseconds: 200),
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: c.primary,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: c.background,
+                    width: 4,
                   ),
-                ],
+                ),
+                child: Icon(icon, color: c.primaryForeground, size: 28),
               ),
-              child: Icon(icon, color: c.primaryForeground, size: 24),
             ),
           ),
         ),
