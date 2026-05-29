@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/simulation_providers.dart';
@@ -88,6 +91,7 @@ class SimulationChatState {
 
 class SimulationChatNotifier extends Notifier<SimulationChatState> {
   String? _outboundMessageId;
+  CancelToken? _cancelToken;
 
   bool get isAwaitingAiResponse =>
       _outboundMessageId != null ||
@@ -147,6 +151,8 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
     );
 
     _outboundMessageId = learnerMessage.id;
+    final cancelToken = CancelToken();
+    _cancelToken = cancelToken;
 
     state = state.copyWith(
       messages: [...state.messages, learnerMessage],
@@ -157,15 +163,27 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
 
     try {
       final repo = ref.read(simulationRepositoryProvider);
-      final response = await repo.sendMessage(state.sessionId, trimmed);
+      final response = await repo.sendMessage(
+        state.sessionId,
+        trimmed,
+        cancelToken: cancelToken,
+      );
       if (_outboundMessageId != learnerMessage.id) return;
 
       _outboundMessageId = null;
+      _cancelToken = null;
       _applySendResponse(response, learnerMessageIndex: state.messages.length - 1);
     } catch (e) {
-      if (_outboundMessageId != learnerMessage.id) return;
+      if (e is DioException && e.type == DioExceptionType.cancel) {
+        // Connection closed → backend aborted AI → only learner message may
+        // have been saved. Clean it up best-effort.
+        await _revertPendingLearnerOnServer();
+        return;
+      }
 
+      if (_outboundMessageId != learnerMessage.id) return;
       _outboundMessageId = null;
+      _cancelToken = null;
       await _revertPendingLearnerOnServer();
       state = state.copyWith(
         messages: _messagesWithoutId(state.messages, learnerMessage.id),
@@ -181,27 +199,32 @@ class SimulationChatNotifier extends Notifier<SimulationChatState> {
     if (state.sessionId.isEmpty || !isAwaitingAiResponse) return;
 
     final outboundId = _outboundMessageId;
-    _outboundMessageId = null;
-    await _revertPendingLearnerOnServer();
+    final pendingContent = outboundId != null
+        ? state.messages.where((m) => m.id == outboundId).firstOrNull?.content
+        : null;
 
-    var messages = state.messages;
-    if (outboundId != null) {
-      messages = _messagesWithoutId(messages, outboundId);
-    } else if (messages.isNotEmpty && messages.last.isLearner) {
-      messages = messages.sublist(0, messages.length - 1);
-    }
+    _outboundMessageId = null;
+    _cancelToken?.cancel('user stopped');
+    _cancelToken = null;
+
+    // Call server cleanup immediately — don't rely on TCP close event
+    // since Dio cancel doesn't guarantee the connection is closed server-side.
+    unawaited(_revertPendingLearnerOnServer());
+
+    final messages = outboundId != null
+        ? _messagesWithoutId(state.messages, outboundId)
+        : state.messages;
 
     state = state.copyWith(
       messages: messages,
       status: SimulationChatStatus.idle,
       error: null,
-      failedOutboundContent: null,
+      failedOutboundContent: pendingContent,
     );
   }
 
   Future<void> _revertPendingLearnerOnServer() async {
     if (state.sessionId.isEmpty) return;
-
     try {
       final repo = ref.read(simulationRepositoryProvider);
       await repo.revertPendingLearnerMessage(state.sessionId);

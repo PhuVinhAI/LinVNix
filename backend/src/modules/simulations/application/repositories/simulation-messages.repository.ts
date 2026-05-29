@@ -37,6 +37,11 @@ export class SimulationMessagesRepository {
     await this.repository.update({ id: messageId }, { feedback });
   }
 
+  async exists(id: string): Promise<boolean> {
+    const count = await this.repository.count({ where: { id } });
+    return count > 0;
+  }
+
   async softDelete(id: string): Promise<void> {
     await this.repository.softDelete(id);
   }

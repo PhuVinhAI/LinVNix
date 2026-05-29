@@ -8,6 +8,8 @@ import '../../data/home_providers.dart';
 import '../../../courses/data/courses_providers.dart';
 import '../../../courses/domain/course_models.dart';
 import '../../../daily_goals/presentation/widgets/daily_goal_progress_card.dart';
+import '../../../simulation/data/simulation_providers.dart';
+import '../../../simulation/domain/scenario_summary.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +22,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> _onRefresh() async {
     ref.read(coursesProvider.notifier).refresh();
     ref.read(continueLearningProvider.notifier).refresh();
+    ref.read(simulationScenariosProvider.notifier).refresh();
   }
 
   String _getGreeting() {
@@ -34,6 +37,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final c = AppTheme.colors(context);
     final theme = Theme.of(context);
     final coursesAsync = ref.watch(coursesProvider);
+    final scenariosAsync = ref.watch(simulationScenariosProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -78,6 +82,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: const DailyGoalProgressCard(),
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                child: _SimulationSection(scenariosAsync: scenariosAsync),
               ),
               const SizedBox(height: AppSpacing.xl),
               Padding(
@@ -205,6 +214,146 @@ class _CoursesSection extends StatelessWidget {
                           Icons.chevron_right,
                           color: c.mutedForeground,
                         ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _SimulationSection extends StatelessWidget {
+  const _SimulationSection({required this.scenariosAsync});
+  final AsyncValue<List<ScenarioSummary>> scenariosAsync;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Practice',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.go('/practice'),
+              child: Text(
+                'See all',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: c.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        scenariosAsync.when(
+          loading: () => const _HomeCoursesLoading(),
+          error: (_, _) => Center(
+            child: Text(
+              'Unable to load scenarios',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: c.mutedForeground,
+              ),
+            ),
+          ),
+          data: (scenarios) {
+            if (scenarios.isEmpty) {
+              return AppCard(
+                variant: AppCardVariant.outlined,
+                borderRadius: AppRadius.lg,
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                onTap: () => context.go('/practice'),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: c.primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
+                      child: Icon(Icons.chat_bubble_outline, color: c.primary),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Text(
+                        'Start a conversation practice',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.chevron_right, color: c.mutedForeground),
+                  ],
+                ),
+              );
+            }
+            return Column(
+              children: scenarios.take(3).map((scenario) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                  child: AppCard(
+                    variant: AppCardVariant.outlined,
+                    borderRadius: AppRadius.lg,
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    onTap: () => context.push('/practice/scenarios/${scenario.id}'),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: c.primary.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(AppRadius.md),
+                          ),
+                          child: Icon(
+                            Icons.chat_bubble_outline,
+                            color: c.primary,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                scenario.title,
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (scenario.description.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  scenario.description,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: c.mutedForeground,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        Icon(Icons.chevron_right, color: c.mutedForeground),
                       ],
                     ),
                   ),

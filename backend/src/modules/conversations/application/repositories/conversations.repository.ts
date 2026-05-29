@@ -89,4 +89,11 @@ export class ConversationsRepository {
       await this.messageRepo.delete(message.id);
     }
   }
+
+  async lastUserMessageExists(conversationId: string): Promise<boolean> {
+    const count = await this.messageRepo.count({
+      where: { conversationId, role: 'user' as any },
+    });
+    return count > 0;
+  }
 }

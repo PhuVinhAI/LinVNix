@@ -17,6 +17,7 @@ class ImageAnalysisApi {
     required List<ImageAnalysisRequestImage> images,
     required String prompt,
     List<ImageAnalysisChatHistoryMessage> chatHistory = const [],
+    CancelToken? cancelToken,
   }) async {
     final response = await _dio.post<Map<String, dynamic>>(
       '/image-analysis/analyze',
@@ -26,6 +27,7 @@ class ImageAnalysisApi {
         'chatHistory': chatHistory.map((message) => message.toJson()).toList(),
       },
       options: _aiRequestOptions,
+      cancelToken: cancelToken,
     );
 
     return ImageAnalysisResponse.fromJson(response.data!);

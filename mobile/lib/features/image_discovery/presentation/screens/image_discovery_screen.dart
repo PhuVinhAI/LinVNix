@@ -109,7 +109,8 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
           previous?.isLoading != next.isLoading) {
         _scrollToBottom();
       }
-      if (next.error != null && next.error != previous?.error) {
+      // Restore text when stopped (no error) or on error
+      if (previous?.isLoading == true && !next.isLoading) {
         final failed = next.failedOutboundContent;
         if (failed != null && failed.isNotEmpty) {
           _inputController.text = failed;
@@ -117,6 +118,8 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
               TextSelection.collapsed(offset: failed.length);
           _focusNode.requestFocus();
         }
+      }
+      if (next.error != null && next.error != previous?.error) {
         AppToast.show(
           context,
           message: next.error!,
@@ -181,6 +184,8 @@ class _ImageDiscoveryScreenState extends ConsumerState<ImageDiscoveryScreen> {
               isLoading: state.isLoading,
               hasImage: state.hasImage,
               onSend: () => unawaited(_send()),
+              onStop: () =>
+                  ref.read(imageDiscoveryProvider.notifier).cancelAnalysis(),
             ),
           ],
         ),
@@ -595,6 +600,7 @@ class _ComposeBar extends StatelessWidget {
     required this.isLoading,
     required this.hasImage,
     required this.onSend,
+    required this.onStop,
   });
 
   final TextEditingController controller;
@@ -602,6 +608,7 @@ class _ComposeBar extends StatelessWidget {
   final bool isLoading;
   final bool hasImage;
   final VoidCallback onSend;
+  final VoidCallback onStop;
 
   bool get canSend => hasImage && !isLoading;
 
@@ -613,6 +620,8 @@ class _ComposeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
     return Padding(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -620,14 +629,54 @@ class _ComposeBar extends StatelessWidget {
         AppSpacing.lg,
         MediaQuery.viewInsetsOf(context).bottom + AppSpacing.sm,
       ),
-      child: AppChatComposeField(
-        controller: controller,
-        focusNode: focusNode,
-        hintText: hintText,
-        enabled: !isLoading,
-        onSend: canSend ? onSend : null,
-        onSubmitted: canSend ? (_) => onSend() : null,
-      ),
+      child: isLoading
+          ? Container(
+              decoration: BoxDecoration(
+                color: c.muted.withValues(alpha: 0.25),
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.sm,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      hintText,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyMedium,
+                        color: c.mutedForeground,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: onStop,
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: c.error,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.stop_rounded,
+                        color: c.errorForeground,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : AppChatComposeField(
+              controller: controller,
+              focusNode: focusNode,
+              hintText: hintText,
+              enabled: !isLoading,
+              onSend: canSend ? onSend : null,
+              onSubmitted: canSend ? (_) => onSend() : null,
+            ),
     );
   }
 }

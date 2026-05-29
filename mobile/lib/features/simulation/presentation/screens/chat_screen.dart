@@ -336,7 +336,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (prev?.messages.length != next.messages.length) {
         _scrollToBottom();
       }
-      if (next.error != null && next.error != prev?.error) {
+      if (prev?.status == SimulationChatStatus.sending &&
+          next.status == SimulationChatStatus.idle) {
         final failedContent = next.failedOutboundContent;
         if (failedContent != null && failedContent.isNotEmpty) {
           _inputController.text = failedContent;
@@ -345,6 +346,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           );
           _inputFocusNode.requestFocus();
         }
+      }
+      if (next.error != null && next.error != prev?.error) {
         AppToast.show(
           context,
           message: 'Unable to send message. Please try again.',
@@ -408,7 +411,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   focusNode: _inputFocusNode,
                   enabled: chatState.isLearnerTurn &&
                       chatState.status == SimulationChatStatus.idle,
+                  isSending: chatState.status == SimulationChatStatus.sending,
                   onSend: _onSend,
+                  onStop: () => ref
+                      .read(simulationChatProvider.notifier)
+                      .discardPendingOutboundMessage(),
                 ),
             ],
           ),
@@ -894,13 +901,17 @@ class _ComposeBar extends StatelessWidget {
     required this.controller,
     required this.focusNode,
     required this.enabled,
+    required this.isSending,
     required this.onSend,
+    required this.onStop,
   });
 
   final TextEditingController controller;
   final FocusNode focusNode;
   final bool enabled;
+  final bool isSending;
   final VoidCallback onSend;
+  final VoidCallback onStop;
 
   @override
   Widget build(BuildContext context) {
@@ -913,13 +924,67 @@ class _ComposeBar extends StatelessWidget {
         AppSpacing.lg,
         AppSpacing.sm,
       ),
-      child: AppChatComposeField(
-        controller: controller,
-        focusNode: focusNode,
-        hintText: hint,
-        enabled: enabled,
-        onSend: enabled ? onSend : null,
-        onSubmitted: enabled ? (_) => onSend() : null,
+      child: isSending
+          ? _StopBar(hint: hint, onStop: onStop)
+          : AppChatComposeField(
+              controller: controller,
+              focusNode: focusNode,
+              hintText: hint,
+              enabled: enabled,
+              onSend: enabled ? onSend : null,
+              onSubmitted: enabled ? (_) => onSend() : null,
+            ),
+    );
+  }
+}
+
+class _StopBar extends StatelessWidget {
+  const _StopBar({required this.hint, required this.onStop});
+
+  final String hint;
+  final VoidCallback onStop;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: c.muted.withValues(alpha: 0.25),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              hint,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.mutedForeground,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: onStop,
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: c.error,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.stop_rounded,
+                color: c.errorForeground,
+                size: 20,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

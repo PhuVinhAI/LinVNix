@@ -103,4 +103,8 @@ export class ConversationService {
     await this.findById(conversationId);
     await this.conversationsRepository.deleteLastUserMessage(conversationId);
   }
+
+  async lastUserMessageExists(conversationId: string): Promise<boolean> {
+    return this.conversationsRepository.lastUserMessageExists(conversationId);
+  }
 }

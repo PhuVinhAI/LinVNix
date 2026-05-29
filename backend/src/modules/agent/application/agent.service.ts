@@ -503,6 +503,16 @@ export class AgentService {
     }
 
     if (!finalAssistantMessage) {
+      // User cancelled before AI streamed anything — check if the user message
+      // was already deleted by the client (same pattern as simulation stop).
+      const userMsgExists = await this.conversationService.lastUserMessageExists(
+        activeConversationId,
+      );
+      if (!userMsgExists) {
+        // Client deleted the user message — discard this turn entirely.
+        return;
+      }
+
       // Either aborted before we reached the no-tools branch, or we ran out
       // of iterations. Persist a partial assistant message so the client and
       // history still have an anchor for the turn.

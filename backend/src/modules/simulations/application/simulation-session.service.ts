@@ -453,6 +453,15 @@ export class SimulationSessionService {
         forceWrapUp,
       });
 
+      // Mobile called DELETE /pending-learner while AI was processing.
+      // The learner message was already deleted — discard NPC response too.
+      const learnerStillExists = await this.messagesRepository.exists(
+        learnerMessage.id,
+      );
+      if (!learnerStillExists) {
+        throw new Error('Request cancelled by client');
+      }
+
       let currentOrderIndex = nextOrderIndex + 1;
       const returnedMessages: SendMessageResult['messages'] = [];
 

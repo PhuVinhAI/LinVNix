@@ -149,13 +149,33 @@ class AssistantChatNotifier {
   /// with `interrupted=true`) and synthesizes the terminal "interrupted
   /// done" state immediately so the UI doesn't have to wait for the
   /// abort to round-trip.
+  ///
+  /// If AI hasn't streamed anything yet (MidLoading), also deletes the
+  /// user message from the server and restores the input to Compose.
   void stop() {
     if (_cancelToken == null && _subscription == null) {
       return;
     }
+
+    final current = _activeState(_ref.read(assistantStateMachineProvider));
+    final isPreStream = current is AssistantMidLoading;
+    final lastInput = isPreStream ? current.lastInput : null;
+
     _userCancelled = true;
     _cancelToken?.cancel('user pressed Stop');
-    _ref.read(assistantStateMachineProvider.notifier).stop();
+
+    final sm = _ref.read(assistantStateMachineProvider.notifier);
+
+    if (isPreStream && lastInput != null) {
+      // No text streamed yet — restore input to Compose and delete user message.
+      sm.composeWithInput(lastInput);
+      if (_conversationId != null) {
+        unawaited(_deleteLastUserMessage(_conversationId!));
+      }
+      _conversationId = null;
+    } else {
+      sm.stop();
+    }
   }
 
   /// User tapped "Soạn tiếp". Returns to Compose; keeps

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -100,13 +101,35 @@ class ImageDiscoveryState {
 
 class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
   int _session = 0;
+  CancelToken? _cancelToken;
+  String? _pendingPrompt;
 
   @override
   ImageDiscoveryState build() => const ImageDiscoveryState();
 
   void reset() {
     _session += 1;
+    _cancelToken?.cancel('reset');
+    _cancelToken = null;
+    _pendingPrompt = null;
     state = const ImageDiscoveryState();
+  }
+
+  void cancelAnalysis() {
+    if (!state.isLoading) return;
+    final prompt = _pendingPrompt;
+    _session += 1;
+    _cancelToken?.cancel('user stopped');
+    _cancelToken = null;
+    _pendingPrompt = null;
+    state = state.copyWith(
+      messages: state.messages.isEmpty
+          ? state.messages
+          : state.messages.sublist(0, state.messages.length - 1),
+      isLoading: false,
+      error: null,
+      failedOutboundContent: prompt,
+    );
   }
 
   Future<void> pickImage(ImageSource source) async {
@@ -188,6 +211,10 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
     );
     final previousMessages = state.messages;
 
+    final cancelToken = CancelToken();
+    _cancelToken = cancelToken;
+    _pendingPrompt = trimmed;
+
     state = state.copyWith(
       messages: [...previousMessages, userMessage],
       isLoading: true,
@@ -204,8 +231,11 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
         chatHistory: previousMessages
             .map((message) => message.toChatHistoryMessage())
             .toList(),
+        cancelToken: cancelToken,
       );
       if (session != _session) return;
+      _cancelToken = null;
+      _pendingPrompt = null;
       final assistantMessage = ImageDiscoveryMessage(
         id: 'assistant-${DateTime.now().microsecondsSinceEpoch}',
         role: ImageDiscoveryMessageRole.assistant,
@@ -217,8 +247,11 @@ class ImageDiscoveryNotifier extends Notifier<ImageDiscoveryState> {
         isLoading: false,
         error: null,
       );
-    } catch (_) {
+    } catch (e) {
       if (session != _session) return;
+      _cancelToken = null;
+      _pendingPrompt = null;
+      if (e is DioException && e.type == DioExceptionType.cancel) return;
       state = state.copyWith(
         messages: previousMessages,
         isLoading: false,

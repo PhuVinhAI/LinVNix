@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/assistant_event.dart';
 import '../domain/assistant_state.dart';
 
 /// Pure-logic Riverpod notifier encoding the PRD's "Mobile UI state
@@ -222,13 +221,15 @@ class AssistantStateMachine extends Notifier<AssistantState> {
   }
 
   /// Error recovery — transitions to Compose with [input] pre-filled so
-  /// the learner can edit and retry without re-typing. Valid from MidError.
+  /// the learner can edit and retry without re-typing. Valid from MidError
+  /// or MidLoading (when stop is called before any text arrived).
   void composeWithInput(String input) {
     final s = _activeState;
-    if (s is! AssistantMidError) {
-      throw _invalid('composeWithInput');
+    if (s is AssistantMidError || s is AssistantMidLoading) {
+      _setActiveState(AssistantMidCompose(pendingInput: input));
+      return;
     }
-    _setActiveState(AssistantMidCompose(pendingInput: input));
+    throw _invalid('composeWithInput');
   }
 
   /// "Reset" button — drops the current conversation and returns to

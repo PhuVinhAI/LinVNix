@@ -90,13 +90,15 @@ class SimulationRepository {
 
   Future<SendMessageResponse> sendMessage(
     String sessionId,
-    String content,
-  ) async {
+    String content, {
+    CancelToken? cancelToken,
+  }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         '/simulations/sessions/$sessionId/messages',
         data: {'content': content},
         options: _aiRequestOptions,
+        cancelToken: cancelToken,
       );
       return SendMessageResponse.fromJson(
         response.data as Map<String, dynamic>,
