@@ -327,8 +327,15 @@ class AssistantChatNotifier {
     final message = _humanReadableError(error);
     final sm = _ref.read(assistantStateMachineProvider.notifier);
     final current = _activeState(_ref.read(assistantStateMachineProvider));
-    if (current is AssistantMidLoading ||
-        (current is AssistantMidReading && current.streaming)) {
+    if (current is AssistantMidLoading) {
+      // Error before any text streamed — restore input and clean up DB.
+      final lastInput = current.lastInput;
+      sm.composeWithInput(lastInput);
+      if (_conversationId != null) {
+        unawaited(_deleteLastUserMessage(_conversationId!));
+        _conversationId = null;
+      }
+    } else if (current is AssistantMidReading && current.streaming) {
       sm.onError(message: message);
     }
     _subscription = null;
@@ -339,8 +346,15 @@ class AssistantChatNotifier {
     final current = _activeState(_ref.read(assistantStateMachineProvider));
     // Server should have sent a `done` event; if not, defensively
     // terminate the stream so the UI does not stay stuck in Loading.
-    if (current is AssistantMidLoading ||
-        (current is AssistantMidReading && current.streaming)) {
+    if (current is AssistantMidLoading) {
+      // Closed before any text — restore input.
+      final lastInput = current.lastInput;
+      _ref.read(assistantStateMachineProvider.notifier).composeWithInput(lastInput);
+      if (_conversationId != null) {
+        unawaited(_deleteLastUserMessage(_conversationId!));
+        _conversationId = null;
+      }
+    } else if (current is AssistantMidReading && current.streaming) {
       _ref.read(assistantStateMachineProvider.notifier).stop();
     }
     _subscription = null;
