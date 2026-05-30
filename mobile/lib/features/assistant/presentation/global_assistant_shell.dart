@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/providers/assistant_bar_provider.dart';
+import '../../../core/providers/bottom_sheet_provider.dart';
 import '../../../core/router/app_router.dart';
 import '../application/assistant_state_machine.dart';
 import '../data/go_router_effective_route.dart';
@@ -125,14 +126,17 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
     final match = ref.watch(currentRouteMatchProvider);
     final assistantState = ref.watch(assistantStateMachineProvider);
     final assistantBarEnabled = ref.watch(assistantBarEnabledProvider);
+    final isBottomSheetOpen = ref.watch(bottomSheetOpenProvider);
 
     final barShouldBeVisible =
         assistantBarEnabled &&
         isAssistantBarVisible(match?.location) &&
         assistantState is! AssistantFull;
 
-    // Hide bar when sheet is open (any Mid state)
-    final showBar = barShouldBeVisible && assistantState is AssistantCollapsed;
+    // Hide bar when sheet is open (any Mid state) or when any bottom sheet is open
+    final showBar = barShouldBeVisible &&
+        assistantState is AssistantCollapsed &&
+        !isBottomSheetOpen;
 
     if (!barShouldBeVisible) {
       return ScreenUiSnapshotHost(key: _snapshotHostKey, child: widget.child);
