@@ -497,10 +497,10 @@ class _MessageBubble extends StatelessWidget {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         constraints: isUser
-            ? BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.78)
+            ? BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.75)
             : const BoxConstraints(),
         width: isUser ? null : double.infinity,
-        margin: const EdgeInsets.only(bottom: AppSpacing.md),
+        margin: const EdgeInsets.only(bottom: AppSpacing.xl),
         padding: isUser
             ? const EdgeInsets.symmetric(
                 horizontal: AppSpacing.lg,
@@ -509,8 +509,9 @@ class _MessageBubble extends StatelessWidget {
             : EdgeInsets.zero,
         decoration: isUser
             ? BoxDecoration(
-                color: c.primary.withValues(alpha: 0.1),
+                color: c.card,
                 borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: c.border, width: 1),
               )
             : null,
         child: isUser
@@ -518,7 +519,9 @@ class _MessageBubble extends StatelessWidget {
                 message.text,
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodyMedium,
+                  fontWeight: FontWeight.w500,
                   color: c.foreground,
+                  height: 1.5,
                 ),
               )
             : _AssistantMessage(message: message),
@@ -534,10 +537,15 @@ class _AssistantMessage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppTheme.colors(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MarkdownBody(data: message.text, selectable: true),
+        MarkdownBody(
+          data: message.text,
+          selectable: true,
+          styleSheet: _buildMarkdownStyleSheet(context, c),
+        ),
         if (message.vocabularies.isNotEmpty) ...[
           const SizedBox(height: AppSpacing.md),
           ...message.vocabularies.map(
@@ -553,6 +561,57 @@ class _AssistantMessage extends ConsumerWidget {
           ),
         ],
       ],
+    );
+  }
+
+  MarkdownStyleSheet _buildMarkdownStyleSheet(BuildContext context, AppColors c) {
+    return MarkdownStyleSheet(
+      p: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
+        height: 1.6,
+      ),
+      h1: GoogleFonts.inter(
+        fontSize: AppTypography.titleLarge,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h2: GoogleFonts.inter(
+        fontSize: AppTypography.titleMedium,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h3: GoogleFonts.inter(
+        fontSize: AppTypography.titleSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      code: GoogleFonts.jetBrainsMono(
+        fontSize: AppTypography.bodySmall,
+        color: c.primary,
+        backgroundColor: c.muted,
+      ),
+      codeblockDecoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      blockquote: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.mutedForeground,
+        fontStyle: FontStyle.italic,
+        height: 1.6,
+      ),
+      blockquoteDecoration: BoxDecoration(
+        border: Border(left: BorderSide(color: c.border, width: 3)),
+      ),
+      listBullet: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
+      ),
     );
   }
 }

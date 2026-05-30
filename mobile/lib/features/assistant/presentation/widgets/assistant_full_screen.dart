@@ -556,65 +556,120 @@ class _MessageBubble extends StatelessWidget {
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.75,
           ),
-          margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+          margin: const EdgeInsets.only(bottom: AppSpacing.lg),
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.md,
           ),
           decoration: BoxDecoration(
-            color: c.primary.withValues(alpha: 0.1),
+            color: c.card,
             borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: c.border, width: 1),
           ),
           child: Text(
             message.content,
             style: GoogleFonts.inter(
               fontSize: AppTypography.bodyMedium,
+              fontWeight: FontWeight.w500,
               color: c.foreground,
+              height: 1.5,
             ),
           ),
         ),
       );
     }
 
-    // Assistant message — full width, markdown rendered.
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: AppSpacing.sm),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (message.content.isNotEmpty)
-              MarkdownBody(data: message.content, selectable: true)
-            else if (!message.interrupted)
-              Text(
-                S.of(context).noResponseLabel,
+    // Assistant message — full width, no background, markdown rendered.
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: AppSpacing.xl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (message.content.isNotEmpty)
+            MarkdownBody(
+              data: message.content,
+              selectable: true,
+              styleSheet: _buildMarkdownStyleSheet(context, c),
+            )
+          else if (!message.interrupted)
+            Text(
+              S.of(context).noResponseLabel,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                color: c.mutedForeground,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          if (message.interrupted)
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.sm),
+              child: Text(
+                S.of(context).stoppedLabel,
                 style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodySmall,
+                  fontSize: AppTypography.caption,
                   color: c.mutedForeground,
                   fontStyle: FontStyle.italic,
                 ),
               ),
-            if (message.interrupted)
-              Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.xs),
-                child: Text(
-                  S.of(context).stoppedLabel,
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.caption,
-                    color: c.mutedForeground,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-            _MessageActionBar(
-              content: message.content,
-              createdAt: message.createdAt,
-              onRegenerate: onRegenerate,
             ),
-          ],
-        ),
+          _MessageActionBar(
+            content: message.content,
+            createdAt: message.createdAt,
+            onRegenerate: onRegenerate,
+          ),
+        ],
+      ),
+    );
+  }
+
+  MarkdownStyleSheet _buildMarkdownStyleSheet(BuildContext context, AppColors c) {
+    return MarkdownStyleSheet(
+      p: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
+        height: 1.6,
+      ),
+      h1: GoogleFonts.inter(
+        fontSize: AppTypography.titleLarge,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h2: GoogleFonts.inter(
+        fontSize: AppTypography.titleMedium,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h3: GoogleFonts.inter(
+        fontSize: AppTypography.titleSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      code: GoogleFonts.jetBrainsMono(
+        fontSize: AppTypography.bodySmall,
+        color: c.primary,
+        backgroundColor: c.muted,
+      ),
+      codeblockDecoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      blockquote: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.mutedForeground,
+        fontStyle: FontStyle.italic,
+        height: 1.6,
+      ),
+      blockquoteDecoration: BoxDecoration(
+        border: Border(left: BorderSide(color: c.border, width: 3)),
+      ),
+      listBullet: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
       ),
     );
   }
@@ -633,109 +688,162 @@ class _LiveAssistantTurn extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
 
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: AppSpacing.sm),
-        child: switch (state) {
-          AssistantMidLoading(:final statusText) => Row(
-            children: [
-              const AppSpinner(),
-              const SizedBox(width: AppSpacing.md),
-              Flexible(
-                child: Text(
-                  statusText == AssistantMidLoading.defaultStatusText
-                      ? S.of(context).thinking
-                      : statusText,
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.bodyMedium,
-                    color: c.mutedForeground,
-                  ),
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: AppSpacing.xl),
+      child: switch (state) {
+        AssistantMidLoading(:final statusText) => Row(
+          children: [
+            const AppSpinner(),
+            const SizedBox(width: AppSpacing.md),
+            Flexible(
+              child: Text(
+                statusText == AssistantMidLoading.defaultStatusText
+                    ? S.of(context).thinking
+                    : statusText,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyMedium,
+                  color: c.mutedForeground,
                 ),
               ),
-            ],
-          ),
-          AssistantMidReading(
-            :final partial,
-            :final interrupted,
-            :final streaming,
-            :final toolStatusText,
-          ) =>
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (partial.isNotEmpty)
-                  MarkdownBody(data: partial, selectable: true),
-                if (interrupted)
-                  Padding(
-                    padding: const EdgeInsets.only(top: AppSpacing.xs),
-                    child: Text(
-                      S.of(context).stoppedLabel,
-                      style: GoogleFonts.inter(
-                        fontSize: AppTypography.caption,
-                        color: c.mutedForeground,
-                        fontStyle: FontStyle.italic,
-                      ),
+            ),
+          ],
+        ),
+        AssistantMidReading(
+          :final partial,
+          :final interrupted,
+          :final streaming,
+          :final toolStatusText,
+        ) =>
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (partial.isNotEmpty)
+                MarkdownBody(
+                  data: partial,
+                  selectable: true,
+                  styleSheet: _buildMarkdownStyleSheet(context, c),
+                ),
+              if (interrupted)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.sm),
+                  child: Text(
+                    S.of(context).stoppedLabel,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.caption,
+                      color: c.mutedForeground,
+                      fontStyle: FontStyle.italic,
                     ),
                   ),
-                if (toolStatusText != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: AppSpacing.sm),
-                    child: Row(
-                      children: [
-                        const AppSpinner(),
-                        const SizedBox(width: AppSpacing.md),
-                        Flexible(
-                          child: Text(
-                            toolStatusText,
-                            style: GoogleFonts.inter(
-                              fontSize: AppTypography.bodyMedium,
-                              color: c.mutedForeground,
-                            ),
+                ),
+              if (toolStatusText != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.sm),
+                  child: Row(
+                    children: [
+                      const AppSpinner(),
+                      const SizedBox(width: AppSpacing.md),
+                      Flexible(
+                        child: Text(
+                          toolStatusText,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodyMedium,
+                            color: c.mutedForeground,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                // Show action bar only when streaming is done.
-                if (!streaming && partial.isNotEmpty)
-                  _MessageActionBar(
-                    content: partial,
-                    createdAt: null,
-                    onRegenerate: null,
-                  ),
-              ],
-            ),
-          AssistantMidError(:final message) => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.error_outline, color: c.error),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      message,
-                      style: GoogleFonts.inter(
-                        fontSize: AppTypography.bodyMedium,
-                        color: c.foreground,
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
-              AppButton(
-                onPressed: onRetry,
-                label: S.of(context).retryButton,
-                isFullWidth: true,
-              ),
+                ),
+              // Show action bar only when streaming is done.
+              if (!streaming && partial.isNotEmpty)
+                _MessageActionBar(
+                  content: partial,
+                  createdAt: null,
+                  onRegenerate: null,
+                ),
             ],
           ),
-          _ => const SizedBox.shrink(),
-        },
+        AssistantMidError(:final message) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.error_outline, color: c.error, size: 20),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      color: c.foreground,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.md),
+            AppButton(
+              onPressed: onRetry,
+              label: S.of(context).retryButton,
+              isFullWidth: true,
+            ),
+          ],
+        ),
+        _ => const SizedBox.shrink(),
+      },
+    );
+  }
+
+  MarkdownStyleSheet _buildMarkdownStyleSheet(BuildContext context, AppColors c) {
+    return MarkdownStyleSheet(
+      p: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
+        height: 1.6,
+      ),
+      h1: GoogleFonts.inter(
+        fontSize: AppTypography.titleLarge,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h2: GoogleFonts.inter(
+        fontSize: AppTypography.titleMedium,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h3: GoogleFonts.inter(
+        fontSize: AppTypography.titleSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      code: GoogleFonts.jetBrainsMono(
+        fontSize: AppTypography.bodySmall,
+        color: c.primary,
+        backgroundColor: c.muted,
+      ),
+      codeblockDecoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      blockquote: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.mutedForeground,
+        fontStyle: FontStyle.italic,
+        height: 1.6,
+      ),
+      blockquoteDecoration: BoxDecoration(
+        border: Border(left: BorderSide(color: c.border, width: 3)),
+      ),
+      listBullet: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
       ),
     );
   }
@@ -1015,12 +1123,13 @@ class _ActionChip extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(6),
+          padding: const EdgeInsets.all(7),
           decoration: BoxDecoration(
-            border: Border.all(color: c.border),
-            borderRadius: BorderRadius.circular(AppRadius.sm),
+            color: c.card,
+            border: Border.all(color: c.border, width: 1),
+            borderRadius: BorderRadius.circular(AppRadius.md),
           ),
-          child: Icon(icon, size: 16, color: color),
+          child: Icon(icon, size: 15, color: color),
         ),
       ),
     );
@@ -1042,17 +1151,20 @@ class _TimeChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
-        vertical: 6,
+        vertical: 7,
       ),
       decoration: BoxDecoration(
-        border: Border.all(color: c.border),
-        borderRadius: BorderRadius.circular(AppRadius.sm),
+        color: c.card,
+        border: Border.all(color: c.border, width: 1),
+        borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Text(
         label,
         style: GoogleFonts.inter(
           fontSize: AppTypography.caption,
+          fontWeight: FontWeight.w500,
           color: color,
+          height: 1,
         ),
       ),
     );
