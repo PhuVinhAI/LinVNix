@@ -125,12 +125,16 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
     final match = ref.watch(currentRouteMatchProvider);
     final assistantState = ref.watch(assistantStateMachineProvider);
     final assistantBarEnabled = ref.watch(assistantBarEnabledProvider);
-    final visible =
+
+    final barShouldBeVisible =
         assistantBarEnabled &&
         isAssistantBarVisible(match?.location) &&
         assistantState is! AssistantFull;
 
-    if (!visible) {
+    // Hide bar when sheet is open (any Mid state)
+    final showBar = barShouldBeVisible && assistantState is AssistantCollapsed;
+
+    if (!barShouldBeVisible) {
       return ScreenUiSnapshotHost(key: _snapshotHostKey, child: widget.child);
     }
 
@@ -153,15 +157,21 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
             ),
           ),
         ),
-        AssistantBar(
-          onOpen: () {
-            final match = ref.read(currentRouteMatchProvider);
-            if (match != null) {
-              _syncScreenUiSnapshotIfNeeded(match);
-            } else {
-              _syncScreenUiSnapshotNow();
-            }
-          },
+        Visibility(
+          visible: showBar,
+          maintainState: true,
+          maintainAnimation: true,
+          maintainSize: false,
+          child: AssistantBar(
+            onOpen: () {
+              final match = ref.read(currentRouteMatchProvider);
+              if (match != null) {
+                _syncScreenUiSnapshotIfNeeded(match);
+              } else {
+                _syncScreenUiSnapshotNow();
+              }
+            },
+          ),
         ),
       ],
     );

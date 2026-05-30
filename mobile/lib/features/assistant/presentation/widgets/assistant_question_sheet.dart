@@ -112,11 +112,9 @@ class _AssistantQuestionSheetState
       currentScreenContextProvider.select((s) => s.displayName),
     );
 
-    final double bottomPadding = (state is AssistantMidCompose
-        ? (keyboardInset > 0
-            ? (keyboardInset - 24).clamp(0.0, double.infinity)
-            : AppSpacing.md)
-        : (keyboardInset + AppSpacing.md).clamp(0.0, double.infinity));
+    final double bottomPadding = keyboardInset > 0
+        ? keyboardInset + AppSpacing.md
+        : AppSpacing.md;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(

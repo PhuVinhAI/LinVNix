@@ -12,10 +12,11 @@ import '../../data/screen_context_registry.dart';
 import '../../domain/assistant_state.dart';
 import 'assistant_question_sheet.dart';
 
-/// Thin always-visible entry-point to the Trợ lý AI. Tapping it opens
-/// the [AssistantQuestionSheet] in its Compose phase and drives the
-/// state machine through the chat notifier; dismissing the sheet
-/// collapses the state machine and drops the cached `conversationId`.
+/// Thin always-visible entry-point to the Trợ lý AI with inverted-U shape
+/// (rounded top corners). Tapping it opens the [AssistantQuestionSheet] in
+/// its Compose phase and drives the state machine through the chat notifier;
+/// dismissing the sheet collapses the state machine and drops the cached
+/// `conversationId`.
 class AssistantBar extends ConsumerWidget {
   const AssistantBar({super.key, this.onOpen});
 
@@ -32,45 +33,52 @@ class AssistantBar extends ConsumerWidget {
         : placeholder;
 
     return Material(
-      color: c.card,
-      child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Divider(color: c.border, height: 1),
-            InkWell(
-              onTap: () => _openSheet(context, ref),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lg,
-                  vertical: AppSpacing.md,
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.auto_awesome, color: c.primary, size: 20),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: Text(
-                        displayPlaceholder,
-                        style: GoogleFonts.inter(
-                          fontSize: AppTypography.bodySmall,
-                          color: c.mutedForeground,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          color: c.card,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(AppRadius.xl),
+          ),
+          border: Border(
+            top: BorderSide(color: c.border, width: 1),
+            left: BorderSide(color: c.border, width: 1),
+            right: BorderSide(color: c.border, width: 1),
+          ),
+        ),
+        child: SafeArea(
+          top: false,
+          child: InkWell(
+            onTap: () => _openSheet(context, ref),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.md,
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.auto_awesome, color: c.primary, size: 20),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      displayPlaceholder,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodySmall,
+                        color: c.mutedForeground,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    Icon(
-                      Icons.keyboard_arrow_up,
-                      color: c.mutedForeground,
-                      size: 20,
-                    ),
-                  ],
-                ),
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_up,
+                    color: c.mutedForeground,
+                    size: 20,
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -94,10 +102,10 @@ class AssistantBar extends ConsumerWidget {
       isScrollControlled: true,
       builder: (ctx) => const AssistantQuestionSheet(),
     ).whenComplete(() {
-      // Dismissed via backdrop, drag-down, or the "−" button. The state
-      // machine collapses and the cached conversationId is dropped so the
-      // next session starts a fresh Conversation.
-      notifier.collapse();
+      // Delay collapse to let the sheet dismiss animation complete
+      Future.delayed(const Duration(milliseconds: 100), () {
+        notifier.collapse();
+      });
     });
   }
 }
