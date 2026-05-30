@@ -1,8 +1,12 @@
 import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 
+/// Section header used on course / module detail screens. Matches the flat
+/// profile/settings header style: large inter title with optional subtitle and
+/// trailing compact actions.
 class ContentListHeader extends StatelessWidget {
   const ContentListHeader({
     super.key,
@@ -31,7 +35,6 @@ class ContentListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final hasActions = showCompleteAll || showReset;
 
     return Padding(
@@ -39,7 +42,7 @@ class ContentListHeader extends StatelessWidget {
         AppSpacing.lg,
         AppSpacing.xl,
         AppSpacing.lg,
-        AppSpacing.sm,
+        AppSpacing.md,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,15 +53,19 @@ class ContentListHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.titleMedium,
+                    fontWeight: FontWeight.w700,
+                    color: c.foreground,
+                    height: 1.2,
                   ),
                 ),
                 if (progressText != null) ...[
                   const SizedBox(height: 2),
                   Text(
                     progressText!,
-                    style: theme.textTheme.bodySmall?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
                       color: c.mutedForeground,
                     ),
                   ),
@@ -112,6 +119,7 @@ class ContentListHeader extends StatelessWidget {
   }
 }
 
+/// AI custom-practice section shown at the foot of course / module detail.
 class CustomPracticeSection extends StatelessWidget {
   const CustomPracticeSection({
     super.key,
@@ -137,7 +145,6 @@ class CustomPracticeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -151,12 +158,23 @@ class CustomPracticeSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.auto_awesome, color: c.primary, size: 20),
-              const SizedBox(width: 8),
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.sm + 2),
+                ),
+                child: Icon(Icons.auto_awesome, color: c.primary, size: 18),
+              ),
+              const SizedBox(width: AppSpacing.sm),
               Text(
                 S.of(context).customPracticeLabel,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.titleMedium,
+                  fontWeight: FontWeight.w700,
+                  color: c.foreground,
+                  height: 1.2,
                 ),
               ),
             ],
@@ -213,7 +231,10 @@ class CustomPracticeSection extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
             Text(
               error!,
-              style: theme.textTheme.bodySmall?.copyWith(color: c.error),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                color: c.error,
+              ),
             ),
           ],
           if (setCards.isNotEmpty) ...[
@@ -241,11 +262,11 @@ class _StatusMessage extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: c.muted.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: c.border),
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,9 +276,11 @@ class _StatusMessage extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: c.mutedForeground,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.mutedForeground,
+                height: 1.4,
+              ),
             ),
           ),
         ],

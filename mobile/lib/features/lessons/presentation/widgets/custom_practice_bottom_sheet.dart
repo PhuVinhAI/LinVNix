@@ -1,5 +1,6 @@
 import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../domain/exercise_models.dart';
@@ -116,7 +117,6 @@ class _CreationFormState extends State<_CreationForm> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
@@ -139,7 +139,8 @@ class _CreationFormState extends State<_CreationForm> {
                   Expanded(
                     child: Text(
                       S.of(context).configureCustomPractice,
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.titleMedium,
                         fontWeight: FontWeight.w600,
                         color: c.foreground,
                       ),
@@ -171,7 +172,10 @@ class _CreationFormState extends State<_CreationForm> {
                 children: [
                   Text(
                     S.of(context).numberOfQuestionsParam(_questionCount.round()),
-                    style: theme.textTheme.bodyMedium,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      color: c.foreground,
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   AppSlider(
@@ -185,8 +189,10 @@ class _CreationFormState extends State<_CreationForm> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     S.of(context).exerciseTypesLabel,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w600,
+                      color: c.foreground,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -213,8 +219,10 @@ class _CreationFormState extends State<_CreationForm> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     S.of(context).focusLabel,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w600,
+                      color: c.foreground,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -234,8 +242,10 @@ class _CreationFormState extends State<_CreationForm> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     S.of(context).promptOptionalLabel,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w600,
+                      color: c.foreground,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -313,7 +323,6 @@ class _InfoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
@@ -336,7 +345,8 @@ class _InfoView extends StatelessWidget {
                   Expanded(
                     child: Text(
                       progress.title,
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.titleMedium,
                         fontWeight: FontWeight.w600,
                         color: c.foreground,
                       ),
@@ -372,7 +382,8 @@ class _InfoView extends StatelessWidget {
                       progress.description!.isNotEmpty) ...[
                     Text(
                       progress.description!,
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyMedium,
                         color: c.mutedForeground,
                       ),
                     ),
@@ -454,7 +465,6 @@ class _ConfigSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -468,7 +478,8 @@ class _ConfigSummary extends StatelessWidget {
           const SizedBox(width: AppSpacing.sm),
           Text(
             '${progress.totalExercises} questions',
-            style: theme.textTheme.bodySmall?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,
             ),
           ),
@@ -480,7 +491,8 @@ class _ConfigSummary extends StatelessWidget {
             Expanded(
               child: Text(
                 progress.userPrompt!,
-                style: theme.textTheme.bodySmall?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodySmall,
                   color: c.mutedForeground,
                 ),
                 maxLines: 1,
@@ -546,8 +558,6 @@ class _StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
@@ -562,14 +572,16 @@ class _StatItem extends StatelessWidget {
         children: [
           Text(
             value,
-            style: theme.textTheme.titleSmall?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.titleSmall,
               fontWeight: FontWeight.w700,
               color: color,
             ),
           ),
           Text(
             label,
-            style: theme.textTheme.labelSmall?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
               color: color.withValues(alpha: 0.7),
             ),
           ),

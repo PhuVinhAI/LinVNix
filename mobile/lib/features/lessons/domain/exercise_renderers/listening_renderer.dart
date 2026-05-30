@@ -29,11 +29,14 @@ class ListeningRenderer extends ExerciseRenderer {
 
   @override
   Widget buildQuestion(Exercise exercise, BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       exercise.question,
-      style: Theme.of(
-        context,
-      ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.headlineSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+      ),
     );
   }
 
@@ -166,7 +169,6 @@ class _ListeningInputState extends State<_ListeningInput> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final visuals = getExerciseVisuals(context, ExerciseType.listening);
 
     final progress = _duration.inMilliseconds == 0
@@ -201,7 +203,8 @@ class _ListeningInputState extends State<_ListeningInput> {
               Expanded(
                 child: Text(
                   'Listen carefully and type what you hear',
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
                     color: visuals.accent,
                     fontWeight: FontWeight.w600,
                   ),
@@ -353,7 +356,10 @@ class _ListeningInputState extends State<_ListeningInput> {
               if (_hasError)
                 Text(
                   'Could not load audio',
-                  style: theme.textTheme.bodySmall?.copyWith(color: c.error),
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
+                    color: c.error,
+                  ),
                 ),
             ],
           ),
@@ -395,7 +401,8 @@ class _ListeningInputState extends State<_ListeningInput> {
                     const SizedBox(width: AppSpacing.sm),
                     Text(
                       'Your transcription',
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.caption,
                         color: visuals.accent.withValues(alpha: 0.85),
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.3,
@@ -404,7 +411,8 @@ class _ListeningInputState extends State<_ListeningInput> {
                     const Spacer(),
                     Text(
                       '${_transcriptController.text.length}',
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.caption,
                         color: c.mutedForeground,
                       ),
                     ),

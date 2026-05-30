@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -166,7 +167,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     final lessonAsync = ref.watch(lessonDetailProvider(widget.lessonId));
     final vocabAsync = ref.watch(lessonVocabulariesProvider(widget.lessonId));
@@ -286,15 +286,18 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
                     _currentPage + 1,
                     steps.length,
                   ),
-                  style: theme.textTheme.labelMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     color: c.mutedForeground,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Text(
                   steps[_currentPage].label,
-                  style: theme.textTheme.labelMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     fontWeight: FontWeight.w600,
+                    color: c.foreground,
                   ),
                 ),
               ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/lesson_providers.dart';
 import '../../domain/exercise_models.dart';
 import '../../domain/exercise_renderer.dart';
@@ -185,12 +185,34 @@ class _ExerciseStepWidgetState extends ConsumerState<ExerciseStepWidget> {
           ],
           const SizedBox(height: 24),
           if (_error != null) ...[
-            AppCard(
-              variant: AppCardVariant.filled,
-              color: c.error,
-              borderRadius: AppRadius.md,
+            Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(AppSpacing.md),
-              child: Text(_error!, style: TextStyle(color: c.errorForeground)),
+              decoration: BoxDecoration(
+                color: c.error.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(
+                  color: c.error.withValues(alpha: 0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.error_outline, size: 18, color: c.error),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      _error!,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodySmall,
+                        color: c.error,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 16),
           ],

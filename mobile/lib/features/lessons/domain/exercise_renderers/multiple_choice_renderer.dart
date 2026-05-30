@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../exercise_models.dart';
 import '../exercise_renderer.dart';
@@ -22,11 +23,15 @@ class MultipleChoiceRenderer extends ExerciseRenderer {
 
   @override
   Widget buildQuestion(Exercise exercise, BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       exercise.question,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.headlineSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+        height: 1.35,
+      ),
     );
   }
 
@@ -65,7 +70,6 @@ class _MultipleChoiceInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final visuals = getExerciseVisuals(context, ExerciseType.multipleChoice);
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -115,7 +119,8 @@ class _MultipleChoiceInput extends StatelessWidget {
                       child: Center(
                         child: Text(
                           letter,
-                          style: theme.textTheme.labelMedium?.copyWith(
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodySmall,
                             fontWeight: FontWeight.w700,
                             color: isSelected
                                 ? c.primaryForeground
@@ -129,7 +134,8 @@ class _MultipleChoiceInput extends StatelessWidget {
                     Expanded(
                       child: Text(
                         choice,
-                        style: theme.textTheme.bodyLarge?.copyWith(
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyLarge,
                           fontWeight:
                               isSelected ? FontWeight.w600 : FontWeight.w400,
                           color: isSelected ? visuals.accent : c.foreground,

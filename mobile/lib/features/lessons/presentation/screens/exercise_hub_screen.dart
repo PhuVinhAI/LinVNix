@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -116,6 +117,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
 
   Future<void> _pushExercisePlay(String setId) async {
     await _lessonTimeTracker?.pauseAndFlush();
+    if (!mounted) return;
     await context.push('/lessons/${widget.lessonId}/exercises/play/$setId');
     if (!mounted) return;
     _lessonTimeTracker?.start();
@@ -390,7 +392,6 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final summaryAsync = ref.watch(exerciseSetsProvider(widget.lessonId));
 
     return Scaffold(
@@ -404,22 +405,20 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  width: 64,
+                  height: 64,
                   decoration: BoxDecoration(
-                    color: c.error.withValues(alpha: 0.08),
-                    shape: BoxShape.circle,
+                    color: c.error.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(AppRadius.xl),
                   ),
-                  child: Icon(
-                    Icons.error_outline_rounded,
-                    size: 80,
-                    color: c.error,
-                  ),
+                  child: Icon(Icons.error_outline, size: 30, color: c.error),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Text(
                   S.of(context).failedToLoadLesson,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyLarge,
+                    fontWeight: FontWeight.w600,
                     color: c.foreground,
                   ),
                   textAlign: TextAlign.center,
@@ -427,7 +426,8 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   e.toString(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     color: c.mutedForeground,
                   ),
                   textAlign: TextAlign.center,
@@ -436,6 +436,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 AppButton(
                   label: S.of(context).retryButton,
                   variant: AppButtonVariant.primary,
+                  icon: const Icon(Icons.refresh),
                   onPressed: () => ref.read(exerciseSetsProvider(widget.lessonId).notifier).refresh(),
                 ),
               ],
@@ -447,45 +448,32 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
           final customSets = summary.customSets;
 
           return ListView(
-            padding: const EdgeInsets.all(16),
+            padding: AppNavBar.scrollPadding(
+              context,
+              base: const EdgeInsets.all(AppSpacing.lg),
+            ),
             children: [
               if (defaultSets.isNotEmpty) ...[
-                Text(
-                  S.of(context).lessonExercisesTitle,
-                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                _HubSectionHeader(
+                  title: S.of(context).lessonExercisesTitle,
+                  subtitle: S.of(context).practiceWithLessonDesc,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  S.of(context).practiceWithLessonDesc,
-                  style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
-                ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.md),
                 ...defaultSets.map((set) => _SetCard(
                   progress: set,
                   isBusy: _busySetId == set.setId,
                   onPlay: () => _pushExercisePlay(set.setId),
                   onReset: () => _confirmReset(set.setId, set.title),
                 )),
-                const SizedBox(height: 32),
+                const SizedBox(height: AppSpacing.xl),
               ],
-              Row(
-                children: [
-                  Icon(Icons.auto_awesome, color: c.primary, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    S.of(context).customPracticeLabel,
-                    style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
+              _HubSectionHeader(
+                title: S.of(context).customPracticeLabel,
+                subtitle: S.of(context).generateAiExercisesTailored,
+                icon: Icons.auto_awesome,
               ),
-              const SizedBox(height: 8),
-              Text(
-                S.of(context).generateAiExercisesTailored,
-                style: theme.textTheme.bodyMedium?.copyWith(color: c.mutedForeground),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.md),
               if (_isCreatingCustom) ...[
-                const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
                   child: AppButton(
@@ -499,7 +487,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 SizedBox(
                   width: double.infinity,
                   child: AppButton(
@@ -519,10 +507,16 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                   ),
                 ),
               if (_error != null) ...[
-                const SizedBox(height: 8),
-                Text(_error!, style: theme.textTheme.bodySmall?.copyWith(color: c.error)),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  _error!,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
+                    color: c.error,
+                  ),
+                ),
               ],
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
               ...customSets.map((set) => _SetCard(
                 progress: set,
                 isBusy: _busySetId == set.setId,
@@ -545,29 +539,33 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(24),
+                          width: 64,
+                          height: 64,
                           decoration: BoxDecoration(
-                            color: c.primary.withValues(alpha: 0.08),
-                            shape: BoxShape.circle,
+                            color: c.primary.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(AppRadius.xl),
                           ),
                           child: Icon(
                             Icons.edit_note_rounded,
-                            size: 80,
+                            size: 30,
                             color: c.primary,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.lg),
                         Text(
                           S.of(context).noExercisesYet,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodyLarge,
+                            fontWeight: FontWeight.w600,
                             color: c.foreground,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.xs),
                         Text(
                           S.of(context).createCustomSetPrompt,
-                          style: theme.textTheme.bodyMedium?.copyWith(
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodyMedium,
                             color: c.mutedForeground,
                           ),
                         ),
@@ -583,6 +581,67 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   }
 }
 
+class _HubSectionHeader extends StatelessWidget {
+  const _HubSectionHeader({
+    required this.title,
+    this.subtitle,
+    this.icon,
+  });
+
+  final String title;
+  final String? subtitle;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            if (icon != null) ...[
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.sm + 2),
+                ),
+                child: Icon(icon, color: c.primary, size: 18),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+            ],
+            Expanded(
+              child: Text(
+                title,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.titleMedium,
+                  fontWeight: FontWeight.w700,
+                  color: c.foreground,
+                  height: 1.2,
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (subtitle != null) ...[
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            subtitle!,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodySmall,
+              color: c.mutedForeground,
+              height: 1.4,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
 class _ExerciseHubLoading extends StatelessWidget {
   const _ExerciseHubLoading();
 
@@ -592,20 +651,25 @@ class _ExerciseHubLoading extends StatelessWidget {
 
     Widget buildCardShimmer() {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: AppCard(
-          padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(bottom: AppSpacing.md),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.md + 2),
+          decoration: BoxDecoration(
+            color: c.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: c.border, width: 1),
+          ),
           child: Row(
             children: [
               Shimmer.fromColors(
                 baseColor: c.muted,
                 highlightColor: c.card,
                 child: Container(
-                  width: 48,
-                  height: 48,
+                  width: 44,
+                  height: 44,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                   ),
                 ),
               ),
@@ -810,10 +874,11 @@ class _SetCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         S.of(context).actionsTitle,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: c.foreground,
-                            ),
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.titleMedium,
+                          fontWeight: FontWeight.w700,
+                          color: c.foreground,
+                        ),
                       ),
                     ),
                     IconButton(
@@ -883,13 +948,16 @@ class _SetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-    final color = isCustom ? c.accent : c.primary;
+    final color = c.primary;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: AppCard(
-        padding: EdgeInsets.zero,
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      child: Container(
+        decoration: BoxDecoration(
+          color: c.card,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: c.border, width: 1),
+        ),
         child: Row(
           children: [
             Expanded(
@@ -899,45 +967,50 @@ class _SetCard extends StatelessWidget {
                   onTap: isCustom ? onInfo : onPlay,
                   borderRadius: BorderRadius.circular(AppRadius.lg),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(AppSpacing.md + 2),
                     child: Row(
                       children: [
                         Container(
-                          width: 48,
-                          height: 48,
+                          width: 44,
+                          height: 44,
                           decoration: BoxDecoration(
-                            color: color.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
+                            color: color.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(AppRadius.md),
                           ),
                           child: Icon(
                             isCustom ? Icons.auto_awesome : Icons.edit_note,
                             color: color,
-                            size: 24,
+                            size: 22,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 progress.title,
-                                style: theme.textTheme.titleMedium?.copyWith(
+                                style: GoogleFonts.inter(
+                                  fontSize: AppTypography.bodyLarge,
                                   fontWeight: FontWeight.w600,
+                                  color: c.foreground,
+                                  height: 1.25,
                                 ),
                               ),
                               if (progress.description != null &&
-                                  progress.description!.isNotEmpty)
+                                  progress.description!.isNotEmpty) ...[
+                                const SizedBox(height: 2),
                                 Text(
                                   progress.description!,
-                                  style: theme.textTheme.bodySmall?.copyWith(
+                                  style: GoogleFonts.inter(
+                                    fontSize: AppTypography.bodySmall,
                                     color: c.mutedForeground,
+                                    height: 1.4,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                )
-                              else
-                                const SizedBox(height: 4),
+                                ),
+                              ],
                               const SizedBox(height: 2),
                               Text(
                                 progress.isCompleted
@@ -945,26 +1018,28 @@ class _SetCard extends StatelessWidget {
                                     : progress.isInProgress
                                         ? '${progress.percentComplete.round()}%'
                                         : '${progress.totalExercises} questions',
-                                style: theme.textTheme.bodySmall?.copyWith(
+                                style: GoogleFonts.inter(
+                                  fontSize: AppTypography.caption,
                                   color: c.mutedForeground,
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(width: AppSpacing.sm),
                         if (progress.isCompleted)
-                          Icon(Icons.check_circle, color: color, size: 28)
+                          Icon(Icons.check_circle, color: color, size: 26)
                         else if (progress.isInProgress)
                           SizedBox(
-                            width: 32,
-                            height: 32,
+                            width: 28,
+                            height: 28,
                             child: AppProgress(
                               value: progress.percentComplete / 100,
                               color: color,
                             ),
                           )
                         else
-                          Icon(Icons.play_circle_outline, color: color, size: 28),
+                          Icon(Icons.play_circle_outline, color: color, size: 26),
                       ],
                     ),
                   ),
@@ -979,7 +1054,7 @@ class _SetCard extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: onCancel,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -987,9 +1062,9 @@ class _SetCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           S.of(context).cancelButton2,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: c.mutedForeground,
+                          style: GoogleFonts.inter(
                             fontSize: 10,
+                            color: c.mutedForeground,
                           ),
                         ),
                       ],
@@ -1007,7 +1082,7 @@ class _SetCard extends StatelessWidget {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: onCancel,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppRadius.md),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -1015,9 +1090,9 @@ class _SetCard extends StatelessWidget {
                                   const SizedBox(height: 2),
                                   Text(
                                     S.of(context).cancelButton2,
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      color: c.mutedForeground,
+                                    style: GoogleFonts.inter(
                                       fontSize: 10,
+                                      color: c.mutedForeground,
                                     ),
                                   ),
                                 ],

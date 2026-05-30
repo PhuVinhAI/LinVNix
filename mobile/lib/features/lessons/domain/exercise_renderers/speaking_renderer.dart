@@ -256,7 +256,6 @@ class _SpeakingInputState extends State<_SpeakingInput>
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final visuals = getExerciseVisuals(context, ExerciseType.speaking);
     final hasTranscript = _transcriptController.text.trim().isNotEmpty;
 
@@ -287,7 +286,8 @@ class _SpeakingInputState extends State<_SpeakingInput>
                   const SizedBox(width: AppSpacing.sm),
                   Text(
                     'Say this aloud',
-                    style: theme.textTheme.labelSmall?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.caption,
                       color: visuals.accent.withValues(alpha: 0.85),
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.3,
@@ -403,7 +403,8 @@ class _SpeakingInputState extends State<_SpeakingInput>
                 ),
                 child: Text(
                   _isListening ? 'Listening... tap to stop' : 'Tap to speak',
-                  style: theme.textTheme.labelMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     color: _isListening ? visuals.accent : c.mutedForeground,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
@@ -449,7 +450,8 @@ class _SpeakingInputState extends State<_SpeakingInput>
                     const SizedBox(width: AppSpacing.sm),
                     Text(
                       'Recognized text',
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.caption,
                         color: visuals.accent.withValues(alpha: 0.85),
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.3,
@@ -519,7 +521,10 @@ class _SpeakingInputState extends State<_SpeakingInput>
                 Expanded(
                   child: Text(
                     _error!,
-                    style: theme.textTheme.bodySmall?.copyWith(color: c.error),
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
+                      color: c.error,
+                    ),
                   ),
                 ),
               ],

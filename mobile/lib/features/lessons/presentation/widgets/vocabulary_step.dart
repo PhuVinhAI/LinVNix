@@ -1,6 +1,7 @@
 import 'package:linvnix/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../domain/lesson_models.dart';
@@ -52,11 +53,20 @@ class _VocabularyStepWidgetState extends ConsumerState<VocabularyStepWidget> {
     final preferredDialect = profileAsync.value?.preferredDialect;
 
     if (widget.vocabularies.isEmpty) {
-      return Center(child: Text(S.of(context).noVocabularyForLesson));
+      final c = AppTheme.colors(context);
+      return Center(
+        child: Text(
+          S.of(context).noVocabularyForLesson,
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.bodyMedium,
+            color: c.mutedForeground,
+          ),
+        ),
+      );
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       itemCount: widget.vocabularies.length,
       itemBuilder: (context, index) {
         final vocab = widget.vocabularies[index];
@@ -89,7 +99,6 @@ class _VocabularyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final vocab = vocabulary;
 
     final String displayedWord;
@@ -102,9 +111,14 @@ class _VocabularyCard extends StatelessWidget {
       displayedWord = vocab.word;
     }
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
+    return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,15 +131,19 @@ class _VocabularyCard extends StatelessWidget {
                   children: [
                     Text(
                       displayedWord,
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.titleMedium,
                         fontWeight: FontWeight.w700,
+                        color: c.foreground,
+                        height: 1.2,
                       ),
                     ),
                     if (vocab.phonetic != null) ...[
                       const SizedBox(height: 2),
                       Text(
                         vocab.phonetic!,
-                        style: theme.textTheme.bodyMedium?.copyWith(
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyMedium,
                           color: c.mutedForeground,
                           fontStyle: FontStyle.italic,
                         ),
@@ -149,15 +167,19 @@ class _VocabularyCard extends StatelessWidget {
                     ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             vocab.translation,
-            style: theme.textTheme.bodyLarge,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyLarge,
+              color: c.foreground,
+              height: 1.4,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Wrap(
-            spacing: 8,
-            runSpacing: 4,
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.xs,
             children: [
               if (vocab.partOfSpeech != null)
                 AppChip(
@@ -172,26 +194,35 @@ class _VocabularyCard extends StatelessWidget {
             ],
           ),
           if (vocab.exampleSentence != null) ...[
-            const SizedBox(height: 8),
-            AppCard(
-              variant: AppCardVariant.muted,
+            const SizedBox(height: AppSpacing.md),
+            Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(AppSpacing.md),
-              borderRadius: AppRadius.md,
+              decoration: BoxDecoration(
+                color: c.muted,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(color: c.border, width: 1),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     vocab.exampleSentence!,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w500,
+                      color: c.foreground,
+                      height: 1.45,
                     ),
                   ),
                   if (vocab.exampleTranslation != null) ...[
                     const SizedBox(height: 4),
                     Text(
                       vocab.exampleTranslation!,
-                      style: theme.textTheme.bodySmall?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodySmall,
                         color: c.mutedForeground,
+                        height: 1.4,
                       ),
                     ),
                   ],

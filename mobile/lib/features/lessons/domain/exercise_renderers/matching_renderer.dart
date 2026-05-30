@@ -96,7 +96,6 @@ class _MatchingInputState extends State<_MatchingInput> {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final visuals = getExerciseVisuals(context, ExerciseType.matching);
-    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -127,7 +126,8 @@ class _MatchingInputState extends State<_MatchingInput> {
                   _selectedLeft != null
                       ? 'Now tap the matching item on the right'
                       : 'Tap an item on the left to start matching',
-                  style: theme.textTheme.bodySmall?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     color: visuals.accent,
                     fontWeight: FontWeight.w600,
                   ),
@@ -136,7 +136,8 @@ class _MatchingInputState extends State<_MatchingInput> {
               // Progress
               Text(
                 '${widget.matches.length}/${widget.leftItems.length}',
-                style: theme.textTheme.labelMedium?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodySmall,
                   color: visuals.accent,
                   fontWeight: FontWeight.w700,
                 ),
@@ -204,7 +205,8 @@ class _MatchingInputState extends State<_MatchingInput> {
                             Expanded(
                               child: Text(
                                 item,
-                                style: theme.textTheme.bodyMedium?.copyWith(
+                                style: GoogleFonts.inter(
+                                  fontSize: AppTypography.bodyMedium,
                                   fontWeight: isSelected || isMatched
                                       ? FontWeight.w600
                                       : FontWeight.w400,
@@ -300,7 +302,8 @@ class _MatchingInputState extends State<_MatchingInput> {
                             Expanded(
                               child: Text(
                                 item,
-                                style: theme.textTheme.bodyMedium?.copyWith(
+                                style: GoogleFonts.inter(
+                                  fontSize: AppTypography.bodyMedium,
                                   fontWeight: isMatched
                                       ? FontWeight.w600
                                       : FontWeight.w400,
@@ -342,7 +345,8 @@ class _MatchingInputState extends State<_MatchingInput> {
                 ),
                 child: Text(
                   'Matched Pairs',
-                  style: theme.textTheme.labelSmall?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.caption,
                     color: visuals.accent,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.5,

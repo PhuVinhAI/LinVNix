@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -318,7 +319,6 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 
   void _showSummary() {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final total = _exercises.length;
     final correct = _totalCorrect;
     final percent = total > 0 ? ((correct / total) * 100).round() : 0;
@@ -327,34 +327,38 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AppDialog(
-        titleWidget: Row(
-          children: [
-            Icon(Icons.check_circle, color: c.primary),
-            const SizedBox(width: 8),
-            Text(S.of(context).exerciseComplete),
-          ],
-        ),
+        icon: Icons.emoji_events_outlined,
+        title: S.of(context).exerciseComplete,
         contentWidget: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(S.of(context).yourScoreLabel, style: theme.textTheme.bodyLarge),
-            const SizedBox(height: 8),
             Text(
-              '$percent%',
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: c.primary,
+              S.of(context).yourScoreLabel,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.mutedForeground,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              '$percent%',
+              style: GoogleFonts.inter(
+                fontSize: 40,
+                fontWeight: FontWeight.w800,
+                color: c.primary,
+                height: 1.1,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               '$correct of $total exercises correct',
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
                 color: c.mutedForeground,
               ),
             ),
             if (correct < total) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
               ..._results.entries.where((e) => !e.value.isCorrect).map((e) {
                 final idx = e.key;
                 final exercise = idx < _exercises.length
@@ -362,17 +366,20 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                     : null;
                 if (exercise == null) return const SizedBox.shrink();
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
+                  padding: const EdgeInsets.only(bottom: AppSpacing.xs),
                   child: Row(
                     children: [
                       Icon(Icons.close, size: 16, color: c.error),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
                           exercise.question,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodySmall,
+                            color: c.mutedForeground,
+                          ),
                         ),
                       ),
                     ],
@@ -450,7 +457,6 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _syncAssistantContext(),
@@ -469,22 +475,20 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  width: 64,
+                  height: 64,
                   decoration: BoxDecoration(
-                    color: c.error.withValues(alpha: 0.08),
-                    shape: BoxShape.circle,
+                    color: c.error.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(AppRadius.xl),
                   ),
-                  child: Icon(
-                    Icons.error_outline_rounded,
-                    size: 80,
-                    color: c.error,
-                  ),
+                  child: Icon(Icons.error_outline, size: 30, color: c.error),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Text(
                   S.of(context).failedToLoadLesson,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyLarge,
+                    fontWeight: FontWeight.w600,
                     color: c.foreground,
                   ),
                   textAlign: TextAlign.center,
@@ -492,7 +496,8 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   error.toString(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     color: c.mutedForeground,
                   ),
                   textAlign: TextAlign.center,
@@ -519,22 +524,24 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(24),
+                      width: 64,
+                      height: 64,
                       decoration: BoxDecoration(
-                        color: c.primary.withValues(alpha: 0.08),
-                        shape: BoxShape.circle,
+                        color: c.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(AppRadius.xl),
                       ),
                       child: Icon(
                         Icons.edit_note_rounded,
-                        size: 80,
+                        size: 30,
                         color: c.primary,
                       ),
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     Text(
                       S.of(context).noExercisesAvailable,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyLarge,
+                        fontWeight: FontWeight.w600,
                         color: c.foreground,
                       ),
                       textAlign: TextAlign.center,
@@ -586,7 +593,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
               ),
             ),
             body: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -595,13 +602,15 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                       _currentIndex + 1,
                       _exercises.length,
                     ),
-                    style: theme.textTheme.labelMedium?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
+                      fontWeight: FontWeight.w600,
                       color: c.mutedForeground,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   QuestionHeader(exercise: exercise, renderer: renderer),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   renderer.buildInput(
                     exercise,
                     context,
@@ -609,18 +618,29 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                     _handleAnswerChanged,
                   ),
                   if (_submitError != null) ...[
-                    const SizedBox(height: 16),
-                    AppCard(
-                      padding: const EdgeInsets.all(12),
+                    const SizedBox(height: AppSpacing.lg),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      decoration: BoxDecoration(
+                        color: c.error.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(
+                          color: c.error.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
                       child: Row(
                         children: [
                           Icon(Icons.error_outline, color: c.error, size: 20),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
                               _submitError!,
-                              style: theme.textTheme.bodySmall?.copyWith(
+                              style: GoogleFonts.inter(
+                                fontSize: AppTypography.bodySmall,
                                 color: c.error,
+                                height: 1.4,
                               ),
                             ),
                           ),
@@ -628,7 +648,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                       ),
                     ),
                   ],
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xl),
                   if (!_submitted)
                     AppButton(
                       label: _submitting ? S.of(context).submittingStatus : S.of(context).submitLabel,
@@ -673,7 +693,7 @@ class QuestionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
     final visuals = getExerciseVisuals(context, exercise.exerciseType);
 
     return Column(
@@ -699,7 +719,8 @@ class QuestionHeader extends StatelessWidget {
               const SizedBox(width: AppSpacing.xs + 2),
               Text(
                 visuals.label,
-                style: theme.textTheme.labelSmall?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.caption,
                   color: visuals.accent,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.3,
@@ -709,11 +730,14 @@ class QuestionHeader extends StatelessWidget {
           ),
         ),
         if (renderer.showsQuestion) ...[
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Text(
             exercise.question,
-            style: theme.textTheme.titleMedium?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.titleSmall,
               fontWeight: FontWeight.w600,
+              color: c.foreground,
+              height: 1.35,
             ),
           ),
         ],
@@ -739,10 +763,16 @@ class ExplanationPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final accent = isCorrect ? c.success : c.error;
 
-    return AppCard(
-      padding: const EdgeInsets.all(16),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: accent.withValues(alpha: 0.3), width: 1),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -750,40 +780,51 @@ class ExplanationPanel extends StatelessWidget {
             children: [
               Icon(
                 isCorrect ? Icons.check_circle : Icons.cancel,
-                color: isCorrect ? Colors.green : c.error,
-                size: 24,
+                color: accent,
+                size: 22,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
               Text(
                 isCorrect ? S.of(context).correctLabel : S.of(context).incorrectLabel,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: isCorrect ? Colors.green : c.error,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w700,
+                  color: accent,
                 ),
               ),
               const Spacer(),
               if (score != null)
                 Text(
                   '+$score',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: c.primary,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyLarge,
+                    fontWeight: FontWeight.w800,
+                    color: accent,
                   ),
                 ),
             ],
           ),
           if (!isCorrect) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.md),
             Text(
               S.of(context).correctAnswerLabel,
-              style: theme.textTheme.labelMedium?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                fontWeight: FontWeight.w600,
                 color: c.mutedForeground,
               ),
             ),
           ],
           if (explanation != null && explanation!.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(explanation!, style: theme.textTheme.bodyMedium),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              explanation!,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.foreground,
+                height: 1.5,
+              ),
+            ),
           ],
         ],
       ),
@@ -800,9 +841,14 @@ class _ExercisePlayLoading extends StatelessWidget {
 
     Widget buildOptionShimmer() {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: AppCard(
-          padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(bottom: AppSpacing.md),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.md + 2),
+          decoration: BoxDecoration(
+            color: c.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: c.border, width: 1),
+          ),
           child: Row(
             children: [
               Shimmer.fromColors(

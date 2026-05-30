@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -560,7 +561,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
       loading: () => SliverToBoxAdapter(
         child: ContentListHeader(title: S.of(context).lessonsTitle),
       ),
-      error: (_, __) => SliverToBoxAdapter(
+      error: (_, _) => SliverToBoxAdapter(
         child: ContentListHeader(title: S.of(context).lessonsTitle),
       ),
       data: (summary) {
@@ -592,7 +593,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
   ) {
     return exerciseSetsAsync.when(
       loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-      error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+      error: (_, _) => const SliverToBoxAdapter(child: SizedBox.shrink()),
       data: (summary) {
         final customSets = summary.moduleSets;
 
@@ -634,62 +635,109 @@ class _ModuleInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.lg,
+        AppSpacing.lg,
+        AppSpacing.sm,
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: c.card,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: c.border, width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (module.topic != null) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm + 2,
+                  vertical: AppSpacing.xs + 1,
+                ),
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+                child: Text(
+                  module.topic!,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.caption,
+                    fontWeight: FontWeight.w600,
+                    color: c.primary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+            Text(
+              module.description,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.foreground,
+                height: 1.5,
+              ),
+            ),
+            if (module.estimatedHours != null || module.course != null) ...[
+              const SizedBox(height: AppSpacing.md),
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.xs,
+                children: [
+                  if (module.estimatedHours != null)
+                    _ModuleMetaChip(
+                      icon: Icons.access_time_rounded,
+                      label: '${module.estimatedHours}h',
+                    ),
+                  if (module.course != null)
+                    _ModuleMetaChip(
+                      icon: Icons.school_outlined,
+                      label: module.course!.title,
+                    ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ModuleMetaChip extends StatelessWidget {
+  const _ModuleMetaChip({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm + 2,
+        vertical: AppSpacing.xs + 1,
+      ),
+      decoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          if (module.topic != null) ...[
-            AppChip(
-              label: module.topic!,
-              color: c.primary,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-          ],
+          Icon(icon, size: 13, color: c.mutedForeground),
+          const SizedBox(width: AppSpacing.xs),
           Text(
-            module.description,
-            style: theme.textTheme.bodyMedium,
+            label,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              fontWeight: FontWeight.w500,
+              color: c.mutedForeground,
+            ),
           ),
-          const SizedBox(height: AppSpacing.sm),
-          if (module.estimatedHours != null) ...[
-            Row(
-              children: [
-                Icon(
-                  Icons.access_time,
-                  size: 16,
-                  color: c.mutedForeground,
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  '${module.estimatedHours}h estimated',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
-                ),
-              ],
-            ),
-          ],
-          if (module.course != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Row(
-              children: [
-                Icon(
-                  Icons.school,
-                  size: 16,
-                  color: c.mutedForeground,
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  module.course!.title,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
-                ),
-              ],
-            ),
-          ],
         ],
       ),
     );
@@ -714,116 +762,146 @@ class _ModuleSetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-      child: AppCard(
-        variant: AppCardVariant.outlined,
-        padding: EdgeInsets.zero,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: isBusy ? null : onTap,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: c.accent.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(Icons.auto_awesome,
-                        color: c.accent, size: 24),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isBusy ? null : onTap,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: Container(
+            padding: const EdgeInsets.all(AppSpacing.md + 2),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: c.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  child: Icon(Icons.auto_awesome, color: c.primary, size: 22),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        progress.title,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyLarge,
+                          fontWeight: FontWeight.w600,
+                          color: c.foreground,
+                          height: 1.25,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (progress.description != null &&
+                          progress.description!.isNotEmpty) ...[
+                        const SizedBox(height: 2),
                         Text(
-                          progress.title,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w600),
+                          progress.description!,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodySmall,
+                            color: c.mutedForeground,
+                            height: 1.4,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (progress.description != null &&
-                            progress.description!.isNotEmpty)
-                          Text(
-                            progress.description!,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                                color: c.mutedForeground),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        else
-                          const SizedBox(height: 4),
-                        const SizedBox(height: 2),
-                        Text(
-                          progress.isCompleted
-                              ? '${progress.percentCorrect.round()}%'
-                              : progress.isInProgress
-                                  ? '${progress.percentComplete.round()}%'
-                                  : '${progress.totalExercises} questions',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                              color: c.mutedForeground),
-                        ),
                       ],
-                    ),
-                  ),
-                  if (isBusy)
-                    SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: isRegenerating && onCancel != null
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const AppSpinner(
-                                  size: 20,
-                                  strokeWidth: 2,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  S.of(context).cancelButton2,
-                                  style: theme.textTheme.labelSmall
-                                      ?.copyWith(
-                                    color: c.mutedForeground,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : const Center(
-                              child: AppSpinner(size: 22),
-                            ),
-                    )
-                  else if (progress.isCompleted)
-                    Icon(Icons.check_circle, color: c.accent, size: 28)
-                  else if (progress.isInProgress)
-                    SizedBox(
-                      width: 32,
-                      height: 32,
-                      child: AppProgress(
-                        value: progress.percentComplete / 100,
-                        color: c.accent,
+                      const SizedBox(height: 2),
+                      Text(
+                        progress.isCompleted
+                            ? '${progress.percentCorrect.round()}%'
+                            : progress.isInProgress
+                                ? '${progress.percentComplete.round()}%'
+                                : '${progress.totalExercises} questions',
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.caption,
+                          color: c.mutedForeground,
+                        ),
                       ),
-                    )
-                  else
-                    Icon(Icons.play_circle_outline,
-                        color: c.accent, size: 28),
-                ],
-              ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _ModuleSetTrailing(
+                  progress: progress,
+                  isBusy: isBusy,
+                  isRegenerating: isRegenerating,
+                  onCancel: onCancel,
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class _ModuleSetTrailing extends StatelessWidget {
+  const _ModuleSetTrailing({
+    required this.progress,
+    required this.isBusy,
+    required this.isRegenerating,
+    this.onCancel,
+  });
+
+  final SetProgress progress;
+  final bool isBusy;
+  final bool isRegenerating;
+  final VoidCallback? onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    if (isBusy) {
+      return SizedBox(
+        width: 44,
+        height: 44,
+        child: isRegenerating && onCancel != null
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AppSpinner(size: 20, strokeWidth: 2),
+                  const SizedBox(height: 2),
+                  Text(
+                    S.of(context).cancelButton2,
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      color: c.mutedForeground,
+                    ),
+                  ),
+                ],
+              )
+            : const Center(child: AppSpinner(size: 22)),
+      );
+    }
+    if (progress.isCompleted) {
+      return Icon(Icons.check_circle, color: c.primary, size: 26);
+    }
+    if (progress.isInProgress) {
+      return SizedBox(
+        width: 28,
+        height: 28,
+        child: AppProgress(
+          value: progress.percentComplete / 100,
+          color: c.primary,
+        ),
+      );
+    }
+    return Icon(Icons.play_circle_outline, color: c.primary, size: 26);
   }
 }
 
@@ -867,88 +945,119 @@ class _LessonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final statusColor = _statusColor(progress?.status, c);
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      margin: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg, vertical: 6),
-      padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
-      child: AppListItem(
-        onTap: () => context.push('/lessons/${lesson.id}'),
-        leading: _LessonTypeIcon(lessonType: lesson.lessonType),
-        titleWidget: Row(
-          children: [
-            Expanded(
-              child: Text(
-                lesson.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        0,
+        AppSpacing.lg,
+        AppSpacing.md,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => context.push('/lessons/${lesson.id}'),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: Container(
+            padding: const EdgeInsets.all(AppSpacing.md + 2),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1),
             ),
-            if (lesson.isAssessment)
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: c.muted,
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                ),
-                child: Text(
-                  S.of(context).quizLabel,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: c.foreground,
-                  ),
-                ),
-              ),
-          ],
-        ),
-        subtitleWidget: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              lesson.description,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 6),
-            Row(
+            child: Row(
               children: [
-                if (lesson.estimatedDuration != null) ...[
-                  Icon(Icons.access_time, size: 12, color: c.mutedForeground),
-                  const SizedBox(width: AppSpacing.xs),
-                  Text(
-                    _formatDuration(lesson.estimatedDuration!),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: c.mutedForeground,
-                      fontSize: 11,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                ],
-                Icon(_statusIcon(progress?.status),
-                    size: 14, color: statusColor),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  _statusLabel(context, progress?.status),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: statusColor,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
+                _LessonTypeIcon(lessonType: lesson.lessonType),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              lesson.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontSize: AppTypography.bodyLarge,
+                                fontWeight: FontWeight.w600,
+                                color: c.foreground,
+                                height: 1.25,
+                              ),
+                            ),
+                          ),
+                          if (lesson.isAssessment)
+                            Container(
+                              margin: const EdgeInsets.only(left: AppSpacing.sm),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: c.muted,
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.sm),
+                              ),
+                              child: Text(
+                                S.of(context).quizLabel,
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: c.foreground,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        lesson.description,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodySmall,
+                          color: c.mutedForeground,
+                          height: 1.4,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: AppSpacing.xs + 2),
+                      Row(
+                        children: [
+                          if (lesson.estimatedDuration != null) ...[
+                            Icon(Icons.access_time_rounded,
+                                size: 12, color: c.mutedForeground),
+                            const SizedBox(width: AppSpacing.xs),
+                            Text(
+                              _formatDuration(lesson.estimatedDuration!),
+                              style: GoogleFonts.inter(
+                                fontSize: AppTypography.caption,
+                                color: c.mutedForeground,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.md),
+                          ],
+                          Icon(_statusIcon(progress?.status),
+                              size: 13, color: statusColor),
+                          const SizedBox(width: AppSpacing.xs),
+                          Text(
+                            _statusLabel(context, progress?.status),
+                            style: GoogleFonts.inter(
+                              fontSize: AppTypography.caption,
+                              fontWeight: FontWeight.w500,
+                              color: statusColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+                const SizedBox(width: AppSpacing.sm),
+                Icon(Icons.chevron_right, color: c.mutedForeground, size: 22),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -963,14 +1072,14 @@ class _LessonTypeIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
 
-    return AppAvatar(
-      backgroundColor: c.muted,
-      radius: 20,
-      child: Icon(
-        _getIcon(),
-        size: 20,
-        color: c.foreground,
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: c.primary.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(AppRadius.md),
       ),
+      child: Icon(_getIcon(), size: 22, color: c.primary),
     );
   }
 
@@ -1064,42 +1173,69 @@ class _ModuleDetailLoading extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return AppCard(
-                variant: AppCardVariant.outlined,
-                margin: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg, vertical: 6),
-                padding: const EdgeInsets.only(
-                    left: 12, right: 4, top: 6, bottom: 6),
-                child: AppListItem(
-                  leading: Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: AppAvatar(backgroundColor: Colors.white),
-                  ),
-                  titleWidget: Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      height: 16,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
+              return Container(
+                margin: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  0,
+                  AppSpacing.lg,
+                  AppSpacing.md,
+                ),
+                padding: const EdgeInsets.all(AppSpacing.md + 2),
+                decoration: BoxDecoration(
+                  color: c.card,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                  border: Border.all(color: c.border, width: 1),
+                ),
+                child: Row(
+                  children: [
+                    Shimmer.fromColors(
+                      baseColor: c.muted,
+                      highlightColor: c.card,
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(AppRadius.md),
+                        ),
                       ),
                     ),
-                  ),
-                  subtitleWidget: Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      height: 12,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Shimmer.fromColors(
+                            baseColor: c.muted,
+                            highlightColor: c.card,
+                            child: Container(
+                              height: 16,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.sm),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          Shimmer.fromColors(
+                            baseColor: c.muted,
+                            highlightColor: c.card,
+                            child: Container(
+                              height: 12,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.sm),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
               );
             },
@@ -1127,10 +1263,26 @@ class _ModuleDetailError extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: c.error.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
+                ),
+                child: Icon(Icons.error_outline, size: 30, color: c.error),
+              ),
               const SizedBox(height: AppSpacing.lg),
-              Text(S.of(context).failedToLoadModule, textAlign: TextAlign.center),
-              const SizedBox(height: AppSpacing.sm),
+              Text(
+                S.of(context).failedToLoadModule,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w600,
+                  color: c.foreground,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
               AppButton(
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,

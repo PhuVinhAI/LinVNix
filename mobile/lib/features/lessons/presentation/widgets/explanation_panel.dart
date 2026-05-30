@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:linvnix/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/widgets/widgets.dart';
 
 class ExplanationPanel extends StatelessWidget {
   const ExplanationPanel({
@@ -20,13 +20,16 @@ class ExplanationPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final bgColor = isCorrect ? c.success : c.error;
-    final fgColor = isCorrect ? c.successForeground : c.errorForeground;
+    final accent = isCorrect ? c.success : c.error;
 
-    return AppCard(
-      variant: AppCardVariant.filled,
-      color: bgColor,
-      borderRadius: AppRadius.lg,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: accent.withValues(alpha: 0.3), width: 1),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,45 +37,54 @@ class ExplanationPanel extends StatelessWidget {
             children: [
               Icon(
                 isCorrect ? Icons.check_circle : Icons.cancel,
-                color: fgColor,
+                color: accent,
+                size: 22,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
               Text(
-                isCorrect ? S.of(context).correctLabel : S.of(context).incorrectLabel,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: fgColor,
-                    ),
+                isCorrect
+                    ? S.of(context).correctLabel
+                    : S.of(context).incorrectLabel,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w700,
+                  color: accent,
+                ),
               ),
               if (score != null) ...[
                 const Spacer(),
                 Text(
                   S.of(context).pointsParam(score!),
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: fgColor,
-                      ),
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
+                    fontWeight: FontWeight.w700,
+                    color: accent,
+                  ),
                 ),
               ],
             ],
           ),
           if (!isCorrect) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             Text(
               S.of(context).correctAnswerParam(correctAnswer),
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: fgColor,
-                    fontWeight: FontWeight.w500,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.foreground,
+                fontWeight: FontWeight.w600,
+                height: 1.45,
+              ),
             ),
           ],
           if (explanation != null && explanation!.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             Text(
               explanation!,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: fgColor,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.mutedForeground,
+                height: 1.5,
+              ),
             ),
           ],
         ],

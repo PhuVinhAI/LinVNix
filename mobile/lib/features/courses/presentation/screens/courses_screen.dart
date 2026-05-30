@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../data/courses_providers.dart';
 import '../../domain/course_models.dart';
 import '../../../../l10n/app_localizations.dart';
 
-Color _getLevelColor(String level, AppColors c) {
+Color _levelColor(String level, AppColors c) {
   return switch (level) {
     'A1' => const Color(0xFF22C55E),
     'A2' => const Color(0xFF84CC16),
     'B1' => const Color(0xFFF59E0B),
-    'B2' => const Color(0xFFf97316),
+    'B2' => const Color(0xFFF97316),
     'C1' => const Color(0xFFEF4444),
     'C2' => const Color(0xFFDC2626),
     _ => c.mutedForeground,
@@ -46,33 +46,7 @@ class _CoursesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-
-    if (courses.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Semantics(
-              label: S.of(context).noCoursesAvailableIcon,
-              child: Icon(
-                Icons.school_outlined,
-                size: 64,
-                color: c.mutedForeground,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              S.of(context).noCoursesAvailable,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    if (courses.isEmpty) return const _CoursesEmpty();
 
     return ListView.builder(
       padding: AppNavBar.scrollPadding(
@@ -99,78 +73,169 @@ class _CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final levelColor = _levelColor(course.level, c);
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      borderRadius: AppRadius.lg,
-      margin: const EdgeInsets.only(bottom: AppSpacing.md),
-      padding: const EdgeInsets.all(AppSpacing.md),
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              AppBadge(
-                label: course.level,
-                color: _getLevelColor(course.level, c),
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  if (course.estimatedHours != null) ...[
-                    Icon(
-                      Icons.access_time,
-                      size: 14,
-                      color: c.mutedForeground,
-                    ),
-                    const SizedBox(width: AppSpacing.xs),
-                    Text(
-                      '${course.estimatedHours}h',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: c.mutedForeground,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: Container(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: levelColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
+                      child: Text(
+                        course.level,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodySmall,
+                          fontWeight: FontWeight.w800,
+                          color: levelColor,
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
-                  ],
-                  Icon(
-                    Icons.menu_book,
-                    size: 14,
-                    color: c.mutedForeground,
-                  ),
-                  const SizedBox(width: AppSpacing.xs),
-                  Text(
-                    '${course.modules.length} modules',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: c.mutedForeground,
+                    Expanded(
+                      child: Text(
+                        course.title,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyLarge,
+                          fontWeight: FontWeight.w700,
+                          color: c.foreground,
+                          height: 1.25,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Icon(Icons.chevron_right, color: c.mutedForeground, size: 22),
+                  ],
+                ),
+                if (course.description.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    course.description,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
+                      color: c.mutedForeground,
+                      height: 1.45,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            course.title,
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
+                const SizedBox(height: AppSpacing.md),
+                Row(
+                  children: [
+                    _MetaChip(
+                      icon: Icons.menu_book_outlined,
+                      label: '${course.modules.length} modules',
+                    ),
+                    if (course.estimatedHours != null) ...[
+                      const SizedBox(width: AppSpacing.sm),
+                      _MetaChip(
+                        icon: Icons.access_time_rounded,
+                        label: '${course.estimatedHours}h',
+                      ),
+                    ],
+                  ],
+                ),
+              ],
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
-          if (course.description.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              course.description,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
+        ),
+      ),
+    );
+  }
+}
+
+class _MetaChip extends StatelessWidget {
+  const _MetaChip({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm + 2,
+        vertical: AppSpacing.xs + 1,
+      ),
+      decoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: c.mutedForeground),
+          const SizedBox(width: AppSpacing.xs),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              fontWeight: FontWeight.w500,
+              color: c.mutedForeground,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CoursesEmpty extends StatelessWidget {
+  const _CoursesEmpty();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: c.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(AppRadius.xl),
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+              child: Icon(Icons.school_outlined, size: 30, color: c.primary),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              S.of(context).noCoursesAvailable,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyLarge,
+                fontWeight: FontWeight.w600,
+                color: c.foreground,
+              ),
             ),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -182,77 +247,51 @@ class _CoursesLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
+    Widget bar(double w, double h) => Container(
+          width: w,
+          height: h,
+          decoration: BoxDecoration(
+            color: c.muted,
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+          ),
+        );
 
     return ListView.builder(
       padding: AppNavBar.scrollPadding(
         context,
         base: const EdgeInsets.all(AppSpacing.lg),
       ),
-      itemCount: 3,
+      itemCount: 4,
       itemBuilder: (context, index) {
-        return AppCard(
-          variant: AppCardVariant.outlined,
-          borderRadius: AppRadius.lg,
+        return Container(
           margin: const EdgeInsets.only(bottom: AppSpacing.md),
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          decoration: BoxDecoration(
+            color: c.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: c.border, width: 1),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      width: 40,
-                      height: 22,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.full),
-                      ),
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: c.muted,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
                   ),
-                  const Spacer(),
-                  Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      width: 80,
-                      height: 14,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  bar(160, 16),
                 ],
               ),
+              const SizedBox(height: AppSpacing.md),
+              bar(double.infinity, 12),
               const SizedBox(height: AppSpacing.sm),
-              Shimmer.fromColors(
-                baseColor: c.muted,
-                highlightColor: c.card,
-                child: Container(
-                  height: 20,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Shimmer.fromColors(
-                baseColor: c.muted,
-                highlightColor: c.card,
-                child: Container(
-                  height: 16,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                ),
-              ),
+              bar(220, 12),
             ],
           ),
         );
@@ -268,7 +307,6 @@ class _CoursesError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -276,26 +314,31 @@ class _CoursesError extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Semantics(
-              label: S.of(context).errorLoadingCourses,
-              child: Icon(Icons.error_outline, size: 64, color: c.error),
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: c.error.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+              ),
+              child: Icon(Icons.error_outline, size: 30, color: c.error),
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
               S.of(context).failedToLoadCourses,
-              style: theme.textTheme.titleMedium,
               textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Semantics(
-              label: S.of(context).retryLoadingCourses,
-              button: true,
-              child: AppButton(
-                variant: AppButtonVariant.primary,
-                onPressed: onRetry,
-                icon: const Icon(Icons.refresh),
-                label: S.of(context).retryButton,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyLarge,
+                fontWeight: FontWeight.w600,
+                color: c.foreground,
               ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            AppButton(
+              variant: AppButtonVariant.primary,
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh),
+              label: S.of(context).retryButton,
             ),
           ],
         ),

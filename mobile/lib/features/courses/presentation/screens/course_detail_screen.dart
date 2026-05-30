@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -681,7 +682,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
       loading: () => SliverToBoxAdapter(
         child: ContentListHeader(title: S.of(context).modulesTitle),
       ),
-      error: (_, __) => SliverToBoxAdapter(
+      error: (_, _) => SliverToBoxAdapter(
         child: ContentListHeader(title: S.of(context).modulesTitle),
       ),
       data: (summary) {
@@ -713,7 +714,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen>
   ) {
     return exerciseSetsAsync.when(
       loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-      error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+      error: (_, _) => const SliverToBoxAdapter(child: SizedBox.shrink()),
       data: (summary) {
         final customSets = summary.courseSets;
 
@@ -754,42 +755,122 @@ class _CourseInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final levelColor = _getLevelColor(course.level, c);
 
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              AppBadge(
-                label: course.level,
-                color: _getLevelColor(course.level, c),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              if (course.estimatedHours != null) ...[
-                Icon(
-                  Icons.access_time,
-                  size: 16,
-                  color: c.mutedForeground,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.lg,
+        AppSpacing.lg,
+        AppSpacing.sm,
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: c.card,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: c.border, width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: levelColor.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                  ),
+                  child: Text(
+                    course.level,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
+                      fontWeight: FontWeight.w800,
+                      color: levelColor,
+                    ),
+                  ),
                 ),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  '${course.estimatedHours}h',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: c.mutedForeground,
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    course.title,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.titleSmall,
+                      fontWeight: FontWeight.w700,
+                      color: c.foreground,
+                      height: 1.25,
+                    ),
                   ),
                 ),
               ],
+            ),
+            if (course.description.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                course.description,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyMedium,
+                  color: c.mutedForeground,
+                  height: 1.5,
+                ),
+              ),
             ],
-          ),
-          const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.md),
+            Row(
+              children: [
+                _CourseMetaChip(
+                  icon: Icons.menu_book_outlined,
+                  label: '${course.modules.length} modules',
+                ),
+                if (course.estimatedHours != null) ...[
+                  const SizedBox(width: AppSpacing.sm),
+                  _CourseMetaChip(
+                    icon: Icons.access_time_rounded,
+                    label: '${course.estimatedHours}h',
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CourseMetaChip extends StatelessWidget {
+  const _CourseMetaChip({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm + 2,
+        vertical: AppSpacing.xs + 1,
+      ),
+      decoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: c.mutedForeground),
+          const SizedBox(width: AppSpacing.xs),
           Text(
-            course.description,
-            style: theme.textTheme.bodyMedium,
+            label,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              fontWeight: FontWeight.w500,
+              color: c.mutedForeground,
+            ),
           ),
-          const SizedBox(height: AppSpacing.lg),
         ],
       ),
     );
@@ -821,90 +902,153 @@ class _ModuleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final completed = _isCompleted;
+    final inProgress = !completed && _hasProgress;
 
-    return AppCard(
-      variant: AppCardVariant.outlined,
-      margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
-      padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
-      child: AppListItem(
-        onTap: onTap,
-        leading: AppAvatar(
-          backgroundColor: c.muted,
-          child: Text(
-            '${index + 1}',
-            style: TextStyle(
-              color: c.foreground,
-              fontWeight: FontWeight.w600,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        0,
+        AppSpacing.lg,
+        AppSpacing.md,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: Container(
+            padding: const EdgeInsets.all(AppSpacing.md + 2),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1),
             ),
-          ),
-        ),
-        titleWidget: Text(
-          module.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        subtitleWidget: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (module.topic != null) ...[
-              Text(
-                module.topic!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: c.primary,
+            child: Row(
+              children: [
+                _ModuleIndexBadge(
+                  index: index,
+                  completed: completed,
+                  inProgress: inProgress,
                 ),
-              ),
-            ],
-            Text(
-              module.description,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            if (module.estimatedHours != null) ...[
-              const SizedBox(height: 2),
-              Row(
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    size: 12,
-                    color: c.mutedForeground,
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        module.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyLarge,
+                          fontWeight: FontWeight.w600,
+                          color: c.foreground,
+                          height: 1.25,
+                        ),
+                      ),
+                      if (module.topic != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          module.topic!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodySmall,
+                            fontWeight: FontWeight.w500,
+                            color: c.primary,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 2),
+                      Text(
+                        module.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodySmall,
+                          color: c.mutedForeground,
+                          height: 1.4,
+                        ),
+                      ),
+                      if (module.estimatedHours != null) ...[
+                        const SizedBox(height: AppSpacing.xs),
+                        Row(
+                          children: [
+                            Icon(Icons.access_time_rounded,
+                                size: 12, color: c.mutedForeground),
+                            const SizedBox(width: AppSpacing.xs),
+                            Text(
+                              '${module.estimatedHours}h',
+                              style: GoogleFonts.inter(
+                                fontSize: AppTypography.caption,
+                                color: c.mutedForeground,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
                   ),
-                  const SizedBox(width: AppSpacing.xs),
-                  Text(
-                    '${module.estimatedHours}h',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: c.mutedForeground,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_isCompleted)
-              Icon(Icons.check_circle, color: const Color(0xFF22C55E), size: 22)
-            else if (_hasProgress)
-              Icon(Icons.radio_button_checked, color: c.primary, size: 22),
-            const SizedBox(width: 4),
-            Icon(
-              Icons.chevron_right,
-              color: c.mutedForeground,
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Icon(Icons.chevron_right, color: c.mutedForeground, size: 22),
+              ],
             ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _ModuleIndexBadge extends StatelessWidget {
+  const _ModuleIndexBadge({
+    required this.index,
+    required this.completed,
+    required this.inProgress,
+  });
+
+  final int index;
+  final bool completed;
+  final bool inProgress;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final success = const Color(0xFF22C55E);
+
+    final Color bg;
+    final Color fg;
+    if (completed) {
+      bg = success.withValues(alpha: 0.12);
+      fg = success;
+    } else if (inProgress) {
+      bg = c.primary.withValues(alpha: 0.12);
+      fg = c.primary;
+    } else {
+      bg = c.muted;
+      fg = c.foreground;
+    }
+
+    return Container(
+      width: 44,
+      height: 44,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
+      child: completed
+          ? Icon(Icons.check_rounded, color: fg, size: 22)
+          : Text(
+              '${index + 1}',
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                fontWeight: FontWeight.w700,
+                color: fg,
+              ),
+            ),
     );
   }
 }
@@ -927,116 +1071,146 @@ class _CourseSetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-      child: AppCard(
-        variant: AppCardVariant.outlined,
-        padding: EdgeInsets.zero,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: isBusy ? null : onTap,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: c.accent.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(Icons.auto_awesome,
-                        color: c.accent, size: 24),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isBusy ? null : onTap,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: Container(
+            padding: const EdgeInsets.all(AppSpacing.md + 2),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: c.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  child: Icon(Icons.auto_awesome, color: c.primary, size: 22),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        progress.title,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyLarge,
+                          fontWeight: FontWeight.w600,
+                          color: c.foreground,
+                          height: 1.25,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (progress.description != null &&
+                          progress.description!.isNotEmpty) ...[
+                        const SizedBox(height: 2),
                         Text(
-                          progress.title,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w600),
+                          progress.description!,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodySmall,
+                            color: c.mutedForeground,
+                            height: 1.4,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (progress.description != null &&
-                            progress.description!.isNotEmpty)
-                          Text(
-                            progress.description!,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                                color: c.mutedForeground),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        else
-                          const SizedBox(height: 4),
-                        const SizedBox(height: 2),
-                        Text(
-                          progress.isCompleted
-                              ? '${progress.percentCorrect.round()}%'
-                              : progress.isInProgress
-                                  ? '${progress.percentComplete.round()}%'
-                                  : '${progress.totalExercises} questions',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                              color: c.mutedForeground),
-                        ),
                       ],
-                    ),
-                  ),
-                  if (isBusy)
-                    SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: isRegenerating && onCancel != null
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const AppSpinner(
-                                  size: 20,
-                                  strokeWidth: 2,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  S.of(context).cancelButton2,
-                                  style: theme.textTheme.labelSmall
-                                      ?.copyWith(
-                                    color: c.mutedForeground,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : const Center(
-                              child: AppSpinner(size: 22),
-                            ),
-                    )
-                  else if (progress.isCompleted)
-                    Icon(Icons.check_circle, color: c.accent, size: 28)
-                  else if (progress.isInProgress)
-                    SizedBox(
-                      width: 32,
-                      height: 32,
-                      child: AppProgress(
-                        value: progress.percentComplete / 100,
-                        color: c.accent,
+                      const SizedBox(height: 2),
+                      Text(
+                        progress.isCompleted
+                            ? '${progress.percentCorrect.round()}%'
+                            : progress.isInProgress
+                                ? '${progress.percentComplete.round()}%'
+                                : '${progress.totalExercises} questions',
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.caption,
+                          color: c.mutedForeground,
+                        ),
                       ),
-                    )
-                  else
-                    Icon(Icons.play_circle_outline,
-                        color: c.accent, size: 28),
-                ],
-              ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _CourseSetTrailing(
+                  progress: progress,
+                  isBusy: isBusy,
+                  isRegenerating: isRegenerating,
+                  onCancel: onCancel,
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class _CourseSetTrailing extends StatelessWidget {
+  const _CourseSetTrailing({
+    required this.progress,
+    required this.isBusy,
+    required this.isRegenerating,
+    this.onCancel,
+  });
+
+  final SetProgress progress;
+  final bool isBusy;
+  final bool isRegenerating;
+  final VoidCallback? onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+
+    if (isBusy) {
+      return SizedBox(
+        width: 44,
+        height: 44,
+        child: isRegenerating && onCancel != null
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AppSpinner(size: 20, strokeWidth: 2),
+                  const SizedBox(height: 2),
+                  Text(
+                    S.of(context).cancelButton2,
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      color: c.mutedForeground,
+                    ),
+                  ),
+                ],
+              )
+            : const Center(child: AppSpinner(size: 22)),
+      );
+    }
+    if (progress.isCompleted) {
+      return Icon(Icons.check_circle, color: c.primary, size: 26);
+    }
+    if (progress.isInProgress) {
+      return SizedBox(
+        width: 28,
+        height: 28,
+        child: AppProgress(
+          value: progress.percentComplete / 100,
+          color: c.primary,
+        ),
+      );
+    }
+    return Icon(Icons.play_circle_outline, color: c.primary, size: 26);
   }
 }
 
@@ -1128,40 +1302,67 @@ class _CourseDetailLoading extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return AppCard(
-                variant: AppCardVariant.outlined,
-                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 6),
-                padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
-                child: AppListItem(
-                  leading: Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: AppAvatar(backgroundColor: Colors.white),
-                  ),
-                  titleWidget: Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      height: 16,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
+              return Container(
+                margin: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  0,
+                  AppSpacing.lg,
+                  AppSpacing.md,
+                ),
+                padding: const EdgeInsets.all(AppSpacing.md + 2),
+                decoration: BoxDecoration(
+                  color: c.card,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                  border: Border.all(color: c.border, width: 1),
+                ),
+                child: Row(
+                  children: [
+                    Shimmer.fromColors(
+                      baseColor: c.muted,
+                      highlightColor: c.card,
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(AppRadius.md),
+                        ),
                       ),
                     ),
-                  ),
-                  subtitleWidget: Shimmer.fromColors(
-                    baseColor: c.muted,
-                    highlightColor: c.card,
-                    child: Container(
-                      height: 12,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Shimmer.fromColors(
+                            baseColor: c.muted,
+                            highlightColor: c.card,
+                            child: Container(
+                              height: 16,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          Shimmer.fromColors(
+                            baseColor: c.muted,
+                            highlightColor: c.card,
+                            child: Container(
+                              height: 12,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
               );
             },
@@ -1189,10 +1390,26 @@ class _CourseDetailError extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: c.mutedForeground),
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: c.error.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
+                ),
+                child: Icon(Icons.error_outline, size: 30, color: c.error),
+              ),
               const SizedBox(height: AppSpacing.lg),
-              Text(S.of(context).failedToLoadCourse, textAlign: TextAlign.center),
-              const SizedBox(height: AppSpacing.sm),
+              Text(
+                S.of(context).failedToLoadCourse,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w600,
+                  color: c.foreground,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
               AppButton(
                 variant: AppButtonVariant.primary,
                 onPressed: onRetry,

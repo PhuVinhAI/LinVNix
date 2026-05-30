@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/exercise_models.dart';
 import '../../domain/exercise_renderer.dart';
@@ -45,10 +46,11 @@ class QuestionHeader extends StatelessWidget {
               const SizedBox(width: AppSpacing.xs + 2),
               Text(
                 visuals.label,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: visuals.accent,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.3,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.caption,
+                  color: visuals.accent,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
                     ),
               ),
             ],

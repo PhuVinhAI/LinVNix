@@ -25,11 +25,14 @@ class OrderingRenderer extends ExerciseRenderer {
 
   @override
   Widget buildQuestion(Exercise exercise, BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       exercise.question,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.headlineSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+      ),
     );
   }
 
@@ -107,7 +110,6 @@ class _OrderingInputState extends State<_OrderingInput> {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final visuals = getExerciseVisuals(context, ExerciseType.ordering);
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -137,7 +139,8 @@ class _OrderingInputState extends State<_OrderingInput> {
               Expanded(
                 child: Text(
                   'Drag the handle to arrange in the correct order',
-                  style: theme.textTheme.bodySmall?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     color: visuals.accent,
                     fontWeight: FontWeight.w600,
                   ),
@@ -209,7 +212,8 @@ class _OrderingInputState extends State<_OrderingInput> {
                         Expanded(
                           child: Text(
                             _items[index],
-                            style: theme.textTheme.bodyLarge?.copyWith(
+                            style: GoogleFonts.inter(
+                              fontSize: AppTypography.bodyLarge,
                               fontWeight: FontWeight.w500,
                               color: c.foreground,
                             ),

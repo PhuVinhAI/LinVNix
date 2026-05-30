@@ -27,11 +27,14 @@ class TranslationRenderer extends ExerciseRenderer {
 
   @override
   Widget buildQuestion(Exercise exercise, BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       exercise.question,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.headlineSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+      ),
     );
   }
 
@@ -112,7 +115,6 @@ class _TranslationInputState extends State<_TranslationInput> {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final visuals = getExerciseVisuals(context, ExerciseType.translation);
-    final theme = Theme.of(context);
 
     final srcLang = widget.options.sourceLanguage;
     final tgtLang = widget.options.targetLanguage;
@@ -202,7 +204,8 @@ class _TranslationInputState extends State<_TranslationInput> {
                   if (srcLang.isNotEmpty) const SizedBox(width: AppSpacing.sm),
                   Text(
                     'Source text',
-                    style: theme.textTheme.labelSmall?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.caption,
                       color: visuals.accent.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.5,
@@ -222,7 +225,8 @@ class _TranslationInputState extends State<_TranslationInput> {
                         color: c.foreground,
                         height: 1.5,
                       )
-                    : theme.textTheme.titleSmall?.copyWith(
+                    : GoogleFonts.inter(
+                        fontSize: AppTypography.titleSmall,
                         fontWeight: FontWeight.w600,
                         color: c.foreground,
                         height: 1.5,
@@ -300,7 +304,8 @@ class _TranslationInputState extends State<_TranslationInput> {
                     if (tgtLang.isNotEmpty) const SizedBox(width: AppSpacing.sm),
                     Text(
                       'Your translation',
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.caption,
                         color: visuals.accent.withValues(alpha: 0.7),
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
@@ -310,7 +315,8 @@ class _TranslationInputState extends State<_TranslationInput> {
                     // Character count
                     Text(
                       '${_controller.text.length}',
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.caption,
                         color: c.mutedForeground,
                       ),
                     ),

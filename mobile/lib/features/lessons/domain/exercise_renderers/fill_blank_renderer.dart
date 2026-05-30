@@ -27,11 +27,14 @@ class FillBlankRenderer extends ExerciseRenderer {
 
   @override
   Widget buildQuestion(Exercise exercise, BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       exercise.question,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.headlineSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+      ),
     );
   }
 
@@ -109,7 +112,6 @@ class _FillBlankInputState extends State<_FillBlankInput> {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final visuals = getExerciseVisuals(context, ExerciseType.fillBlank);
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,7 +141,8 @@ class _FillBlankInputState extends State<_FillBlankInput> {
                   widget.blanks == 1
                       ? 'Fill in the missing word'
                       : 'Fill in the ${widget.blanks} missing words',
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
                     color: visuals.accent,
                     fontWeight: FontWeight.w600,
                   ),

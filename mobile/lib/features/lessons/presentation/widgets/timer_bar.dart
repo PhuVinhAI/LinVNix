@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 
@@ -80,7 +81,8 @@ class _TimerBarState extends State<TimerBar> {
             const SizedBox(width: 4),
             Text(
               '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
                     color: isLow ? c.error : c.mutedForeground,
                     fontWeight: isLow ? FontWeight.w600 : FontWeight.normal,
                   ),

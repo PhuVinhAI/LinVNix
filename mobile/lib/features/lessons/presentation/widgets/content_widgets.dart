@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:just_audio/just_audio.dart';
@@ -17,7 +18,6 @@ class TextContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -29,7 +29,8 @@ class TextContentWidget extends StatelessWidget {
           SizedBox(height: content.translation != null ? 8 : 0),
           Text(
             content.vietnameseText,
-            style: theme.textTheme.bodyLarge?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyLarge,
               color: c.mutedForeground,
               height: 1.5,
             ),
@@ -38,7 +39,8 @@ class TextContentWidget extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               content.phonetic!,
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
                 color: c.mutedForeground,
                 fontStyle: FontStyle.italic,
               ),
@@ -48,7 +50,8 @@ class TextContentWidget extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               content.notes!,
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
                 color: c.mutedForeground,
               ),
             ),
@@ -74,7 +77,6 @@ class _AudioContentWidgetState extends State<AudioContentWidget> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -86,7 +88,8 @@ class _AudioContentWidgetState extends State<AudioContentWidget> {
           SizedBox(height: widget.content.translation != null ? 8 : 0),
           Text(
             widget.content.vietnameseText,
-            style: theme.textTheme.bodyLarge?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyLarge,
               color: c.mutedForeground,
               height: 1.5,
             ),
@@ -95,7 +98,8 @@ class _AudioContentWidgetState extends State<AudioContentWidget> {
             const SizedBox(height: 4),
             Text(
               widget.content.phonetic!,
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
                 color: c.mutedForeground,
                 fontStyle: FontStyle.italic,
               ),
@@ -153,7 +157,6 @@ class ImageContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -196,7 +199,8 @@ class ImageContentWidget extends StatelessWidget {
           ],
           Text(
             content.vietnameseText,
-            style: theme.textTheme.bodyLarge?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyLarge,
               color: c.mutedForeground,
               height: 1.5,
             ),
@@ -219,7 +223,6 @@ class _VideoContentWidgetState extends State<VideoContentWidget> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -249,7 +252,8 @@ class _VideoContentWidgetState extends State<VideoContentWidget> {
           ],
           Text(
             widget.content.vietnameseText,
-            style: theme.textTheme.bodyLarge?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyLarge,
               color: c.mutedForeground,
               height: 1.5,
             ),
@@ -287,7 +291,6 @@ class DialogueContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final lines = _parseLines();
 
     return SingleChildScrollView(
@@ -301,8 +304,9 @@ class DialogueContentWidget extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 S.of(context).dialogueTitle,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.titleMedium,
+                  fontWeight: FontWeight.w700,
                   color: c.primary,
                 ),
               ),
@@ -404,7 +408,8 @@ class _DialogueAudioCardState extends State<_DialogueAudioCard> {
           Expanded(
             child: Text(
               _hasError ? S.of(context).audioUnavailable : S.of(context).listenToDialogue,
-              style: TextStyle(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
                 color: _hasError ? c.error : c.foreground,
               ),
             ),
@@ -449,7 +454,6 @@ class _ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final isLeft = line.isSpeaker1;
 
     return Padding(
@@ -484,7 +488,8 @@ class _ChatBubble extends StatelessWidget {
               children: [
                 Text(
                   line.vietnamese,
-                  style: theme.textTheme.bodyLarge?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyLarge,
                     fontWeight: FontWeight.w500,
                     height: 1.5,
                     color: isLeft ? c.foreground : c.primaryForeground,
@@ -494,7 +499,8 @@ class _ChatBubble extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     line.translation!,
-                    style: theme.textTheme.bodySmall?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
                       color: isLeft
                           ? c.mutedForeground
                           : c.primaryForeground.withValues(alpha: 0.8),
@@ -523,14 +529,16 @@ class _ContentTranslation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
 
     return Padding(
       padding: EdgeInsets.only(top: topSpacing),
       child: Text(
         text,
-        style: theme.textTheme.headlineSmall?.copyWith(
+        style: GoogleFonts.inter(
+          fontSize: AppTypography.headlineSmall,
           fontWeight: FontWeight.w600,
+          color: c.foreground,
           height: 1.6,
         ),
       ),
