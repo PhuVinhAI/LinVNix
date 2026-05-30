@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -207,6 +208,7 @@ class _PracticeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (categories.isEmpty) {
+      final c = AppTheme.colors(context);
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -216,15 +218,17 @@ class _PracticeContent extends StatelessWidget {
               child: Icon(
                 Icons.category_outlined,
                 size: 64,
-                color: AppTheme.colors(context).mutedForeground,
+                color: c.mutedForeground,
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
               S.of(context).failedToLoadCategoriesTitle,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppTheme.colors(context).mutedForeground,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyLarge,
+                fontWeight: FontWeight.w600,
+                color: c.mutedForeground,
+              ),
             ),
           ],
         ),
@@ -289,22 +293,27 @@ class _CategoryHeader extends StatelessWidget {
     final c = AppTheme.colors(context);
     return Row(
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+        Expanded(
+          child: Text(
+            title,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.titleMedium,
+              fontWeight: FontWeight.w700,
+              color: c.foreground,
+              height: 1.2,
+            ),
+          ),
         ),
-        const Spacer(),
         if (onSeeAll != null)
           GestureDetector(
             onTap: onSeeAll,
             child: Text(
               S.of(context).seeAll,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: c.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                color: c.primary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
       ],
@@ -318,11 +327,15 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.titleMedium,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.2,
+      ),
     );
   }
 }
@@ -406,43 +419,55 @@ class _CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final color = _parseColor(category.color);
 
-    return AppCard(
-      variant: isSelected ? AppCardVariant.outlined : AppCardVariant.filled,
-      borderRadius: AppRadius.lg,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      color: color.withValues(alpha: isSelected ? 0.15 : 0.08),
-      borderColor: isSelected ? color : color.withValues(alpha: 0.15),
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-            child: Icon(
-              _getIconData(category.icon),
-              size: 28,
-              color: color,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: isSelected ? color.withValues(alpha: 0.08) : c.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(
+              color: isSelected ? color : c.border,
+              width: isSelected ? 1.5 : 1,
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            category.name,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: isSelected ? color : c.foreground,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                ),
+                child: Icon(
+                  _getIconData(category.icon),
+                  size: 24,
+                  color: color,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                category.name,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyMedium,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? color : c.foreground,
+                  height: 1.2,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -477,8 +502,8 @@ class _ScenarioCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-    final metaStyle = theme.textTheme.bodySmall?.copyWith(
+    final metaStyle = GoogleFonts.inter(
+      fontSize: AppTypography.bodySmall,
       color: c.mutedForeground,
       height: 1.2,
     );
@@ -486,10 +511,7 @@ class _ScenarioCard extends StatelessWidget {
     return AppCard(
       variant: AppCardVariant.outlined,
       borderRadius: AppRadius.lg,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm + 2,
-      ),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       onTap: () => context.push('/practice/scenarios/${scenario.id}'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -516,11 +538,13 @@ class _ScenarioCard extends StatelessWidget {
               Text('${scenario.characterCount}', style: metaStyle),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.md),
           Text(
             scenario.title,
-            style: theme.textTheme.bodyMedium?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyLarge,
               fontWeight: FontWeight.w600,
+              color: c.foreground,
               height: 1.25,
             ),
             maxLines: 2,
@@ -530,9 +554,10 @@ class _ScenarioCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.xs),
             Text(
               scenario.description,
-              style: theme.textTheme.bodySmall?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
                 color: c.mutedForeground,
-                height: 1.3,
+                height: 1.4,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -550,7 +575,6 @@ class _ScenariosEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -565,9 +589,10 @@ class _ScenariosEmpty extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
             Text(
               S.of(context).failedToLoadCategoriesMessage,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                    color: c.mutedForeground,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.mutedForeground,
+              ),
             ),
           ],
         ),
@@ -683,7 +708,6 @@ class _ScenariosError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -694,9 +718,10 @@ class _ScenariosError extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
             Text(
               S.of(context).failedToLoadCategoriesMessage,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                    color: c.mutedForeground,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.mutedForeground,
+              ),
             ),
             const SizedBox(height: AppSpacing.sm),
             AppButton(
@@ -751,7 +776,6 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
     final bottomInset = mq.viewInsets.bottom + mq.viewPadding.bottom;
 
@@ -775,8 +799,9 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                   Expanded(
                     child: Text(
                       S.of(context).filtersTitle,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.titleMedium,
+                        fontWeight: FontWeight.w700,
                         color: c.foreground,
                       ),
                     ),
@@ -899,14 +924,16 @@ class _FilterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final c = AppTheme.colors(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: theme.textTheme.bodyMedium?.copyWith(
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.bodyMedium,
             fontWeight: FontWeight.w600,
+            color: c.foreground,
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
@@ -1007,48 +1034,68 @@ class _PausedSessionBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
-    return AppCard(
-      variant: AppCardVariant.filled,
-      borderRadius: AppRadius.lg,
+    return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
-      color: c.primary.withAlpha(20),
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border, width: 1),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.pause_circle_outline,
-                size: 20,
-                color: c.primary,
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                ),
+                child: Icon(
+                  Icons.pause_circle_outline,
+                  size: 20,
+                  color: c.primary,
+                ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text(
-                  S.of(context).sessionPaused,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: c.primary,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      S.of(context).sessionPaused,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodySmall,
+                        fontWeight: FontWeight.w600,
+                        color: c.primary,
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      session.scenarioTitle,
+                      style: GoogleFonts.inter(
+                        fontSize: AppTypography.bodyMedium,
+                        fontWeight: FontWeight.w600,
+                        color: c.foreground,
+                        height: 1.2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            session.scenarioTitle,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
           const SizedBox(height: AppSpacing.xs),
           Text(
             S.of(context).characterNameParam(session.chosenCharacterName),
-            style: theme.textTheme.bodySmall?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,
             ),
             maxLines: 1,
@@ -1093,7 +1140,6 @@ class _CategoriesError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -1108,7 +1154,11 @@ class _CategoriesError extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             Text(
               errorMessage ?? S.of(context).failedToLoadCategoriesMessage,
-              style: theme.textTheme.titleMedium,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyLarge,
+                fontWeight: FontWeight.w600,
+                color: c.foreground,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.sm),

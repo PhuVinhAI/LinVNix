@@ -134,16 +134,19 @@ class _ResultContent extends StatelessWidget {
                     const SizedBox(height: AppSpacing.md),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(AppSpacing.md),
+                      padding: const EdgeInsets.all(AppSpacing.lg),
                       decoration: BoxDecoration(
-                        color: c.muted.withAlpha(80),
+                        color: c.card,
                         borderRadius: BorderRadius.circular(AppRadius.lg),
+                        border: Border.all(color: c.border, width: 1),
                       ),
                       child: Text(
                         result.aiSummary!,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: c.foreground,
-                            ),
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyMedium,
+                          color: c.foreground,
+                          height: 1.5,
+                        ),
                       ),
                     ),
                   ],
@@ -153,7 +156,7 @@ class _ResultContent extends StatelessWidget {
                       icon: Icons.menu_book_outlined,
                       iconColor: c.warning,
                       message: S.of(context).reviewLessonBeforeRetry,
-                      bgColor: c.warning.withAlpha(12),
+                      bgColor: c.warning.withValues(alpha: 0.08),
                     ),
                   ],
                   if (result.isInappropriate) ...[
@@ -163,7 +166,7 @@ class _ResultContent extends StatelessWidget {
                       iconColor: c.error,
                       message:
                           S.of(context).inappropriateContentEndMessage,
-                      bgColor: c.error.withAlpha(12),
+                      bgColor: c.error.withValues(alpha: 0.08),
                     ),
                   ],
                   const SizedBox(height: AppSpacing.xxl + AppSpacing.lg),
@@ -267,11 +270,15 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.titleSmall,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.2,
+      ),
     );
   }
 }
@@ -283,7 +290,6 @@ class _CriteriaScoreItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final progress =
         criteriaScore.maxScore > 0
             ? criteriaScore.score / criteriaScore.maxScore
@@ -295,7 +301,7 @@ class _CriteriaScoreItem extends StatelessWidget {
       child: AppCard(
         variant: AppCardVariant.outlined,
         borderRadius: AppRadius.lg,
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -304,8 +310,10 @@ class _CriteriaScoreItem extends StatelessWidget {
                 Expanded(
                   child: Text(
                     criteriaScore.name,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w600,
+                      color: c.foreground,
                     ),
                   ),
                 ),
@@ -331,8 +339,10 @@ class _CriteriaScoreItem extends StatelessWidget {
               const SizedBox(height: AppSpacing.sm),
               Text(
                 criteriaScore.comment!,
-                style: theme.textTheme.bodySmall?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodySmall,
                   color: c.mutedForeground,
+                  height: 1.4,
                 ),
               ),
             ],
@@ -362,22 +372,32 @@ class _EndReasonMessage extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: iconColor.withAlpha(40)),
+        border: Border.all(color: iconColor.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
-          Icon(icon, color: iconColor, size: 24),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppRadius.md),
+            ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Text(
               message,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: c.foreground,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                color: c.foreground,
+                height: 1.4,
+              ),
             ),
           ),
         ],
@@ -532,6 +552,11 @@ class _ResultError extends StatelessWidget {
               const SizedBox(height: AppSpacing.lg),
               Text(
                 S.of(context).unableToLoadResultMessage,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w600,
+                  color: c.foreground,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),

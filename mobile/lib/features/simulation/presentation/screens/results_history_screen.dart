@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -139,19 +140,21 @@ class _FilterRow extends StatelessWidget {
         const SizedBox(width: AppSpacing.xs),
         Text(
           S.of(context).filteringByScenario,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.bodySmall,
+            color: c.mutedForeground,
+          ),
         ),
         const Spacer(),
         GestureDetector(
           onTap: () => onFilterChanged(null),
           child: Text(
             S.of(context).clearFilter,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: c.primary,
-                  fontWeight: FontWeight.w600,
-                ),
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodySmall,
+              color: c.primary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
@@ -204,15 +207,18 @@ class _ResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final scoreColor = _scoreColor(result.totalScore, c);
+    final metaStyle = GoogleFonts.inter(
+      fontSize: AppTypography.bodySmall,
+      color: c.mutedForeground,
+    );
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: AppCard(
         variant: AppCardVariant.outlined,
         borderRadius: AppRadius.lg,
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         onTap: () {
           final query = StringBuffer('fromHistory=true');
           if (historyScenarioId != null && historyScenarioId!.isNotEmpty) {
@@ -227,18 +233,14 @@ class _ResultCard extends StatelessWidget {
               children: [
                 Text(
                   result.totalScore.round().toString(),
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.titleMedium,
                     fontWeight: FontWeight.w700,
                     color: scoreColor,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.xs),
-                Text(
-                  '/100',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
-                ),
+                Text('/100', style: metaStyle),
                 const Spacer(),
                 AppBadge(
                   label: _endReasonLabel(context, result.endReason),
@@ -250,8 +252,10 @@ class _ResultCard extends StatelessWidget {
             if (result.scenarioTitle != null)
               Text(
                 result.scenarioTitle!,
-                style: theme.textTheme.bodyMedium?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyMedium,
                   fontWeight: FontWeight.w600,
+                  color: c.foreground,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -266,12 +270,7 @@ class _ResultCard extends StatelessWidget {
                     color: c.mutedForeground,
                   ),
                   const SizedBox(width: AppSpacing.xs),
-                  Text(
-                    result.characterName!,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: c.mutedForeground,
-                    ),
-                  ),
+                  Text(result.characterName!, style: metaStyle),
                   const SizedBox(width: AppSpacing.md),
                 ],
                 Icon(
@@ -280,12 +279,7 @@ class _ResultCard extends StatelessWidget {
                   color: c.mutedForeground,
                 ),
                 const SizedBox(width: AppSpacing.xs),
-                Text(
-                  _formatDate(result.createdAt),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
-                ),
+                Text(_formatDate(result.createdAt), style: metaStyle),
               ],
             ),
           ],
@@ -301,7 +295,6 @@ class _ResultsEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -310,22 +303,24 @@ class _ResultsEmpty extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(24),
+              width: 96,
+              height: 96,
               decoration: BoxDecoration(
                 color: c.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.history_outlined,
-                size: 80,
+                size: 44,
                 color: c.primary,
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
               S.of(context).noResultsYet,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.titleSmall,
+                fontWeight: FontWeight.w700,
                 color: c.foreground,
               ),
               textAlign: TextAlign.center,
@@ -333,8 +328,10 @@ class _ResultsEmpty extends StatelessWidget {
             const SizedBox(height: AppSpacing.xs),
             Text(
               S.of(context).completeSimulationToSeeResults,
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
                 color: c.mutedForeground,
+                height: 1.4,
               ),
               textAlign: TextAlign.center,
             ),
@@ -436,7 +433,6 @@ class _ResultsError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -445,22 +441,24 @@ class _ResultsError extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
+              width: 96,
+              height: 96,
               decoration: BoxDecoration(
                 color: c.error.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.error_outline_rounded,
-                size: 80,
+                size: 44,
                 color: c.error,
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
               S.of(context).unableToLoadDataMessage,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.titleSmall,
+                fontWeight: FontWeight.w700,
                 color: c.foreground,
               ),
               textAlign: TextAlign.center,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -142,10 +143,12 @@ class _CharacterSelectionContent extends StatelessWidget {
               ),
               child: Text(
                 S.of(context).chooseCharacterTitle,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: c.mutedForeground,
-                    ),
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.titleSmall,
+                  fontWeight: FontWeight.w700,
+                  color: c.foreground,
+                  height: 1.2,
+                ),
               ),
             ),
           ),
@@ -215,24 +218,24 @@ class _CharacterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return AppCard(
       variant: AppCardVariant.outlined,
       borderRadius: AppRadius.lg,
       borderColor: isSelected ? c.primary : null,
-      color: isSelected ? c.primary.withAlpha(12) : null,
-      padding: const EdgeInsets.all(AppSpacing.md),
+      color: isSelected ? c.primary.withValues(alpha: 0.08) : null,
+      padding: const EdgeInsets.all(AppSpacing.lg),
       onTap: onTap,
       child: AppListItem(
         leading: AppAvatar(
           radius: 20,
-          backgroundColor: isSelected ? c.primary.withAlpha(20) : c.muted,
+          backgroundColor:
+              isSelected ? c.primary.withValues(alpha: 0.12) : c.muted,
           child: Text(
             character.name.isNotEmpty
                 ? character.name[0].toUpperCase()
                 : '?',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               color: isSelected ? c.primary : c.foreground,
               fontWeight: FontWeight.w600,
               fontSize: AppTypography.bodyMedium,
@@ -241,19 +244,24 @@ class _CharacterCard extends StatelessWidget {
         ),
         titleWidget: Text(
           character.name,
-          style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: isSelected ? c.primary : c.foreground,
-              ),
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.bodyMedium,
+            fontWeight: FontWeight.w600,
+            color: isSelected ? c.primary : c.foreground,
+          ),
         ),
         subtitleWidget: Text(
           character.role,
-          style: theme.textTheme.bodySmall?.copyWith(
-                color: isSelected
-                    ? c.primary.withAlpha(180)
-                    : c.mutedForeground,
-              ),
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.bodySmall,
+            color: isSelected
+                ? c.primary.withValues(alpha: 0.7)
+                : c.mutedForeground,
+          ),
         ),
+        trailing: isSelected
+            ? Icon(Icons.check_circle, color: c.primary, size: 22)
+            : null,
       ),
     );
   }
@@ -266,11 +274,12 @@ class _LoadingOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
 
-    return Container(
-      color: c.background.withAlpha(180),
+    return Material(
+      type: MaterialType.canvas,
+      color: c.background.withValues(alpha: 0.7),
       child: Center(
         child: AppCard(
-          variant: AppCardVariant.filled,
+          variant: AppCardVariant.outlined,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.xl,
             vertical: AppSpacing.lg,
@@ -281,10 +290,12 @@ class _LoadingOverlay extends StatelessWidget {
               AppSpinner(size: 28),
               const SizedBox(height: AppSpacing.md),
               Text(
-                S.of(context).chatTitle,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: c.foreground,
-                    ),
+                S.of(context).creatingStatus,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyMedium,
+                  fontWeight: FontWeight.w600,
+                  color: c.foreground,
+                ),
               ),
             ],
           ),
@@ -399,6 +410,11 @@ class _CharacterSelectionError extends StatelessWidget {
               const SizedBox(height: AppSpacing.lg),
               Text(
                 S.of(context).unableToLoadDataMessage,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w600,
+                  color: c.foreground,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),

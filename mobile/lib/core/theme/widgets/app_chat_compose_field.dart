@@ -266,7 +266,10 @@ class _AppChatComposeFieldState extends State<AppChatComposeField> {
                   // with the same inset as the right side (AppSpacing.lg).
                   if (mic == null || multiline)
                     const SizedBox(width: AppSpacing.lg - AppSpacing.sm),
-                  Expanded(child: textField),
+                  Expanded(
+                    key: const ValueKey('app_chat_compose_field_expanded'),
+                    child: textField,
+                  ),
                   if (!multiline) ...[
                     const SizedBox(width: AppChatComposeField._actionGap),
                     trailing,

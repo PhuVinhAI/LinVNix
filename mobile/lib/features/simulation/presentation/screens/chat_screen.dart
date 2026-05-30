@@ -552,7 +552,7 @@ class _TypingIndicator extends StatelessWidget {
                 AppSpinner(size: 16, color: c.mutedForeground),
                 const SizedBox(width: AppSpacing.sm),
                 Text(
-                  S.of(context).chatTitle,
+                  S.of(context).thinking,
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.bodySmall,
                     color: c.mutedForeground,
@@ -635,7 +635,6 @@ class _NpcBubble extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final hasEn = message.contentEn != null && message.contentEn!.isNotEmpty;
     final playingId = ref.watch(ttsPlayingMessageIdProvider);
     final isPlaying = playingId == message.id;
@@ -650,7 +649,7 @@ class _NpcBubble extends ConsumerWidget {
             message.speakerName.isNotEmpty
                 ? message.speakerName[0].toUpperCase()
                 : '?',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               color: c.foreground,
               fontWeight: FontWeight.w600,
               fontSize: AppTypography.caption,
@@ -664,7 +663,8 @@ class _NpcBubble extends ConsumerWidget {
             children: [
               Text(
                 message.speakerName,
-                style: theme.textTheme.labelSmall?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.caption,
                   fontWeight: FontWeight.w600,
                   color: c.mutedForeground,
                 ),
@@ -692,8 +692,10 @@ class _NpcBubble extends ConsumerWidget {
                           Expanded(
                             child: Text(
                               message.content,
-                              style: theme.textTheme.bodyMedium?.copyWith(
+                              style: GoogleFonts.inter(
+                                fontSize: AppTypography.bodyMedium,
                                 color: c.foreground,
+                                height: 1.4,
                               ),
                             ),
                           ),
@@ -711,9 +713,11 @@ class _NpcBubble extends ConsumerWidget {
                         const SizedBox(height: AppSpacing.xs),
                         Text(
                           message.contentEn!,
-                          style: theme.textTheme.bodySmall?.copyWith(
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodySmall,
                             color: c.mutedForeground,
                             fontStyle: FontStyle.italic,
+                            height: 1.4,
                           ),
                         ),
                       ],
@@ -757,7 +761,6 @@ class _LearnerBubble extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final chatState = ref.watch(simulationChatProvider);
     final profile = ref.watch(userProfileProvider).value;
     final youLabel = S.of(context).youLabel;
@@ -770,6 +773,11 @@ class _LearnerBubble extends ConsumerWidget {
     final avatarUrl = profile?.avatarUrl;
     final feedback = message.feedback;
     final hasCorrections = feedback != null && feedback.corrections.isNotEmpty;
+    final bodyStyle = GoogleFonts.inter(
+      fontSize: AppTypography.bodyMedium,
+      color: c.foreground,
+      height: 1.4,
+    );
 
     final textWidget = hasCorrections
         ? RichText(
@@ -779,17 +787,14 @@ class _LearnerBubble extends ConsumerWidget {
                 corrections: feedback.corrections,
                 errorColor: c.error,
                 warningColor: c.warning,
-                baseStyle: theme.textTheme.bodyMedium!.copyWith(color: c.foreground),
+                baseStyle: bodyStyle,
                 onCorrectionTap: _hasFeedback
                     ? (index) => _openFeedbackSheet(context, scrollToIndex: index)
                     : null,
               ),
             ),
           )
-        : Text(
-            message.content,
-            style: theme.textTheme.bodyMedium?.copyWith(color: c.foreground),
-          );
+        : Text(message.content, style: bodyStyle);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -800,7 +805,8 @@ class _LearnerBubble extends ConsumerWidget {
             children: [
               Text(
                 displayName,
-                style: theme.textTheme.labelSmall?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.caption,
                   fontWeight: FontWeight.w600,
                   color: c.mutedForeground,
                 ),
@@ -833,7 +839,7 @@ class _LearnerBubble extends ConsumerWidget {
                       behavior: HitTestBehavior.opaque,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: c.primary.withAlpha(25),
+                          color: c.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(AppRadius.lg),
                         ),
                         padding: const EdgeInsets.symmetric(
@@ -860,7 +866,7 @@ class _LearnerBubble extends ConsumerWidget {
                   displayName.isNotEmpty
                       ? displayName[0].toUpperCase()
                       : '?',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     color: c.foreground,
                     fontWeight: FontWeight.w600,
                     fontSize: AppTypography.caption,
@@ -928,7 +934,7 @@ class _ComposeBar extends StatelessWidget {
         AppSpacing.sm,
       ),
       child: isSending
-          ? _StopBar(hint: S.of(context).chatTitle, onStop: onStop)
+          ? _StopBar(hint: S.of(context).stopLabel, onStop: onStop)
           : AppChatComposeField(
               controller: controller,
               focusNode: focusNode,

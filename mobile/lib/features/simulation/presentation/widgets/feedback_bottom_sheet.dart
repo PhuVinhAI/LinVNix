@@ -102,7 +102,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
         textAlign: TextAlign.center,
         style: GoogleFonts.inter(
           fontSize: AppTypography.titleSmall,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           color: c.foreground,
         ),
       ),

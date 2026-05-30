@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
@@ -144,9 +145,11 @@ class _ScenarioDetailContent extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     detail.description,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: c.foreground,
-                        ),
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      color: c.foreground,
+                      height: 1.5,
+                    ),
                   ),
                   if (detail.scoringCriteria.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.xl),
@@ -216,8 +219,8 @@ class _ScenarioInfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
-    final metaStyle = theme.textTheme.bodySmall?.copyWith(
+    final metaStyle = GoogleFonts.inter(
+      fontSize: AppTypography.bodySmall,
       color: c.mutedForeground,
       height: 1.2,
     );
@@ -253,11 +256,15 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+      style: GoogleFonts.inter(
+        fontSize: AppTypography.titleSmall,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.2,
+      ),
     );
   }
 }
@@ -269,26 +276,29 @@ class _ScoringCriterionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: AppCard(
         variant: AppCardVariant.outlined,
         borderRadius: AppRadius.lg,
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: AppListItem(
           titleWidget: Text(
             criterion.name,
-            style: theme.textTheme.bodyMedium?.copyWith(
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodyMedium,
               fontWeight: FontWeight.w600,
+              color: c.foreground,
             ),
           ),
           subtitleWidget: Text(
             criterion.description,
-            style: theme.textTheme.bodySmall?.copyWith(
-                  color: c.mutedForeground,
-                ),
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.bodySmall,
+              color: c.mutedForeground,
+              height: 1.3,
+            ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -309,7 +319,6 @@ class _CharacterItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
     final isNpc = !character.isPlayable;
 
     return Padding(
@@ -319,7 +328,7 @@ class _CharacterItem extends StatelessWidget {
         child: AppCard(
           variant: AppCardVariant.outlined,
           borderRadius: AppRadius.lg,
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: AppListItem(
             leading: AppAvatar(
               radius: 20,
@@ -328,7 +337,7 @@ class _CharacterItem extends StatelessWidget {
                 character.name.isNotEmpty
                     ? character.name[0].toUpperCase()
                     : '?',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   color: c.foreground,
                   fontWeight: FontWeight.w600,
                   fontSize: AppTypography.bodyMedium,
@@ -337,15 +346,18 @@ class _CharacterItem extends StatelessWidget {
             ),
             titleWidget: Text(
               character.name,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
+                fontWeight: FontWeight.w600,
+                color: c.foreground,
+              ),
             ),
             subtitleWidget: Text(
               character.role,
-              style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                color: c.mutedForeground,
+              ),
             ),
             trailing: isNpc
                 ? AppBadge(label: 'NPC', color: c.mutedForeground)
@@ -557,6 +569,11 @@ class _ScenarioDetailError extends StatelessWidget {
               const SizedBox(height: AppSpacing.lg),
               Text(
                 S.of(context).unableToLoadDataMessage,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w600,
+                  color: c.foreground,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -601,7 +618,6 @@ class _MiniHistorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -617,7 +633,8 @@ class _MiniHistorySection extends StatelessWidget {
               ),
               child: Text(
                 S.of(context).seeAll,
-                style: theme.textTheme.bodySmall?.copyWith(
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodySmall,
                   color: c.primary,
                   fontWeight: FontWeight.w600,
                 ),
@@ -652,53 +669,42 @@ class _MiniHistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final theme = Theme.of(context);
+    final mutedStyle = GoogleFonts.inter(
+      fontSize: AppTypography.bodySmall,
+      color: c.mutedForeground,
+    );
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: AppCard(
         variant: AppCardVariant.outlined,
         borderRadius: AppRadius.lg,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         onTap: () => context.push('/practice/results/${result.id}'),
         child: Row(
           children: [
             Text(
               result.totalScore.round().toString(),
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodyMedium,
                 fontWeight: FontWeight.w700,
                 color: scoreColor,
               ),
             ),
             const SizedBox(width: AppSpacing.xs),
-            Text(
-              '/100',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
+            Text('/100', style: mutedStyle),
             const Spacer(),
             if (result.characterName != null)
               Flexible(
                 child: Text(
                   result.characterName!,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: c.mutedForeground,
-                  ),
+                  style: mutedStyle,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
             if (result.characterName != null)
               const SizedBox(width: AppSpacing.md),
-            Text(
-              formattedDate,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: c.mutedForeground,
-              ),
-            ),
+            Text(formattedDate, style: mutedStyle),
           ],
         ),
       ),
