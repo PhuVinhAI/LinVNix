@@ -1189,6 +1189,24 @@ class SJa extends S {
   String get typeAnswerHint => 'ここに回答を入力...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted => '声調記号なしでベトナム語を入力できます';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle => '声調記号なしのベトナム語';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => '例';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => 'わかりました';
+
+  @override
   String get typeMessageHint => 'メッセージを入力...';
 
   @override

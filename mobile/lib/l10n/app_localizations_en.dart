@@ -1211,6 +1211,26 @@ class SEn extends S {
   String get typeAnswerHint => 'Type answer here...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted =>
+      'You can type Vietnamese without diacritics';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle =>
+      'Vietnamese Without Diacritics';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => 'Example';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => 'Got it';
+
+  @override
   String get typeMessageHint => 'Type a message...';
 
   @override

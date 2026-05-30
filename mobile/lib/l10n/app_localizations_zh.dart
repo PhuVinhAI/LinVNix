@@ -1176,6 +1176,24 @@ class SZh extends S {
   String get typeAnswerHint => '在此输入答案...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted => '您可以输入不带声调符号的越南语';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle => '不带声调符号的越南语';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => '示例';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => '明白了';
+
+  @override
   String get typeMessageHint => '输入消息...';
 
   @override

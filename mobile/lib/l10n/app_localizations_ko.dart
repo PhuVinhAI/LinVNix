@@ -1189,6 +1189,24 @@ class SKo extends S {
   String get typeAnswerHint => '여기에 정답 입력...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted => '성조 기호 없이 베트남어를 입력할 수 있습니다';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle => '성조 기호 없는 베트남어';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => '예시';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => '알겠습니다';
+
+  @override
   String get typeMessageHint => '메시지 입력...';
 
   @override

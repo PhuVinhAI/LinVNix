@@ -19,6 +19,11 @@ export class ExercisesRepository {
     return this.repository.find({
       where: { lessonId },
       order: { orderIndex: 'ASC' },
+      relations: [
+        'lesson',
+        'lesson.module',
+        'lesson.module.course',
+      ],
     });
   }
 
@@ -26,6 +31,15 @@ export class ExercisesRepository {
     return this.repository.find({
       where: { setId },
       order: { orderIndex: 'ASC' },
+      relations: [
+        'exerciseSet',
+        'exerciseSet.lesson',
+        'exerciseSet.lesson.module',
+        'exerciseSet.lesson.module.course',
+        'exerciseSet.module',
+        'exerciseSet.module.course',
+        'exerciseSet.course',
+      ],
     });
   }
 

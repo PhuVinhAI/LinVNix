@@ -1205,6 +1205,26 @@ class STh extends S {
   String get typeAnswerHint => 'พิมพ์คำตอบที่นี่...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted =>
+      'คุณสามารถพิมพ์ภาษาเวียดนามโดยไม่ต้องใส่เครื่องหมายวรรณยุกต์';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle =>
+      'ภาษาเวียดนามไม่มีเครื่องหมายวรรณยุกต์';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => 'ตัวอย่าง';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => 'เข้าใจแล้ว';
+
+  @override
   String get typeMessageHint => 'พิมพ์ข้อความ...';
 
   @override

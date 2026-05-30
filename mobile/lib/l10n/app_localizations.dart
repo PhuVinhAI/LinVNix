@@ -2391,6 +2391,42 @@ abstract class S {
   /// **'Nhập câu trả lời tại đây...'**
   String get typeAnswerHint;
 
+  /// No description provided for @vietnameseWithoutDiacriticsAccepted.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn có thể gõ tiếng Việt không dấu'**
+  String get vietnameseWithoutDiacriticsAccepted;
+
+  /// No description provided for @vietnameseWithoutDiacriticsTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiếng Việt Không Dấu'**
+  String get vietnameseWithoutDiacriticsTitle;
+
+  /// No description provided for @vietnameseWithoutDiacriticsExample.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ví dụ'**
+  String get vietnameseWithoutDiacriticsExample;
+
+  /// No description provided for @vietnameseWithoutDiacriticsExampleBefore.
+  ///
+  /// In vi, this message translates to:
+  /// **'tieng viet'**
+  String get vietnameseWithoutDiacriticsExampleBefore;
+
+  /// No description provided for @vietnameseWithoutDiacriticsExampleAfter.
+  ///
+  /// In vi, this message translates to:
+  /// **'tiếng việt'**
+  String get vietnameseWithoutDiacriticsExampleAfter;
+
+  /// No description provided for @understoodButton.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã hiểu'**
+  String get understoodButton;
+
   /// No description provided for @typeMessageHint.
   ///
   /// In vi, this message translates to:

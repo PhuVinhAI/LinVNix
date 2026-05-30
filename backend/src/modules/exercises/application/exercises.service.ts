@@ -55,6 +55,39 @@ export class ExercisesService implements ExerciseStatsPort {
     return this.exercisesRepository.findBySetId(setId);
   }
 
+  /**
+   * Serialize exercises with acceptsWithoutDiacritics flag for client.
+   */
+  serializeExercises(exercises: Exercise[]): any[] {
+    return exercises.map((ex) => this.serializeExercise(ex));
+  }
+
+  serializeExercise(exercise: Exercise): any {
+    const level = this.resolveCourseLevel(exercise);
+    const requiresVietnameseInput = [
+      'fill_blank',
+      'translation',
+      'listening',
+      'speaking',
+    ].includes(exercise.exerciseType);
+    const acceptsWithoutDiacritics =
+      requiresVietnameseInput &&
+      (level === UserLevel.A1 || level === UserLevel.A2);
+
+    return {
+      id: exercise.id,
+      exerciseType: exercise.exerciseType,
+      question: exercise.question,
+      questionAudioUrl: exercise.questionAudioUrl,
+      options: exercise.options,
+      correctAnswer: exercise.correctAnswer,
+      explanation: exercise.explanation,
+      orderIndex: exercise.orderIndex,
+      difficultyLevel: exercise.difficultyLevel,
+      acceptsWithoutDiacritics,
+    };
+  }
+
   async findById(id: string): Promise<Exercise> {
     const exercise = await this.exercisesRepository.findById(id);
     if (!exercise) {
@@ -148,8 +181,15 @@ export class ExercisesService implements ExerciseStatsPort {
     const level = this.resolveCourseLevel(exercise);
     if (!level) return undefined;
 
+    const requiresVietnameseInput = [
+      'fill_blank',
+      'translation',
+      'listening',
+      'speaking',
+    ].includes(exercise.exerciseType);
     const acceptWithoutDiacritics =
-      level === UserLevel.A1 || level === UserLevel.A2;
+      requiresVietnameseInput &&
+      (level === UserLevel.A1 || level === UserLevel.A2);
 
     return { acceptWithoutDiacritics };
   }

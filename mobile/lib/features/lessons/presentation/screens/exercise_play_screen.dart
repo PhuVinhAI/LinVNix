@@ -8,6 +8,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../core/theme/widgets/app_bottom_sheet.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../assistant/data/current_exercise_attempt_provider.dart';
 import '../../../assistant/data/exercise_context_sanitizer.dart';
@@ -691,6 +692,132 @@ class QuestionHeader extends StatelessWidget {
   final Exercise exercise;
   final ExerciseRenderer renderer;
 
+  void _showDiacriticsInfo(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final s = S.of(context);
+    AppBottomSheet.show(
+      context,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.sm,
+              AppSpacing.sm,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  color: c.primary,
+                  size: 24,
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    s.vietnameseWithoutDiacriticsTitle,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.titleMedium,
+                      fontWeight: FontWeight.w600,
+                      color: c.foreground,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  tooltip: s.closeButton,
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(Icons.close, color: c.mutedForeground),
+                  style: IconButton.styleFrom(
+                    foregroundColor: c.mutedForeground,
+                    minimumSize: const Size(48, 48),
+                    fixedSize: const Size(48, 48),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: c.border),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.md,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  s.vietnameseWithoutDiacriticsAccepted,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyMedium,
+                    color: c.foreground,
+                    height: 1.6,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Container(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  decoration: BoxDecoration(
+                    color: c.muted.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${s.vietnameseWithoutDiacriticsExample}:',
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyMedium,
+                          fontWeight: FontWeight.w600,
+                          color: c.mutedForeground,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Text(
+                        '"${s.vietnameseWithoutDiacriticsExampleBefore}"',
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyMedium,
+                          fontWeight: FontWeight.w600,
+                          color: c.primary,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.xs),
+                      Icon(
+                        Icons.arrow_forward,
+                        size: 16,
+                        color: c.mutedForeground,
+                      ),
+                      const SizedBox(width: AppSpacing.xs),
+                      Text(
+                        '"${s.vietnameseWithoutDiacriticsExampleAfter}"',
+                        style: AppTheme.vnStyle(
+                          fontSize: AppTypography.bodyMedium,
+                          fontWeight: FontWeight.w600,
+                          color: c.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                AppButton(
+                  label: s.understoodButton,
+                  variant: AppButtonVariant.primary,
+                  onPressed: () => Navigator.pop(context),
+                  isFullWidth: true,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
@@ -699,35 +826,54 @@ class QuestionHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.xs + 2,
-          ),
-          decoration: BoxDecoration(
-            color: visuals.accent.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(AppRadius.full),
-            border: Border.all(
-              color: visuals.accent.withValues(alpha: 0.25),
-              width: 1,
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs + 2,
+              ),
+              decoration: BoxDecoration(
+                color: visuals.accent.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(AppRadius.full),
+                border: Border.all(
+                  color: visuals.accent.withValues(alpha: 0.25),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(visuals.icon, size: 14, color: visuals.accent),
+                  const SizedBox(width: AppSpacing.xs + 2),
+                  Text(
+                    visuals.label,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.caption,
+                      color: visuals.accent,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(visuals.icon, size: 14, color: visuals.accent),
-              const SizedBox(width: AppSpacing.xs + 2),
-              Text(
-                visuals.label,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.caption,
-                  color: visuals.accent,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.3,
+            if (exercise.acceptsWithoutDiacritics) ...[
+              const SizedBox(width: AppSpacing.sm),
+              InkWell(
+                onTap: () => _showDiacriticsInfo(context),
+                borderRadius: BorderRadius.circular(AppRadius.full),
+                child: Container(
+                  padding: const EdgeInsets.all(AppSpacing.xs),
+                  child: Icon(
+                    Icons.info_outline,
+                    size: 18,
+                    color: visuals.accent.withValues(alpha: 0.7),
+                  ),
                 ),
               ),
             ],
-          ),
+          ],
         ),
         if (renderer.showsQuestion) ...[
           const SizedBox(height: AppSpacing.md),

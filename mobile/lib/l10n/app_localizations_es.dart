@@ -1217,6 +1217,25 @@ class SEs extends S {
   String get typeAnswerHint => 'Escribe tu respuesta aquí...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted =>
+      'Puedes escribir vietnamita sin diacríticos';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle => 'Vietnamita sin diacríticos';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => 'Ejemplo';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => 'Entendido';
+
+  @override
   String get typeMessageHint => 'Escribe un mensaje...';
 
   @override

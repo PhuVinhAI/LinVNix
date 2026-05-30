@@ -50,6 +50,7 @@ class Exercise {
     this.explanation,
     this.orderIndex = 0,
     this.difficultyLevel = 1,
+    this.acceptsWithoutDiacritics = false,
   });
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
@@ -71,6 +72,7 @@ class Exercise {
       explanation: json['explanation'] as String?,
       orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
       difficultyLevel: (json['difficultyLevel'] as num?)?.toInt() ?? 1,
+      acceptsWithoutDiacritics: json['acceptsWithoutDiacritics'] as bool? ?? false,
     );
   }
 
@@ -85,6 +87,7 @@ class Exercise {
       'explanation': explanation,
       'orderIndex': orderIndex,
       'difficultyLevel': difficultyLevel,
+      'acceptsWithoutDiacritics': acceptsWithoutDiacritics,
     };
   }
 
@@ -97,6 +100,7 @@ class Exercise {
   final String? explanation;
   final int orderIndex;
   final int difficultyLevel;
+  final bool acceptsWithoutDiacritics;
 }
 
 @immutable

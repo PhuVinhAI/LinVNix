@@ -1224,6 +1224,26 @@ class SFr extends S {
   String get typeAnswerHint => 'Saisissez votre réponse ici...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted =>
+      'Vous pouvez taper le vietnamien sans signes diacritiques';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle =>
+      'Vietnamien sans signes diacritiques';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => 'Exemple';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => 'Compris';
+
+  @override
   String get typeMessageHint => 'Écrivez un message...';
 
   @override

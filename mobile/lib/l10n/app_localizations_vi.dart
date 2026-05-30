@@ -1213,6 +1213,25 @@ class SVi extends S {
   String get typeAnswerHint => 'Nhập câu trả lời tại đây...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted =>
+      'Bạn có thể gõ tiếng Việt không dấu';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle => 'Tiếng Việt Không Dấu';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => 'Ví dụ';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => 'Đã hiểu';
+
+  @override
   String get typeMessageHint => 'Nhập tin nhắn...';
 
   @override

@@ -100,12 +100,14 @@ export class ExercisesController {
           options: ['Tôi', 'Bạn', 'Anh ấy', 'Cả 3 đều đúng'],
           orderIndex: 1,
           difficultyLevel: 1,
+          acceptsWithoutDiacritics: true,
         },
       ],
     },
   })
   async findByLesson(@Param('lessonId') lessonId: string) {
-    return this.exercisesService.findByLessonId(lessonId);
+    const exercises = await this.exercisesService.findByLessonId(lessonId);
+    return this.exercisesService.serializeExercises(exercises);
   }
 
   @Public()
@@ -120,7 +122,8 @@ export class ExercisesController {
     description: 'Danh sách bài tập của set',
   })
   async findBySet(@Param('setId') setId: string) {
-    return this.exercisesService.findBySetId(setId);
+    const exercises = await this.exercisesService.findBySetId(setId);
+    return this.exercisesService.serializeExercises(exercises);
   }
 
   @Public()

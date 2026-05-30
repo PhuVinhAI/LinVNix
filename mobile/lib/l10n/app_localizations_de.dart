@@ -1225,6 +1225,26 @@ class SDe extends S {
   String get typeAnswerHint => 'Antwort hier eingeben...';
 
   @override
+  String get vietnameseWithoutDiacriticsAccepted =>
+      'Sie können Vietnamesisch ohne diakritische Zeichen eingeben';
+
+  @override
+  String get vietnameseWithoutDiacriticsTitle =>
+      'Vietnamesisch ohne diakritische Zeichen';
+
+  @override
+  String get vietnameseWithoutDiacriticsExample => 'Beispiel';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleBefore => 'tieng viet';
+
+  @override
+  String get vietnameseWithoutDiacriticsExampleAfter => 'tiếng việt';
+
+  @override
+  String get understoodButton => 'Verstanden';
+
+  @override
   String get typeMessageHint => 'Schreibe eine Nachricht...';
 
   @override
