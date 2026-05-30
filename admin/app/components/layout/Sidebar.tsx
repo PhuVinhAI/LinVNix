@@ -1,22 +1,77 @@
-import { NavLink } from 'react-router';
-import { ROUTES } from '../../../lib/shared/constants';
+import { NavLink } from 'react-router'
+import { ROUTES } from '../../../lib/shared/constants'
 import {
   LayoutDashboard,
-  Users,
   BookOpen,
-  BookMarked,
+  FolderTree,
   FileText,
+  BookMarked,
+  Languages,
+  ClipboardList,
+  Layers,
+  MessageSquare,
+  FolderOpen,
+  Users,
   Settings,
-} from 'lucide-react';
+  type LucideIcon,
+} from 'lucide-react'
+import { ScrollArea } from '../ui/scroll-area'
 
-const navigation = [
-  { name: 'Dashboard', href: ROUTES.DASHBOARD, icon: LayoutDashboard },
-  { name: 'Người dùng', href: ROUTES.USERS, icon: Users },
-  { name: 'Khóa học', href: ROUTES.COURSES, icon: BookOpen },
-  { name: 'Từ vựng', href: ROUTES.VOCABULARIES, icon: BookMarked },
-  { name: 'Bài tập', href: ROUTES.EXERCISES, icon: FileText },
-  { name: 'Cài đặt', href: ROUTES.SETTINGS, icon: Settings },
-];
+interface NavigationItem {
+  name: string
+  href: string
+  icon: LucideIcon
+}
+
+interface NavigationGroup {
+  title: string
+  items: NavigationItem[]
+}
+
+const navigationGroups: NavigationGroup[] = [
+  {
+    title: 'Tổng quan',
+    items: [
+      { name: 'Dashboard', href: ROUTES.DASHBOARD, icon: LayoutDashboard },
+    ],
+  },
+  {
+    title: 'Học liệu',
+    items: [
+      { name: 'Khóa học', href: ROUTES.COURSES, icon: BookOpen },
+      { name: 'Chủ đề', href: ROUTES.TOPICS, icon: FolderTree },
+      { name: 'Bài học', href: ROUTES.LESSONS, icon: FileText },
+      { name: 'Từ vựng', href: ROUTES.VOCABULARIES, icon: BookMarked },
+      { name: 'Ngữ pháp', href: ROUTES.GRAMMAR, icon: Languages },
+    ],
+  },
+  {
+    title: 'Bài tập',
+    items: [
+      { name: 'Bài tập', href: ROUTES.EXERCISES, icon: ClipboardList },
+      { name: 'Bộ bài tập', href: ROUTES.EXERCISE_SETS, icon: Layers },
+    ],
+  },
+  {
+    title: 'Hội thoại mô phỏng',
+    items: [
+      { name: 'Tình huống', href: ROUTES.SCENARIOS, icon: MessageSquare },
+      { name: 'Danh mục tình huống', href: ROUTES.SCENARIO_CATEGORIES, icon: FolderOpen },
+    ],
+  },
+  {
+    title: 'Người dùng',
+    items: [
+      { name: 'Học viên', href: ROUTES.LEARNERS, icon: Users },
+    ],
+  },
+  {
+    title: 'Cài đặt',
+    items: [
+      { name: 'Cài đặt', href: ROUTES.SETTINGS, icon: Settings },
+    ],
+  },
+]
 
 /**
  * Sidebar Component
@@ -32,24 +87,35 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="space-y-1 p-4">
-        {navigation.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.href}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-              }`
-            }
-          >
-            <item.icon className="h-5 w-5" />
-            {item.name}
-          </NavLink>
-        ))}
-      </nav>
+      <ScrollArea className="h-[calc(100vh-4rem)]">
+        <nav className="space-y-6 p-4">
+          {navigationGroups.map((group) => (
+            <div key={group.title}>
+              <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {group.title}
+              </h3>
+              <div className="space-y-1">
+                {group.items.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                        isActive
+                          ? 'bg-primary text-primary-foreground'
+                          : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      }`
+                    }
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.name}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+      </ScrollArea>
     </aside>
-  );
+  )
 }

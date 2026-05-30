@@ -17,9 +17,20 @@ export const STORAGE_KEYS = {
 export const ROUTES = {
   LOGIN: '/login',
   DASHBOARD: '/',
-  USERS: '/users',
+  // Học liệu
   COURSES: '/courses',
+  TOPICS: '/topics',
+  LESSONS: '/lessons',
   VOCABULARIES: '/vocabularies',
+  GRAMMAR: '/grammar',
+  // Bài tập
   EXERCISES: '/exercises',
+  EXERCISE_SETS: '/exercise-sets',
+  // Hội thoại mô phỏng
+  SCENARIOS: '/scenarios',
+  SCENARIO_CATEGORIES: '/scenario-categories',
+  // Người dùng
+  LEARNERS: '/learners',
+  // Cài đặt
   SETTINGS: '/settings',
 } as const;

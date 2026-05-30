@@ -20,3 +20,18 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   return <>{children}</>
 }
+
+/**
+ * Public Route - Redirect to dashboard if already authenticated
+ * Use this for login page
+ */
+export function PublicRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated } = useAuthStore()
+
+  if (isAuthenticated) {
+    // Already logged in, redirect to dashboard
+    return <Navigate to={ROUTES.DASHBOARD} replace />
+  }
+
+  return <>{children}</>
+}

@@ -1,5 +1,5 @@
-import { useAuth } from '../../hooks/useAuth';
-import { Button } from '../ui/button';
+import { useAuth } from '../../hooks/useAuth'
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,18 +7,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
-import { LogOut, User, Settings } from 'lucide-react';
+} from '../ui/dropdown-menu'
+import { LogOut, User, Settings, Moon, Sun } from 'lucide-react'
+import { useTheme } from '../../hooks/useTheme'
 
 /**
  * Header Component
  */
 export function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth()
+  const { theme, toggleTheme } = useTheme()
 
   const handleLogout = async () => {
-    await logout();
-  };
+    await logout()
+  }
 
   return (
     <header className="flex h-16 items-center justify-between border-b border-border bg-card px-6">
@@ -29,8 +31,24 @@ export function Header() {
         </h2>
       </div>
 
-      {/* Right - User Menu */}
+      {/* Right - Theme Toggle + User Menu */}
       <div className="flex items-center gap-4">
+        {/* Theme Toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="h-9 w-9"
+        >
+          {theme === 'dark' ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+
+        {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
@@ -61,5 +79,5 @@ export function Header() {
         </DropdownMenu>
       </div>
     </header>
-  );
+  )
 }
