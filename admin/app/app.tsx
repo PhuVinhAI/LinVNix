@@ -4,6 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { router } from './router'
 import { useAuthStore } from './features/auth'
+import { useTheme } from './hooks/useTheme'
 import { queryClient } from '../lib/core/infrastructure/query/query-client'
 import { Toaster } from './components/ui/sonner'
 import './styles/app.css'
@@ -11,7 +12,9 @@ import './styles/app.css'
 export default function App() {
   const initialize = useAuthStore((state) => state.initialize)
 
-  // Initialize auth state from storage
+  // Apply theme class to root on every page (including login)
+  useTheme()
+
   useEffect(() => {
     initialize()
   }, [initialize])

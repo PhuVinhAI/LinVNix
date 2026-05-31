@@ -1,142 +1,206 @@
-import { Link } from 'react-router'
+import { useState } from 'react'
+import type { MouseEvent, KeyboardEvent } from 'react'
+import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
-import { Plus, MessageSquare, Edit, Trash2 } from 'lucide-react'
+import { Plus, MessageSquare, Pencil, Trash2, MoreVertical } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Badge } from '../../components/ui/badge'
-import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { PageHeader } from '../../components/admin/PageHeader'
-import { LoadingState } from '../../components/admin/LoadingState'
-import { ErrorState } from '../../components/admin/ErrorState'
-import { EmptyState } from '../../components/admin/EmptyState'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../../components/ui/alert-dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../components/ui/dropdown-menu'
 import { useAdminScenarioCategories, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
 import type { ScenarioCategory } from '../../features/simulations/types'
 import { simulationPath } from './route-utils'
 
 export function ScenarioCategoriesPage() {
-  const { data = [], isLoading, error, refetch } = useAdminScenarioCategories()
+  const navigate = useNavigate()
+  const { data = [], isLoading, error } = useAdminScenarioCategories()
   const mutations = useSimulationsAdminMutation()
+  const [pendingDelete, setPendingDelete] = useState<ScenarioCategory | null>(null)
 
-  const remove = async (category: ScenarioCategory) => {
+  const confirmDelete = async () => {
+    if (!pendingDelete) return
     try {
-      await mutations.deleteCategory.mutateAsync(category.id)
+      await mutations.deleteCategory.mutateAsync(pendingDelete.id)
       toast.success('Đã xóa danh mục')
+      setPendingDelete(null)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Không thể xóa')
     }
   }
 
-  return (
-    <div className="space-y-8">
-      <Breadcrumbs items={[{ label: 'Mô phỏng' }, { label: 'Danh mục tình huống' }]} />
+  const stop = (e: MouseEvent | KeyboardEvent) => {
+    e.stopPropagation()
+  }
 
-      <PageHeader
-        title="Danh mục tình huống"
-        description="Đi vào từng danh mục để quản lý tình huống và nhân vật mô phỏng hội thoại."
-        actions={
-          <Button asChild size="lg">
-            <Link to={simulationPath.categoryNew()}>
-              <Plus className="h-5 w-5" />
-              Thêm danh mục
-            </Link>
-          </Button>
-        }
-      />
+  return (
+    <div className="space-y-6">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">
+            Danh mục tình huống
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1.5">
+            Tổ chức tình huống và nhân vật cho hội thoại mô phỏng.
+          </p>
+        </div>
+        <Button asChild>
+          <Link to={simulationPath.categoryNew()}>
+            <Plus className="h-4 w-4" />
+            Thêm danh mục
+          </Link>
+        </Button>
+      </div>
 
       {isLoading ? (
-        <LoadingState message="Đang tải danh mục..." />
+        <div className="text-center py-12">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
+          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
+        </div>
       ) : error ? (
-        <ErrorState
-          message={error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          onRetry={() => refetch()}
-        />
+        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
+          <p className="text-sm text-destructive font-semibold">
+            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
+          </p>
+        </div>
       ) : data.length === 0 ? (
-        <EmptyState
-          icon={MessageSquare}
-          title="Chưa có danh mục nào"
-          description="Tạo danh mục đầu tiên để tổ chức các tình huống mô phỏng"
-          action={
-            <Button asChild size="lg">
-              <Link to={simulationPath.categoryNew()}>
-                <Plus className="h-5 w-5" />
-                Tạo danh mục đầu tiên
-              </Link>
-            </Button>
-          }
-        />
+        <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
+          <MessageSquare className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+          <h3 className="text-lg font-bold mb-1">Chưa có danh mục nào</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Tạo danh mục đầu tiên để tổ chức các tình huống mô phỏng
+          </p>
+          <Button asChild>
+            <Link to={simulationPath.categoryNew()}>
+              <Plus className="h-4 w-4" />
+              Tạo danh mục đầu tiên
+            </Link>
+          </Button>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.map((category) => (
+        <div className="rounded-lg border-2 border-border overflow-hidden">
+          {data.map((category, index) => (
             <div
               key={category.id}
-              className="group rounded-2xl border-2 border-border bg-card overflow-hidden transition-all hover:border-primary hover:-translate-y-2"
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate(simulationPath.category(category.id))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') navigate(simulationPath.category(category.id))
+              }}
+              className={`group flex items-center gap-4 p-4 bg-card cursor-pointer transition-colors hover:bg-muted/40 focus:outline-none focus:bg-muted/40 ${
+                index > 0 ? 'border-t-2 border-border' : ''
+              }`}
             >
-              {/* Color Header */}
+              {/* Color signature box */}
               <div
-                className="h-32 flex items-center justify-center relative"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white"
                 style={{ backgroundColor: category.color || '#6366F1' }}
               >
-                <MessageSquare className="h-16 w-16 text-white/30" />
-                <div className="absolute top-4 right-4">
-                  <Badge variant="secondary" className="text-sm font-semibold">
-                    #{category.orderIndex}
-                  </Badge>
-                </div>
+                <MessageSquare className="h-5 w-5" strokeWidth={2.5} />
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-4">
-                {/* Title & Icon */}
-                <div>
-                  <Link to={simulationPath.category(category.id)} className="block mb-2">
-                    <h3 className="text-xl font-bold text-foreground hover:text-primary transition-colors">
-                      {category.name}
-                    </h3>
-                  </Link>
-                  {category.icon && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span>Icon:</span>
-                      <code className="bg-muted px-2 py-1 rounded">{category.icon}</code>
-                    </div>
-                  )}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-base font-bold text-foreground truncate">
+                    {category.name}
+                  </h3>
+                  <span className="text-xs text-muted-foreground">·</span>
+                  <span className="text-xs text-muted-foreground">#{category.orderIndex}</span>
                 </div>
+                {category.description ? (
+                  <p className="text-sm text-muted-foreground line-clamp-1 mt-0.5">
+                    {category.description}
+                  </p>
+                ) : category.icon ? (
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Icon: <code className="font-mono">{category.icon}</code>
+                  </p>
+                ) : null}
+              </div>
 
-                {/* Color Badge */}
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-8 w-8 rounded-lg border-2 border-border"
-                    style={{ backgroundColor: category.color }}
-                  />
-                  <code className="text-sm text-muted-foreground">{category.color}</code>
-                </div>
+              {/* Stats */}
+              <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground shrink-0">
+                <MessageSquare className="h-3.5 w-3.5" />
+                <span className="font-medium tabular-nums">
+                  {category.scenarios?.length ?? 0}
+                </span>
+                <span>tình huống</span>
+              </div>
 
-                {/* Actions */}
-                <div className="flex gap-2 pt-2">
-                  <Button asChild variant="default" size="sm" className="flex-1">
-                    <Link to={simulationPath.category(category.id)}>Mở</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <Link to={simulationPath.categoryEdit(category.id)}>
-                      <Edit className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (window.confirm(`Xóa danh mục "${category.name}"?`)) {
-                        remove(category)
-                      }
-                    }}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
+              {/* Actions */}
+              <div onClick={stop} onKeyDown={stop} className="shrink-0">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                      <span className="sr-only">Tùy chọn</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44">
+                    <DropdownMenuItem asChild>
+                      <Link to={simulationPath.categoryEdit(category.id)}>
+                        <Pencil className="h-4 w-4" />
+                        Chỉnh sửa
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={() => setPendingDelete(category)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Xóa danh mục
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      <AlertDialog open={!!pendingDelete} onOpenChange={(open) => !open && setPendingDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10">
+                <Trash2 className="h-5 w-5 text-destructive" />
+              </div>
+              <AlertDialogTitle>Xóa danh mục?</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription>
+              Danh mục <span className="font-semibold text-foreground">&quot;{pendingDelete?.name}&quot;</span> và toàn bộ tình huống, nhân vật bên trong sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:opacity-90"
+              onClick={confirmDelete}
+            >
+              <Trash2 className="h-4 w-4" />
+              Xóa danh mục
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

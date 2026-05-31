@@ -35,47 +35,47 @@ export function LessonFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const backPath = parentModuleId ? learningPath.module(parentModuleId) : learningPath.courses()
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-3xl space-y-6">
       <Breadcrumbs
         items={[
-          { label: 'Học liệu', href: learningPath.courses() },
           { label: module?.course?.title ?? 'Khóa học', href: module?.courseId ? learningPath.course(module.courseId) : learningPath.courses() },
           { label: module?.title ?? 'Chủ đề', href: parentModuleId ? learningPath.module(parentModuleId) : undefined },
           { label: mode === 'edit' ? lesson?.title ?? 'Sửa bài học' : 'Thêm bài học' },
         ]}
       />
 
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button asChild variant="ghost" size="icon-lg">
-            <Link to={backPath}>
-              <ArrowLeft className="h-6 w-6" />
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-4xl font-bold">{mode === 'edit' ? 'Sửa bài học' : 'Tạo bài học mới'}</h1>
-            <p className="text-lg text-muted-foreground mt-2">
-              {mode === 'edit' ? 'Cập nhật thông tin bài học' : 'Điền thông tin để tạo bài học mới'}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button asChild variant="outline" size="lg">
-            <Link to={backPath}>Hủy</Link>
-          </Button>
-          <Button type="submit" form="lesson-form" size="lg">
-            <Save className="h-5 w-5" />
-            {mode === 'edit' ? 'Cập nhật' : 'Tạo bài học'}
-          </Button>
+      <div className="flex items-center gap-3">
+        <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
+          <Link to={backPath}>
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+        </Button>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {mode === 'edit' ? 'Sửa bài học' : 'Tạo bài học mới'}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1.5">
+            {mode === 'edit' ? 'Cập nhật thông tin bài học' : 'Điền thông tin để tạo bài học mới'}
+          </p>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="max-w-4xl">
-        <div className="rounded-2xl border-2 border-border bg-card p-8">
-          <ResourceForm id="lesson-form" fields={lessonFields} initialValue={lesson} onSubmit={submit} />
-        </div>
+      <ResourceForm
+        id="lesson-form"
+        fields={lessonFields}
+        initialValue={lesson}
+        onSubmit={submit}
+        hideSubmit
+      />
+
+      <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
+        <Button asChild variant="ghost">
+          <Link to={backPath}>Hủy</Link>
+        </Button>
+        <Button type="submit" form="lesson-form">
+          <Save className="h-4 w-4" />
+          {mode === 'edit' ? 'Cập nhật' : 'Tạo bài học'}
+        </Button>
       </div>
     </div>
   )

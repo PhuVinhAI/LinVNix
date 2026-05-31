@@ -1,17 +1,48 @@
-import { Link } from 'react-router'
-import { Search, User as UserIcon } from 'lucide-react'
-import { Badge } from '../../components/ui/badge'
-import { Button } from '../../components/ui/button'
+import { useNavigate } from 'react-router'
+import { Search } from 'lucide-react'
 import { Input } from '../../components/ui/input'
-import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { DataTable } from '../../components/admin/DataTable'
-import { PageHeader } from '../../components/admin/PageHeader'
 import { useAdminLearners } from '../../features/learners/api/use-learners-admin'
 import type { Learner } from '../../features/learners/types'
 import { learnerPath } from './route-utils'
 import { useState } from 'react'
 
+const levelColors: Record<string, string> = {
+  A1: 'text-emerald-600 dark:text-emerald-400',
+  A2: 'text-teal-600 dark:text-teal-400',
+  B1: 'text-blue-600 dark:text-blue-400',
+  B2: 'text-indigo-600 dark:text-indigo-400',
+  C1: 'text-purple-600 dark:text-purple-400',
+  C2: 'text-rose-600 dark:text-rose-400',
+}
+
+const avatarColors = [
+  'bg-blue-500',
+  'bg-emerald-500',
+  'bg-rose-500',
+  'bg-amber-500',
+  'bg-indigo-500',
+  'bg-purple-500',
+  'bg-teal-500',
+  'bg-fuchsia-500',
+]
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/)
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+}
+
+function hashColor(id: string): string {
+  let hash = 0
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash * 31 + id.charCodeAt(i)) & 0xffffffff
+  }
+  return avatarColors[Math.abs(hash) % avatarColors.length]
+}
+
 export function LearnersPage() {
+  const navigate = useNavigate()
   const { data, isLoading, error } = useAdminLearners()
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -21,53 +52,57 @@ export function LearnersPage() {
   ) ?? []
 
   return (
-    <div className="space-y-8">
-      <Breadcrumbs items={[{ label: 'Học viên' }]} />
+    <div className="space-y-6">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Học viên</h1>
+          <p className="text-sm text-muted-foreground mt-1.5">
+            Quản lý hồ sơ và theo dõi tiến độ học tập.
+          </p>
+        </div>
+      </div>
 
-      <PageHeader
-        title="Học viên"
-        description="Quản lý hồ sơ và theo dõi dữ liệu học tập theo từng học viên."
-      />
-
-      {/* Search Bar */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
+      <div className="relative max-w-md">
+        <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Tìm kiếm học viên theo tên hoặc email..."
+          placeholder="Tìm theo tên hoặc email..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-14 h-16 text-lg"
+          className="pl-9"
         />
       </div>
 
       {isLoading ? (
-        <div className="text-center py-20">
-          <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-          <p className="mt-4 text-lg text-muted-foreground">Đang tải...</p>
+        <div className="text-center py-12">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
+          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
         </div>
       ) : error ? (
-        <div className="rounded-2xl border-2 border-destructive bg-destructive/10 p-8 text-center">
-          <p className="text-lg text-destructive font-semibold">{error instanceof Error ? error.message : 'Không tải được dữ liệu'}</p>
+        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
+          <p className="text-sm text-destructive font-semibold">
+            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
+          </p>
         </div>
       ) : (
         <DataTable
           data={filteredData}
-          empty="Chưa có học viên"
+          empty={searchQuery ? `Không tìm thấy "${searchQuery}"` : 'Chưa có học viên'}
+          onRowClick={(row) => navigate(learnerPath.learner(row.id))}
           columns={[
             {
               key: 'name',
               header: 'Học viên',
               cell: (row: Learner) => (
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                    <UserIcon className="h-7 w-7 text-primary" />
+                <div className="flex items-center gap-3">
+                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white text-xs font-bold ${hashColor(row.id)}`}>
+                    {getInitials(row.fullName)}
                   </div>
-                  <div>
-                    <Link className="text-lg font-bold hover:text-primary transition-colors" to={learnerPath.learner(row.id)}>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-foreground truncate">
                       {row.fullName}
-                    </Link>
-                    <p className="text-sm text-muted-foreground">{row.email}</p>
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{row.email}</p>
                   </div>
                 </div>
               ),
@@ -76,57 +111,45 @@ export function LearnersPage() {
               key: 'level',
               header: 'Level',
               cell: (row) => (
-                <Badge variant="secondary" className="text-base font-semibold px-4 py-2">
+                <span className={`text-sm font-bold ${levelColors[row.currentLevel] ?? 'text-muted-foreground'}`}>
                   {row.currentLevel}
-                </Badge>
-              )
+                </span>
+              ),
             },
             {
               key: 'role',
               header: 'Vai trò',
               cell: (row) => (
-                <Badge variant="outline" className="text-base font-semibold px-4 py-2">
+                <span className="text-sm font-medium text-muted-foreground capitalize">
                   {row.role}
-                </Badge>
-              )
+                </span>
+              ),
             },
             {
               key: 'lessons',
               header: 'Bài đã học',
               cell: (row) => (
-                <div className="text-base font-semibold">
+                <span className="text-sm font-bold tabular-nums">
                   {row.summary?.completedLessons ?? 0}
-                </div>
-              )
+                </span>
+              ),
             },
             {
               key: 'exercises',
-              header: 'Kết quả bài tập',
+              header: 'Bài tập',
               cell: (row) => (
-                <div className="text-base font-semibold">
+                <span className="text-sm font-bold tabular-nums">
                   {row.summary?.exerciseResults ?? 0}
-                </div>
-              )
+                </span>
+              ),
             },
             {
               key: 'vocab',
-              header: 'Từ cá nhân',
+              header: 'Từ vựng',
               cell: (row) => (
-                <div className="text-base font-semibold">
+                <span className="text-sm font-bold tabular-nums">
                   {row.summary?.personalVocabularyCount ?? 0}
-                </div>
-              )
-            },
-            {
-              key: 'actions',
-              header: '',
-              className: 'text-right',
-              cell: (row) => (
-                <div className="flex justify-end gap-2">
-                  <Button asChild variant="default" size="sm">
-                    <Link to={learnerPath.learner(row.id)}>Xem chi tiết</Link>
-                  </Button>
-                </div>
+                </span>
               ),
             },
           ]}

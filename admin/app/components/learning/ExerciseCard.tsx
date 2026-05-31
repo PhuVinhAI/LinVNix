@@ -1,99 +1,136 @@
-import { GripVertical, Edit, Trash2, Copy } from 'lucide-react'
+import { Pencil, Trash2, MoreVertical, Clock, Award } from 'lucide-react'
 import { Button } from '../ui/button'
-import { Badge } from '../ui/badge'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 import type { Exercise } from '../../features/learning/types'
 
-const EXERCISE_TYPE_COLORS = {
-  MULTIPLE_CHOICE: 'border-l-blue-500',
-  FILL_IN_BLANK: 'border-l-green-500',
-  MATCHING: 'border-l-purple-500',
-  TRANSLATION: 'border-l-orange-500',
-  LISTENING: 'border-l-pink-500',
-  SPEAKING: 'border-l-cyan-500',
-} as const
+const TYPE_COLORS: Record<string, string> = {
+  MULTIPLE_CHOICE: 'text-blue-600 dark:text-blue-400',
+  FILL_IN_BLANK: 'text-emerald-600 dark:text-emerald-400',
+  MATCHING: 'text-purple-600 dark:text-purple-400',
+  TRANSLATION: 'text-amber-600 dark:text-amber-400',
+  LISTENING: 'text-rose-600 dark:text-rose-400',
+  SPEAKING: 'text-cyan-600 dark:text-cyan-400',
+}
 
-const DIFFICULTY_CONFIG = {
-  BEGINNER: { label: 'Dễ', color: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' },
-  INTERMEDIATE: { label: 'Trung bình', color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' },
-  ADVANCED: { label: 'Khó', color: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' },
-} as const
+const TYPE_LABELS: Record<string, string> = {
+  MULTIPLE_CHOICE: 'Trắc nghiệm',
+  FILL_IN_BLANK: 'Điền chỗ trống',
+  MATCHING: 'Ghép cặp',
+  TRANSLATION: 'Dịch',
+  LISTENING: 'Nghe',
+  SPEAKING: 'Nói',
+}
+
+const DIFFICULTY: Record<string, { label: string; color: string; dot: string }> = {
+  BEGINNER: {
+    label: 'Dễ',
+    color: 'text-emerald-600 dark:text-emerald-400',
+    dot: 'bg-emerald-500',
+  },
+  INTERMEDIATE: {
+    label: 'Trung bình',
+    color: 'text-amber-600 dark:text-amber-400',
+    dot: 'bg-amber-500',
+  },
+  ADVANCED: {
+    label: 'Khó',
+    color: 'text-rose-600 dark:text-rose-400',
+    dot: 'bg-rose-500',
+  },
+}
 
 interface ExerciseCardProps {
   exercise: Exercise
   onEdit: () => void
   onDelete: () => void
-  onDuplicate?: () => void
-  isDragging?: boolean
+  onClick?: () => void
 }
 
-export function ExerciseCard({ exercise, onEdit, onDelete, onDuplicate, isDragging }: ExerciseCardProps) {
-  const typeColor = EXERCISE_TYPE_COLORS[exercise.exerciseType as keyof typeof EXERCISE_TYPE_COLORS] || 'border-l-gray-500'
-  const difficulty = DIFFICULTY_CONFIG[exercise.difficultyLevel as keyof typeof DIFFICULTY_CONFIG] || DIFFICULTY_CONFIG.BEGINNER
+export function ExerciseCard({ exercise, onEdit, onDelete, onClick }: ExerciseCardProps) {
+  const typeColor = TYPE_COLORS[exercise.exerciseType] ?? 'text-muted-foreground'
+  const typeLabel = TYPE_LABELS[exercise.exerciseType] ?? exercise.exerciseType
+  const difficulty = DIFFICULTY[exercise.difficultyLevel] ?? DIFFICULTY.BEGINNER
+
+  const handleClick = () => onClick?.()
 
   return (
     <div
-      className={`group relative rounded-2xl border-2 border-border bg-card p-6 transition-all hover:border-primary hover:-translate-y-1 ${typeColor} border-l-8 ${
-        isDragging ? 'opacity-50 scale-95' : ''
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onClick={handleClick}
+      onKeyDown={(e) => {
+        if (onClick && e.key === 'Enter') handleClick()
+      }}
+      className={`group rounded-lg border-2 border-border bg-card p-4 transition-colors ${
+        onClick ? 'cursor-pointer hover:border-primary focus:outline-none focus:border-primary' : ''
       }`}
     >
-      {/* Drag Handle */}
-      <div className="absolute left-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
-        <GripVertical className="h-6 w-6 text-muted-foreground" />
-      </div>
-
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3 mb-2">
-            <Badge variant="secondary" className="text-sm font-semibold">
-              {exercise.exerciseType.replace(/_/g, ' ')}
-            </Badge>
-            <Badge className={`text-sm font-semibold ${difficulty.color}`}>
-              {difficulty.label}
-            </Badge>
-            <span className="text-sm text-muted-foreground font-medium">#{exercise.orderIndex}</span>
-          </div>
+      {/* Meta row */}
+      <div className="flex items-center justify-between gap-2 mb-3">
+        <div className="flex items-center gap-2 text-xs flex-wrap min-w-0">
+          <span className={`font-bold ${typeColor}`}>{typeLabel}</span>
+          <span className="text-muted-foreground">·</span>
+          <span className={`flex items-center gap-1 font-medium ${difficulty.color}`}>
+            <span className={`h-1.5 w-1.5 rounded-full ${difficulty.dot}`} />
+            {difficulty.label}
+          </span>
+          <span className="text-muted-foreground">·</span>
+          <span className="text-muted-foreground tabular-nums">#{exercise.orderIndex}</span>
+        </div>
+        <div onClick={(e) => e.stopPropagation()} className="shrink-0 -mr-1 -mt-1">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              >
+                <MoreVertical className="h-4 w-4" />
+                <span className="sr-only">Tùy chọn</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onSelect={onEdit}>
+                <Pencil className="h-4 w-4" />
+                Chỉnh sửa
+              </DropdownMenuItem>
+              <DropdownMenuItem variant="destructive" onSelect={onDelete}>
+                <Trash2 className="h-4 w-4" />
+                Xóa bài tập
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      {/* Question Preview */}
-      <div className="mb-6">
-        <p className="text-xl font-bold text-foreground line-clamp-2 leading-relaxed">
-          {exercise.question}
-        </p>
-      </div>
+      {/* Question */}
+      <p className="text-sm font-bold text-foreground line-clamp-2 leading-relaxed mb-3">
+        {exercise.question}
+      </p>
 
-      {/* Metadata */}
-      <div className="flex items-center gap-4 mb-6 text-sm text-muted-foreground">
-        {exercise.points && (
-          <div className="flex items-center gap-1">
-            <span className="font-semibold">Điểm:</span>
-            <span>{exercise.points}</span>
-          </div>
-        )}
-        {exercise.timeLimit && (
-          <div className="flex items-center gap-1">
-            <span className="font-semibold">Thời gian:</span>
-            <span>{exercise.timeLimit}s</span>
-          </div>
-        )}
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center gap-2">
-        <Button onClick={onEdit} variant="outline" size="sm" className="flex-1">
-          <Edit className="h-4 w-4" />
-          Sửa
-        </Button>
-        {onDuplicate && (
-          <Button onClick={onDuplicate} variant="ghost" size="icon-sm">
-            <Copy className="h-4 w-4" />
-          </Button>
-        )}
-        <Button onClick={onDelete} variant="ghost" size="icon-sm" className="text-destructive hover:text-destructive">
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </div>
+      {/* Footer meta */}
+      {(exercise.points || exercise.timeLimit) && (
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          {exercise.points != null && (
+            <span className="flex items-center gap-1">
+              <Award className="h-3 w-3" />
+              <span className="font-medium tabular-nums">{exercise.points}</span>
+              <span>điểm</span>
+            </span>
+          )}
+          {exercise.timeLimit != null && (
+            <span className="flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              <span className="font-medium tabular-nums">{exercise.timeLimit}s</span>
+            </span>
+          )}
+        </div>
+      )}
     </div>
   )
 }

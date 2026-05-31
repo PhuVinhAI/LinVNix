@@ -1,101 +1,168 @@
-import { Link, useParams } from 'react-router'
+import { useState } from 'react'
+import type { MouseEvent, KeyboardEvent } from 'react'
+import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { Plus, Edit, MessageSquare, Users, User } from 'lucide-react'
+import { Plus, Pencil, MessageSquare, Users, MoreVertical, Trash2, UserCheck } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Badge } from '../../components/ui/badge'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { LoadingState } from '../../components/admin/LoadingState'
-import { ErrorState } from '../../components/admin/ErrorState'
-import { EmptyState } from '../../components/admin/EmptyState'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../../components/ui/alert-dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../components/ui/dropdown-menu'
 import { useAdminScenario, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
 import type { ScenarioCharacter } from '../../features/simulations/types'
 import { simulationPath } from './route-utils'
 
+const levelColors: Record<string, string> = {
+  A1: 'text-emerald-600 dark:text-emerald-400',
+  A2: 'text-teal-600 dark:text-teal-400',
+  B1: 'text-blue-600 dark:text-blue-400',
+  B2: 'text-indigo-600 dark:text-indigo-400',
+  C1: 'text-purple-600 dark:text-purple-400',
+  C2: 'text-rose-600 dark:text-rose-400',
+}
+
+// Palette for character avatars
+const avatarColors = [
+  'bg-blue-500',
+  'bg-emerald-500',
+  'bg-rose-500',
+  'bg-amber-500',
+  'bg-indigo-500',
+  'bg-purple-500',
+  'bg-teal-500',
+  'bg-fuchsia-500',
+]
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/)
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+}
+
 export function ScenarioDetailPage() {
   const { scenarioId } = useParams()
-  const { data: scenario, isLoading, error, refetch } = useAdminScenario(scenarioId)
+  const navigate = useNavigate()
+  const { data: scenario, isLoading, error } = useAdminScenario(scenarioId)
   const mutations = useSimulationsAdminMutation()
+  const [pendingDelete, setPendingDelete] = useState<ScenarioCharacter | null>(null)
 
-  const remove = async (character: ScenarioCharacter) => {
+  const confirmDelete = async () => {
+    if (!pendingDelete) return
     try {
-      await mutations.deleteCharacter.mutateAsync(character.id)
+      await mutations.deleteCharacter.mutateAsync(pendingDelete.id)
       toast.success('Đã xóa nhân vật')
+      setPendingDelete(null)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Không thể xóa')
     }
   }
 
+  const stop = (e: MouseEvent | KeyboardEvent) => {
+    e.stopPropagation()
+  }
+
+  const playableCount = scenario?.characters?.filter(c => c.isPlayable).length ?? 0
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: 'Mô phỏng', href: simulationPath.categories() },
           { label: scenario?.category?.name ?? 'Danh mục', href: scenario?.categoryId ? simulationPath.category(scenario.categoryId) : undefined },
           { label: scenario?.title ?? 'Tình huống' },
         ]}
       />
 
       {/* Scenario Header */}
-      <div className="rounded-2xl border-2 border-border bg-card overflow-hidden">
-        <div className="h-32 bg-primary/10 flex items-center justify-center relative border-b-2 border-border">
-          <MessageSquare className="h-16 w-16 text-primary/30" />
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-xs flex-wrap">
+          <span className="font-bold text-muted-foreground">TÌNH HUỐNG</span>
+          <span className="text-muted-foreground">·</span>
+          <span className={`font-bold ${levelColors[scenario?.requiredLevel ?? ''] ?? 'text-muted-foreground'}`}>
+            {scenario?.requiredLevel ?? '—'}
+          </span>
+          <span className="text-muted-foreground">·</span>
+          <span className="font-medium text-muted-foreground capitalize">
+            {scenario?.difficulty ?? '—'}
+          </span>
+          <span className="text-muted-foreground">·</span>
+          {scenario?.isPublished ? (
+            <span className="flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Public
+            </span>
+          ) : (
+            <span className="flex items-center gap-1 font-medium text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
+              Draft
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-3xl font-bold text-foreground tracking-tight">
+              {scenario?.title ?? 'Tình huống'}
+            </h1>
+            {scenario?.description && (
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-3xl">
+                {scenario.description}
+              </p>
+            )}
+          </div>
           {scenarioId && scenario && (
-            <Button asChild variant="secondary" size="lg" className="absolute top-4 right-6">
+            <Button asChild variant="outline" className="shrink-0">
               <Link to={simulationPath.scenarioEdit(scenario.categoryId, scenarioId)}>
-                <Edit className="h-5 w-5" />
-                Sửa tình huống
+                <Pencil className="h-4 w-4" />
+                Sửa
               </Link>
             </Button>
           )}
         </div>
 
-        <div className="p-8">
-          <div className="flex items-center gap-3 mb-3">
-            <Badge variant="secondary" className="text-base px-4 py-2">
-              {scenario?.requiredLevel}
-            </Badge>
-            <Badge variant="outline" className="text-base px-4 py-2">
-              {scenario?.difficulty}
-            </Badge>
-            {scenario?.isPublished && (
-              <Badge className="text-base px-4 py-2">Published</Badge>
-            )}
+        <div className="flex items-center gap-6 pt-2 border-t-2 border-border">
+          <div className="flex items-center gap-2 pt-4">
+            <Users className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-bold text-foreground tabular-nums">
+              {scenario?.characters?.length ?? 0}
+            </span>
+            <span className="text-sm text-muted-foreground">nhân vật</span>
           </div>
-
-          <h1 className="text-4xl font-bold mb-3">{scenario?.title ?? 'Tình huống'}</h1>
-          {scenario?.description && (
-            <p className="text-lg text-muted-foreground mb-6">{scenario.description}</p>
-          )}
-
-          <div className="grid grid-cols-2 gap-6">
-            <div className="rounded-xl border-2 border-border bg-muted/30 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Users className="h-6 w-6 text-primary" />
-                <span className="text-sm font-semibold text-muted-foreground">Nhân vật</span>
-              </div>
-              <p className="text-3xl font-bold">{scenario?.characters?.length ?? 0}</p>
-            </div>
-            <div className="rounded-xl border-2 border-border bg-muted/30 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <User className="h-6 w-6 text-secondary" />
-                <span className="text-sm font-semibold text-muted-foreground">Playable</span>
-              </div>
-              <p className="text-3xl font-bold">
-                {scenario?.characters?.filter(c => c.isPlayable).length ?? 0}
-              </p>
-            </div>
+          <div className="flex items-center gap-2 pt-4">
+            <UserCheck className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-bold text-foreground tabular-nums">
+              {playableCount}
+            </span>
+            <span className="text-sm text-muted-foreground">playable</span>
           </div>
         </div>
       </div>
 
       {/* Characters Section */}
-      <div>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Nhân vật</h2>
+      <div className="space-y-4 pt-2">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight">Nhân vật</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Các nhân vật tham gia hội thoại trong tình huống.
+            </p>
+          </div>
           {scenarioId && (
-            <Button asChild size="lg">
+            <Button asChild>
               <Link to={simulationPath.characterNew(scenarioId)}>
-                <Plus className="h-5 w-5" />
+                <Plus className="h-4 w-4" />
                 Thêm nhân vật
               </Link>
             </Button>
@@ -103,71 +170,107 @@ export function ScenarioDetailPage() {
         </div>
 
         {isLoading ? (
-          <LoadingState message="Đang tải nhân vật..." />
+          <div className="text-center py-12">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
+            <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
+          </div>
         ) : error ? (
-          <ErrorState
-            message={error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-            onRetry={() => refetch()}
-          />
+          <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
+            <p className="text-sm text-destructive font-semibold">
+              {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
+            </p>
+          </div>
         ) : !scenario?.characters || scenario.characters.length === 0 ? (
-          <EmptyState
-            icon={Users}
-            title="Chưa có nhân vật nào"
-            description="Tạo nhân vật đầu tiên cho tình huống này"
-            action={
-              scenarioId ? (
-                <Button asChild size="lg">
-                  <Link to={simulationPath.characterNew(scenarioId)}>
-                    <Plus className="h-5 w-5" />
-                    Tạo nhân vật đầu tiên
-                  </Link>
-                </Button>
-              ) : null
-            }
-          />
+          <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
+            <Users className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+            <h3 className="text-lg font-bold mb-1">Chưa có nhân vật nào</h3>
+            <p className="text-sm text-muted-foreground mb-4">Tạo nhân vật đầu tiên cho tình huống này</p>
+            {scenarioId && (
+              <Button asChild>
+                <Link to={simulationPath.characterNew(scenarioId)}>
+                  <Plus className="h-4 w-4" />
+                  Tạo nhân vật đầu tiên
+                </Link>
+              </Button>
+            )}
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {scenario.characters.map((character) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {scenario.characters.map((character, index) => (
               <div
                 key={character.id}
-                className="group rounded-2xl border-2 border-border bg-card p-6 transition-all hover:border-primary hover:-translate-y-2"
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate(simulationPath.characterEdit(character.scenarioId, character.id))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') navigate(simulationPath.characterEdit(character.scenarioId, character.id))
+                }}
+                className="group relative rounded-lg border-2 border-border bg-card p-4 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
               >
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold mb-2">{character.name}</h3>
-                      <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="secondary">{character.role}</Badge>
-                        {character.isPlayable && <Badge>Playable</Badge>}
-                      </div>
-                      {character.personality && (
-                        <p className="text-sm text-muted-foreground line-clamp-2">{character.personality}</p>
-                      )}
-                    </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
-                      <span className="text-xl font-bold text-primary">#{character.orderIndex}</span>
-                    </div>
+                <div className="flex items-start gap-3">
+                  {/* Avatar with initials */}
+                  <div
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white text-sm font-bold ${avatarColors[index % avatarColors.length]}`}
+                  >
+                    {getInitials(character.name)}
                   </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Button asChild variant="default" size="sm" className="flex-1">
-                      <Link to={simulationPath.characterEdit(character.scenarioId, character.id)}>
-                        <Edit className="h-4 w-4" />
-                        Sửa
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        if (window.confirm(`Xóa nhân vật "${character.name}"?`)) {
-                          remove(character)
-                        }
-                      }}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      Xóa
-                    </Button>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-base font-bold text-foreground truncate">
+                        {character.name}
+                      </h3>
+                      <div onClick={stop} onKeyDown={stop} className="shrink-0 -mr-1 -mt-1">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                              <span className="sr-only">Tùy chọn</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-44">
+                            <DropdownMenuItem asChild>
+                              <Link to={simulationPath.characterEdit(character.scenarioId, character.id)}>
+                                <Pencil className="h-4 w-4" />
+                                Chỉnh sửa
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              variant="destructive"
+                              onSelect={() => setPendingDelete(character)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Xóa nhân vật
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-wrap mt-0.5">
+                      <span className="text-xs font-medium text-muted-foreground capitalize">
+                        {character.role}
+                      </span>
+                      {character.isPlayable && (
+                        <>
+                          <span className="text-xs text-muted-foreground">·</span>
+                          <span className="flex items-center gap-1 text-xs font-medium text-primary">
+                            <UserCheck className="h-3 w-3" />
+                            Playable
+                          </span>
+                        </>
+                      )}
+                    </div>
+
+                    {character.personality && (
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-2">
+                        {character.personality}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -175,6 +278,32 @@ export function ScenarioDetailPage() {
           </div>
         )}
       </div>
+
+      <AlertDialog open={!!pendingDelete} onOpenChange={(open) => !open && setPendingDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10">
+                <Trash2 className="h-5 w-5 text-destructive" />
+              </div>
+              <AlertDialogTitle>Xóa nhân vật?</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription>
+              Nhân vật <span className="font-semibold text-foreground">&quot;{pendingDelete?.name}&quot;</span> và toàn bộ đoạn hội thoại có nhân vật này sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:opacity-90"
+              onClick={confirmDelete}
+            >
+              <Trash2 className="h-4 w-4" />
+              Xóa nhân vật
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

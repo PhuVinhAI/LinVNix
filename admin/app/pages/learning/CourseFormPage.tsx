@@ -36,7 +36,6 @@ export function CourseFormPage({ mode }: { mode: 'create' | 'edit' }) {
     <div className="max-w-3xl space-y-6">
       <Breadcrumbs
         items={[
-          { label: 'Học liệu', href: learningPath.courses() },
           { label: 'Khóa học', href: learningPath.courses() },
           { label: mode === 'edit' ? course?.title ?? 'Sửa' : 'Thêm' },
         ]}

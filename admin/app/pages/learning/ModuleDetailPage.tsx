@@ -1,107 +1,153 @@
-import { Link, useParams } from 'react-router'
+import { useState } from 'react'
+import type { MouseEvent, KeyboardEvent } from 'react'
+import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { Plus, Edit, BookOpen, Clock, Layers, FileText } from 'lucide-react'
+import { Plus, Pencil, BookOpen, Clock, MoreVertical, Trash2 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Badge } from '../../components/ui/badge'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { PageHeader } from '../../components/admin/PageHeader'
-import { LoadingState } from '../../components/admin/LoadingState'
-import { ErrorState } from '../../components/admin/ErrorState'
-import { EmptyState } from '../../components/admin/EmptyState'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../../components/ui/alert-dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../components/ui/dropdown-menu'
 import { useAdminModule, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { Lesson } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
+const lessonTypeColors: Record<string, string> = {
+  vocabulary: 'text-emerald-600 dark:text-emerald-400',
+  grammar: 'text-blue-600 dark:text-blue-400',
+  reading: 'text-indigo-600 dark:text-indigo-400',
+  listening: 'text-purple-600 dark:text-purple-400',
+  speaking: 'text-rose-600 dark:text-rose-400',
+  writing: 'text-amber-600 dark:text-amber-400',
+  pronunciation: 'text-teal-600 dark:text-teal-400',
+  culture: 'text-fuchsia-600 dark:text-fuchsia-400',
+}
+
+const lessonTypeLabels: Record<string, string> = {
+  vocabulary: 'Từ vựng',
+  grammar: 'Ngữ pháp',
+  reading: 'Đọc',
+  listening: 'Nghe',
+  speaking: 'Nói',
+  writing: 'Viết',
+  pronunciation: 'Phát âm',
+  culture: 'Văn hóa',
+}
+
 export function ModuleDetailPage() {
   const { moduleId } = useParams()
-  const { data: module, isLoading, error, refetch } = useAdminModule(moduleId)
+  const navigate = useNavigate()
+  const { data: module, isLoading, error } = useAdminModule(moduleId)
   const mutations = useLearningAdminMutation()
+  const [pendingDelete, setPendingDelete] = useState<Lesson | null>(null)
 
-  const remove = async (lesson: Lesson) => {
+  const confirmDelete = async () => {
+    if (!pendingDelete) return
     try {
-      await mutations.deleteLesson.mutateAsync(lesson.id)
+      await mutations.deleteLesson.mutateAsync(pendingDelete.id)
       toast.success('Đã xóa bài học')
+      setPendingDelete(null)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Không thể xóa')
     }
   }
 
+  const stop = (e: MouseEvent | KeyboardEvent) => {
+    e.stopPropagation()
+  }
+
+  const totalMinutes = module?.lessons?.reduce((sum, l) => sum + (l.estimatedDuration ?? 0), 0) ?? 0
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: 'Học liệu', href: learningPath.courses() },
           { label: module?.course?.title ?? 'Khóa học', href: module?.courseId ? learningPath.course(module.courseId) : learningPath.courses() },
           { label: module?.title ?? 'Chủ đề' },
         ]}
       />
 
       {/* Module Header */}
-      <div className="rounded-2xl border-2 border-border bg-card overflow-hidden">
-        {/* Cover Area */}
-        <div className="h-40 bg-secondary/10 flex items-center justify-center relative border-b-2 border-border">
-          <Layers className="h-20 w-20 text-secondary/30" />
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-xs">
+          <span className="font-bold text-muted-foreground">CHỦ ĐỀ</span>
+          <span className="text-muted-foreground">·</span>
+          <span className="text-muted-foreground">#{module?.orderIndex ?? 0}</span>
+          {module?.topic && (
+            <>
+              <span className="text-muted-foreground">·</span>
+              <span className="font-medium text-foreground">{module.topic}</span>
+            </>
+          )}
+        </div>
+
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-3xl font-bold text-foreground tracking-tight">
+              {module?.title ?? 'Chủ đề'}
+            </h1>
+            {module?.description && (
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-3xl">
+                {module.description}
+              </p>
+            )}
+          </div>
           {moduleId && module && (
-            <Button asChild variant="secondary" size="lg" className="absolute top-6 right-6">
+            <Button asChild variant="outline" className="shrink-0">
               <Link to={learningPath.moduleEdit(module.courseId, moduleId)}>
-                <Edit className="h-5 w-5" />
-                Sửa chủ đề
+                <Pencil className="h-4 w-4" />
+                Sửa
               </Link>
             </Button>
           )}
         </div>
 
-        {/* Module Info */}
-        <div className="p-8 space-y-6">
-          <div>
-            {module?.topic && (
-              <Badge variant="outline" className="mb-3 text-base px-4 py-2">
-                {module.topic}
-              </Badge>
-            )}
-            <h1 className="text-4xl font-bold text-foreground mb-3">{module?.title ?? 'Chủ đề'}</h1>
-            {module?.description && (
-              <p className="text-lg text-muted-foreground leading-relaxed">{module.description}</p>
-            )}
+        <div className="flex items-center gap-6 pt-2 border-t-2 border-border">
+          <div className="flex items-center gap-2 pt-4">
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-bold text-foreground tabular-nums">
+              {module?.lessons?.length ?? 0}
+            </span>
+            <span className="text-sm text-muted-foreground">bài học</span>
           </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-6">
-            <div className="rounded-xl border-2 border-border bg-muted/30 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <BookOpen className="h-6 w-6 text-primary" />
-                <span className="text-sm font-semibold text-muted-foreground">Bài học</span>
-              </div>
-              <p className="text-3xl font-bold">{module?.lessons?.length ?? 0}</p>
+          {totalMinutes > 0 && (
+            <div className="flex items-center gap-2 pt-4">
+              <Clock className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-bold text-foreground tabular-nums">
+                {totalMinutes}
+              </span>
+              <span className="text-sm text-muted-foreground">phút</span>
             </div>
-            <div className="rounded-xl border-2 border-border bg-muted/30 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Clock className="h-6 w-6 text-secondary" />
-                <span className="text-sm font-semibold text-muted-foreground">Tổng thời gian</span>
-              </div>
-              <p className="text-3xl font-bold">
-                {module?.lessons?.reduce((sum, l) => sum + (l.estimatedDuration ?? 0), 0) ?? 0} phút
-              </p>
-            </div>
-            <div className="rounded-xl border-2 border-border bg-muted/30 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <FileText className="h-6 w-6 text-accent" />
-                <span className="text-sm font-semibold text-muted-foreground">Thứ tự</span>
-              </div>
-              <p className="text-3xl font-bold">#{module?.orderIndex ?? 0}</p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
       {/* Lessons Section */}
-      <div>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Các bài học</h2>
+      <div className="space-y-4 pt-2">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight">Bài học</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Quản lý các bài học trong chủ đề này.
+            </p>
+          </div>
           {moduleId && (
-            <Button asChild size="lg">
+            <Button asChild>
               <Link to={learningPath.lessonNew(moduleId)}>
-                <Plus className="h-5 w-5" />
+                <Plus className="h-4 w-4" />
                 Thêm bài học
               </Link>
             </Button>
@@ -109,93 +155,136 @@ export function ModuleDetailPage() {
         </div>
 
         {isLoading ? (
-          <LoadingState message="Đang tải bài học..." />
+          <div className="text-center py-12">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
+            <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
+          </div>
         ) : error ? (
-          <ErrorState
-            message={error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-            onRetry={() => refetch()}
-          />
+          <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
+            <p className="text-sm text-destructive font-semibold">
+              {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
+            </p>
+          </div>
         ) : !module?.lessons || module.lessons.length === 0 ? (
-          <EmptyState
-            icon={BookOpen}
-            title="Chưa có bài học nào"
-            description="Tạo bài học đầu tiên cho chủ đề này"
-            action={
-              moduleId ? (
-                <Button asChild size="lg">
-                  <Link to={learningPath.lessonNew(moduleId)}>
-                    <Plus className="h-5 w-5" />
-                    Tạo bài học đầu tiên
-                  </Link>
-                </Button>
-              ) : null
-            }
-          />
+          <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
+            <BookOpen className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+            <h3 className="text-lg font-bold mb-1">Chưa có bài học nào</h3>
+            <p className="text-sm text-muted-foreground mb-4">Tạo bài học đầu tiên cho chủ đề này</p>
+            {moduleId && (
+              <Button asChild>
+                <Link to={learningPath.lessonNew(moduleId)}>
+                  <Plus className="h-4 w-4" />
+                  Tạo bài học đầu tiên
+                </Link>
+              </Button>
+            )}
+          </div>
         ) : (
-          <div className="space-y-4">
-            {module.lessons.map((lesson) => (
+          <div className="rounded-lg border-2 border-border overflow-hidden">
+            {module.lessons.map((lesson, index) => (
               <div
                 key={lesson.id}
-                className="group rounded-2xl border-2 border-border bg-card p-6 transition-all hover:border-primary hover:-translate-y-1"
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate(learningPath.lesson(lesson.id))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') navigate(learningPath.lesson(lesson.id))
+                }}
+                className={`group flex items-center gap-4 p-4 bg-card cursor-pointer transition-colors hover:bg-muted/40 focus:outline-none focus:bg-muted/40 ${
+                  index > 0 ? 'border-t-2 border-border' : ''
+                }`}
               >
-                <div className="flex items-start gap-6">
-                  {/* Order Number */}
-                  <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-secondary/10 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-secondary">{lesson.orderIndex}</span>
-                  </div>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-bold text-foreground tabular-nums">
+                  {lesson.orderIndex}
+                </div>
 
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <Link to={learningPath.lesson(lesson.id)} className="block mb-2">
-                      <h3 className="text-xl font-bold text-foreground hover:text-primary transition-colors">
-                        {lesson.title}
-                      </h3>
-                    </Link>
-                    <div className="flex items-center gap-3 mb-3">
-                      <Badge variant="secondary" className="text-sm">
-                        {lesson.lessonType}
-                      </Badge>
-                      {lesson.estimatedDuration && (
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Clock className="h-4 w-4" />
-                          <span className="font-medium">{lesson.estimatedDuration} phút</span>
-                        </div>
-                      )}
-                    </div>
-                    {lesson.description && (
-                      <p className="text-base text-muted-foreground line-clamp-2">{lesson.description}</p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="text-base font-bold text-foreground truncate">
+                      {lesson.title}
+                    </h3>
+                    <span
+                      className={`text-xs font-bold ${lessonTypeColors[lesson.lessonType] ?? 'text-muted-foreground'}`}
+                    >
+                      {lessonTypeLabels[lesson.lessonType] ?? lesson.lessonType}
+                    </span>
+                    {lesson.estimatedDuration && (
+                      <>
+                        <span className="text-xs text-muted-foreground">·</span>
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Clock className="h-3 w-3" />
+                          <span className="font-medium tabular-nums">{lesson.estimatedDuration}p</span>
+                        </span>
+                      </>
                     )}
                   </div>
+                  {lesson.description && (
+                    <p className="text-sm text-muted-foreground line-clamp-1 mt-0.5">
+                      {lesson.description}
+                    </p>
+                  )}
+                </div>
 
-                  {/* Actions */}
-                  <div className="flex items-center gap-2">
-                    <Button asChild variant="default" size="sm">
-                      <Link to={learningPath.lesson(lesson.id)}>Mở</Link>
-                    </Button>
-                    <Button asChild variant="outline" size="sm">
-                      <Link to={learningPath.lessonEdit(lesson.moduleId, lesson.id)}>
-                        <Edit className="h-4 w-4" />
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        if (window.confirm(`Xóa bài học "${lesson.title}"?`)) {
-                          remove(lesson)
-                        }
-                      }}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      Xóa
-                    </Button>
-                  </div>
+                <div onClick={stop} onKeyDown={stop} className="shrink-0">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                      >
+                        <MoreVertical className="h-4 w-4" />
+                        <span className="sr-only">Tùy chọn</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-44">
+                      <DropdownMenuItem asChild>
+                        <Link to={learningPath.lessonEdit(lesson.moduleId, lesson.id)}>
+                          <Pencil className="h-4 w-4" />
+                          Chỉnh sửa
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onSelect={() => setPendingDelete(lesson)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Xóa bài học
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      <AlertDialog open={!!pendingDelete} onOpenChange={(open) => !open && setPendingDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10">
+                <Trash2 className="h-5 w-5 text-destructive" />
+              </div>
+              <AlertDialogTitle>Xóa bài học?</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription>
+              Bài học <span className="font-semibold text-foreground">&quot;{pendingDelete?.title}&quot;</span> cùng nội dung, từ vựng và bài tập bên trong sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:opacity-90"
+              onClick={confirmDelete}
+            >
+              <Trash2 className="h-4 w-4" />
+              Xóa bài học
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { Plus, BookOpen, Layers, Pencil, Trash2, MoreVertical } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -57,8 +56,6 @@ export function CoursesPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: 'Học liệu' }, { label: 'Khóa học' }]} />
-
       <div className="flex items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-foreground tracking-tight">Khóa học</h1>
