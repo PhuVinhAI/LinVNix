@@ -46,19 +46,18 @@ describe('UserDataCleanupService', () => {
     expect(mockQueryRunner.commitTransaction).toHaveBeenCalledTimes(1);
     expect(mockQueryRunner.release).toHaveBeenCalledTimes(1);
 
-    expect(mockQuery).toHaveBeenCalledTimes(17);
+    expect(mockQuery).toHaveBeenCalledTimes(15);
     for (const call of mockQuery.mock.calls) {
       expect(call[1]).toEqual([userId]);
     }
 
     const queries = mockQuery.mock.calls.map((c) => c[0] as string);
     expect(queries[2]).toContain('DELETE FROM simulation_messages');
-    expect(queries[3]).toContain('DELETE FROM simulation_results');
-    expect(queries[4]).toContain('DELETE FROM simulation_sessions');
-    expect(queries[6]).toContain('DELETE FROM personal_vocabularies');
+    expect(queries[3]).toContain('DELETE FROM simulation_sessions');
+    expect(queries[5]).toContain('DELETE FROM personal_vocabularies');
     expect(queries[8]).toContain('DELETE FROM exercises');
     expect(queries[9]).toContain('DELETE FROM exercise_sets');
-    expect(queries[16]).toContain(
+    expect(queries[14]).toContain(
       'UPDATE users SET onboarding_completed = false',
     );
   });
@@ -80,8 +79,8 @@ describe('UserDataCleanupService', () => {
 
     await service.deleteAccount(userId);
 
-    expect(mockQuery).toHaveBeenCalledTimes(21);
-    expect(mockQuery.mock.calls[16][0]).toContain('DELETE FROM refresh_tokens');
-    expect(mockQuery.mock.calls[20][0]).toContain('deleted_at = NOW()');
+    expect(mockQuery).toHaveBeenCalledTimes(17);
+    expect(mockQuery.mock.calls[14][0]).toContain('DELETE FROM refresh_tokens');
+    expect(mockQuery.mock.calls[16][0]).toContain('deleted_at = NOW()');
   });
 });

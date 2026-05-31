@@ -9,7 +9,6 @@ import { LoggingService } from '../../infrastructure/logging/logging.service';
 import { EmailQueueService } from '../../infrastructure/queue/email-queue.service';
 import { TokenLifecycle } from './token-lifecycle/token-lifecycle.service';
 import { RefreshToken } from './domain/refresh-token.entity';
-import { Role } from './domain/role.entity';
 
 jest.mock('google-auth-library', () => {
   const verifyIdToken = jest.fn();
@@ -86,10 +85,6 @@ describe('AuthService.loginWithGoogleToken', () => {
     update: jest.fn(),
   };
 
-  const mockRoleRepo = {
-    findOne: jest.fn().mockResolvedValue({ id: 'role-id', name: 'USER' }),
-  };
-
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -106,7 +101,6 @@ describe('AuthService.loginWithGoogleToken', () => {
           provide: getRepositoryToken(RefreshToken),
           useValue: mockRefreshTokenRepo,
         },
-        { provide: getRepositoryToken(Role), useValue: mockRoleRepo },
       ],
     }).compile();
 

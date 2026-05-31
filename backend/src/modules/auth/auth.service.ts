@@ -23,8 +23,6 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { OAuthUserDto } from './dto/oauth-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RefreshToken } from './domain/refresh-token.entity';
-import { Role } from './domain/role.entity';
-import { Role as RoleEnum } from '../../common/enums';
 import { TokenLifecycle } from './token-lifecycle/token-lifecycle.service';
 import { randomBytes } from 'crypto';
 
@@ -39,8 +37,6 @@ export class AuthService {
     private tokenLifecycle: TokenLifecycle,
     @InjectRepository(RefreshToken)
     private refreshTokenRepository: Repository<RefreshToken>,
-    @InjectRepository(Role)
-    private roleRepository: Repository<Role>,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -61,15 +57,6 @@ export class AuthService {
         });
       } else {
         user = await this.usersService.create(registerDto);
-      }
-
-      const userRole = await this.roleRepository.findOne({
-        where: { name: RoleEnum.USER },
-      });
-
-      if (userRole) {
-        user.roles = [userRole];
-        await this.usersService.save(user);
       }
 
       const verificationToken =
@@ -450,16 +437,6 @@ export class AuthService {
       emailVerified: true,
       emailVerifiedAt: new Date(),
     });
-
-    // Assign USER role
-    const userRole = await this.roleRepository.findOne({
-      where: { name: RoleEnum.USER },
-    });
-
-    if (userRole) {
-      newUser.roles = [userRole];
-      await this.usersService.save(newUser);
-    }
 
     // Gửi welcome email
     await this.emailQueueService.sendWelcomeEmail(

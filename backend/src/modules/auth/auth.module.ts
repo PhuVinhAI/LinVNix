@@ -12,10 +12,7 @@ import { OptionalJwtAuthGuard } from './guards/optional-jwt-auth.guard';
 import { UsersModule } from '../users/users.module';
 import { QueueModule } from '../../infrastructure/queue/queue.module';
 import { TokenLifecycleModule } from './token-lifecycle/token-lifecycle.module';
-import { Role } from './domain/role.entity';
-import { Permission } from './domain/permission.entity';
 import { RefreshToken } from './domain/refresh-token.entity';
-import { RbacService } from './application/rbac.service';
 
 @Module({
   imports: [
@@ -23,7 +20,7 @@ import { RbacService } from './application/rbac.service';
     QueueModule,
     TokenLifecycleModule,
     PassportModule,
-    TypeOrmModule.forFeature([Role, Permission, RefreshToken]),
+    TypeOrmModule.forFeature([RefreshToken]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
@@ -44,10 +41,9 @@ import { RbacService } from './application/rbac.service';
     AuthService,
     JwtStrategy,
     GoogleStrategy,
-    RbacService,
     JwtAuthGuard,
     OptionalJwtAuthGuard,
   ],
-  exports: [AuthService, RbacService, JwtAuthGuard, OptionalJwtAuthGuard],
+  exports: [AuthService, JwtAuthGuard, OptionalJwtAuthGuard],
 })
 export class AuthModule {}

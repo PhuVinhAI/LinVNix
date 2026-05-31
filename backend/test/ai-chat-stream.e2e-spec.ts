@@ -7,10 +7,8 @@ import * as bcrypt from 'bcrypt';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
-import { AI_PROVIDER } from '../src/infrastructure/genai/genai.module';
+import { AiProviderRouter } from '../src/infrastructure/ai/ai-provider-router';
 import { User } from '../src/modules/users/domain/user.entity';
-import { Role as RoleEntity } from '../src/modules/auth/domain/role.entity';
-import { Role as RoleEnum } from '../src/common/enums';
 import { ConversationMessage } from '../src/modules/conversations/domain/conversation-message.entity';
 
 interface SsePacket {
@@ -42,6 +40,12 @@ function parseSse(raw: string): SsePacket[] {
   return packets;
 }
 
+async function* streamChunks(...chunks: any[]) {
+  for (const chunk of chunks) {
+    yield chunk;
+  }
+}
+
 describe('POST /ai/chat/stream (e2e)', () => {
   let app: INestApplication<App>;
   let authToken: string;
@@ -68,8 +72,13 @@ describe('POST /ai/chat/stream (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(AI_PROVIDER)
-      .useValue(aiProviderMock)
+      .overrideProvider(AiProviderRouter)
+      .useValue({
+        forFeature: jest.fn().mockReturnValue(aiProviderMock),
+        renderPrompt: jest
+          .fn()
+          .mockImplementation((_name, data) => `Tro ly AI ${JSON.stringify(data)}`),
+      })
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -79,24 +88,13 @@ describe('POST /ai/chat/stream (e2e)', () => {
     );
     await app.init();
 
-    // Seed a fully-verified user + USER role-link directly. The default
+    // Seed a fully-verified user directly. The default
     // register/login flow goes through email verification which we can't
     // (and shouldn't) drive from an e2e — bypass it by minting the JWT
     // ourselves with the same JwtService the app uses, against a user row
     // already marked `emailVerified=true`.
     userRepo = moduleFixture.get<Repository<User>>(getRepositoryToken(User));
     messageRepo = moduleFixture.get<Repository<ConversationMessage>>(getRepositoryToken(ConversationMessage));
-    const roleRepo = moduleFixture.get<Repository<RoleEntity>>(
-      getRepositoryToken(RoleEntity),
-    );
-    const userRole = await roleRepo.findOne({
-      where: { name: RoleEnum.USER },
-    });
-    if (!userRole) {
-      throw new Error(
-        'USER role not seeded by RbacService — verify db:up and seed flow',
-      );
-    }
 
     testUserEmail = `ai-stream-${Date.now()}@test.com`;
     const hashed = await bcrypt.hash('Test1234!', 10);
@@ -106,7 +104,6 @@ describe('POST /ai/chat/stream (e2e)', () => {
       fullName: 'AI Stream Test User',
       emailVerified: true,
       emailVerifiedAt: new Date(),
-      roles: [userRole],
     });
     await userRepo.save(user);
 
@@ -123,19 +120,23 @@ describe('POST /ai/chat/stream (e2e)', () => {
 
   beforeEach(() => {
     aiProviderMock.chat.mockReset();
+    aiProviderMock.chatStream.mockReset();
   });
 
   it('emits tool_start + tool_result + text_chunk + done for "How am I doing?" with screen context', async () => {
-    aiProviderMock.chat
-      .mockResolvedValueOnce({
-        text: '',
-        functionCalls: [{ name: 'get_user_summary', arguments: {} }],
-        usageMetadata: { promptTokenCount: 8, candidatesTokenCount: 0 },
-      })
-      .mockResolvedValueOnce({
-        text: 'Bạn đã học liên tục 0 ngày, mục tiêu chưa được đặt. Hãy bắt đầu!',
-        usageMetadata: { promptTokenCount: 16, candidatesTokenCount: 14 },
-      });
+    aiProviderMock.chatStream
+      .mockImplementationOnce(() =>
+        streamChunks({
+          functionCalls: [{ name: 'get_user_summary', arguments: {} }],
+          usageMetadata: { promptTokenCount: 8, candidatesTokenCount: 0 },
+        }),
+      )
+      .mockImplementationOnce(() =>
+        streamChunks({
+          text: 'You have studied for 0 days.',
+          usageMetadata: { promptTokenCount: 16, candidatesTokenCount: 14 },
+        }),
+      );
 
     const res = await request(app.getHttpServer())
       .post('/api/v1/ai/chat/stream')
@@ -176,24 +177,26 @@ describe('POST /ai/chat/stream (e2e)', () => {
     expect((packets[0].data.conversationId as string).length).toBeGreaterThan(0);
     expect(packets[1].data).toEqual({
       name: 'get_user_summary',
-      displayName: 'Đang tóm tắt thông tin của bạn...',
+      displayName: 'Summarizing your profile...',
       args: {},
     });
     expect(packets[2].data).toEqual({
       name: 'get_user_summary',
       ok: true,
     });
-    expect(packets[3].data.text).toContain('Bạn đã học liên tục');
+    expect(packets[3].data.text).toContain('studied');
     expect(packets[4].data.interrupted).toBe(false);
     expect(typeof packets[4].data.messageId).toBe('string');
     expect(packets[4].data.messageId.length).toBeGreaterThan(0);
   });
 
   it('uses the rendered assistant-tutor system instruction when screenContext is non-empty', async () => {
-    aiProviderMock.chat.mockResolvedValueOnce({
-      text: 'Câu trả lời.',
-      usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
-    });
+    aiProviderMock.chatStream.mockImplementationOnce(() =>
+      streamChunks({
+        text: 'Answer.',
+        usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
+      }),
+    );
 
     await request(app.getHttpServer())
       .post('/api/v1/ai/chat/stream')
@@ -218,13 +221,13 @@ describe('POST /ai/chat/stream (e2e)', () => {
         response.on('error', (err) => callback(err, null as any));
       });
 
-    expect(aiProviderMock.chat).toHaveBeenCalledWith(
+    expect(aiProviderMock.chatStream).toHaveBeenCalledWith(
       expect.objectContaining({
-        systemInstruction: expect.stringContaining('Trợ lý AI'),
+        systemInstruction: expect.stringContaining('AI'),
       }),
     );
-    const lastCallArg = aiProviderMock.chat.mock.calls[
-      aiProviderMock.chat.mock.calls.length - 1
+    const lastCallArg = aiProviderMock.chatStream.mock.calls[
+      aiProviderMock.chatStream.mock.calls.length - 1
     ][0];
     expect(lastCallArg.systemInstruction).toContain('lessonId');
   });

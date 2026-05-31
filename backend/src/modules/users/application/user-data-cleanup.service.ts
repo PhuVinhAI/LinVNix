@@ -30,7 +30,6 @@ export class UserDataCleanupService implements TransactionalHost {
     await this.deleteLearningData(qr, userId);
     await qr.query(`DELETE FROM refresh_tokens WHERE user_id = $1`, [userId]);
     await qr.query(`DELETE FROM auth_tokens WHERE user_id = $1`, [userId]);
-    await qr.query(`DELETE FROM user_roles WHERE user_id = $1`, [userId]);
     await qr.query(
       `UPDATE users SET
          email = CONCAT('deleted_', id, '@deleted.local'),

@@ -7,12 +7,9 @@ import * as bcrypt from 'bcrypt';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
-import { AI_PROVIDER } from '../src/infrastructure/genai/genai.module';
 import { SimulationAiService } from '../src/modules/simulations/application/simulation-ai.service';
 import { User } from '../src/modules/users/domain/user.entity';
-import { Role as RoleEntity } from '../src/modules/auth/domain/role.entity';
 import {
-  Role as RoleEnum,
   UserLevel,
   Difficulty,
   SimulationSessionStatus,
@@ -33,10 +30,8 @@ describe('Simulations (e2e)', () => {
   let app: INestApplication<App>;
   let authToken: string;
   let otherToken: string;
-  let noRoleToken: string;
   let testUserId: string;
   let otherUserId: string;
-  let noRoleUserId: string;
 
   let userRepo: Repository<User>;
   let categoryRepo: Repository<ScenarioCategory>;
@@ -58,16 +53,6 @@ describe('Simulations (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(AI_PROVIDER)
-      .useValue({
-        chat: jest.fn(),
-        chatStream: jest.fn(),
-        chatStructured: jest.fn(),
-        embed: jest.fn(),
-        uploadFile: jest.fn(),
-        generateImage: jest.fn(),
-        renderPrompt: jest.fn().mockReturnValue('mocked'),
-      })
       .overrideProvider(SimulationAiService)
       .useValue(aiServiceMock)
       .compile();
@@ -96,16 +81,6 @@ describe('Simulations (e2e)', () => {
       getRepositoryToken(SimulationResult),
     );
 
-    const roleRepo = moduleFixture.get<Repository<RoleEntity>>(
-      getRepositoryToken(RoleEntity),
-    );
-    const userRole = await roleRepo.findOne({
-      where: { name: RoleEnum.USER },
-    });
-    if (!userRole) {
-      throw new Error('USER role not seeded by RbacService');
-    }
-
     const jwtService = moduleFixture.get<JwtService>(JwtService);
     const hashed = await bcrypt.hash('Test1234!', 10);
 
@@ -117,7 +92,6 @@ describe('Simulations (e2e)', () => {
       emailVerifiedAt: new Date(),
       currentLevel: UserLevel.A2,
       nativeLanguage: 'English',
-      roles: [userRole],
     });
     await userRepo.save(testUser);
     testUserId = testUser.id;
@@ -131,27 +105,12 @@ describe('Simulations (e2e)', () => {
       emailVerifiedAt: new Date(),
       currentLevel: UserLevel.A1,
       nativeLanguage: 'English',
-      roles: [userRole],
     });
     await userRepo.save(otherUser);
     otherUserId = otherUser.id;
     otherToken = jwtService.sign({
       sub: otherUser.id,
       email: otherUser.email,
-    });
-
-    const noRoleUser = userRepo.create({
-      email: `sim-norole-${Date.now()}@test.com`,
-      password: hashed,
-      fullName: 'Sim NoRole User',
-      emailVerified: true,
-      emailVerifiedAt: new Date(),
-    });
-    await userRepo.save(noRoleUser);
-    noRoleUserId = noRoleUser.id;
-    noRoleToken = jwtService.sign({
-      sub: noRoleUser.id,
-      email: noRoleUser.email,
     });
 
     const category = categoryRepo.create({
@@ -207,7 +166,6 @@ describe('Simulations (e2e)', () => {
 
   afterAll(async () => {
     if (otherUserId) await userRepo.delete(otherUserId);
-    if (noRoleUserId) await userRepo.delete(noRoleUserId);
     if (testUserId) await userRepo.delete(testUserId);
     if (scenarioId) await scenarioRepo.delete(scenarioId);
     if (categoryId) await categoryRepo.delete(categoryId);
@@ -593,17 +551,6 @@ describe('Simulations (e2e)', () => {
       }
     });
 
-    it('rejects user without SIMULATION_ACCESS with 403', async () => {
-      for (const ep of endpoints) {
-        const req = request(app.getHttpServer())[ep.method](ep.path).set(
-          'Authorization',
-          `Bearer ${noRoleToken}`,
-        );
-        if (ep.body) req.send(ep.body);
-        const res = await req;
-        expect(res.status).toBe(403);
-      }
-    });
   });
 
   describe('Validation', () => {

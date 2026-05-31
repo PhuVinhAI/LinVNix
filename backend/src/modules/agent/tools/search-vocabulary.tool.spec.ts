@@ -128,7 +128,10 @@ describe('SearchVocabularyTool', () => {
 
     it('omits dialect when the user has none and params has none', async () => {
       const ctxNoDialect = buildCtx({
-        user: { ...mockUser, preferredDialect: undefined as any },
+        user: {
+          ...mockUser,
+          preferredDialect: undefined as any,
+        } as unknown as User,
       });
       vocabulariesService.search.mockResolvedValue(vocabs);
 

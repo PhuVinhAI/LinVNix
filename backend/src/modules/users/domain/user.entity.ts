@@ -1,8 +1,8 @@
-import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { UserLevel, Dialect } from '../../../common/enums';
-import { Role } from '../../auth/domain/role.entity';
+import { UserLevel, Dialect, Role } from '../../../common/enums';
+import { getRoleView } from '../../../common/auth/role-permissions';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -53,13 +53,16 @@ export class User extends BaseEntity {
   @Column({ name: 'onboarding_completed', default: false })
   onboardingCompleted: boolean;
 
-  @ManyToMany(() => Role, { eager: true })
-  @JoinTable({
-    name: 'user_roles',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
   })
-  roles: Role[];
+  role: Role;
+
+  get roles(): ReturnType<typeof getRoleView>[] {
+    return [getRoleView(this.role)];
+  }
 
   @OneToMany('LearningProgress', 'user')
   progress: any[];
@@ -81,4 +84,11 @@ export class User extends BaseEntity {
 
   @Column({ name: 'notification_time', default: '20:00' })
   notificationTime: string;
+
+  toJSON() {
+    const plain = { ...this } as Record<string, unknown>;
+    delete plain.password;
+    plain.roles = this.roles;
+    return plain;
+  }
 }

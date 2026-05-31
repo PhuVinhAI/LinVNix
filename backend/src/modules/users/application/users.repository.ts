@@ -18,14 +18,12 @@ export class UsersRepository {
   async findById(id: string): Promise<User | null> {
     return this.repository.findOne({
       where: { id },
-      relations: ['roles', 'roles.permissions'],
     });
   }
 
   async findByEmail(email: string): Promise<User | null> {
     return this.repository.findOne({
       where: { email },
-      relations: ['roles', 'roles.permissions'],
     });
   }
 
@@ -33,7 +31,6 @@ export class UsersRepository {
     return this.repository.findOne({
       where: { email },
       withDeleted: true,
-      relations: ['roles', 'roles.permissions'],
     });
   }
 
@@ -61,7 +58,6 @@ export class UsersRepository {
   async findByGoogleId(googleId: string): Promise<User | null> {
     return this.repository.findOne({
       where: { googleId },
-      relations: ['roles', 'roles.permissions'],
     });
   }
 
