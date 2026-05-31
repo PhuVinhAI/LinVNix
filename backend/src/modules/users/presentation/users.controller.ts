@@ -129,7 +129,9 @@ export class UsersController {
       currentLevel: onboardingData.currentLevel,
       preferredDialect: onboardingData.preferredDialect,
       onboardingCompleted: true,
-      ...(onboardingData.nativeLanguage && { nativeLanguage: onboardingData.nativeLanguage }),
+      ...(onboardingData.nativeLanguage && {
+        nativeLanguage: onboardingData.nativeLanguage,
+      }),
     });
 
     if (onboardingData.completeLowerCourses) {

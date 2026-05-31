@@ -76,11 +76,16 @@ export class OpenaiProvider implements IAiProvider {
 
   private buildGenerationParams(): Record<string, any> {
     const params: Record<string, any> = {};
-    if (this.generation.temperature !== undefined) params.temperature = this.generation.temperature;
-    if (this.generation.top_p !== undefined) params.top_p = this.generation.top_p;
-    if (this.generation.top_k !== undefined) params.top_k = this.generation.top_k;
-    if (this.generation.max_tokens !== undefined) params.max_tokens = this.generation.max_tokens;
-    if (this.generation.reasoning_effort) params.reasoning_effort = this.generation.reasoning_effort;
+    if (this.generation.temperature !== undefined)
+      params.temperature = this.generation.temperature;
+    if (this.generation.top_p !== undefined)
+      params.top_p = this.generation.top_p;
+    if (this.generation.top_k !== undefined)
+      params.top_k = this.generation.top_k;
+    if (this.generation.max_tokens !== undefined)
+      params.max_tokens = this.generation.max_tokens;
+    if (this.generation.reasoning_effort)
+      params.reasoning_effort = this.generation.reasoning_effort;
     return params;
   }
 

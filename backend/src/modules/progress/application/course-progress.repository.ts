@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CourseProgress } from '../domain/course-progress.entity';
+import {
+  CourseProgress,
+  LearningUnitType,
+} from '../domain/learning-progress.entity';
 
 @Injectable()
 export class CourseProgressRepository {
@@ -11,7 +14,10 @@ export class CourseProgressRepository {
   ) {}
 
   async create(data: Partial<CourseProgress>): Promise<CourseProgress> {
-    const progress = this.repository.create(data);
+    const progress = this.repository.create({
+      ...data,
+      unitType: LearningUnitType.COURSE,
+    });
     return this.repository.save(progress);
   }
 
@@ -20,7 +26,7 @@ export class CourseProgressRepository {
     courseId: string,
   ): Promise<CourseProgress | null> {
     return this.repository.findOne({
-      where: { userId, courseId },
+      where: { userId, courseId, unitType: LearningUnitType.COURSE },
     });
   }
 
@@ -40,6 +46,7 @@ export class CourseProgressRepository {
     return this.repository.find({
       where: {
         courseId,
+        unitType: LearningUnitType.COURSE,
         status: 'completed' as any,
       },
     });

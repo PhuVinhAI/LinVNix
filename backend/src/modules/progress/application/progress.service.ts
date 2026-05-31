@@ -12,9 +12,9 @@ import {
   ProgressTransactionService,
   isLevelHigher,
 } from './progress-transaction.service';
-import { UserProgress } from '../domain/user-progress.entity';
-import { ModuleProgress } from '../domain/module-progress.entity';
-import { CourseProgress } from '../domain/course-progress.entity';
+import { UserProgress } from '../domain/learning-progress.entity';
+import { ModuleProgress } from '../domain/learning-progress.entity';
+import { CourseProgress } from '../domain/learning-progress.entity';
 import { ProgressStatus, UserLevel } from '../../../common/enums';
 
 @Injectable()

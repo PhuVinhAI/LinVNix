@@ -2,6 +2,7 @@ import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Exercise } from './domain/exercise.entity';
 import { ExerciseSet } from './domain/exercise-set.entity';
+import { ExerciseAttempt } from './domain/exercise-attempt.entity';
 import { UserExerciseResult } from './domain/user-exercise-result.entity';
 import { ExercisesService } from './application/exercises.service';
 import { ExerciseSetService } from './application/exercise-set.service';
@@ -20,7 +21,12 @@ import { CoursesModule } from '../courses/courses.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Exercise, ExerciseSet, UserExerciseResult]),
+    TypeOrmModule.forFeature([
+      Exercise,
+      ExerciseSet,
+      ExerciseAttempt,
+      UserExerciseResult,
+    ]),
     forwardRef(() => ProgressModule),
     forwardRef(() => CoursesModule),
   ],

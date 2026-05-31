@@ -5,9 +5,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { z } from 'zod';
-import {
-  Type,
-} from '../../../infrastructure/genai/genai-provider';
+import { Type } from '../../../infrastructure/genai/genai-provider';
 import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
 import { withParseRetry } from '../../../infrastructure/ai/ai-parse-retry';
 import {
@@ -142,16 +140,13 @@ export class ImageAnalysisService {
       content: message.content.trim(),
     }));
 
-    const systemInstruction = this.aiRouter.renderPrompt(
-      'image-discovery',
-      {
-        user: {
-          nativeLanguage: learner.nativeLanguage || 'English',
-          currentLevel: learner.currentLevel || 'A1',
-          preferredDialect: learner.preferredDialect || 'STANDARD',
-        },
+    const systemInstruction = this.aiRouter.renderPrompt('image-discovery', {
+      user: {
+        nativeLanguage: learner.nativeLanguage || 'English',
+        currentLevel: learner.currentLevel || 'A1',
+        preferredDialect: learner.preferredDialect || 'STANDARD',
       },
-    );
+    });
 
     const provider = this.aiRouter.forFeature('image-analysis');
 

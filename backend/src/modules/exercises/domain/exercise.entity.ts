@@ -49,4 +49,7 @@ export class Exercise extends BaseEntity {
 
   @OneToMany('UserExerciseResult', 'exercise')
   userResults: any[];
+
+  @OneToMany('ExerciseAttempt', 'exercise')
+  attempts: any[];
 }

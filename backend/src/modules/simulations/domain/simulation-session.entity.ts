@@ -1,6 +1,9 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { SimulationSessionStatus } from '../../../common/enums';
+import {
+  SimulationEndReason,
+  SimulationSessionStatus,
+} from '../../../common/enums';
 import { Scenario } from './scenario.entity';
 import { ScenarioCharacter } from './scenario-character.entity';
 
@@ -43,6 +46,38 @@ export class SimulationSession extends BaseEntity {
   @OneToMany('SimulationMessage', 'session')
   messages: any[];
 
-  @OneToMany('SimulationResult', 'session')
-  results: any[];
+  @Column({ name: 'total_score', type: 'int', nullable: true })
+  totalScore?: number;
+
+  @Column({
+    name: 'criteria_scores',
+    type: 'jsonb',
+    default: () => "'[]'::jsonb",
+  })
+  criteriaScores: Array<{
+    name: string;
+    score: number;
+    maxScore: number;
+    comment: string;
+  }>;
+
+  @Column({
+    name: 'end_reason',
+    type: 'enum',
+    enum: SimulationEndReason,
+    nullable: true,
+  })
+  endReason?: SimulationEndReason;
+
+  @Column({ name: 'ai_summary', type: 'text', nullable: true })
+  aiSummary?: string;
+
+  @Column({ name: 'total_messages', type: 'int', default: 0 })
+  totalMessages: number;
+
+  @Column({ name: 'result_created_at', type: 'timestamp', nullable: true })
+  resultCreatedAt?: Date;
 }
+
+export const SimulationResult = SimulationSession;
+export type SimulationResult = SimulationSession;

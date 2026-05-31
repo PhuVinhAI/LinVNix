@@ -40,7 +40,10 @@ export class TranslationChecker implements CheckerAdapter {
     if (context?.acceptWithoutDiacritics) {
       const strippedUser = stripVietnameseDiacritics(normalizedUser);
       const strippedCorrect = stripVietnameseDiacritics(normalizedCorrect);
-      const strippedSimilarity = calculateSimilarity(strippedUser, strippedCorrect);
+      const strippedSimilarity = calculateSimilarity(
+        strippedUser,
+        strippedCorrect,
+      );
       return {
         isCorrect: strippedSimilarity > this.SIMILARITY_THRESHOLD,
         similarity: strippedSimilarity,

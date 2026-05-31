@@ -8,7 +8,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
-import '../../../../core/theme/widgets/app_bottom_sheet.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../assistant/data/current_exercise_attempt_provider.dart';
 import '../../../assistant/data/exercise_context_sanitizer.dart';
@@ -147,10 +146,12 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         barrierDismissible: false,
         builder: (ctx) => AppDialog(
           title: S.of(context).resumeExerciseQuestion,
-          content: S.of(context).unfinishedProgressQuestionParam(
-            session.currentIndex + 1,
-            _exercises.length,
-          ),
+          content: S
+              .of(context)
+              .unfinishedProgressQuestionParam(
+                session.currentIndex + 1,
+                _exercises.length,
+              ),
           actions: [
             AppDialogAction(
               label: S.of(context).startOver,
@@ -442,10 +443,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         ),
         exerciseIndex: _currentIndex,
         totalExercises: _exercises.length,
-        options: optionsForAssistantContext(
-          exercise,
-          revealAnswers: submitted,
-        ),
+        options: optionsForAssistantContext(exercise, revealAnswers: submitted),
         submitted: submitted,
         correctAnswer: submitted ? exercise.correctAnswer.toJson() : null,
         explanation: submitted ? exercise.explanation : null,
@@ -599,10 +597,12 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    S.of(context).questionProgressParam(
-                      _currentIndex + 1,
-                      _exercises.length,
-                    ),
+                    S
+                        .of(context)
+                        .questionProgressParam(
+                          _currentIndex + 1,
+                          _exercises.length,
+                        ),
                     style: GoogleFonts.inter(
                       fontSize: AppTypography.bodySmall,
                       fontWeight: FontWeight.w600,
@@ -652,7 +652,9 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                   const SizedBox(height: AppSpacing.xl),
                   if (!_submitted)
                     AppButton(
-                      label: _submitting ? S.of(context).submittingStatus : S.of(context).submitLabel,
+                      label: _submitting
+                          ? S.of(context).submittingStatus
+                          : S.of(context).submitLabel,
                       variant: AppButtonVariant.primary,
                       onPressed: _isValid && !_submitting ? _submit : null,
                     ),
@@ -688,7 +690,11 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
 }
 
 class QuestionHeader extends StatelessWidget {
-  const QuestionHeader({super.key, required this.exercise, required this.renderer});
+  const QuestionHeader({
+    super.key,
+    required this.exercise,
+    required this.renderer,
+  });
   final Exercise exercise;
   final ExerciseRenderer renderer;
 
@@ -711,11 +717,7 @@ class QuestionHeader extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.info_outline,
-                  color: c.primary,
-                  size: 24,
-                ),
+                Icon(Icons.info_outline, color: c.primary, size: 24),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Text(
@@ -931,7 +933,9 @@ class ExplanationPanel extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                isCorrect ? S.of(context).correctLabel : S.of(context).incorrectLabel,
+                isCorrect
+                    ? S.of(context).correctLabel
+                    : S.of(context).incorrectLabel,
                 style: GoogleFonts.inter(
                   fontSize: AppTypography.bodyLarge,
                   fontWeight: FontWeight.w700,

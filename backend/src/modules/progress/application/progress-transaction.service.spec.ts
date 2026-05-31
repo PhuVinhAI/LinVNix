@@ -6,9 +6,12 @@ import {
 } from './progress-transaction.service';
 import { ProgressRepository } from './progress.repository';
 import { UserExerciseResultsRepository } from '../../exercises/application/repositories/user-exercise-results.repository';
-import { UserProgress } from '../domain/user-progress.entity';
-import { ModuleProgress } from '../domain/module-progress.entity';
-import { CourseProgress } from '../domain/course-progress.entity';
+import { UserProgress } from '../domain/learning-progress.entity';
+import { ModuleProgress } from '../domain/learning-progress.entity';
+import {
+  CourseProgress,
+  LearningUnitType,
+} from '../domain/learning-progress.entity';
 import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
 import { ProgressStatus, UserLevel } from '../../../common/enums';
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
@@ -217,12 +220,20 @@ describe('ProgressTransactionService', () => {
       expect(mockManager.update).toHaveBeenCalledTimes(2);
       expect(mockManager.update).toHaveBeenCalledWith(
         UserProgress,
-        { userId: 'user-1', lessonId: 'lesson-1' },
+        {
+          userId: 'user-1',
+          lessonId: 'lesson-1',
+          unitType: LearningUnitType.LESSON,
+        },
         { status: ProgressStatus.COMPLETED, score: 85 },
       );
       expect(mockManager.update).toHaveBeenCalledWith(
         UserProgress,
-        { userId: 'user-2', lessonId: 'lesson-2' },
+        {
+          userId: 'user-2',
+          lessonId: 'lesson-2',
+          unitType: LearningUnitType.LESSON,
+        },
         { status: ProgressStatus.IN_PROGRESS },
       );
     });
@@ -301,43 +312,43 @@ describe('ProgressTransactionService', () => {
 
       await service.completeAllCourseProgress(userId, courseId, UserLevel.B1);
 
-      expect(mockManager.upsert).toHaveBeenCalledWith(
-        expect.anything(),
+      expect(mockManager.save).toHaveBeenCalledWith(
+        CourseProgress,
         expect.objectContaining({
           userId,
           courseId,
+          unitType: LearningUnitType.COURSE,
           status: ProgressStatus.COMPLETED,
           score: null,
           completedModulesCount: 2,
           totalModulesCount: 2,
         }),
-        ['userId', 'courseId'],
       );
 
-      expect(mockManager.upsert).toHaveBeenCalledWith(
-        expect.anything(),
+      expect(mockManager.save).toHaveBeenCalledWith(
+        ModuleProgress,
         expect.objectContaining({
           userId,
           moduleId: 'mod-1',
+          unitType: LearningUnitType.MODULE,
           status: ProgressStatus.COMPLETED,
           score: null,
           completedLessonsCount: 2,
           totalLessonsCount: 2,
         }),
-        ['userId', 'moduleId'],
       );
 
-      expect(mockManager.upsert).toHaveBeenCalledWith(
-        expect.anything(),
+      expect(mockManager.save).toHaveBeenCalledWith(
+        ModuleProgress,
         expect.objectContaining({
           userId,
           moduleId: 'mod-2',
+          unitType: LearningUnitType.MODULE,
           status: ProgressStatus.COMPLETED,
           score: null,
           completedLessonsCount: 1,
           totalLessonsCount: 1,
         }),
-        ['userId', 'moduleId'],
       );
 
       expect(mockManager.save).toHaveBeenCalledWith(
@@ -345,6 +356,7 @@ describe('ProgressTransactionService', () => {
         expect.objectContaining({
           userId,
           lessonId: 'lesson-1',
+          unitType: LearningUnitType.LESSON,
           status: ProgressStatus.COMPLETED,
           score: null,
           contentViewed: true,
@@ -355,6 +367,7 @@ describe('ProgressTransactionService', () => {
         expect.objectContaining({
           userId,
           lessonId: 'lesson-2',
+          unitType: LearningUnitType.LESSON,
           status: ProgressStatus.COMPLETED,
           score: null,
           contentViewed: true,
@@ -365,6 +378,7 @@ describe('ProgressTransactionService', () => {
         expect.objectContaining({
           userId,
           lessonId: 'lesson-3',
+          unitType: LearningUnitType.LESSON,
           status: ProgressStatus.COMPLETED,
           score: null,
           contentViewed: true,
@@ -380,17 +394,20 @@ describe('ProgressTransactionService', () => {
         status: ProgressStatus.IN_PROGRESS,
       };
 
-      (mockManager.findOne as jest.Mock)
-        .mockResolvedValueOnce(mockCourse)
-        .mockResolvedValueOnce(existingProgress)
-        .mockResolvedValue(null);
+      (mockManager.findOne as jest.Mock).mockImplementation(
+        async (_entity, options?: any) => {
+          if (options?.where?.id === courseId) return mockCourse;
+          if (options?.where?.lessonId === 'lesson-1') return existingProgress;
+          return null;
+        },
+      );
 
       await service.completeAllCourseProgress(userId, courseId, UserLevel.B1);
 
-      expect(mockManager.update).toHaveBeenCalledWith(
+      expect(mockManager.save).toHaveBeenCalledWith(
         UserProgress,
-        'up-1',
         expect.objectContaining({
+          id: 'up-1',
           status: ProgressStatus.COMPLETED,
           score: null,
           contentViewed: true,
@@ -411,9 +428,7 @@ describe('ProgressTransactionService', () => {
 
     it('rolls back transaction on error', async () => {
       (mockManager.findOne as jest.Mock).mockResolvedValueOnce(mockCourse);
-      (mockManager.upsert as jest.Mock).mockRejectedValue(
-        new Error('DB error'),
-      );
+      (mockManager.save as jest.Mock).mockRejectedValue(new Error('DB error'));
 
       await expect(
         service.completeAllCourseProgress(userId, courseId, UserLevel.B1),
@@ -458,16 +473,19 @@ describe('ProgressTransactionService', () => {
       expect(mockManager.delete).toHaveBeenCalledWith(CourseProgress, {
         userId,
         courseId,
+        unitType: LearningUnitType.COURSE,
       });
 
       expect(mockManager.delete).toHaveBeenCalledWith(ModuleProgress, {
         userId,
         moduleId: expect.anything(),
+        unitType: LearningUnitType.MODULE,
       });
 
       expect(mockManager.delete).toHaveBeenCalledWith(UserProgress, {
         userId,
         lessonId: expect.anything(),
+        unitType: LearningUnitType.LESSON,
       });
 
       expect(mockManager.delete).toHaveBeenCalledWith(
@@ -495,6 +513,7 @@ describe('ProgressTransactionService', () => {
       expect(mockManager.delete).toHaveBeenCalledWith(CourseProgress, {
         userId,
         courseId,
+        unitType: LearningUnitType.COURSE,
       });
       expect(mockManager.delete).toHaveBeenCalledTimes(1);
     });

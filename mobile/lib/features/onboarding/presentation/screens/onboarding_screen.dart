@@ -193,7 +193,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             _goalTargets[entry.key] ?? entry.key.defaultTarget,
           );
         } on AppException catch (e) {
-          final alreadyExists = e.message.toLowerCase().contains('already exists');
+          final alreadyExists = e.message.toLowerCase().contains(
+            'already exists',
+          );
           if (!alreadyExists) rethrow;
         }
       }
@@ -211,7 +213,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       ref.invalidate(dailyGoalProgressProvider);
       ref.read(onboardingCompletedProvider.notifier).markCompleted();
 
-      if (!context.mounted) return;
+      if (!mounted) return;
       final container = ProviderScope.containerOf(context);
       context.go('/');
       succeeded = true;
@@ -333,10 +335,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                   const Spacer(),
                   AppButton(
-                    label: _currentStep < 3 ? S.of(context).nextButton : S.of(context).finishButton,
+                    label: _currentStep < 3
+                        ? S.of(context).nextButton
+                        : S.of(context).finishButton,
                     variant: AppButtonVariant.primary,
-                    onPressed:
-                        _canProceed && !_isSubmitting ? _nextStep : null,
+                    onPressed: _canProceed && !_isSubmitting ? _nextStep : null,
                     isLoading: _isSubmitting,
                   ),
                 ],
@@ -500,8 +503,9 @@ class _NativeLanguageStep extends StatelessWidget {
         children: [
           _StepHeader(
             title: S.of(context).onboardingSelectNativeLanguageTitle,
-            description:
-                S.of(context).onboardingSelectNativeLanguageDescription,
+            description: S
+                .of(context)
+                .onboardingSelectNativeLanguageDescription,
           ),
           ...languages.map((lang) {
             final isSelected = lang == selected;
@@ -778,10 +782,7 @@ class _GoalToggleTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
-              AppSwitch(
-                value: enabled,
-                onChanged: onToggle,
-              ),
+              AppSwitch(value: enabled, onChanged: onToggle),
             ],
           ),
           if (enabled) ...[

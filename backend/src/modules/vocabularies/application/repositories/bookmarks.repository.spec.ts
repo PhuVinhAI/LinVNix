@@ -103,7 +103,10 @@ describe('BookmarksRepository', () => {
       );
 
       expect(mockRepo.findOne).toHaveBeenCalledWith({
-        where: { userId: 'user-1', vocabularyId: 'vocab-1' },
+        where: {
+          userId: 'user-1',
+          vocabularyId: 'vocab-1',
+        },
       });
       expect(result).toEqual(bookmark);
     });
@@ -135,7 +138,10 @@ describe('BookmarksRepository', () => {
       );
 
       expect(mockRepo.findOne).toHaveBeenCalledWith({
-        where: { userId: 'user-1', personalVocabularyId: 'pv-1' },
+        where: {
+          userId: 'user-1',
+          personalVocabularyId: 'pv-1',
+        },
       });
       expect(result).toEqual(bookmark);
     });
@@ -179,6 +185,9 @@ describe('BookmarksRepository', () => {
       expect(mockQueryBuilder.where).toHaveBeenCalledWith(
         'bookmark.userId = :userId',
         { userId: 'user-1' },
+      );
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
+        'bookmark.vocabularyId IS NOT NULL',
       );
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
         'bookmark.vocabularyId IN (:...vocabularyIds)',

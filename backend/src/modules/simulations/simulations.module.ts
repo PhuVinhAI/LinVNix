@@ -5,7 +5,6 @@ import { Scenario } from './domain/scenario.entity';
 import { ScenarioCharacter } from './domain/scenario-character.entity';
 import { SimulationSession } from './domain/simulation-session.entity';
 import { SimulationMessage } from './domain/simulation-message.entity';
-import { SimulationResult } from './domain/simulation-result.entity';
 import { ScenariosService } from './application/scenarios.service';
 import { SimulationSessionService } from './application/simulation-session.service';
 import { SimulationAiService } from './application/simulation-ai.service';
@@ -26,7 +25,6 @@ import { UsersModule } from '../users/users.module';
       ScenarioCharacter,
       SimulationSession,
       SimulationMessage,
-      SimulationResult,
     ]),
     forwardRef(() => UsersModule),
   ],

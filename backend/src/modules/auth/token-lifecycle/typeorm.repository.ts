@@ -2,16 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, IsNull } from 'typeorm';
 import { ITokenRepository } from './interfaces';
-import { EmailVerificationToken } from '../domain/email-verification-token.entity';
-import { PasswordResetToken } from '../domain/password-reset-token.entity';
+import { AuthToken, AuthTokenPurpose } from '../domain/auth-token.entity';
 
 @Injectable()
 export class TypeOrmTokenRepository implements ITokenRepository {
   constructor(
-    @InjectRepository(EmailVerificationToken)
-    private readonly repo: Repository<EmailVerificationToken>,
-    @InjectRepository(PasswordResetToken)
-    private readonly passwordResetRepo: Repository<PasswordResetToken>,
+    @InjectRepository(AuthToken)
+    private readonly repo: Repository<AuthToken>,
   ) {}
 
   async save(
@@ -20,7 +17,13 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     expiresAt: Date,
     code: string,
   ): Promise<void> {
-    const entity = this.repo.create({ token, userId, expiresAt, code });
+    const entity = this.repo.create({
+      token,
+      userId,
+      expiresAt,
+      code,
+      purpose: AuthTokenPurpose.EMAIL_VERIFICATION,
+    });
     await this.repo.save(entity);
   }
 
@@ -31,7 +34,11 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     fullName: string;
   } | null> {
     const entity = await this.repo.findOne({
-      where: { token, verifiedAt: null as any },
+      where: {
+        token,
+        purpose: AuthTokenPurpose.EMAIL_VERIFICATION,
+        usedAt: IsNull(),
+      },
       relations: ['user'],
     });
     if (!entity) return null;
@@ -53,7 +60,12 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     fullName: string;
   } | null> {
     const entity = await this.repo.findOne({
-      where: { code, userId, verifiedAt: null as any },
+      where: {
+        code,
+        userId,
+        purpose: AuthTokenPurpose.EMAIL_VERIFICATION,
+        usedAt: IsNull(),
+      },
       relations: ['user'],
     });
     if (!entity) return null;
@@ -68,27 +80,39 @@ export class TypeOrmTokenRepository implements ITokenRepository {
   async markVerified(token: string): Promise<void> {
     const entity = await this.repo.findOne({ where: { token } });
     if (entity) {
-      entity.verifiedAt = new Date();
+      entity.usedAt = new Date();
       await this.repo.save(entity);
     }
   }
 
   async markVerifiedByCodeAndUser(code: string, userId: string): Promise<void> {
     const entity = await this.repo.findOne({
-      where: { code, userId, verifiedAt: null as any },
+      where: {
+        code,
+        userId,
+        purpose: AuthTokenPurpose.EMAIL_VERIFICATION,
+        usedAt: IsNull(),
+      },
     });
     if (entity) {
-      entity.verifiedAt = new Date();
+      entity.usedAt = new Date();
       await this.repo.save(entity);
     }
   }
 
   async deleteUnverifiedByUserId(userId: string): Promise<void> {
-    await this.repo.delete({ userId, verifiedAt: null as any });
+    await this.repo.delete({
+      userId,
+      purpose: AuthTokenPurpose.EMAIL_VERIFICATION,
+      usedAt: IsNull(),
+    });
   }
 
   async deleteExpired(): Promise<number> {
-    const result = await this.repo.delete({ expiresAt: LessThan(new Date()) });
+    const result = await this.repo.delete({
+      expiresAt: LessThan(new Date()),
+      purpose: AuthTokenPurpose.EMAIL_VERIFICATION,
+    });
     return result.affected ?? 0;
   }
 
@@ -98,17 +122,22 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     expiresAt: Date,
     code?: string,
   ): Promise<void> {
-    const entity = this.passwordResetRepo.create({
+    const entity = this.repo.create({
       token,
       userId,
       expiresAt,
       code,
+      purpose: AuthTokenPurpose.PASSWORD_RESET,
     });
-    await this.passwordResetRepo.save(entity);
+    await this.repo.save(entity);
   }
 
   async deleteUnusedPasswordResetByUserId(userId: string): Promise<void> {
-    await this.passwordResetRepo.delete({ userId, usedAt: IsNull() });
+    await this.repo.delete({
+      userId,
+      purpose: AuthTokenPurpose.PASSWORD_RESET,
+      usedAt: IsNull(),
+    });
   }
 
   async findUnusedPasswordResetByToken(token: string): Promise<{
@@ -116,8 +145,12 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     expiresAt: Date;
     email: string;
   } | null> {
-    const entity = await this.passwordResetRepo.findOne({
-      where: { token, usedAt: IsNull() },
+    const entity = await this.repo.findOne({
+      where: {
+        token,
+        purpose: AuthTokenPurpose.PASSWORD_RESET,
+        usedAt: IsNull(),
+      },
       relations: ['user'],
     });
     if (!entity) return null;
@@ -129,10 +162,12 @@ export class TypeOrmTokenRepository implements ITokenRepository {
   }
 
   async markPasswordResetUsed(token: string): Promise<void> {
-    const entity = await this.passwordResetRepo.findOne({ where: { token } });
+    const entity = await this.repo.findOne({
+      where: { token, purpose: AuthTokenPurpose.PASSWORD_RESET },
+    });
     if (entity) {
       entity.usedAt = new Date();
-      await this.passwordResetRepo.save(entity);
+      await this.repo.save(entity);
     }
   }
 
@@ -145,8 +180,12 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     email: string;
     token: string;
   } | null> {
-    const entity = await this.passwordResetRepo.findOne({
-      where: { code, usedAt: IsNull() },
+    const entity = await this.repo.findOne({
+      where: {
+        code,
+        purpose: AuthTokenPurpose.PASSWORD_RESET,
+        usedAt: IsNull(),
+      },
       relations: ['user'],
     });
     if (!entity || entity.user.email !== email) return null;
@@ -162,19 +201,24 @@ export class TypeOrmTokenRepository implements ITokenRepository {
     code: string,
     email: string,
   ): Promise<void> {
-    const entity = await this.passwordResetRepo.findOne({
-      where: { code, usedAt: IsNull() },
+    const entity = await this.repo.findOne({
+      where: {
+        code,
+        purpose: AuthTokenPurpose.PASSWORD_RESET,
+        usedAt: IsNull(),
+      },
       relations: ['user'],
     });
     if (entity && entity.user.email === email) {
       entity.usedAt = new Date();
-      await this.passwordResetRepo.save(entity);
+      await this.repo.save(entity);
     }
   }
 
   async deleteExpiredPasswordResetTokens(): Promise<number> {
-    const result = await this.passwordResetRepo.delete({
+    const result = await this.repo.delete({
       expiresAt: LessThan(new Date()),
+      purpose: AuthTokenPurpose.PASSWORD_RESET,
     });
     return result.affected ?? 0;
   }

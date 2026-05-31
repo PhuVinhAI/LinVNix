@@ -1,8 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserProgress } from './domain/user-progress.entity';
-import { ModuleProgress } from './domain/module-progress.entity';
-import { CourseProgress } from './domain/course-progress.entity';
+import { LearningProgress } from './domain/learning-progress.entity';
+import { ExerciseAttempt } from '../exercises/domain/exercise-attempt.entity';
 import { UserExerciseResult } from '../exercises/domain/user-exercise-result.entity';
 import { ProgressService } from './application/progress.service';
 import { ProgressRepository } from './application/progress.repository';
@@ -17,10 +16,9 @@ import { CoursesModule } from '../courses/courses.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      UserProgress,
+      LearningProgress,
+      ExerciseAttempt,
       UserExerciseResult,
-      ModuleProgress,
-      CourseProgress,
     ]),
     forwardRef(() => ExercisesModule),
     forwardRef(() => CoursesModule),

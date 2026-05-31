@@ -48,6 +48,6 @@ export class Lesson extends BaseEntity {
   @OneToMany('ExerciseSet', 'lesson')
   exerciseSets: any[];
 
-  @OneToMany('UserProgress', 'lesson')
+  @OneToMany('LearningProgress', 'lesson')
   userProgress: any[];
 }

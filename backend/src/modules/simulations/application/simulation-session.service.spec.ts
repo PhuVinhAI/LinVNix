@@ -102,6 +102,7 @@ describe('SimulationSessionService', () => {
       create: jest.fn(),
       findBySessionId: jest.fn(),
       updateFeedback: jest.fn(),
+      exists: jest.fn(),
       softDelete: jest.fn(),
     };
     const resultsMock = {
@@ -481,6 +482,7 @@ describe('SimulationSessionService', () => {
       messagesRepo.create.mockImplementation((data: any) =>
         Promise.resolve({ id: `msg-${data.orderIndex}`, ...data }),
       );
+      messagesRepo.exists.mockResolvedValue(true);
       messagesRepo.softDelete.mockResolvedValue(undefined);
       messagesRepo.updateFeedback.mockResolvedValue(undefined);
       sessionsRepo.updateNextTurnCharacterId.mockResolvedValue(undefined);
@@ -849,6 +851,7 @@ describe('SimulationSessionService', () => {
             speakerCharacterId: 'ch-2',
             speakerName: 'Chị Lan',
             content: 'Chào em!',
+            contentEn: undefined,
             orderIndex: 1,
           },
         ],

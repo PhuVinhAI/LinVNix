@@ -18,10 +18,15 @@ export class ArchivingService {
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
     try {
+      await this.dataSource.query(
+        `CREATE TABLE IF NOT EXISTS exercise_attempts_archive
+         (LIKE exercise_attempts INCLUDING ALL)`,
+      );
+
       const result = await this.dataSource.query(
         `
-        INSERT INTO user_exercise_results_archive
-        SELECT * FROM user_exercise_results
+        INSERT INTO exercise_attempts_archive
+        SELECT * FROM exercise_attempts
         WHERE attempted_at < $1
         ON CONFLICT DO NOTHING
         `,
@@ -35,7 +40,7 @@ export class ArchivingService {
 
       // Delete archived records
       await this.dataSource.query(
-        `DELETE FROM user_exercise_results WHERE attempted_at < $1`,
+        `DELETE FROM exercise_attempts WHERE attempted_at < $1`,
         [sixMonthsAgo],
       );
 
@@ -59,10 +64,15 @@ export class ArchivingService {
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
     try {
+      await this.dataSource.query(
+        `CREATE TABLE IF NOT EXISTS learning_progress_archive
+         (LIKE learning_progress INCLUDING ALL)`,
+      );
+
       const result = await this.dataSource.query(
         `
-        INSERT INTO user_progress_archive
-        SELECT * FROM user_progress
+        INSERT INTO learning_progress_archive
+        SELECT * FROM learning_progress
         WHERE last_accessed_at < $1
         ON CONFLICT DO NOTHING
         `,
@@ -76,7 +86,7 @@ export class ArchivingService {
 
       // Delete archived records
       await this.dataSource.query(
-        `DELETE FROM user_progress WHERE last_accessed_at < $1`,
+        `DELETE FROM learning_progress WHERE last_accessed_at < $1`,
         [oneYearAgo],
       );
 

@@ -9,7 +9,9 @@ import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router'
 describe('ImageAnalysisService', () => {
   let service: ImageAnalysisService;
   let mockProvider: { chatStructured: jest.Mock };
-  let aiRouter: jest.Mocked<Pick<AiProviderRouter, 'forFeature' | 'renderPrompt'>>;
+  let aiRouter: jest.Mocked<
+    Pick<AiProviderRouter, 'forFeature' | 'renderPrompt'>
+  >;
 
   const user = {
     id: 'user-1',

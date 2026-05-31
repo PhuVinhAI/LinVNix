@@ -29,12 +29,7 @@ export class UserDataCleanupService implements TransactionalHost {
     const qr = this.queryRunner!;
     await this.deleteLearningData(qr, userId);
     await qr.query(`DELETE FROM refresh_tokens WHERE user_id = $1`, [userId]);
-    await qr.query(`DELETE FROM email_verification_tokens WHERE user_id = $1`, [
-      userId,
-    ]);
-    await qr.query(`DELETE FROM password_reset_tokens WHERE user_id = $1`, [
-      userId,
-    ]);
+    await qr.query(`DELETE FROM auth_tokens WHERE user_id = $1`, [userId]);
     await qr.query(`DELETE FROM user_roles WHERE user_id = $1`, [userId]);
     await qr.query(
       `UPDATE users SET
@@ -68,14 +63,14 @@ export class UserDataCleanupService implements TransactionalHost {
        )`,
       [userId],
     );
-    await qr.query(`DELETE FROM simulation_results WHERE user_id = $1`, [
-      userId,
-    ]);
     await qr.query(`DELETE FROM simulation_sessions WHERE user_id = $1`, [
       userId,
     ]);
     await qr.query(`DELETE FROM bookmarks WHERE user_id = $1`, [userId]);
     await qr.query(`DELETE FROM personal_vocabularies WHERE user_id = $1`, [
+      userId,
+    ]);
+    await qr.query(`DELETE FROM exercise_attempts WHERE user_id = $1`, [
       userId,
     ]);
     await qr.query(`DELETE FROM user_exercise_results WHERE user_id = $1`, [
@@ -95,9 +90,9 @@ export class UserDataCleanupService implements TransactionalHost {
        WHERE generated_by_id = $1 AND is_custom = true`,
       [userId],
     );
-    await qr.query(`DELETE FROM user_progress WHERE user_id = $1`, [userId]);
-    await qr.query(`DELETE FROM course_progress WHERE user_id = $1`, [userId]);
-    await qr.query(`DELETE FROM module_progress WHERE user_id = $1`, [userId]);
+    await qr.query(`DELETE FROM learning_progress WHERE user_id = $1`, [
+      userId,
+    ]);
     await qr.query(`DELETE FROM daily_goal_progress WHERE user_id = $1`, [
       userId,
     ]);

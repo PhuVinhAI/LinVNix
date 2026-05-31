@@ -6,6 +6,7 @@ import { AnswerAssessment } from './answer-assessment.service';
 import { AnswerNormalizer } from './answer-normalizer';
 import { Transactional } from '../../../common/decorators';
 import { Exercise } from '../domain/exercise.entity';
+import { ExerciseAttempt } from '../domain/exercise-attempt.entity';
 import { UserExerciseResult } from '../domain/user-exercise-result.entity';
 import { UserLevel } from '../../../common/enums';
 import type { AssessmentContext } from '../domain/assessment.types';
@@ -112,7 +113,7 @@ export class ExercisesService implements ExerciseStatsPort {
     exerciseId: string,
     userAnswer: any,
     timeTaken?: number,
-  ): Promise<UserExerciseResult> {
+  ): Promise<ExerciseAttempt> {
     const exercise =
       await this.exercisesRepository.findByIdWithCourseLevel(exerciseId);
     if (!exercise) {
@@ -139,20 +140,32 @@ export class ExercisesService implements ExerciseStatsPort {
     const score = isCorrect ? 10 : 0;
     const attemptedAt = new Date();
 
+    const attempt = await manager.save(ExerciseAttempt, {
+      userId,
+      exerciseId,
+      userAnswer,
+      isCorrect,
+      score,
+      attemptedAt,
+      timeTaken,
+    });
+
     const existing = await manager.findOne(UserExerciseResult, {
       where: { userId, exerciseId },
     });
 
-    let result: UserExerciseResult;
     if (existing) {
       existing.userAnswer = userAnswer;
       existing.isCorrect = isCorrect;
       existing.score = score;
       existing.attemptedAt = attemptedAt;
       existing.timeTaken = timeTaken;
-      result = await manager.save(UserExerciseResult, existing);
+      existing.attemptCount = (existing.attemptCount ?? 0) + 1;
+      existing.bestScore = Math.max(existing.bestScore ?? 0, score);
+      existing.lastAttemptId = attempt.id;
+      await manager.save(UserExerciseResult, existing);
     } else {
-      result = await manager.save(UserExerciseResult, {
+      await manager.save(UserExerciseResult, {
         userId,
         exerciseId,
         userAnswer,
@@ -160,16 +173,19 @@ export class ExercisesService implements ExerciseStatsPort {
         score,
         attemptedAt,
         timeTaken,
+        attemptCount: 1,
+        bestScore: score,
+        lastAttemptId: attempt.id,
       });
     }
 
-    return result;
+    return attempt;
   }
 
   async getUserResults(
     userId: string,
     opts?: { limit?: number },
-  ): Promise<UserExerciseResult[]> {
+  ): Promise<ExerciseAttempt[]> {
     return this.userExerciseResultsRepository.findByUserId(userId, opts);
   }
 
@@ -177,7 +193,9 @@ export class ExercisesService implements ExerciseStatsPort {
     return this.userExerciseResultsRepository.getStatsByUser(userId);
   }
 
-  private buildAssessmentContext(exercise: Exercise): AssessmentContext | undefined {
+  private buildAssessmentContext(
+    exercise: Exercise,
+  ): AssessmentContext | undefined {
     const level = this.resolveCourseLevel(exercise);
     if (!level) return undefined;
 

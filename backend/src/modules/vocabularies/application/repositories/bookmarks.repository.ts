@@ -24,7 +24,10 @@ export class BookmarksRepository {
     vocabularyId: string,
   ): Promise<Bookmark | null> {
     return this.repository.findOne({
-      where: { userId, vocabularyId },
+      where: {
+        userId,
+        vocabularyId,
+      },
     });
   }
 
@@ -33,7 +36,10 @@ export class BookmarksRepository {
     personalVocabularyId: string,
   ): Promise<Bookmark | null> {
     return this.repository.findOne({
-      where: { userId, personalVocabularyId },
+      where: {
+        userId,
+        personalVocabularyId,
+      },
     });
   }
 
@@ -52,6 +58,7 @@ export class BookmarksRepository {
     return this.repository
       .createQueryBuilder('bookmark')
       .where('bookmark.userId = :userId', { userId })
+      .andWhere('bookmark.vocabularyId IS NOT NULL')
       .andWhere('bookmark.vocabularyId IN (:...vocabularyIds)', {
         vocabularyIds,
       })
@@ -73,6 +80,7 @@ export class BookmarksRepository {
       .select('vocabulary.partOfSpeech', 'partOfSpeech')
       .addSelect('COUNT(*)', 'count')
       .where('bookmark.userId = :userId', { userId })
+      .andWhere('bookmark.vocabularyId IS NOT NULL')
       .groupBy('vocabulary.partOfSpeech')
       .getRawMany();
 
@@ -82,6 +90,7 @@ export class BookmarksRepository {
       .select('personalVocabulary.partOfSpeech', 'partOfSpeech')
       .addSelect('COUNT(*)', 'count')
       .where('bookmark.userId = :userId', { userId })
+      .andWhere('bookmark.personalVocabularyId IS NOT NULL')
       .groupBy('personalVocabulary.partOfSpeech')
       .getRawMany();
 

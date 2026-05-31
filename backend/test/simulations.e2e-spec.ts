@@ -21,7 +21,7 @@ import { ScenarioCategory } from '../src/modules/simulations/domain/scenario-cat
 import { Scenario } from '../src/modules/simulations/domain/scenario.entity';
 import { ScenarioCharacter } from '../src/modules/simulations/domain/scenario-character.entity';
 import { SimulationSession } from '../src/modules/simulations/domain/simulation-session.entity';
-import { SimulationResult } from '../src/modules/simulations/domain/simulation-result.entity';
+import { SimulationResult } from '../src/modules/simulations/domain/simulation-session.entity';
 
 const SCORING_CRITERIA = [
   { name: 'Vocabulary', description: 'Vocabulary usage', weight: 40 },

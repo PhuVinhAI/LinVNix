@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseTool, ToolContext } from '@linvnix/shared';
 import { z } from 'zod';
 import { ExercisesService } from '../../exercises/application/exercises.service';
-import { UserExerciseResult } from '../../exercises/domain/user-exercise-result.entity';
+import { ExerciseAttempt } from '../../exercises/domain/exercise-attempt.entity';
 import type { User } from '../../users/domain/user.entity';
 
 const paramsSchema = z
@@ -16,7 +16,7 @@ type ListRecentExerciseResultsParams = z.infer<typeof paramsSchema>;
 const DEFAULT_LIMIT = 10;
 
 export interface ListRecentExerciseResultsResult {
-  results: UserExerciseResult[];
+  results: ExerciseAttempt[];
 }
 
 export type ListRecentExerciseResultsOutput =

@@ -67,7 +67,10 @@ export class BookmarksService {
         return { isBookmarked: false };
       }
 
-      await this.bookmarksRepository.create({ userId, vocabularyId });
+      await this.bookmarksRepository.create({
+        userId,
+        vocabularyId,
+      });
       return { isBookmarked: true };
     }
 

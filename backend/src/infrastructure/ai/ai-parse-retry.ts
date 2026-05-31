@@ -6,11 +6,7 @@ export interface ParseRetryResult<T> {
 }
 
 export function extractRawText(response: unknown): string {
-  if (
-    response !== null &&
-    typeof response === 'object' &&
-    'text' in (response as object)
-  ) {
+  if (response !== null && typeof response === 'object' && 'text' in response) {
     return (response as { text: string }).text;
   }
   return JSON.stringify(response);
@@ -20,7 +16,7 @@ export function extractTokenCount(response: unknown): number | undefined {
   if (
     response !== null &&
     typeof response === 'object' &&
-    'usageMetadata' in (response as object)
+    'usageMetadata' in response
   ) {
     return (response as { usageMetadata?: { totalTokenCount?: number } })
       .usageMetadata?.totalTokenCount;

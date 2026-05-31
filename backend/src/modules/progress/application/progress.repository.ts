@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
-import { UserProgress } from '../domain/user-progress.entity';
+import {
+  LearningUnitType,
+  UserProgress,
+} from '../domain/learning-progress.entity';
 import { ProgressStatus } from '../../../common/enums';
 
 @Injectable()
@@ -12,7 +15,10 @@ export class ProgressRepository {
   ) {}
 
   async create(data: Partial<UserProgress>): Promise<UserProgress> {
-    const progress = this.repository.create(data);
+    const progress = this.repository.create({
+      ...data,
+      unitType: LearningUnitType.LESSON,
+    });
     return this.repository.save(progress);
   }
 
@@ -21,14 +27,14 @@ export class ProgressRepository {
     lessonId: string,
   ): Promise<UserProgress | null> {
     return this.repository.findOne({
-      where: { userId, lessonId },
+      where: { userId, lessonId, unitType: LearningUnitType.LESSON },
       relations: ['lesson'],
     });
   }
 
   async findByUserId(userId: string): Promise<UserProgress[]> {
     return this.repository.find({
-      where: { userId },
+      where: { userId, unitType: LearningUnitType.LESSON },
       relations: ['lesson', 'lesson.module', 'lesson.module.course'],
       order: { lastAccessedAt: 'DESC' },
     });
@@ -58,6 +64,9 @@ export class ProgressRepository {
       .select('course.id', 'courseId')
       .addSelect('course.title', 'courseTitle')
       .addSelect('COUNT(DISTINCT progress.userId)', 'userCount')
+      .where('progress.unitType = :unitType', {
+        unitType: LearningUnitType.LESSON,
+      })
       .groupBy('course.id')
       .addGroupBy('course.title')
       .orderBy('"userCount"', 'DESC')
@@ -79,6 +88,9 @@ export class ProgressRepository {
     const result = await this.repository
       .createQueryBuilder('progress')
       .where('progress.userId = :userId', { userId })
+      .andWhere('progress.unitType = :unitType', {
+        unitType: LearningUnitType.LESSON,
+      })
       .andWhere('progress.status = :status', {
         status: ProgressStatus.COMPLETED,
       })
@@ -96,6 +108,7 @@ export class ProgressRepository {
       where: {
         userId,
         lessonId: In(lessonIds),
+        unitType: LearningUnitType.LESSON,
         status: ProgressStatus.COMPLETED,
       },
     });

@@ -2,11 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { UserExerciseResultsRepository } from './user-exercise-results.repository';
+import { ExerciseAttempt } from '../../domain/exercise-attempt.entity';
 import { UserExerciseResult } from '../../domain/user-exercise-result.entity';
 
 describe('UserExerciseResultsRepository', () => {
   let repository: UserExerciseResultsRepository;
   let mockRepo: jest.Mocked<Repository<UserExerciseResult>>;
+  let mockAttemptsRepo: jest.Mocked<Repository<ExerciseAttempt>>;
   let mockManager: jest.Mocked<EntityManager>;
   let mockDataSource: jest.Mocked<DataSource>;
 
@@ -18,6 +20,10 @@ describe('UserExerciseResultsRepository', () => {
       findOne: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+    } as any;
+    mockAttemptsRepo = {
+      find: jest.fn(),
+      createQueryBuilder: jest.fn(),
     } as any;
 
     mockManager = {
@@ -37,6 +43,10 @@ describe('UserExerciseResultsRepository', () => {
           useValue: mockRepo,
         },
         {
+          provide: getRepositoryToken(ExerciseAttempt),
+          useValue: mockAttemptsRepo,
+        },
+        {
           provide: DataSource,
           useValue: mockDataSource,
         },
@@ -50,22 +60,22 @@ describe('UserExerciseResultsRepository', () => {
 
   describe('findByUserId', () => {
     it('queries by userId ordered by attemptedAt DESC with no limit by default', async () => {
-      mockRepo.find.mockResolvedValue([]);
+      mockAttemptsRepo.find.mockResolvedValue([]);
 
       await repository.findByUserId('user-1');
 
-      expect(mockRepo.find).toHaveBeenCalledWith({
+      expect(mockAttemptsRepo.find).toHaveBeenCalledWith({
         where: { userId: 'user-1' },
         order: { attemptedAt: 'DESC' },
       });
     });
 
     it('applies the provided limit when within [1..50]', async () => {
-      mockRepo.find.mockResolvedValue([]);
+      mockAttemptsRepo.find.mockResolvedValue([]);
 
       await repository.findByUserId('user-1', { limit: 5 });
 
-      expect(mockRepo.find).toHaveBeenCalledWith({
+      expect(mockAttemptsRepo.find).toHaveBeenCalledWith({
         where: { userId: 'user-1' },
         order: { attemptedAt: 'DESC' },
         take: 5,
@@ -73,11 +83,11 @@ describe('UserExerciseResultsRepository', () => {
     });
 
     it('clamps limit > 50 down to 50 (the hard upper bound)', async () => {
-      mockRepo.find.mockResolvedValue([]);
+      mockAttemptsRepo.find.mockResolvedValue([]);
 
       await repository.findByUserId('user-1', { limit: 999 });
 
-      expect(mockRepo.find).toHaveBeenCalledWith({
+      expect(mockAttemptsRepo.find).toHaveBeenCalledWith({
         where: { userId: 'user-1' },
         order: { attemptedAt: 'DESC' },
         take: 50,
@@ -85,11 +95,11 @@ describe('UserExerciseResultsRepository', () => {
     });
 
     it('coerces limit < 1 up to 1 (no negative/zero takes hitting the DB)', async () => {
-      mockRepo.find.mockResolvedValue([]);
+      mockAttemptsRepo.find.mockResolvedValue([]);
 
       await repository.findByUserId('user-1', { limit: 0 });
 
-      expect(mockRepo.find).toHaveBeenCalledWith({
+      expect(mockAttemptsRepo.find).toHaveBeenCalledWith({
         where: { userId: 'user-1' },
         order: { attemptedAt: 'DESC' },
         take: 1,
@@ -97,11 +107,11 @@ describe('UserExerciseResultsRepository', () => {
     });
 
     it('treats limit=undefined as "no limit" (forward compat with callers that pass {})', async () => {
-      mockRepo.find.mockResolvedValue([]);
+      mockAttemptsRepo.find.mockResolvedValue([]);
 
       await repository.findByUserId('user-1', {});
 
-      expect(mockRepo.find).toHaveBeenCalledWith({
+      expect(mockAttemptsRepo.find).toHaveBeenCalledWith({
         where: { userId: 'user-1' },
         order: { attemptedAt: 'DESC' },
       });
@@ -124,7 +134,10 @@ describe('UserExerciseResultsRepository', () => {
           userId: 'user-1',
           exerciseId: 'exercise-1',
           score: 85,
+          bestScore: 85,
           isCorrect: true,
+          attemptedAt: expect.any(Date),
+          attemptCount: 1,
         },
         ['userId', 'exerciseId'],
       );
@@ -141,7 +154,13 @@ describe('UserExerciseResultsRepository', () => {
 
       expect(mockManager.upsert).toHaveBeenCalledWith(
         UserExerciseResult,
-        expect.objectContaining({ score: 100, isCorrect: true }),
+        expect.objectContaining({
+          score: 100,
+          bestScore: 100,
+          isCorrect: true,
+          attemptedAt: expect.any(Date),
+          attemptCount: 1,
+        }),
         ['userId', 'exerciseId'],
       );
     });
@@ -170,9 +189,8 @@ describe('UserExerciseResultsRepository', () => {
         .mockResolvedValueOnce([
           { totalExercises: '10', correctAnswers: '7', totalTimeTaken: '600' },
         ])
-        .mockResolvedValueOnce([
-          { completedLessons: '3', totalLessonTime: '1800' },
-        ]);
+        .mockResolvedValueOnce([{ completedExercises: '3' }])
+        .mockResolvedValueOnce([{ totalLessonTime: '1800' }]);
 
       const result = await repository.getStatsByUser('user-1');
 
@@ -189,9 +207,8 @@ describe('UserExerciseResultsRepository', () => {
         .mockResolvedValueOnce([
           { totalExercises: '0', correctAnswers: null, totalTimeTaken: null },
         ])
-        .mockResolvedValueOnce([
-          { completedLessons: '0', totalLessonTime: null },
-        ]);
+        .mockResolvedValueOnce([{ completedExercises: '0' }])
+        .mockResolvedValueOnce([{ totalLessonTime: null }]);
 
       const result = await repository.getStatsByUser('new-user');
 
@@ -208,9 +225,8 @@ describe('UserExerciseResultsRepository', () => {
         .mockResolvedValueOnce([
           { totalExercises: '5', correctAnswers: '5', totalTimeTaken: '300' },
         ])
-        .mockResolvedValueOnce([
-          { completedLessons: '2', totalLessonTime: '900' },
-        ]);
+        .mockResolvedValueOnce([{ completedExercises: '2' }])
+        .mockResolvedValueOnce([{ totalLessonTime: '900' }]);
 
       const result = await repository.getStatsByUser('user-2');
 
@@ -223,20 +239,24 @@ describe('UserExerciseResultsRepository', () => {
         .mockResolvedValueOnce([
           { totalExercises: '0', correctAnswers: null, totalTimeTaken: null },
         ])
-        .mockResolvedValueOnce([
-          { completedLessons: '0', totalLessonTime: null },
-        ]);
+        .mockResolvedValueOnce([{ completedExercises: '0' }])
+        .mockResolvedValueOnce([{ totalLessonTime: null }]);
 
       await repository.getStatsByUser('target-user');
 
       expect(mockDataSource.query).toHaveBeenNthCalledWith(
         1,
-        expect.stringContaining('user_exercise_results'),
+        expect.stringContaining('exercise_attempts'),
         ['target-user'],
       );
       expect(mockDataSource.query).toHaveBeenNthCalledWith(
         2,
-        expect.stringContaining('completed'),
+        expect.stringContaining('user_exercise_results'),
+        ['target-user'],
+      );
+      expect(mockDataSource.query).toHaveBeenNthCalledWith(
+        3,
+        expect.stringContaining('learning_progress'),
         ['target-user'],
       );
     });

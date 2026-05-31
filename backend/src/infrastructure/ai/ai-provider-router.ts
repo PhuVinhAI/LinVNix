@@ -4,7 +4,11 @@ import { GenaiProvider } from '../genai/genai-provider';
 import { OpenaiProvider } from '../openai/openai.provider';
 import type { IAiProvider } from '@linvnix/shared';
 
-export type FeatureName = 'exercise' | 'simulation' | 'assistant' | 'image-analysis';
+export type FeatureName =
+  | 'exercise'
+  | 'simulation'
+  | 'assistant'
+  | 'image-analysis';
 
 interface FeatureConfig {
   provider: string;
@@ -32,10 +36,18 @@ export class AiProviderRouter implements OnModuleInit {
   ) {}
 
   onModuleInit(): void {
-    const features: FeatureName[] = ['exercise', 'simulation', 'assistant', 'image-analysis'];
+    const features: FeatureName[] = [
+      'exercise',
+      'simulation',
+      'assistant',
+      'image-analysis',
+    ];
     for (const feature of features) {
-      const configKey = feature === 'image-analysis' ? 'imageAnalysis' : feature;
-      const config = this.configService.get<FeatureConfig>(`aiRouter.${configKey}`)!;
+      const configKey =
+        feature === 'image-analysis' ? 'imageAnalysis' : feature;
+      const config = this.configService.get<FeatureConfig>(
+        `aiRouter.${configKey}`,
+      )!;
       if (config.provider === 'openai') {
         if (!config.baseUrl || config.apiKeys.length === 0) {
           throw new Error(

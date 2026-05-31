@@ -505,9 +505,10 @@ export class AgentService {
     if (!finalAssistantMessage) {
       // User cancelled before AI streamed anything — check if the user message
       // was already deleted by the client (same pattern as simulation stop).
-      const userMsgExists = await this.conversationService.lastUserMessageExists(
-        activeConversationId,
-      );
+      const userMsgExists =
+        await this.conversationService.lastUserMessageExists(
+          activeConversationId,
+        );
       if (!userMsgExists) {
         // Client deleted the user message — discard this turn entirely.
         return;

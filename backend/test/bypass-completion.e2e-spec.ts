@@ -9,9 +9,9 @@ import { User } from '../src/modules/users/domain/user.entity';
 import { Course } from '../src/modules/courses/domain/course.entity';
 import { Module } from '../src/modules/courses/domain/module.entity';
 import { Lesson } from '../src/modules/courses/domain/lesson.entity';
-import { UserProgress } from '../src/modules/progress/domain/user-progress.entity';
-import { ModuleProgress } from '../src/modules/progress/domain/module-progress.entity';
-import { CourseProgress } from '../src/modules/progress/domain/course-progress.entity';
+import { UserProgress } from '../src/modules/progress/domain/learning-progress.entity';
+import { ModuleProgress } from '../src/modules/progress/domain/learning-progress.entity';
+import { CourseProgress } from '../src/modules/progress/domain/learning-progress.entity';
 import { UserLevel, ProgressStatus } from '../src/common/enums';
 import { JwtService } from '@nestjs/jwt';
 

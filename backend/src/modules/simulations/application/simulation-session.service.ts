@@ -15,7 +15,7 @@ import {
 } from './simulation-ai.service';
 import { SimulationSession } from '../domain/simulation-session.entity';
 import { SimulationMessage } from '../domain/simulation-message.entity';
-import { SimulationResult } from '../domain/simulation-result.entity';
+import { SimulationResult } from '../domain/simulation-session.entity';
 import {
   SimulationSessionStatus,
   SimulationEndReason,

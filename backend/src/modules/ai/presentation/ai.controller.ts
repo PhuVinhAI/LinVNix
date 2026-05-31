@@ -282,7 +282,10 @@ export class AiController {
       'leaving an orphaned message in the history.',
   })
   @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiResponse({ status: 204, description: 'Message deleted (or no-op if none)' })
+  @ApiResponse({
+    status: 204,
+    description: 'Message deleted (or no-op if none)',
+  })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Conversation not found' })
   async deleteLastUserMessage(

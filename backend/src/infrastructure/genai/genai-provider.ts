@@ -308,13 +308,21 @@ export class GenaiProvider implements IAiProvider, OnModuleInit {
     if (gen.temperature !== undefined) cfg.temperature = gen.temperature;
     if (gen.topP !== undefined) cfg.topP = gen.topP;
     if (gen.topK !== undefined) cfg.topK = gen.topK;
-    if (gen.maxOutputTokens !== undefined) cfg.maxOutputTokens = gen.maxOutputTokens;
-    const hasThinking = gen.thinkingBudget !== undefined || gen.thinkingLevel || gen.includeThoughts !== undefined;
+    if (gen.maxOutputTokens !== undefined)
+      cfg.maxOutputTokens = gen.maxOutputTokens;
+    const hasThinking =
+      gen.thinkingBudget !== undefined ||
+      gen.thinkingLevel ||
+      gen.includeThoughts !== undefined;
     if (hasThinking) {
       cfg.thinkingConfig = {
-        ...(gen.thinkingBudget !== undefined ? { thinkingBudget: gen.thinkingBudget } : {}),
+        ...(gen.thinkingBudget !== undefined
+          ? { thinkingBudget: gen.thinkingBudget }
+          : {}),
         ...(gen.thinkingLevel ? { thinkingLevel: gen.thinkingLevel } : {}),
-        ...(gen.includeThoughts !== undefined ? { includeThoughts: gen.includeThoughts } : {}),
+        ...(gen.includeThoughts !== undefined
+          ? { includeThoughts: gen.includeThoughts }
+          : {}),
       };
     }
     return Object.keys(cfg).length > 0 ? cfg : undefined;

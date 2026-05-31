@@ -19,11 +19,7 @@ export class ExercisesRepository {
     return this.repository.find({
       where: { lessonId },
       order: { orderIndex: 'ASC' },
-      relations: [
-        'lesson',
-        'lesson.module',
-        'lesson.module.course',
-      ],
+      relations: ['lesson', 'lesson.module', 'lesson.module.course'],
     });
   }
 

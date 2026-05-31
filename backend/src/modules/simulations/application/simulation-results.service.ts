@@ -59,9 +59,9 @@ export class SimulationResultsService {
 
     return results.map((r) => ({
       id: r.id,
-      totalScore: r.totalScore,
-      endReason: r.endReason,
-      createdAt: r.createdAt,
+      totalScore: r.totalScore ?? 0,
+      endReason: r.endReason ?? '',
+      createdAt: r.resultCreatedAt ?? r.updatedAt,
       scenarioId: r.scenarioId,
       scenarioTitle: (r.scenario as any)?.title ?? '',
       chosenCharacterName: (r.chosenCharacter as any)?.name ?? '',
@@ -86,7 +86,28 @@ export class SimulationResultsService {
       );
     }
 
-    return result as ResultDetail;
+    return {
+      id: result.id,
+      userId: result.userId,
+      sessionId: result.id,
+      scenarioId: result.scenarioId,
+      chosenCharacterId: result.chosenCharacterId,
+      totalScore: result.totalScore ?? 0,
+      criteriaScores: result.criteriaScores ?? [],
+      endReason: result.endReason ?? '',
+      aiSummary: result.aiSummary ?? '',
+      totalMessages: result.totalMessages ?? 0,
+      createdAt: result.resultCreatedAt ?? result.updatedAt,
+      updatedAt: result.updatedAt,
+      scenario: {
+        id: (result.scenario as any)?.id ?? result.scenarioId,
+        title: (result.scenario as any)?.title ?? '',
+      },
+      chosenCharacter: {
+        id: (result.chosenCharacter as any)?.id ?? result.chosenCharacterId,
+        name: (result.chosenCharacter as any)?.name ?? '',
+      },
+    };
   }
 
   async getStats(userId: string): Promise<SimulationStats> {

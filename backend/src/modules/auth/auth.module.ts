@@ -14,7 +14,6 @@ import { QueueModule } from '../../infrastructure/queue/queue.module';
 import { TokenLifecycleModule } from './token-lifecycle/token-lifecycle.module';
 import { Role } from './domain/role.entity';
 import { Permission } from './domain/permission.entity';
-import { PasswordResetToken } from './domain/password-reset-token.entity';
 import { RefreshToken } from './domain/refresh-token.entity';
 import { RbacService } from './application/rbac.service';
 
@@ -24,12 +23,7 @@ import { RbacService } from './application/rbac.service';
     QueueModule,
     TokenLifecycleModule,
     PassportModule,
-    TypeOrmModule.forFeature([
-      Role,
-      Permission,
-      PasswordResetToken,
-      RefreshToken,
-    ]),
+    TypeOrmModule.forFeature([Role, Permission, RefreshToken]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {

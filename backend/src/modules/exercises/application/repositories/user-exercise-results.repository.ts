@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, EntityManager, Repository } from 'typeorm';
+import { ExerciseAttempt } from '../../domain/exercise-attempt.entity';
 import { UserExerciseResult } from '../../domain/user-exercise-result.entity';
 
 @Injectable()
@@ -8,6 +9,8 @@ export class UserExerciseResultsRepository {
   constructor(
     @InjectRepository(UserExerciseResult)
     private readonly repository: Repository<UserExerciseResult>,
+    @InjectRepository(ExerciseAttempt)
+    private readonly attemptsRepository: Repository<ExerciseAttempt>,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -19,7 +22,7 @@ export class UserExerciseResultsRepository {
   async findByUserId(
     userId: string,
     opts?: { limit?: number },
-  ): Promise<UserExerciseResult[]> {
+  ): Promise<ExerciseAttempt[]> {
     const options: {
       where: { userId: string };
       order: { attemptedAt: 'DESC' };
@@ -35,14 +38,14 @@ export class UserExerciseResultsRepository {
       options.take = Math.max(1, Math.min(50, opts.limit));
     }
 
-    return this.repository.find(options);
+    return this.attemptsRepository.find(options);
   }
 
   async findByUserAndExercise(
     userId: string,
     exerciseId: string,
-  ): Promise<UserExerciseResult[]> {
-    return this.repository.find({
+  ): Promise<ExerciseAttempt[]> {
+    return this.attemptsRepository.find({
       where: { userId, exerciseId },
       order: { attemptedAt: 'DESC' },
     });
@@ -65,6 +68,12 @@ export class UserExerciseResultsRepository {
     exerciseIds: string[],
   ): Promise<void> {
     if (exerciseIds.length === 0) return;
+    await this.attemptsRepository
+      .createQueryBuilder()
+      .delete()
+      .where('userId = :userId', { userId })
+      .andWhere('exerciseId IN (:...exerciseIds)', { exerciseIds })
+      .execute();
     await this.repository
       .createQueryBuilder()
       .delete()
@@ -81,7 +90,7 @@ export class UserExerciseResultsRepository {
     completedExercises: number;
     totalTimeSpent: number;
   }> {
-    // Exercise-level stats from user_exercise_results
+    // Attempt-level stats from exercise_attempts
     const [exerciseRow]: {
       totalExercises: string;
       correctAnswers: string;
@@ -91,21 +100,28 @@ export class UserExerciseResultsRepository {
          COUNT(*) AS "totalExercises",
          SUM(CASE WHEN is_correct = true THEN 1 ELSE 0 END) AS "correctAnswers",
          COALESCE(SUM(time_taken), 0) AS "totalTimeTaken"
+       FROM exercise_attempts
+       WHERE user_id = $1`,
+      [userId],
+    );
+
+    const [completedRow]: {
+      completedExercises: string;
+    }[] = await this.dataSource.query(
+      `SELECT COUNT(*) AS "completedExercises"
        FROM user_exercise_results
        WHERE user_id = $1`,
       [userId],
     );
 
-    // Lesson-level stats from user_progress
+    // Lesson-level stats from learning_progress
     const [progressRow]: {
-      completedLessons: string;
       totalLessonTime: string;
     }[] = await this.dataSource.query(
       `SELECT
-         COUNT(*) FILTER (WHERE status = 'completed') AS "completedLessons",
          COALESCE(SUM(time_spent), 0) AS "totalLessonTime"
-       FROM user_progress
-       WHERE user_id = $1`,
+       FROM learning_progress
+       WHERE user_id = $1 AND unit_type = 'lesson'`,
       [userId],
     );
 
@@ -114,7 +130,8 @@ export class UserExerciseResultsRepository {
     const incorrectAnswers = totalExercises - correctAnswers;
     const accuracy =
       totalExercises > 0 ? (correctAnswers / totalExercises) * 100 : 0;
-    const completedExercises = parseInt(progressRow.completedLessons, 10) || 0;
+    const completedExercises =
+      parseInt(completedRow.completedExercises, 10) || 0;
     const totalTimeSpent =
       (parseInt(exerciseRow.totalTimeTaken, 10) || 0) +
       (parseInt(progressRow.totalLessonTime, 10) || 0);
@@ -138,7 +155,15 @@ export class UserExerciseResultsRepository {
   ): Promise<void> {
     await manager.upsert(
       UserExerciseResult,
-      { userId, exerciseId, score, isCorrect },
+      {
+        userId,
+        exerciseId,
+        score,
+        bestScore: score,
+        isCorrect,
+        attemptedAt: new Date(),
+        attemptCount: 1,
+      },
       ['userId', 'exerciseId'],
     );
   }
@@ -148,7 +173,7 @@ export class UserExerciseResultsRepository {
     start: Date,
     end: Date,
   ): Promise<number> {
-    const result = await this.repository
+    const result = await this.attemptsRepository
       .createQueryBuilder('result')
       .where('result.userId = :userId', { userId })
       .andWhere('result.attemptedAt >= :start', { start })
@@ -177,7 +202,7 @@ export class UserExerciseResultsRepository {
       totalAttempts: string;
       incorrectCount: string;
       errorRate: string;
-    }[] = await this.repository
+    }[] = await this.attemptsRepository
       .createQueryBuilder('result')
       .innerJoin('result.exercise', 'exercise')
       .select('exercise.id', 'exerciseId')

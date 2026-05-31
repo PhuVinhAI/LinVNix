@@ -8,9 +8,7 @@ import {
 import { describePasswordFailure, isPasswordStrong } from './password-policy';
 
 @ValidatorConstraint({ name: 'isSecurePassword', async: false })
-export class IsSecurePasswordConstraint
-  implements ValidatorConstraintInterface
-{
+export class IsSecurePasswordConstraint implements ValidatorConstraintInterface {
   validate(value: unknown): boolean {
     return typeof value === 'string' && isPasswordStrong(value);
   }
