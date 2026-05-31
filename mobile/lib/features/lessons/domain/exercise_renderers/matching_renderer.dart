@@ -190,18 +190,6 @@ class _MatchingInputState extends State<_MatchingInput> {
                         ),
                         child: Row(
                           children: [
-                            // Left accent strip
-                            Container(
-                              width: 4,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: isMatched || isSelected
-                                    ? visuals.accent
-                                    : c.border,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                            const SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Text(
                                 item,

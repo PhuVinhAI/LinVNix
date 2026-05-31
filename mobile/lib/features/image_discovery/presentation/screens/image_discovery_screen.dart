@@ -606,7 +606,9 @@ class _AssistantMessage extends ConsumerWidget {
         height: 1.6,
       ),
       blockquoteDecoration: BoxDecoration(
-        border: Border(left: BorderSide(color: c.border, width: 3)),
+        color: c.muted.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: c.border, width: 1),
       ),
       listBullet: GoogleFonts.inter(
         fontSize: AppTypography.bodyMedium,

@@ -415,6 +415,7 @@ class _ReadingBody extends ConsumerWidget {
                 MarkdownBody(
                   data: partial.isEmpty ? S.of(context).noResponseLabel : partial,
                   selectable: true,
+                  styleSheet: _buildMarkdownStyleSheet(context, c),
                 ),
               ],
             ),
@@ -465,6 +466,59 @@ class _ReadingBody extends ConsumerWidget {
             isFullWidth: true,
           ),
       ],
+    );
+  }
+
+  MarkdownStyleSheet _buildMarkdownStyleSheet(BuildContext context, AppColors c) {
+    return MarkdownStyleSheet(
+      p: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
+        height: 1.6,
+      ),
+      h1: GoogleFonts.inter(
+        fontSize: AppTypography.titleLarge,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h2: GoogleFonts.inter(
+        fontSize: AppTypography.titleMedium,
+        fontWeight: FontWeight.w700,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      h3: GoogleFonts.inter(
+        fontSize: AppTypography.titleSmall,
+        fontWeight: FontWeight.w600,
+        color: c.foreground,
+        height: 1.3,
+      ),
+      code: GoogleFonts.jetBrainsMono(
+        fontSize: AppTypography.bodySmall,
+        color: c.primary,
+        backgroundColor: c.muted,
+      ),
+      codeblockDecoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      blockquote: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.mutedForeground,
+        fontStyle: FontStyle.italic,
+        height: 1.6,
+      ),
+      blockquoteDecoration: BoxDecoration(
+        color: c.muted.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: c.border, width: 1),
+      ),
+      listBullet: GoogleFonts.inter(
+        fontSize: AppTypography.bodyMedium,
+        color: c.foreground,
+      ),
     );
   }
 }

@@ -40,11 +40,12 @@ class AppListItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: effectivePadding,
-        decoration: BoxDecoration(
-          border: showBorder
-              ? Border(bottom: BorderSide(color: c.border, width: 1))
-              : null,
-        ),
+        decoration: showBorder
+            ? BoxDecoration(
+                border: Border.all(color: c.border, width: 1),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+              )
+            : null,
         child: Row(
           children: [
             if (leading != null) ...[

@@ -1015,7 +1015,10 @@ class _CompletedBanner extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: c.card,
-        border: Border(top: BorderSide(color: c.border)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppRadius.lg),
+        ),
+        border: Border.all(color: c.border, width: 1),
       ),
       child: SafeArea(
         top: false,
@@ -1063,7 +1066,10 @@ class _HistoryBanner extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: c.card,
-        border: Border(top: BorderSide(color: c.border)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppRadius.lg),
+        ),
+        border: Border.all(color: c.border, width: 1),
       ),
       child: SafeArea(
         top: false,
