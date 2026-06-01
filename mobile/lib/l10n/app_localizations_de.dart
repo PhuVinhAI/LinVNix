@@ -1835,4 +1835,97 @@ class SDe extends S {
   @override
   String get passwordRequirementsNotMet =>
       'Das Passwort erfüllt die Sicherheitsanforderungen nicht';
+
+  @override
+  String get assistantBookmarksTitle => 'Gespeicherte Wörter';
+
+  @override
+  String get assistantBookmarksPlaceholder => 'Frage zu gespeicherten Wörtern?';
+
+  @override
+  String get assistantFlashcardTitle => 'Karteikarten';
+
+  @override
+  String get assistantFlashcardPlaceholder => 'Frage zu dieser Karte?';
+
+  @override
+  String get assistantCourseTitle => 'Kurs';
+
+  @override
+  String assistantCourseTitleParam(Object title) {
+    return 'Kurs · $title';
+  }
+
+  @override
+  String get assistantCoursePlaceholder => 'Frage zu diesem Kurs?';
+
+  @override
+  String get assistantModuleTitle => 'Modul';
+
+  @override
+  String assistantModuleTitleParam(Object title) {
+    return 'Modul · $title';
+  }
+
+  @override
+  String get assistantModulePlaceholder => 'Frage zu diesem Modul?';
+
+  @override
+  String get assistantLessonTitle => 'Lektion';
+
+  @override
+  String assistantLessonTitleParam(Object title) {
+    return 'Lektion · $title';
+  }
+
+  @override
+  String get assistantLessonPlaceholder => 'Frage zu dieser Lektion?';
+
+  @override
+  String get assistantPracticeTitle => 'Übung';
+
+  @override
+  String assistantPracticeTitleParam(Object title) {
+    return 'Übung · $title';
+  }
+
+  @override
+  String get assistantPracticePlaceholder => 'Frage zur Übung?';
+
+  @override
+  String get assistantExerciseTitle => 'Aufgabe';
+
+  @override
+  String get assistantExercisePlaceholder => 'Brauchst du einen Tipp?';
+
+  @override
+  String get assistantScenarioTitle => 'Szenario';
+
+  @override
+  String assistantScenarioTitleParam(Object title) {
+    return 'Szenario · $title';
+  }
+
+  @override
+  String get assistantScenarioPlaceholder => 'Frage zu diesem Szenario?';
+
+  @override
+  String get assistantResultTitle => 'Simulationsergebnis';
+
+  @override
+  String assistantResultTitleParam(Object title) {
+    return 'Ergebnis · $title';
+  }
+
+  @override
+  String get assistantResultPlaceholder => 'Frage zu diesem Ergebnis?';
+
+  @override
+  String get assistantHistoryTitle => 'Gesprächsverlauf';
+
+  @override
+  String get assistantHistoryFilteredTitle => 'Verlauf · Szenario';
+
+  @override
+  String get assistantHistoryPlaceholder => 'Frage zu deinem Verlauf?';
 }

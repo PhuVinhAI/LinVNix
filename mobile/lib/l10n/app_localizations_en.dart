@@ -1811,4 +1811,97 @@ class SEn extends S {
   @override
   String get passwordRequirementsNotMet =>
       'Password doesn\'t meet the security requirements';
+
+  @override
+  String get assistantBookmarksTitle => 'Saved words';
+
+  @override
+  String get assistantBookmarksPlaceholder => 'Ask about saved words?';
+
+  @override
+  String get assistantFlashcardTitle => 'Flashcards';
+
+  @override
+  String get assistantFlashcardPlaceholder => 'Ask about this card?';
+
+  @override
+  String get assistantCourseTitle => 'Course';
+
+  @override
+  String assistantCourseTitleParam(Object title) {
+    return 'Course · $title';
+  }
+
+  @override
+  String get assistantCoursePlaceholder => 'Ask about this course?';
+
+  @override
+  String get assistantModuleTitle => 'Module';
+
+  @override
+  String assistantModuleTitleParam(Object title) {
+    return 'Module · $title';
+  }
+
+  @override
+  String get assistantModulePlaceholder => 'Ask about this module?';
+
+  @override
+  String get assistantLessonTitle => 'Lesson';
+
+  @override
+  String assistantLessonTitleParam(Object title) {
+    return 'Lesson · $title';
+  }
+
+  @override
+  String get assistantLessonPlaceholder => 'Ask about this lesson?';
+
+  @override
+  String get assistantPracticeTitle => 'Practice';
+
+  @override
+  String assistantPracticeTitleParam(Object title) {
+    return 'Practice · $title';
+  }
+
+  @override
+  String get assistantPracticePlaceholder => 'Ask about practice?';
+
+  @override
+  String get assistantExerciseTitle => 'Exercise';
+
+  @override
+  String get assistantExercisePlaceholder => 'Need a hint?';
+
+  @override
+  String get assistantScenarioTitle => 'Scenario';
+
+  @override
+  String assistantScenarioTitleParam(Object title) {
+    return 'Scenario · $title';
+  }
+
+  @override
+  String get assistantScenarioPlaceholder => 'Ask about this scenario?';
+
+  @override
+  String get assistantResultTitle => 'Simulation result';
+
+  @override
+  String assistantResultTitleParam(Object title) {
+    return 'Result · $title';
+  }
+
+  @override
+  String get assistantResultPlaceholder => 'Ask about this result?';
+
+  @override
+  String get assistantHistoryTitle => 'Conversation history';
+
+  @override
+  String get assistantHistoryFilteredTitle => 'History · scenario';
+
+  @override
+  String get assistantHistoryPlaceholder => 'Ask about your history?';
 }

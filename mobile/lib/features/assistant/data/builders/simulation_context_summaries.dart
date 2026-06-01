@@ -4,7 +4,10 @@ import '../../../simulation/domain/scoring_criterion.dart';
 import '../../../simulation/domain/simulation_result_detail.dart';
 import '../../../simulation/domain/simulation_result_summary.dart';
 
-/// Compact scenario detail for assistant screen context.
+/// Compact scenario detail for assistant screen context. `category` is
+/// deliberately omitted — the scenario-detail screen does not render it,
+/// and including it here would suggest a UI element to the assistant
+/// that the learner cannot see.
 Map<String, dynamic> scenarioDetailContextSummary(ScenarioDetail detail) {
   return {
     'id': detail.id,
@@ -14,7 +17,6 @@ Map<String, dynamic> scenarioDetailContextSummary(ScenarioDetail detail) {
     'difficulty': detail.difficulty,
     'estimatedMinutes': detail.estimatedMinutes,
     'characterCount': detail.characterCount,
-    if (detail.categoryInfo != null) 'category': detail.categoryInfo!.name,
   };
 }
 

@@ -1787,4 +1787,97 @@ class SVi extends S {
   @override
   String get passwordRequirementsNotMet =>
       'Mật khẩu chưa đáp ứng yêu cầu bảo mật';
+
+  @override
+  String get assistantBookmarksTitle => 'Từ đã lưu';
+
+  @override
+  String get assistantBookmarksPlaceholder => 'Hỏi về từ đã lưu?';
+
+  @override
+  String get assistantFlashcardTitle => 'Thẻ ghi nhớ';
+
+  @override
+  String get assistantFlashcardPlaceholder => 'Hỏi về thẻ này?';
+
+  @override
+  String get assistantCourseTitle => 'Khóa học';
+
+  @override
+  String assistantCourseTitleParam(Object title) {
+    return 'Khóa học · $title';
+  }
+
+  @override
+  String get assistantCoursePlaceholder => 'Hỏi về khóa học này?';
+
+  @override
+  String get assistantModuleTitle => 'Mô-đun';
+
+  @override
+  String assistantModuleTitleParam(Object title) {
+    return 'Mô-đun · $title';
+  }
+
+  @override
+  String get assistantModulePlaceholder => 'Hỏi về mô-đun này?';
+
+  @override
+  String get assistantLessonTitle => 'Bài học';
+
+  @override
+  String assistantLessonTitleParam(Object title) {
+    return 'Bài học · $title';
+  }
+
+  @override
+  String get assistantLessonPlaceholder => 'Hỏi về bài học này?';
+
+  @override
+  String get assistantPracticeTitle => 'Luyện tập';
+
+  @override
+  String assistantPracticeTitleParam(Object title) {
+    return 'Luyện tập · $title';
+  }
+
+  @override
+  String get assistantPracticePlaceholder => 'Hỏi về luyện tập?';
+
+  @override
+  String get assistantExerciseTitle => 'Bài tập';
+
+  @override
+  String get assistantExercisePlaceholder => 'Cần gợi ý không?';
+
+  @override
+  String get assistantScenarioTitle => 'Tình huống';
+
+  @override
+  String assistantScenarioTitleParam(Object title) {
+    return 'Tình huống · $title';
+  }
+
+  @override
+  String get assistantScenarioPlaceholder => 'Hỏi về tình huống này?';
+
+  @override
+  String get assistantResultTitle => 'Kết quả mô phỏng';
+
+  @override
+  String assistantResultTitleParam(Object title) {
+    return 'Kết quả · $title';
+  }
+
+  @override
+  String get assistantResultPlaceholder => 'Hỏi về kết quả này?';
+
+  @override
+  String get assistantHistoryTitle => 'Lịch sử trò chuyện';
+
+  @override
+  String get assistantHistoryFilteredTitle => 'Lịch sử · tình huống';
+
+  @override
+  String get assistantHistoryPlaceholder => 'Hỏi về lịch sử của bạn?';
 }

@@ -10,6 +10,7 @@ import '../../data/bookmark_providers.dart';
 import '../../domain/bookmark_models.dart';
 import '../../../../core/services/audio_player_service.dart';
 import '../../../profile/data/profile_providers.dart';
+import '../../../assistant/data/saved_words_view_state_provider.dart';
 
 String _displayWord(BookmarkWithVocabulary item, String? preferredDialect) {
   if (preferredDialect != null &&
@@ -46,6 +47,11 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
 
   @override
   void dispose() {
+    // Reset the assistant-facing snapshot so the next screen doesn't see a
+    // stale "current card" pointer.
+    try {
+      ref.read(savedWordsViewStateProvider.notifier).reset();
+    } catch (_) {}
     _pageController.dispose();
     _flipController.dispose();
     super.dispose();
@@ -56,6 +62,7 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
     setState(() {
       _isFlipped = !_isFlipped;
     });
+    ref.read(savedWordsViewStateProvider.notifier).setFlipped(_isFlipped);
     if (reduceMotion) return;
     if (_isFlipped) {
       _flipController.forward();
@@ -69,6 +76,7 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
       _currentIndex = index;
       _isFlipped = false;
     });
+    ref.read(savedWordsViewStateProvider.notifier).setIndex(index);
     _flipController.reverse();
   }
 
@@ -118,6 +126,9 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (!mounted) return;
               setState(() => _currentIndex = safeIndex);
+              ref
+                  .read(savedWordsViewStateProvider.notifier)
+                  .setIndex(safeIndex);
               if (_pageController.hasClients) {
                 _pageController.jumpToPage(safeIndex);
               }

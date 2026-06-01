@@ -1744,4 +1744,97 @@ class SKo extends S {
 
   @override
   String get passwordRequirementsNotMet => '비밀번호가 보안 요건을 충족하지 않습니다';
+
+  @override
+  String get assistantBookmarksTitle => '저장한 단어';
+
+  @override
+  String get assistantBookmarksPlaceholder => '저장한 단어에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantFlashcardTitle => '플래시카드';
+
+  @override
+  String get assistantFlashcardPlaceholder => '이 카드에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantCourseTitle => '코스';
+
+  @override
+  String assistantCourseTitleParam(Object title) {
+    return '코스 · $title';
+  }
+
+  @override
+  String get assistantCoursePlaceholder => '이 코스에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantModuleTitle => '모듈';
+
+  @override
+  String assistantModuleTitleParam(Object title) {
+    return '모듈 · $title';
+  }
+
+  @override
+  String get assistantModulePlaceholder => '이 모듈에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantLessonTitle => '레슨';
+
+  @override
+  String assistantLessonTitleParam(Object title) {
+    return '레슨 · $title';
+  }
+
+  @override
+  String get assistantLessonPlaceholder => '이 레슨에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantPracticeTitle => '연습';
+
+  @override
+  String assistantPracticeTitleParam(Object title) {
+    return '연습 · $title';
+  }
+
+  @override
+  String get assistantPracticePlaceholder => '연습에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantExerciseTitle => '문제';
+
+  @override
+  String get assistantExercisePlaceholder => '힌트가 필요한가요?';
+
+  @override
+  String get assistantScenarioTitle => '시나리오';
+
+  @override
+  String assistantScenarioTitleParam(Object title) {
+    return '시나리오 · $title';
+  }
+
+  @override
+  String get assistantScenarioPlaceholder => '이 시나리오에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantResultTitle => '시뮬레이션 결과';
+
+  @override
+  String assistantResultTitleParam(Object title) {
+    return '결과 · $title';
+  }
+
+  @override
+  String get assistantResultPlaceholder => '이 결과에 대해 질문하시겠어요?';
+
+  @override
+  String get assistantHistoryTitle => '대화 기록';
+
+  @override
+  String get assistantHistoryFilteredTitle => '기록 · 시나리오';
+
+  @override
+  String get assistantHistoryPlaceholder => '기록에 대해 질문하시겠어요?';
 }

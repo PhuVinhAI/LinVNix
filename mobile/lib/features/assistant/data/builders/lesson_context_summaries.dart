@@ -20,10 +20,12 @@ Map<String, dynamic> vocabularyContextSummary(LessonVocabulary vocabulary, {Stri
     'translation': vocabulary.translation,
     if (vocabulary.phonetic != null) 'phonetic': vocabulary.phonetic,
     if (vocabulary.partOfSpeech != null) 'partOfSpeech': vocabulary.partOfSpeech,
+    if (vocabulary.classifier != null) 'classifier': vocabulary.classifier,
     if (vocabulary.exampleSentence != null)
       'exampleSentence': vocabulary.exampleSentence,
     if (vocabulary.exampleTranslation != null)
       'exampleTranslation': vocabulary.exampleTranslation,
+    'isBookmarked': vocabulary.isBookmarked,
   };
 }
 
@@ -34,6 +36,7 @@ Map<String, dynamic> grammarRuleContextSummary(GrammarRule rule) {
     'title': rule.title,
     'explanation': _truncate(rule.explanation, _maxGrammarExplanationLength),
     if (rule.structure != null) 'structure': rule.structure,
+    if (rule.notes != null && rule.notes!.isNotEmpty) 'notes': rule.notes,
     if (rule.examples.isNotEmpty)
       'examples': rule.examples
           .take(3)

@@ -3,14 +3,17 @@ import '../../../lessons/data/lesson_providers.dart';
 import '../../../lessons/domain/exercise_set_models.dart';
 import '../../../lessons/domain/lesson_models.dart';
 import '../../domain/screen_context.dart';
+import '../assistant_localizations_provider.dart';
+import '../exercise_hub_view_state_provider.dart';
 import '../route_match.dart';
 import 'course_context_summaries.dart';
-import 'exercise_context_summaries.dart';
 
 /// `ScreenContext` builder for `/lessons/:id/exercises`. Pulls lesson title
-/// and exercise-set progress from existing providers so the AI can answer
-/// practice-hub questions without a tool call.
+/// and exercise-set progress from existing providers, plus the transient
+/// busy / error / generating state pushed by the hub screen, so the AI can
+/// answer practice-hub questions without a tool call.
 ScreenContext exerciseHubScreenContextBuilder(Ref ref, RouteMatch match) {
+  final s = ref.watch(assistantLocalizationsProvider);
   final lessonId = match.pathParameters['id'] ?? '';
   final setsAsync = lessonId.isEmpty
       ? const AsyncValue<LessonExerciseSummary>.loading()
@@ -18,6 +21,7 @@ ScreenContext exerciseHubScreenContextBuilder(Ref ref, RouteMatch match) {
   final lessonAsync = lessonId.isEmpty
       ? const AsyncValue<LessonDetail>.loading()
       : ref.watch(lessonDetailProvider(lessonId));
+  final hubView = ref.watch(exerciseHubViewStateProvider);
   final status = asyncLoadStatus(setsAsync);
 
   final data = <String, dynamic>{
@@ -25,6 +29,11 @@ ScreenContext exerciseHubScreenContextBuilder(Ref ref, RouteMatch match) {
     'lessonId': lessonId,
     'status': status,
     'lessonTitle': lessonAsync.whenOrNull(data: (lesson) => lesson.title) ?? '',
+    'isGeneratingCustomSet': hubView.isCreatingCustom,
+    if (hubView.busySetId != null) 'busySetId': hubView.busySetId,
+    if (hubView.busyAction != null) 'busyAction': hubView.busyAction,
+    if (hubView.actionError != null && hubView.actionError!.isNotEmpty)
+      'actionError': hubView.actionError,
   };
 
   if (status == 'error') {
@@ -33,11 +42,13 @@ ScreenContext exerciseHubScreenContextBuilder(Ref ref, RouteMatch match) {
     data['customSetCount'] = 0;
     data['defaultSets'] = const <Map<String, dynamic>>[];
     data['customSets'] = const <Map<String, dynamic>>[];
+    data['isEmpty'] = true;
   } else if (status == 'loading') {
     data['defaultSetCount'] = 0;
     data['customSetCount'] = 0;
     data['defaultSets'] = const <Map<String, dynamic>>[];
     data['customSets'] = const <Map<String, dynamic>>[];
+    data['isEmpty'] = false;
   } else {
     final summary = setsAsync.requireValue;
     final defaultSets = summary.defaultSets;
@@ -49,6 +60,7 @@ ScreenContext exerciseHubScreenContextBuilder(Ref ref, RouteMatch match) {
         .toList(growable: false);
     data['customSets'] =
         customSets.map(setProgressContextSummary).toList(growable: false);
+    data['isEmpty'] = defaultSets.isEmpty && customSets.isEmpty;
   }
 
   final lessonTitle = lessonAsync.whenOrNull(data: (lesson) => lesson.title);
@@ -56,9 +68,9 @@ ScreenContext exerciseHubScreenContextBuilder(Ref ref, RouteMatch match) {
   return ScreenContext(
     route: match.location,
     displayName: lessonTitle != null
-        ? 'Practice · $lessonTitle'
-        : 'Practice',
-    barPlaceholder: 'Ask about practice?',
+        ? s.assistantPracticeTitleParam(lessonTitle)
+        : s.assistantPracticeTitle,
+    barPlaceholder: s.assistantPracticePlaceholder,
     data: data,
   );
 }

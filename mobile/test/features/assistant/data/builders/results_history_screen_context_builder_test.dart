@@ -33,7 +33,7 @@ SimulationResultSummary _result({
 void main() {
   group('resultsHistoryScreenContextBuilder', () {
     test(
-      'unfiltered history exposes all results plus aggregate score stats',
+      'unfiltered history exposes all results without aggregate score stats',
       () async {
         final results = [
           _result(id: 'r-1', score: 90, scenarioTitle: 'Coffee'),
@@ -66,9 +66,12 @@ void main() {
         expect(ctx.data['status'], 'data');
         expect(ctx.data['filteredByScenario'], false);
         expect(ctx.data['resultCount'], 3);
-        expect(ctx.data['averageScore'], 75.0);
-        expect(ctx.data['bestScore'], 90.0);
-        expect(ctx.data['worstScore'], 60.0);
+        // Aggregate stats are no longer surfaced — the history screen has
+        // no card that shows average/best/worst, so exposing them would
+        // make the assistant claim a UI element that doesn't exist.
+        expect(ctx.data.containsKey('averageScore'), isFalse);
+        expect(ctx.data.containsKey('bestScore'), isFalse);
+        expect(ctx.data.containsKey('worstScore'), isFalse);
 
         final items = ctx.data['results'] as List;
         expect(items, hasLength(3));

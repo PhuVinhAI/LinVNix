@@ -14,6 +14,7 @@ import '../../domain/lesson_models.dart';
 import '../widgets/content_widgets.dart';
 import '../widgets/vocabulary_step.dart';
 import '../widgets/grammar_step.dart';
+import '../../../assistant/data/lesson_wizard_view_state_provider.dart';
 
 class LessonWizardScreen extends ConsumerStatefulWidget {
   const LessonWizardScreen({super.key, required this.lessonId});
@@ -160,8 +161,36 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     unawaited(_lessonTimeTracker?.stop());
+    try {
+      ref.read(lessonWizardViewStateProvider.notifier).clear();
+    } catch (_) {}
     _pageController?.dispose();
     super.dispose();
+  }
+
+  void _publishWizardState({
+    required List<_WizardStep> steps,
+    required int currentPage,
+  }) {
+    final mapped = steps
+        .map(
+          (s) => LessonWizardStep(
+            type: switch (s.type) {
+              _StepType.content => 'content',
+              _StepType.vocabulary => 'vocabulary',
+              _StepType.grammar => 'grammar',
+            },
+            label: s.label,
+            contentId: s.content?.id,
+            contentType: s.content?.contentType,
+          ),
+        )
+        .toList(growable: false);
+    ref.read(lessonWizardViewStateProvider.notifier).update(
+          lessonId: widget.lessonId,
+          currentPage: currentPage,
+          steps: mapped,
+        );
   }
 
   @override
@@ -259,6 +288,11 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
         body: Center(child: Text(S.of(context).noContentAvailable)),
       );
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _publishWizardState(steps: steps, currentPage: _currentPage);
+    });
 
     final isLastStep = _currentPage == steps.length - 1;
     final canGoForward = _canGoForwardFrom(_currentPage, steps.length);

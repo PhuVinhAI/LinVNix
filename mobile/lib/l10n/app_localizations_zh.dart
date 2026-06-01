@@ -1726,4 +1726,97 @@ class SZh extends S {
 
   @override
   String get passwordRequirementsNotMet => '密码不符合安全要求';
+
+  @override
+  String get assistantBookmarksTitle => '已保存的词';
+
+  @override
+  String get assistantBookmarksPlaceholder => '想问已保存的词吗？';
+
+  @override
+  String get assistantFlashcardTitle => '记忆卡';
+
+  @override
+  String get assistantFlashcardPlaceholder => '想问这张卡吗？';
+
+  @override
+  String get assistantCourseTitle => '课程';
+
+  @override
+  String assistantCourseTitleParam(Object title) {
+    return '课程 · $title';
+  }
+
+  @override
+  String get assistantCoursePlaceholder => '想问这门课程吗？';
+
+  @override
+  String get assistantModuleTitle => '模块';
+
+  @override
+  String assistantModuleTitleParam(Object title) {
+    return '模块 · $title';
+  }
+
+  @override
+  String get assistantModulePlaceholder => '想问这个模块吗？';
+
+  @override
+  String get assistantLessonTitle => '课时';
+
+  @override
+  String assistantLessonTitleParam(Object title) {
+    return '课时 · $title';
+  }
+
+  @override
+  String get assistantLessonPlaceholder => '想问这节课吗？';
+
+  @override
+  String get assistantPracticeTitle => '练习';
+
+  @override
+  String assistantPracticeTitleParam(Object title) {
+    return '练习 · $title';
+  }
+
+  @override
+  String get assistantPracticePlaceholder => '想问练习吗？';
+
+  @override
+  String get assistantExerciseTitle => '题目';
+
+  @override
+  String get assistantExercisePlaceholder => '需要提示吗？';
+
+  @override
+  String get assistantScenarioTitle => '场景';
+
+  @override
+  String assistantScenarioTitleParam(Object title) {
+    return '场景 · $title';
+  }
+
+  @override
+  String get assistantScenarioPlaceholder => '想问这个场景吗？';
+
+  @override
+  String get assistantResultTitle => '模拟结果';
+
+  @override
+  String assistantResultTitleParam(Object title) {
+    return '结果 · $title';
+  }
+
+  @override
+  String get assistantResultPlaceholder => '想问这个结果吗？';
+
+  @override
+  String get assistantHistoryTitle => '对话历史';
+
+  @override
+  String get assistantHistoryFilteredTitle => '历史 · 场景';
+
+  @override
+  String get assistantHistoryPlaceholder => '想问你的历史记录吗？';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/screen_context.dart';
+import '../assistant_localizations_provider.dart';
 import '../current_exercise_attempt_provider.dart';
 import '../route_match.dart';
 
@@ -17,6 +18,7 @@ import '../route_match.dart';
 /// so the AI can ground hints like "you only heard the audio once, try
 /// again" or "the prompt asks you to say X".
 ScreenContext exercisePlayScreenContextBuilder(Ref ref, RouteMatch match) {
+  final s = ref.watch(assistantLocalizationsProvider);
   final attempt = ref.watch(currentExerciseAttemptProvider);
   final setId = match.pathParameters['setId'] ?? '';
   final routePattern = match.routePattern;
@@ -34,8 +36,8 @@ ScreenContext exercisePlayScreenContextBuilder(Ref ref, RouteMatch match) {
 
   return ScreenContext(
     route: match.location,
-    displayName: 'Exercise',
-    barPlaceholder: 'Need a hint?',
+    displayName: s.assistantExerciseTitle,
+    barPlaceholder: s.assistantExercisePlaceholder,
     data: <String, dynamic>{
       'screenType': 'exercisePlay',
       'setId': setId,
@@ -45,11 +47,16 @@ ScreenContext exercisePlayScreenContextBuilder(Ref ref, RouteMatch match) {
       'exerciseId': attempt?.exerciseId,
       'exerciseType': attempt?.exerciseType,
       'question': attempt?.question,
+      'questionAudioUrl': ?attempt?.questionAudioUrl,
+      'acceptsWithoutDiacritics': attempt?.acceptsWithoutDiacritics ?? false,
       'userAnswer': attempt?.userAnswer,
       'exerciseIndex': attempt?.exerciseIndex,
       'totalExercises': attempt?.totalExercises,
+      'correctCount': ?attempt?.correctCount,
       'options': ?attempt?.options,
       'submitted': attempt?.submitted ?? false,
+      'submitting': attempt?.submitting ?? false,
+      'submitError': ?attempt?.submitError,
       'isCorrect': ?attempt?.isCorrect,
       'score': ?attempt?.score,
       'correctAnswer': ?attempt?.correctAnswer,

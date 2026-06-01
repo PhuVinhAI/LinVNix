@@ -119,8 +119,18 @@ void main() {
         expect(ctx.data['lessonId'], lessonId);
         expect(ctx.data['title'], 'Greetings');
         expect(ctx.data['vocabularies'], [
-          {'id': 'v1', 'word': 'xin chào', 'translation': 'hello'},
-          {'id': 'v2', 'word': 'tạm biệt', 'translation': 'bye'},
+          {
+            'id': 'v1',
+            'word': 'xin chào',
+            'translation': 'hello',
+            'isBookmarked': false,
+          },
+          {
+            'id': 'v2',
+            'word': 'tạm biệt',
+            'translation': 'bye',
+            'isBookmarked': false,
+          },
         ]);
         expect(ctx.data['grammarRules'], [
           {

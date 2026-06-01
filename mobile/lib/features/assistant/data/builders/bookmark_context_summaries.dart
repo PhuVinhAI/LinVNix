@@ -4,6 +4,7 @@ import '../../../bookmarks/domain/bookmark_models.dart';
 Map<String, dynamic> bookmarkContextSummary(
   BookmarkWithVocabulary bookmark, {
   String? preferredDialect,
+  bool includeStudyDetails = false,
 }) {
   final String displayedWord;
   if (preferredDialect != null &&
@@ -18,6 +19,7 @@ Map<String, dynamic> bookmarkContextSummary(
   return {
     'vocabularyId': bookmark.vocabularyId,
     'type': bookmark.type.value,
+    'isPersonal': bookmark.isPersonal,
     if (bookmark.personalVocabularyId != null)
       'personalVocabularyId': bookmark.personalVocabularyId,
     'word': displayedWord,
@@ -26,5 +28,13 @@ Map<String, dynamic> bookmarkContextSummary(
     if (bookmark.partOfSpeech != null) 'partOfSpeech': bookmark.partOfSpeech,
     if (bookmark.difficultyLevel != null)
       'difficultyLevel': bookmark.difficultyLevel,
+    // Detail-sheet / flashcard-back fields. Only emitted when callers ask
+    // for them so the bookmarks-list snapshot stays compact.
+    if (includeStudyDetails && bookmark.classifier != null)
+      'classifier': bookmark.classifier,
+    if (includeStudyDetails && bookmark.exampleSentence != null)
+      'exampleSentence': bookmark.exampleSentence,
+    if (includeStudyDetails && bookmark.exampleTranslation != null)
+      'exampleTranslation': bookmark.exampleTranslation,
   };
 }

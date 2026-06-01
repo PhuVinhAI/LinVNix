@@ -1775,4 +1775,97 @@ class STh extends S {
   @override
   String get passwordRequirementsNotMet =>
       'รหัสผ่านไม่ตรงตามข้อกำหนดด้านความปลอดภัย';
+
+  @override
+  String get assistantBookmarksTitle => 'คำที่บันทึก';
+
+  @override
+  String get assistantBookmarksPlaceholder => 'ถามเกี่ยวกับคำที่บันทึกไหม?';
+
+  @override
+  String get assistantFlashcardTitle => 'บัตรคำ';
+
+  @override
+  String get assistantFlashcardPlaceholder => 'ถามเกี่ยวกับบัตรนี้ไหม?';
+
+  @override
+  String get assistantCourseTitle => 'คอร์ส';
+
+  @override
+  String assistantCourseTitleParam(Object title) {
+    return 'คอร์ส · $title';
+  }
+
+  @override
+  String get assistantCoursePlaceholder => 'ถามเกี่ยวกับคอร์สนี้ไหม?';
+
+  @override
+  String get assistantModuleTitle => 'โมดูล';
+
+  @override
+  String assistantModuleTitleParam(Object title) {
+    return 'โมดูล · $title';
+  }
+
+  @override
+  String get assistantModulePlaceholder => 'ถามเกี่ยวกับโมดูลนี้ไหม?';
+
+  @override
+  String get assistantLessonTitle => 'บทเรียน';
+
+  @override
+  String assistantLessonTitleParam(Object title) {
+    return 'บทเรียน · $title';
+  }
+
+  @override
+  String get assistantLessonPlaceholder => 'ถามเกี่ยวกับบทเรียนนี้ไหม?';
+
+  @override
+  String get assistantPracticeTitle => 'ฝึก';
+
+  @override
+  String assistantPracticeTitleParam(Object title) {
+    return 'ฝึก · $title';
+  }
+
+  @override
+  String get assistantPracticePlaceholder => 'ถามเกี่ยวกับการฝึกไหม?';
+
+  @override
+  String get assistantExerciseTitle => 'แบบฝึกหัด';
+
+  @override
+  String get assistantExercisePlaceholder => 'ต้องการคำใบ้ไหม?';
+
+  @override
+  String get assistantScenarioTitle => 'สถานการณ์';
+
+  @override
+  String assistantScenarioTitleParam(Object title) {
+    return 'สถานการณ์ · $title';
+  }
+
+  @override
+  String get assistantScenarioPlaceholder => 'ถามเกี่ยวกับสถานการณ์นี้ไหม?';
+
+  @override
+  String get assistantResultTitle => 'ผลการจำลอง';
+
+  @override
+  String assistantResultTitleParam(Object title) {
+    return 'ผลลัพธ์ · $title';
+  }
+
+  @override
+  String get assistantResultPlaceholder => 'ถามเกี่ยวกับผลลัพธ์นี้ไหม?';
+
+  @override
+  String get assistantHistoryTitle => 'ประวัติการสนทนา';
+
+  @override
+  String get assistantHistoryFilteredTitle => 'ประวัติ · สถานการณ์';
+
+  @override
+  String get assistantHistoryPlaceholder => 'ถามเกี่ยวกับประวัติของคุณไหม?';
 }

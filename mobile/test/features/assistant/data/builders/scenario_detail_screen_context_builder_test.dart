@@ -114,7 +114,13 @@ void main() {
         expect(scenario['title'], 'Ordering coffee');
         expect(scenario['requiredLevel'], 'A2');
         expect(scenario['difficulty'], 'EASY');
-        expect(scenario['category'], 'Food & drink');
+        // `category` is no longer surfaced: the scenario detail screen
+        // does not render it, so exposing it here would invent a UI
+        // affordance the learner cannot see.
+        expect(scenario.containsKey('category'), isFalse);
+
+        expect(ctx.data['fromConversation'], false);
+        expect(ctx.data['showsStartCta'], true);
 
         final characters = ctx.data['characters'] as List;
         expect(characters, hasLength(2));

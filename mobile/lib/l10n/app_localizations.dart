@@ -3410,6 +3410,168 @@ abstract class S {
   /// In vi, this message translates to:
   /// **'Mật khẩu chưa đáp ứng yêu cầu bảo mật'**
   String get passwordRequirementsNotMet;
+
+  /// No description provided for @assistantBookmarksTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Từ đã lưu'**
+  String get assistantBookmarksTitle;
+
+  /// No description provided for @assistantBookmarksPlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về từ đã lưu?'**
+  String get assistantBookmarksPlaceholder;
+
+  /// No description provided for @assistantFlashcardTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thẻ ghi nhớ'**
+  String get assistantFlashcardTitle;
+
+  /// No description provided for @assistantFlashcardPlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về thẻ này?'**
+  String get assistantFlashcardPlaceholder;
+
+  /// No description provided for @assistantCourseTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khóa học'**
+  String get assistantCourseTitle;
+
+  /// No description provided for @assistantCourseTitleParam.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khóa học · {title}'**
+  String assistantCourseTitleParam(Object title);
+
+  /// No description provided for @assistantCoursePlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về khóa học này?'**
+  String get assistantCoursePlaceholder;
+
+  /// No description provided for @assistantModuleTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mô-đun'**
+  String get assistantModuleTitle;
+
+  /// No description provided for @assistantModuleTitleParam.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mô-đun · {title}'**
+  String assistantModuleTitleParam(Object title);
+
+  /// No description provided for @assistantModulePlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về mô-đun này?'**
+  String get assistantModulePlaceholder;
+
+  /// No description provided for @assistantLessonTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bài học'**
+  String get assistantLessonTitle;
+
+  /// No description provided for @assistantLessonTitleParam.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bài học · {title}'**
+  String assistantLessonTitleParam(Object title);
+
+  /// No description provided for @assistantLessonPlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về bài học này?'**
+  String get assistantLessonPlaceholder;
+
+  /// No description provided for @assistantPracticeTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Luyện tập'**
+  String get assistantPracticeTitle;
+
+  /// No description provided for @assistantPracticeTitleParam.
+  ///
+  /// In vi, this message translates to:
+  /// **'Luyện tập · {title}'**
+  String assistantPracticeTitleParam(Object title);
+
+  /// No description provided for @assistantPracticePlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về luyện tập?'**
+  String get assistantPracticePlaceholder;
+
+  /// No description provided for @assistantExerciseTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bài tập'**
+  String get assistantExerciseTitle;
+
+  /// No description provided for @assistantExercisePlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cần gợi ý không?'**
+  String get assistantExercisePlaceholder;
+
+  /// No description provided for @assistantScenarioTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tình huống'**
+  String get assistantScenarioTitle;
+
+  /// No description provided for @assistantScenarioTitleParam.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tình huống · {title}'**
+  String assistantScenarioTitleParam(Object title);
+
+  /// No description provided for @assistantScenarioPlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về tình huống này?'**
+  String get assistantScenarioPlaceholder;
+
+  /// No description provided for @assistantResultTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết quả mô phỏng'**
+  String get assistantResultTitle;
+
+  /// No description provided for @assistantResultTitleParam.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết quả · {title}'**
+  String assistantResultTitleParam(Object title);
+
+  /// No description provided for @assistantResultPlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về kết quả này?'**
+  String get assistantResultPlaceholder;
+
+  /// No description provided for @assistantHistoryTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lịch sử trò chuyện'**
+  String get assistantHistoryTitle;
+
+  /// No description provided for @assistantHistoryFilteredTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lịch sử · tình huống'**
+  String get assistantHistoryFilteredTitle;
+
+  /// No description provided for @assistantHistoryPlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi về lịch sử của bạn?'**
+  String get assistantHistoryPlaceholder;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

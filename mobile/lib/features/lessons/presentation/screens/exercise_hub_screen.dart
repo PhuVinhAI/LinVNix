@@ -15,6 +15,7 @@ import '../../data/lesson_repository.dart';
 import '../../data/lesson_time_tracker.dart';
 import '../../domain/exercise_set_models.dart';
 import '../widgets/custom_practice_bottom_sheet.dart';
+import '../../../assistant/data/exercise_hub_view_state_provider.dart';
 
 class ExerciseHubScreen extends ConsumerStatefulWidget {
   const ExerciseHubScreen({super.key, required this.lessonId});
@@ -26,12 +27,30 @@ class ExerciseHubScreen extends ConsumerStatefulWidget {
 
 enum _BusyAction { none, regenerate, delete, reset, create }
 
+String? _busyActionName(_BusyAction action) => switch (action) {
+      _BusyAction.none => null,
+      _BusyAction.regenerate => 'regenerate',
+      _BusyAction.delete => 'delete',
+      _BusyAction.reset => 'reset',
+      _BusyAction.create => 'create',
+    };
+
 class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     with WidgetsBindingObserver {
   String? _busySetId;
   _BusyAction _busyAction = _BusyAction.none;
   String? _error;
   bool _isCreatingCustom = false;
+
+  void _publishHubViewState() {
+    final next = ExerciseHubViewState(
+      isCreatingCustom: _isCreatingCustom,
+      busySetId: _busySetId,
+      busyAction: _busyActionName(_busyAction),
+      actionError: _error,
+    );
+    ref.read(exerciseHubViewStateProvider.notifier).set(next);
+  }
   String? _creatingSetId;
   String? _regeneratingNewSetId;
   CancelToken? _aiCancelToken;
@@ -85,6 +104,9 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     _aiCancelToken?.cancel();
     _cleanupIncompleteSet();
     unawaited(_lessonTimeTracker?.stop());
+    try {
+      ref.read(exerciseHubViewStateProvider.notifier).clear();
+    } catch (_) {}
     super.dispose();
   }
 
@@ -393,6 +415,11 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final summaryAsync = ref.watch(exerciseSetsProvider(widget.lessonId));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _publishHubViewState();
+    });
 
     return Scaffold(
       appBar: AppAppBar(title: Text(S.of(context).exercisesTitle)),

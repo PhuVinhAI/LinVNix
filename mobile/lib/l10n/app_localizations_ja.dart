@@ -1742,4 +1742,97 @@ class SJa extends S {
 
   @override
   String get passwordRequirementsNotMet => 'パスワードがセキュリティ要件を満たしていません';
+
+  @override
+  String get assistantBookmarksTitle => '保存した単語';
+
+  @override
+  String get assistantBookmarksPlaceholder => '保存した単語について質問しますか？';
+
+  @override
+  String get assistantFlashcardTitle => 'フラッシュカード';
+
+  @override
+  String get assistantFlashcardPlaceholder => 'このカードについて質問しますか？';
+
+  @override
+  String get assistantCourseTitle => 'コース';
+
+  @override
+  String assistantCourseTitleParam(Object title) {
+    return 'コース · $title';
+  }
+
+  @override
+  String get assistantCoursePlaceholder => 'このコースについて質問しますか？';
+
+  @override
+  String get assistantModuleTitle => 'モジュール';
+
+  @override
+  String assistantModuleTitleParam(Object title) {
+    return 'モジュール · $title';
+  }
+
+  @override
+  String get assistantModulePlaceholder => 'このモジュールについて質問しますか？';
+
+  @override
+  String get assistantLessonTitle => 'レッスン';
+
+  @override
+  String assistantLessonTitleParam(Object title) {
+    return 'レッスン · $title';
+  }
+
+  @override
+  String get assistantLessonPlaceholder => 'このレッスンについて質問しますか？';
+
+  @override
+  String get assistantPracticeTitle => '練習';
+
+  @override
+  String assistantPracticeTitleParam(Object title) {
+    return '練習 · $title';
+  }
+
+  @override
+  String get assistantPracticePlaceholder => '練習について質問しますか？';
+
+  @override
+  String get assistantExerciseTitle => '問題';
+
+  @override
+  String get assistantExercisePlaceholder => 'ヒントが必要ですか？';
+
+  @override
+  String get assistantScenarioTitle => 'シナリオ';
+
+  @override
+  String assistantScenarioTitleParam(Object title) {
+    return 'シナリオ · $title';
+  }
+
+  @override
+  String get assistantScenarioPlaceholder => 'このシナリオについて質問しますか？';
+
+  @override
+  String get assistantResultTitle => 'シミュレーション結果';
+
+  @override
+  String assistantResultTitleParam(Object title) {
+    return '結果 · $title';
+  }
+
+  @override
+  String get assistantResultPlaceholder => 'この結果について質問しますか？';
+
+  @override
+  String get assistantHistoryTitle => '会話履歴';
+
+  @override
+  String get assistantHistoryFilteredTitle => '履歴 · シナリオ';
+
+  @override
+  String get assistantHistoryPlaceholder => '履歴について質問しますか？';
 }
