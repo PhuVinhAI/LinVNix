@@ -91,9 +91,8 @@ export function Sidebar() {
       </ScrollArea>
 
       {/* Bottom Section */}
-      <div className="border-t-2 border-border p-3 space-y-2">
-        {/* User Card */}
-        <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-muted">
+      <div className="border-t-2 border-border p-3">
+        <div className="flex items-center gap-2 px-2 py-2">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
             {getInitials(user?.fullName)}
           </div>
@@ -105,33 +104,27 @@ export function Sidebar() {
               {user?.email}
             </p>
           </div>
-        </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-1.5">
           <button
             type="button"
             onClick={toggleTheme}
-            className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/70 transition-colors"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             title={theme === 'dark' ? 'Chuyển sang sáng' : 'Chuyển sang tối'}
           >
             {theme === 'dark' ? (
-              <Sun className="h-4 w-4" />
+              <Sun className="h-[18px] w-[18px]" />
             ) : (
-              <Moon className="h-4 w-4" />
+              <Moon className="h-[18px] w-[18px]" />
             )}
-            <span className="text-xs font-semibold">
-              {theme === 'dark' ? 'Sáng' : 'Tối'}
-            </span>
           </button>
 
           <button
             type="button"
             onClick={handleLogout}
-            className="flex items-center justify-center h-9 w-9 rounded-lg bg-muted text-destructive hover:bg-destructive/10 transition-colors"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
             title="Đăng xuất"
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-[18px] w-[18px]" />
           </button>
         </div>
       </div>

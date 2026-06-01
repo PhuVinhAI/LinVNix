@@ -191,18 +191,6 @@ export function CoursesPage() {
                         </DropdownMenu>
                       </div>
                     </div>
-                    <div className="absolute bottom-2 right-2">
-                      {course.isPublished ? (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500 px-2 py-1 text-xs font-bold text-white">
-                          <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                          Đang phát hành
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-black/40 backdrop-blur-sm px-2 py-1 text-xs font-bold text-white">
-                          Bản nháp
-                        </span>
-                      )}
-                    </div>
                   </div>
 
                   {/* Content */}
@@ -224,6 +212,19 @@ export function CoursesPage() {
                           <span className="font-medium tabular-nums">{course.estimatedHours} giờ</span>
                         </span>
                       )}
+                      <span className="ml-auto">
+                        {course.isPublished ? (
+                          <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-1 text-[11px] font-bold">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                            Đang phát hành
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 rounded-md bg-muted text-muted-foreground px-2 py-1 text-[11px] font-bold">
+                            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
+                            Bản nháp
+                          </span>
+                        )}
+                      </span>
                     </div>
                   </div>
                 </div>

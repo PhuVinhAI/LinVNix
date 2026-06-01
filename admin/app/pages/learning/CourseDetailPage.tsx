@@ -84,30 +84,32 @@ export function CourseDetailPage() {
               <BookOpen className="h-24 w-24 text-white/15" strokeWidth={1.2} />
             </div>
           )}
-          <div className="absolute top-3 left-3 flex items-center gap-2">
+          <div className="absolute top-3 left-3">
             <span className="inline-flex items-center gap-1.5 rounded-md bg-black/40 backdrop-blur-sm px-2.5 py-1 text-xs font-bold text-white">
               {course?.level ?? '—'} · {label}
             </span>
-            {course?.isPublished ? (
-              <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold text-white">
-                <Eye className="h-3 w-3" />
-                Đã xuất bản
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 rounded-md bg-black/40 backdrop-blur-sm px-2.5 py-1 text-xs font-bold text-white">
-                <EyeOff className="h-3 w-3" />
-                Bản nháp
-              </span>
-            )}
           </div>
         </div>
 
         <div className="p-5 space-y-4">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-bold text-foreground tracking-tight">
-                {course?.title ?? 'Khóa học'}
-              </h1>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-2xl font-bold text-foreground tracking-tight">
+                  {course?.title ?? 'Khóa học'}
+                </h1>
+                {course?.isPublished ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-1 text-[11px] font-bold">
+                    <Eye className="h-3 w-3" />
+                    Đã xuất bản
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 rounded-md bg-muted text-muted-foreground px-2 py-1 text-[11px] font-bold">
+                    <EyeOff className="h-3 w-3" />
+                    Bản nháp
+                  </span>
+                )}
+              </div>
               {course?.description && (
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
                   {course.description}
