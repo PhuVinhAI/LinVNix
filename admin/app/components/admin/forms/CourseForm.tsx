@@ -6,6 +6,8 @@ import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { LevelPicker } from '../editors/PickerControls'
 import { OrderIndexStepper } from '../editors/OrderIndexStepper'
+import { NumberStepper } from '../editors/NumberStepper'
+import { MediaUpload } from '../editors/MediaUpload'
 
 export interface CourseFormValues {
   title: string
@@ -90,12 +92,13 @@ export function CourseForm({
           </FormField>
 
           <FormField label="Giờ học ước tính" help="Tổng thời lượng dự kiến để hoàn thành">
-            <Input
-              type="number"
-              min="0"
-              value={values.estimatedHours ?? ''}
-              onChange={(e) => update('estimatedHours', e.target.value ? Number(e.target.value) : null)}
-              placeholder="VD: 40"
+            <NumberStepper
+              value={values.estimatedHours ?? null}
+              onChange={(v) => update('estimatedHours', v)}
+              nullable
+              suffix="h"
+              ariaLabelDecrement="Giảm giờ học"
+              ariaLabelIncrement="Tăng giờ học"
             />
           </FormField>
         </div>
@@ -110,27 +113,13 @@ export function CourseForm({
       </FormSection>
 
       <FormSection icon={ImageIcon} title="Hình ảnh đại diện" description="Ảnh thumbnail hiển thị trên danh sách khóa học">
-        <FormField label="Đường dẫn ảnh thumbnail">
-          <Input
-            value={values.thumbnailUrl ?? ''}
-            onChange={(e) => update('thumbnailUrl', e.target.value)}
-            placeholder="https://..."
-            type="url"
+        <FormField label="Ảnh thumbnail">
+          <MediaUpload
+            kind="image"
+            value={values.thumbnailUrl ?? null}
+            onChange={(url) => update('thumbnailUrl', url)}
           />
         </FormField>
-
-        {values.thumbnailUrl && (
-          <div className="rounded-lg border-2 border-border overflow-hidden bg-muted/30">
-            <img
-              src={values.thumbnailUrl}
-              alt="Xem trước"
-              className="w-full max-h-64 object-cover"
-              onError={(e) => {
-                ;(e.target as HTMLImageElement).style.display = 'none'
-              }}
-            />
-          </div>
-        )}
       </FormSection>
 
       <FormSection title="Trạng thái xuất bản" description="Kiểm soát hiển thị khóa học với học viên">

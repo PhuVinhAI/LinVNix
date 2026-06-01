@@ -17,7 +17,6 @@ export class StorageService {
   private readonly logger = new Logger(StorageService.name);
   private readonly uploadDir =
     process.env.UPLOADS_DIR || path.join(process.cwd(), 'uploads');
-  private readonly baseUrl = process.env.BASE_URL || 'http://localhost:3000';
 
   constructor() {
     void this.ensureUploadDir();
@@ -57,7 +56,7 @@ export class StorageService {
       filename,
       originalName,
       path: filePath,
-      url: `${this.baseUrl}/uploads/${filename}`,
+      url: `/uploads/${filename}`,
       size: file.length,
       mimetype,
     };
@@ -86,7 +85,7 @@ export class StorageService {
       filename,
       originalName,
       path: filePath,
-      url: `${this.baseUrl}/uploads/audio/${filename}`,
+      url: `/uploads/audio/${filename}`,
       size: file.length,
       mimetype: 'audio/mpeg',
     };
@@ -96,9 +95,14 @@ export class StorageService {
    * Upload image file
    * @param file Image file buffer
    * @param originalName Original filename
+   * @param mimetype Mimetype from request
    * @returns Uploaded file info
    */
-  async uploadImage(file: Buffer, originalName: string): Promise<UploadedFile> {
+  async uploadImage(
+    file: Buffer,
+    originalName: string,
+    mimetype = 'image/jpeg',
+  ): Promise<UploadedFile> {
     const imageDir = path.join(this.uploadDir, 'images');
     await fs.mkdir(imageDir, { recursive: true });
 
@@ -112,25 +116,84 @@ export class StorageService {
       filename,
       originalName,
       path: filePath,
-      url: `${this.baseUrl}/uploads/images/${filename}`,
+      url: `/uploads/images/${filename}`,
       size: file.length,
-      mimetype: 'image/jpeg',
+      mimetype,
     };
   }
 
   /**
-   * Delete a file
-   * @param filename Filename to delete
+   * Upload video file
+   * @param file Video file buffer
+   * @param originalName Original filename
+   * @param mimetype Mimetype from request
+   * @returns Uploaded file info
    */
-  async deleteFile(filename: string): Promise<void> {
-    const filePath = path.join(this.uploadDir, filename);
+  async uploadVideo(
+    file: Buffer,
+    originalName: string,
+    mimetype = 'video/mp4',
+  ): Promise<UploadedFile> {
+    const videoDir = path.join(this.uploadDir, 'videos');
+    await fs.mkdir(videoDir, { recursive: true });
+
+    const ext = path.extname(originalName);
+    const filename = `${uuidv4()}${ext}`;
+    const filePath = path.join(videoDir, filename);
+
+    await fs.writeFile(filePath, file);
+
+    return {
+      filename,
+      originalName,
+      path: filePath,
+      url: `/uploads/videos/${filename}`,
+      size: file.length,
+      mimetype,
+    };
+  }
+
+  /**
+   * Delete a file by sub-path (e.g. "audio/xxx.mp3" or "images/yyy.jpg" or "zzz.png" for legacy root files).
+   */
+  async deleteFile(subPath: string): Promise<void> {
+    const filePath = path.join(this.uploadDir, subPath);
 
     try {
       await fs.unlink(filePath);
-      this.logger.log(`File deleted: ${filename}`);
+      this.logger.log(`File deleted: ${subPath}`);
     } catch (error) {
-      this.logger.error(`Failed to delete file: ${filename}`, error);
+      this.logger.error(`Failed to delete file: ${subPath}`, error);
       throw error;
+    }
+  }
+
+  /**
+   * Resolve a relative or absolute URL back to a sub-path under uploadDir.
+   * Accepts both legacy absolute URLs (http://host/uploads/...) and current relative URLs (/uploads/...).
+   * Returns null if URL doesn't contain /uploads/.
+   */
+  resolveUrlToSubPath(url: string): string | null {
+    const marker = '/uploads/';
+    const idx = url.indexOf(marker);
+    if (idx === -1) return null;
+    return url.slice(idx + marker.length);
+  }
+
+  /**
+   * Delete a file given its public URL. No-op if URL isn't ours.
+   */
+  async deleteByUrl(url: string): Promise<boolean> {
+    const subPath = this.resolveUrlToSubPath(url);
+    if (!subPath) {
+      this.logger.warn(`URL not managed by storage service: ${url}`);
+      return false;
+    }
+    try {
+      await this.deleteFile(subPath);
+      return true;
+    } catch {
+      return false;
     }
   }
 
@@ -172,10 +235,10 @@ export class StorageService {
   }
 
   /**
-   * Get file URL
+   * Get relative file URL
    * @param filename Filename
    */
   getFileUrl(filename: string): string {
-    return `${this.baseUrl}/uploads/${filename}`;
+    return `/uploads/${filename}`;
   }
 }

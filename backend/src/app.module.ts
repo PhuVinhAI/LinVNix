@@ -34,6 +34,7 @@ import { DailyGoalsModule } from './modules/daily-goals/daily-goals.module';
 import { SimulationsModule } from './modules/simulations/simulations.module';
 import { PersonalVocabulariesModule } from './modules/personal-vocabularies/personal-vocabularies.module';
 import { ImageAnalysisModule } from './modules/image-analysis/image-analysis.module';
+import { UploadsModule } from './modules/uploads/uploads.module';
 import { CacheModule } from './infrastructure/cache/cache.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
 import { LoggingModule } from './infrastructure/logging/logging.module';
@@ -102,6 +103,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     SimulationsModule,
     PersonalVocabulariesModule,
     ImageAnalysisModule,
+    UploadsModule,
   ],
   providers: [
     {

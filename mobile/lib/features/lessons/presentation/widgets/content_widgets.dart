@@ -170,7 +170,7 @@ class ImageContentWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(AppRadius.lg),
               child: CachedNetworkImage(
-                imageUrl: content.imageUrl!,
+                imageUrl: resolveMediaUrl(content.imageUrl!),
                 placeholder: (_, _) => Shimmer.fromColors(
                   baseColor: c.muted,
                   highlightColor: c.card,

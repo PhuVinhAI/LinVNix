@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../data/bookmark_providers.dart';
 import '../../domain/bookmark_models.dart';
 import '../../../../core/services/audio_player_service.dart';
+import '../../../../core/network/media_url.dart';
 import '../../../profile/data/profile_providers.dart';
 import '../../../assistant/data/saved_words_view_state_provider.dart';
 
@@ -82,7 +83,7 @@ class _SavedWordsScreenState extends ConsumerState<SavedWordsScreen>
 
   Future<void> _playAudio(String audioUrl) async {
     final audioService = ref.read(audioPlayerProvider);
-    await audioService.play(audioUrl);
+    await audioService.play(resolveMediaUrl(audioUrl));
   }
 
   @override

@@ -4,6 +4,7 @@ import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
 import { OrderIndexStepper } from '../editors/OrderIndexStepper'
+import { NumberStepper } from '../editors/NumberStepper'
 
 export interface ModuleFormValues {
   title: string
@@ -85,12 +86,13 @@ export function ModuleForm({
           </FormField>
 
           <FormField label="Giờ học ước tính">
-            <Input
-              type="number"
-              min="0"
-              value={values.estimatedHours ?? ''}
-              onChange={(e) => update('estimatedHours', e.target.value ? Number(e.target.value) : null)}
-              placeholder="VD: 5"
+            <NumberStepper
+              value={values.estimatedHours ?? null}
+              onChange={(v) => update('estimatedHours', v)}
+              nullable
+              suffix="h"
+              ariaLabelDecrement="Giảm giờ học"
+              ariaLabelIncrement="Tăng giờ học"
             />
           </FormField>
         </div>

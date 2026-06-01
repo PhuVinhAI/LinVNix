@@ -13,6 +13,7 @@ import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/theme_provider.dart';
 import '../../../../core/sync/sync.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/network/media_url.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../daily_goals/data/notification_service.dart';
@@ -462,7 +463,7 @@ class _AccountHeader extends StatelessWidget {
               ),
               image: hasAvatar
                   ? DecorationImage(
-                      image: NetworkImage(profile.avatarUrl!),
+                      image: NetworkImage(resolveMediaUrl(profile.avatarUrl!)),
                       fit: BoxFit.cover,
                     )
                   : null,

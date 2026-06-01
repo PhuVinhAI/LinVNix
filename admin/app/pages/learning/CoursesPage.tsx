@@ -27,6 +27,7 @@ import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import type { Course } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 import { levelBg, levelLabel } from '../../features/learning/level-meta'
+import { resolveMediaUrl } from '../../../lib/shared/media-url'
 
 export function CoursesPage() {
   const navigate = useNavigate()
@@ -146,7 +147,7 @@ export function CoursesPage() {
                   <div className={`relative h-32 ${bg} overflow-hidden`}>
                     {course.thumbnailUrl ? (
                       <img
-                        src={course.thumbnailUrl}
+                        src={resolveMediaUrl(course.thumbnailUrl) ?? ''}
                         alt={course.title}
                         className="w-full h-full object-cover"
                       />

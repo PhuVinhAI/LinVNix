@@ -4,11 +4,11 @@ import {
   IsNumber,
   IsUUID,
   IsOptional,
-  IsUrl,
   IsObject,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { PartOfSpeech, Dialect } from '../../../common/enums';
+import { IsMediaUrl } from '../../../common/validators';
 
 export class CreateVocabularyDto {
   @ApiProperty({ example: 'xin chào' })
@@ -39,12 +39,12 @@ export class CreateVocabularyDto {
   exampleTranslation?: string;
 
   @ApiProperty({ example: 'https://example.com/audio.mp3', required: false })
-  @IsUrl()
+  @IsMediaUrl()
   @IsOptional()
   audioUrl?: string;
 
   @ApiProperty({ example: 'https://example.com/image.jpg', required: false })
-  @IsUrl()
+  @IsMediaUrl()
   @IsOptional()
   imageUrl?: string;
 

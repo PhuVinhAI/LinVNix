@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../core/services/audio_player_service.dart';
+import '../../../../core/network/media_url.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/bookmark_providers.dart';
 import '../../domain/bookmark_models.dart';
@@ -92,7 +93,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
 
   Future<void> _playAudio(String audioUrl) async {
     final audioService = ref.read(audioPlayerProvider);
-    await audioService.play(audioUrl);
+    await audioService.play(resolveMediaUrl(audioUrl));
   }
 
   Future<void> _onToggleBookmark(BookmarkWithVocabulary item) async {

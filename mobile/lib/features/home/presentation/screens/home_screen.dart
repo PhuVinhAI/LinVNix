@@ -12,6 +12,7 @@ import '../../../daily_goals/presentation/widgets/daily_goal_progress_card.dart'
 import '../../../simulation/data/simulation_providers.dart';
 import '../../../simulation/domain/scenario_summary.dart';
 import '../../../profile/data/profile_providers.dart';
+import '../../../../core/network/media_url.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -191,7 +192,7 @@ class _HeroAvatar extends StatelessWidget {
                     width: 2,
                   ),
                   image: DecorationImage(
-                    image: NetworkImage(profile.avatarUrl!),
+                    image: NetworkImage(resolveMediaUrl(profile.avatarUrl!)),
                     fit: BoxFit.cover,
                   ),
                 ),

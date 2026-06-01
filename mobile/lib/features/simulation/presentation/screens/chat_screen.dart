@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../core/network/media_url.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -862,7 +863,7 @@ class _LearnerBubble extends ConsumerWidget {
           radius: 20,
           backgroundColor: c.muted,
           backgroundImage:
-              avatarUrl != null ? NetworkImage(avatarUrl) : null,
+              avatarUrl != null ? NetworkImage(resolveMediaUrl(avatarUrl)) : null,
           child: avatarUrl == null
               ? Text(
                   displayName.isNotEmpty

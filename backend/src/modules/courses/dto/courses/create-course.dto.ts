@@ -4,10 +4,10 @@ import {
   IsNumber,
   IsBoolean,
   IsOptional,
-  IsUrl,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserLevel } from '../../../../common/enums';
+import { IsMediaUrl } from '../../../../common/validators';
 
 export class CreateCourseDto {
   @ApiProperty({ example: 'Tiếng Việt A1' })
@@ -32,10 +32,10 @@ export class CreateCourseDto {
   isPublished?: boolean;
 
   @ApiProperty({
-    example: 'https://example.com/thumbnail.jpg',
+    example: '/uploads/images/abc.jpg',
     required: false,
   })
-  @IsUrl()
+  @IsMediaUrl()
   @IsOptional()
   thumbnailUrl?: string;
 

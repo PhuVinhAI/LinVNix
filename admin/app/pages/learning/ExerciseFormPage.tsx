@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
 import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/popover'
+import { MediaUpload } from '../../components/admin/editors/MediaUpload'
 import { useAdminExerciseSet, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import { learningPath } from './route-utils'
 
@@ -594,28 +595,15 @@ function AudioPicker({ value, onChange }: { value: string; onChange: (v: string)
           <span className="text-sm">{value ? 'Có audio' : 'Audio'}</span>
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-80 p-3 space-y-2">
+      <PopoverContent align="start" className="w-96 p-3 space-y-2">
         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          URL audio câu hỏi
+          Audio câu hỏi
         </label>
-        <Input
-          type="url"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="https://..."
+        <MediaUpload
+          kind="audio"
+          value={value || null}
+          onChange={(url) => onChange(url ?? '')}
         />
-        {value && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onChange('')}
-            className="w-full justify-center text-destructive hover:text-destructive"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-            Xóa audio
-          </Button>
-        )}
       </PopoverContent>
     </Popover>
   )

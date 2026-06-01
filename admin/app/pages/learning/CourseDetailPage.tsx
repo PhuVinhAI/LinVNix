@@ -30,6 +30,7 @@ import { useAdminCourse, useLearningAdminMutation } from '../../features/learnin
 import type { Module } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 import { levelBg, levelLabel } from '../../features/learning/level-meta'
+import { resolveMediaUrl } from '../../../lib/shared/media-url'
 
 export function CourseDetailPage() {
   const { courseId } = useParams()
@@ -73,7 +74,7 @@ export function CourseDetailPage() {
         <div className={`relative h-40 ${bg}`}>
           {course?.thumbnailUrl && (
             <img
-              src={course.thumbnailUrl}
+              src={resolveMediaUrl(course.thumbnailUrl) ?? ''}
               alt={course.title}
               className="w-full h-full object-cover"
             />

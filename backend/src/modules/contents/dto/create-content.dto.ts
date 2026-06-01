@@ -4,10 +4,10 @@ import {
   IsNumber,
   IsUUID,
   IsOptional,
-  IsUrl,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ContentType } from '../../../common/enums';
+import { IsMediaUrl } from '../../../common/validators';
 
 export class CreateContentDto {
   @ApiProperty({ enum: ContentType, example: ContentType.TEXT })
@@ -29,17 +29,17 @@ export class CreateContentDto {
   phonetic?: string;
 
   @ApiProperty({ example: 'https://example.com/audio.mp3', required: false })
-  @IsUrl()
+  @IsMediaUrl()
   @IsOptional()
   audioUrl?: string;
 
   @ApiProperty({ example: 'https://example.com/image.jpg', required: false })
-  @IsUrl()
+  @IsMediaUrl()
   @IsOptional()
   imageUrl?: string;
 
   @ApiProperty({ example: 'https://example.com/video.mp4', required: false })
-  @IsUrl()
+  @IsMediaUrl()
   @IsOptional()
   videoUrl?: string;
 

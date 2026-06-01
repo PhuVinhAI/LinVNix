@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
+import '../../../../core/network/media_url.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/profile_providers.dart';
 import '../../../bookmarks/data/bookmark_providers.dart';
@@ -260,7 +261,7 @@ class _Avatar extends StatelessWidget {
         ),
         image: hasAvatar
             ? DecorationImage(
-                image: NetworkImage(profile.avatarUrl!),
+                image: NetworkImage(resolveMediaUrl(profile.avatarUrl!)),
                 fit: BoxFit.cover,
               )
             : null,

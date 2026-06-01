@@ -30,6 +30,13 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # backend debug
 backend/debug
 
+# backend uploaded media at runtime (admin upload)
+# Keep seed data tracked, ignore everything else
+backend/uploads/images/
+backend/uploads/videos/
+backend/uploads/audio/*
+!backend/uploads/audio/seed/
+
 # IntelliJ based IDEs
 .idea
 

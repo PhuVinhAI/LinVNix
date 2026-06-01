@@ -5,6 +5,7 @@ import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
 import { OrderIndexStepper } from '../editors/OrderIndexStepper'
+import { MediaUpload } from '../editors/MediaUpload'
 
 const CONTENT_TYPES: Array<{ value: string; label: string; Icon: LucideIcon }> = [
   { value: 'text', label: 'Văn bản', Icon: Type },
@@ -120,12 +121,11 @@ export function ContentForm({
 
       {(values.contentType === 'audio' || values.contentType === 'dialogue') && (
         <FormSection icon={Mic} title="Âm thanh">
-          <FormField label="Đường dẫn file audio">
-            <Input
-              type="url"
-              value={values.audioUrl ?? ''}
-              onChange={(e) => update('audioUrl', e.target.value)}
-              placeholder="https://..."
+          <FormField label="File audio">
+            <MediaUpload
+              kind="audio"
+              value={values.audioUrl ?? null}
+              onChange={(url) => update('audioUrl', url)}
             />
           </FormField>
         </FormSection>
@@ -133,30 +133,23 @@ export function ContentForm({
 
       {values.contentType === 'image' && (
         <FormSection icon={ImageIcon} title="Hình ảnh">
-          <FormField label="Đường dẫn hình ảnh">
-            <Input
-              type="url"
-              value={values.imageUrl ?? ''}
-              onChange={(e) => update('imageUrl', e.target.value)}
-              placeholder="https://..."
+          <FormField label="File hình ảnh">
+            <MediaUpload
+              kind="image"
+              value={values.imageUrl ?? null}
+              onChange={(url) => update('imageUrl', url)}
             />
           </FormField>
-          {values.imageUrl && (
-            <div className="rounded-lg border-2 border-border overflow-hidden bg-muted/30">
-              <img src={values.imageUrl} alt="Xem trước" className="w-full max-h-64 object-cover" />
-            </div>
-          )}
         </FormSection>
       )}
 
       {values.contentType === 'video' && (
         <FormSection icon={Video} title="Video">
-          <FormField label="Đường dẫn video">
-            <Input
-              type="url"
-              value={values.videoUrl ?? ''}
-              onChange={(e) => update('videoUrl', e.target.value)}
-              placeholder="https://..."
+          <FormField label="File video">
+            <MediaUpload
+              kind="video"
+              value={values.videoUrl ?? null}
+              onChange={(url) => update('videoUrl', url)}
             />
           </FormField>
         </FormSection>

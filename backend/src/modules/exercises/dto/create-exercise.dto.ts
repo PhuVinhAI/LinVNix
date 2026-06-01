@@ -4,11 +4,11 @@ import {
   IsNumber,
   IsUUID,
   IsOptional,
-  IsUrl,
   IsObject,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ExerciseType } from '../../../common/enums';
+import { IsMediaUrl } from '../../../common/validators';
 import type {
   ExerciseOptions,
   ExerciseAnswer,
@@ -23,8 +23,8 @@ export class CreateExerciseDto {
   @IsString()
   question: string;
 
-  @ApiProperty({ example: 'https://example.com/audio.mp3', required: false })
-  @IsUrl()
+  @ApiProperty({ example: '/uploads/audio/abc.mp3', required: false })
+  @IsMediaUrl()
   @IsOptional()
   questionAudioUrl?: string;
 

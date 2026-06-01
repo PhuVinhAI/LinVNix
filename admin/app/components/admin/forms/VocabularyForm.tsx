@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import { BookMarked, Volume2, Image as ImageIcon } from 'lucide-react'
+import { BookMarked } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
+import { MediaUpload } from '../editors/MediaUpload'
 
 const PART_OF_SPEECH: Array<{ value: string; label: string }> = [
   { value: 'noun', label: 'Danh từ' },
@@ -174,36 +175,22 @@ export function VocabularyForm({
         </FormField>
       </FormSection>
 
-      <FormSection title="Phương tiện">
+      <FormSection title="Phương tiện" description="Phát âm và hình minh họa cho từ vựng">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Đường dẫn audio">
-            <div className="flex gap-2">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-border bg-muted">
-                <Volume2 className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <Input
-                type="url"
-                value={values.audioUrl ?? ''}
-                onChange={(e) => update('audioUrl', e.target.value)}
-                placeholder="https://..."
-                className="flex-1"
-              />
-            </div>
+          <FormField label="File phát âm">
+            <MediaUpload
+              kind="audio"
+              value={values.audioUrl ?? null}
+              onChange={(url) => update('audioUrl', url)}
+            />
           </FormField>
 
-          <FormField label="Đường dẫn hình ảnh">
-            <div className="flex gap-2">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-border bg-muted">
-                <ImageIcon className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <Input
-                type="url"
-                value={values.imageUrl ?? ''}
-                onChange={(e) => update('imageUrl', e.target.value)}
-                placeholder="https://..."
-                className="flex-1"
-              />
-            </div>
+          <FormField label="Hình minh họa">
+            <MediaUpload
+              kind="image"
+              value={values.imageUrl ?? null}
+              onChange={(url) => update('imageUrl', url)}
+            />
           </FormField>
         </div>
       </FormSection>

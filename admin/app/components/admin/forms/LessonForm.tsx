@@ -9,6 +9,7 @@ import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { OrderIndexStepper } from '../editors/OrderIndexStepper'
+import { NumberStepper } from '../editors/NumberStepper'
 
 const LESSON_TYPES: Array<{ value: string; label: string; Icon: LucideIcon; color: string }> = [
   { value: 'vocabulary', label: 'Từ vựng', Icon: BookOpen, color: 'text-emerald-600 dark:text-emerald-400' },
@@ -113,13 +114,14 @@ export function LessonForm({
             />
           </FormField>
 
-          <FormField label="Thời gian ước tính (phút)">
-            <Input
-              type="number"
-              min="0"
-              value={values.estimatedDuration ?? ''}
-              onChange={(e) => update('estimatedDuration', e.target.value ? Number(e.target.value) : null)}
-              placeholder="VD: 15"
+          <FormField label="Thời gian ước tính">
+            <NumberStepper
+              value={values.estimatedDuration ?? null}
+              onChange={(v) => update('estimatedDuration', v)}
+              nullable
+              suffix="phút"
+              ariaLabelDecrement="Giảm thời gian"
+              ariaLabelIncrement="Tăng thời gian"
             />
           </FormField>
         </div>
