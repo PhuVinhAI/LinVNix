@@ -4,7 +4,7 @@ import { useAuthStore } from '../../features/auth'
 import { LoginForm } from '../../components/forms/LoginForm'
 import { TitleBar } from '../../components/layout/TitleBar'
 import { ROUTES } from '../../../lib/shared/constants'
-import { Sparkles } from 'lucide-react'
+import appIcon from '../../assets/app-icon.png'
 
 /**
  * Login Page - Admin authentication
@@ -32,9 +32,12 @@ export function LoginPage() {
         <div className="w-full max-w-[420px]">
           {/* Brand */}
           <div className="flex flex-col items-center mb-8">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary mb-4">
-              <Sparkles className="h-7 w-7 text-primary-foreground" strokeWidth={2.5} />
-            </div>
+            <img
+              src={appIcon}
+              alt="LinVNix"
+              className="h-16 w-16 rounded-2xl mb-4 select-none"
+              draggable={false}
+            />
             <h1 className="text-xl font-bold text-foreground tracking-tight">
               LinVNix
             </h1>

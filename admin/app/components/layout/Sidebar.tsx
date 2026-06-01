@@ -9,12 +9,12 @@ import {
   LogOut,
   Moon,
   Sun,
-  Sparkles,
   type LucideIcon,
 } from 'lucide-react'
 import { ScrollArea } from '../ui/scroll-area'
 import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../hooks/useTheme'
+import appIcon from '../../assets/app-icon.png'
 
 interface NavigationItem {
   name: string
@@ -52,9 +52,12 @@ export function Sidebar() {
     <aside className="w-[256px] border-r-2 border-border bg-card flex flex-col">
       {/* Logo */}
       <div className="flex h-20 items-center gap-3 border-b-2 border-border px-5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-          <Sparkles className="h-5 w-5 text-primary-foreground" strokeWidth={2.5} />
-        </div>
+        <img
+          src={appIcon}
+          alt="LinVNix"
+          className="h-10 w-10 rounded-lg select-none"
+          draggable={false}
+        />
         <div className="flex flex-col">
           <h1 className="text-base font-bold text-card-foreground leading-tight tracking-tight">
             LinVNix
