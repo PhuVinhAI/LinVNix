@@ -7,7 +7,7 @@ import {
   type ClipboardEvent as ReactClipboardEvent,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, Search, X } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
 
 export interface PromptVariable {
@@ -47,6 +47,49 @@ const STATIC_GROUPS: PromptVariableGroup[] = [
         key: 'learner.preferredDialect',
         label: 'Phương ngữ ưa thích',
         description: 'Phương ngữ tiếng Việt ưa thích (Bắc, Trung, Nam)',
+      },
+    ],
+  },
+  {
+    groupLabel: 'Nhân vật học viên chọn',
+    variables: [
+      {
+        key: 'playable.name',
+        label: 'Tên nhân vật học viên',
+        description:
+          'Tên nhân vật học viên chọn đóng vai (xác định khi bắt đầu phiên)',
+      },
+      {
+        key: 'playable.role',
+        label: 'Vai trò nhân vật học viên',
+        description: 'Vai trò của nhân vật học viên chọn đóng vai',
+      },
+      {
+        key: 'playable.personality',
+        label: 'Tính cách nhân vật học viên',
+        description: 'Tính cách của nhân vật học viên chọn đóng vai',
+      },
+      {
+        key: 'playable.speechStyle',
+        label: 'Phong cách nói nhân vật học viên',
+        description: 'Phong cách nói của nhân vật học viên chọn đóng vai',
+      },
+      {
+        key: 'playable.profile',
+        label: 'Hồ sơ đầy đủ nhân vật học viên',
+        description:
+          'Khối đa dòng gộp 4 trường (tên, vai trò, tính cách, phong cách nói) của nhân vật học viên chọn',
+      },
+    ],
+  },
+  {
+    groupLabel: 'Nhân vật AI điều khiển',
+    variables: [
+      {
+        key: 'npcs.profile',
+        label: 'Hồ sơ tất cả nhân vật AI',
+        description:
+          'Danh sách đầy đủ tất cả nhân vật không-playable (AI sẽ đóng vai) — mỗi nhân vật một khối với 4 trường',
       },
     ],
   },
@@ -112,6 +155,11 @@ function buildVariableGroups(
           key: `characters[${idx}].speechStyle`,
           label: `Phong cách nói — ${char.name}`,
           description: `Phong cách nói của ${char.name}`,
+        },
+        {
+          key: `characters[${idx}].profile`,
+          label: `Hồ sơ đầy đủ — ${char.name}`,
+          description: `Khối đa dòng gộp 4 trường của ${char.name}`,
         },
       ],
     })
@@ -237,10 +285,15 @@ export function SystemPromptEditor({
   const lastSerialized = useRef<string>(value)
   const [empty, setEmpty] = useState(value.length === 0)
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [pickerQuery, setPickerQuery] = useState('')
   const [inlinePicker, setInlinePicker] = useState<InlinePickerState | null>(
     null,
   )
   const [inlineIndex, setInlineIndex] = useState(0)
+
+  useEffect(() => {
+    if (!pickerOpen) setPickerQuery('')
+  }, [pickerOpen])
 
   const variableGroups = useMemo(
     () => buildVariableGroups(characters),
@@ -261,6 +314,29 @@ export function SystemPromptEditor({
         g.variables.map((v) => ({ ...v, groupLabel: g.groupLabel })),
       ),
     [variableGroups],
+  )
+
+  const filteredPickerGroups = useMemo(() => {
+    const q = pickerQuery.trim().toLowerCase()
+    if (!q) return variableGroups
+    return variableGroups
+      .map((g) => ({
+        ...g,
+        variables: g.variables.filter(
+          (v) =>
+            v.key.toLowerCase().includes(q) ||
+            v.label.toLowerCase().includes(q) ||
+            v.description.toLowerCase().includes(q) ||
+            g.groupLabel.toLowerCase().includes(q),
+        ),
+      }))
+      .filter((g) => g.variables.length > 0)
+  }, [variableGroups, pickerQuery])
+
+  const filteredPickerCount = useMemo(
+    () =>
+      filteredPickerGroups.reduce((sum, g) => sum + g.variables.length, 0),
+    [filteredPickerGroups],
   )
 
   const inlineMatches = useMemo(() => {
@@ -511,16 +587,41 @@ export function SystemPromptEditor({
                   'var(--radix-popover-content-available-height, 480px)',
               }}
             >
-              <div className="border-b-2 border-border bg-muted/30 px-3 py-2 flex items-center justify-between gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                  Tất cả biến
-                </span>
-                <span className="text-xs font-bold text-foreground tabular-nums">
-                  {flatVariables.length}
-                </span>
+              <div className="border-b-2 border-border bg-muted/30 px-3 py-2 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    {pickerQuery ? 'Kết quả' : 'Tất cả biến'}
+                  </span>
+                  <span className="text-xs font-bold text-foreground tabular-nums">
+                    {pickerQuery
+                      ? `${filteredPickerCount}/${flatVariables.length}`
+                      : flatVariables.length}
+                  </span>
+                </div>
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={pickerQuery}
+                    onChange={(e) => setPickerQuery(e.target.value)}
+                    placeholder="Tìm biến theo tên, key..."
+                    autoFocus
+                    className="w-full rounded-md border-2 border-border bg-card pl-8 pr-8 py-1.5 text-xs font-semibold text-foreground placeholder:text-muted-foreground placeholder:font-normal outline-none focus:border-primary"
+                  />
+                  {pickerQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setPickerQuery('')}
+                      title="Xoá tìm kiếm"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-md border-2 border-border bg-card text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
+                    >
+                      <X className="h-2.5 w-2.5" />
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="flex-1 overflow-y-auto p-1.5 space-y-3">
-                {!hasCharacters && (
+                {!hasCharacters && !pickerQuery && (
                   <div className="rounded-lg border-2 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/20 px-3 py-2">
                     <p className="text-xs font-bold text-amber-800 dark:text-amber-300">
                       Chưa có nhân vật
@@ -530,23 +631,34 @@ export function SystemPromptEditor({
                     </p>
                   </div>
                 )}
-                {variableGroups.map((group) => (
-                  <div key={group.groupLabel} className="space-y-1">
-                    <p className="px-2 pt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                      {group.groupLabel}
+                {filteredPickerGroups.length === 0 ? (
+                  <div className="rounded-lg border-2 border-dashed border-border px-4 py-8 text-center">
+                    <p className="text-sm font-bold text-foreground mb-1">
+                      Không có biến phù hợp
                     </p>
-                    <div className="space-y-1">
-                      {group.variables.map((v) => (
-                        <VariableRow
-                          key={v.key}
-                          variable={v}
-                          groupLabel={group.groupLabel}
-                          onPick={() => insertVariable(v.key)}
-                        />
-                      ))}
-                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Thử từ khoá khác hoặc xoá ô tìm kiếm.
+                    </p>
                   </div>
-                ))}
+                ) : (
+                  filteredPickerGroups.map((group) => (
+                    <div key={group.groupLabel} className="space-y-1">
+                      <p className="px-2 pt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        {group.groupLabel}
+                      </p>
+                      <div className="space-y-1">
+                        {group.variables.map((v) => (
+                          <VariableRow
+                            key={v.key}
+                            variable={v}
+                            groupLabel={group.groupLabel}
+                            onPick={() => insertVariable(v.key)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </PopoverContent>
           </Popover>

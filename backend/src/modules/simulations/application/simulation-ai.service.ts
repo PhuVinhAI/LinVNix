@@ -346,6 +346,17 @@ export class SimulationAiService {
       )
       .join('\n');
 
+    const formatProfile = (c: SimulationAiCharacter): string =>
+      `${c.name} (${c.role})\nTính cách: ${c.personality}\nPhong cách nói chuyện: ${c.speechStyle}`;
+
+    const npcsProfile = scenario.characters
+      .filter((c) => !c.isPlayable)
+      .map(
+        (c) =>
+          `- ${c.name} (${c.role})\n  Tính cách: ${c.personality}\n  Phong cách nói chuyện: ${c.speechStyle}`,
+      )
+      .join('\n');
+
     const scoringCriteriaDescription = scenario.scoringCriteria
       .map((c) => `- ${c.name} (weight: ${c.weight}%): ${c.description}`)
       .join('\n');
@@ -371,12 +382,26 @@ export class SimulationAiService {
         name: chosenCharacter.name,
         role: chosenCharacter.role,
       },
+      // Runtime alias for the learner-chosen character. Admin authors use
+      // `{{playable.name}}` / `{{playable.role}}` / `{{playable.personality}}`
+      // / `{{playable.speechStyle}}` when the scenario allows multiple
+      // playable characters and the chosen one is only known at session
+      // start. `{{playable.profile}}` expands to a multi-line block with
+      // all four fields formatted.
+      playable: {
+        id: chosenCharacter.id,
+        name: chosenCharacter.name,
+        role: chosenCharacter.role,
+        personality: chosenCharacter.personality,
+        speechStyle: chosenCharacter.speechStyle,
+        profile: formatProfile(chosenCharacter),
+      },
       // Full scenario cast — exposes `{{characters[i].name}}`,
       // `{{characters[i].role}}`, `{{characters[i].personality}}`,
-      // `{{characters[i].speechStyle}}` for admin-authored system prompts.
-      // Must appear AFTER `scenario` so the outer template inserts the
-      // scenario prompt first; the next iteration then substitutes the
-      // inner `{{characters[i].*}}` placeholders inside it.
+      // `{{characters[i].speechStyle}}`, `{{characters[i].profile}}` for
+      // admin-authored system prompts. Must appear AFTER `scenario` so
+      // the outer template inserts the scenario prompt first; the next
+      // iteration substitutes the inner `{{characters[i].*}}` placeholders.
       characters: scenario.characters.map((c) => ({
         id: c.id,
         name: c.name,
@@ -384,7 +409,15 @@ export class SimulationAiService {
         personality: c.personality,
         speechStyle: c.speechStyle,
         isPlayable: c.isPlayable,
+        profile: formatProfile(c),
       })),
+      // Runtime alias for the cast AI plays — all non-playable characters
+      // concatenated into a single bulleted block. Useful when the prompt
+      // wants to introduce the whole AI cast at once without enumerating
+      // each `{{characters[i]}}` by index.
+      npcs: {
+        profile: npcsProfile,
+      },
       scoringCriteriaDescription,
       maxTurns: scenario.maxTurns?.toString() ?? 'unlimited',
       forceWrapUpInstruction,
