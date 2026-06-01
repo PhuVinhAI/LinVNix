@@ -51,8 +51,8 @@ interface State {
 
 function deriveInitial(initial: Record<string, unknown> | undefined | null): State {
   const type = String(initial?.exerciseType ?? 'multiple_choice').toLowerCase()
-  const opts = initial?.options ?? null
-  const correct = initial?.correctAnswer ?? null
+  const opts = (initial?.options ?? null) as Record<string, unknown> | unknown[] | null
+  const correct = (initial?.correctAnswer ?? null) as Record<string, unknown> | unknown[] | string | null
   const state: State = {
     exerciseType: type,
     question: String(initial?.question ?? ''),
@@ -67,26 +67,126 @@ function deriveInitial(initial: Record<string, unknown> | undefined | null): Sta
     orderingItems: [],
     translationAnswers: [],
   }
+
   if (type === 'multiple_choice') {
-    state.choiceOptions = Array.isArray(opts) ? (opts as string[]) : ['', '']
-    state.choiceCorrect = typeof correct === 'string' ? correct : ''
+    if (Array.isArray(opts)) {
+      state.choiceOptions = opts as string[]
+    } else if (opts && typeof opts === 'object' && Array.isArray((opts as { choices?: unknown }).choices)) {
+      state.choiceOptions = (opts as { choices: string[] }).choices
+    } else {
+      state.choiceOptions = ['', '']
+    }
+    if (typeof correct === 'string') {
+      state.choiceCorrect = correct
+    } else if (correct && typeof correct === 'object' && !Array.isArray(correct)) {
+      const selected = (correct as { selectedChoice?: unknown }).selectedChoice
+      state.choiceCorrect = typeof selected === 'string' ? selected : ''
+    }
   } else if (type === 'fill_blank') {
-    state.fillBlankAnswers = Array.isArray(correct) ? (correct as string[]) : typeof correct === 'string' ? [correct] : ['']
+    if (Array.isArray(correct)) {
+      state.fillBlankAnswers = correct as string[]
+    } else if (typeof correct === 'string') {
+      state.fillBlankAnswers = [correct]
+    } else if (correct && typeof correct === 'object') {
+      const answers = (correct as { answers?: unknown }).answers
+      state.fillBlankAnswers = Array.isArray(answers) ? (answers as string[]) : ['']
+    } else {
+      state.fillBlankAnswers = ['']
+    }
   } else if (type === 'matching') {
-    state.matchingPairs = Array.isArray(correct)
-      ? (correct as Array<{ left: string; right: string }>).filter((p) => typeof p === 'object' && p !== null)
-      : [{ left: '', right: '' }]
+    let pairs: Array<{ left: string; right: string }> = []
+    if (Array.isArray(correct)) {
+      pairs = (correct as Array<{ left?: string; right?: string }>)
+        .filter((p) => p && typeof p === 'object')
+        .map((p) => ({ left: String(p.left ?? ''), right: String(p.right ?? '') }))
+    } else if (correct && typeof correct === 'object') {
+      const matches = (correct as { matches?: unknown }).matches
+      if (Array.isArray(matches)) {
+        pairs = (matches as Array<{ left?: string; right?: string }>).map((p) => ({
+          left: String(p.left ?? ''),
+          right: String(p.right ?? ''),
+        }))
+      }
+    }
+    if (!pairs.length && opts && typeof opts === 'object' && !Array.isArray(opts)) {
+      const optPairs = (opts as { pairs?: unknown }).pairs
+      if (Array.isArray(optPairs)) {
+        pairs = (optPairs as Array<{ left?: string; right?: string }>).map((p) => ({
+          left: String(p.left ?? ''),
+          right: String(p.right ?? ''),
+        }))
+      }
+    }
+    state.matchingPairs = pairs.length ? pairs : [{ left: '', right: '' }]
   } else if (type === 'ordering') {
-    state.orderingItems = Array.isArray(correct) ? (correct as string[]) : ['', '']
-  } else if (type === 'translation' || type === 'listening' || type === 'speaking') {
-    state.translationAnswers = Array.isArray(correct) ? (correct as string[]) : typeof correct === 'string' ? [correct] : ['']
+    let items: string[] = []
+    if (Array.isArray(correct)) {
+      items = correct as string[]
+    } else if (correct && typeof correct === 'object') {
+      const ordered = (correct as { orderedItems?: unknown }).orderedItems
+      if (Array.isArray(ordered)) items = ordered as string[]
+    }
+    if (!items.length && opts && typeof opts === 'object' && !Array.isArray(opts)) {
+      const optItems = (opts as { items?: unknown }).items
+      if (Array.isArray(optItems)) items = optItems as string[]
+    } else if (!items.length && Array.isArray(opts)) {
+      items = opts as string[]
+    }
+    state.orderingItems = items.length ? items : ['', '']
+  } else if (type === 'translation') {
+    if (Array.isArray(correct)) {
+      state.translationAnswers = correct as string[]
+    } else if (typeof correct === 'string') {
+      state.translationAnswers = [correct]
+    } else if (correct && typeof correct === 'object') {
+      const t = (correct as { translation?: unknown }).translation
+      const accepted =
+        opts && typeof opts === 'object' && !Array.isArray(opts)
+          ? (opts as { acceptedTranslations?: unknown }).acceptedTranslations
+          : null
+      const list: string[] = []
+      if (typeof t === 'string' && t) list.push(t)
+      if (Array.isArray(accepted)) list.push(...(accepted as string[]))
+      state.translationAnswers = list.length ? Array.from(new Set(list)) : ['']
+    } else {
+      state.translationAnswers = ['']
+    }
+  } else if (type === 'listening' || type === 'speaking') {
+    if (Array.isArray(correct)) {
+      state.translationAnswers = correct as string[]
+    } else if (typeof correct === 'string') {
+      state.translationAnswers = [correct]
+    } else if (correct && typeof correct === 'object') {
+      const transcript = (correct as { transcript?: unknown }).transcript
+      const keywords =
+        opts && typeof opts === 'object' && !Array.isArray(opts)
+          ? (opts as { keywords?: unknown }).keywords
+          : null
+      const list: string[] = []
+      if (typeof transcript === 'string' && transcript) list.push(transcript)
+      if (Array.isArray(keywords)) list.push(...(keywords as string[]))
+      state.translationAnswers = list.length ? Array.from(new Set(list)) : ['']
+    } else {
+      state.translationAnswers = ['']
+    }
   }
+
   return state
+}
+
+const TYPE_TO_ENUM: Record<string, string> = {
+  multiple_choice: 'MULTIPLE_CHOICE',
+  fill_blank: 'FILL_BLANK',
+  matching: 'MATCHING',
+  ordering: 'ORDERING',
+  translation: 'TRANSLATION',
+  listening: 'LISTENING',
+  speaking: 'SPEAKING',
 }
 
 function buildPayload(state: State): Record<string, unknown> {
   const base: Record<string, unknown> = {
-    exerciseType: state.exerciseType,
+    exerciseType: TYPE_TO_ENUM[state.exerciseType] ?? state.exerciseType.toUpperCase(),
     question: state.question,
     questionAudioUrl: state.questionAudioUrl || null,
     explanation: state.explanation || null,
@@ -94,30 +194,69 @@ function buildPayload(state: State): Record<string, unknown> {
     difficultyLevel: state.difficultyLevel,
   }
   switch (state.exerciseType) {
-    case 'multiple_choice':
+    case 'multiple_choice': {
+      const choices = state.choiceOptions.filter(Boolean)
       return {
         ...base,
-        options: state.choiceOptions.filter(Boolean),
-        correctAnswer: state.choiceCorrect,
+        options: { type: state.exerciseType, choices },
+        correctAnswer: { selectedChoice: state.choiceCorrect },
       }
-    case 'fill_blank':
-      return { ...base, options: null, correctAnswer: state.fillBlankAnswers.filter(Boolean) }
-    case 'matching':
+    }
+    case 'fill_blank': {
+      const answers = state.fillBlankAnswers.filter(Boolean)
       return {
         ...base,
-        options: state.matchingPairs.map((p) => p.left),
-        correctAnswer: state.matchingPairs.filter((p) => p.left.trim() && p.right.trim()),
+        options: { type: state.exerciseType, blanks: answers.length || 1 },
+        correctAnswer: { answers },
       }
-    case 'ordering':
+    }
+    case 'matching': {
+      const pairs = state.matchingPairs.filter((p) => p.left.trim() && p.right.trim())
       return {
         ...base,
-        options: state.orderingItems.filter(Boolean),
-        correctAnswer: state.orderingItems.filter(Boolean),
+        options: { type: state.exerciseType, pairs },
+        correctAnswer: { matches: pairs },
       }
-    case 'translation':
+    }
+    case 'ordering': {
+      const items = state.orderingItems.filter(Boolean)
+      return {
+        ...base,
+        options: { type: state.exerciseType, items },
+        correctAnswer: { orderedItems: items },
+      }
+    }
+    case 'translation': {
+      const answers = state.translationAnswers.filter(Boolean)
+      return {
+        ...base,
+        options: {
+          type: state.exerciseType,
+          sourceLanguage: 'vi',
+          targetLanguage: 'en',
+          acceptedTranslations: answers,
+        },
+        correctAnswer: { translation: answers[0] ?? '' },
+      }
+    }
     case 'listening':
-    case 'speaking':
-      return { ...base, options: null, correctAnswer: state.translationAnswers.filter(Boolean) }
+    case 'speaking': {
+      const answers = state.translationAnswers.filter(Boolean)
+      const optionsExtras =
+        state.exerciseType === 'speaking'
+          ? { promptAudioUrl: state.questionAudioUrl || '' }
+          : { audioUrl: state.questionAudioUrl || '' }
+      return {
+        ...base,
+        options: {
+          type: state.exerciseType,
+          transcriptType: 'keywords' as const,
+          keywords: answers,
+          ...optionsExtras,
+        },
+        correctAnswer: { transcript: answers[0] ?? '' },
+      }
+    }
     default:
       return base
   }
