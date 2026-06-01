@@ -1,8 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { MessageSquare, Target, Settings, Eye, EyeOff, GraduationCap } from 'lucide-react'
+import { MessageSquare, Target, Settings, GraduationCap } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
-import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { LevelPicker, DifficultyPicker } from '../editors/PickerControls'
 import { ScoringCriteriaEditor, type ScoringCriterion } from '../editors/ScoringCriteriaEditor'
@@ -16,7 +15,6 @@ export interface ScenarioFormValues {
   scoringCriteria: ScoringCriterion[]
   maxTurns?: number | null
   estimatedMinutes: number
-  isPublished: boolean
 }
 
 export function ScenarioForm({
@@ -36,7 +34,6 @@ export function ScenarioForm({
     scoringCriteria: Array.isArray(initialValue?.scoringCriteria) ? initialValue.scoringCriteria : [],
     maxTurns: initialValue?.maxTurns ?? null,
     estimatedMinutes: initialValue?.estimatedMinutes ?? 10,
-    isPublished: initialValue?.isPublished ?? true,
   })
 
   const update = <K extends keyof ScenarioFormValues>(key: K, value: ScenarioFormValues[K]) => {
@@ -92,7 +89,7 @@ export function ScenarioForm({
         />
       </FormSection>
 
-      <FormSection icon={Settings} title="Cấu hình phiên hội thoại" description="Giới hạn lượt nói và trạng thái xuất bản">
+      <FormSection icon={Settings} title="Cấu hình phiên hội thoại" description="Giới hạn lượt nói và thời gian dự kiến">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField label="Số lượt tối đa" help="Để trống nếu không giới hạn">
             <NumberStepper
@@ -116,30 +113,6 @@ export function ScenarioForm({
               ariaLabelIncrement="Tăng thời gian"
             />
           </FormField>
-        </div>
-
-        <div className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-            {values.isPublished ? (
-              <Eye className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            ) : (
-              <EyeOff className="h-5 w-5 text-muted-foreground" />
-            )}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold">
-              {values.isPublished ? 'Đã xuất bản' : 'Bản nháp'}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {values.isPublished
-                ? 'Học viên có thể nhìn thấy và luyện tập tình huống này'
-                : 'Tình huống chỉ hiển thị trong khu vực quản trị'}
-            </p>
-          </div>
-          <Switch
-            checked={values.isPublished}
-            onCheckedChange={(checked) => update('isPublished', checked)}
-          />
         </div>
       </FormSection>
     </form>

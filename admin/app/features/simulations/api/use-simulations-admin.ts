@@ -52,6 +52,11 @@ export function useSimulationsAdminMutation() {
         simulationsAdminRepository.updateScenario(id, payload),
       onSuccess: invalidate,
     }),
+    setScenarioPublished: useMutation({
+      mutationFn: ({ id, isPublished }: { id: string; isPublished: boolean }) =>
+        simulationsAdminRepository.setScenarioPublished(id, isPublished),
+      onSuccess: invalidate,
+    }),
     deleteScenario: useMutation({
       mutationFn: (id: string) => simulationsAdminRepository.deleteScenario(id),
       onSuccess: invalidate,

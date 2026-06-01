@@ -41,6 +41,11 @@ export class LearningAdminRepository {
     return unwrap(response)
   }
 
+  async setCoursePublished(id: string, isPublished: boolean) {
+    const response = await apiClient.patch(`/admin/learning/courses/${id}/publish`, { isPublished })
+    return unwrap(response)
+  }
+
   async deleteCourse(id: string) {
     await apiClient.delete(`/admin/learning/courses/${id}`)
   }

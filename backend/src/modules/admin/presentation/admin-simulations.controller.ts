@@ -16,6 +16,7 @@ import { ScenarioCategory } from '../../simulations/domain/scenario-category.ent
 import { Scenario } from '../../simulations/domain/scenario.entity';
 import { ScenarioCharacter } from '../../simulations/domain/scenario-character.entity';
 import { AdminSimulationsService } from '../application/admin-simulations.service';
+import { SetPublishedDto } from '../dto/set-published.dto';
 
 @ApiTags('Admin Simulations')
 @ApiBearerAuth()
@@ -66,6 +67,17 @@ export class AdminSimulationsController {
   @Patch('scenarios/:id')
   updateScenario(@Param('id') id: string, @Body() dto: Partial<Scenario>) {
     return this.adminSimulationsService.updateScenario(id, dto);
+  }
+
+  @Patch('scenarios/:id/publish')
+  setScenarioPublished(
+    @Param('id') id: string,
+    @Body() dto: SetPublishedDto,
+  ) {
+    return this.adminSimulationsService.setScenarioPublished(
+      id,
+      dto.isPublished,
+    );
   }
 
   @Delete('scenarios/:id')

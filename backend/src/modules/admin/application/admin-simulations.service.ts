@@ -40,16 +40,26 @@ export class AdminSimulationsService {
   }
 
   async createScenario(categoryId: string, dto: Partial<Scenario>) {
+    const { isPublished: _ignored, ...rest } = dto;
     return this.scenariosRepository.create({
       systemPrompt: '',
       openingMessage: null,
-      ...dto,
+      ...rest,
       categoryId,
     });
   }
 
   async updateScenario(id: string, dto: Partial<Scenario>) {
-    return this.scenariosRepository.update(id, dto);
+    const { isPublished: _ignored, ...rest } = dto;
+    return this.scenariosRepository.update(id, rest);
+  }
+
+  async setScenarioPublished(id: string, isPublished: boolean) {
+    const scenario = await this.scenariosRepository.findById(id);
+    if (!scenario) {
+      throw new NotFoundException(`Scenario with ID ${id} not found`);
+    }
+    return this.scenariosRepository.update(id, { isPublished });
   }
 
   async deleteScenario(id: string) {

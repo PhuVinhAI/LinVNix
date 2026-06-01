@@ -4,10 +4,10 @@ import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import {
   Plus, Pencil, BookOpen, Layers, MoreVertical, Trash2, Clock, ChevronRight,
-  Eye, EyeOff,
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { PublishStatusToggle } from '../../components/admin/PublishStatusToggle'
 import { ModuleListSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
@@ -47,6 +47,16 @@ export function CourseDetailPage() {
       setPendingDelete(null)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Không thể xóa')
+    }
+  }
+
+  const togglePublished = async (next: boolean) => {
+    if (!courseId) return
+    try {
+      await mutations.setCoursePublished.mutateAsync({ id: courseId, isPublished: next })
+      toast.success(next ? 'Đã xuất bản khóa học' : 'Đã chuyển về bản nháp')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Không thể cập nhật trạng thái')
     }
   }
 
@@ -90,36 +100,32 @@ export function CourseDetailPage() {
         <div className="p-5 space-y-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-2xl font-bold text-foreground tracking-tight">
-                  {course?.title ?? 'Khóa học'}
-                </h1>
-                {course?.isPublished ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-1 text-[11px] font-bold">
-                    <Eye className="h-3 w-3" />
-                    Đã xuất bản
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1.5 rounded-md bg-muted text-muted-foreground px-2 py-1 text-[11px] font-bold">
-                    <EyeOff className="h-3 w-3" />
-                    Bản nháp
-                  </span>
-                )}
-              </div>
+              <h1 className="text-2xl font-bold text-foreground tracking-tight">
+                {course?.title ?? 'Khóa học'}
+              </h1>
               {course?.description && (
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
                   {course.description}
                 </p>
               )}
             </div>
-            {courseId && (
-              <Button asChild variant="outline" className="shrink-0">
-                <Link to={learningPath.courseEdit(courseId)}>
-                  <Pencil className="h-4 w-4" />
-                  Sửa
-                </Link>
-              </Button>
-            )}
+            <div className="flex items-center gap-2 shrink-0">
+              {course && (
+                <PublishStatusToggle
+                  isPublished={course.isPublished}
+                  onChange={togglePublished}
+                  pending={mutations.setCoursePublished.isPending}
+                />
+              )}
+              {courseId && (
+                <Button asChild variant="outline">
+                  <Link to={learningPath.courseEdit(courseId)}>
+                    <Pencil className="h-4 w-4" />
+                    Sửa
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">

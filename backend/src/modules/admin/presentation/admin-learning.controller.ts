@@ -21,6 +21,7 @@ import { CreateGrammarDto } from '../../grammar/dto/create-grammar.dto';
 import { CreateExerciseDto } from '../../exercises/dto/create-exercise.dto';
 import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
 import { AdminLearningService } from '../application/admin-learning.service';
+import { SetPublishedDto } from '../dto/set-published.dto';
 
 @ApiTags('Admin Learning')
 @ApiBearerAuth()
@@ -43,6 +44,14 @@ export class AdminLearningController {
   @Patch('courses/:id')
   updateCourse(@Param('id') id: string, @Body() dto: Partial<CreateCourseDto>) {
     return this.adminLearningService.updateCourse(id, dto);
+  }
+
+  @Patch('courses/:id/publish')
+  setCoursePublished(
+    @Param('id') id: string,
+    @Body() dto: SetPublishedDto,
+  ) {
+    return this.adminLearningService.setCoursePublished(id, dto.isPublished);
   }
 
   @Delete('courses/:id')

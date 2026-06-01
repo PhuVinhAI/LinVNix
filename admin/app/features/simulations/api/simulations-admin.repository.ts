@@ -45,6 +45,11 @@ export class SimulationsAdminRepository {
     return unwrap(response)
   }
 
+  async setScenarioPublished(id: string, isPublished: boolean) {
+    const response = await apiClient.patch(`/admin/simulations/scenarios/${id}/publish`, { isPublished })
+    return unwrap(response)
+  }
+
   async deleteScenario(id: string) {
     await apiClient.delete(`/admin/simulations/scenarios/${id}`)
   }

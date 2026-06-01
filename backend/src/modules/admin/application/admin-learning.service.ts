@@ -28,11 +28,17 @@ export class AdminLearningService {
   }
 
   async createCourse(dto: CreateCourseDto) {
-    return this.coursesService.create(dto);
+    const { isPublished: _ignored, ...rest } = dto;
+    return this.coursesService.create(rest);
   }
 
   async updateCourse(id: string, dto: Partial<CreateCourseDto>) {
-    return this.coursesService.update(id, dto);
+    const { isPublished: _ignored, ...rest } = dto;
+    return this.coursesService.update(id, rest);
+  }
+
+  async setCoursePublished(id: string, isPublished: boolean) {
+    return this.coursesService.update(id, { isPublished });
   }
 
   async deleteCourse(id: string) {

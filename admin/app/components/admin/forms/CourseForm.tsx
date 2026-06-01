@@ -1,8 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { BookOpen, Eye, EyeOff, Image as ImageIcon, GraduationCap, Globe } from 'lucide-react'
+import { BookOpen, Image as ImageIcon, GraduationCap } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
-import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { LevelPicker } from '../editors/PickerControls'
 import { OrderIndexStepper } from '../editors/OrderIndexStepper'
@@ -17,7 +16,6 @@ export interface CourseFormValues {
   estimatedHours?: number | null
   vietnameseLevelName?: string | null
   thumbnailUrl?: string | null
-  isPublished: boolean
 }
 
 export function CourseForm({
@@ -37,7 +35,6 @@ export function CourseForm({
     estimatedHours: initialValue?.estimatedHours ?? null,
     vietnameseLevelName: initialValue?.vietnameseLevelName ?? '',
     thumbnailUrl: initialValue?.thumbnailUrl ?? '',
-    isPublished: initialValue?.isPublished ?? false,
   })
 
   const update = <K extends keyof CourseFormValues>(key: K, value: CourseFormValues[K]) => {
@@ -120,32 +117,6 @@ export function CourseForm({
             onChange={(url) => update('thumbnailUrl', url)}
           />
         </FormField>
-      </FormSection>
-
-      <FormSection icon={Globe} title="Trạng thái xuất bản" description="Kiểm soát hiển thị khóa học với học viên">
-        <div className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-            {values.isPublished ? (
-              <Eye className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            ) : (
-              <EyeOff className="h-5 w-5 text-muted-foreground" />
-            )}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold">
-              {values.isPublished ? 'Đã xuất bản' : 'Bản nháp'}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {values.isPublished
-                ? 'Học viên có thể nhìn thấy và tham gia khóa học này'
-                : 'Khóa học chỉ hiển thị trong khu vực quản trị'}
-            </p>
-          </div>
-          <Switch
-            checked={values.isPublished}
-            onCheckedChange={(checked) => update('isPublished', checked)}
-          />
-        </div>
       </FormSection>
     </form>
   )

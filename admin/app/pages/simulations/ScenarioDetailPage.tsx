@@ -3,7 +3,7 @@ import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import {
-  Plus, Pencil, Users, MoreVertical, Trash2, UserCheck, Eye, EyeOff,
+  Plus, Pencil, Users, MoreVertical, Trash2, UserCheck,
   Clock, Sparkles, MessageCircle, Target, Quote, User, GraduationCap,
   Stethoscope, Car, BookOpen, Store, Plane, Shield, Sprout, Wrench,
   UtensilsCrossed, Save, X,
@@ -12,6 +12,7 @@ import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Textarea } from '../../components/ui/textarea'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { PublishStatusToggle } from '../../components/admin/PublishStatusToggle'
 import { ScenarioDetailSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { SystemPromptEditor } from '../../components/admin/editors/SystemPromptEditor'
@@ -118,6 +119,16 @@ export function ScenarioDetailPage() {
     }
   }
 
+  const togglePublished = async (next: boolean) => {
+    if (!scenarioId) return
+    try {
+      await mutations.setScenarioPublished.mutateAsync({ id: scenarioId, isPublished: next })
+      toast.success(next ? 'Đã xuất bản tình huống' : 'Đã chuyển về bản nháp')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Không thể cập nhật trạng thái')
+    }
+  }
+
   const stop = (e: MouseEvent | KeyboardEvent) => e.stopPropagation()
 
   const playableCount = scenario?.characters?.filter((c) => c.isPlayable).length ?? 0
@@ -152,17 +163,6 @@ export function ScenarioDetailPage() {
               <span className={`inline-flex items-center rounded-md px-2 py-1 font-bold ${diff.bg} ${diff.color}`}>
                 {diff.label}
               </span>
-              {scenario?.isPublished ? (
-                <span className="inline-flex items-center gap-1 rounded-md bg-emerald-100 dark:bg-emerald-950/40 px-2 py-1 font-bold text-emerald-700 dark:text-emerald-300">
-                  <Eye className="h-3 w-3" />
-                  Đã xuất bản
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1 font-bold text-muted-foreground">
-                  <EyeOff className="h-3 w-3" />
-                  Bản nháp
-                </span>
-              )}
               {scenario?.estimatedMinutes && (
                 <span className="inline-flex items-center gap-1 text-muted-foreground">
                   <Clock className="h-3 w-3" />
@@ -185,14 +185,23 @@ export function ScenarioDetailPage() {
               </p>
             )}
           </div>
-          {scenarioId && scenario && (
-            <Button asChild variant="outline" className="shrink-0">
-              <Link to={simulationPath.scenarioEdit(scenario.categoryId, scenarioId)}>
-                <Pencil className="h-4 w-4" />
-                Sửa
-              </Link>
-            </Button>
-          )}
+          <div className="flex items-center gap-2 shrink-0">
+            {scenario && (
+              <PublishStatusToggle
+                isPublished={scenario.isPublished}
+                onChange={togglePublished}
+                pending={mutations.setScenarioPublished.isPending}
+              />
+            )}
+            {scenarioId && scenario && (
+              <Button asChild variant="outline">
+                <Link to={simulationPath.scenarioEdit(scenario.categoryId, scenarioId)}>
+                  <Pencil className="h-4 w-4" />
+                  Sửa
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 

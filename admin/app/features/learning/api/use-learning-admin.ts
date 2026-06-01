@@ -54,6 +54,11 @@ export function useLearningAdminMutation() {
         learningAdminRepository.updateCourse(id, payload),
       onSuccess: invalidate,
     }),
+    setCoursePublished: useMutation({
+      mutationFn: ({ id, isPublished }: { id: string; isPublished: boolean }) =>
+        learningAdminRepository.setCoursePublished(id, isPublished),
+      onSuccess: invalidate,
+    }),
     deleteCourse: useMutation({
       mutationFn: (id: string) => learningAdminRepository.deleteCourse(id),
       onSuccess: invalidate,
