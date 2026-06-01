@@ -3,56 +3,64 @@ interface Props {
 	class?: string;
 }
 const { class: className = '' } = Astro.props;
-
-const words = [
-	{ t: 'phở', x: 40, y: 50, size: 16, w: 700, italic: false },
-	{ t: 'cảm ơn', x: 130, y: 38, size: 11, w: 400, italic: true },
-	{ t: 'cái', x: 30, y: 90, size: 9, w: 500, italic: false },
-	{ t: 'xin chào', x: 110, y: 95, size: 14, w: 600, italic: true },
-	{ t: 'đẹp', x: 60, y: 130, size: 18, w: 700, italic: false, primary: true },
-	{ t: 'con', x: 160, y: 140, size: 10, w: 400, italic: false },
-	{ t: 'yêu', x: 180, y: 75, size: 13, w: 500, italic: true },
-	{ t: 'việt', x: 30, y: 170, size: 11, w: 600, italic: true },
-	{ t: 'nói', x: 130, y: 180, size: 12, w: 500, italic: false },
-];
 ---
 
 <svg
-	viewBox="0 0 240 200"
+	viewBox="0 0 280 200"
 	class={className}
 	aria-hidden="true"
+	font-family="var(--font-sans)"
 >
-	<!-- decorative connection lines -->
-	<g stroke="currentColor" stroke-width="0.5" opacity="0.25" data-draw>
-		<line x1="60" y1="50" x2="110" y2="40" />
-		<line x1="100" y1="90" x2="60" y2="130" />
-		<line x1="180" y1="75" x2="130" y2="40" />
-		<line x1="60" y1="130" x2="130" y2="180" />
-		<line x1="40" y1="170" x2="100" y2="95" />
+	<!-- Top meta row: POS + classifier badge | bookmark -->
+	<g font-size="9" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.6">
+		<text x="14" y="22">NOUN · CLF: con</text>
 	</g>
 
-	<!-- words -->
-	<g font-family="var(--font-display)" fill="currentColor">
-		{
-			words.map((w) => (
-				<text
-					x={w.x}
-					y={w.y}
-					font-size={w.size}
-					font-weight={w.w}
-					font-style={w.italic ? 'italic' : 'normal'}
-					fill={w.primary ? 'var(--primary)' : 'currentColor'}
-				>
-					{w.t}
-				</text>
-			))
-		}
+	<!-- Bookmark (Yêu sách) icon top-right -->
+	<g transform="translate(254 14)" fill="var(--primary)">
+		<path d="M0 0 L0 14 L5 10 L10 14 L10 0 Z" />
 	</g>
 
-	<!-- small dots accent -->
+	<!-- Vietnamese word -->
+	<g fill="currentColor">
+		<text x="14" y="68" font-size="32" font-weight="700" letter-spacing="-0.025em">
+			con mèo
+		</text>
+	</g>
+
+	<!-- Pronunciation -->
+	<g fill="currentColor" opacity="0.55" font-size="13" letter-spacing="0.02em">
+		<text x="14" y="92">/kɔn mɛw˧˩/</text>
+	</g>
+
+	<!-- Translation -->
+	<g fill="currentColor" font-size="14" font-weight="500" font-style="italic" opacity="0.85">
+		<text x="14" y="114">cat</text>
+	</g>
+
+	<!-- Divider -->
+	<line x1="14" y1="130" x2="266" y2="130" stroke="currentColor" stroke-width="0.5" opacity="0.25" data-draw />
+
+	<!-- Dialect variants section -->
+	<g font-size="8" letter-spacing="0.25em" font-weight="600" fill="currentColor" opacity="0.5">
+		<text x="14" y="148">BẮC</text>
+		<text x="100" y="148">TRUNG</text>
+		<text x="200" y="148">NAM</text>
+	</g>
+
+	<g font-size="14" font-weight="600" fill="currentColor">
+		<text x="14" y="172">con mèo</text>
+		<text x="100" y="172">con méo</text>
+		<text x="200" y="172">con mèo</text>
+	</g>
+
+	<!-- Audio dot indicators per dialect -->
 	<g fill="var(--primary)">
-		<circle cx="120" cy="68" r="1.5" />
-		<circle cx="200" cy="160" r="1.5" />
-		<circle cx="35" cy="155" r="1.5" />
+		<circle cx="76" cy="167" r="2" opacity="0.7" />
+		<circle cx="170" cy="167" r="2" opacity="0.7" />
+		<circle cx="252" cy="167" r="2" />
 	</g>
+
+	<!-- Decorative accent stripe on left -->
+	<line x1="2" y1="14" x2="2" y2="60" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" />
 </svg>

@@ -3,6 +3,7 @@ import Container from '../ui/Container.astro';
 import Logo from '../ui/Logo.astro';
 import { defaultLang, type Lang } from '../../i18n/config';
 import { localizedPath, useTranslations } from '../../i18n/utils';
+import { CONTACT_URL } from '../../config';
 
 interface Props {
 	lang?: Lang;
@@ -26,7 +27,7 @@ const columns = [
 		title: t('footer.company'),
 		links: [
 			{ label: t('footer.about'), href: '/about' },
-			{ label: t('footer.contact'), href: '/contact' },
+			{ label: t('footer.contact'), href: CONTACT_URL, external: true },
 			{ label: t('footer.careers'), href: '/careers' },
 		],
 	},
@@ -40,12 +41,12 @@ const columns = [
 ];
 ---
 
-<footer class="border-t border-rule bg-paper relative">
+<footer class="border-t border-border bg-card relative">
 	<Container size="xl">
 		<div class="py-16 md:py-20 grid grid-cols-2 md:grid-cols-12 gap-10">
 			<div class="col-span-2 md:col-span-5 space-y-6">
 				<Logo size="md" />
-				<p class="text-sm text-foreground/70 max-w-xs leading-[1.6] italic">
+				<p class="text-sm text-foreground/70 max-w-xs leading-[1.6]">
 					{t('footer.tagline')}
 				</p>
 			</div>
@@ -53,7 +54,7 @@ const columns = [
 			{
 				columns.map((col) => (
 					<div class="md:col-span-2 lg:col-span-2">
-						<div class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+						<div class="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
 							/ {col.title}
 						</div>
 						<ul class="mt-6 space-y-3">
@@ -61,6 +62,8 @@ const columns = [
 								<li>
 									<a
 										href={link.href}
+										target={'external' in link && link.external ? '_blank' : undefined}
+										rel={'external' in link && link.external ? 'noopener noreferrer' : undefined}
 										class="link-editorial text-sm text-foreground/80 hover:text-foreground transition-colors"
 									>
 										{link.label}
@@ -75,7 +78,7 @@ const columns = [
 			<div class="md:col-span-1"></div>
 		</div>
 
-		<div class="py-6 border-t border-rule flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+		<div class="py-6 border-t border-border flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground num-tabular">
 			<div class="flex items-center gap-3">
 				<span class="size-1 rounded-full bg-primary"></span>
 				<span>© {year} LinVNix. {t('footer.copyright')}</span>

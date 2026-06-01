@@ -4,57 +4,117 @@ interface Props {
 }
 const { class: className = '' } = Astro.props;
 
-// 7-week × 7-day grid like GitHub contribution graph
-const days = Array.from({ length: 49 }, (_, i) => {
-	const intensity = (Math.sin(i * 0.7) + Math.cos(i * 0.4) + 2) / 4;
-	const level = intensity > 0.75 ? 4 : intensity > 0.55 ? 3 : intensity > 0.35 ? 2 : intensity > 0.18 ? 1 : 0;
-	return level;
-});
+const goals = [
+	{ label: 'EXERCISES', current: 8, max: 10, done: false },
+	{ label: 'SIMULATIONS', current: 3, max: 3, done: true },
+	{ label: 'LESSONS', current: 2, max: 5, done: false },
+];
+
+const barWidth = 130;
 ---
 
 <svg
-	viewBox="0 0 240 180"
+	viewBox="0 0 280 200"
 	class={className}
 	aria-hidden="true"
+	font-family="var(--font-sans)"
 >
-	<!-- Day grid -->
-	<g>
-		{
-			days.map((level, i) => {
-				const col = Math.floor(i / 7);
-				const row = i % 7;
-				const fillMap = ['none', 'currentColor', 'currentColor', 'var(--primary)', 'var(--primary)'];
-				const opacityMap = [0.2, 0.3, 0.55, 0.8, 1];
-				return (
-					<rect
-						x={col * 22 + 14}
-						y={row * 18 + 14}
-						width="14"
-						height="14"
-						rx="2"
-						fill={fillMap[level] as string}
-						opacity={opacityMap[level]}
-						stroke="currentColor"
-						stroke-width="0.5"
-					/>
-				);
-			})
-		}
+	<!-- Header -->
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
+		<text x="14" y="22">TODAY · MỤC TIÊU NGÀY</text>
 	</g>
 
-	<!-- Streak number callout -->
-	<g
-		font-family="var(--font-display)"
-		fill="currentColor"
-	>
-		<text x="180" y="148" font-size="50" font-weight="500" font-style="italic">
-			47
+	<!-- Goals list -->
+	{
+		goals.map((g, i) => {
+			const y = 42 + i * 30;
+			const pct = g.current / g.max;
+			return (
+				<g>
+					{/* checkbox */}
+					<rect
+						x="14"
+						y={y}
+						width="12"
+						height="12"
+						rx="3"
+						fill={g.done ? 'var(--primary)' : 'none'}
+						stroke="currentColor"
+						stroke-width="1"
+						opacity={g.done ? '1' : '0.5'}
+					/>
+					{g.done && (
+						<path
+							d={`M ${17} ${y + 6} L ${19} ${y + 8.5} L ${23} ${y + 4.5}`}
+							stroke="var(--primary-foreground)"
+							stroke-width="1.5"
+							fill="none"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					)}
+					{/* label */}
+					<text
+						x="34"
+						y={y + 10}
+						font-size="9"
+						letter-spacing="0.2em"
+						font-weight="600"
+						fill="currentColor"
+					>
+						{g.label}
+					</text>
+					{/* bar track */}
+					<rect x="120" y={y + 4} width={barWidth} height="4" rx="2" fill="currentColor" opacity="0.12" />
+					{/* bar fill */}
+					<rect
+						x="120"
+						y={y + 4}
+						width={barWidth * pct}
+						height="4"
+						rx="2"
+						fill={g.done ? 'var(--primary)' : 'currentColor'}
+					/>
+					{/* count */}
+					<text
+						x="258"
+						y={y + 10}
+						font-size="9"
+						font-weight="700"
+						fill="currentColor"
+						text-anchor="end"
+					>
+						{g.current}/{g.max}
+					</text>
+				</g>
+			);
+		})
+	}
+
+	<!-- Divider -->
+	<line x1="14" y1="138" x2="266" y2="138" stroke="currentColor" stroke-width="0.5" opacity="0.25" data-draw />
+
+	<!-- Streak section -->
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
+		<text x="14" y="160">CHUỖI · STREAK</text>
+	</g>
+	<g font-size="9" font-weight="500" fill="currentColor" opacity="0.7">
+		<text x="14" y="185">Longest 89 days</text>
+	</g>
+
+	<!-- Big streak number -->
+	<g transform="translate(266 188)">
+		<text
+			font-size="46"
+			font-weight="800"
+			fill="currentColor"
+			letter-spacing="-0.04em"
+			text-anchor="end"
+		>
+			47<tspan font-size="11" fill="currentColor" opacity="0.55" font-weight="600" letter-spacing="0.15em">d</tspan>
 		</text>
 	</g>
-	<g font-family="var(--font-mono)" font-size="9" fill="currentColor" letter-spacing="0.15em">
-		<text x="180" y="162">DAY STREAK</text>
-	</g>
 
-	<!-- accent dot -->
-	<circle cx="225" cy="106" r="3" fill="var(--primary)" />
+	<!-- Cinnabar dot accent next to streak -->
+	<circle cx="270" cy="156" r="3" fill="var(--primary)" />
 </svg>

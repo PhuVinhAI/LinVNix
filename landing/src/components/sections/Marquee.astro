@@ -6,17 +6,17 @@ const rowA = [
 	'A2', 'Listening', 'B1', 'Speaking', 'C2', 'Dialects',
 ];
 const rowB = [
-	'xin chào', 'cảm ơn', 'tạm biệt', 'đẹp', 'ngon', 'thật tuyệt',
-	'việt nam', 'tiếng việt', 'phở', 'áo dài',
+	'xin chào', 'cảm ơn', 'tạm biệt', 'phở', 'áo dài', 'sài gòn',
+	'hà nội', 'cà phê', 'ngon quá', 'em chào anh',
 ];
 const markRotation = ['acute', 'grave', 'hook', 'tilde', 'dot', 'breve'] as const;
 ---
 
 <section
 	aria-hidden="true"
-	class="relative border-y border-rule bg-paper overflow-hidden py-6 md:py-8"
+	class="relative border-y border-border bg-card overflow-hidden py-6 md:py-8"
 >
-	<!-- Row 1: editorial italic Vietnamese phrases -->
+	<!-- Row 1: Vietnamese phrases, large editorial -->
 	<div
 		data-marquee
 		data-marquee-speed="55"
@@ -25,7 +25,7 @@ const markRotation = ['acute', 'grave', 'hook', 'tilde', 'dot', 'breve'] as cons
 	>
 		<div
 			data-marquee-track
-			class="flex items-center whitespace-nowrap will-change-transform gap-8 md:gap-12 text-4xl md:text-6xl text-display italic-display text-foreground"
+			class="flex items-center whitespace-nowrap will-change-transform gap-8 md:gap-12 text-4xl md:text-6xl font-bold tracking-tight text-foreground"
 		>
 			{
 				rowB.map((w, i) => {
@@ -43,7 +43,7 @@ const markRotation = ['acute', 'grave', 'hook', 'tilde', 'dot', 'breve'] as cons
 		</div>
 	</div>
 
-	<!-- Row 2: CEFR + skill labels mono, reverse direction -->
+	<!-- Row 2: CEFR + skill labels, mono uppercase, reverse direction -->
 	<div
 		data-marquee
 		data-marquee-speed="80"
@@ -52,13 +52,13 @@ const markRotation = ['acute', 'grave', 'hook', 'tilde', 'dot', 'breve'] as cons
 	>
 		<div
 			data-marquee-track
-			class="flex items-center whitespace-nowrap will-change-transform gap-6 md:gap-10 text-xs md:text-sm text-mono uppercase tracking-[0.3em] text-muted-foreground"
+			class="flex items-center whitespace-nowrap will-change-transform gap-6 md:gap-10 text-xs md:text-sm uppercase tracking-[0.3em] text-muted-foreground num-tabular"
 		>
 			{
 				rowA.map((w) => (
 					<span class="inline-flex items-center gap-6 md:gap-10">
 						<span>{w}</span>
-						<span class="size-1 rounded-full bg-rule"></span>
+						<span class="size-1 rounded-full bg-border"></span>
 					</span>
 				))
 			}

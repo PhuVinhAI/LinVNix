@@ -3,58 +3,76 @@ interface Props {
 	class?: string;
 }
 const { class: className = '' } = Astro.props;
-
-// Generate a deterministic sine-like wave with varying amplitudes
-const bars = Array.from({ length: 32 }, (_, i) => {
-	const phase = (i / 32) * Math.PI * 4;
-	const base = Math.abs(Math.sin(phase)) * 50;
-	const jitter = ((i * 7) % 13) / 13;
-	return Math.max(6, base + jitter * 18);
-});
 ---
 
 <svg
-	viewBox="0 0 240 120"
+	viewBox="0 0 280 200"
 	class={className}
 	aria-hidden="true"
+	font-family="var(--font-sans)"
 >
-	<!-- waveform bars -->
-	<g fill="currentColor">
-		{
-			bars.map((h, i) => (
-				<rect
-					x={i * 7 + 4}
-					y={60 - h / 2}
-					width="3"
-					height={h}
-					rx="1.5"
-					class="sw-bar"
-					style={`animation-delay: ${i * 50}ms`}
-				/>
-			))
-		}
+	<!-- Screen context indicator (the key differentiator) -->
+	<g transform="translate(14 14)">
+		<rect width="160" height="22" rx="11" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4" />
+		<g font-size="8" letter-spacing="0.18em" font-weight="600" fill="currentColor">
+			<text x="12" y="15" opacity="0.5">CONTEXT</text>
+		</g>
+		<line x1="62" y1="6" x2="62" y2="16" stroke="currentColor" opacity="0.25" />
+		<g font-size="9" font-weight="500" fill="currentColor" opacity="0.85">
+			<text x="70" y="15">Lesson 03 · Q2</text>
+		</g>
+		<circle cx="150" cy="11" r="2.5" fill="var(--primary)">
+			<animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite" />
+		</circle>
 	</g>
 
-	<!-- speech-bubble outline integrated -->
-	<g stroke="currentColor" stroke-width="1.25" fill="none" opacity="0.35" data-draw>
-		<path d="M8 105 Q4 105 4 100 L4 85 Q4 80 8 80 L40 80" stroke-linecap="round" />
-		<path d="M230 105 Q236 105 236 100 L236 85 Q236 80 232 80 L200 80" stroke-linecap="round" />
+	<!-- User question bubble (right-aligned) -->
+	<g transform="translate(110 50)">
+		<rect width="156" height="38" rx="14" fill="currentColor" />
+		<g font-size="10" font-weight="500" fill="var(--background)">
+			<text x="14" y="17">Why is "không"</text>
+			<text x="14" y="30">at the end?</text>
+		</g>
+		<!-- tail -->
+		<path d="M156 34 L162 38 L150 38 Z" fill="currentColor" />
 	</g>
 
-	<!-- accent dot -->
-	<circle cx="120" cy="105" r="2" fill="var(--primary)" />
+	<!-- AI response bubble (left-aligned, outlined) -->
+	<g transform="translate(14 102)">
+		<rect width="190" height="50" rx="14" fill="none" stroke="currentColor" stroke-width="1" />
+		<g font-size="10" font-weight="500" fill="currentColor">
+			<text x="14" y="18">It's a yes/no question</text>
+			<text x="14" y="32">particle. Vietnamese</text>
+			<text x="14" y="46">puts it at the end</text>
+		</g>
+		<!-- tail -->
+		<path d="M14 46 L8 50 L20 50 Z" fill="var(--background)" stroke="currentColor" stroke-width="1" />
+		<!-- streaming cursor -->
+		<rect x="118" y="38" width="2" height="10" fill="var(--primary)">
+			<animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="indefinite" />
+		</rect>
+	</g>
 
-	<style>
-		.sw-bar {
-			transform-origin: center;
-			animation: sw-pulse 1.4s ease-in-out infinite;
-		}
-		@keyframes sw-pulse {
-			0%, 100% { transform: scaleY(0.7); }
-			50% { transform: scaleY(1.15); }
-		}
-		@media (prefers-reduced-motion: reduce) {
-			.sw-bar { animation: none; }
-		}
-	</style>
+	<!-- AI avatar marker -->
+	<g transform="translate(214 110)">
+		<circle r="10" fill="var(--primary)" />
+		<text font-size="9" font-weight="700" fill="var(--primary-foreground)" text-anchor="middle" y="3">AI</text>
+	</g>
+
+	<!-- mini waveform at bottom indicating voice capable -->
+	<g fill="currentColor" opacity="0.4" transform="translate(14 175)">
+		<rect x="0" y="2" width="2" height="6" rx="1" />
+		<rect x="6" y="-2" width="2" height="14" rx="1" />
+		<rect x="12" y="0" width="2" height="10" rx="1" />
+		<rect x="18" y="-3" width="2" height="16" rx="1" />
+		<rect x="24" y="-1" width="2" height="12" rx="1" />
+		<rect x="30" y="-4" width="2" height="18" rx="1" />
+		<rect x="36" y="0" width="2" height="10" rx="1" />
+		<rect x="42" y="-2" width="2" height="14" rx="1" />
+		<rect x="48" y="2" width="2" height="6" rx="1" />
+		<rect x="54" y="-1" width="2" height="12" rx="1" />
+	</g>
+	<g font-size="8" letter-spacing="0.2em" fill="currentColor" opacity="0.45" font-weight="600">
+		<text x="76" y="186">voice · text · streaming</text>
+	</g>
 </svg>

@@ -7,7 +7,7 @@ export const ui = {
 		'nav.howItWorks': 'How it works',
 		'nav.faq': 'FAQ',
 		'nav.signIn': 'Sign in',
-		'nav.getStarted': 'Download demo',
+		'nav.getStarted': 'Download',
 
 		'theme.light': 'Switch to light mode',
 		'theme.dark': 'Switch to dark mode',
@@ -16,101 +16,95 @@ export const ui = {
 		'hero.title1': 'Learn Vietnamese,',
 		'hero.title2': 'the smart way.',
 		'hero.subtitle':
-			'LinVNix combines structured CEFR lessons with multimodal AI to help you build real Vietnamese fluency — vocabulary, grammar, pronunciation, and conversation.',
+			'LinVNix pairs a CEFR-aligned curriculum (A1–C2) with multimodal AI: vocabulary in real context, bilingual grammar, six exercise types, an AI tutor that sees your screen, and roleplay simulations with AI characters.',
 		'hero.ctaPrimary': 'Download demo',
 		'hero.ctaSecondary': 'How it works',
 
-		'stats.lessons': 'Structured lessons',
-		'stats.levels': 'CEFR levels covered',
-		'stats.languages': 'Native languages supported',
-		'stats.dialects': 'Vietnamese dialects',
+		'stats.lessons': 'Lessons',
+		'stats.lessonsNote': 'audio · text · interactive',
+		'stats.levels': 'CEFR levels',
+		'stats.levelsNote': 'A1 → C2, six tiers',
+		'stats.languages': 'Native languages',
+		'stats.languagesNote': 'bilingual bridges',
+		'stats.dialects': 'Dialects',
+		'stats.dialectsNote': 'Standard · North · Central · South',
 
 		'how.eyebrow': 'How it works',
-		'how.title': 'Start speaking Vietnamese in three steps',
-		'how.subtitle': 'From your first word to fluent conversation, LinVNix guides every step.',
-		'how.s1Title': 'Choose your level',
-		'how.s1Desc': 'Take a short placement quiz or pick your CEFR level from A1 to C2.',
+		'how.title': 'From your first word to full conversations — in three steps.',
+		'how.subtitle':
+			'LinVNix structures every step so you never wonder what to do next.',
+		'how.s1Title': 'Pick your level',
+		'how.s1Desc':
+			'Take a short placement check or pick a CEFR level from A1 to C2. Courses below your level are auto-marked complete.',
 		'how.s2Title': 'Learn with AI',
 		'how.s2Desc':
-			'Daily lessons mix vocabulary, grammar, listening, and speaking — explained in your language.',
-		'how.s3Title': 'Practice & track',
-		'how.s3Desc': 'Talk to the AI tutor, complete daily goals, and watch your streak grow.',
+			'Daily lessons weave vocabulary, grammar, listening and speaking — explained in your native language with examples in Vietnamese.',
+		'how.s3Title': 'Practice & build a streak',
+		'how.s3Desc':
+			'Chat with the AI tutor, roleplay real-world scenarios with AI characters, hit your daily goals, and watch your streak grow.',
 
 		'feat.eyebrow': 'Features',
-		'feat.title': 'Everything you need to learn Vietnamese',
-		'feat.subtitle': 'Designed around how foreigners actually pick up Vietnamese.',
-		'feat.f1Title': 'CEFR structured lessons',
+		'feat.title': 'Built around how foreigners actually learn Vietnamese.',
+		'feat.subtitle':
+			'Every layer is designed for non-native speakers — from classifiers to dialect variants to bilingual grammar.',
+		'feat.f1Title': 'AI tutor that sees your screen',
 		'feat.f1Desc':
-			'From A1 beginner to C2 mastery, every lesson is mapped to an internationally recognised level.',
-		'feat.f2Title': 'Vocabulary with context',
+			'Open the assistant on any screen and ask anything — it already knows the lesson you’re reading, the exercise you’re solving, even the answer you’ve typed. It hints without giving the answer away. Snap a photo to discover Vietnamese in the wild.',
+		'feat.f2Title': 'A1 → C2 curriculum',
 		'feat.f2Desc':
-			'Each word comes with pronunciation, part of speech, classifiers (con, cái, chiếc), and regional dialect variants.',
+			'Six CEFR tiers, organised as courses → topics → lessons. Pick where you are; the rest unlocks as you go.',
 		'feat.f3Title': 'Bilingual grammar',
 		'feat.f3Desc':
-			'Every grammar rule is explained with examples in your language alongside Vietnamese.',
-		'feat.f4Title': 'Interactive exercises',
+			'Every grammar rule is explained in your native language with side-by-side Vietnamese examples — never just translations.',
+		'feat.f4Title': 'Vocabulary with real depth',
 		'feat.f4Desc':
-			'Multiple choice, fill-in-the-blank, matching, ordering, translation, and listening — practice every skill.',
-		'feat.f5Title': 'AI conversation tutor',
+			'Each word ships with pronunciation, part of speech, classifiers (con, cái, chiếc), regional dialect variants, and a slot in your personal collection.',
+		'feat.f5Title': 'Six exercise types',
 		'feat.f5Desc':
-			'Hold real conversations with an AI tutor that adapts to your level and corrects you in real time.',
-		'feat.f6Title': 'Daily goals & streaks',
+			'Multiple choice, fill-in-the-blank, matching, ordering, translation, listening. A1/A2 accepts diacritic-free typing so beginners are never stuck on tone marks.',
+		'feat.f6Title': 'Roleplay simulations',
 		'feat.f6Desc':
-			'Set personal daily goals and build a learning habit that sticks. Track your streak day by day.',
+			'Step into real situations — markets, restaurants, clinics, offices. AI plays the other characters, corrects you per message, and scores you against rubric criteria when the scene ends.',
 
 		'pricing.eyebrow': 'Pricing',
-		'pricing.title': 'Free for everyone during demo',
+		'pricing.title': 'Free for everyone during the demo.',
 		'pricing.subtitle':
-			"Every feature unlocked. We'll introduce paid plans after the demo phase.",
+			'Every feature unlocked. Paid plans only arrive after the demo phase ends.',
 		'pricing.demoBadge': 'Demo phase',
-		'pricing.demoName': 'Demo Access',
+		'pricing.demoName': 'Demo access',
 		'pricing.demoPrice': 'Free',
 		'pricing.demoDesc':
-			"Try every LinVNix feature while we're in early access. No credit card, no time limit during demo.",
+			'Try every LinVNix feature in early access. No credit card, no time limit during demo.',
 		'pricing.demoCta': 'Download Android APK',
 		'pricing.demoNote': 'iOS and web versions coming soon.',
 		'pricing.demoF1': 'All CEFR levels (A1–C2)',
-		'pricing.demoF2': 'Unlimited AI conversation tutor',
-		'pricing.demoF3': 'Multi-dialect support (Standard, North, South)',
-		'pricing.demoF4': 'Custom AI-generated exercise sets',
+		'pricing.demoF2': 'Unlimited AI tutor + image discovery',
+		'pricing.demoF3': 'Roleplay simulations (markets, clinics, work…)',
+		'pricing.demoF4': 'AI-generated personalised exercise sets',
 		'pricing.demoF5': 'Daily goals & learning streaks',
-		'pricing.demoF6': 'All 9 native languages supported',
-
-		'test.eyebrow': 'Learners',
-		'test.title': 'Loved by foreigners learning Vietnamese',
-		'test.q1':
-			'After three months I can finally have real conversations with my Vietnamese partner’s family. The AI tutor is incredibly patient.',
-		'test.n1': 'Marcus W.',
-		'test.r1': 'Software engineer, Germany',
-		'test.q2':
-			'The dialect variants are a game-changer. I’m in Saigon and the Southern pronunciations actually match what I hear on the street.',
-		'test.n2': 'Sophie L.',
-		'test.r2': 'Designer, France',
-		'test.q3':
-			'I tried other apps but LinVNix is the first that explains grammar properly. The bilingual examples make everything click.',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': 'Researcher, Japan',
+		'pricing.demoF6': 'All 9 native languages, 4 dialect variants',
 
 		'faq.eyebrow': 'FAQ',
-		'faq.title': 'Frequently asked questions',
+		'faq.title': 'Frequently asked questions.',
 		'faq.q1': 'Do I need to know any Vietnamese to start?',
 		'faq.a1':
-			'No. LinVNix starts at CEFR A1 and explains everything in your native language. The first lessons assume zero Vietnamese knowledge.',
+			'No. LinVNix starts at CEFR A1 and explains everything in your native language. The first lessons assume zero prior knowledge, and A1/A2 exercises accept typing without diacritic marks so you’re not blocked by tone keys.',
 		'faq.q2': 'Is the demo really free?',
 		'faq.a2':
-			'Yes. During the demo phase every feature is unlocked for everyone — no credit card required. Paid plans will only be introduced after the demo period ends.',
+			'Yes. During the demo phase every feature is unlocked for everyone — no credit card required. Paid plans only arrive after the demo period ends.',
 		'faq.q3': 'Which Vietnamese dialect do you teach?',
 		'faq.a3':
-			'All three: Standard, Northern, and Southern. You can pick a preferred dialect and we’ll show pronunciation variants alongside.',
-		'faq.q4': 'Can I use LinVNix on my phone?',
+			'All four: Standard, Northern, Central, and Southern. You pick a preferred dialect and the app shows pronunciation variants alongside; vocabulary carries regional variants.',
+		'faq.q4': 'What does the AI tutor actually do?',
 		'faq.a4':
-			'Yes. The demo currently ships as an Android APK you can install directly. iOS and web versions are on the way.',
-		'faq.q5': 'How accurate is the AI tutor?',
+			'Two things. The AI Assistant lives at the bottom of every screen — open it and it already knows the lesson, exercise, or content you’re viewing; ask anything in your language and it answers contextually. Roleplay Simulations are different: pick a real-world scenario, embody a character, and converse — the AI plays everyone else, gives per-message corrections, and scores you at the end.',
+		'faq.q5': 'Can I use LinVNix on my phone?',
 		'faq.a5':
-			'The AI is trained on Vietnamese language data and supervised by native teachers — strong at conversation, pronunciation feedback, and grammar correction at every CEFR level.',
+			'Yes. The demo currently ships as an Android APK you install directly. iOS and web versions are on the way.',
 
 		'cta.title': 'Ready to speak Vietnamese?',
-		'cta.subtitle': 'Install the demo on your Android device and start learning today.',
+		'cta.subtitle':
+			'Install the demo on your Android device and start learning today.',
 		'cta.primary': 'Download demo',
 		'cta.secondary': 'Contact us',
 
@@ -134,64 +128,69 @@ export const ui = {
 		'nav.howItWorks': 'Cách hoạt động',
 		'nav.faq': 'Câu hỏi',
 		'nav.signIn': 'Đăng nhập',
-		'nav.getStarted': 'Tải bản demo',
+		'nav.getStarted': 'Tải về',
 
 		'theme.light': 'Chuyển sang chế độ sáng',
 		'theme.dark': 'Chuyển sang chế độ tối',
 
-		'hero.badge': 'Học tiếng Việt với AI',
+		'hero.badge': 'Học tiếng Việt cùng AI',
 		'hero.title1': 'Học tiếng Việt,',
 		'hero.title2': 'theo cách thông minh.',
 		'hero.subtitle':
-			'LinVNix kết hợp bài học chuẩn CEFR với AI đa phương thức, giúp bạn xây dựng năng lực tiếng Việt thực thụ — từ vựng, ngữ pháp, phát âm và giao tiếp.',
+			'LinVNix kết hợp khóa học chuẩn CEFR (A1–C2) với AI đa phương thức: từ vựng có ngữ cảnh, ngữ pháp song ngữ, sáu kiểu bài tập, Trợ lý AI hiểu màn hình, và Hội thoại mô phỏng với nhân vật AI.',
 		'hero.ctaPrimary': 'Tải bản demo',
 		'hero.ctaSecondary': 'Xem cách hoạt động',
 
-		'stats.lessons': 'Bài học có cấu trúc',
+		'stats.lessons': 'Bài học',
+		'stats.lessonsNote': 'âm thanh · văn bản · tương tác',
 		'stats.levels': 'Cấp độ CEFR',
-		'stats.languages': 'Ngôn ngữ mẹ đẻ được hỗ trợ',
-		'stats.dialects': 'Phương ngữ tiếng Việt',
+		'stats.levelsNote': 'A1 → C2, sáu cấp',
+		'stats.languages': 'Ngôn ngữ mẹ đẻ',
+		'stats.languagesNote': 'cầu nối song ngữ',
+		'stats.dialects': 'Phương ngữ',
+		'stats.dialectsNote': 'Chuẩn · Bắc · Trung · Nam',
 
 		'how.eyebrow': 'Cách hoạt động',
-		'how.title': 'Nói tiếng Việt trong ba bước',
+		'how.title': 'Từ từ đầu tiên đến giao tiếp đời thực — chỉ ba bước.',
 		'how.subtitle':
-			'Từ chữ đầu tiên tới hội thoại trôi chảy, LinVNix đồng hành từng bước.',
+			'LinVNix sắp xếp từng bước rõ ràng để bạn không bao giờ phân vân kế tiếp làm gì.',
 		'how.s1Title': 'Chọn cấp độ',
 		'how.s1Desc':
-			'Làm bài đánh giá ngắn hoặc chọn cấp độ CEFR từ A1 tới C2.',
+			'Làm bài đánh giá ngắn hoặc chọn cấp CEFR từ A1 đến C2. Khóa học dưới cấp tự động đánh dấu hoàn thành.',
 		'how.s2Title': 'Học cùng AI',
 		'how.s2Desc':
-			'Bài học hằng ngày kết hợp từ vựng, ngữ pháp, nghe và nói — giải thích bằng ngôn ngữ của bạn.',
-		'how.s3Title': 'Luyện tập & theo dõi',
+			'Bài học hằng ngày kết hợp từ vựng, ngữ pháp, nghe và nói — giải thích bằng tiếng mẹ đẻ kèm ví dụ tiếng Việt.',
+		'how.s3Title': 'Luyện tập & xây chuỗi',
 		'how.s3Desc':
-			'Trò chuyện với gia sư AI, hoàn thành mục tiêu mỗi ngày và xây dựng chuỗi học tập.',
+			'Trò chuyện cùng Trợ lý AI, vào Hội thoại mô phỏng với nhân vật AI, đạt Mục tiêu ngày và xem Chuỗi của bạn dài thêm.',
 
 		'feat.eyebrow': 'Tính năng',
-		'feat.title': 'Mọi thứ bạn cần để học tiếng Việt',
-		'feat.subtitle': 'Thiết kế quanh cách người nước ngoài thực sự tiếp cận tiếng Việt.',
-		'feat.f1Title': 'Bài học theo chuẩn CEFR',
+		'feat.title': 'Thiết kế quanh cách người nước ngoài thực sự học tiếng Việt.',
+		'feat.subtitle':
+			'Mọi lớp đều dành cho người không nói tiếng Việt — từ danh từ phân loại đến biến thể phương ngữ và ngữ pháp song ngữ.',
+		'feat.f1Title': 'Trợ lý AI hiểu màn hình',
 		'feat.f1Desc':
-			'Từ A1 cho người mới bắt đầu đến C2 thành thạo, mỗi bài học gắn với một cấp độ quốc tế rõ ràng.',
-		'feat.f2Title': 'Từ vựng có ngữ cảnh',
+			'Mở Trợ lý AI trên mọi màn hình và hỏi bất cứ điều gì — AI đã biết bạn đang đọc bài học nào, đang làm câu hỏi nào, thậm chí cả đáp án bạn vừa gõ. Gợi ý chứ không đưa đáp án thẳng. Chụp ảnh để khám phá tiếng Việt ngoài đời.',
+		'feat.f2Title': 'Lộ trình A1 → C2',
 		'feat.f2Desc':
-			'Mỗi từ kèm phát âm, từ loại, danh từ phân loại (con, cái, chiếc) và biến thể phương ngữ vùng miền.',
+			'Sáu cấp CEFR, tổ chức theo Khóa học → Chủ đề → Bài học. Chọn cấp của bạn; phần còn lại mở khóa theo tiến trình.',
 		'feat.f3Title': 'Ngữ pháp song ngữ',
 		'feat.f3Desc':
-			'Mỗi quy tắc ngữ pháp được giải thích kèm ví dụ trong ngôn ngữ của bạn cùng tiếng Việt.',
-		'feat.f4Title': 'Bài tập tương tác',
+			'Mỗi Quy tắc ngữ pháp được giải thích bằng tiếng mẹ đẻ kèm ví dụ tiếng Việt song song — không chỉ là bản dịch.',
+		'feat.f4Title': 'Từ vựng giàu ngữ cảnh',
 		'feat.f4Desc':
-			'Trắc nghiệm, điền chỗ trống, ghép đôi, sắp xếp, dịch và nghe — rèn luyện mọi kỹ năng.',
-		'feat.f5Title': 'Gia sư AI hội thoại',
+			'Mỗi Từ vựng đi kèm phát âm, từ loại, Danh từ phân loại (con, cái, chiếc), biến thể Phương ngữ và một chỗ trong Từ vựng cá nhân của bạn.',
+		'feat.f5Title': 'Sáu kiểu Bài tập',
 		'feat.f5Desc':
-			'Trò chuyện thực sự với gia sư AI, tự điều chỉnh theo cấp độ và sửa lỗi cho bạn theo thời gian thực.',
-		'feat.f6Title': 'Mục tiêu ngày & chuỗi',
+			'Trắc nghiệm, điền chỗ trống, ghép đôi, sắp xếp, dịch, nghe. Cấp A1/A2 chấp nhận gõ không dấu để người mới không bị chặn vì dấu thanh.',
+		'feat.f6Title': 'Hội thoại mô phỏng',
 		'feat.f6Desc':
-			'Đặt mục tiêu cá nhân mỗi ngày, xây dựng thói quen học bền vững và theo dõi chuỗi của bạn.',
+			'Bước vào tình huống thực — chợ, quán ăn, phòng khám, công sở. AI đóng vai các nhân vật còn lại, sửa lỗi theo từng tin nhắn và chấm điểm theo tiêu chí khi cảnh kết thúc.',
 
 		'pricing.eyebrow': 'Bảng giá',
-		'pricing.title': 'Miễn phí cho tất cả trong giai đoạn demo',
+		'pricing.title': 'Miễn phí cho tất cả trong giai đoạn demo.',
 		'pricing.subtitle':
-			'Mở khóa toàn bộ tính năng. Các gói trả phí sẽ ra mắt sau giai đoạn demo.',
+			'Mở khóa toàn bộ tính năng. Các gói trả phí chỉ ra mắt sau khi giai đoạn demo kết thúc.',
 		'pricing.demoBadge': 'Đang demo',
 		'pricing.demoName': 'Truy cập demo',
 		'pricing.demoPrice': 'Miễn phí',
@@ -199,45 +198,30 @@ export const ui = {
 			'Trải nghiệm mọi tính năng của LinVNix trong giai đoạn early access. Không cần thẻ, không giới hạn thời gian khi demo.',
 		'pricing.demoCta': 'Tải APK Android',
 		'pricing.demoNote': 'Phiên bản iOS và web sẽ ra mắt sau.',
-		'pricing.demoF1': 'Tất cả cấp độ CEFR (A1–C2)',
-		'pricing.demoF2': 'Gia sư AI hội thoại không giới hạn',
-		'pricing.demoF3': 'Hỗ trợ đa phương ngữ (Chuẩn, Bắc, Nam)',
-		'pricing.demoF4': 'Bộ bài tập do AI sinh theo yêu cầu',
-		'pricing.demoF5': 'Mục tiêu ngày & chuỗi học tập',
-		'pricing.demoF6': 'Hỗ trợ đủ 9 ngôn ngữ mẹ đẻ',
-
-		'test.eyebrow': 'Học viên',
-		'test.title': 'Được yêu thích bởi người nước ngoài học tiếng Việt',
-		'test.q1':
-			'Sau ba tháng tôi đã có thể trò chuyện thực sự với gia đình bạn đời người Việt. Gia sư AI cực kỳ kiên nhẫn.',
-		'test.n1': 'Marcus W.',
-		'test.r1': 'Kỹ sư phần mềm, Đức',
-		'test.q2':
-			'Hỗ trợ phương ngữ là điểm cộng lớn. Tôi sống ở Sài Gòn và phát âm miền Nam khớp đúng với những gì tôi nghe ngoài đường.',
-		'test.n2': 'Sophie L.',
-		'test.r2': 'Nhà thiết kế, Pháp',
-		'test.q3':
-			'Tôi đã thử nhiều app khác nhưng LinVNix là app đầu tiên giải thích ngữ pháp đến nơi đến chốn. Ví dụ song ngữ giúp mọi thứ rõ ràng.',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': 'Nhà nghiên cứu, Nhật Bản',
+		'pricing.demoF1': 'Tất cả cấp CEFR (A1–C2)',
+		'pricing.demoF2': 'Trợ lý AI + Khám phá ảnh không giới hạn',
+		'pricing.demoF3': 'Hội thoại mô phỏng (chợ, phòng khám, công sở…)',
+		'pricing.demoF4': 'Bộ bài tập tùy chỉnh do AI sinh',
+		'pricing.demoF5': 'Mục tiêu ngày & Chuỗi học tập',
+		'pricing.demoF6': 'Đủ 9 ngôn ngữ mẹ đẻ, 4 biến thể phương ngữ',
 
 		'faq.eyebrow': 'Câu hỏi thường gặp',
-		'faq.title': 'Những câu hỏi thường gặp',
-		'faq.q1': 'Tôi có cần biết tiếng Việt trước không?',
+		'faq.title': 'Câu hỏi thường gặp.',
+		'faq.q1': 'Tôi cần biết tiếng Việt trước không?',
 		'faq.a1':
-			'Không. LinVNix bắt đầu từ CEFR A1 và giải thích mọi thứ bằng ngôn ngữ mẹ đẻ của bạn. Bài học đầu giả định bạn chưa biết gì.',
+			'Không. LinVNix bắt đầu từ CEFR A1 và giải thích mọi thứ bằng tiếng mẹ đẻ của bạn. Các bài đầu giả định không có kiến thức trước, và bài tập A1/A2 chấp nhận gõ không dấu để bạn không bị chặn vì phím dấu.',
 		'faq.q2': 'Bản demo có thực sự miễn phí?',
 		'faq.a2':
-			'Có. Trong giai đoạn demo, tất cả tính năng được mở cho mọi người — không cần thẻ tín dụng. Các gói trả phí chỉ ra mắt khi giai đoạn demo kết thúc.',
+			'Có. Trong giai đoạn demo mọi tính năng được mở cho tất cả — không cần thẻ tín dụng. Các gói trả phí chỉ ra mắt sau khi giai đoạn demo kết thúc.',
 		'faq.q3': 'LinVNix dạy phương ngữ nào?',
 		'faq.a3':
-			'Cả ba: Chuẩn chung, Miền Bắc và Miền Nam. Bạn có thể chọn phương ngữ ưu tiên và xem các biến thể phát âm song song.',
-		'faq.q4': 'Có dùng được trên điện thoại không?',
+			'Cả bốn: Chuẩn chung, Miền Bắc, Miền Trung và Miền Nam. Bạn chọn phương ngữ ưu tiên, app hiện các biến thể phát âm song song; từ vựng mang theo biến thể vùng miền.',
+		'faq.q4': 'Trợ lý AI thực sự làm gì?',
 		'faq.a4':
-			'Có. Hiện tại bản demo được phát hành dưới dạng APK Android để cài trực tiếp. Phiên bản iOS và web đang được phát triển.',
-		'faq.q5': 'Gia sư AI chính xác đến đâu?',
+			'Hai việc. Trợ lý AI ở đáy mọi màn hình — mở lên là đã biết bài học, bài tập hay nội dung bạn đang xem; hỏi bằng tiếng mẹ đẻ và AI trả lời đúng ngữ cảnh. Hội thoại mô phỏng khác hẳn: chọn tình huống thực tế, hóa thân nhân vật, trò chuyện — AI đóng vai tất cả nhân vật còn lại, sửa lỗi theo từng tin nhắn và chấm điểm khi kết thúc.',
+		'faq.q5': 'Dùng được trên điện thoại không?',
 		'faq.a5':
-			'AI được huấn luyện trên dữ liệu tiếng Việt và giám sát bởi giáo viên bản ngữ — mạnh ở hội thoại, phản hồi phát âm và sửa ngữ pháp ở mọi cấp CEFR.',
+			'Có. Bản demo hiện được phát hành dưới dạng APK Android để cài trực tiếp. Phiên bản iOS và web đang được phát triển.',
 
 		'cta.title': 'Sẵn sàng nói tiếng Việt?',
 		'cta.subtitle':
@@ -265,7 +249,7 @@ export const ui = {
 		'nav.howItWorks': 'So funktioniert’s',
 		'nav.faq': 'FAQ',
 		'nav.signIn': 'Anmelden',
-		'nav.getStarted': 'Demo herunterladen',
+		'nav.getStarted': 'Download',
 
 		'theme.light': 'Zum hellen Modus wechseln',
 		'theme.dark': 'Zum dunklen Modus wechseln',
@@ -274,55 +258,60 @@ export const ui = {
 		'hero.title1': 'Vietnamesisch lernen,',
 		'hero.title2': 'auf die schlaue Art.',
 		'hero.subtitle':
-			'LinVNix verbindet strukturierte CEFR-Lektionen mit multimodaler KI, damit du echte Vietnamesisch-Fähigkeiten aufbaust — Wortschatz, Grammatik, Aussprache und Konversation.',
+			'LinVNix verbindet einen CEFR-Lehrplan (A1–C2) mit multimodaler KI: kontextreicher Wortschatz, zweisprachige Grammatik, sechs Übungstypen, ein KI-Tutor, der deinen Bildschirm versteht, und Rollenspiel-Simulationen mit KI-Charakteren.',
 		'hero.ctaPrimary': 'Demo herunterladen',
 		'hero.ctaSecondary': 'So funktioniert’s',
 
-		'stats.lessons': 'Strukturierte Lektionen',
-		'stats.levels': 'Abgedeckte CEFR-Stufen',
-		'stats.languages': 'Unterstützte Muttersprachen',
-		'stats.dialects': 'Vietnamesische Dialekte',
+		'stats.lessons': 'Lektionen',
+		'stats.lessonsNote': 'Audio · Text · interaktiv',
+		'stats.levels': 'CEFR-Stufen',
+		'stats.levelsNote': 'A1 → C2, sechs Stufen',
+		'stats.languages': 'Muttersprachen',
+		'stats.languagesNote': 'zweisprachige Brücken',
+		'stats.dialects': 'Dialekte',
+		'stats.dialectsNote': 'Standard · Nord · Mitte · Süd',
 
 		'how.eyebrow': 'So funktioniert’s',
-		'how.title': 'In drei Schritten zu deinen ersten vietnamesischen Sätzen',
+		'how.title': 'Vom ersten Wort zur echten Konversation — in drei Schritten.',
 		'how.subtitle':
-			'Vom ersten Wort bis zur flüssigen Konversation — LinVNix begleitet jeden Schritt.',
+			'LinVNix strukturiert jeden Schritt, damit du nie überlegst, was als Nächstes kommt.',
 		'how.s1Title': 'Wähle dein Niveau',
 		'how.s1Desc':
-			'Mache einen kurzen Einstufungstest oder wähle dein CEFR-Niveau von A1 bis C2.',
+			'Mach einen kurzen Einstufungstest oder wähle eine CEFR-Stufe von A1 bis C2. Kurse unter deinem Niveau werden automatisch abgeschlossen.',
 		'how.s2Title': 'Lerne mit KI',
 		'how.s2Desc':
-			'Tägliche Lektionen mischen Wortschatz, Grammatik, Hören und Sprechen — erklärt in deiner Sprache.',
-		'how.s3Title': 'Üben & verfolgen',
+			'Tägliche Lektionen mischen Wortschatz, Grammatik, Hören und Sprechen — in deiner Muttersprache erklärt, mit vietnamesischen Beispielen.',
+		'how.s3Title': 'Üben & Serie aufbauen',
 		'how.s3Desc':
-			'Sprich mit dem KI-Tutor, erreiche deine Tagesziele und baue deine Serie aus.',
+			'Sprich mit dem KI-Tutor, spiele Rollen-Szenarien mit KI-Charakteren, erreiche deine Tagesziele und sieh deine Serie wachsen.',
 
 		'feat.eyebrow': 'Funktionen',
-		'feat.title': 'Alles, was du zum Vietnamesisch-Lernen brauchst',
-		'feat.subtitle': 'Entwickelt rund um die Art, wie Ausländer Vietnamesisch wirklich lernen.',
-		'feat.f1Title': 'CEFR-Lektionen',
+		'feat.title': 'Entwickelt rund um die Art, wie Ausländer Vietnamesisch wirklich lernen.',
+		'feat.subtitle':
+			'Jede Ebene ist für Nicht-Muttersprachler gemacht — von Klassifikatoren bis zu Dialektvarianten und zweisprachiger Grammatik.',
+		'feat.f1Title': 'KI-Tutor, der deinen Bildschirm sieht',
 		'feat.f1Desc':
-			'Von A1 für Anfänger bis C2 für Profis — jede Lektion ist klar einem international anerkannten Niveau zugeordnet.',
-		'feat.f2Title': 'Wortschatz mit Kontext',
+			'Öffne den Assistenten auf jedem Bildschirm und frag alles — er kennt die Lektion, die Aufgabe und sogar deine bisherige Antwort. Gibt Hinweise, ohne die Lösung zu verraten. Fotografiere etwas und entdecke Vietnamesisch in der echten Welt.',
+		'feat.f2Title': 'Lehrplan A1 → C2',
 		'feat.f2Desc':
-			'Jedes Wort mit Aussprache, Wortart, Klassifikatoren (con, cái, chiếc) und regionalen Dialektvarianten.',
+			'Sechs CEFR-Stufen, organisiert in Kursen → Themen → Lektionen. Wähle deine Stufe; der Rest wird freigeschaltet.',
 		'feat.f3Title': 'Zweisprachige Grammatik',
 		'feat.f3Desc':
-			'Jede Grammatikregel wird mit Beispielen in deiner Sprache neben Vietnamesisch erklärt.',
-		'feat.f4Title': 'Interaktive Übungen',
+			'Jede Grammatikregel wird in deiner Sprache erklärt, mit nebenstehenden vietnamesischen Beispielen — nicht nur Übersetzungen.',
+		'feat.f4Title': 'Wortschatz mit echter Tiefe',
 		'feat.f4Desc':
-			'Multiple Choice, Lückentext, Zuordnen, Ordnen, Übersetzen und Hören — alle Fertigkeiten üben.',
-		'feat.f5Title': 'KI-Konversationstutor',
+			'Jedes Wort kommt mit Aussprache, Wortart, Klassifikatoren (con, cái, chiếc), Dialektvarianten und einem Platz in deiner persönlichen Sammlung.',
+		'feat.f5Title': 'Sechs Übungstypen',
 		'feat.f5Desc':
-			'Führe echte Gespräche mit einem KI-Tutor, der sich deinem Niveau anpasst und in Echtzeit korrigiert.',
-		'feat.f6Title': 'Tagesziele & Serien',
+			'Multiple Choice, Lückentext, Zuordnen, Ordnen, Übersetzen, Hören. A1/A2 akzeptiert Tippen ohne Diakritika — Anfänger bleiben nie an Tonzeichen hängen.',
+		'feat.f6Title': 'Rollenspiel-Simulationen',
 		'feat.f6Desc':
-			'Setze persönliche Tagesziele und baue eine Lerngewohnheit auf, die hält.',
+			'Tritt in echte Situationen ein — Märkte, Restaurants, Kliniken, Büros. Die KI spielt die anderen Charaktere, korrigiert jede Nachricht und bewertet dich nach Kriterien am Ende.',
 
 		'pricing.eyebrow': 'Preise',
-		'pricing.title': 'Während der Demo für alle kostenlos',
+		'pricing.title': 'Während der Demo für alle kostenlos.',
 		'pricing.subtitle':
-			'Alle Funktionen freigeschaltet. Bezahlpläne folgen erst nach der Demo-Phase.',
+			'Alle Funktionen freigeschaltet. Bezahlpläne kommen erst nach Ende der Demo-Phase.',
 		'pricing.demoBadge': 'Demo-Phase',
 		'pricing.demoName': 'Demo-Zugang',
 		'pricing.demoPrice': 'Kostenlos',
@@ -331,44 +320,29 @@ export const ui = {
 		'pricing.demoCta': 'Android-APK herunterladen',
 		'pricing.demoNote': 'iOS- und Web-Versionen kommen bald.',
 		'pricing.demoF1': 'Alle CEFR-Stufen (A1–C2)',
-		'pricing.demoF2': 'Unbegrenzter KI-Konversationstutor',
-		'pricing.demoF3': 'Mehrere Dialekte (Standard, Nord, Süd)',
-		'pricing.demoF4': 'KI-generierte Übungssets',
+		'pricing.demoF2': 'Unbegrenzter KI-Tutor + Foto-Entdeckung',
+		'pricing.demoF3': 'Rollenspiel-Simulationen (Märkte, Kliniken, Arbeit…)',
+		'pricing.demoF4': 'KI-generierte personalisierte Übungssets',
 		'pricing.demoF5': 'Tagesziele & Lernserien',
-		'pricing.demoF6': 'Alle 9 Muttersprachen unterstützt',
-
-		'test.eyebrow': 'Lernende',
-		'test.title': 'Geliebt von Ausländern, die Vietnamesisch lernen',
-		'test.q1':
-			'Nach drei Monaten kann ich endlich echte Gespräche mit der Familie meiner vietnamesischen Partnerin führen. Der KI-Tutor ist unglaublich geduldig.',
-		'test.n1': 'Marcus W.',
-		'test.r1': 'Softwareentwickler, Deutschland',
-		'test.q2':
-			'Die Dialektvarianten sind ein Game-Changer. Ich bin in Saigon, und die südliche Aussprache passt zu dem, was ich auf der Straße höre.',
-		'test.n2': 'Sophie L.',
-		'test.r2': 'Designerin, Frankreich',
-		'test.q3':
-			'Ich habe andere Apps probiert, aber LinVNix ist die erste, die Grammatik richtig erklärt. Die zweisprachigen Beispiele machen alles klar.',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': 'Forscher, Japan',
+		'pricing.demoF6': 'Alle 9 Muttersprachen, 4 Dialektvarianten',
 
 		'faq.eyebrow': 'FAQ',
-		'faq.title': 'Häufig gestellte Fragen',
+		'faq.title': 'Häufig gestellte Fragen.',
 		'faq.q1': 'Muss ich schon Vietnamesisch können?',
 		'faq.a1':
-			'Nein. LinVNix beginnt bei CEFR A1 und erklärt alles in deiner Muttersprache. Die ersten Lektionen setzen null Vorkenntnisse voraus.',
+			'Nein. LinVNix beginnt bei CEFR A1 und erklärt alles in deiner Muttersprache. Die ersten Lektionen setzen null Vorkenntnisse voraus, und A1/A2-Übungen akzeptieren Tippen ohne Diakritika.',
 		'faq.q2': 'Ist die Demo wirklich kostenlos?',
 		'faq.a2':
-			'Ja. Während der Demo-Phase sind alle Funktionen für alle freigeschaltet — keine Kreditkarte nötig. Bezahlpläne kommen erst nach Ende der Demo.',
+			'Ja. Während der Demo-Phase sind alle Funktionen für alle freigeschaltet — keine Kreditkarte nötig. Bezahlpläne erst nach Ende der Demo.',
 		'faq.q3': 'Welchen Dialekt unterrichtet ihr?',
 		'faq.a3':
-			'Alle drei: Standard, Nord und Süd. Du wählst einen bevorzugten Dialekt und siehst die Aussprache-Varianten daneben.',
-		'faq.q4': 'Kann ich LinVNix auf dem Handy nutzen?',
+			'Alle vier: Standard, Nord, Mitte und Süd. Du wählst deinen bevorzugten Dialekt, und die App zeigt die Aussprache-Varianten daneben; der Wortschatz trägt regionale Varianten.',
+		'faq.q4': 'Was macht der KI-Tutor genau?',
 		'faq.a4':
-			'Ja. Die Demo wird derzeit als Android-APK angeboten, die du direkt installieren kannst. iOS und Web folgen.',
-		'faq.q5': 'Wie genau ist der KI-Tutor?',
+			'Zwei Dinge. Der KI-Assistent lebt am unteren Rand jedes Bildschirms — er kennt schon die Lektion, Aufgabe oder Inhalte vor dir; frag ihn alles in deiner Sprache, die Antwort kommt kontextuell. Rollenspiel-Simulationen sind anders: wähle ein Szenario, verkörpere einen Charakter und unterhalte dich — die KI spielt alle anderen, korrigiert pro Nachricht und bewertet dich am Ende.',
+		'faq.q5': 'Kann ich LinVNix auf dem Handy nutzen?',
 		'faq.a5':
-			'Die KI wird mit vietnamesischen Sprachdaten trainiert und von muttersprachlichen Lehrern überwacht — stark bei Konversation, Aussprache-Feedback und Grammatik auf jedem CEFR-Niveau.',
+			'Ja. Die Demo wird derzeit als Android-APK angeboten, die du direkt installieren kannst. iOS und Web folgen.',
 
 		'cta.title': 'Bereit, Vietnamesisch zu sprechen?',
 		'cta.subtitle': 'Installiere die Demo auf deinem Android-Gerät und lerne heute los.',
@@ -395,7 +369,7 @@ export const ui = {
 		'nav.howItWorks': 'Cómo funciona',
 		'nav.faq': 'FAQ',
 		'nav.signIn': 'Iniciar sesión',
-		'nav.getStarted': 'Descargar demo',
+		'nav.getStarted': 'Descargar',
 
 		'theme.light': 'Cambiar a modo claro',
 		'theme.dark': 'Cambiar a modo oscuro',
@@ -404,104 +378,94 @@ export const ui = {
 		'hero.title1': 'Aprende vietnamita,',
 		'hero.title2': 'de la forma inteligente.',
 		'hero.subtitle':
-			'LinVNix combina lecciones estructuradas CEFR con IA multimodal para que desarrolles fluidez real en vietnamita — vocabulario, gramática, pronunciación y conversación.',
+			'LinVNix une un plan CEFR (A1–C2) con IA multimodal: vocabulario en contexto real, gramática bilingüe, seis tipos de ejercicios, un tutor IA que ve tu pantalla y simulaciones de roleplay con personajes IA.',
 		'hero.ctaPrimary': 'Descargar demo',
 		'hero.ctaSecondary': 'Cómo funciona',
 
-		'stats.lessons': 'Lecciones estructuradas',
-		'stats.levels': 'Niveles CEFR cubiertos',
-		'stats.languages': 'Idiomas nativos soportados',
-		'stats.dialects': 'Dialectos vietnamitas',
+		'stats.lessons': 'Lecciones',
+		'stats.lessonsNote': 'audio · texto · interactivo',
+		'stats.levels': 'Niveles CEFR',
+		'stats.levelsNote': 'A1 → C2, seis niveles',
+		'stats.languages': 'Idiomas nativos',
+		'stats.languagesNote': 'puentes bilingües',
+		'stats.dialects': 'Dialectos',
+		'stats.dialectsNote': 'Estándar · Norte · Centro · Sur',
 
 		'how.eyebrow': 'Cómo funciona',
-		'how.title': 'Habla vietnamita en tres pasos',
+		'how.title': 'De la primera palabra a las conversaciones reales — en tres pasos.',
 		'how.subtitle':
-			'Desde la primera palabra hasta la conversación fluida, LinVNix te guía en cada paso.',
+			'LinVNix estructura cada paso para que nunca dudes qué hacer a continuación.',
 		'how.s1Title': 'Elige tu nivel',
 		'how.s1Desc':
-			'Haz una prueba breve de nivel o elige tu nivel CEFR de A1 a C2.',
+			'Haz una prueba rápida o elige tu nivel CEFR de A1 a C2. Los cursos por debajo de tu nivel se marcan completados.',
 		'how.s2Title': 'Aprende con IA',
 		'how.s2Desc':
-			'Lecciones diarias que combinan vocabulario, gramática, escucha y habla — explicadas en tu idioma.',
-		'how.s3Title': 'Practica y mide',
+			'Lecciones diarias que mezclan vocabulario, gramática, escucha y habla — explicadas en tu idioma nativo con ejemplos en vietnamita.',
+		'how.s3Title': 'Practica y construye tu racha',
 		'how.s3Desc':
-			'Habla con el tutor IA, cumple tus metas diarias y haz crecer tu racha.',
+			'Habla con el tutor IA, entra en simulaciones de roleplay con personajes IA, cumple tus metas diarias y haz crecer tu racha.',
 
 		'feat.eyebrow': 'Funciones',
-		'feat.title': 'Todo lo que necesitas para aprender vietnamita',
-		'feat.subtitle': 'Diseñado en torno a cómo los extranjeros realmente aprenden vietnamita.',
-		'feat.f1Title': 'Lecciones CEFR',
+		'feat.title': 'Pensado para cómo los extranjeros aprenden vietnamita en realidad.',
+		'feat.subtitle':
+			'Cada capa está hecha para hablantes no nativos — de los clasificadores a las variantes dialectales y la gramática bilingüe.',
+		'feat.f1Title': 'Tutor IA que ve tu pantalla',
 		'feat.f1Desc':
-			'De principiante A1 a maestría C2, cada lección está mapeada a un nivel internacionalmente reconocido.',
-		'feat.f2Title': 'Vocabulario con contexto',
+			'Abre el asistente en cualquier pantalla y pregunta lo que quieras — ya conoce la lección, el ejercicio y hasta tu respuesta escrita. Da pistas sin dar la solución. Saca una foto para descubrir vietnamita en la vida real.',
+		'feat.f2Title': 'Plan A1 → C2',
 		'feat.f2Desc':
-			'Cada palabra con pronunciación, categoría gramatical, clasificadores (con, cái, chiếc) y variantes dialectales regionales.',
+			'Seis niveles CEFR, organizados en cursos → temas → lecciones. Empieza donde estás; el resto se desbloquea sobre la marcha.',
 		'feat.f3Title': 'Gramática bilingüe',
 		'feat.f3Desc':
-			'Cada regla se explica con ejemplos en tu idioma junto al vietnamita.',
-		'feat.f4Title': 'Ejercicios interactivos',
+			'Cada regla se explica en tu idioma con ejemplos vietnamitas al lado — nunca solo traducciones.',
+		'feat.f4Title': 'Vocabulario con profundidad real',
 		'feat.f4Desc':
-			'Opción múltiple, completar espacios, emparejar, ordenar, traducir y escuchar — practica cada destreza.',
-		'feat.f5Title': 'Tutor IA de conversación',
+			'Cada palabra trae pronunciación, categoría gramatical, clasificadores (con, cái, chiếc), variantes dialectales regionales y un sitio en tu colección personal.',
+		'feat.f5Title': 'Seis tipos de ejercicios',
 		'feat.f5Desc':
-			'Ten conversaciones reales con un tutor IA que se adapta a tu nivel y te corrige en tiempo real.',
-		'feat.f6Title': 'Metas diarias y rachas',
+			'Opción múltiple, rellenar huecos, emparejar, ordenar, traducir, escuchar. A1/A2 acepta escribir sin diacríticos — los principiantes no se atascan con tonos.',
+		'feat.f6Title': 'Simulaciones de roleplay',
 		'feat.f6Desc':
-			'Define metas diarias personales y construye un hábito de aprendizaje que perdura.',
+			'Entra en situaciones reales — mercados, restaurantes, clínicas, oficinas. La IA interpreta a los demás personajes, te corrige por mensaje y te puntúa al final.',
 
 		'pricing.eyebrow': 'Precios',
-		'pricing.title': 'Gratis para todos durante la demo',
+		'pricing.title': 'Gratis para todos durante la demo.',
 		'pricing.subtitle':
-			'Todas las funciones desbloqueadas. Los planes de pago llegarán al terminar la fase demo.',
+			'Todas las funciones desbloqueadas. Los planes de pago solo llegan al terminar la fase demo.',
 		'pricing.demoBadge': 'Fase demo',
 		'pricing.demoName': 'Acceso demo',
 		'pricing.demoPrice': 'Gratis',
 		'pricing.demoDesc':
-			'Prueba todas las funciones de LinVNix en acceso anticipado. Sin tarjeta y sin límite de tiempo durante la demo.',
+			'Prueba todas las funciones de LinVNix en acceso anticipado. Sin tarjeta y sin límite de tiempo.',
 		'pricing.demoCta': 'Descargar APK Android',
 		'pricing.demoNote': 'Versiones iOS y web próximamente.',
 		'pricing.demoF1': 'Todos los niveles CEFR (A1–C2)',
-		'pricing.demoF2': 'Tutor IA de conversación ilimitado',
-		'pricing.demoF3': 'Soporte multidialectal (estándar, norte, sur)',
-		'pricing.demoF4': 'Sets de ejercicios generados por IA',
-		'pricing.demoF5': 'Metas diarias y rachas de aprendizaje',
-		'pricing.demoF6': 'Compatible con los 9 idiomas nativos',
-
-		'test.eyebrow': 'Estudiantes',
-		'test.title': 'Amado por extranjeros que aprenden vietnamita',
-		'test.q1':
-			'Tras tres meses por fin puedo conversar con la familia de mi pareja vietnamita. El tutor IA es increíblemente paciente.',
-		'test.n1': 'Marcus W.',
-		'test.r1': 'Ingeniero de software, Alemania',
-		'test.q2':
-			'Las variantes dialectales son un acierto. Vivo en Saigón y la pronunciación del sur coincide con lo que oigo en la calle.',
-		'test.n2': 'Sophie L.',
-		'test.r2': 'Diseñadora, Francia',
-		'test.q3':
-			'Probé otras apps, pero LinVNix es la primera que explica la gramática bien. Los ejemplos bilingües lo hacen todo claro.',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': 'Investigador, Japón',
+		'pricing.demoF2': 'Tutor IA + descubrimiento por foto ilimitado',
+		'pricing.demoF3': 'Simulaciones de roleplay (mercados, clínicas, trabajo…)',
+		'pricing.demoF4': 'Ejercicios personalizados generados por IA',
+		'pricing.demoF5': 'Metas diarias y rachas',
+		'pricing.demoF6': '9 idiomas nativos, 4 variantes dialectales',
 
 		'faq.eyebrow': 'FAQ',
-		'faq.title': 'Preguntas frecuentes',
+		'faq.title': 'Preguntas frecuentes.',
 		'faq.q1': '¿Necesito saber algo de vietnamita?',
 		'faq.a1':
-			'No. LinVNix empieza en CEFR A1 y explica todo en tu idioma nativo. Las primeras lecciones asumen cero conocimiento.',
+			'No. LinVNix empieza en CEFR A1 y explica todo en tu idioma. Las primeras lecciones asumen cero conocimiento, y los ejercicios A1/A2 aceptan escritura sin diacríticos.',
 		'faq.q2': '¿La demo es realmente gratis?',
 		'faq.a2':
-			'Sí. Durante la fase demo todas las funciones están desbloqueadas para todos — sin tarjeta de crédito. Los planes de pago solo llegarán al terminar la fase demo.',
+			'Sí. Durante la fase demo todas las funciones están desbloqueadas — sin tarjeta. Los planes de pago solo llegan al terminar la demo.',
 		'faq.q3': '¿Qué dialecto vietnamita enseñan?',
 		'faq.a3':
-			'Los tres: estándar, norte y sur. Puedes elegir el preferido y ver las variantes de pronunciación al lado.',
-		'faq.q4': '¿Puedo usar LinVNix en el móvil?',
+			'Los cuatro: estándar, norte, centro y sur. Eliges tu preferido y la app muestra las variantes de pronunciación al lado; el vocabulario lleva variantes regionales.',
+		'faq.q4': '¿Qué hace el tutor IA exactamente?',
 		'faq.a4':
-			'Sí. La demo se distribuye actualmente como un APK Android que puedes instalar directamente. Las versiones iOS y web están en camino.',
-		'faq.q5': '¿Qué tan preciso es el tutor IA?',
+			'Dos cosas. El asistente IA vive al pie de cada pantalla — ya conoce la lección, el ejercicio o lo que estás viendo; pregunta en tu idioma y responde en contexto. Las simulaciones de roleplay son distintas: eliges un escenario, encarnas un personaje y conversas — la IA interpreta a los demás, corrige por mensaje y puntúa al final.',
+		'faq.q5': '¿Puedo usar LinVNix en el móvil?',
 		'faq.a5':
-			'La IA está entrenada con datos del idioma vietnamita y supervisada por profesores nativos — fuerte en conversación, retroalimentación de pronunciación y corrección gramatical en cada nivel CEFR.',
+			'Sí. La demo se distribuye actualmente como un APK Android. Las versiones iOS y web están en camino.',
 
 		'cta.title': '¿Listo para hablar vietnamita?',
-		'cta.subtitle': 'Instala la demo en tu dispositivo Android y empieza a aprender hoy.',
+		'cta.subtitle': 'Instala la demo en tu Android y empieza hoy.',
 		'cta.primary': 'Descargar demo',
 		'cta.secondary': 'Contáctanos',
 
@@ -525,7 +489,7 @@ export const ui = {
 		'nav.howItWorks': 'Fonctionnement',
 		'nav.faq': 'FAQ',
 		'nav.signIn': 'Connexion',
-		'nav.getStarted': 'Télécharger la démo',
+		'nav.getStarted': 'Télécharger',
 
 		'theme.light': 'Passer en mode clair',
 		'theme.dark': 'Passer en mode sombre',
@@ -534,104 +498,94 @@ export const ui = {
 		'hero.title1': 'Apprenez le vietnamien,',
 		'hero.title2': 'intelligemment.',
 		'hero.subtitle':
-			'LinVNix associe des leçons structurées CEFR à une IA multimodale pour vous faire atteindre une vraie aisance en vietnamien — vocabulaire, grammaire, prononciation et conversation.',
+			'LinVNix associe un programme CEFR (A1–C2) à une IA multimodale : vocabulaire en contexte réel, grammaire bilingue, six types d’exercices, un tuteur IA qui voit votre écran et des simulations de jeu de rôle avec des personnages IA.',
 		'hero.ctaPrimary': 'Télécharger la démo',
 		'hero.ctaSecondary': 'Comment ça marche',
 
-		'stats.lessons': 'Leçons structurées',
-		'stats.levels': 'Niveaux CEFR couverts',
-		'stats.languages': 'Langues natives prises en charge',
-		'stats.dialects': 'Dialectes vietnamiens',
+		'stats.lessons': 'Leçons',
+		'stats.lessonsNote': 'audio · texte · interactif',
+		'stats.levels': 'Niveaux CEFR',
+		'stats.levelsNote': 'A1 → C2, six niveaux',
+		'stats.languages': 'Langues natives',
+		'stats.languagesNote': 'ponts bilingues',
+		'stats.dialects': 'Dialectes',
+		'stats.dialectsNote': 'Standard · Nord · Centre · Sud',
 
 		'how.eyebrow': 'Fonctionnement',
-		'how.title': 'Parlez vietnamien en trois étapes',
+		'how.title': 'Du premier mot aux vraies conversations — en trois étapes.',
 		'how.subtitle':
-			'Du premier mot à la conversation fluide, LinVNix vous guide à chaque étape.',
+			'LinVNix structure chaque étape pour que vous ne vous demandiez jamais quoi faire ensuite.',
 		'how.s1Title': 'Choisissez votre niveau',
 		'how.s1Desc':
-			'Faites un test rapide ou choisissez votre niveau CEFR de A1 à C2.',
+			'Faites un test rapide ou choisissez votre niveau CEFR de A1 à C2. Les cours en dessous de votre niveau sont marqués terminés.',
 		'how.s2Title': 'Apprenez avec l’IA',
 		'how.s2Desc':
-			'Des leçons quotidiennes mêlant vocabulaire, grammaire, écoute et expression — expliquées dans votre langue.',
-		'how.s3Title': 'Pratiquez & suivez',
+			'Des leçons quotidiennes mêlant vocabulaire, grammaire, écoute et expression — expliquées dans votre langue, avec des exemples vietnamiens.',
+		'how.s3Title': 'Pratiquez & gardez la série',
 		'how.s3Desc':
-			'Parlez au tuteur IA, atteignez vos objectifs quotidiens et faites grandir votre série.',
+			'Discutez avec le tuteur IA, entrez dans des simulations de jeu de rôle avec des personnages IA, atteignez vos objectifs quotidiens et faites grandir votre série.',
 
 		'feat.eyebrow': 'Fonctionnalités',
-		'feat.title': 'Tout pour apprendre le vietnamien',
-		'feat.subtitle': 'Conçu autour de la façon dont les étrangers apprennent vraiment le vietnamien.',
-		'feat.f1Title': 'Leçons CEFR',
+		'feat.title': 'Conçu pour la façon dont les étrangers apprennent vraiment le vietnamien.',
+		'feat.subtitle':
+			'Chaque couche est pensée pour les non-natifs — des classificateurs aux variantes dialectales et à la grammaire bilingue.',
+		'feat.f1Title': 'Tuteur IA qui voit votre écran',
 		'feat.f1Desc':
-			'De A1 débutant à C2 maîtrise, chaque leçon correspond à un niveau internationalement reconnu.',
-		'feat.f2Title': 'Vocabulaire en contexte',
+			'Ouvrez l’assistant sur n’importe quel écran et demandez ce que vous voulez — il connaît la leçon, l’exercice et même votre réponse en cours. Donne des indices sans révéler la solution. Prenez une photo pour découvrir le vietnamien dans la vie réelle.',
+		'feat.f2Title': 'Parcours A1 → C2',
 		'feat.f2Desc':
-			'Chaque mot avec prononciation, catégorie grammaticale, classificateurs (con, cái, chiếc) et variantes dialectales.',
+			'Six niveaux CEFR, organisés en cours → thèmes → leçons. Commencez où vous êtes ; le reste se débloque au fur et à mesure.',
 		'feat.f3Title': 'Grammaire bilingue',
 		'feat.f3Desc':
-			'Chaque règle est expliquée avec des exemples dans votre langue à côté du vietnamien.',
-		'feat.f4Title': 'Exercices interactifs',
+			'Chaque règle est expliquée dans votre langue, avec des exemples vietnamiens côte à côte — jamais de simples traductions.',
+		'feat.f4Title': 'Vocabulaire avec profondeur',
 		'feat.f4Desc':
-			'QCM, textes à trous, appariements, mises en ordre, traductions et écoute — toutes les compétences.',
-		'feat.f5Title': 'Tuteur IA conversationnel',
+			'Chaque mot vient avec prononciation, catégorie, classificateurs (con, cái, chiếc), variantes dialectales et une place dans votre collection personnelle.',
+		'feat.f5Title': 'Six types d’exercices',
 		'feat.f5Desc':
-			'Discutez avec un tuteur IA qui s’adapte à votre niveau et vous corrige en temps réel.',
-		'feat.f6Title': 'Objectifs quotidiens & séries',
+			'QCM, textes à trous, appariements, mises en ordre, traductions, écoute. A1/A2 accepte la saisie sans diacritiques — les débutants ne se bloquent pas sur les tons.',
+		'feat.f6Title': 'Simulations de jeu de rôle',
 		'feat.f6Desc':
-			'Fixez des objectifs personnels et bâtissez une habitude d’apprentissage durable.',
+			'Entrez dans des situations réelles — marchés, restaurants, cliniques, bureaux. L’IA joue les autres personnages, corrige chaque message et vous note selon des critères à la fin.',
 
 		'pricing.eyebrow': 'Tarifs',
-		'pricing.title': 'Gratuit pour tous pendant la démo',
+		'pricing.title': 'Gratuit pour tous pendant la démo.',
 		'pricing.subtitle':
-			'Toutes les fonctionnalités débloquées. Les forfaits payants arriveront après la phase de démo.',
+			'Toutes les fonctionnalités débloquées. Les forfaits payants n’arrivent qu’après la phase de démo.',
 		'pricing.demoBadge': 'Phase de démo',
 		'pricing.demoName': 'Accès démo',
 		'pricing.demoPrice': 'Gratuit',
 		'pricing.demoDesc':
-			'Essayez toutes les fonctionnalités de LinVNix pendant l’accès anticipé. Sans carte ni limite de temps durant la démo.',
+			'Essayez toutes les fonctionnalités de LinVNix en accès anticipé. Sans carte ni limite de temps.',
 		'pricing.demoCta': 'Télécharger l’APK Android',
-		'pricing.demoNote': 'Versions iOS et web bientôt disponibles.',
+		'pricing.demoNote': 'Versions iOS et web bientôt.',
 		'pricing.demoF1': 'Tous les niveaux CEFR (A1–C2)',
-		'pricing.demoF2': 'Tuteur IA conversationnel illimité',
-		'pricing.demoF3': 'Multidialecte (standard, nord, sud)',
-		'pricing.demoF4': 'Séries d’exercices générées par l’IA',
-		'pricing.demoF5': 'Objectifs quotidiens & séries d’apprentissage',
-		'pricing.demoF6': 'Compatible avec les 9 langues natives',
-
-		'test.eyebrow': 'Apprenants',
-		'test.title': 'Adoré des étrangers qui apprennent le vietnamien',
-		'test.q1':
-			'Au bout de trois mois, je peux enfin discuter avec la famille de ma compagne vietnamienne. Le tuteur IA est très patient.',
-		'test.n1': 'Marcus W.',
-		'test.r1': 'Ingénieur logiciel, Allemagne',
-		'test.q2':
-			'Les variantes dialectales changent tout. Je vis à Saïgon et la prononciation du Sud correspond à ce que j’entends dans la rue.',
-		'test.n2': 'Sophie L.',
-		'test.r2': 'Designeuse, France',
-		'test.q3':
-			'J’ai essayé d’autres apps, mais LinVNix est la première à expliquer la grammaire correctement. Les exemples bilingues éclaircissent tout.',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': 'Chercheur, Japon',
+		'pricing.demoF2': 'Tuteur IA + découverte photo illimités',
+		'pricing.demoF3': 'Simulations de jeu de rôle (marchés, cliniques, travail…)',
+		'pricing.demoF4': 'Séries d’exercices personnalisées par IA',
+		'pricing.demoF5': 'Objectifs quotidiens & séries',
+		'pricing.demoF6': '9 langues natives, 4 variantes dialectales',
 
 		'faq.eyebrow': 'FAQ',
-		'faq.title': 'Questions fréquentes',
-		'faq.q1': 'Faut-il déjà connaître le vietnamien ?',
+		'faq.title': 'Questions fréquentes.',
+		'faq.q1': 'Faut-il connaître le vietnamien ?',
 		'faq.a1':
-			'Non. LinVNix démarre au niveau CEFR A1 et explique tout dans votre langue maternelle. Les premières leçons supposent zéro connaissance.',
+			'Non. LinVNix démarre au niveau CEFR A1 et explique tout dans votre langue. Les premières leçons supposent zéro connaissance, et les exercices A1/A2 acceptent la saisie sans diacritiques.',
 		'faq.q2': 'La démo est-elle vraiment gratuite ?',
 		'faq.a2':
-			'Oui. Pendant la phase de démo, toutes les fonctionnalités sont débloquées pour tout le monde — sans carte bancaire. Les forfaits payants n’arriveront qu’à la fin de la démo.',
+			'Oui. Pendant la phase de démo, toutes les fonctionnalités sont débloquées — sans carte. Les forfaits payants arrivent après la démo.',
 		'faq.q3': 'Quel dialecte enseignez-vous ?',
 		'faq.a3':
-			'Les trois : standard, Nord et Sud. Vous choisissez votre dialecte préféré et voyez les variantes de prononciation à côté.',
-		'faq.q4': 'Puis-je utiliser LinVNix sur mobile ?',
+			'Les quatre : standard, Nord, Centre et Sud. Vous choisissez votre dialecte préféré, l’app affiche les variantes de prononciation à côté ; le vocabulaire porte les variantes régionales.',
+		'faq.q4': 'Que fait exactement le tuteur IA ?',
 		'faq.a4':
-			'Oui. La démo est actuellement disponible sous forme d’APK Android à installer directement. Les versions iOS et web arrivent.',
-		'faq.q5': 'Quelle est la précision du tuteur IA ?',
+			'Deux choses. L’assistant IA vit en bas de chaque écran — il connaît déjà la leçon, l’exercice ou ce que vous regardez ; demandez en votre langue, la réponse est contextuelle. Les simulations de jeu de rôle sont différentes : choisissez un scénario, incarnez un personnage et conversez — l’IA joue tous les autres, corrige chaque message et vous note à la fin.',
+		'faq.q5': 'Puis-je utiliser LinVNix sur mobile ?',
 		'faq.a5':
-			'L’IA est entraînée sur des données linguistiques vietnamiennes et supervisée par des enseignants natifs — forte en conversation, retour de prononciation et correction grammaticale à chaque niveau CEFR.',
+			'Oui. La démo est disponible sous forme d’APK Android à installer directement. iOS et web arrivent.',
 
 		'cta.title': 'Prêt à parler vietnamien ?',
-		'cta.subtitle': 'Installez la démo sur votre appareil Android et commencez à apprendre dès aujourd’hui.',
+		'cta.subtitle': 'Installez la démo sur votre Android et commencez aujourd’hui.',
 		'cta.primary': 'Télécharger la démo',
 		'cta.secondary': 'Nous contacter',
 
@@ -655,7 +609,7 @@ export const ui = {
 		'nav.howItWorks': '使い方',
 		'nav.faq': 'FAQ',
 		'nav.signIn': 'ログイン',
-		'nav.getStarted': 'デモをダウンロード',
+		'nav.getStarted': 'ダウンロード',
 
 		'theme.light': 'ライトモードに切り替え',
 		'theme.dark': 'ダークモードに切り替え',
@@ -664,91 +618,91 @@ export const ui = {
 		'hero.title1': 'ベトナム語を、',
 		'hero.title2': '賢く学ぼう。',
 		'hero.subtitle':
-			'LinVNixはCEFRに基づく体系的なレッスンとマルチモーダルAIを組み合わせ、語彙・文法・発音・会話のすべてで本当のベトナム語力を育てます。',
+			'LinVNixはCEFR準拠カリキュラム（A1–C2）とマルチモーダルAIを組み合わせます。文脈付き語彙、二言語文法、6種の演習、画面を理解するAIチューター、AIキャラクターとのロールプレイ。',
 		'hero.ctaPrimary': 'デモをダウンロード',
 		'hero.ctaSecondary': '使い方を見る',
 
-		'stats.lessons': '体系的なレッスン',
-		'stats.levels': '対応CEFRレベル',
-		'stats.languages': '対応する母国語',
-		'stats.dialects': 'ベトナム語の方言',
+		'stats.lessons': 'レッスン',
+		'stats.lessonsNote': '音声・テキスト・インタラクティブ',
+		'stats.levels': 'CEFRレベル',
+		'stats.levelsNote': 'A1 → C2、6段階',
+		'stats.languages': '母国語',
+		'stats.languagesNote': '二言語ブリッジ',
+		'stats.dialects': '方言',
+		'stats.dialectsNote': '標準 · 北 · 中 · 南',
 
 		'how.eyebrow': '使い方',
-		'how.title': '3ステップでベトナム語を話そう',
-		'how.subtitle': '最初の一語から流暢な会話まで、LinVNixが一歩ずつ伴走します。',
+		'how.title': '最初の一語から本物の会話まで——わずか3ステップ。',
+		'how.subtitle':
+			'LinVNixは各ステップを構造化し、次に何をすればよいか迷わせません。',
 		'how.s1Title': 'レベルを選ぶ',
-		'how.s1Desc': '短い診断テストを受けるか、A1〜C2のCEFRレベルを選びます。',
+		'how.s1Desc':
+			'短い診断テストを受けるか、A1〜C2のCEFRレベルを選びます。あなたのレベル未満のコースは自動で完了マークされます。',
 		'how.s2Title': 'AIと学ぶ',
-		'how.s2Desc': '毎日のレッスンが語彙・文法・聞く・話すを組み合わせ、あなたの言語で解説します。',
-		'how.s3Title': '練習して記録',
-		'how.s3Desc': 'AIチューターと話し、毎日の目標を達成し、ストリークを伸ばしましょう。',
+		'how.s2Desc':
+			'毎日のレッスンが語彙・文法・聞く・話すを組み合わせ、あなたの母国語で解説し、ベトナム語の例文を示します。',
+		'how.s3Title': '練習してストリーク',
+		'how.s3Desc':
+			'AIチューターと会話し、AIキャラとのロールプレイに入り、毎日の目標を達成し、ストリークを伸ばしましょう。',
 
 		'feat.eyebrow': '機能',
-		'feat.title': 'ベトナム語学習に必要なすべて',
-		'feat.subtitle': '外国人が実際にベトナム語を習得する方法に合わせて設計。',
-		'feat.f1Title': 'CEFR体系レッスン',
-		'feat.f1Desc': 'A1の入門からC2の熟達まで、各レッスンは国際的に認められた水準にマッピング。',
-		'feat.f2Title': '文脈付き語彙',
-		'feat.f2Desc': '各単語に発音・品詞・類別詞（con, cái, chiếc）・地域方言の変種を付属。',
-		'feat.f3Title': 'バイリンガル文法',
-		'feat.f3Desc': '各文法ルールをベトナム語と並べてあなたの言語で例示。',
-		'feat.f4Title': 'インタラクティブ練習',
-		'feat.f4Desc': '選択肢・穴埋め・マッチング・並び替え・翻訳・聞き取り—あらゆる技能を練習。',
-		'feat.f5Title': 'AI会話チューター',
-		'feat.f5Desc': 'レベルに合わせて適応し、リアルタイムに訂正してくれるAIチューターと実際に会話。',
-		'feat.f6Title': '毎日の目標とストリーク',
-		'feat.f6Desc': '自分の目標を設定し、続く学習習慣を作りましょう。',
+		'feat.title': '外国人が実際にベトナム語を習得する方法に合わせて設計。',
+		'feat.subtitle':
+			'すべての層を非ネイティブのために設計——類別詞から方言バリアント、二言語文法まで。',
+		'feat.f1Title': '画面を理解するAIチューター',
+		'feat.f1Desc':
+			'どの画面でもアシスタントを開いて何でも質問してください——AIはあなたが読んでいるレッスン、解いている問題、入力中の回答まで把握済み。答えを与えずヒントだけ。写真を撮れば日常のベトナム語を発見できます。',
+		'feat.f2Title': 'A1 → C2 カリキュラム',
+		'feat.f2Desc':
+			'CEFRの6段階、コース→トピック→レッスンの階層。自分の場所から始め、進むにつれて開放されます。',
+		'feat.f3Title': '二言語文法',
+		'feat.f3Desc':
+			'すべての文法ルールを母国語で説明し、ベトナム語の例文を並置——単なる翻訳ではありません。',
+		'feat.f4Title': '深さのある語彙',
+		'feat.f4Desc':
+			'各単語に発音・品詞・類別詞（con, cái, chiếc）・地域方言の変種、そしてあなたの個人コレクション欄。',
+		'feat.f5Title': '6種の演習',
+		'feat.f5Desc':
+			'選択肢・穴埋め・マッチング・並び替え・翻訳・聞き取り。A1/A2は無声調入力も許容し、初学者は声調キーで詰まりません。',
+		'feat.f6Title': 'ロールプレイ・シミュレーション',
+		'feat.f6Desc':
+			'現実の場面に入り込もう——市場、レストラン、診療所、オフィス。AIが他の登場人物を演じ、メッセージごとに訂正し、終了時にルーブリックで採点します。',
 
 		'pricing.eyebrow': '料金',
-		'pricing.title': 'デモ期間中はみんな無料',
+		'pricing.title': 'デモ期間中はみんな無料。',
 		'pricing.subtitle':
-			'全機能を開放しています。有料プランはデモ期間の終了後に導入予定です。',
+			'全機能を開放しています。有料プランはデモ期間の終了後に導入予定。',
 		'pricing.demoBadge': 'デモフェーズ',
 		'pricing.demoName': 'デモアクセス',
 		'pricing.demoPrice': '無料',
 		'pricing.demoDesc':
-			'アーリーアクセス中、LinVNixの全機能を試せます。クレジットカード不要、デモ期間中の時間制限もありません。',
+			'アーリーアクセス中、LinVNixの全機能を試せます。カード不要、デモ期間中の時間制限もありません。',
 		'pricing.demoCta': 'Android APK をダウンロード',
 		'pricing.demoNote': 'iOS版とWeb版は近日公開予定。',
 		'pricing.demoF1': '全CEFRレベル（A1〜C2）',
-		'pricing.demoF2': 'AI会話チューター 無制限',
-		'pricing.demoF3': '方言サポート（標準・北部・南部）',
-		'pricing.demoF4': 'AI生成のカスタム問題セット',
-		'pricing.demoF5': '毎日の目標 & 学習ストリーク',
-		'pricing.demoF6': '9言語の母国語に対応',
-
-		'test.eyebrow': '学習者の声',
-		'test.title': 'ベトナム語を学ぶ外国人に愛されています',
-		'test.q1':
-			'3ヶ月でベトナム人パートナーの家族と本当に会話できるようになりました。AIチューターはとても忍耐強いです。',
-		'test.n1': 'Marcus W.',
-		'test.r1': 'ソフトウェアエンジニア（ドイツ）',
-		'test.q2':
-			'方言バリアントが革命的。サイゴン在住で、南部の発音は街で聞くものと一致します。',
-		'test.n2': 'Sophie L.',
-		'test.r2': 'デザイナー（フランス）',
-		'test.q3':
-			'他のアプリも試しましたが、LinVNixは文法をきちんと説明してくれる初めてのアプリ。バイリンガル例文で理解が深まります。',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': '研究者（日本）',
+		'pricing.demoF2': 'AIチューター + 画像探索 無制限',
+		'pricing.demoF3': 'ロールプレイ（市場・診療所・職場…）',
+		'pricing.demoF4': 'AI生成のパーソナル演習セット',
+		'pricing.demoF5': '毎日の目標 & ストリーク',
+		'pricing.demoF6': '9言語の母国語、4つの方言バリアント',
 
 		'faq.eyebrow': 'FAQ',
-		'faq.title': 'よくあるご質問',
-		'faq.q1': '事前にベトナム語の知識は必要ですか？',
+		'faq.title': 'よくあるご質問。',
+		'faq.q1': '事前のベトナム語知識は必要ですか？',
 		'faq.a1':
-			'いいえ。LinVNixはCEFR A1から始まり、あなたの母国語ですべて解説します。最初のレッスンはゼロ知識を前提としています。',
+			'いいえ。LinVNixはCEFR A1から始まり、すべて母国語で説明します。最初のレッスンはゼロ知識を前提とし、A1/A2の演習は無声調入力も受け付けます。',
 		'faq.q2': 'デモは本当に無料ですか？',
 		'faq.a2':
-			'はい。デモ期間中はすべての機能が全員に開放されており、クレジットカードも不要です。有料プランはデモ終了後に導入されます。',
-		'faq.q3': 'どのベトナム語方言を教えますか？',
+			'はい。デモ期間中はすべての機能が全員に開放され、カードも不要です。有料プランはデモ終了後に導入されます。',
+		'faq.q3': 'どの方言を教えますか？',
 		'faq.a3':
-			'標準、北部、南部の3つすべてです。優先方言を選ぶと、発音の異形が併記されます。',
-		'faq.q4': 'スマホで使えますか？',
+			'4つすべて：標準、北部、中部、南部。希望の方言を選ぶと発音の異形が併記され、語彙は地域バリアントを持ちます。',
+		'faq.q4': 'AIチューターは具体的に何をしますか？',
 		'faq.a4':
-			'はい。現在デモはAndroid向けAPKとして提供しており、直接インストールできます。iOS版とWeb版は準備中です。',
-		'faq.q5': 'AIチューターの精度は？',
+			'2つあります。AIアシスタントは各画面の最下部に常駐し——レッスン、演習、表示中の内容を把握済み；母国語で質問すれば文脈に沿って答えます。ロールプレイは別物：シナリオを選び、人物を演じ、会話します——AIは他のキャラを演じ、メッセージごとに訂正し、終了時に採点します。',
+		'faq.q5': 'スマホで使えますか？',
 		'faq.a5':
-			'AIはベトナム語データで学習され、ネイティブ教師に監修されています。会話・発音フィードバック・文法訂正のすべてのCEFR水準で強みを発揮します。',
+			'はい。現在デモはAndroid向けAPKとして提供しており、直接インストールできます。iOS版とWeb版は準備中です。',
 
 		'cta.title': 'ベトナム語を話してみませんか？',
 		'cta.subtitle': 'Androidデバイスにデモをインストールして、今日から学び始めましょう。',
@@ -775,7 +729,7 @@ export const ui = {
 		'nav.howItWorks': '사용 방법',
 		'nav.faq': 'FAQ',
 		'nav.signIn': '로그인',
-		'nav.getStarted': '데모 다운로드',
+		'nav.getStarted': '다운로드',
 
 		'theme.light': '라이트 모드로 전환',
 		'theme.dark': '다크 모드로 전환',
@@ -784,91 +738,90 @@ export const ui = {
 		'hero.title1': '베트남어를,',
 		'hero.title2': '똑똑하게 배우세요.',
 		'hero.subtitle':
-			'LinVNix는 CEFR 기반 체계적 수업과 멀티모달 AI를 결합해 어휘, 문법, 발음, 회화까지 진짜 베트남어 실력을 키워줍니다.',
+			'LinVNix는 CEFR 기반 커리큘럼(A1–C2)에 멀티모달 AI를 결합합니다. 맥락 있는 어휘, 이중 언어 문법, 6가지 연습, 화면을 이해하는 AI 튜터, AI 캐릭터와의 롤플레이.',
 		'hero.ctaPrimary': '데모 다운로드',
 		'hero.ctaSecondary': '사용 방법 보기',
 
-		'stats.lessons': '체계적인 수업',
-		'stats.levels': '지원하는 CEFR 레벨',
-		'stats.languages': '지원하는 모국어',
-		'stats.dialects': '베트남어 방언',
+		'stats.lessons': '수업',
+		'stats.lessonsNote': '오디오 · 텍스트 · 인터랙티브',
+		'stats.levels': 'CEFR 레벨',
+		'stats.levelsNote': 'A1 → C2, 6단계',
+		'stats.languages': '모국어',
+		'stats.languagesNote': '이중언어 브릿지',
+		'stats.dialects': '방언',
+		'stats.dialectsNote': '표준 · 북부 · 중부 · 남부',
 
 		'how.eyebrow': '사용 방법',
-		'how.title': '세 단계로 베트남어 시작',
-		'how.subtitle': '첫 단어부터 유창한 대화까지, LinVNix가 매 단계 함께합니다.',
+		'how.title': '첫 단어부터 실전 회화까지 — 단 세 단계.',
+		'how.subtitle': 'LinVNix는 각 단계를 구조화하여 다음에 무엇을 할지 고민할 필요가 없습니다.',
 		'how.s1Title': '레벨 선택',
-		'how.s1Desc': '간단한 진단 테스트를 보거나 A1~C2 중 CEFR 레벨을 선택하세요.',
+		'how.s1Desc':
+			'간단한 진단 테스트를 보거나 A1~C2 중 CEFR 레벨을 선택하세요. 본인보다 낮은 레벨의 코스는 자동 완료로 표시됩니다.',
 		'how.s2Title': 'AI와 학습',
-		'how.s2Desc': '매일의 수업이 어휘·문법·듣기·말하기를 결합해 모국어로 설명합니다.',
-		'how.s3Title': '연습 & 기록',
-		'how.s3Desc': 'AI 튜터와 대화하고 일일 목표를 달성하며 연속 학습을 늘려보세요.',
+		'how.s2Desc':
+			'매일의 수업이 어휘·문법·듣기·말하기를 결합해 모국어로 설명하고 베트남어 예문을 보여줍니다.',
+		'how.s3Title': '연습 & 연속 기록',
+		'how.s3Desc':
+			'AI 튜터와 대화하고, AI 캐릭터와 롤플레이에 들어가며, 일일 목표를 달성해 연속 기록을 늘리세요.',
 
 		'feat.eyebrow': '기능',
-		'feat.title': '베트남어 학습에 필요한 모든 것',
-		'feat.subtitle': '외국인이 실제로 베트남어를 익히는 방식을 중심으로 설계.',
-		'feat.f1Title': 'CEFR 체계 수업',
-		'feat.f1Desc': 'A1 입문부터 C2 숙달까지, 모든 수업이 국제 인증 레벨에 매핑됩니다.',
-		'feat.f2Title': '맥락 있는 어휘',
-		'feat.f2Desc': '각 단어에 발음, 품사, 분류사(con, cái, chiếc), 지역 방언 변형을 함께 제공합니다.',
+		'feat.title': '외국인이 실제로 베트남어를 익히는 방식을 중심으로 설계.',
+		'feat.subtitle':
+			'모든 레이어가 비원어민을 위해 만들어졌습니다 — 분류사부터 방언 변형, 이중 언어 문법까지.',
+		'feat.f1Title': '화면을 이해하는 AI 튜터',
+		'feat.f1Desc':
+			'어떤 화면에서든 어시스턴트를 열고 무엇이든 물어보세요 — AI는 보고 있는 수업, 푸는 문제, 입력한 답까지 이미 알고 있습니다. 정답은 알려주지 않고 힌트만. 사진을 찍어 실생활 베트남어도 발견하세요.',
+		'feat.f2Title': 'A1 → C2 커리큘럼',
+		'feat.f2Desc':
+			'CEFR 6단계, 코스 → 주제 → 수업으로 구성. 현재 위치에서 시작하면 나머지는 진행에 따라 열립니다.',
 		'feat.f3Title': '이중 언어 문법',
-		'feat.f3Desc': '모든 문법 규칙을 모국어 예문과 베트남어를 나란히 설명합니다.',
-		'feat.f4Title': '인터랙티브 연습',
-		'feat.f4Desc': '객관식, 빈칸 채우기, 매칭, 순서, 번역, 듣기 — 모든 기능을 연습.',
-		'feat.f5Title': 'AI 회화 튜터',
-		'feat.f5Desc': '레벨에 맞춰 적응하고 실시간으로 교정해주는 AI 튜터와 진짜 대화.',
-		'feat.f6Title': '일일 목표 & 연속',
-		'feat.f6Desc': '나만의 일일 목표를 설정해 지속 가능한 학습 습관을 만드세요.',
+		'feat.f3Desc':
+			'모든 문법 규칙을 모국어로 설명하고 베트남어 예문을 나란히 보여줍니다 — 단순 번역이 아닙니다.',
+		'feat.f4Title': '깊이 있는 어휘',
+		'feat.f4Desc':
+			'각 단어에 발음, 품사, 분류사(con, cái, chiếc), 지역 방언 변형, 그리고 개인 컬렉션 자리까지.',
+		'feat.f5Title': '6가지 연습 유형',
+		'feat.f5Desc':
+			'객관식, 빈칸 채우기, 매칭, 순서, 번역, 듣기. A1/A2는 무성조 입력도 허용해 초보자가 성조 키에 막히지 않습니다.',
+		'feat.f6Title': '롤플레이 시뮬레이션',
+		'feat.f6Desc':
+			'실제 상황에 들어가 보세요 — 시장, 식당, 병원, 사무실. AI가 다른 등장인물을 연기하고, 메시지마다 교정하며, 종료 시 기준에 따라 점수를 매깁니다.',
 
 		'pricing.eyebrow': '요금',
-		'pricing.title': '데모 기간 동안 모두에게 무료',
+		'pricing.title': '데모 기간 동안 모두에게 무료.',
 		'pricing.subtitle':
 			'모든 기능이 열려 있습니다. 유료 요금제는 데모 단계가 끝난 뒤 도입됩니다.',
 		'pricing.demoBadge': '데모 단계',
 		'pricing.demoName': '데모 액세스',
 		'pricing.demoPrice': '무료',
 		'pricing.demoDesc':
-			'얼리 액세스 동안 LinVNix의 모든 기능을 사용해보세요. 신용카드 불필요, 데모 기간 동안 시간 제한 없음.',
+			'얼리 액세스 동안 LinVNix의 모든 기능을 사용해 보세요. 카드 불필요, 데모 기간 동안 시간 제한 없음.',
 		'pricing.demoCta': 'Android APK 다운로드',
 		'pricing.demoNote': 'iOS 및 웹 버전은 곧 출시됩니다.',
 		'pricing.demoF1': '모든 CEFR 레벨 (A1~C2)',
-		'pricing.demoF2': '무제한 AI 회화 튜터',
-		'pricing.demoF3': '방언 지원 (표준, 북부, 남부)',
-		'pricing.demoF4': 'AI가 생성하는 맞춤 문제 세트',
+		'pricing.demoF2': '무제한 AI 튜터 + 이미지 탐색',
+		'pricing.demoF3': '롤플레이 시뮬레이션 (시장, 병원, 직장…)',
+		'pricing.demoF4': 'AI 생성 맞춤 연습 세트',
 		'pricing.demoF5': '일일 목표 & 학습 연속',
-		'pricing.demoF6': '9개 모국어 지원',
-
-		'test.eyebrow': '학습자',
-		'test.title': '베트남어를 배우는 외국인이 사랑하는 앱',
-		'test.q1':
-			'3개월 만에 베트남인 파트너의 가족과 진짜 대화를 할 수 있게 됐어요. AI 튜터는 정말 인내심이 깊습니다.',
-		'test.n1': 'Marcus W.',
-		'test.r1': '소프트웨어 엔지니어, 독일',
-		'test.q2':
-			'방언 옵션이 게임 체인저. 사이공에 살고 있는데 남부 발음이 길에서 듣는 것과 정확히 같아요.',
-		'test.n2': 'Sophie L.',
-		'test.r2': '디자이너, 프랑스',
-		'test.q3':
-			'다른 앱도 써봤지만 LinVNix가 문법을 제대로 설명해주는 첫 앱입니다. 이중 언어 예문 덕에 모두 이해됩니다.',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': '연구원, 일본',
+		'pricing.demoF6': '9개 모국어, 4개 방언 변형',
 
 		'faq.eyebrow': 'FAQ',
-		'faq.title': '자주 묻는 질문',
+		'faq.title': '자주 묻는 질문.',
 		'faq.q1': '베트남어를 미리 알아야 하나요?',
 		'faq.a1':
-			'아니요. LinVNix는 CEFR A1부터 시작하며 모든 내용을 모국어로 설명합니다. 첫 수업은 사전 지식 없이 시작합니다.',
+			'아니요. LinVNix는 CEFR A1부터 시작하며 모든 내용을 모국어로 설명합니다. 첫 수업은 사전 지식이 필요 없으며, A1/A2 연습은 무성조 입력도 받습니다.',
 		'faq.q2': '데모가 정말 무료인가요?',
 		'faq.a2':
-			'네. 데모 기간 동안에는 모든 사람에게 모든 기능이 열려 있으며 신용카드도 필요 없습니다. 유료 요금제는 데모 종료 후에만 도입됩니다.',
+			'네. 데모 기간 동안에는 모든 사람에게 모든 기능이 열려 있으며 카드도 필요 없습니다. 유료 요금제는 데모 종료 후에만 도입됩니다.',
 		'faq.q3': '어떤 베트남어 방언을 가르치나요?',
 		'faq.a3':
-			'표준, 북부, 남부 세 가지 모두. 원하는 방언을 선택하면 발음 변형이 함께 표시됩니다.',
-		'faq.q4': '모바일에서도 사용 가능한가요?',
+			'네 가지 모두: 표준, 북부, 중부, 남부. 원하는 방언을 선택하면 발음 변형이 함께 표시되고, 어휘는 지역 변형을 가집니다.',
+		'faq.q4': 'AI 튜터는 정확히 무엇을 하나요?',
 		'faq.a4':
-			'네. 현재 데모는 Android APK로 제공되어 직접 설치할 수 있습니다. iOS와 웹 버전은 준비 중입니다.',
-		'faq.q5': 'AI 튜터의 정확도는 어느 정도인가요?',
+			'두 가지입니다. AI 어시스턴트는 모든 화면 하단에 상주합니다 — 보고 있는 수업, 문제, 콘텐츠를 이미 알고 있고, 모국어로 물으면 맥락에 맞게 답합니다. 롤플레이 시뮬레이션은 다릅니다: 시나리오를 고르고 캐릭터를 연기하며 대화합니다 — AI가 다른 캐릭터를 연기하고, 메시지마다 교정하며, 종료 시 점수를 줍니다.',
+		'faq.q5': '모바일에서도 사용 가능한가요?',
 		'faq.a5':
-			'AI는 베트남어 데이터로 학습되고 원어민 교사의 감수를 받습니다. 회화, 발음 피드백, 문법 교정에서 모든 CEFR 레벨에 강합니다.',
+			'네. 현재 데모는 Android APK로 제공되어 직접 설치할 수 있습니다. iOS와 웹 버전은 준비 중입니다.',
 
 		'cta.title': '베트남어로 말할 준비 됐나요?',
 		'cta.subtitle': 'Android 기기에 데모를 설치하고 오늘부터 학습을 시작하세요.',
@@ -895,7 +848,7 @@ export const ui = {
 		'nav.howItWorks': 'วิธีใช้งาน',
 		'nav.faq': 'คำถามที่พบบ่อย',
 		'nav.signIn': 'เข้าสู่ระบบ',
-		'nav.getStarted': 'ดาวน์โหลดเดโม',
+		'nav.getStarted': 'ดาวน์โหลด',
 
 		'theme.light': 'สลับเป็นโหมดสว่าง',
 		'theme.dark': 'สลับเป็นโหมดมืด',
@@ -904,40 +857,54 @@ export const ui = {
 		'hero.title1': 'เรียนภาษาเวียดนาม',
 		'hero.title2': 'อย่างชาญฉลาด',
 		'hero.subtitle':
-			'LinVNix ผสมผสานบทเรียนตามมาตรฐาน CEFR กับ AI หลายรูปแบบ เพื่อให้คุณพูดภาษาเวียดนามได้จริง — คำศัพท์ ไวยากรณ์ การออกเสียง และการสนทนา',
+			'LinVNix ผสานหลักสูตรตามมาตรฐาน CEFR (A1–C2) เข้ากับ AI หลายรูปแบบ: คำศัพท์ในบริบทจริง ไวยากรณ์สองภาษา 6 รูปแบบแบบฝึก ติวเตอร์ AI ที่เข้าใจหน้าจอ และซิมูเลชันสวมบทบาทกับตัวละคร AI',
 		'hero.ctaPrimary': 'ดาวน์โหลดเดโม',
 		'hero.ctaSecondary': 'ดูวิธีใช้งาน',
 
-		'stats.lessons': 'บทเรียนที่มีโครงสร้าง',
-		'stats.levels': 'ระดับ CEFR ที่ครอบคลุม',
-		'stats.languages': 'ภาษาแม่ที่รองรับ',
-		'stats.dialects': 'สำเนียงภาษาเวียดนาม',
+		'stats.lessons': 'บทเรียน',
+		'stats.lessonsNote': 'เสียง · ข้อความ · อินเทอร์แอกทีฟ',
+		'stats.levels': 'ระดับ CEFR',
+		'stats.levelsNote': 'A1 → C2, 6 ระดับ',
+		'stats.languages': 'ภาษาแม่',
+		'stats.languagesNote': 'สะพานสองภาษา',
+		'stats.dialects': 'สำเนียง',
+		'stats.dialectsNote': 'มาตรฐาน · เหนือ · กลาง · ใต้',
 
 		'how.eyebrow': 'วิธีใช้งาน',
-		'how.title': 'พูดภาษาเวียดนามได้ใน 3 ขั้นตอน',
-		'how.subtitle': 'จากคำแรกถึงการสนทนาที่คล่องแคล่ว LinVNix อยู่เคียงข้างคุณทุกขั้นตอน',
+		'how.title': 'จากคำแรกถึงการสนทนาจริง — เพียง 3 ขั้นตอน',
+		'how.subtitle': 'LinVNix จัดโครงสร้างทุกขั้น คุณจะไม่ลังเลว่าต้องทำอะไรต่อ',
 		'how.s1Title': 'เลือกระดับ',
-		'how.s1Desc': 'ทำแบบทดสอบสั้น ๆ หรือเลือกระดับ CEFR ตั้งแต่ A1 ถึง C2',
+		'how.s1Desc':
+			'ทำแบบทดสอบสั้นๆ หรือเลือกระดับ CEFR ตั้งแต่ A1 ถึง C2 หลักสูตรต่ำกว่าระดับของคุณจะถูกทำเครื่องหมายเสร็จอัตโนมัติ',
 		'how.s2Title': 'เรียนรู้กับ AI',
-		'how.s2Desc': 'บทเรียนรายวันรวมคำศัพท์ ไวยากรณ์ การฟังและการพูด อธิบายเป็นภาษาของคุณ',
-		'how.s3Title': 'ฝึกและติดตาม',
-		'how.s3Desc': 'คุยกับติวเตอร์ AI บรรลุเป้าหมายรายวัน และต่อสตรีคการเรียนของคุณ',
+		'how.s2Desc':
+			'บทเรียนรายวันรวมคำศัพท์ ไวยากรณ์ การฟังและการพูด อธิบายเป็นภาษาแม่ของคุณพร้อมตัวอย่างภาษาเวียดนาม',
+		'how.s3Title': 'ฝึกและสร้างสตรีค',
+		'how.s3Desc':
+			'คุยกับติวเตอร์ AI เข้าซิมูเลชันสวมบทบาทกับตัวละคร AI บรรลุเป้าหมายรายวัน และต่อสตรีคให้ยาวขึ้น',
 
 		'feat.eyebrow': 'ฟีเจอร์',
-		'feat.title': 'ทุกสิ่งที่ต้องใช้เพื่อเรียนภาษาเวียดนาม',
-		'feat.subtitle': 'ออกแบบตามวิธีที่ชาวต่างชาติเรียนภาษาเวียดนามจริง ๆ',
-		'feat.f1Title': 'บทเรียน CEFR',
-		'feat.f1Desc': 'ตั้งแต่ A1 ถึง C2 ทุกบทเรียนถูกจัดให้ตรงกับมาตรฐานสากลที่ชัดเจน',
-		'feat.f2Title': 'คำศัพท์มีบริบท',
-		'feat.f2Desc': 'แต่ละคำมาพร้อมการออกเสียง ชนิดคำ คำลักษณะ (con, cái, chiếc) และสำเนียงท้องถิ่น',
+		'feat.title': 'ออกแบบตามวิธีที่ชาวต่างชาติเรียนภาษาเวียดนามจริงๆ',
+		'feat.subtitle':
+			'ทุกชั้นออกแบบสำหรับผู้ไม่ใช่เจ้าของภาษา — ตั้งแต่คำลักษณนามจนถึงสำเนียงท้องถิ่นและไวยากรณ์สองภาษา',
+		'feat.f1Title': 'ติวเตอร์ AI ที่เข้าใจหน้าจอ',
+		'feat.f1Desc':
+			'เปิดผู้ช่วยบนหน้าจอใดก็ได้แล้วถามอะไรก็ได้ — AI รู้บทเรียน คำถาม และแม้แต่คำตอบที่คุณกำลังพิมพ์ ให้คำใบ้โดยไม่บอกคำตอบ ถ่ายภาพเพื่อค้นพบภาษาเวียดนามจากชีวิตจริง',
+		'feat.f2Title': 'หลักสูตร A1 → C2',
+		'feat.f2Desc':
+			'6 ระดับ CEFR จัดเป็นคอร์ส → หัวข้อ → บทเรียน เริ่มจากจุดของคุณ ส่วนที่เหลือปลดล็อกตามความคืบหน้า',
 		'feat.f3Title': 'ไวยากรณ์สองภาษา',
-		'feat.f3Desc': 'อธิบายไวยากรณ์ทุกข้อด้วยตัวอย่างภาษาคุณคู่กับเวียดนาม',
-		'feat.f4Title': 'แบบฝึกแบบโต้ตอบ',
-		'feat.f4Desc': 'เลือกตอบ เติมคำ จับคู่ เรียงประโยค แปล และฟัง — ฝึกครบทุกทักษะ',
-		'feat.f5Title': 'ติวเตอร์ AI สนทนา',
-		'feat.f5Desc': 'พูดคุยจริงกับติวเตอร์ AI ที่ปรับตามระดับและแก้ให้แบบเรียลไทม์',
-		'feat.f6Title': 'เป้าหมายรายวัน & สตรีค',
-		'feat.f6Desc': 'ตั้งเป้าหมายส่วนตัวรายวัน สร้างนิสัยการเรียนที่อยู่กับคุณ',
+		'feat.f3Desc':
+			'ทุกกฎอธิบายเป็นภาษาแม่พร้อมตัวอย่างภาษาเวียดนามคู่กัน — ไม่ใช่แค่การแปล',
+		'feat.f4Title': 'คำศัพท์มีบริบทลึก',
+		'feat.f4Desc':
+			'แต่ละคำมาพร้อมการออกเสียง ชนิดคำ คำลักษณนาม (con, cái, chiếc) ตัวแปรสำเนียงท้องถิ่น และที่ในคลังคำส่วนตัวของคุณ',
+		'feat.f5Title': '6 รูปแบบแบบฝึก',
+		'feat.f5Desc':
+			'เลือกตอบ เติมคำ จับคู่ เรียงประโยค แปล ฟัง A1/A2 ยอมรับการพิมพ์ไม่ใส่วรรณยุกต์ ผู้เริ่มต้นไม่ติดกับแป้นวรรณยุกต์',
+		'feat.f6Title': 'ซิมูเลชันสวมบทบาท',
+		'feat.f6Desc':
+			'ก้าวเข้าสู่สถานการณ์จริง — ตลาด ร้านอาหาร คลินิก สำนักงาน AI สวมบทบาทตัวละครอื่น แก้ไขทุกข้อความ และให้คะแนนตามเกณฑ์เมื่อจบฉาก',
 
 		'pricing.eyebrow': 'ราคา',
 		'pricing.title': 'ฟรีสำหรับทุกคนระหว่างเดโม',
@@ -947,48 +914,33 @@ export const ui = {
 		'pricing.demoName': 'การเข้าใช้งานเดโม',
 		'pricing.demoPrice': 'ฟรี',
 		'pricing.demoDesc':
-			'ลองทุกฟีเจอร์ของ LinVNix ในช่วง early access ไม่ต้องใช้บัตรเครดิตและไม่มีจำกัดเวลาช่วงเดโม',
+			'ลองทุกฟีเจอร์ของ LinVNix ในช่วง early access ไม่ต้องใช้บัตรเครดิตและไม่จำกัดเวลาช่วงเดโม',
 		'pricing.demoCta': 'ดาวน์โหลด APK Android',
-		'pricing.demoNote': 'เวอร์ชัน iOS และเว็บ เร็ว ๆ นี้',
+		'pricing.demoNote': 'เวอร์ชัน iOS และเว็บ เร็วๆ นี้',
 		'pricing.demoF1': 'ครบทุกระดับ CEFR (A1–C2)',
-		'pricing.demoF2': 'ติวเตอร์ AI สนทนา ไม่จำกัด',
-		'pricing.demoF3': 'รองรับหลายสำเนียง (มาตรฐาน เหนือ ใต้)',
-		'pricing.demoF4': 'ชุดแบบฝึกหัดที่สร้างด้วย AI',
+		'pricing.demoF2': 'ติวเตอร์ AI + ค้นหาด้วยภาพ ไม่จำกัด',
+		'pricing.demoF3': 'ซิมูเลชันสวมบทบาท (ตลาด คลินิก ที่ทำงาน…)',
+		'pricing.demoF4': 'ชุดแบบฝึกที่ AI สร้างเฉพาะตัว',
 		'pricing.demoF5': 'เป้าหมายรายวัน & สตรีคการเรียน',
-		'pricing.demoF6': 'รองรับภาษาแม่ทั้ง 9 ภาษา',
-
-		'test.eyebrow': 'ผู้เรียน',
-		'test.title': 'ครองใจชาวต่างชาติที่เรียนภาษาเวียดนาม',
-		'test.q1':
-			'หลังจาก 3 เดือน ฉันคุยกับครอบครัวคู่รักชาวเวียดนามได้จริง ๆ ติวเตอร์ AI ใจเย็นมาก',
-		'test.n1': 'Marcus W.',
-		'test.r1': 'วิศวกรซอฟต์แวร์ เยอรมนี',
-		'test.q2':
-			'การรองรับสำเนียงเปลี่ยนเกมเลย ฉันอยู่ไซง่อน และสำเนียงใต้ตรงกับที่ได้ยินบนถนน',
-		'test.n2': 'Sophie L.',
-		'test.r2': 'นักออกแบบ ฝรั่งเศส',
-		'test.q3':
-			'ลองหลายแอป แต่ LinVNix เป็นแอปแรกที่อธิบายไวยากรณ์ได้ดีจริง ตัวอย่างสองภาษาช่วยให้เข้าใจชัด',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': 'นักวิจัย ญี่ปุ่น',
+		'pricing.demoF6': '9 ภาษาแม่, 4 สำเนียง',
 
 		'faq.eyebrow': 'FAQ',
 		'faq.title': 'คำถามที่พบบ่อย',
 		'faq.q1': 'ต้องรู้ภาษาเวียดนามมาก่อนไหม?',
 		'faq.a1':
-			'ไม่ต้อง LinVNix เริ่มที่ CEFR A1 และอธิบายทุกอย่างเป็นภาษาแม่ของคุณ บทเรียนแรกไม่ต้องมีพื้นฐานใด ๆ',
+			'ไม่ต้อง LinVNix เริ่มที่ CEFR A1 และอธิบายทุกอย่างเป็นภาษาแม่ของคุณ บทเรียนแรกไม่ต้องมีพื้นฐาน และแบบฝึก A1/A2 ยอมรับการพิมพ์ไม่ใส่วรรณยุกต์',
 		'faq.q2': 'เดโมฟรีจริงไหม?',
 		'faq.a2':
-			'จริง ในช่วงเดโม ทุกฟีเจอร์ปลดล็อกให้ทุกคน — ไม่ต้องใช้บัตรเครดิต แพ็กเกจแบบเสียเงินจะมาหลังจบเฟสเดโมเท่านั้น',
+			'จริง ในช่วงเดโมทุกฟีเจอร์ปลดล็อกให้ทุกคน — ไม่ต้องใช้บัตรเครดิต แพ็กเกจแบบเสียเงินจะมาหลังจบเฟสเดโมเท่านั้น',
 		'faq.q3': 'สอนสำเนียงเวียดนามแบบใด?',
 		'faq.a3':
-			'ทั้งสามแบบ: มาตรฐาน เหนือ และใต้ คุณเลือกสำเนียงที่ชอบ และดูตัวอย่างการออกเสียงคู่กัน',
-		'faq.q4': 'ใช้บนมือถือได้ไหม?',
+			'ทั้งสี่: มาตรฐาน เหนือ กลาง และใต้ คุณเลือกสำเนียงที่ชอบ และดูตัวอย่างการออกเสียงคู่กัน คำศัพท์มีตัวแปรตามภูมิภาค',
+		'faq.q4': 'ติวเตอร์ AI ทำอะไรกันแน่?',
 		'faq.a4':
-			'ได้ ตอนนี้เดโมแจกในรูปแบบ APK Android ติดตั้งได้ทันที เวอร์ชัน iOS และเว็บกำลังพัฒนา',
-		'faq.q5': 'ติวเตอร์ AI แม่นยำแค่ไหน?',
+			'สองอย่าง ผู้ช่วย AI อยู่ด้านล่างของทุกหน้าจอ — มันรู้บทเรียน แบบฝึก หรือเนื้อหาที่คุณกำลังดูอยู่แล้ว ถามด้วยภาษาแม่ก็ตอบตามบริบท ซิมูเลชันสวมบทบาทต่างกัน: เลือกสถานการณ์ สวมบทบาทตัวละคร และสนทนา — AI สวมบทบาทคนอื่นทุกคน แก้ทุกข้อความ และให้คะแนนตอนจบ',
+		'faq.q5': 'ใช้บนมือถือได้ไหม?',
 		'faq.a5':
-			'AI ถูกฝึกบนข้อมูลภาษาเวียดนามและมีครูเจ้าของภาษาควบคุม ดีมากในการสนทนา ผลตอบรับการออกเสียง และการแก้ไวยากรณ์ทุกระดับ CEFR',
+			'ได้ ตอนนี้เดโมแจกในรูปแบบ APK Android ติดตั้งได้ทันที เวอร์ชัน iOS และเว็บกำลังพัฒนา',
 
 		'cta.title': 'พร้อมพูดภาษาเวียดนามแล้วหรือยัง?',
 		'cta.subtitle': 'ติดตั้งเดโมบนเครื่อง Android ของคุณและเริ่มเรียนวันนี้',
@@ -1015,7 +967,7 @@ export const ui = {
 		'nav.howItWorks': '使用方法',
 		'nav.faq': '常见问题',
 		'nav.signIn': '登录',
-		'nav.getStarted': '下载演示版',
+		'nav.getStarted': '下载',
 
 		'theme.light': '切换到浅色模式',
 		'theme.dark': '切换到深色模式',
@@ -1024,43 +976,57 @@ export const ui = {
 		'hero.title1': '学越南语，',
 		'hero.title2': '更聪明的方式。',
 		'hero.subtitle':
-			'LinVNix 结合 CEFR 体系化课程与多模态 AI，帮助你真正掌握越南语 —— 词汇、语法、发音和对话。',
+			'LinVNix 将 CEFR 课程体系（A1–C2）与多模态 AI 结合：真实语境词汇、双语语法、六种练习、能看到你屏幕的 AI 导师，以及与 AI 角色的角色扮演模拟。',
 		'hero.ctaPrimary': '下载演示版',
 		'hero.ctaSecondary': '查看使用方法',
 
-		'stats.lessons': '体系化课程',
-		'stats.levels': '覆盖的 CEFR 等级',
-		'stats.languages': '支持的母语',
-		'stats.dialects': '越南语方言',
+		'stats.lessons': '课程',
+		'stats.lessonsNote': '音频 · 文字 · 交互',
+		'stats.levels': 'CEFR 等级',
+		'stats.levelsNote': 'A1 → C2，六级',
+		'stats.languages': '母语',
+		'stats.languagesNote': '双语桥梁',
+		'stats.dialects': '方言',
+		'stats.dialectsNote': '标准 · 北 · 中 · 南',
 
 		'how.eyebrow': '使用方法',
-		'how.title': '三步开口说越南语',
-		'how.subtitle': '从第一个词到流利对话，LinVNix 全程相伴。',
+		'how.title': '从第一个词到真正会话——只需三步。',
+		'how.subtitle': 'LinVNix 把每一步都安排清楚，让你不再纠结下一步该做什么。',
 		'how.s1Title': '选择等级',
-		'how.s1Desc': '做一个简短的水平测试，或在 A1 到 C2 中选择你的 CEFR 等级。',
+		'how.s1Desc':
+			'做一个简短的水平测试，或在 A1 到 C2 中选择你的 CEFR 等级。低于你等级的课程将自动标记为完成。',
 		'how.s2Title': '与 AI 一起学',
-		'how.s2Desc': '每日课程结合词汇、语法、听力和口语，并用你的母语解释。',
-		'how.s3Title': '练习并追踪',
-		'how.s3Desc': '与 AI 导师对话，完成每日目标，延长你的连续学习记录。',
+		'how.s2Desc':
+			'每日课程结合词汇、语法、听力和口语，并用你的母语解释，配以越南语例句。',
+		'how.s3Title': '练习并保持连续',
+		'how.s3Desc':
+			'与 AI 导师对话，进入与 AI 角色的角色扮演模拟，完成每日目标，让连续记录持续增长。',
 
 		'feat.eyebrow': '功能',
-		'feat.title': '学越南语所需的一切',
-		'feat.subtitle': '围绕外国人真正学好越南语的方式而设计。',
-		'feat.f1Title': 'CEFR 体系课程',
-		'feat.f1Desc': '从 A1 入门到 C2 精通，每节课都对应国际公认的等级。',
-		'feat.f2Title': '语境化词汇',
-		'feat.f2Desc': '每个词都附带发音、词性、量词（con, cái, chiếc）和地方方言变体。',
+		'feat.title': '围绕外国人真正学好越南语的方式而设计。',
+		'feat.subtitle':
+			'每一层都为非母语者设计——从量词到方言变体再到双语语法。',
+		'feat.f1Title': '能看到你屏幕的 AI 导师',
+		'feat.f1Desc':
+			'在任何屏幕打开助手，问任何问题——AI 已经知道你正在读的课程、做的题，甚至你刚输入的答案。只给提示不直接给答案。拍张照片，在现实生活中发现越南语。',
+		'feat.f2Title': 'A1 → C2 课程体系',
+		'feat.f2Desc':
+			'CEFR 六级，按课程 → 主题 → 课时组织。从你的位置开始，其余随进度解锁。',
 		'feat.f3Title': '双语语法',
-		'feat.f3Desc': '所有语法规则都用你的母语示例并与越南语并排呈现。',
-		'feat.f4Title': '互动练习',
-		'feat.f4Desc': '选择题、填空、配对、排序、翻译和听力 —— 全面训练。',
-		'feat.f5Title': 'AI 对话导师',
-		'feat.f5Desc': '与可根据你水平调整、实时纠正的 AI 导师进行真实对话。',
-		'feat.f6Title': '每日目标与连续学习',
-		'feat.f6Desc': '设定个人每日目标，建立稳定的学习习惯。',
+		'feat.f3Desc':
+			'所有语法规则用你的母语解释，并配以并排的越南语例句——绝不只是翻译。',
+		'feat.f4Title': '有深度的词汇',
+		'feat.f4Desc':
+			'每个词配发音、词性、量词（con, cái, chiếc）、地方方言变体，以及你个人收藏中的一席之地。',
+		'feat.f5Title': '六种练习类型',
+		'feat.f5Desc':
+			'选择题、填空、配对、排序、翻译、听力。A1/A2 接受无声调输入——初学者不会被声调按键卡住。',
+		'feat.f6Title': '角色扮演模拟',
+		'feat.f6Desc':
+			'走进真实场景——市场、餐厅、诊所、办公室。AI 扮演其他所有角色，逐条纠错，结束时按评分标准给分。',
 
 		'pricing.eyebrow': '价格',
-		'pricing.title': '演示期间面向所有人免费',
+		'pricing.title': '演示期间面向所有人免费。',
 		'pricing.subtitle':
 			'全功能解锁。付费方案将在演示阶段结束后才推出。',
 		'pricing.demoBadge': '演示阶段',
@@ -1071,44 +1037,29 @@ export const ui = {
 		'pricing.demoCta': '下载 Android APK',
 		'pricing.demoNote': 'iOS 和网页版即将推出。',
 		'pricing.demoF1': '所有 CEFR 等级（A1–C2）',
-		'pricing.demoF2': '无限 AI 对话导师',
-		'pricing.demoF3': '多方言支持（标准、北部、南部）',
-		'pricing.demoF4': 'AI 生成的自定义练习集',
-		'pricing.demoF5': '每日目标与学习连续记录',
-		'pricing.demoF6': '支持全部 9 种母语',
-
-		'test.eyebrow': '学员',
-		'test.title': '深受学越南语的外国学员喜爱',
-		'test.q1':
-			'三个月后我终于可以和越南伴侣的家人真正聊天。AI 导师非常有耐心。',
-		'test.n1': 'Marcus W.',
-		'test.r1': '软件工程师，德国',
-		'test.q2':
-			'方言变体是关键。我住在西贡，南部发音和我在街上听到的完全一致。',
-		'test.n2': 'Sophie L.',
-		'test.r2': '设计师，法国',
-		'test.q3':
-			'我试过其他应用，但 LinVNix 是第一个真正讲清楚语法的。双语例句让一切豁然开朗。',
-		'test.n3': 'Hiroshi T.',
-		'test.r3': '研究员，日本',
+		'pricing.demoF2': '无限 AI 导师 + 图像探索',
+		'pricing.demoF3': '角色扮演模拟（市场、诊所、职场……）',
+		'pricing.demoF4': 'AI 生成的个性化练习集',
+		'pricing.demoF5': '每日目标 & 学习连续',
+		'pricing.demoF6': '9 种母语，4 种方言变体',
 
 		'faq.eyebrow': '常见问题',
-		'faq.title': '常见问题',
+		'faq.title': '常见问题。',
 		'faq.q1': '我需要先懂一些越南语吗？',
 		'faq.a1':
-			'不需要。LinVNix 从 CEFR A1 起步，并用你的母语解释所有内容。前几节课假设你零基础。',
+			'不需要。LinVNix 从 CEFR A1 起步，并用你的母语解释所有内容。前几节课假设你零基础，A1/A2 练习接受无声调输入。',
 		'faq.q2': '演示版真的免费吗？',
 		'faq.a2':
 			'是的。在演示阶段，所有人都可使用全部功能，无需信用卡。付费方案将在演示阶段结束后才推出。',
 		'faq.q3': '你们教哪种越南语方言？',
 		'faq.a3':
-			'三种都教：标准、北部和南部。你可以选择偏好方言，并查看发音变体的对照。',
-		'faq.q4': '我可以在手机上使用吗？',
+			'四种都教：标准、北部、中部和南部。选择偏好方言，应用会并排显示发音变体；词汇带有地区变体。',
+		'faq.q4': 'AI 导师到底做什么？',
 		'faq.a4':
-			'可以。目前演示版以 Android APK 形式提供，可直接安装。iOS 和网页版正在开发中。',
-		'faq.q5': 'AI 导师有多准确？',
+			'两件事。AI 助手常驻每个屏幕的底部——它已经知道你正在看的课程、练习或内容；用你的母语提问，它按上下文回答。角色扮演模拟不同：选一个场景，扮演一个角色并对话——AI 扮演其他所有角色，逐条纠错，结束时给分。',
+		'faq.q5': '我可以在手机上使用吗？',
 		'faq.a5':
-			'AI 在越南语数据上训练并由母语教师监督，在所有 CEFR 等级的对话、发音反馈和语法纠正方面表现出色。',
+			'可以。目前演示版以 Android APK 形式提供，可直接安装。iOS 和网页版正在开发中。',
 
 		'cta.title': '准备好说越南语了吗？',
 		'cta.subtitle': '在你的 Android 设备上安装演示版，今天就开始学习。',

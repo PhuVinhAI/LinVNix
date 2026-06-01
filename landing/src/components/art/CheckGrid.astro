@@ -3,49 +3,131 @@ interface Props {
 	class?: string;
 }
 const { class: className = '' } = Astro.props;
-
-const cells = Array.from({ length: 24 }, (_, i) => {
-	const row = Math.floor(i / 6);
-	const col = i % 6;
-	// Deterministic pattern: some cells checked, some not, primary highlight on a few
-	const filled = [1, 2, 5, 8, 9, 14, 15, 18, 19, 22].includes(i);
-	const primary = [9, 19].includes(i);
-	return { x: col * 36 + 14, y: row * 36 + 14, filled, primary };
-});
 ---
 
 <svg
-	viewBox="0 0 240 160"
+	viewBox="0 0 280 200"
 	class={className}
 	aria-hidden="true"
+	font-family="var(--font-sans)"
 >
-	<g data-draw>
-		{
-			cells.map((c) => (
-				<>
-					<rect
-						x={c.x}
-						y={c.y}
-						width="24"
-						height="24"
-						rx="4"
-						fill={c.filled ? (c.primary ? 'var(--primary)' : 'currentColor') : 'none'}
-						stroke="currentColor"
-						stroke-width="1"
-						opacity={c.filled ? 1 : 0.35}
-					/>
-					{c.filled && (
-						<path
-							d={`M ${c.x + 7} ${c.y + 12} L ${c.x + 11} ${c.y + 16} L ${c.x + 18} ${c.y + 9}`}
-							stroke={c.primary ? 'var(--primary-foreground)' : 'var(--background)'}
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							fill="none"
-						/>
-					)}
-				</>
-			))
-		}
+	<defs>
+		<symbol id="ex-cell-frame" overflow="visible">
+			<rect x="0" y="0" width="86" height="86" rx="8" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4" />
+		</symbol>
+	</defs>
+
+	<!-- 3x2 grid, each cell 86x86, gap 8px -->
+	<!-- Cell 1: MULTIPLE CHOICE -->
+	<g transform="translate(0 0)">
+		<use href="#ex-cell-frame" />
+		<g fill="none" stroke="currentColor" stroke-width="1">
+			<circle cx="16" cy="24" r="4" />
+			<circle cx="16" cy="44" r="4" fill="var(--primary)" stroke="var(--primary)" />
+			<circle cx="16" cy="64" r="4" />
+		</g>
+		<g fill="currentColor" font-size="7" opacity="0.7">
+			<line x1="26" y1="24" x2="58" y2="24" stroke="currentColor" stroke-width="1" opacity="0.4" />
+			<line x1="26" y1="44" x2="74" y2="44" stroke="currentColor" stroke-width="1.2" />
+			<line x1="26" y1="64" x2="50" y2="64" stroke="currentColor" stroke-width="1" opacity="0.4" />
+		</g>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">MULTI · CHOICE</text>
+	</g>
+
+	<!-- Cell 2: FILL BLANK -->
+	<g transform="translate(97 0)">
+		<use href="#ex-cell-frame" />
+		<text x="12" y="35" font-size="11" font-weight="700" fill="currentColor">Em</text>
+		<rect x="32" y="22" width="22" height="16" rx="3" fill="var(--primary)" opacity="0.12" />
+		<rect x="32" y="22" width="22" height="16" rx="3" fill="none" stroke="var(--primary)" stroke-dasharray="2 2" />
+		<text x="58" y="35" font-size="11" font-weight="700" fill="currentColor">phở.</text>
+		<g font-size="7" fill="currentColor" opacity="0.5">
+			<text x="12" y="60">[ăn] [đi] [làm]</text>
+		</g>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">FILL · BLANK</text>
+	</g>
+
+	<!-- Cell 3: MATCHING -->
+	<g transform="translate(194 0)">
+		<use href="#ex-cell-frame" />
+		<g fill="currentColor" font-size="8" font-weight="600">
+			<text x="12" y="22">phở</text>
+			<text x="12" y="44">áo</text>
+			<text x="12" y="66">cà phê</text>
+		</g>
+		<g fill="currentColor" font-size="8" font-style="italic" opacity="0.7">
+			<text x="58" y="22">shirt</text>
+			<text x="58" y="44">noodle</text>
+			<text x="58" y="66">coffee</text>
+		</g>
+		<g stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.7">
+			<path d="M28 19 Q 44 30 56 41" />
+			<path d="M28 41 Q 44 30 56 19" />
+			<path d="M30 63 L 56 63" />
+		</g>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">MATCHING</text>
+	</g>
+
+	<!-- Cell 4: ORDERING -->
+	<g transform="translate(0 113)">
+		<use href="#ex-cell-frame" />
+		<g fill="none" stroke="currentColor" stroke-width="1" opacity="0.5">
+			<rect x="10" y="18" width="20" height="16" rx="3" />
+			<rect x="34" y="18" width="20" height="16" rx="3" />
+			<rect x="58" y="18" width="20" height="16" rx="3" />
+		</g>
+		<g fill="currentColor" font-size="9" font-weight="700" text-anchor="middle">
+			<text x="20" y="30">1</text>
+			<text x="44" y="30">2</text>
+			<text x="68" y="30">3</text>
+		</g>
+		<g fill="currentColor" font-size="7" opacity="0.6" text-anchor="middle">
+			<text x="20" y="50">Em</text>
+			<text x="44" y="50">ăn</text>
+			<text x="68" y="50">phở</text>
+		</g>
+		<g stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.6">
+			<path d="M14 64 Q 44 70 74 64" stroke-linecap="round" />
+		</g>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">ORDERING</text>
+	</g>
+
+	<!-- Cell 5: TRANSLATION -->
+	<g transform="translate(97 113)">
+		<use href="#ex-cell-frame" />
+		<g fill="currentColor" font-size="9" font-weight="600">
+			<text x="12" y="25">Xin chào</text>
+		</g>
+		<g stroke="var(--primary)" stroke-width="1" fill="none" data-draw>
+			<line x1="44" y1="33" x2="44" y2="46" stroke-linecap="round" />
+			<path d="M40 42 L44 48 L48 42" stroke-linecap="round" />
+		</g>
+		<g fill="currentColor" font-size="9" font-style="italic" opacity="0.8">
+			<text x="12" y="65">Hello</text>
+		</g>
+		<g font-size="7" fill="currentColor" opacity="0.5">
+			<text x="60" y="25">VI</text>
+			<text x="60" y="65">EN</text>
+		</g>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">TRANSLATION</text>
+	</g>
+
+	<!-- Cell 6: LISTENING -->
+	<g transform="translate(194 113)">
+		<use href="#ex-cell-frame" />
+		<g fill="var(--primary)">
+			<circle cx="22" cy="42" r="12" />
+		</g>
+		<g fill="var(--background)">
+			<path d="M19 36 L19 48 L26 42 Z" />
+		</g>
+		<g fill="currentColor">
+			<rect x="46" y="38" width="2" height="8" rx="1" />
+			<rect x="52" y="34" width="2" height="16" rx="1" />
+			<rect x="58" y="32" width="2" height="20" rx="1" />
+			<rect x="64" y="36" width="2" height="12" rx="1" />
+			<rect x="70" y="40" width="2" height="4" rx="1" />
+		</g>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">LISTENING</text>
 	</g>
 </svg>

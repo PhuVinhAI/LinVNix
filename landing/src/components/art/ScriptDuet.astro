@@ -6,44 +6,62 @@ const { class: className = '' } = Astro.props;
 ---
 
 <svg
-	viewBox="0 0 240 200"
+	viewBox="0 0 280 200"
 	class={className}
 	aria-hidden="true"
+	font-family="var(--font-sans)"
 >
-	<!-- Vietnamese script side -->
-	<g font-family="var(--font-display)" font-style="italic">
-		<text x="20" y="60" font-size="48" font-weight="500" fill="currentColor">
-			Xin
+	<!-- RULE label -->
+	<g font-size="9" letter-spacing="0.25em" font-weight="600" fill="currentColor" opacity="0.55">
+		<text x="14" y="22">RULE · QUESTION PARTICLE</text>
+	</g>
+
+	<!-- Vietnamese sentence -->
+	<g fill="currentColor">
+		<text x="14" y="56" font-size="18" font-weight="700" letter-spacing="-0.015em">
+			Em uống cà phê
 		</text>
-		<text x="20" y="105" font-size="48" font-weight="500" fill="var(--primary)">
-			chào
+		<!-- highlighted "không?" -->
+		<rect x="148" y="40" width="56" height="22" rx="4" fill="var(--primary)" opacity="0.12" />
+		<text x="155" y="56" font-size="18" font-weight="700" letter-spacing="-0.015em" fill="var(--primary)">
+			không?
 		</text>
 	</g>
 
-	<!-- divider rule -->
-	<line
-		x1="20"
-		y1="120"
-		x2="220"
-		y2="120"
-		stroke="currentColor"
-		stroke-width="0.75"
-		opacity="0.4"
-		data-draw
-	/>
-
-	<!-- Foreign script side (Hello / 你好 / こんにちは hint) -->
-	<g font-family="var(--font-sans)" font-size="13" fill="currentColor">
-		<text x="20" y="145" letter-spacing="0.15em" opacity="0.6">EN — HELLO</text>
-		<text x="20" y="162" letter-spacing="0.15em" opacity="0.5">FR — BONJOUR</text>
-		<text x="20" y="179" letter-spacing="0.15em" opacity="0.4">JA — こんにちは</text>
-		<text x="20" y="196" letter-spacing="0.15em" opacity="0.3">DE — HALLO</text>
+	<!-- VI label -->
+	<g font-size="8" letter-spacing="0.25em" font-weight="500" fill="currentColor" opacity="0.4">
+		<text x="14" y="74">VIETNAMESE</text>
 	</g>
 
-	<!-- corner accent -->
-	<g stroke="currentColor" stroke-width="1" data-draw>
-		<line x1="200" y1="20" x2="220" y2="20" />
-		<line x1="220" y1="20" x2="220" y2="40" />
+	<!-- Arrow connector -->
+	<g stroke="currentColor" stroke-width="1" fill="none" opacity="0.4" data-draw>
+		<line x1="20" y1="92" x2="20" y2="108" stroke-linecap="round" />
+		<path d="M16 104 L20 110 L24 104" stroke-linecap="round" />
 	</g>
-	<circle cx="220" cy="40" r="2.5" fill="var(--primary)" />
+
+	<!-- English sentence -->
+	<g fill="currentColor">
+		<!-- highlighted "Do" -->
+		<rect x="11" y="120" width="28" height="22" rx="4" fill="var(--primary)" opacity="0.12" />
+		<text x="14" y="136" font-size="18" font-weight="700" letter-spacing="-0.015em" fill="var(--primary)">
+			Do
+		</text>
+		<text x="42" y="136" font-size="18" font-weight="700" letter-spacing="-0.015em">
+			you drink coffee?
+		</text>
+	</g>
+
+	<!-- EN label -->
+	<g font-size="8" letter-spacing="0.25em" font-weight="500" fill="currentColor" opacity="0.4">
+		<text x="14" y="154">ENGLISH</text>
+	</g>
+
+	<!-- Divider -->
+	<line x1="14" y1="166" x2="266" y2="166" stroke="currentColor" stroke-width="0.5" opacity="0.25" data-draw />
+
+	<!-- Pattern abstraction -->
+	<g font-size="10" font-weight="500" fill="currentColor" opacity="0.6">
+		<text x="14" y="184">[S] + [V] + [O] +</text>
+		<text x="130" y="184" fill="var(--primary)" font-weight="700">không?</text>
+	</g>
 </svg>
