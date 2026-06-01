@@ -5,6 +5,8 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '../../components/ui/button'
+import { MetricCardsSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -69,17 +71,14 @@ export function SettingsPage() {
         />
 
         {isLoading ? (
-          <div className="rounded-lg border-2 border-border bg-card text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-            <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-          </div>
+          <MetricCardsSkeleton count={3} />
         ) : error ? (
-          <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4">
-            <p className="text-sm font-bold text-destructive">Không tải được cache</p>
-            <p className="text-xs text-destructive/80 mt-1">
-              {error instanceof Error ? error.message : 'Lỗi không xác định'}
-            </p>
-          </div>
+          <ErrorState
+            title="Không tải được cache"
+            message={errorMessage(error, 'Lỗi không xác định')}
+            onRetry={() => refetch()}
+            retrying={isFetching}
+          />
         ) : data ? (
           <>
             <div className="grid gap-3 md:grid-cols-3">

@@ -7,6 +7,8 @@ import {
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { ListRowsSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,7 +47,7 @@ const difficultyMeta: Record<string, { label: string; color: string }> = {
 export function ScenarioCategoryDetailPage() {
   const { categoryId } = useParams()
   const navigate = useNavigate()
-  const { data: category, isLoading, error } = useAdminScenarioCategory(categoryId)
+  const { data: category, isLoading, error, refetch, isFetching } = useAdminScenarioCategory(categoryId)
   const mutations = useSimulationsAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Scenario | null>(null)
   const [levelFilter, setLevelFilter] = useState<string>('all')
@@ -147,16 +149,13 @@ export function ScenarioCategoryDetailPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
+        <ListRowsSkeleton count={4} />
       ) : error ? (
-        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-sm text-destructive font-semibold">
-            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          </p>
-        </div>
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : scenarios.length === 0 ? (
         <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
           <MessageSquare className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />

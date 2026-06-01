@@ -8,6 +8,8 @@ import {
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { ModuleListSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,7 +42,7 @@ const levelMeta: Record<string, { label: string; bg: string }> = {
 export function CourseDetailPage() {
   const { courseId } = useParams()
   const navigate = useNavigate()
-  const { data: course, isLoading, error } = useAdminCourse(courseId)
+  const { data: course, isLoading, error, refetch, isFetching } = useAdminCourse(courseId)
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Module | null>(null)
 
@@ -162,16 +164,13 @@ export function CourseDetailPage() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-            <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-          </div>
+          <ModuleListSkeleton count={4} />
         ) : error ? (
-          <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-            <p className="text-sm text-destructive font-semibold">
-              {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-            </p>
-          </div>
+          <ErrorState
+            message={errorMessage(error)}
+            onRetry={() => refetch()}
+            retrying={isFetching}
+          />
         ) : !course?.modules || course.modules.length === 0 ? (
           <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
             <Layers className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />

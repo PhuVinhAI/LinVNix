@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router'
 import { Search, LayoutGrid, List, BookOpen, ClipboardCheck, BookMarked, Mail } from 'lucide-react'
 import { Input } from '../../components/ui/input'
 import { DataTable } from '../../components/admin/DataTable'
+import { CardGridSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { useAdminLearners } from '../../features/learners/api/use-learners-admin'
 import type { Learner } from '../../features/learners/types'
 import { learnerPath } from './route-utils'
@@ -43,7 +45,7 @@ function hashColor(id: string): string {
 
 export function LearnersPage() {
   const navigate = useNavigate()
-  const { data, isLoading, error } = useAdminLearners()
+  const { data, isLoading, error, refetch, isFetching } = useAdminLearners()
   const [searchQuery, setSearchQuery] = useState('')
   const [view, setView] = useState<'grid' | 'list'>('grid')
   const [levelFilter, setLevelFilter] = useState<string>('all')
@@ -113,16 +115,13 @@ export function LearnersPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
+        <CardGridSkeleton count={6} />
       ) : error ? (
-        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-sm text-destructive font-semibold">
-            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          </p>
-        </div>
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : filteredData.length === 0 ? (
         <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
           <Search className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />

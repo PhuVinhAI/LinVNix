@@ -24,6 +24,8 @@ import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { LessonContentSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -104,7 +106,7 @@ type DeleteTarget = {
 export function LessonDetailPage() {
   const { lessonId } = useParams()
   const navigate = useNavigate()
-  const { data: lesson, isLoading, error } = useAdminLesson(lessonId)
+  const { data: lesson, isLoading, error, refetch, isFetching } = useAdminLesson(lessonId)
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<DeleteTarget | null>(null)
 
@@ -181,16 +183,13 @@ export function LessonDetailPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
+        <LessonContentSkeleton />
       ) : error ? (
-        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-sm text-destructive font-semibold">
-            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          </p>
-        </div>
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : lesson && lessonId ? (
         <Tabs defaultValue="contents" className="space-y-4">
           <div className="border-b-2 border-border">

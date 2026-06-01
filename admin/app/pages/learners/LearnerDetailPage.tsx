@@ -7,6 +7,8 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { LearnerDetailSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { useAdminLearner } from '../../features/learners/api/use-learners-admin'
 import { learnerPath } from './route-utils'
 
@@ -70,7 +72,7 @@ const UNIT_TYPE_LABELS: Record<string, string> = {
 export function LearnerDetailPage() {
   const { learnerId } = useParams()
   const navigate = useNavigate()
-  const { data, isLoading, error } = useAdminLearner(learnerId)
+  const { data, isLoading, error, refetch, isFetching } = useAdminLearner(learnerId)
 
   const learner = data?.user
   const meta = levelMeta[learner?.currentLevel ?? ''] ?? { label: '—', bg: 'bg-muted' }
@@ -97,16 +99,13 @@ export function LearnerDetailPage() {
       />
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
+        <LearnerDetailSkeleton />
       ) : error ? (
-        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-sm text-destructive font-semibold">
-            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          </p>
-        </div>
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : data ? (
         <>
           {/* Profile hero */}

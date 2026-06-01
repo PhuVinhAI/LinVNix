@@ -11,6 +11,8 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { ScenarioDetailSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -64,7 +66,7 @@ const AVATAR_ICONS: Record<string, LucideIcon> = {
 export function ScenarioDetailPage() {
   const { scenarioId } = useParams()
   const navigate = useNavigate()
-  const { data: scenario, isLoading, error } = useAdminScenario(scenarioId)
+  const { data: scenario, isLoading, error, refetch, isFetching } = useAdminScenario(scenarioId)
   const mutations = useSimulationsAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<ScenarioCharacter | null>(null)
   const [showFullPrompt, setShowFullPrompt] = useState(false)
@@ -159,16 +161,13 @@ export function ScenarioDetailPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
+        <ScenarioDetailSkeleton />
       ) : error ? (
-        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-sm text-destructive font-semibold">
-            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          </p>
-        </div>
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : scenario ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left column — AI configuration */}

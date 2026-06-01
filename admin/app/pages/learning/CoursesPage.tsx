@@ -22,6 +22,8 @@ import {
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
 import { useAdminCourses, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
+import { CourseGridSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import type { Course } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
@@ -36,7 +38,7 @@ const levelMeta: Record<string, { label: string; color: string; bg: string }> = 
 
 export function CoursesPage() {
   const navigate = useNavigate()
-  const { data = [], isLoading, error } = useAdminCourses()
+  const { data = [], isLoading, error, refetch, isFetching } = useAdminCourses()
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Course | null>(null)
   const [search, setSearch] = useState('')
@@ -116,9 +118,13 @@ export function CoursesPage() {
       )}
 
       {isLoading ? (
-        <LoadingState />
+        <CourseGridSkeleton count={6} />
       ) : error ? (
-        <ErrorState message={error instanceof Error ? error.message : 'Không tải được dữ liệu'} />
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : data.length === 0 ? (
         <EmptyCourses />
       ) : filtered.length === 0 ? (
@@ -288,23 +294,6 @@ function FilterPill({ active, onClick, children }: { active: boolean; onClick: (
     >
       {children}
     </button>
-  )
-}
-
-function LoadingState() {
-  return (
-    <div className="text-center py-12">
-      <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-      <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-    </div>
-  )
-}
-
-function ErrorState({ message }: { message: string }) {
-  return (
-    <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-      <p className="text-sm text-destructive font-semibold">{message}</p>
-    </div>
   )
 }
 

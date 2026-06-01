@@ -21,12 +21,14 @@ import {
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
 import { useAdminScenarioCategories, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
+import { CardGridSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import type { ScenarioCategory } from '../../features/simulations/types'
 import { simulationPath } from './route-utils'
 
 export function ScenarioCategoriesPage() {
   const navigate = useNavigate()
-  const { data = [], isLoading, error } = useAdminScenarioCategories()
+  const { data = [], isLoading, error, refetch, isFetching } = useAdminScenarioCategories()
   const mutations = useSimulationsAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<ScenarioCategory | null>(null)
 
@@ -82,16 +84,13 @@ export function ScenarioCategoriesPage() {
       )}
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
+        <CardGridSkeleton count={6} />
       ) : error ? (
-        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-sm text-destructive font-semibold">
-            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          </p>
-        </div>
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : data.length === 0 ? (
         <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
           <MessageSquare className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />

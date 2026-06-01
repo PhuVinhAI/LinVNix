@@ -2,6 +2,8 @@ import { Link, useParams } from 'react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { ConversationSkeleton, MetricCardsSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { useAdminLearner, useAdminLearnerSimulation } from '../../features/learners/api/use-learners-admin'
 import { learnerPath } from './route-utils'
 
@@ -40,7 +42,7 @@ const statusColors: Record<string, string> = {
 export function LearnerSimulationDetailPage() {
   const { learnerId, sessionId } = useParams()
   const { data: learnerData } = useAdminLearner(learnerId)
-  const { data, isLoading, error } = useAdminLearnerSimulation(learnerId, sessionId)
+  const { data, isLoading, error, refetch, isFetching } = useAdminLearnerSimulation(learnerId, sessionId)
 
   const learner = learnerData?.user
   const session = data?.session
@@ -80,16 +82,16 @@ export function LearnerSimulationDetailPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-          <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
+        <>
+          <MetricCardsSkeleton count={4} columns="md:grid-cols-4" />
+          <ConversationSkeleton count={6} />
+        </>
       ) : error ? (
-        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-sm text-destructive font-semibold">
-            {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-          </p>
-        </div>
+        <ErrorState
+          message={errorMessage(error)}
+          onRetry={() => refetch()}
+          retrying={isFetching}
+        />
       ) : data ? (
         <>
           {/* Metrics */}

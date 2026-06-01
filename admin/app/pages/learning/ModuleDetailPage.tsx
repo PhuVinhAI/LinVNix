@@ -9,6 +9,8 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { LessonTimelineSkeleton } from '../../components/admin/PageSkeletons'
+import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,7 +45,7 @@ const lessonTypes: Record<string, { Icon: LucideIcon; label: string; bg: string;
 export function ModuleDetailPage() {
   const { moduleId } = useParams()
   const navigate = useNavigate()
-  const { data: module, isLoading, error } = useAdminModule(moduleId)
+  const { data: module, isLoading, error, refetch, isFetching } = useAdminModule(moduleId)
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Lesson | null>(null)
 
@@ -169,16 +171,13 @@ export function ModuleDetailPage() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-            <p className="mt-3 text-sm text-muted-foreground">Đang tải...</p>
-          </div>
+          <LessonTimelineSkeleton count={4} />
         ) : error ? (
-          <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-center">
-            <p className="text-sm text-destructive font-semibold">
-              {error instanceof Error ? error.message : 'Không tải được dữ liệu'}
-            </p>
-          </div>
+          <ErrorState
+            message={errorMessage(error)}
+            onRetry={() => refetch()}
+            retrying={isFetching}
+          />
         ) : !module?.lessons || module.lessons.length === 0 ? (
           <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
             <BookOpen className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
