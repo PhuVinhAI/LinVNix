@@ -42,7 +42,7 @@ export function ThemeToggle({ labels }: { labels: { light: string; dark: string 
 			onClick={toggle}
 			aria-label={ariaLabel}
 			title={ariaLabel}
-			className="inline-flex items-center justify-center size-9 rounded-xl border-2 border-border bg-transparent text-foreground transition-opacity hover:opacity-90 active:opacity-70 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+			className="inline-flex items-center justify-center size-9 rounded-full border border-border bg-transparent text-foreground hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
 		>
 			{mounted ? (
 				isDark ? <Sun className="size-4" /> : <Moon className="size-4" />

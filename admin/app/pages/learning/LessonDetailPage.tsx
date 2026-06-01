@@ -12,7 +12,6 @@ import {
   Clock,
   MoreVertical,
   Trash2,
-  GraduationCap,
   Volume2,
   Image as ImageIcon,
   Video as VideoIcon,
@@ -148,12 +147,6 @@ export function LessonDetailPage() {
               <span className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-white font-bold ${typeBg}`}>
                 {typeLabel}
               </span>
-              {lesson?.isAssessment && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-amber-100 dark:bg-amber-950/40 px-2 py-0.5 text-[11px] font-bold text-amber-700 dark:text-amber-300">
-                  <GraduationCap className="h-3 w-3" />
-                  Bài đánh giá
-                </span>
-              )}
               {lesson?.estimatedDuration && (
                 <span className="inline-flex items-center gap-1 text-muted-foreground">
                   <Clock className="h-3 w-3" />

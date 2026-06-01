@@ -19,7 +19,6 @@ export interface Module {
   description: string
   orderIndex: number
   estimatedHours?: number | null
-  topic?: string | null
   courseId: string
   course?: Course
   lessons?: Lesson[]
@@ -32,7 +31,6 @@ export interface Lesson {
   lessonType: string
   orderIndex: number
   estimatedDuration?: number | null
-  isAssessment: boolean
   moduleId: string
   module?: Module
   contents?: LessonContent[]

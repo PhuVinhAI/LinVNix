@@ -26,9 +26,6 @@ export class Module extends BaseEntity {
   @Column({ name: 'estimated_hours', nullable: true })
   estimatedHours?: number;
 
-  @Column({ nullable: true })
-  topic?: string;
-
   @Column({ name: 'course_id' })
   courseId: string;
 

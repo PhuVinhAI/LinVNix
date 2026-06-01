@@ -1,12 +1,11 @@
 import { useState, type FormEvent } from 'react'
 import {
   BookOpen, Lightbulb, Headphones, MessageCircle, Edit3,
-  Mic, Globe, FileText, GraduationCap,
+  Mic, Globe, FileText,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
-import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 import { NumberStepper } from '../editors/NumberStepper'
@@ -28,7 +27,6 @@ export interface LessonFormValues {
   lessonType: string
   orderIndex: number
   estimatedDuration?: number | null
-  isAssessment: boolean
 }
 
 export function LessonForm({
@@ -46,7 +44,6 @@ export function LessonForm({
     lessonType: initialValue?.lessonType ?? 'vocabulary',
     orderIndex: initialValue?.orderIndex ?? 0,
     estimatedDuration: initialValue?.estimatedDuration ?? null,
-    isAssessment: initialValue?.isAssessment ?? false,
   })
 
   const update = <K extends keyof LessonFormValues>(key: K, value: LessonFormValues[K]) => {
@@ -124,22 +121,6 @@ export function LessonForm({
               ariaLabelIncrement="Tăng thời gian"
             />
           </FormField>
-        </div>
-
-        <div className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-            <GraduationCap className="h-5 w-5 text-muted-foreground" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold">Bài kiểm tra đánh giá</p>
-            <p className="text-xs text-muted-foreground">
-              Đánh dấu nếu đây là bài đánh giá tổng hợp kết thúc chủ đề
-            </p>
-          </div>
-          <Switch
-            checked={values.isAssessment}
-            onCheckedChange={(checked) => update('isAssessment', checked)}
-          />
         </div>
       </FormSection>
     </form>

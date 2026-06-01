@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import Container from '../ui/Container.astro';
 import Section from '../ui/Section.astro';
+import Mark from '../art/Mark.astro';
 import { defaultLang, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/utils';
 
@@ -21,32 +22,64 @@ const items = [
 ];
 ---
 
-<Section id="faq" bordered>
-	<Container size="md">
-		<div class="text-center mb-12 space-y-4">
-			<div class="text-sm font-medium text-primary">{t('faq.eyebrow')}</div>
-			<h2 class="text-4xl md:text-5xl font-bold tracking-tight">
-				{t('faq.title')}
-			</h2>
-		</div>
+<Section id="faq" bordered class="bg-paper">
+	<Container size="xl">
+		<div class="grid md:grid-cols-12 gap-10 md:gap-20">
+			<aside class="md:col-span-4 md:sticky md:top-32 self-start space-y-8">
+				<div data-reveal="up">
+					<div class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+						/ {t('faq.eyebrow')} — chapter 05
+					</div>
+					<h2 class="mt-6 text-section leading-[0.95]">
+						<span class="block" data-split="word">{t('faq.title')}</span>
+					</h2>
+				</div>
 
-		<div class="rounded-2xl border border-border overflow-hidden divide-y divide-border bg-background">
-			{
-				items.map((item, i) => (
-					<details class="group" open={i === 0}>
-						<summary class="flex items-center justify-between cursor-pointer list-none px-6 py-5 hover:bg-muted/50 transition-colors">
-							<span class="text-base font-medium pr-6">{item.q}</span>
-							<Icon
-								name="lucide:plus"
-								class="size-5 text-muted-foreground shrink-0 transition-transform group-open:rotate-45"
-							/>
-						</summary>
-						<div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
-							{item.a}
-						</div>
-					</details>
-				))
-			}
+				<!-- Decorative mark + meta -->
+				<div class="flex items-center gap-4 text-mono text-[10px] uppercase tracking-[0.3em] text-foreground">
+					<span class="size-6 text-primary inline-flex">
+						<Mark type="hook" class="size-full" />
+					</span>
+					<span>05 · answers</span>
+					<div class="h-px flex-1 bg-rule"></div>
+				</div>
+
+				<!-- Quick note -->
+				<p class="text-sm text-foreground/70 italic max-w-xs leading-[1.55]">
+					More questions? Reach us at <span class="text-foreground link-editorial">hello@linvnix.com</span>.
+				</p>
+			</aside>
+
+			<div class="md:col-span-8">
+				{
+					items.map((item, i) => (
+						<details
+							class="group border-b border-rule first:border-t"
+							open={i === 0}
+							data-smooth
+						>
+							<summary class="flex items-start justify-between cursor-pointer list-none py-7 transition-colors hover:text-primary">
+								<div class="flex items-start gap-5 pr-6">
+									<span class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 shrink-0">
+										{String(i + 1).padStart(2, '0')}
+									</span>
+									<span class="text-xl md:text-3xl font-display leading-[1.1]">
+										{item.q}
+									</span>
+								</div>
+								<div class="size-10 rounded-full border border-rule bg-background flex items-center justify-center shrink-0 transition-transform duration-500 group-open:rotate-45">
+									<Icon name="lucide:plus" class="size-4" />
+								</div>
+							</summary>
+							<div data-smooth-content class="overflow-hidden">
+								<div class="pb-7 pl-12 pr-14 text-base md:text-lg text-foreground/75 leading-[1.65] max-w-3xl">
+									{item.a}
+								</div>
+							</div>
+						</details>
+					))
+				}
+			</div>
 		</div>
 	</Container>
 </Section>

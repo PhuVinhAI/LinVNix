@@ -66,7 +66,6 @@ export class LessonsController {
         lessonType: 'vocabulary',
         orderIndex: 1,
         estimatedDuration: 30,
-        isAssessment: false,
         contents: [],
         vocabularies: [],
         grammarRules: [],

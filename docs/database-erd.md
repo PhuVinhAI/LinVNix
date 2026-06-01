@@ -87,7 +87,6 @@ erDiagram
     text description
     int order_index
     int estimated_hours
-    varchar topic
     uuid course_id FK
   }
 
@@ -101,7 +100,6 @@ erDiagram
     enum lesson_type
     int order_index
     int estimated_duration
-    boolean is_assessment
     uuid module_id FK
   }
 

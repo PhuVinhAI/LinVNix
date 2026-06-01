@@ -34,9 +34,6 @@ export class Lesson extends BaseEntity {
   @Column({ name: 'estimated_duration', nullable: true })
   estimatedDuration?: number;
 
-  @Column({ name: 'is_assessment', default: false })
-  isAssessment: boolean;
-
   @Column({ name: 'module_id' })
   moduleId: string;
 

@@ -12,7 +12,6 @@ void main() {
         'orderIndex': 1,
         'moduleId': 'module-1',
         'estimatedDuration': 15,
-        'isAssessment': false,
         'contents': [
           {
             'id': 'content-1',

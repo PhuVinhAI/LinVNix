@@ -653,27 +653,6 @@ class _ModuleInfoSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (module.topic != null) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm + 2,
-                  vertical: AppSpacing.xs + 1,
-                ),
-                decoration: BoxDecoration(
-                  color: c.primary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                ),
-                child: Text(
-                  module.topic!,
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.caption,
-                    fontWeight: FontWeight.w600,
-                    color: c.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-            ],
             Text(
               module.description,
               style: GoogleFonts.inter(
@@ -974,41 +953,16 @@ class _LessonCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              lesson.title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.inter(
-                                fontSize: AppTypography.bodyLarge,
-                                fontWeight: FontWeight.w600,
-                                color: c.foreground,
-                                height: 1.25,
-                              ),
-                            ),
-                          ),
-                          if (lesson.isAssessment)
-                            Container(
-                              margin: const EdgeInsets.only(left: AppSpacing.sm),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: c.muted,
-                                borderRadius:
-                                    BorderRadius.circular(AppRadius.sm),
-                              ),
-                              child: Text(
-                                S.of(context).quizLabel,
-                                style: GoogleFonts.inter(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: c.foreground,
-                                ),
-                              ),
-                            ),
-                        ],
+                      Text(
+                        lesson.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: AppTypography.bodyLarge,
+                          fontWeight: FontWeight.w600,
+                          color: c.foreground,
+                          height: 1.25,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(

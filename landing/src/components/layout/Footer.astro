@@ -40,26 +40,28 @@ const columns = [
 ];
 ---
 
-<footer class="border-t border-border bg-background">
+<footer class="border-t border-rule bg-paper relative">
 	<Container size="xl">
-		<div class="py-16 grid grid-cols-2 md:grid-cols-4 gap-10">
-			<div class="col-span-2 md:col-span-1">
+		<div class="py-16 md:py-20 grid grid-cols-2 md:grid-cols-12 gap-10">
+			<div class="col-span-2 md:col-span-5 space-y-6">
 				<Logo size="md" />
-				<p class="mt-4 text-sm text-muted-foreground max-w-xs leading-relaxed">
+				<p class="text-sm text-foreground/70 max-w-xs leading-[1.6] italic">
 					{t('footer.tagline')}
 				</p>
 			</div>
 
 			{
 				columns.map((col) => (
-					<div>
-						<div class="text-sm font-semibold">{col.title}</div>
-						<ul class="mt-4 space-y-3">
+					<div class="md:col-span-2 lg:col-span-2">
+						<div class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+							/ {col.title}
+						</div>
+						<ul class="mt-6 space-y-3">
 							{col.links.map((link) => (
 								<li>
 									<a
 										href={link.href}
-										class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+										class="link-editorial text-sm text-foreground/80 hover:text-foreground transition-colors"
 									>
 										{link.label}
 									</a>
@@ -69,13 +71,16 @@ const columns = [
 					</div>
 				))
 			}
+
+			<div class="md:col-span-1"></div>
 		</div>
 
-		<div class="py-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-3">
-			<div class="text-xs text-muted-foreground">
-				© {year} LinVNix. {t('footer.copyright')}
+		<div class="py-6 border-t border-rule flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+			<div class="flex items-center gap-3">
+				<span class="size-1 rounded-full bg-primary"></span>
+				<span>© {year} LinVNix. {t('footer.copyright')}</span>
 			</div>
-			<div class="text-xs text-muted-foreground">{t('footer.madeIn')}</div>
+			<div>{t('footer.madeIn')} · Hà Nội</div>
 		</div>
 	</Container>
 </footer>

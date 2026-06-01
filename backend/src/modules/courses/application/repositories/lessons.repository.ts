@@ -66,10 +66,9 @@ export class LessonsRepository {
    *
    * Joins `Lesson → Module → Course` and applies optional filters:
    *
-   * - `topic` — ILIKE against `Module.title`. The PRD intentionally targets
-   *   module title (not the module's optional `topic` column) because
-   *   modules are the human-meaningful unit ("Family vocabulary",
-   *   "Greetings") and the `topic` column is sparsely populated.
+   * - `topic` — ILIKE against `Module.title`. Modules are the human-meaningful
+   *   unit ("Family vocabulary", "Greetings"), so callers filter by the
+   *   module title text.
    * - `level` — exact match against the owning `Course.level` (CEFR).
    * - `type` — exact match against `Lesson.lessonType`.
    *

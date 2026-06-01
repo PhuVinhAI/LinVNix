@@ -1,0 +1,67 @@
+---
+import Mark from '../art/Mark.astro';
+
+const rowA = [
+	'A1', 'Vocabulary', 'B2', 'Pronunciation', 'C1', 'Grammar',
+	'A2', 'Listening', 'B1', 'Speaking', 'C2', 'Dialects',
+];
+const rowB = [
+	'xin chào', 'cảm ơn', 'tạm biệt', 'đẹp', 'ngon', 'thật tuyệt',
+	'việt nam', 'tiếng việt', 'phở', 'áo dài',
+];
+const markRotation = ['acute', 'grave', 'hook', 'tilde', 'dot', 'breve'] as const;
+---
+
+<section
+	aria-hidden="true"
+	class="relative border-y border-rule bg-paper overflow-hidden py-6 md:py-8"
+>
+	<!-- Row 1: editorial italic Vietnamese phrases -->
+	<div
+		data-marquee
+		data-marquee-speed="55"
+		data-marquee-reactive
+		class="relative mb-2"
+	>
+		<div
+			data-marquee-track
+			class="flex items-center whitespace-nowrap will-change-transform gap-8 md:gap-12 text-4xl md:text-6xl text-display italic-display text-foreground"
+		>
+			{
+				rowB.map((w, i) => {
+					const mark = markRotation[i % markRotation.length];
+					return (
+						<span class="inline-flex items-center gap-6 md:gap-10">
+							<span>{w}</span>
+							<span class="size-6 md:size-7 text-primary inline-flex">
+								<Mark type={mark} class="size-full" />
+							</span>
+						</span>
+					);
+				})
+			}
+		</div>
+	</div>
+
+	<!-- Row 2: CEFR + skill labels mono, reverse direction -->
+	<div
+		data-marquee
+		data-marquee-speed="80"
+		data-marquee-direction="right"
+		class="relative"
+	>
+		<div
+			data-marquee-track
+			class="flex items-center whitespace-nowrap will-change-transform gap-6 md:gap-10 text-xs md:text-sm text-mono uppercase tracking-[0.3em] text-muted-foreground"
+		>
+			{
+				rowA.map((w) => (
+					<span class="inline-flex items-center gap-6 md:gap-10">
+						<span>{w}</span>
+						<span class="size-1 rounded-full bg-rule"></span>
+					</span>
+				))
+			}
+		</div>
+	</div>
+</section>

@@ -19,11 +19,6 @@ export class CreateModuleDto {
   @IsOptional()
   estimatedHours?: number;
 
-  @ApiProperty({ example: 'Chào hỏi', required: false })
-  @IsString()
-  @IsOptional()
-  topic?: string;
-
   @ApiProperty({ example: 'uuid-of-course' })
   @IsUUID()
   courseId: string;

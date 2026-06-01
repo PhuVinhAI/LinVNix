@@ -1,0 +1,104 @@
+---
+interface Props {
+	type: 'acute' | 'grave' | 'hook' | 'tilde' | 'dot' | 'horn' | 'breve';
+	class?: string;
+}
+
+const { type, class: className = '' } = Astro.props;
+---
+
+{
+	type === 'acute' && (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			class={className}
+		>
+			<path d="M16 4 L8 14" />
+		</svg>
+	)
+}
+{
+	type === 'grave' && (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			class={className}
+		>
+			<path d="M8 4 L16 14" />
+		</svg>
+	)
+}
+{
+	type === 'hook' && (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			class={className}
+		>
+			<path d="M9 14 Q9 4, 15 4 Q19 4, 19 8" />
+		</svg>
+	)
+}
+{
+	type === 'tilde' && (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			class={className}
+		>
+			<path d="M3 12 Q7 6, 12 12 T21 12" />
+		</svg>
+	)
+}
+{
+	type === 'dot' && (
+		<svg
+			viewBox="0 0 24 24"
+			fill="currentColor"
+			class={className}
+		>
+			<circle cx="12" cy="12" r="4" />
+		</svg>
+	)
+}
+{
+	type === 'horn' && (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			class={className}
+		>
+			<path d="M16 4 Q14 10, 19 14" />
+		</svg>
+	)
+}
+{
+	type === 'breve' && (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			class={className}
+		>
+			<path d="M5 6 Q12 16, 19 6" />
+		</svg>
+	)
+}

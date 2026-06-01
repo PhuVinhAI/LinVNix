@@ -76,7 +76,6 @@ class CourseModule {
     required this.description,
     required this.orderIndex,
     required this.courseId,
-    this.topic,
     this.estimatedHours,
     this.lessons = const [],
     this.course,
@@ -91,7 +90,6 @@ class CourseModule {
       description: json['description'] as String,
       orderIndex: (json['orderIndex'] as num).toInt(),
       courseId: json['courseId'] as String,
-      topic: json['topic'] as String?,
       estimatedHours: (json['estimatedHours'] as num?)?.toInt(),
       lessons: (json['lessons'] as List<dynamic>?)
               ?.map((e) => Lesson.fromJson(e as Map<String, dynamic>))
@@ -114,7 +112,6 @@ class CourseModule {
   final String description;
   final int orderIndex;
   final String courseId;
-  final String? topic;
   final int? estimatedHours;
   final List<Lesson> lessons;
   final Course? course;
@@ -128,7 +125,6 @@ class CourseModule {
       'description': description,
       'orderIndex': orderIndex,
       'courseId': courseId,
-      'topic': topic,
       'estimatedHours': estimatedHours,
       'lessons': lessons.map((e) => e.toJson()).toList(),
       'course': course?.toJson(),
@@ -147,7 +143,6 @@ class Lesson {
     required this.orderIndex,
     required this.moduleId,
     this.estimatedDuration,
-    this.isAssessment = false,
     this.createdAt,
     this.updatedAt,
   });
@@ -161,7 +156,6 @@ class Lesson {
       orderIndex: (json['orderIndex'] as num).toInt(),
       moduleId: json['moduleId'] as String,
       estimatedDuration: (json['estimatedDuration'] as num?)?.toInt(),
-      isAssessment: json['isAssessment'] as bool? ?? false,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -178,7 +172,6 @@ class Lesson {
   final int orderIndex;
   final String moduleId;
   final int? estimatedDuration;
-  final bool isAssessment;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -191,7 +184,6 @@ class Lesson {
       'orderIndex': orderIndex,
       'moduleId': moduleId,
       'estimatedDuration': estimatedDuration,
-      'isAssessment': isAssessment,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };

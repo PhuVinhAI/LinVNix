@@ -1,6 +1,5 @@
 ---
 import Container from '../ui/Container.astro';
-import Section from '../ui/Section.astro';
 import { defaultLang, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/utils';
 
@@ -12,26 +11,104 @@ const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
 
 const stats = [
-	{ value: '500+', label: t('stats.lessons') },
-	{ value: 'A1–C2', label: t('stats.levels') },
-	{ value: '9', label: t('stats.languages') },
-	{ value: '3', label: t('stats.dialects') },
+	{
+		idx: '01',
+		value: 500,
+		suffix: '+',
+		isCount: true,
+		label: t('stats.lessons'),
+		note: 'audio · video · text',
+		span: 'md:col-span-5',
+	},
+	{
+		idx: '02',
+		value: null,
+		text: 'A1–C2',
+		label: t('stats.levels'),
+		note: 'CEFR aligned',
+		span: 'md:col-span-3',
+	},
+	{
+		idx: '03',
+		value: 9,
+		suffix: '',
+		isCount: true,
+		label: t('stats.languages'),
+		note: 'bilingual bridges',
+		span: 'md:col-span-2',
+	},
+	{
+		idx: '04',
+		value: 3,
+		suffix: '',
+		isCount: true,
+		label: t('stats.dialects'),
+		note: 'Bắc · Trung · Nam',
+		span: 'md:col-span-2',
+	},
 ];
 ---
 
-<Section bordered class="py-14 md:py-16">
+<section class="border-b border-rule bg-paper relative">
 	<Container size="xl">
-		<div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-border border border-border rounded-xl overflow-hidden">
+		<div
+			class="py-14 md:py-20 grid md:grid-cols-12 gap-x-6 gap-y-12 md:gap-y-0 divide-y md:divide-y-0 divide-rule"
+		>
 			{
-				stats.map((s) => (
-					<div class="bg-background p-8 text-center">
-						<div class="text-3xl md:text-4xl font-bold tracking-tight text-primary">
-							{s.value}
+				stats.map((s, i) => (
+					<article
+						class={`${s.span} ${i > 0 ? 'md:border-l md:border-rule md:pl-6' : ''} pt-12 md:pt-0`}
+						data-reveal="up"
+						data-reveal-delay={`${i * 0.08}`}
+					>
+						<div class="flex items-baseline justify-between mb-6 md:mb-10">
+							<span class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+								{s.idx}
+							</span>
+							<span class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+								/ stat
+							</span>
 						</div>
-						<div class="mt-2 text-sm text-muted-foreground">{s.label}</div>
-					</div>
+
+						<div class="font-display num-tabular leading-none">
+							{s.isCount ? (
+								<span class="block text-6xl md:text-7xl lg:text-8xl italic-display">
+									<span
+										data-count={s.value}
+										data-count-suffix={s.suffix}
+									>
+										0{s.suffix}
+									</span>
+								</span>
+							) : (
+								<span class="block text-6xl md:text-7xl lg:text-8xl italic-display">
+									{s.text}
+								</span>
+							)}
+						</div>
+
+						<!-- Hand-drawn rule -->
+						<svg
+							viewBox="0 0 200 10"
+							class="mt-6 md:mt-8 w-full h-2 text-primary"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							data-draw
+							data-draw-duration="1.6"
+						>
+							<path d="M2 5 Q 50 1, 100 5 T 198 5" stroke-linecap="round" />
+						</svg>
+
+						<div class="mt-6 md:mt-8 text-sm md:text-base font-medium text-foreground">
+							{s.label}
+						</div>
+						<div class="mt-1 text-xs text-muted-foreground italic">
+							{s.note}
+						</div>
+					</article>
 				))
 			}
 		</div>
 	</Container>
-</Section>
+</section>

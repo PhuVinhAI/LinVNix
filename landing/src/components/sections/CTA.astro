@@ -1,7 +1,9 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Container from '../ui/Container.astro';
 import Section from '../ui/Section.astro';
-import Button from '../ui/Button.astro';
+import Mark from '../art/Mark.astro';
+import OrbitDecor from '../art/OrbitDecor.astro';
 import { defaultLang, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/utils';
 import { DEMO_APK_URL, DEMO_APK_FILENAME } from '../../config';
@@ -14,26 +16,93 @@ const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<Section id="cta">
-	<Container size="md">
-		<div class="rounded-2xl border border-border bg-muted p-12 md:p-16 text-center space-y-6">
-			<h2 class="text-3xl md:text-4xl font-bold tracking-tight">
-				{t('cta.title')}
-			</h2>
-			<p class="text-lg text-muted-foreground max-w-xl mx-auto">
-				{t('cta.subtitle')}
-			</p>
-			<div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-				<Button
-					href={DEMO_APK_URL}
-					download={DEMO_APK_FILENAME}
-					variant="primary"
-					size="lg"
+<Section id="cta" class="bg-foreground text-background relative overflow-hidden">
+	<!-- Decorative rotating orbit -->
+	<div
+		aria-hidden="true"
+		class="absolute -right-40 -top-32 size-[42rem] text-background/15 pointer-events-none"
+		data-rotate-on-scroll="180"
+	>
+		<OrbitDecor class="size-full" />
+	</div>
+
+	<!-- Floating decorative tonal marks -->
+	<div
+		aria-hidden="true"
+		class="absolute left-[10%] top-[20%] size-12 text-primary"
+		data-float
+		data-float-duration="5"
+	>
+		<Mark type="acute" class="size-full" />
+	</div>
+	<div
+		aria-hidden="true"
+		class="absolute right-[12%] bottom-[18%] size-9 text-background/30"
+		data-float
+		data-float-duration="6"
+	>
+		<Mark type="grave" class="size-full" />
+	</div>
+
+	<Container size="xl">
+		<div class="relative py-8 md:py-16 grid md:grid-cols-12 gap-10 md:gap-16 items-end">
+			<div class="md:col-span-8">
+				<div
+					class="text-mono text-[10px] uppercase tracking-[0.3em] text-background/60 mb-8"
+					data-reveal="up"
 				>
-					{t('cta.primary')}
-				</Button>
-				<Button href="/contact" variant="outline" size="lg">{t('cta.secondary')}</Button>
+					/ ready — chapter 06
+				</div>
+				<h2 class="text-mega leading-[0.9]">
+					<span class="block" data-split="word">{t('cta.title')}</span>
+				</h2>
 			</div>
+
+			<div class="md:col-span-4 space-y-8">
+				<p
+					class="text-base md:text-lg text-background/75 leading-[1.6]"
+					data-reveal="up"
+					data-reveal-delay="0.1"
+				>
+					{t('cta.subtitle')}
+				</p>
+				<div
+					class="flex flex-col gap-3"
+					data-reveal="up"
+					data-reveal-delay="0.2"
+				>
+					<div data-magnet="0.3">
+						<a
+							href={DEMO_APK_URL}
+							download={DEMO_APK_FILENAME}
+							data-magnet-inner
+							class="group inline-flex items-center justify-between gap-3 h-16 px-8 rounded-full bg-primary text-primary-foreground font-medium hover:bg-background hover:text-foreground transition-colors"
+						>
+							<span>{t('cta.primary')}</span>
+							<Icon name="lucide:arrow-down-to-line" class="size-5" />
+						</a>
+					</div>
+					<a
+						href="/contact"
+						class="inline-flex items-center justify-between gap-3 h-16 px-8 rounded-full border border-background/30 hover:bg-background/10 transition-colors font-medium"
+					>
+						<span>{t('cta.secondary')}</span>
+						<Icon name="lucide:arrow-up-right" class="size-5" />
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- credits strip -->
+		<div
+			class="mt-8 md:mt-16 pt-8 border-t border-background/20 grid md:grid-cols-12 gap-6 items-center text-mono text-[10px] uppercase tracking-[0.3em] text-background/60"
+		>
+			<div class="md:col-span-4 flex items-center gap-3">
+				<span class="size-1.5 rounded-full bg-primary animate-pulse"></span>
+				<span data-scribble>LinVNix · Hà Nội · 2026</span>
+			</div>
+			<div class="md:col-span-4 md:text-center">Vol. 01 / Edition 1</div>
+			<div class="md:col-span-4 md:text-right">Android APK · iOS soon · Web soon</div>
 		</div>
 	</Container>
 </Section>

@@ -30,7 +30,6 @@ Map<String, dynamic> moduleContextSummary(
     'id': module.id,
     'title': module.title,
     'description': module.description,
-    if (module.topic != null) 'topic': module.topic,
     if (module.estimatedHours != null) 'estimatedHours': module.estimatedHours,
     'lessonCount': module.lessons.length,
   };
@@ -75,7 +74,6 @@ Map<String, dynamic> lessonContextSummary(
     'orderIndex': lesson.orderIndex,
     if (lesson.estimatedDuration != null)
       'estimatedDuration': lesson.estimatedDuration,
-    'isAssessment': lesson.isAssessment,
     if (progress != null) ...{
       'status': progress.status,
       if (progress.score != null) 'score': progress.score,

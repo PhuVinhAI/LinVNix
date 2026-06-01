@@ -54,7 +54,6 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | `lesson_type` | enum | ✅ | Một trong: `vocabulary`, `grammar`, `reading`, `listening`, `speaking`, `writing`, `pronunciation`, `culture` |
 | `order_index` | int | ✅ | Thứ tự trong unit |
 | `estimated_duration` | int | ❌ | Nullable — ước lượng phút |
-| `is_assessment` | boolean | ❌ | default: `false` — bài kiểm tra? |
 | `module_id` | UUID | ✅ | FK → modules.id, ON DELETE CASCADE |
 
 **Yêu cầu:** Mỗi Module cần 2-4 Lesson, phân bổ các lesson_type phù hợp chủ đề. Ví dụ Module "Chào hỏi" có thể có: vocabulary lesson (từ vựng chào hỏi), grammar lesson (cấu trúc câu chào), pronunciation lesson (phát âm), culture lesson (văn hóa giao tiếp VN).
@@ -350,7 +349,6 @@ Trả về dữ liệu dưới dạng **JSON** theo cấu trúc cây lồng nhau
               "lesson_type": "vocabulary",
               "order_index": 1,
               "estimated_duration": 20,
-              "is_assessment": false,
               "lesson_contents": [
                 {
                   "content_type": "text",

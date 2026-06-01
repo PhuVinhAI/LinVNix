@@ -1,4 +1,6 @@
 ---
+import Glyph from '../art/Glyph.astro';
+
 interface Props {
 	href?: string;
 	size?: 'sm' | 'md' | 'lg';
@@ -28,16 +30,11 @@ const textSizes = {
 const Tag = href ? 'a' : 'div';
 ---
 
-<Tag href={href} class={`inline-flex items-center gap-2 ${className}`}>
-	<img
-		src="/icon.png"
-		alt="LinVNix"
-		width="40"
-		height="40"
-		class={`${iconSizes[size]} rounded-md select-none`}
-		draggable="false"
-	/>
+<Tag href={href} class={`inline-flex items-center gap-2.5 group ${className}`}>
+	<Glyph class={`${iconSizes[size]} text-foreground transition-transform duration-700 group-hover:rotate-[-10deg]`} />
 	{withText && (
-		<span class={`font-bold tracking-tight ${textSizes[size]}`}>LinVNix</span>
+		<span class={`font-display ${textSizes[size]} tracking-tight italic-display font-medium`} style="font-style: italic;">
+			Lin<span class="text-primary">·</span>VNix
+		</span>
 	)}
 </Tag>

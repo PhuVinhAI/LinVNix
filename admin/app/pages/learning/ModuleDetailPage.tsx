@@ -3,7 +3,7 @@ import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import {
-  Plus, Pencil, BookOpen, Clock, MoreVertical, Trash2, Layers, GraduationCap,
+  Plus, Pencil, BookOpen, Clock, MoreVertical, Trash2, Layers,
   Lightbulb, Headphones, MessageCircle, Edit3, Mic, Globe, FileText,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -63,7 +63,6 @@ export function ModuleDetailPage() {
   const stop = (e: MouseEvent | KeyboardEvent) => e.stopPropagation()
 
   const totalMinutes = module?.lessons?.reduce((sum, l) => sum + (l.estimatedDuration ?? 0), 0) ?? 0
-  const assessmentCount = module?.lessons?.filter((l) => l.isAssessment).length ?? 0
 
   // Group lessons by type for the type breakdown
   const typeCounts = (module?.lessons ?? []).reduce<Record<string, number>>((acc, lesson) => {
@@ -90,12 +89,6 @@ export function ModuleDetailPage() {
             <div className="flex items-center gap-2 text-xs mb-1.5">
               <Layers className="h-3.5 w-3.5 text-muted-foreground" />
               <span className="font-bold uppercase tracking-wider text-muted-foreground">Chủ đề</span>
-              {module?.topic && (
-                <>
-                  <span className="text-muted-foreground">·</span>
-                  <span className="font-medium text-foreground">{module.topic}</span>
-                </>
-              )}
             </div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">
               {module?.title ?? 'Chủ đề'}
@@ -117,9 +110,8 @@ export function ModuleDetailPage() {
         </div>
 
         {/* Inline metric strip */}
-        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t-2 border-border">
+        <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t-2 border-border">
           <MetricCell icon={BookOpen} label="Bài học" value={module?.lessons?.length ?? 0} />
-          <MetricCell icon={GraduationCap} label="Bài đánh giá" value={assessmentCount} />
           <MetricCell icon={Clock} label="Tổng phút" value={totalMinutes} />
         </div>
 
@@ -228,12 +220,6 @@ export function ModuleDetailPage() {
                           {lesson.title}
                         </h3>
                         <span className={`text-xs font-bold ${t.color}`}>{t.label}</span>
-                        {lesson.isAssessment && (
-                          <span className="inline-flex items-center gap-1 rounded-md bg-amber-100 dark:bg-amber-950/40 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">
-                            <GraduationCap className="h-3 w-3" />
-                            ĐÁNH GIÁ
-                          </span>
-                        )}
                         {lesson.estimatedDuration && (
                           <span className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Clock className="h-3 w-3" />

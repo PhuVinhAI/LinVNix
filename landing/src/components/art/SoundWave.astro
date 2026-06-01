@@ -1,0 +1,60 @@
+---
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+// Generate a deterministic sine-like wave with varying amplitudes
+const bars = Array.from({ length: 32 }, (_, i) => {
+	const phase = (i / 32) * Math.PI * 4;
+	const base = Math.abs(Math.sin(phase)) * 50;
+	const jitter = ((i * 7) % 13) / 13;
+	return Math.max(6, base + jitter * 18);
+});
+---
+
+<svg
+	viewBox="0 0 240 120"
+	class={className}
+	aria-hidden="true"
+>
+	<!-- waveform bars -->
+	<g fill="currentColor">
+		{
+			bars.map((h, i) => (
+				<rect
+					x={i * 7 + 4}
+					y={60 - h / 2}
+					width="3"
+					height={h}
+					rx="1.5"
+					class="sw-bar"
+					style={`animation-delay: ${i * 50}ms`}
+				/>
+			))
+		}
+	</g>
+
+	<!-- speech-bubble outline integrated -->
+	<g stroke="currentColor" stroke-width="1.25" fill="none" opacity="0.35" data-draw>
+		<path d="M8 105 Q4 105 4 100 L4 85 Q4 80 8 80 L40 80" stroke-linecap="round" />
+		<path d="M230 105 Q236 105 236 100 L236 85 Q236 80 232 80 L200 80" stroke-linecap="round" />
+	</g>
+
+	<!-- accent dot -->
+	<circle cx="120" cy="105" r="2" fill="var(--primary)" />
+
+	<style>
+		.sw-bar {
+			transform-origin: center;
+			animation: sw-pulse 1.4s ease-in-out infinite;
+		}
+		@keyframes sw-pulse {
+			0%, 100% { transform: scaleY(0.7); }
+			50% { transform: scaleY(1.15); }
+		}
+		@media (prefers-reduced-motion: reduce) {
+			.sw-bar { animation: none; }
+		}
+	</style>
+</svg>

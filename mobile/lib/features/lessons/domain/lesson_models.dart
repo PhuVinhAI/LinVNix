@@ -7,7 +7,6 @@ class LessonDetail {
     required this.orderIndex,
     required this.moduleId,
     this.estimatedDuration,
-    this.isAssessment = false,
     this.contents = const [],
     this.vocabularies = const [],
     this.grammarRules = const [],
@@ -23,7 +22,6 @@ class LessonDetail {
       orderIndex: (json['orderIndex'] as num).toInt(),
       moduleId: json['moduleId'] as String,
       estimatedDuration: (json['estimatedDuration'] as num?)?.toInt(),
-      isAssessment: json['isAssessment'] as bool? ?? false,
       contents: (json['contents'] as List<dynamic>?)
               ?.map((e) => LessonContent.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -50,7 +48,6 @@ class LessonDetail {
   final int orderIndex;
   final String moduleId;
   final int? estimatedDuration;
-  final bool isAssessment;
   final List<LessonContent> contents;
   final List<LessonVocabulary> vocabularies;
   final List<GrammarRule> grammarRules;

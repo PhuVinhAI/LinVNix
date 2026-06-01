@@ -43,7 +43,6 @@ export class ModulesController {
           title: 'Module 1: Chào hỏi và giới thiệu',
           description: 'Học cách chào hỏi và giới thiệu bản thân',
           orderIndex: 1,
-          topic: 'Chào hỏi',
           estimatedHours: 10,
           courseId: 'course-uuid',
         },
@@ -70,7 +69,6 @@ export class ModulesController {
         title: 'Module 1: Chào hỏi và giới thiệu',
         description: 'Học cách chào hỏi và giới thiệu bản thân',
         orderIndex: 1,
-        topic: 'Chào hỏi',
         estimatedHours: 10,
         lessons: [
           {

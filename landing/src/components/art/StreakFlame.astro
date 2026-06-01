@@ -1,0 +1,60 @@
+---
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+// 7-week × 7-day grid like GitHub contribution graph
+const days = Array.from({ length: 49 }, (_, i) => {
+	const intensity = (Math.sin(i * 0.7) + Math.cos(i * 0.4) + 2) / 4;
+	const level = intensity > 0.75 ? 4 : intensity > 0.55 ? 3 : intensity > 0.35 ? 2 : intensity > 0.18 ? 1 : 0;
+	return level;
+});
+---
+
+<svg
+	viewBox="0 0 240 180"
+	class={className}
+	aria-hidden="true"
+>
+	<!-- Day grid -->
+	<g>
+		{
+			days.map((level, i) => {
+				const col = Math.floor(i / 7);
+				const row = i % 7;
+				const fillMap = ['none', 'currentColor', 'currentColor', 'var(--primary)', 'var(--primary)'];
+				const opacityMap = [0.2, 0.3, 0.55, 0.8, 1];
+				return (
+					<rect
+						x={col * 22 + 14}
+						y={row * 18 + 14}
+						width="14"
+						height="14"
+						rx="2"
+						fill={fillMap[level] as string}
+						opacity={opacityMap[level]}
+						stroke="currentColor"
+						stroke-width="0.5"
+					/>
+				);
+			})
+		}
+	</g>
+
+	<!-- Streak number callout -->
+	<g
+		font-family="var(--font-display)"
+		fill="currentColor"
+	>
+		<text x="180" y="148" font-size="50" font-weight="500" font-style="italic">
+			47
+		</text>
+	</g>
+	<g font-family="var(--font-mono)" font-size="9" fill="currentColor" letter-spacing="0.15em">
+		<text x="180" y="162">DAY STREAK</text>
+	</g>
+
+	<!-- accent dot -->
+	<circle cx="225" cy="106" r="3" fill="var(--primary)" />
+</svg>

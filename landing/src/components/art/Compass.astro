@@ -1,0 +1,47 @@
+---
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<svg
+	viewBox="0 0 240 240"
+	fill="none"
+	stroke="currentColor"
+	stroke-width="1.25"
+	class={className}
+	aria-hidden="true"
+	data-draw
+>
+	<!-- 6 concentric arcs A1..C2 -->
+	<path d="M40 120 A80 80 0 0 1 120 40" stroke-width="1.5" />
+	<path d="M55 120 A65 65 0 0 1 120 55" />
+	<path d="M70 120 A50 50 0 0 1 120 70" />
+	<path d="M85 120 A35 35 0 0 1 120 85" />
+	<path d="M100 120 A20 20 0 0 1 120 100" />
+
+	<!-- crosshairs -->
+	<line x1="120" y1="20" x2="120" y2="220" stroke-dasharray="2 4" opacity="0.4" />
+	<line x1="20" y1="120" x2="220" y2="120" stroke-dasharray="2 4" opacity="0.4" />
+
+	<!-- needle pointing to C2 -->
+	<line x1="120" y1="120" x2="180" y2="80" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" />
+	<circle cx="120" cy="120" r="3" fill="var(--primary)" stroke="none" />
+
+	<!-- labels -->
+	<g font-family="var(--font-mono)" font-size="9" fill="currentColor" stroke="none">
+		<text x="120" y="38" text-anchor="middle">A1</text>
+		<text x="120" y="53" text-anchor="middle">A2</text>
+		<text x="120" y="68" text-anchor="middle">B1</text>
+		<text x="120" y="83" text-anchor="middle">B2</text>
+		<text x="120" y="98" text-anchor="middle">C1</text>
+		<text x="120" y="113" text-anchor="middle">C2</text>
+	</g>
+
+	<!-- corner ticks -->
+	<path d="M20 20 L20 30 M20 20 L30 20" />
+	<path d="M220 20 L220 30 M220 20 L210 20" />
+	<path d="M20 220 L20 210 M20 220 L30 220" />
+	<path d="M220 220 L220 210 M220 220 L210 220" />
+</svg>

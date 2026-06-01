@@ -47,11 +47,14 @@ const pageDescription = description ?? t('hero.subtitle');
 			})();
 		</script>
 	</head>
-	<body>
+	<body class="overflow-x-clip">
 		<Header lang={lang} />
 		<main>
 			<slot />
 		</main>
 		<Footer lang={lang} />
+		<script>
+			import '../scripts/motion';
+		</script>
 	</body>
 </html>

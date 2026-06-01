@@ -947,19 +947,6 @@ class _ModuleCard extends StatelessWidget {
                           height: 1.25,
                         ),
                       ),
-                      if (module.topic != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          module.topic!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontSize: AppTypography.bodySmall,
-                            fontWeight: FontWeight.w500,
-                            color: c.primary,
-                          ),
-                        ),
-                      ],
                       const SizedBox(height: 2),
                       Text(
                         module.description,

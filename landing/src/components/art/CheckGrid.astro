@@ -1,0 +1,51 @@
+---
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+const cells = Array.from({ length: 24 }, (_, i) => {
+	const row = Math.floor(i / 6);
+	const col = i % 6;
+	// Deterministic pattern: some cells checked, some not, primary highlight on a few
+	const filled = [1, 2, 5, 8, 9, 14, 15, 18, 19, 22].includes(i);
+	const primary = [9, 19].includes(i);
+	return { x: col * 36 + 14, y: row * 36 + 14, filled, primary };
+});
+---
+
+<svg
+	viewBox="0 0 240 160"
+	class={className}
+	aria-hidden="true"
+>
+	<g data-draw>
+		{
+			cells.map((c) => (
+				<>
+					<rect
+						x={c.x}
+						y={c.y}
+						width="24"
+						height="24"
+						rx="4"
+						fill={c.filled ? (c.primary ? 'var(--primary)' : 'currentColor') : 'none'}
+						stroke="currentColor"
+						stroke-width="1"
+						opacity={c.filled ? 1 : 0.35}
+					/>
+					{c.filled && (
+						<path
+							d={`M ${c.x + 7} ${c.y + 12} L ${c.x + 11} ${c.y + 16} L ${c.x + 18} ${c.y + 9}`}
+							stroke={c.primary ? 'var(--primary-foreground)' : 'var(--background)'}
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							fill="none"
+						/>
+					)}
+				</>
+			))
+		}
+	</g>
+</svg>

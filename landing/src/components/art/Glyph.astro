@@ -1,0 +1,30 @@
+---
+interface Props {
+	class?: string;
+	animated?: boolean;
+}
+
+const { class: className = '', animated = false } = Astro.props;
+const wrapAttrs = animated ? { 'data-draw': true } : {};
+---
+
+<svg
+	viewBox="0 0 80 80"
+	fill="none"
+	stroke="currentColor"
+	stroke-width="3"
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	class={className}
+	aria-hidden="true"
+	{...wrapAttrs}
+>
+	<!-- tonal mark above (tilde) -->
+	<path d="M22 14 Q30 6 40 14 T58 14" />
+	<!-- main stem -->
+	<path d="M40 22 L40 60" />
+	<!-- right arm/hook -->
+	<path d="M40 38 Q56 38 56 54" />
+	<!-- dot below (cinnabar, no stroke) -->
+	<circle cx="40" cy="72" r="4.5" fill="var(--primary)" stroke="none" />
+</svg>

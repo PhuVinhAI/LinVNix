@@ -17,7 +17,7 @@ export function LanguageSwitcher({ current, currentLabel, options, hrefs }: Prop
 			<DropdownMenu.Trigger asChild>
 				<button
 					type="button"
-					className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border-2 border-border bg-transparent text-sm font-semibold text-foreground transition-opacity hover:opacity-90 active:opacity-70 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+					className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full border border-border bg-transparent text-xs font-mono uppercase tracking-[0.15em] text-foreground hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
 				>
 					<Globe className="size-4 text-muted-foreground" />
 					<span className="hidden sm:inline">{currentLabel}</span>
@@ -29,7 +29,7 @@ export function LanguageSwitcher({ current, currentLabel, options, hrefs }: Prop
 				<DropdownMenu.Content
 					align="end"
 					sideOffset={6}
-					className="z-50 min-w-44 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-lg border-2 border-border bg-popover p-1.5 text-popover-foreground duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+					className="z-50 min-w-44 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-2xl border border-border bg-popover p-2 text-popover-foreground duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
 				>
 					{options.map((opt) => {
 						const active = opt.code === current;

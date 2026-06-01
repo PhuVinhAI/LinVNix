@@ -138,7 +138,6 @@ function buildListeningLesson(): Record<string, unknown> {
       },
     ],
     grammar_rules: [],
-    is_assessment: false,
     lesson_contents: [
       {
         audio_url: null,

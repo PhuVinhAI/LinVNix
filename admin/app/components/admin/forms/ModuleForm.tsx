@@ -9,7 +9,6 @@ import { NumberStepper } from '../editors/NumberStepper'
 export interface ModuleFormValues {
   title: string
   description: string
-  topic?: string | null
   orderIndex: number
   estimatedHours?: number | null
 }
@@ -26,7 +25,6 @@ export function ModuleForm({
   const [values, setValues] = useState<ModuleFormValues>({
     title: initialValue?.title ?? '',
     description: initialValue?.description ?? '',
-    topic: initialValue?.topic ?? '',
     orderIndex: initialValue?.orderIndex ?? 0,
     estimatedHours: initialValue?.estimatedHours ?? null,
   })
@@ -39,7 +37,6 @@ export function ModuleForm({
     e.preventDefault()
     await onSubmit({
       ...values,
-      topic: values.topic || null,
       estimatedHours: values.estimatedHours || null,
     })
   }
@@ -63,14 +60,6 @@ export function ModuleForm({
             placeholder="Mô tả nội dung và mục tiêu của chủ đề"
             className="min-h-28"
             required
-          />
-        </FormField>
-
-        <FormField label="Từ khóa chủ đề" help="Phân loại nội bộ, không hiển thị với học viên">
-          <Input
-            value={values.topic ?? ''}
-            onChange={(e) => update('topic', e.target.value)}
-            placeholder="VD: greetings, daily-conversation"
           />
         </FormField>
       </FormSection>

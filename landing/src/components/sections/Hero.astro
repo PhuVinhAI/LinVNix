@@ -1,7 +1,8 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Container from '../ui/Container.astro';
-import Button from '../ui/Button.astro';
-import Section from '../ui/Section.astro';
+import Mark from '../art/Mark.astro';
+import OrbitDecor from '../art/OrbitDecor.astro';
 import { defaultLang, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/utils';
 import { DEMO_APK_URL, DEMO_APK_FILENAME } from '../../config';
@@ -12,49 +13,221 @@ interface Props {
 
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
+
+const specs = [
+	{ k: 'CEFR', v: 'A1—C2', note: 'six tiers' },
+	{ k: 'LANG.', v: '09', note: 'native bridges' },
+	{ k: 'AI', v: 'Multi-modal', note: 'speech · text · listen' },
+	{ k: 'EST.', v: '2026', note: 'Hà Nội' },
+];
 ---
 
-<Section id="hero" bordered>
-	<Container size="lg">
-		<div class="text-center space-y-8">
-			<img
-				src="/icon.png"
-				alt="LinVNix"
-				width="80"
-				height="80"
-				class="mx-auto size-20 rounded-2xl select-none"
-				draggable="false"
-			/>
+<section
+	id="hero"
+	class="relative isolate overflow-hidden min-h-[100svh] flex flex-col pt-28 md:pt-36 pb-12"
+>
+	<!-- Marginalia: vertical tick line on left edge -->
+	<div
+		aria-hidden="true"
+		class="hidden md:block absolute left-8 lg:left-12 top-32 bottom-32 w-px"
+	>
+		<div class="h-full ticks-y opacity-30"></div>
+	</div>
 
-			<div
-				class="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-1.5 text-xs font-medium text-muted-foreground"
-			>
-				<span class="size-1.5 rounded-full bg-primary"></span>
-				{t('hero.badge')}
+	<!-- Vertical text marker right edge -->
+	<div
+		aria-hidden="true"
+		class="hidden md:flex absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 flex-col items-center gap-3 text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground"
+		style="writing-mode: vertical-rl;"
+	>
+		<span>chapter / 01</span>
+		<span class="size-1 rounded-full bg-primary"></span>
+		<span>introduction</span>
+	</div>
+
+	<Container size="xl" class="flex-1 flex flex-col relative above-grain">
+		<!-- top meta strip -->
+		<div
+			class="flex items-center justify-between text-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground"
+			data-reveal="up"
+			data-reveal-trigger="load"
+		>
+			<div class="flex items-center gap-3">
+				<span class="size-1 rounded-full bg-primary"></span>
+				<span>/ LinVNix — vol. 01</span>
 			</div>
-
-			<h1 class="text-5xl md:text-6xl font-bold tracking-tight leading-tight">
-				{t('hero.title1')}<br />
-				<span class="text-primary">{t('hero.title2')}</span>
-			</h1>
-
-			<p class="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-				{t('hero.subtitle')}
-			</p>
-
-			<div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-				<Button
-					href={DEMO_APK_URL}
-					download={DEMO_APK_FILENAME}
-					variant="primary"
-					size="lg"
-				>
-					{t('hero.ctaPrimary')}
-				</Button>
-				<Button href="#how-it-works" variant="outline" size="lg">
-					{t('hero.ctaSecondary')}
-				</Button>
+			<div class="hidden md:flex items-center gap-4">
+				<span>{t('hero.badge')}</span>
+				<span>—</span>
+				<span data-scribble class="cursor-default">Hà Nội · 2026</span>
 			</div>
 		</div>
+
+		<!-- Title -->
+		<div class="flex-1 flex flex-col justify-center py-12 md:py-16 relative">
+			<!-- Decorative scattered tonal marks behind title -->
+			<div
+				aria-hidden="true"
+				class="absolute inset-0 pointer-events-none text-primary/60"
+				data-mouse-track="40"
+			>
+				<div
+					class="absolute top-[5%] left-[8%] size-10"
+					data-mouse-target
+					data-mouse-factor="0.5"
+					data-float
+				>
+					<Mark type="tilde" class="size-full" />
+				</div>
+				<div
+					class="absolute top-[18%] right-[12%] size-7 text-foreground/30"
+					data-mouse-target
+					data-mouse-factor="1.2"
+					data-float
+				>
+					<Mark type="acute" class="size-full" />
+				</div>
+				<div
+					class="absolute bottom-[20%] left-[14%] size-8 text-foreground/25"
+					data-mouse-target
+					data-mouse-factor="0.8"
+					data-float
+				>
+					<Mark type="hook" class="size-full" />
+				</div>
+				<div
+					class="absolute bottom-[10%] right-[8%] size-6"
+					data-mouse-target
+					data-mouse-factor="1.5"
+					data-float
+				>
+					<Mark type="dot" class="size-full text-primary" />
+				</div>
+				<div
+					class="absolute top-[40%] right-[3%] size-9 text-accent/60"
+					data-mouse-target
+					data-mouse-factor="0.7"
+					data-float
+				>
+					<Mark type="grave" class="size-full" />
+				</div>
+			</div>
+
+			<!-- Decorative orbit far right (lg only) -->
+			<div
+				aria-hidden="true"
+				class="hidden xl:block absolute -right-24 top-1/2 -translate-y-1/2 w-[42rem] opacity-30 dark:opacity-25 text-foreground"
+				data-rotate-on-scroll="120"
+			>
+				<OrbitDecor class="size-full" />
+			</div>
+
+			<h1 class="text-hero relative z-10 max-w-[18ch]">
+				<span class="block" data-split="word" data-split-trigger="load">
+					{t('hero.title1')}
+				</span>
+				<span
+					class="block italic-display text-primary mt-2 md:mt-0"
+					data-split="word"
+					data-split-trigger="load"
+					data-split-delay="0.18"
+				>
+					{t('hero.title2')}
+				</span>
+			</h1>
+
+			<!-- Subtitle + CTAs row -->
+			<div class="mt-12 md:mt-16 grid md:grid-cols-12 gap-8 items-end relative z-10">
+				<div
+					class="md:col-span-7 lg:col-span-5"
+					data-reveal="up"
+					data-reveal-delay="0.5"
+				>
+					<!-- Editorial drop-cap style intro -->
+					<div class="flex items-start gap-4">
+						<span
+							class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground mt-2 shrink-0"
+							>§ 01</span
+						>
+						<p class="text-base md:text-lg text-foreground/80 leading-[1.55] max-w-lg">
+							{t('hero.subtitle')}
+						</p>
+					</div>
+				</div>
+
+				<div
+					class="md:col-span-5 lg:col-span-7 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-end gap-3"
+					data-reveal="up"
+					data-reveal-delay="0.6"
+				>
+					<div data-magnet="0.3">
+						<a
+							href={DEMO_APK_URL}
+							download={DEMO_APK_FILENAME}
+							data-magnet-inner
+							class="group inline-flex items-center justify-center gap-3 h-14 px-7 rounded-full bg-foreground text-background font-medium transition-colors hover:bg-primary"
+						>
+							<Icon name="lucide:arrow-down-to-line" class="size-4" />
+							<span>{t('hero.ctaPrimary')}</span>
+						</a>
+					</div>
+					<a
+						href="#how-it-works"
+						class="group inline-flex items-center justify-center gap-3 h-14 px-7 rounded-full border border-border bg-transparent text-foreground font-medium hover:bg-muted transition-colors"
+					>
+						<span>{t('hero.ctaSecondary')}</span>
+						<Icon
+							name="lucide:arrow-down-right"
+							class="size-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+						/>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Editorial specs strip bottom -->
+		<div
+			class="grid grid-cols-2 md:grid-cols-4 border-t border-rule relative z-10"
+			data-stagger
+			data-stagger-offset="20"
+			data-stagger-gap="0.06"
+		>
+			{
+				specs.map((s, i) => (
+					<div
+						class={`py-6 pr-4 md:pr-8 ${i > 0 ? 'md:pl-8 md:border-l md:border-rule' : ''} ${i === 2 ? 'md:border-l md:border-rule md:pl-8' : ''} ${i % 2 === 1 ? 'pl-6 border-l border-rule md:pl-8' : ''}`}
+					>
+						<div class="text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+							{s.k}
+						</div>
+						<div class="mt-3 text-2xl md:text-3xl font-display italic-display num-tabular text-foreground">
+							{s.v}
+						</div>
+						<div class="mt-2 text-xs text-muted-foreground italic">{s.note}</div>
+					</div>
+				))
+			}
+		</div>
 	</Container>
-</Section>
+
+	<!-- Bottom-right scroll cue -->
+	<a
+		href="#how-it-works"
+		class="absolute bottom-6 right-6 md:bottom-10 md:right-10 inline-flex flex-col items-center gap-3 text-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors above-grain"
+		aria-label="Scroll"
+	>
+		<span>scroll</span>
+		<span class="relative h-12 w-px bg-rule">
+			<span
+				class="absolute left-1/2 -translate-x-1/2 top-0 size-1 rounded-full bg-primary"
+				style="animation: hero-scroll 1.6s ease-in-out infinite;"></span>
+		</span>
+		<style>
+			@keyframes hero-scroll {
+				0% { transform: translate(-50%, 0); opacity: 0; }
+				40% { opacity: 1; }
+				100% { transform: translate(-50%, 32px); opacity: 0; }
+			}
+		</style>
+	</a>
+</section>

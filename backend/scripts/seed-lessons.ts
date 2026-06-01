@@ -78,14 +78,13 @@ async function main() {
     for (const moduleData of courseData.modules) {
       const moduleFakeUuid = moduleData.__uuid;
       const mRes = await client.query(
-        `INSERT INTO modules (title, description, order_index, estimated_hours, topic, course_id)
-         VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+        `INSERT INTO modules (title, description, order_index, estimated_hours, course_id)
+         VALUES ($1, $2, $3, $4, $5) RETURNING id`,
         [
           moduleData.title,
           moduleData.description,
           moduleData.order_index,
           moduleData.estimated_hours || null,
-          moduleData.topic || null,
           courseId,
         ],
       );
@@ -96,15 +95,14 @@ async function main() {
       for (const lessonData of moduleData.lessons) {
         const lessonFakeUuid = lessonData.__uuid;
         const lRes = await client.query(
-          `INSERT INTO lessons (title, description, lesson_type, order_index, estimated_duration, is_assessment, module_id)
-           VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+          `INSERT INTO lessons (title, description, lesson_type, order_index, estimated_duration, module_id)
+           VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
           [
             lessonData.title,
             lessonData.description,
             lessonData.lesson_type,
             lessonData.order_index,
             lessonData.estimated_duration || null,
-            lessonData.is_assessment || false,
             moduleId,
           ],
         );

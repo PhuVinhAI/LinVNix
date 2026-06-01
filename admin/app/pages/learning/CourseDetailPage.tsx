@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import {
   Plus, Pencil, BookOpen, Layers, MoreVertical, Trash2, Clock, ChevronRight,
-  Eye, EyeOff, GraduationCap,
+  Eye, EyeOff,
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
@@ -53,10 +53,6 @@ export function CourseDetailPage() {
   const stop = (e: MouseEvent | KeyboardEvent) => e.stopPropagation()
 
   const totalLessons = course?.modules?.reduce((sum, m) => sum + (m.lessons?.length ?? 0), 0) ?? 0
-  const totalAssessments = course?.modules?.reduce(
-    (sum, m) => sum + (m.lessons?.filter((l) => l.isAssessment).length ?? 0),
-    0
-  ) ?? 0
   const bg = levelBg(course?.level)
   const label = levelLabel(course?.level, course?.vietnameseLevelName)
 
@@ -126,10 +122,9 @@ export function CourseDetailPage() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4 border-t-2 border-border">
+          <div className="grid grid-cols-3 gap-2 pt-4 border-t-2 border-border">
             <HeroStat icon={Layers} label="Chủ đề" value={course?.modules?.length ?? 0} />
             <HeroStat icon={BookOpen} label="Bài học" value={totalLessons} />
-            <HeroStat icon={GraduationCap} label="Bài đánh giá" value={totalAssessments} />
             <HeroStat
               icon={Clock}
               label="Giờ ước tính"
@@ -292,14 +287,7 @@ function ModuleRow({
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-base font-bold text-foreground truncate">{module.title}</h3>
-            {module.topic && (
-              <span className="text-xs font-medium text-muted-foreground px-2 py-0.5 rounded-md bg-muted">
-                {module.topic}
-              </span>
-            )}
-          </div>
+          <h3 className="text-base font-bold text-foreground truncate">{module.title}</h3>
           {module.description && (
             <p className="text-sm text-muted-foreground line-clamp-1 mt-0.5">{module.description}</p>
           )}
