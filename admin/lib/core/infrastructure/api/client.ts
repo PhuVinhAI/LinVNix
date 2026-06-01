@@ -72,7 +72,8 @@ class ApiClient {
               refreshToken,
             })
 
-            const { access_token, refresh_token } = response.data
+            const payload = (response.data as any).data || response.data
+            const { access_token, refresh_token } = payload
 
             // Save new tokens
             tokenStorage.setAccessToken(access_token)
