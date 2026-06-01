@@ -38,6 +38,10 @@ export class LessonsRepository {
   async findById(id: string): Promise<Lesson | null> {
     return this.repository.findOne({
       where: { id },
+      order: {
+        contents: { orderIndex: 'ASC' },
+        exerciseSets: { orderIndex: 'ASC' },
+      },
       relations: [
         'module',
         'contents',

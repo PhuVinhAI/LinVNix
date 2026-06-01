@@ -1,0 +1,285 @@
+---
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<svg
+	viewBox="0 0 280 220"
+	class={className}
+	aria-hidden="true"
+	font-family="var(--font-sans)"
+>
+	<!-- Header -->
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
+		<text x="14" y="18">BÀI HÔM NAY · 04 KỸ NĂNG</text>
+	</g>
+	<g
+		font-size="7"
+		letter-spacing="0.22em"
+		font-weight="600"
+		fill="currentColor"
+		opacity="0.4"
+		text-anchor="end"
+	>
+		<text x="266" y="18">VI ↔ EN</text>
+	</g>
+	<line
+		x1="14"
+		y1="28"
+		x2="266"
+		y2="28"
+		stroke="currentColor"
+		stroke-width="0.5"
+		opacity="0.2"
+		data-draw
+	/>
+
+	<!-- Card 1: TỪ MỚI -->
+	<g transform="translate(15, 40)">
+		<rect
+			width="120"
+			height="70"
+			rx="8"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1"
+			opacity="0.45"
+		/>
+		<rect x="8" y="8" width="14" height="12" rx="2" fill="var(--primary)" />
+		<text
+			x="15"
+			y="17"
+			font-size="7"
+			font-weight="700"
+			fill="var(--primary-foreground)"
+			text-anchor="middle"
+		>V</text>
+		<text
+			x="28"
+			y="17"
+			font-size="7"
+			letter-spacing="0.18em"
+			font-weight="600"
+			fill="currentColor"
+			opacity="0.55"
+		>TỪ MỚI</text>
+
+		<text
+			x="8"
+			y="44"
+			font-size="16"
+			font-weight="700"
+			fill="currentColor"
+			letter-spacing="-0.01em"
+		>ngon</text>
+		<text
+			x="8"
+			y="60"
+			font-size="9"
+			font-weight="500"
+			fill="currentColor"
+			opacity="0.55"
+			font-style="italic"
+		>delicious · adj.</text>
+	</g>
+
+	<!-- Card 2: NGỮ PHÁP -->
+	<g transform="translate(145, 40)">
+		<rect
+			width="120"
+			height="70"
+			rx="8"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1"
+			opacity="0.45"
+		/>
+		<rect x="8" y="8" width="14" height="12" rx="2" fill="currentColor" opacity="0.85" />
+		<text
+			x="15"
+			y="17"
+			font-size="7"
+			font-weight="700"
+			fill="var(--background)"
+			text-anchor="middle"
+		>G</text>
+		<text
+			x="28"
+			y="17"
+			font-size="7"
+			letter-spacing="0.18em"
+			font-weight="600"
+			fill="currentColor"
+			opacity="0.55"
+		>NGỮ PHÁP</text>
+
+		<text
+			x="8"
+			y="44"
+			font-size="14"
+			font-weight="700"
+			fill="currentColor"
+			letter-spacing="0em"
+		>S + không?</text>
+		<text
+			x="8"
+			y="60"
+			font-size="9"
+			font-weight="500"
+			fill="currentColor"
+			opacity="0.55"
+			font-style="italic"
+		>yes/no question</text>
+	</g>
+
+	<!-- Card 3: NGHE -->
+	<g transform="translate(15, 120)">
+		<rect
+			width="120"
+			height="70"
+			rx="8"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1"
+			opacity="0.45"
+		/>
+		<rect x="8" y="8" width="14" height="12" rx="2" fill="var(--secondary)" />
+		<text
+			x="15"
+			y="17"
+			font-size="7"
+			font-weight="700"
+			fill="var(--secondary-foreground)"
+			text-anchor="middle"
+		>L</text>
+		<text
+			x="28"
+			y="17"
+			font-size="7"
+			letter-spacing="0.18em"
+			font-weight="600"
+			fill="currentColor"
+			opacity="0.55"
+		>NGHE</text>
+
+		<!-- Play button -->
+		<g transform="translate(18, 40)">
+			<circle r="8" fill="currentColor" opacity="0.9" />
+			<path d="M-2 -3 L-2 3 L3 0 Z" fill="var(--background)" />
+		</g>
+		<!-- Waveform -->
+		<g fill="currentColor" opacity="0.55" transform="translate(32, 40)">
+			<rect x="0" y="-2" width="1.5" height="4" rx="0.75" />
+			<rect x="4" y="-5" width="1.5" height="10" rx="0.75" />
+			<rect x="8" y="-3" width="1.5" height="6" rx="0.75" />
+			<rect x="12" y="-6" width="1.5" height="12" rx="0.75" />
+			<rect x="16" y="-2" width="1.5" height="4" rx="0.75" />
+			<rect x="20" y="-4" width="1.5" height="8" rx="0.75" />
+			<rect x="24" y="-1" width="1.5" height="2" rx="0.75" />
+			<rect x="28" y="-3" width="1.5" height="6" rx="0.75" />
+			<rect x="32" y="-5" width="1.5" height="10" rx="0.75" />
+			<rect x="36" y="-2" width="1.5" height="4" rx="0.75" />
+			<rect x="40" y="-4" width="1.5" height="8" rx="0.75" />
+			<rect x="44" y="-1" width="1.5" height="2" rx="0.75" />
+			<rect x="48" y="-3" width="1.5" height="6" rx="0.75" />
+			<rect x="52" y="-5" width="1.5" height="10" rx="0.75" />
+			<rect x="56" y="-2" width="1.5" height="4" rx="0.75" />
+			<rect x="60" y="-3" width="1.5" height="6" rx="0.75" />
+			<rect x="64" y="-1" width="1.5" height="2" rx="0.75" />
+			<rect x="68" y="-4" width="1.5" height="8" rx="0.75" />
+			<rect x="72" y="-2" width="1.5" height="4" rx="0.75" />
+			<rect x="76" y="-3" width="1.5" height="6" rx="0.75" />
+		</g>
+		<text
+			x="8"
+			y="64"
+			font-size="8"
+			font-weight="500"
+			fill="currentColor"
+			opacity="0.5"
+			letter-spacing="0.05em"
+		>0:04 · native voice</text>
+	</g>
+
+	<!-- Card 4: NÓI -->
+	<g transform="translate(145, 120)">
+		<rect
+			width="120"
+			height="70"
+			rx="8"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1"
+			opacity="0.45"
+		/>
+		<rect x="8" y="8" width="14" height="12" rx="2" fill="var(--accent)" />
+		<text
+			x="15"
+			y="17"
+			font-size="7"
+			font-weight="700"
+			fill="var(--accent-foreground)"
+			text-anchor="middle"
+		>S</text>
+		<text
+			x="28"
+			y="17"
+			font-size="7"
+			letter-spacing="0.18em"
+			font-weight="600"
+			fill="currentColor"
+			opacity="0.55"
+		>NÓI</text>
+
+		<!-- Mic glyph -->
+		<g transform="translate(16, 36)" stroke="currentColor" stroke-width="1.4" fill="none" opacity="0.85" stroke-linecap="round">
+			<rect x="-3" y="-7" width="6" height="10" rx="3" fill="currentColor" opacity="1" stroke="none" />
+			<path d="M-6 -1 Q -6 6, 0 6 Q 6 6, 6 -1" />
+			<line x1="0" y1="6" x2="0" y2="10" />
+		</g>
+
+		<!-- Recording indicator -->
+		<g transform="translate(34, 38)">
+			<circle cx="0" cy="0" r="2.5" fill="var(--destructive)">
+				<animate attributeName="opacity" values="1;0.35;1" dur="1.2s" repeatCount="indefinite" />
+			</circle>
+			<text
+				x="8"
+				y="3"
+				font-size="8"
+				font-weight="700"
+				fill="currentColor"
+				opacity="0.7"
+				letter-spacing="0.18em"
+			>REC · 0:02</text>
+		</g>
+
+		<text
+			x="8"
+			y="64"
+			font-size="8"
+			font-weight="500"
+			fill="currentColor"
+			opacity="0.5"
+			letter-spacing="0.05em"
+		>"Bạn khoẻ không?"</text>
+	</g>
+
+	<!-- Footer -->
+	<line
+		x1="14"
+		y1="204"
+		x2="266"
+		y2="204"
+		stroke="currentColor"
+		stroke-width="0.5"
+		opacity="0.25"
+		data-draw
+	/>
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.6">
+		<text x="14" y="216">DỆT 4 KỸ NĂNG · 1 BÀI</text>
+	</g>
+	<circle cx="262" cy="213" r="2.5" fill="var(--primary)" />
+</svg>

@@ -18,14 +18,23 @@ export class CoursesRepository {
   async findAll(): Promise<Course[]> {
     return this.repository.find({
       where: { isPublished: true },
-      order: { orderIndex: 'ASC' },
+      order: {
+        orderIndex: 'ASC',
+        modules: { orderIndex: 'ASC' },
+      },
       relations: ['modules'],
     });
   }
 
   async findAllForAdmin(): Promise<Course[]> {
     return this.repository.find({
-      order: { orderIndex: 'ASC' },
+      order: {
+        orderIndex: 'ASC',
+        modules: {
+          orderIndex: 'ASC',
+          lessons: { orderIndex: 'ASC' },
+        },
+      },
       relations: ['modules', 'modules.lessons'],
     });
   }
@@ -33,6 +42,12 @@ export class CoursesRepository {
   async findById(id: string): Promise<Course | null> {
     return this.repository.findOne({
       where: { id },
+      order: {
+        modules: {
+          orderIndex: 'ASC',
+          lessons: { orderIndex: 'ASC' },
+        },
+      },
       relations: ['modules', 'modules.lessons'],
     });
   }

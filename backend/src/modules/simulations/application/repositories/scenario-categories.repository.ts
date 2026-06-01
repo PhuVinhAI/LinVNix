@@ -20,7 +20,12 @@ export class ScenarioCategoriesRepository {
     return this.repository.findOne({
       where: { id },
       relations: ['scenarios', 'scenarios.characters'],
-      order: { scenarios: { createdAt: 'DESC' } },
+      order: {
+        scenarios: {
+          createdAt: 'DESC',
+          characters: { orderIndex: 'ASC' },
+        },
+      },
     });
   }
 

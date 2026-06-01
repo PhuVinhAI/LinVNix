@@ -18,7 +18,10 @@ export class ModulesRepository {
   async findByCourseId(courseId: string): Promise<Module[]> {
     return this.repository.find({
       where: { courseId },
-      order: { orderIndex: 'ASC' },
+      order: {
+        orderIndex: 'ASC',
+        lessons: { orderIndex: 'ASC' },
+      },
       relations: ['lessons'],
     });
   }
@@ -26,6 +29,7 @@ export class ModulesRepository {
   async findById(id: string): Promise<Module | null> {
     return this.repository.findOne({
       where: { id },
+      order: { lessons: { orderIndex: 'ASC' } },
       relations: ['lessons', 'course'],
     });
   }

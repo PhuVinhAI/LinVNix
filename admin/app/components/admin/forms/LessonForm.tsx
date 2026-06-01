@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import {
   BookOpen, Lightbulb, Headphones, MessageCircle, Edit3,
-  Mic, Globe, FileText,
+  Mic, Globe, FileText, Tags, Hash,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Input } from '../../ui/input'
@@ -78,7 +78,7 @@ export function LessonForm({
         </FormField>
       </FormSection>
 
-      <FormSection title="Loại bài học" description="Chọn kỹ năng chính được rèn luyện trong bài">
+      <FormSection icon={Tags} title="Loại bài học" description="Chọn kỹ năng chính được rèn luyện trong bài">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {LESSON_TYPES.map(({ value, label, Icon, color }) => {
             const isActive = values.lessonType === value
@@ -101,7 +101,7 @@ export function LessonForm({
         </div>
       </FormSection>
 
-      <FormSection title="Cấu hình bài học">
+      <FormSection icon={Hash} title="Sắp xếp và thời lượng" description="Thứ tự hiển thị và thời lượng bài học">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
             <OrderIndexStepper
@@ -111,7 +111,7 @@ export function LessonForm({
             />
           </FormField>
 
-          <FormField label="Thời gian ước tính">
+          <FormField label="Thời gian ước tính" help="Thời gian hoàn thành dự kiến">
             <NumberStepper
               value={values.estimatedDuration ?? null}
               onChange={(v) => update('estimatedDuration', v)}

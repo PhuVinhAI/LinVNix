@@ -33,7 +33,7 @@ export class ScenariosRepository {
     return this.repository.find({
       where,
       relations: ['category', 'characters'],
-      order: { createdAt: 'DESC' },
+      order: { createdAt: 'DESC', characters: { orderIndex: 'ASC' } },
     });
   }
 

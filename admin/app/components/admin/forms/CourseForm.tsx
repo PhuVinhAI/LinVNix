@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { BookOpen, Eye, EyeOff, Image as ImageIcon } from 'lucide-react'
+import { BookOpen, Eye, EyeOff, Image as ImageIcon, GraduationCap, Globe } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
@@ -77,7 +77,7 @@ export function CourseForm({
         </FormField>
       </FormSection>
 
-      <FormSection title="Cấp độ và thời lượng" description="Phân loại khóa học theo cấp độ CEFR">
+      <FormSection icon={GraduationCap} title="Cấp độ và thời lượng" description="Phân loại khóa học theo cấp độ CEFR">
         <FormField label="Cấp độ" required>
           <LevelPicker value={values.level} onChange={(v) => update('level', v)} />
         </FormField>
@@ -122,7 +122,7 @@ export function CourseForm({
         </FormField>
       </FormSection>
 
-      <FormSection title="Trạng thái xuất bản" description="Kiểm soát hiển thị khóa học với học viên">
+      <FormSection icon={Globe} title="Trạng thái xuất bản" description="Kiểm soát hiển thị khóa học với học viên">
         <div className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
             {values.isPublished ? (

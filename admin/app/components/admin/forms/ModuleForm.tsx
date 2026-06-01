@@ -64,7 +64,7 @@ export function ModuleForm({
         </FormField>
       </FormSection>
 
-      <FormSection icon={Hash} title="Sắp xếp và thời lượng">
+      <FormSection icon={Hash} title="Sắp xếp và thời lượng" description="Thứ tự hiển thị và thời lượng học tập">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
             <OrderIndexStepper
@@ -74,7 +74,7 @@ export function ModuleForm({
             />
           </FormField>
 
-          <FormField label="Giờ học ước tính">
+          <FormField label="Giờ học ước tính" help="Tổng giờ hoàn thành dự kiến">
             <NumberStepper
               value={values.estimatedHours ?? null}
               onChange={(v) => update('estimatedHours', v)}

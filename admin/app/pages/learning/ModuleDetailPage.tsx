@@ -98,6 +98,19 @@ export function ModuleDetailPage() {
                 {module.description}
               </p>
             )}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <BookOpen className="h-4 w-4" />
+                <span className="font-bold text-foreground tabular-nums">{module?.lessons?.length ?? 0}</span>
+                bài học
+              </span>
+              <span className="text-muted-foreground/60">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                <span className="font-bold text-foreground tabular-nums">{totalMinutes}</span>
+                phút
+              </span>
+            </div>
           </div>
           {moduleId && module && (
             <Button asChild variant="outline" className="shrink-0">
@@ -107,12 +120,6 @@ export function ModuleDetailPage() {
               </Link>
             </Button>
           )}
-        </div>
-
-        {/* Inline metric strip */}
-        <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t-2 border-border">
-          <MetricCell icon={BookOpen} label="Bài học" value={module?.lessons?.length ?? 0} />
-          <MetricCell icon={Clock} label="Tổng phút" value={totalMinutes} />
         </div>
 
         {/* Lesson type distribution */}
@@ -185,11 +192,8 @@ export function ModuleDetailPage() {
             )}
           </div>
         ) : (
-          <div className="relative">
-            {/* Vertical timeline line */}
-            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-border" aria-hidden />
-            <div className="space-y-3">
-              {module.lessons.map((lesson) => {
+          <div className="space-y-3">
+            {module.lessons.map((lesson) => {
                 const t = lessonTypes[lesson.lessonType] ?? {
                   Icon: BookOpen,
                   label: lesson.lessonType,
@@ -269,7 +273,6 @@ export function ModuleDetailPage() {
                   </div>
                 )
               })}
-            </div>
           </div>
         )}
       </div>
@@ -303,18 +306,3 @@ export function ModuleDetailPage() {
   )
 }
 
-function MetricCell({ icon: Icon, label, value }: { icon: typeof BookOpen; label: string; value: number }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-        <Icon className="h-4 w-4" />
-      </div>
-      <div className="min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground leading-tight">
-          {label}
-        </p>
-        <p className="text-base font-bold tabular-nums leading-tight">{value}</p>
-      </div>
-    </div>
-  )
-}

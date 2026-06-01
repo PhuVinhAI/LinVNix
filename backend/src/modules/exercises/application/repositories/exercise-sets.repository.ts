@@ -25,7 +25,11 @@ export class ExerciseSetsRepository {
   async findAllByLessonIdForAdmin(lessonId: string): Promise<ExerciseSet[]> {
     return this.repository.find({
       where: { lessonId },
-      order: { orderIndex: 'ASC', createdAt: 'DESC' },
+      order: {
+        orderIndex: 'ASC',
+        createdAt: 'DESC',
+        exercises: { orderIndex: 'ASC' },
+      },
       relations: ['exercises'],
     });
   }

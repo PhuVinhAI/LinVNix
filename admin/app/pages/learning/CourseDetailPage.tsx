@@ -87,7 +87,7 @@ export function CourseDetailPage() {
           </div>
         </div>
 
-        <div className="p-5 space-y-4">
+        <div className="p-5 space-y-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
@@ -122,15 +122,24 @@ export function CourseDetailPage() {
             )}
           </div>
 
-          <div className="grid grid-cols-3 gap-2 pt-4 border-t-2 border-border">
-            <HeroStat icon={Layers} label="Chủ đề" value={course?.modules?.length ?? 0} />
-            <HeroStat icon={BookOpen} label="Bài học" value={totalLessons} />
-            <HeroStat
-              icon={Clock}
-              label="Giờ ước tính"
-              value={course?.estimatedHours ?? 0}
-              suffix="h"
-            />
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5">
+              <Layers className="h-4 w-4" />
+              <span className="font-bold text-foreground tabular-nums">{course?.modules?.length ?? 0}</span>
+              chủ đề
+            </span>
+            <span className="text-muted-foreground/60">•</span>
+            <span className="inline-flex items-center gap-1.5">
+              <BookOpen className="h-4 w-4" />
+              <span className="font-bold text-foreground tabular-nums">{totalLessons}</span>
+              bài học
+            </span>
+            <span className="text-muted-foreground/60">•</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Clock className="h-4 w-4" />
+              <span className="font-bold text-foreground tabular-nums">{course?.estimatedHours ?? 0}h</span>
+              ước tính
+            </span>
           </div>
         </div>
       </div>
@@ -367,31 +376,3 @@ function ModuleRow({
   )
 }
 
-function HeroStat({
-  icon: Icon,
-  label,
-  value,
-  suffix,
-}: {
-  icon: typeof BookOpen
-  label: string
-  value: number
-  suffix?: string
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-        <Icon className="h-4 w-4" />
-      </div>
-      <div className="min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground leading-tight">
-          {label}
-        </p>
-        <p className="text-base font-bold tabular-nums leading-tight">
-          {value}
-          {suffix}
-        </p>
-      </div>
-    </div>
-  )
-}

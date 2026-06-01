@@ -18,7 +18,7 @@ const stats = [
 		isCount: true,
 		label: t('stats.lessons'),
 		note: t('stats.lessonsNote'),
-		span: 'md:col-span-5',
+		span: 'md:col-span-4',
 	},
 	{
 		idx: '02',
@@ -26,7 +26,7 @@ const stats = [
 		text: 'A1–C2',
 		label: t('stats.levels'),
 		note: t('stats.levelsNote'),
-		span: 'md:col-span-3',
+		span: 'md:col-span-4',
 	},
 	{
 		idx: '03',
@@ -72,7 +72,7 @@ const stats = [
 
 						<div class="font-bold tracking-tight num-tabular leading-none">
 							{s.isCount ? (
-								<span class="block text-6xl md:text-7xl lg:text-8xl">
+								<span class="block text-6xl md:text-7xl lg:text-8xl whitespace-nowrap">
 									<span
 										data-count={s.value}
 										data-count-suffix={s.suffix}
@@ -81,7 +81,7 @@ const stats = [
 									</span>
 								</span>
 							) : (
-								<span class="block text-6xl md:text-7xl lg:text-8xl text-primary">
+								<span class="block text-6xl md:text-7xl lg:text-8xl text-primary whitespace-nowrap">
 									{s.text}
 								</span>
 							)}

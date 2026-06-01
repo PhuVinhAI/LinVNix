@@ -59,11 +59,17 @@ export function ModuleFormPage({ mode }: { mode: 'create' | 'edit' }) {
           </div>
         </div>
 
-        <ModuleForm
-          id="module-form"
-          initialValue={module}
-          onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
-        />
+        {mode === 'edit' && !module ? (
+          <div className="rounded-xl border-2 border-border bg-card p-12 text-center text-sm text-muted-foreground">
+            Đang tải chủ đề...
+          </div>
+        ) : (
+          <ModuleForm
+            id="module-form"
+            initialValue={module}
+            onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
+          />
+        )}
 
         <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
           <Button asChild variant="ghost">

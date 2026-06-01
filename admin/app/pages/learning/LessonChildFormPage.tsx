@@ -83,33 +83,41 @@ export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'cr
           </div>
         </div>
 
-        {kind === 'contents' && (
-          <ContentForm
-            id="child-form"
-            initialValue={initialValue as never}
-            onSubmit={handleSubmit}
-          />
-        )}
-        {kind === 'vocabularies' && (
-          <VocabularyForm
-            id="child-form"
-            initialValue={initialValue as never}
-            onSubmit={handleSubmit}
-          />
-        )}
-        {kind === 'grammar' && (
-          <GrammarForm
-            id="child-form"
-            initialValue={initialValue as never}
-            onSubmit={handleSubmit}
-          />
-        )}
-        {kind === 'exercise-sets' && (
-          <ExerciseSetForm
-            id="child-form"
-            initialValue={initialValue as never}
-            onSubmit={handleSubmit}
-          />
+        {mode === 'edit' && !initialValue ? (
+          <div className="rounded-xl border-2 border-border bg-card p-12 text-center text-sm text-muted-foreground">
+            Đang tải {meta.title}...
+          </div>
+        ) : (
+          <>
+            {kind === 'contents' && (
+              <ContentForm
+                id="child-form"
+                initialValue={initialValue as never}
+                onSubmit={handleSubmit}
+              />
+            )}
+            {kind === 'vocabularies' && (
+              <VocabularyForm
+                id="child-form"
+                initialValue={initialValue as never}
+                onSubmit={handleSubmit}
+              />
+            )}
+            {kind === 'grammar' && (
+              <GrammarForm
+                id="child-form"
+                initialValue={initialValue as never}
+                onSubmit={handleSubmit}
+              />
+            )}
+            {kind === 'exercise-sets' && (
+              <ExerciseSetForm
+                id="child-form"
+                initialValue={initialValue as never}
+                onSubmit={handleSubmit}
+              />
+            )}
+          </>
         )}
 
         <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">

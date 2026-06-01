@@ -1,8 +1,8 @@
 ---
 import { Icon } from 'astro-icon/components';
 import Container from '../ui/Container.astro';
-import Compass from '../art/Compass.astro';
-import SoundWave from '../art/SoundWave.astro';
+import LevelPicker from '../art/LevelPicker.astro';
+import WovenLesson from '../art/WovenLesson.astro';
 import StreakFlame from '../art/StreakFlame.astro';
 import { defaultLang, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/utils';
@@ -20,14 +20,14 @@ const steps = [
 		eyebrow: 'PLACEMENT',
 		title: t('how.s1Title'),
 		desc: t('how.s1Desc'),
-		art: 'compass',
+		art: 'picker',
 	},
 	{
 		n: '02',
 		eyebrow: 'STUDY',
 		title: t('how.s2Title'),
 		desc: t('how.s2Desc'),
-		art: 'wave',
+		art: 'woven',
 	},
 	{
 		n: '03',
@@ -173,8 +173,8 @@ const steps = [
 									</svg>
 
 									<div class="size-full flex items-center justify-center">
-										{s.art === 'compass' && <Compass class="size-full max-w-[20rem] text-foreground" />}
-										{s.art === 'wave' && <SoundWave class="w-full max-w-[20rem] text-foreground" />}
+										{s.art === 'picker' && <LevelPicker class="size-full max-w-[20rem] text-foreground" />}
+										{s.art === 'woven' && <WovenLesson class="w-full max-w-[20rem] text-foreground" />}
 										{s.art === 'streak' && <StreakFlame class="size-full max-w-[20rem] text-foreground" />}
 									</div>
 								</div>
