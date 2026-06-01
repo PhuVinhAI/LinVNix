@@ -1,21 +1,30 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 
 const levels = [
-	{ code: 'A1', name: 'Beginner',         progress: 1.0,  done: true,  active: false },
-	{ code: 'A2', name: 'Elementary',       progress: 1.0,  done: true,  active: false },
-	{ code: 'B1', name: 'Intermediate',     progress: 0.55, done: false, active: true  },
-	{ code: 'B2', name: 'Upper Inter.',     progress: 0,    done: false, active: false },
-	{ code: 'C1', name: 'Advanced',         progress: 0,    done: false, active: false },
-	{ code: 'C2', name: 'Mastery',          progress: 0,    done: false, active: false },
+	{ code: 'A1', name: t('compass.l.a1'), progress: 1.0,  done: true,  active: false },
+	{ code: 'A2', name: t('compass.l.a2'), progress: 1.0,  done: true,  active: false },
+	{ code: 'B1', name: t('compass.l.b1'), progress: 0.55, done: false, active: true  },
+	{ code: 'B2', name: t('compass.l.b2'), progress: 0,    done: false, active: false },
+	{ code: 'C1', name: t('compass.l.c1'), progress: 0,    done: false, active: false },
+	{ code: 'C2', name: t('compass.l.c2'), progress: 0,    done: false, active: false },
 ];
 
-const rowH = 30;
-const barX = 56;
-const barW = 130;
+const rowH = 26;
+const startY = 50;
+const codeX = 20;
+const markerX = 48;
+const barX = 64;
+const barW = 100;
+const nameX = 172;
 ---
 
 <svg
@@ -26,15 +35,35 @@ const barW = 130;
 >
 	<!-- Header -->
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
-		<text x="14" y="18">CEFR · KHÓA HỌC</text>
+		<text x="14" y="18">{t('compass.title')}</text>
 	</g>
-
-	<!-- Vertical timeline rail -->
+	<g
+		font-size="7"
+		letter-spacing="0.22em"
+		font-weight="600"
+		fill="currentColor"
+		opacity="0.4"
+		text-anchor="end"
+	>
+		<text x="226" y="18">{t('compass.tiers')}</text>
+	</g>
 	<line
-		x1="29"
-		y1="32"
-		x2="29"
-		y2={32 + rowH * levels.length}
+		x1="14"
+		y1="28"
+		x2="226"
+		y2="28"
+		stroke="currentColor"
+		stroke-width="0.5"
+		opacity="0.2"
+		data-draw
+	/>
+
+	<!-- Vertical timeline rail (between code col and bar col) -->
+	<line
+		x1={markerX}
+		y1={startY - 12}
+		x2={markerX}
+		y2={startY + rowH * (levels.length - 1) + 8}
 		stroke="currentColor"
 		stroke-width="1"
 		opacity="0.18"
@@ -43,18 +72,19 @@ const barW = 130;
 
 	{
 		levels.map((l, i) => {
-			const y = 38 + i * rowH;
+			const y = startY + i * rowH;
 			return (
 				<g>
-					{/* CEFR code badge */}
+					{/* CEFR code */}
 					<text
-						x="14"
+						x={codeX}
 						y={y + 4}
-						font-size="10"
+						font-size="11"
 						font-weight="700"
 						fill={l.active ? 'var(--primary)' : 'currentColor'}
-						opacity={l.done || l.active ? '1' : '0.45'}
-						letter-spacing="0.05em"
+						opacity={l.done || l.active ? '1' : '0.55'}
+						letter-spacing="0.04em"
+						text-anchor="middle"
 					>
 						{l.code}
 					</text>
@@ -62,9 +92,9 @@ const barW = 130;
 					{/* Timeline marker */}
 					{l.done && (
 						<g>
-							<circle cx="29" cy={y} r="5" fill="var(--primary)" />
+							<circle cx={markerX} cy={y} r="4.5" fill="var(--primary)" />
 							<path
-								d={`M ${26.5} ${y} L ${28.5} ${y + 2} L ${32} ${y - 1.5}`}
+								d={`M ${markerX - 2.3} ${y} L ${markerX - 0.4} ${y + 1.8} L ${markerX + 2.5} ${y - 1.6}`}
 								stroke="var(--primary-foreground)"
 								stroke-width="1.3"
 								fill="none"
@@ -75,27 +105,19 @@ const barW = 130;
 					)}
 					{l.active && (
 						<>
-							<circle cx="29" cy={y} r="6" fill="none" stroke="var(--primary)" stroke-width="1.5">
-								<animate attributeName="r" values="6;9;6" dur="2s" repeatCount="indefinite" />
-								<animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite" />
+							<circle cx={markerX} cy={y} r="5" fill="var(--primary)" />
+							<circle cx={markerX} cy={y} r="5" fill="none" stroke="var(--primary)" stroke-width="1" opacity="0.5">
+								<animate attributeName="r" values="5;6.5;5" dur="2.2s" repeatCount="indefinite" />
+								<animate attributeName="opacity" values="0.55;0;0.55" dur="2.2s" repeatCount="indefinite" />
 							</circle>
-							<circle cx="29" cy={y} r="4" fill="var(--primary)" />
 						</>
 					)}
 					{!l.done && !l.active && (
-						<circle cx="29" cy={y} r="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" />
+						<circle cx={markerX} cy={y} r="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" />
 					)}
 
 					{/* Progress bar */}
-					<rect
-						x={barX}
-						y={y - 2}
-						width={barW}
-						height="4"
-						rx="2"
-						fill="currentColor"
-						opacity="0.1"
-					/>
+					<rect x={barX} y={y - 2} width={barW} height="4" rx="2" fill="currentColor" opacity="0.1" />
 					{l.progress > 0 && (
 						<rect
 							x={barX}
@@ -110,35 +132,21 @@ const barW = 130;
 
 					{/* Level name */}
 					<text
-						x={barX + barW + 8}
+						x={nameX}
 						y={y + 3}
 						font-size="8"
-						font-weight="500"
-						fill="currentColor"
-						opacity={l.done || l.active ? '0.9' : '0.5'}
+						font-weight={l.active ? '700' : '500'}
+						fill={l.active ? 'var(--primary)' : 'currentColor'}
+						opacity={l.done || l.active ? '0.95' : '0.5'}
 					>
 						{l.name}
 					</text>
-
-					{/* YOU indicator */}
-					{l.active && (
-						<g transform={`translate(${barX + barW + 8}, ${y + 13})`}>
-							<text
-								font-size="7"
-								letter-spacing="0.22em"
-								font-weight="700"
-								fill="var(--primary)"
-							>
-								◂ YOU
-							</text>
-						</g>
-					)}
 				</g>
 			);
 		})
 	}
 
-	<!-- Footer meta -->
+	<!-- Footer -->
 	<line
 		x1="14"
 		y1="218"
@@ -150,7 +158,7 @@ const barW = 130;
 		data-draw
 	/>
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.6">
-		<text x="14" y="232">06 LEVELS · 500+ LESSONS</text>
+		<text x="14" y="232">{t('compass.hierarchy')}</text>
 	</g>
 	<circle cx="222" cy="229" r="2.5" fill="var(--primary)" />
 </svg>

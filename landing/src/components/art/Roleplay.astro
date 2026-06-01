@@ -1,8 +1,13 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 ---
 
 <svg
@@ -11,78 +16,166 @@ const { class: className = '' } = Astro.props;
 	aria-hidden="true"
 	font-family="var(--font-sans)"
 >
-	<!-- Scenario header -->
-	<g transform="translate(14 12)">
-		<rect width="252" height="22" rx="11" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4" />
-		<g font-size="8" letter-spacing="0.2em" font-weight="600" fill="currentColor">
-			<text x="12" y="15" opacity="0.5">TÌNH HUỐNG</text>
-		</g>
-		<line x1="92" y1="6" x2="92" y2="16" stroke="currentColor" opacity="0.25" />
-		<g font-size="9" font-weight="600" fill="currentColor">
-			<text x="100" y="15">Chợ rau · Sài Gòn</text>
-		</g>
-		<g font-size="8" letter-spacing="0.2em" font-weight="600" fill="var(--primary)">
-			<text x="218" y="15">B1 · HARD</text>
-		</g>
+	<!-- Header -->
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
+		<text x="14" y="18">{t('role.title')}</text>
+	</g>
+	<g
+		font-size="7"
+		letter-spacing="0.22em"
+		font-weight="600"
+		fill="currentColor"
+		opacity="0.4"
+		text-anchor="end"
+	>
+		<text x="266" y="18">{t('role.difficulty')}</text>
+	</g>
+	<line
+		x1="14"
+		y1="28"
+		x2="266"
+		y2="28"
+		stroke="currentColor"
+		stroke-width="0.5"
+		opacity="0.2"
+		data-draw
+	/>
+
+	<!-- Scenario meta -->
+	<circle cx="18" cy="44" r="2.5" fill="var(--primary)" />
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor">
+		<text x="26" y="47">CHỢ RAU · SÀI GÒN</text>
 	</g>
 
-	<!-- NPC bubble (left) -->
-	<g transform="translate(14 46)">
-		<circle r="9" cx="9" cy="9" fill="var(--primary)" />
-		<text x="9" y="12" font-size="9" font-weight="700" fill="var(--primary-foreground)" text-anchor="middle">C</text>
-	</g>
-	<g transform="translate(36 40)">
-		<rect width="190" height="28" rx="14" fill="none" stroke="currentColor" stroke-width="1" />
-		<g font-size="10" font-weight="500" fill="currentColor">
-			<text x="14" y="18">Chào em! Em mua gì?</text>
-		</g>
-	</g>
-	<g font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.5">
-		<text x="36" y="80">CÔ NĂM · vendor</text>
-	</g>
+	<!-- NPC tag + line -->
+	<rect x="14" y="62" width="28" height="14" rx="4" fill="currentColor" />
+	<text
+		x="28"
+		y="72"
+		font-size="7"
+		font-weight="700"
+		fill="var(--background)"
+		text-anchor="middle"
+		letter-spacing="0.15em"
+	>NPC</text>
+	<text x="50" y="72" font-size="10" font-weight="500" fill="currentColor">
+		Chào em! Em mua gì?
+	</text>
 
-	<!-- Player bubble (right) -->
-	<g transform="translate(60 98)">
-		<rect width="194" height="42" rx="14" fill="currentColor" />
-		<g font-size="10" font-weight="500" fill="var(--background)">
-			<text x="14" y="18">Cho cháu một ký rau</text>
-			<text x="14" y="32">
-				<tspan>mu</tspan><tspan text-decoration="line-through" fill-opacity="0.65">o</tspan><tspan>ng ạ</tspan>
-			</text>
-		</g>
-		<!-- correction marker -->
-		<g stroke="var(--destructive)" stroke-width="1.5">
-			<line x1="46" y1="36" x2="62" y2="36" />
-		</g>
-		<!-- corrected hint -->
-		<text x="68" y="36" font-size="8" fill="var(--destructive)" font-weight="600">→ muống</text>
-	</g>
-	<g transform="translate(258 105)">
-		<circle r="9" fill="var(--accent)" />
-		<text font-size="9" font-weight="700" fill="var(--accent-foreground)" text-anchor="middle" y="3">EM</text>
-	</g>
-	<g font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.5" text-anchor="end">
-		<text x="254" y="152">YOU · learner</text>
-	</g>
+	<!-- BẠN tag + line -->
+	<rect
+		x="14"
+		y="86"
+		width="28"
+		height="14"
+		rx="4"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="1"
+	/>
+	<text
+		x="28"
+		y="96"
+		font-size="7"
+		font-weight="700"
+		fill="currentColor"
+		text-anchor="middle"
+		letter-spacing="0.1em"
+	>{t('role.you')}</text>
+	<text x="50" y="96" font-size="10" font-weight="500" fill="currentColor">
+		<tspan>Cho cháu một ký rau </tspan><tspan
+			fill="var(--destructive)"
+			text-decoration="underline"
+			text-decoration-style="wavy"
+		>muong</tspan><tspan> ạ</tspan>
+	</text>
+
+	<!-- Correction hint -->
+	<text
+		x="50"
+		y="114"
+		font-size="8"
+		font-weight="500"
+		fill="var(--destructive)"
+		letter-spacing="0.02em"
+	>
+		<tspan>↳ </tspan><tspan font-weight="700" letter-spacing="0.2em">{t('role.aiFix')} </tspan><tspan>muong → muống ({t('role.toneNote')})</tspan>
+	</text>
 
 	<!-- Divider -->
-	<line x1="14" y1="166" x2="266" y2="166" stroke="currentColor" stroke-width="0.5" opacity="0.25" data-draw />
+	<line
+		x1="14"
+		y1="132"
+		x2="266"
+		y2="132"
+		stroke="currentColor"
+		stroke-width="0.5"
+		opacity="0.25"
+		data-draw
+	/>
 
-	<!-- Score block -->
-	<g transform="translate(14 178)">
-		<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
-			<text>SCORE</text>
-		</g>
-		<g font-size="9" fill="currentColor" font-weight="500">
-			<text x="50" y="0">Vocab</text>
-			<text x="88" y="0" font-weight="700">28/30</text>
-			<text x="130" y="0">Grammar</text>
-			<text x="174" y="0" font-weight="700">18/25</text>
-		</g>
+	<!-- Score panel -->
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
+		<text x="14" y="152">{t('role.score')}</text>
 	</g>
-	<g transform="translate(218 210)">
-		<text font-size="22" font-weight="800" fill="currentColor" letter-spacing="-0.04em" text-anchor="end">
-			87<tspan font-size="11" opacity="0.55" font-weight="600">/100</tspan>
-		</text>
-	</g>
+
+	<!-- Vertical separator -->
+	<line x1="160" y1="158" x2="160" y2="198" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
+
+	<!-- Rubric row 1 -->
+	<text
+		x="14"
+		y="174"
+		font-size="8"
+		letter-spacing="0.18em"
+		font-weight="600"
+		fill="currentColor"
+		opacity="0.7"
+	>{t('role.vocab')}</text>
+	<text
+		x="150"
+		y="174"
+		font-size="12"
+		font-weight="700"
+		fill="currentColor"
+		text-anchor="end"
+		letter-spacing="-0.01em"
+	>45<tspan font-size="9" fill-opacity="0.55">/50</tspan></text>
+
+	<!-- Rubric row 2 -->
+	<text
+		x="14"
+		y="194"
+		font-size="8"
+		letter-spacing="0.18em"
+		font-weight="600"
+		fill="currentColor"
+		opacity="0.7"
+	>{t('role.grammar')}</text>
+	<text
+		x="150"
+		y="194"
+		font-size="12"
+		font-weight="700"
+		fill="currentColor"
+		text-anchor="end"
+		letter-spacing="-0.01em"
+	>42<tspan font-size="9" fill-opacity="0.55">/50</tspan></text>
+
+	<!-- Big final score -->
+	<text
+		x="262"
+		y="192"
+		font-size="36"
+		font-weight="800"
+		fill="currentColor"
+		letter-spacing="-0.04em"
+		text-anchor="end"
+	>87<tspan
+			font-size="13"
+			fill="currentColor"
+			fill-opacity="0.55"
+			font-weight="600"
+			letter-spacing="0.05em"
+		>/100</tspan></text>
 </svg>

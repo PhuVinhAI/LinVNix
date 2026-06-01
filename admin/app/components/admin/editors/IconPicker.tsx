@@ -4,9 +4,9 @@ import {
   Music, Phone, Mail, Calendar, Clock, Sun, Cloud, Star,
   BookOpen, Users, User, Camera, Globe, Car, Train, Bike,
 } from 'lucide-react'
-import { Input } from '../../ui/input'
+import type { LucideIcon } from 'lucide-react'
 
-const ICON_PRESETS: Array<{ key: string; Icon: typeof MessageSquare; label: string }> = [
+export const ICON_PRESETS: Array<{ key: string; Icon: LucideIcon; label: string }> = [
   { key: 'message-square', Icon: MessageSquare, label: 'Hội thoại' },
   { key: 'coffee', Icon: Coffee, label: 'Cà phê' },
   { key: 'shopping-cart', Icon: ShoppingCart, label: 'Mua sắm' },
@@ -37,6 +37,10 @@ const ICON_PRESETS: Array<{ key: string; Icon: typeof MessageSquare; label: stri
   { key: 'bike', Icon: Bike, label: 'Xe đạp' },
 ]
 
+export function getCategoryIcon(key: string | undefined | null): LucideIcon {
+  return ICON_PRESETS.find((p) => p.key === key)?.Icon ?? MessageSquare
+}
+
 export function IconPicker({
   value,
   onChange,
@@ -47,34 +51,26 @@ export function IconPicker({
   color?: string
 }) {
   return (
-    <div className="space-y-2">
-      <Input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="message-square"
-        className="font-mono text-xs"
-      />
-      <div className="grid grid-cols-7 gap-1.5 rounded-lg border-2 border-border bg-muted/30 p-2 max-h-48 overflow-y-auto">
-        {ICON_PRESETS.map(({ key, Icon, label }) => {
-          const isActive = value === key
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => onChange(key)}
-              title={label}
-              className={`flex h-10 w-full items-center justify-center rounded-lg transition-colors ${
-                isActive
-                  ? 'text-white'
-                  : 'border-2 border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary'
-              }`}
-              style={isActive ? { backgroundColor: color } : undefined}
-            >
-              <Icon className="h-4 w-4" strokeWidth={2.5} />
-            </button>
-          )
-        })}
-      </div>
+    <div className="grid grid-cols-7 gap-1.5 rounded-lg border-2 border-border bg-muted/30 p-2">
+      {ICON_PRESETS.map(({ key, Icon, label }) => {
+        const isActive = value === key
+        return (
+          <button
+            key={key}
+            type="button"
+            onClick={() => onChange(key)}
+            title={label}
+            className={`flex h-11 w-full items-center justify-center rounded-lg transition-colors ${
+              isActive
+                ? 'text-white'
+                : 'border-2 border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary'
+            }`}
+            style={isActive ? { backgroundColor: color } : undefined}
+          >
+            <Icon className="h-5 w-5" strokeWidth={2.5} />
+          </button>
+        )
+      })}
     </div>
   )
 }

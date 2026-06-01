@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from 'react'
-import { MessageSquare, Sparkles, Target, Settings, Eye, EyeOff } from 'lucide-react'
+import { MessageSquare, Sparkles, Target, Settings, Eye, EyeOff, GraduationCap } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { LevelPicker, DifficultyPicker } from '../editors/PickerControls'
 import { ScoringCriteriaEditor, type ScoringCriterion } from '../editors/ScoringCriteriaEditor'
+import { NumberStepper } from '../editors/NumberStepper'
+import { SystemPromptEditor } from '../editors/SystemPromptEditor'
 
 export interface ScenarioFormValues {
   title: string
@@ -58,8 +60,8 @@ export function ScenarioForm({
 
   return (
     <form id={id} onSubmit={submit} className="space-y-8">
-      <FormSection icon={MessageSquare} title="Thông tin tình huống">
-        <FormField label="Tên tình huống" required>
+      <FormSection icon={MessageSquare} title="Thông tin tình huống" description="Tên và mô tả hiển thị với học viên">
+        <FormField label="Tên tình huống" required help="Tiêu đề ngắn gọn, dễ hình dung bối cảnh">
           <Input
             value={values.title}
             onChange={(e) => update('title', e.target.value)}
@@ -68,11 +70,11 @@ export function ScenarioForm({
           />
         </FormField>
 
-        <FormField label="Mô tả tình huống" required>
+        <FormField label="Mô tả tình huống" required help="Bối cảnh và mục tiêu học viên cần đạt được">
           <Textarea
             value={values.description}
             onChange={(e) => update('description', e.target.value)}
-            placeholder="Mô tả bối cảnh và mục tiêu của tình huống"
+            placeholder="VD: Bạn đang ngồi tại quán cà phê và muốn gọi đồ uống. Hãy giao tiếp với nhân viên để gọi món, hỏi giá và thanh toán."
             className="min-h-24"
             required
           />
@@ -80,12 +82,15 @@ export function ScenarioForm({
       </FormSection>
 
       <FormSection icon={Sparkles} title="Cấu hình AI" description="Chỉ thị cho AI đóng vai trong hội thoại">
-        <FormField label="Lời nhắc hệ thống cho AI" required help="Hướng dẫn AI cách phản hồi học viên">
-          <Textarea
+        <FormField
+          label="Lời nhắc hệ thống cho AI"
+          required
+          help="Mô tả vai trò AI cần đóng. Bấm Chèn biến để cá nhân hoá theo từng học viên."
+        >
+          <SystemPromptEditor
             value={values.systemPrompt}
-            onChange={(e) => update('systemPrompt', e.target.value)}
-            placeholder="VD: Bạn là nhân viên phục vụ trong quán cà phê Việt Nam, hãy thân thiện và sử dụng từ vựng đơn giản..."
-            className="min-h-40 font-mono text-xs"
+            onChange={(v) => update('systemPrompt', v)}
+            placeholder={`VD:\nBạn đóng vai một nhân viên phục vụ quán cà phê Việt Nam. Học viên đóng vai {{playable.name}} ({{playable.role}}), trình độ tiếng Việt {{learner.level}}, ngôn ngữ mẹ đẻ {{learner.nativeLanguage}}.\n\nBối cảnh: {{scenario.title}} — {{scenario.description}}\n\nHãy thân thiện, dùng từ vựng đơn giản phù hợp với cấp độ học viên.`}
             required
           />
         </FormField>
@@ -100,12 +105,12 @@ export function ScenarioForm({
         </FormField>
       </FormSection>
 
-      <FormSection title="Cấp độ và độ khó">
-        <FormField label="Cấp độ yêu cầu" required>
+      <FormSection icon={GraduationCap} title="Cấp độ và độ khó" description="Phân loại để học viên chọn tình huống phù hợp">
+        <FormField label="Cấp độ yêu cầu" required help="Trình độ tiếng Việt tối thiểu để luyện tập">
           <LevelPicker value={values.requiredLevel} onChange={(v) => update('requiredLevel', v)} />
         </FormField>
 
-        <FormField label="Độ khó" required>
+        <FormField label="Độ khó" required help="Mức độ thách thức của bối cảnh và yêu cầu giao tiếp">
           <DifficultyPicker value={values.difficulty} onChange={(v) => update('difficulty', v)} />
         </FormField>
       </FormSection>
@@ -117,25 +122,28 @@ export function ScenarioForm({
         />
       </FormSection>
 
-      <FormSection icon={Settings} title="Cấu hình phiên hội thoại">
+      <FormSection icon={Settings} title="Cấu hình phiên hội thoại" description="Giới hạn lượt nói và trạng thái xuất bản">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField label="Số lượt tối đa" help="Để trống nếu không giới hạn">
-            <Input
-              type="number"
-              min="1"
-              value={values.maxTurns ?? ''}
-              onChange={(e) => update('maxTurns', e.target.value ? Number(e.target.value) : null)}
-              placeholder="VD: 10"
+            <NumberStepper
+              value={values.maxTurns ?? null}
+              onChange={(v) => update('maxTurns', v)}
+              nullable
+              min={1}
+              suffix="lượt"
+              ariaLabelDecrement="Giảm số lượt"
+              ariaLabelIncrement="Tăng số lượt"
             />
           </FormField>
 
-          <FormField label="Thời gian ước tính (phút)" required>
-            <Input
-              type="number"
-              min="1"
+          <FormField label="Thời gian ước tính" required help="Thời gian hoàn thành dự kiến">
+            <NumberStepper
               value={values.estimatedMinutes}
-              onChange={(e) => update('estimatedMinutes', Number(e.target.value) || 1)}
-              required
+              onChange={(v) => update('estimatedMinutes', v ?? 1)}
+              min={1}
+              suffix="phút"
+              ariaLabelDecrement="Giảm thời gian"
+              ariaLabelIncrement="Tăng thời gian"
             />
           </FormField>
         </div>

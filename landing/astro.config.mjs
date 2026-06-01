@@ -8,7 +8,8 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://linvnix.com',
+  site: 'https://phuvinhai.github.io',
+  base: '/LinVNix/',
 
   i18n: {
     defaultLocale: 'en',

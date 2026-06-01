@@ -3,6 +3,7 @@ import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { Plus, MessageSquare, Pencil, Trash2, MoreVertical, Users } from 'lucide-react'
+import { getCategoryIcon } from '../../components/admin/editors/IconPicker'
 import { Button } from '../../components/ui/button'
 import {
   AlertDialog,
@@ -109,6 +110,7 @@ export function ScenarioCategoriesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {data.map((category) => {
             const color = category.color || '#6366F1'
+            const CategoryIcon = getCategoryIcon(category.icon)
             const characterCount = category.scenarios?.reduce(
               (sum, s) => sum + (s.characters?.length ?? 0),
               0
@@ -122,70 +124,71 @@ export function ScenarioCategoriesPage() {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') navigate(simulationPath.category(category.id))
                 }}
-                className="group relative rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+                className="group relative flex items-start gap-4 rounded-lg border-2 border-border bg-card p-4 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
               >
-                {/* Color band */}
+                {/* Color icon box */}
                 <div
-                  className="relative h-20 overflow-hidden flex items-center justify-center"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
                   style={{ backgroundColor: color }}
                 >
-                  <MessageSquare className="h-10 w-10 text-white" strokeWidth={2} />
-                  <div className="absolute top-2 right-2">
-                    <div onClick={stop} onKeyDown={stop}>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 rounded-md bg-black/30 backdrop-blur-sm text-white hover:bg-black/50 hover:text-white"
-                          >
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-44">
-                          <DropdownMenuItem asChild>
-                            <Link to={simulationPath.categoryEdit(category.id)}>
-                              <Pencil className="h-4 w-4" />
-                              Chỉnh sửa
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            variant="destructive"
-                            onSelect={() => setPendingDelete(category)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Xóa danh mục
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
+                  <CategoryIcon className="h-6 w-6 text-white" strokeWidth={2} />
                 </div>
 
                 {/* Content */}
-                <div className="p-4">
-                  <h3 className="text-base font-bold text-foreground line-clamp-1">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-bold text-foreground line-clamp-1 pr-8">
                     {category.name}
                   </h3>
                   <p className="text-xs text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
                     {category.description}
                   </p>
-                  <div className="mt-3 flex items-center gap-3 text-xs">
-                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5">
                       <MessageSquare className="h-3.5 w-3.5" />
                       <span className="font-bold tabular-nums text-foreground">
                         {category.scenarios?.length ?? 0}
                       </span>
-                      <span>tình huống</span>
+                      tình huống
                     </span>
-                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                    <span className="text-muted-foreground/60">•</span>
+                    <span className="inline-flex items-center gap-1.5">
                       <Users className="h-3.5 w-3.5" />
                       <span className="font-bold tabular-nums text-foreground">
                         {characterCount}
                       </span>
-                      <span>nhân vật</span>
+                      nhân vật
                     </span>
                   </div>
+                </div>
+
+                {/* Dropdown */}
+                <div onClick={stop} onKeyDown={stop} className="absolute top-3 right-3">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                      >
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-44">
+                      <DropdownMenuItem asChild>
+                        <Link to={simulationPath.categoryEdit(category.id)}>
+                          <Pencil className="h-4 w-4" />
+                          Chỉnh sửa
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onSelect={() => setPendingDelete(category)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Xóa danh mục
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             )

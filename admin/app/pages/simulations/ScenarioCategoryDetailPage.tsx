@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
 import { useAdminScenarioCategory, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
+import { getCategoryIcon } from '../../components/admin/editors/IconPicker'
 import type { Scenario } from '../../features/simulations/types'
 import { simulationPath } from './route-utils'
 
@@ -72,6 +73,7 @@ export function ScenarioCategoryDetailPage() {
   const totalCharacters = scenarios.reduce((sum, s) => sum + (s.characters?.length ?? 0), 0)
   const publishedCount = scenarios.filter((s) => s.isPublished).length
   const categoryColor = category?.color || '#6366F1'
+  const CategoryIcon = getCategoryIcon(category?.icon)
 
   return (
     <div className="space-y-6">
@@ -82,42 +84,58 @@ export function ScenarioCategoryDetailPage() {
         ]}
       />
 
-      {/* Hero banner using category color */}
-      <div className="rounded-xl border-2 border-border overflow-hidden bg-card">
-        <div className="relative h-32 flex items-center px-6" style={{ backgroundColor: categoryColor }}>
-          <div className="flex items-center gap-4">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm">
-              <MessageSquare className="h-10 w-10 text-white" strokeWidth={2.5} />
-            </div>
-            <div className="text-white">
-              <p className="text-xs font-bold uppercase tracking-wider opacity-90">Danh mục mô phỏng</p>
-              <h1 className="text-2xl font-bold tracking-tight mt-0.5">{category?.name ?? 'Danh mục'}</h1>
-            </div>
+      {/* Header card */}
+      <div className="rounded-xl border-2 border-border bg-card p-5">
+        <div className="flex items-start gap-4">
+          <div
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
+            style={{ backgroundColor: categoryColor }}
+          >
+            <CategoryIcon className="h-7 w-7 text-white" strokeWidth={2.5} />
           </div>
-        </div>
-
-        <div className="p-5 space-y-4">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              {category?.description && (
-                <p className="text-sm text-muted-foreground leading-relaxed">{category.description}</p>
-              )}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 text-xs mb-1.5">
+              <MessageSquare className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="font-bold uppercase tracking-wider text-muted-foreground">
+                Danh mục mô phỏng
+              </span>
             </div>
-            {categoryId && (
-              <Button asChild variant="outline" className="shrink-0">
-                <Link to={simulationPath.categoryEdit(categoryId)}>
-                  <Pencil className="h-4 w-4" />
-                  Sửa
-                </Link>
-              </Button>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">
+              {category?.name ?? 'Danh mục'}
+            </h1>
+            {category?.description && (
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-3xl">
+                {category.description}
+              </p>
             )}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <MessageSquare className="h-4 w-4" />
+                <span className="font-bold text-foreground tabular-nums">{scenarios.length}</span>
+                tình huống
+              </span>
+              <span className="text-muted-foreground/60">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Eye className="h-4 w-4" />
+                <span className="font-bold text-foreground tabular-nums">{publishedCount}</span>
+                đã xuất bản
+              </span>
+              <span className="text-muted-foreground/60">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Users className="h-4 w-4" />
+                <span className="font-bold text-foreground tabular-nums">{totalCharacters}</span>
+                nhân vật
+              </span>
+            </div>
           </div>
-
-          <div className="grid grid-cols-3 gap-3 pt-4 border-t-2 border-border">
-            <Stat label="Tình huống" value={scenarios.length} color={categoryColor} />
-            <Stat label="Đã xuất bản" value={publishedCount} color={categoryColor} />
-            <Stat label="Nhân vật" value={totalCharacters} color={categoryColor} />
-          </div>
+          {categoryId && (
+            <Button asChild variant="outline" className="shrink-0">
+              <Link to={simulationPath.categoryEdit(categoryId)}>
+                <Pencil className="h-4 w-4" />
+                Sửa
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -313,17 +331,6 @@ export function ScenarioCategoryDetailPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
-  )
-}
-
-function Stat({ label, value, color }: { label: string; value: number; color: string }) {
-  return (
-    <div className="rounded-lg border-2 border-border bg-muted/30 p-3">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className="mt-1 text-2xl font-bold tabular-nums" style={{ color }}>
-        {value}
-      </p>
     </div>
   )
 }

@@ -13,6 +13,7 @@ export class ScenarioCategoriesRepository {
   async findAll(): Promise<ScenarioCategory[]> {
     return this.repository.find({
       order: { orderIndex: 'ASC' },
+      relations: ['scenarios', 'scenarios.characters'],
     });
   }
 

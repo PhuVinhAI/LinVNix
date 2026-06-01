@@ -531,6 +531,7 @@ export class SimulationSessionService {
     return {
       id: scenario.id,
       title: scenario.title,
+      description: scenario.description ?? '',
       systemPrompt: scenario.systemPrompt,
       requiredLevel: scenario.requiredLevel,
       difficulty: scenario.difficulty,

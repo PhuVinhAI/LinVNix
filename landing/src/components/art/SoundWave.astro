@@ -1,8 +1,13 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 ---
 
 <svg
@@ -11,68 +16,130 @@ const { class: className = '' } = Astro.props;
 	aria-hidden="true"
 	font-family="var(--font-sans)"
 >
-	<!-- Screen context indicator (the key differentiator) -->
-	<g transform="translate(14 14)">
-		<rect width="160" height="22" rx="11" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4" />
-		<g font-size="8" letter-spacing="0.18em" font-weight="600" fill="currentColor">
-			<text x="12" y="15" opacity="0.5">CONTEXT</text>
+	<!-- Header -->
+	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
+		<text x="14" y="18">{t('tutor.title')}</text>
+	</g>
+	<g
+		font-size="7"
+		letter-spacing="0.22em"
+		font-weight="600"
+		fill="currentColor"
+		opacity="0.4"
+		text-anchor="end"
+	>
+		<text x="266" y="18">LIVE</text>
+	</g>
+	<line
+		x1="14"
+		y1="28"
+		x2="266"
+		y2="28"
+		stroke="currentColor"
+		stroke-width="0.5"
+		opacity="0.2"
+		data-draw
+	/>
+
+	<!-- Single card: top = screen, bottom = AI hint -->
+	<g transform="translate(14, 40)">
+		<rect
+			width="252"
+			height="124"
+			rx="10"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1"
+			opacity="0.5"
+		/>
+
+		<!-- Screen section -->
+		<g font-size="7" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.5">
+			<text x="14" y="20">{t('tutor.lessonMeta')}</text>
 		</g>
-		<line x1="62" y1="6" x2="62" y2="16" stroke="currentColor" opacity="0.25" />
-		<g font-size="9" font-weight="500" fill="currentColor" opacity="0.85">
-			<text x="70" y="15">Lesson 03 · Q2</text>
+
+		<text
+			x="14"
+			y="50"
+			font-size="14"
+			font-weight="700"
+			fill="currentColor"
+			letter-spacing="-0.01em"
+		>Bạn khoẻ ___ ?</text>
+
+		<g
+			font-size="8"
+			letter-spacing="0.18em"
+			font-weight="600"
+			fill="currentColor"
+			opacity="0.45"
+		>
+			<text x="14" y="64">{t('tutor.typing')}</text>
 		</g>
-		<circle cx="150" cy="11" r="2.5" fill="var(--primary)">
-			<animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite" />
-		</circle>
+
+		<!-- Inner divider -->
+		<line
+			x1="0"
+			y1="78"
+			x2="252"
+			y2="78"
+			stroke="currentColor"
+			stroke-width="0.5"
+			opacity="0.2"
+		/>
+
+		<!-- AI hint strip -->
+		<rect
+			x="14"
+			y="92"
+			width="22"
+			height="14"
+			rx="4"
+			fill="currentColor"
+		/>
+		<text
+			x="25"
+			y="103"
+			font-size="8"
+			font-weight="700"
+			fill="var(--background)"
+			text-anchor="middle"
+			letter-spacing="0.1em"
+		>AI</text>
+
+		<text
+			x="44"
+			y="98"
+			font-size="7"
+			letter-spacing="0.22em"
+			font-weight="600"
+			fill="var(--primary)"
+		>{t('tutor.hint')}</text>
+
+		<text
+			x="44"
+			y="111"
+			font-size="10"
+			font-weight="500"
+			fill="currentColor"
+			opacity="0.85"
+		>{t('tutor.hintText')}</text>
 	</g>
 
-	<!-- User question bubble (right-aligned) -->
-	<g transform="translate(110 50)">
-		<rect width="156" height="38" rx="14" fill="currentColor" />
-		<g font-size="10" font-weight="500" fill="var(--background)">
-			<text x="14" y="17">Why is "không"</text>
-			<text x="14" y="30">at the end?</text>
-		</g>
-		<!-- tail -->
-		<path d="M156 34 L162 38 L150 38 Z" fill="currentColor" />
+	<!-- Footer: camera (photo discovery) -->
+	<g transform="translate(14, 184)" stroke="currentColor" fill="none" opacity="0.65" stroke-linejoin="round">
+		<rect x="0" y="-6" width="16" height="12" rx="2" stroke-width="1" />
+		<path d="M3 -6 L5 -9 L11 -9 L13 -6" stroke-width="1" />
+		<circle cx="8" cy="0" r="3" stroke-width="1" />
 	</g>
-
-	<!-- AI response bubble (left-aligned, outlined) -->
-	<g transform="translate(14 102)">
-		<rect width="190" height="50" rx="14" fill="none" stroke="currentColor" stroke-width="1" />
-		<g font-size="10" font-weight="500" fill="currentColor">
-			<text x="14" y="18">It's a yes/no question</text>
-			<text x="14" y="32">particle. Vietnamese</text>
-			<text x="14" y="46">puts it at the end</text>
-		</g>
-		<!-- tail -->
-		<path d="M14 46 L8 50 L20 50 Z" fill="var(--background)" stroke="currentColor" stroke-width="1" />
-		<!-- streaming cursor -->
-		<rect x="118" y="38" width="2" height="10" fill="var(--primary)">
-			<animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="indefinite" />
-		</rect>
-	</g>
-
-	<!-- AI avatar marker -->
-	<g transform="translate(214 110)">
-		<circle r="10" fill="var(--primary)" />
-		<text font-size="9" font-weight="700" fill="var(--primary-foreground)" text-anchor="middle" y="3">AI</text>
-	</g>
-
-	<!-- mini waveform at bottom indicating voice capable -->
-	<g fill="currentColor" opacity="0.4" transform="translate(14 175)">
-		<rect x="0" y="2" width="2" height="6" rx="1" />
-		<rect x="6" y="-2" width="2" height="14" rx="1" />
-		<rect x="12" y="0" width="2" height="10" rx="1" />
-		<rect x="18" y="-3" width="2" height="16" rx="1" />
-		<rect x="24" y="-1" width="2" height="12" rx="1" />
-		<rect x="30" y="-4" width="2" height="18" rx="1" />
-		<rect x="36" y="0" width="2" height="10" rx="1" />
-		<rect x="42" y="-2" width="2" height="14" rx="1" />
-		<rect x="48" y="2" width="2" height="6" rx="1" />
-		<rect x="54" y="-1" width="2" height="12" rx="1" />
-	</g>
-	<g font-size="8" letter-spacing="0.2em" fill="currentColor" opacity="0.45" font-weight="600">
-		<text x="76" y="186">voice · text · streaming</text>
-	</g>
+	<text
+		x="36"
+		y="188"
+		font-size="8"
+		letter-spacing="0.22em"
+		font-weight="600"
+		fill="currentColor"
+		opacity="0.6"
+	>{t('tutor.camera')}</text>
+	<circle cx="262" cy="185" r="2.5" fill="var(--primary)" />
 </svg>

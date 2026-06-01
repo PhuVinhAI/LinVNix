@@ -24,7 +24,7 @@ export async function seedSimulations(dataSource: DataSource) {
     {
       name: 'Mua sắm',
       description: 'Các tình huống mua bán, trao đổi hàng hóa tại chợ, cửa hàng, siêu thị.',
-      icon: 'shopping-bag',
+      icon: 'shopping-cart',
       color: '#FF6B6B',
       orderIndex: 1,
     },
@@ -45,7 +45,7 @@ export async function seedSimulations(dataSource: DataSource) {
     {
       name: 'Y tế',
       description: 'Các tình huống mô tả triệu chứng bệnh, khám bác sĩ, mua thuốc tại nhà thuốc.',
-      icon: 'heart-pulse',
+      icon: 'hospital',
       color: '#EE5253',
       orderIndex: 4,
     },

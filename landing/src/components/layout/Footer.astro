@@ -19,23 +19,16 @@ const columns = [
 		title: t('footer.product'),
 		links: [
 			{ label: t('nav.features'), href: `${base}#features` },
-			{ label: t('nav.pricing'), href: `${base}#pricing` },
 			{ label: t('nav.howItWorks'), href: `${base}#how-it-works` },
+			{ label: t('nav.pricing'), href: `${base}#pricing` },
+			{ label: t('nav.faq'), href: `${base}#faq` },
 		],
 	},
 	{
-		title: t('footer.company'),
+		title: t('footer.contact'),
 		links: [
-			{ label: t('footer.about'), href: '/about' },
-			{ label: t('footer.contact'), href: CONTACT_URL, external: true },
-			{ label: t('footer.careers'), href: '/careers' },
-		],
-	},
-	{
-		title: t('footer.legal'),
-		links: [
-			{ label: t('footer.terms'), href: '/terms' },
-			{ label: t('footer.privacy'), href: '/privacy' },
+			{ label: t('hero.ctaPrimary'), href: `${base}#cta` },
+			{ label: 'Zalo', href: CONTACT_URL, external: true },
 		],
 	},
 ];
@@ -44,16 +37,16 @@ const columns = [
 <footer class="border-t border-border bg-card relative">
 	<Container size="xl">
 		<div class="py-16 md:py-20 grid grid-cols-2 md:grid-cols-12 gap-10">
-			<div class="col-span-2 md:col-span-5 space-y-6">
+			<div class="col-span-2 md:col-span-6 space-y-6">
 				<Logo size="md" />
-				<p class="text-sm text-foreground/70 max-w-xs leading-[1.6]">
+				<p class="text-sm text-foreground/70 max-w-sm leading-[1.6]">
 					{t('footer.tagline')}
 				</p>
 			</div>
 
 			{
 				columns.map((col) => (
-					<div class="md:col-span-2 lg:col-span-2">
+					<div class="md:col-span-3">
 						<div class="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
 							/ {col.title}
 						</div>
@@ -74,8 +67,6 @@ const columns = [
 					</div>
 				))
 			}
-
-			<div class="md:col-span-1"></div>
 		</div>
 
 		<div class="py-6 border-t border-border flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground num-tabular">

@@ -14,7 +14,8 @@ export function useTranslations(lang: Lang) {
 }
 
 export function localizedPath(lang: Lang, path: string = ''): string {
+	const base = import.meta.env.BASE_URL;
 	const clean = path.replace(/^\//, '');
-	if (lang === defaultLang) return `/${clean}`;
-	return clean ? `/${lang}/${clean}` : `/${lang}/`;
+	const langSegment = lang === defaultLang ? '' : `${lang}/`;
+	return `${base}${langSegment}${clean}`;
 }

@@ -1,8 +1,13 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 ---
 
 <svg
@@ -13,7 +18,7 @@ const { class: className = '' } = Astro.props;
 >
 	<!-- Top meta row: POS + classifier badge | bookmark -->
 	<g font-size="9" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.6">
-		<text x="14" y="22">NOUN · CLF: con</text>
+		<text x="14" y="22">{t('word.pos')}</text>
 	</g>
 
 	<!-- Bookmark (Yêu sách) icon top-right -->
@@ -35,7 +40,7 @@ const { class: className = '' } = Astro.props;
 
 	<!-- Translation -->
 	<g fill="currentColor" font-size="14" font-weight="500" font-style="italic" opacity="0.85">
-		<text x="14" y="114">cat</text>
+		<text x="14" y="114">{t('word.translation')}</text>
 	</g>
 
 	<!-- Divider -->
@@ -43,22 +48,15 @@ const { class: className = '' } = Astro.props;
 
 	<!-- Dialect variants section -->
 	<g font-size="8" letter-spacing="0.25em" font-weight="600" fill="currentColor" opacity="0.5">
-		<text x="14" y="148">BẮC</text>
-		<text x="100" y="148">TRUNG</text>
-		<text x="200" y="148">NAM</text>
+		<text x="14" y="148">{t('word.dialectN')}</text>
+		<text x="100" y="148">{t('word.dialectC')}</text>
+		<text x="200" y="148">{t('word.dialectS')}</text>
 	</g>
 
 	<g font-size="14" font-weight="600" fill="currentColor">
 		<text x="14" y="172">con mèo</text>
 		<text x="100" y="172">con méo</text>
 		<text x="200" y="172">con mèo</text>
-	</g>
-
-	<!-- Audio dot indicators per dialect -->
-	<g fill="var(--primary)">
-		<circle cx="76" cy="167" r="2" opacity="0.7" />
-		<circle cx="170" cy="167" r="2" opacity="0.7" />
-		<circle cx="252" cy="167" r="2" />
 	</g>
 
 	<!-- Decorative accent stripe on left -->

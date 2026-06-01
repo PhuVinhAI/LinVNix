@@ -57,11 +57,17 @@ export function ScenarioCategoryFormPage({ mode }: { mode: 'create' | 'edit' }) 
           </div>
         </div>
 
-        <ScenarioCategoryForm
-          id="category-form"
-          initialValue={category}
-          onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
-        />
+        {mode === 'edit' && !category ? (
+          <div className="rounded-xl border-2 border-border bg-card p-12 text-center text-sm text-muted-foreground">
+            Đang tải danh mục...
+          </div>
+        ) : (
+          <ScenarioCategoryForm
+            id="category-form"
+            initialValue={category}
+            onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
+          />
+        )}
 
         <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
           <Button asChild variant="ghost">

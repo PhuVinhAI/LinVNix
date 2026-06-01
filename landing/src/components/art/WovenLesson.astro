@@ -1,8 +1,13 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 ---
 
 <svg
@@ -13,7 +18,7 @@ const { class: className = '' } = Astro.props;
 >
 	<!-- Header -->
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
-		<text x="14" y="18">BÀI HÔM NAY · 04 KỸ NĂNG</text>
+		<text x="14" y="18">{t('woven.title')}</text>
 	</g>
 	<g
 		font-size="7"
@@ -64,7 +69,7 @@ const { class: className = '' } = Astro.props;
 			font-weight="600"
 			fill="currentColor"
 			opacity="0.55"
-		>TỪ MỚI</text>
+		>{t('woven.vocab')}</text>
 
 		<text
 			x="8"
@@ -82,7 +87,7 @@ const { class: className = '' } = Astro.props;
 			fill="currentColor"
 			opacity="0.55"
 			font-style="italic"
-		>delicious · adj.</text>
+		>{t('woven.vocabSample')}</text>
 	</g>
 
 	<!-- Card 2: NGỮ PHÁP -->
@@ -113,7 +118,7 @@ const { class: className = '' } = Astro.props;
 			font-weight="600"
 			fill="currentColor"
 			opacity="0.55"
-		>NGỮ PHÁP</text>
+		>{t('woven.grammar')}</text>
 
 		<text
 			x="8"
@@ -131,7 +136,7 @@ const { class: className = '' } = Astro.props;
 			fill="currentColor"
 			opacity="0.55"
 			font-style="italic"
-		>yes/no question</text>
+		>{t('woven.grammarSample')}</text>
 	</g>
 
 	<!-- Card 3: NGHE -->
@@ -162,7 +167,7 @@ const { class: className = '' } = Astro.props;
 			font-weight="600"
 			fill="currentColor"
 			opacity="0.55"
-		>NGHE</text>
+		>{t('woven.listening')}</text>
 
 		<!-- Play button -->
 		<g transform="translate(18, 40)">
@@ -200,7 +205,7 @@ const { class: className = '' } = Astro.props;
 			fill="currentColor"
 			opacity="0.5"
 			letter-spacing="0.05em"
-		>0:04 · native voice</text>
+		>{t('woven.listeningCaption')}</text>
 	</g>
 
 	<!-- Card 4: NÓI -->
@@ -231,7 +236,7 @@ const { class: className = '' } = Astro.props;
 			font-weight="600"
 			fill="currentColor"
 			opacity="0.55"
-		>NÓI</text>
+		>{t('woven.speaking')}</text>
 
 		<!-- Mic glyph -->
 		<g transform="translate(16, 36)" stroke="currentColor" stroke-width="1.4" fill="none" opacity="0.85" stroke-linecap="round">
@@ -279,7 +284,7 @@ const { class: className = '' } = Astro.props;
 		data-draw
 	/>
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.6">
-		<text x="14" y="216">DỆT 4 KỸ NĂNG · 1 BÀI</text>
+		<text x="14" y="216">{t('woven.weave')}</text>
 	</g>
 	<circle cx="262" cy="213" r="2.5" fill="var(--primary)" />
 </svg>

@@ -1,12 +1,17 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 ---
 
 <svg
-	viewBox="0 0 280 200"
+	viewBox="0 0 280 228"
 	class={className}
 	aria-hidden="true"
 	font-family="var(--font-sans)"
@@ -31,7 +36,7 @@ const { class: className = '' } = Astro.props;
 			<line x1="26" y1="44" x2="74" y2="44" stroke="currentColor" stroke-width="1.2" />
 			<line x1="26" y1="64" x2="50" y2="64" stroke="currentColor" stroke-width="1" opacity="0.4" />
 		</g>
-		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">MULTI · CHOICE</text>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">{t('ex.multi')}</text>
 	</g>
 
 	<!-- Cell 2: FILL BLANK -->
@@ -44,7 +49,7 @@ const { class: className = '' } = Astro.props;
 		<g font-size="7" fill="currentColor" opacity="0.5">
 			<text x="12" y="60">[ăn] [đi] [làm]</text>
 		</g>
-		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">FILL · BLANK</text>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">{t('ex.fill')}</text>
 	</g>
 
 	<!-- Cell 3: MATCHING -->
@@ -56,16 +61,16 @@ const { class: className = '' } = Astro.props;
 			<text x="12" y="66">cà phê</text>
 		</g>
 		<g fill="currentColor" font-size="8" font-style="italic" opacity="0.7">
-			<text x="58" y="22">shirt</text>
-			<text x="58" y="44">noodle</text>
-			<text x="58" y="66">coffee</text>
+			<text x="58" y="22">{t('ex.matchShirt')}</text>
+			<text x="58" y="44">{t('ex.matchNoodle')}</text>
+			<text x="58" y="66">{t('ex.matchCoffee')}</text>
 		</g>
 		<g stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.7">
 			<path d="M28 19 Q 44 30 56 41" />
 			<path d="M28 41 Q 44 30 56 19" />
 			<path d="M30 63 L 56 63" />
 		</g>
-		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">MATCHING</text>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">{t('ex.match')}</text>
 	</g>
 
 	<!-- Cell 4: ORDERING -->
@@ -89,7 +94,7 @@ const { class: className = '' } = Astro.props;
 		<g stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.6">
 			<path d="M14 64 Q 44 70 74 64" stroke-linecap="round" />
 		</g>
-		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">ORDERING</text>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">{t('ex.order')}</text>
 	</g>
 
 	<!-- Cell 5: TRANSLATION -->
@@ -103,13 +108,13 @@ const { class: className = '' } = Astro.props;
 			<path d="M40 42 L44 48 L48 42" stroke-linecap="round" />
 		</g>
 		<g fill="currentColor" font-size="9" font-style="italic" opacity="0.8">
-			<text x="12" y="65">Hello</text>
+			<text x="12" y="65">{t('ex.transHello')}</text>
 		</g>
 		<g font-size="7" fill="currentColor" opacity="0.5">
 			<text x="60" y="25">VI</text>
 			<text x="60" y="65">EN</text>
 		</g>
-		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">TRANSLATION</text>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">{t('ex.translate')}</text>
 	</g>
 
 	<!-- Cell 6: LISTENING -->
@@ -128,6 +133,6 @@ const { class: className = '' } = Astro.props;
 			<rect x="64" y="36" width="2" height="12" rx="1" />
 			<rect x="70" y="40" width="2" height="4" rx="1" />
 		</g>
-		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">LISTENING</text>
+		<text x="0" y="100" font-size="7" letter-spacing="0.18em" font-weight="600" fill="currentColor" opacity="0.55">{t('ex.listen')}</text>
 	</g>
 </svg>

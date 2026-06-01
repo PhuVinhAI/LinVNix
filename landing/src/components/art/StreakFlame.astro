@@ -1,13 +1,18 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 
 const goals = [
-	{ label: 'EXERCISES', current: 8, max: 10, done: false },
-	{ label: 'SIMULATIONS', current: 3, max: 3, done: true },
-	{ label: 'LESSONS', current: 2, max: 5, done: false },
+	{ label: t('streak.exercises'), current: 8, max: 10, done: false },
+	{ label: t('streak.simulations'), current: 3, max: 3, done: true },
+	{ label: t('streak.lessons'), current: 2, max: 5, done: false },
 ];
 
 const barWidth = 108;
@@ -21,7 +26,7 @@ const barWidth = 108;
 >
 	<!-- Header -->
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
-		<text x="14" y="22">TODAY · MỤC TIÊU NGÀY</text>
+		<text x="14" y="22">{t('streak.today')}</text>
 	</g>
 
 	<!-- Goals list -->
@@ -96,10 +101,10 @@ const barWidth = 108;
 
 	<!-- Streak section -->
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
-		<text x="14" y="160">CHUỖI · STREAK</text>
+		<text x="14" y="160">{t('streak.streak')}</text>
 	</g>
 	<g font-size="9" font-weight="500" fill="currentColor" opacity="0.7">
-		<text x="14" y="185">Longest 89 days</text>
+		<text x="14" y="185">{t('streak.longest')}</text>
 	</g>
 
 	<!-- Big streak number -->
@@ -111,7 +116,7 @@ const barWidth = 108;
 			letter-spacing="-0.04em"
 			text-anchor="end"
 		>
-			47<tspan font-size="11" fill="currentColor" opacity="0.55" font-weight="600" letter-spacing="0.15em">d</tspan>
+			47<tspan font-size="11" fill="currentColor" opacity="0.55" font-weight="600" letter-spacing="0.15em">{t('streak.dayAbbr')}</tspan>
 		</text>
 	</g>
 

@@ -1,8 +1,13 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 ---
 
 <svg
@@ -13,24 +18,20 @@ const { class: className = '' } = Astro.props;
 >
 	<!-- RULE label -->
 	<g font-size="9" letter-spacing="0.25em" font-weight="600" fill="currentColor" opacity="0.55">
-		<text x="14" y="22">RULE · QUESTION PARTICLE</text>
+		<text x="14" y="22">{t('duet.title')}</text>
 	</g>
 
 	<!-- Vietnamese sentence -->
-	<g fill="currentColor">
-		<text x="14" y="56" font-size="18" font-weight="700" letter-spacing="-0.015em">
-			Em uống cà phê
-		</text>
-		<!-- highlighted "không?" -->
-		<rect x="148" y="40" width="56" height="22" rx="4" fill="var(--primary)" opacity="0.12" />
-		<text x="155" y="56" font-size="18" font-weight="700" letter-spacing="-0.015em" fill="var(--primary)">
-			không?
-		</text>
-	</g>
+	<text x="14" y="56" font-size="18" font-weight="700" letter-spacing="-0.015em">
+		<tspan fill="currentColor">Em uống cà phê </tspan><tspan
+			fill="var(--primary)"
+			font-weight="800"
+		>không?</tspan>
+	</text>
 
 	<!-- VI label -->
 	<g font-size="8" letter-spacing="0.25em" font-weight="500" fill="currentColor" opacity="0.4">
-		<text x="14" y="74">VIETNAMESE</text>
+		<text x="14" y="74">{t('duet.vnLabel')}</text>
 	</g>
 
 	<!-- Arrow connector -->
@@ -40,28 +41,25 @@ const { class: className = '' } = Astro.props;
 	</g>
 
 	<!-- English sentence -->
-	<g fill="currentColor">
-		<!-- highlighted "Do" -->
-		<rect x="11" y="120" width="28" height="22" rx="4" fill="var(--primary)" opacity="0.12" />
-		<text x="14" y="136" font-size="18" font-weight="700" letter-spacing="-0.015em" fill="var(--primary)">
-			Do
-		</text>
-		<text x="42" y="136" font-size="18" font-weight="700" letter-spacing="-0.015em">
-			you drink coffee?
-		</text>
-	</g>
+	<text x="14" y="136" font-size="18" font-weight="700" letter-spacing="-0.015em">
+		<tspan fill="var(--primary)" font-weight="800">Do</tspan><tspan
+			fill="currentColor"
+		> you drink coffee?</tspan>
+	</text>
 
 	<!-- EN label -->
 	<g font-size="8" letter-spacing="0.25em" font-weight="500" fill="currentColor" opacity="0.4">
-		<text x="14" y="154">ENGLISH</text>
+		<text x="14" y="154">{t('duet.enLabel')}</text>
 	</g>
 
 	<!-- Divider -->
 	<line x1="14" y1="166" x2="266" y2="166" stroke="currentColor" stroke-width="0.5" opacity="0.25" data-draw />
 
 	<!-- Pattern abstraction -->
-	<g font-size="10" font-weight="500" fill="currentColor" opacity="0.6">
-		<text x="14" y="184">[S] + [V] + [O] +</text>
-		<text x="130" y="184" fill="var(--primary)" font-weight="700">không?</text>
-	</g>
+	<text x="14" y="184" font-size="10" font-weight="500" letter-spacing="0.02em">
+		<tspan fill="currentColor" fill-opacity="0.6">[S] + [V] + [O] + </tspan><tspan
+			fill="var(--primary)"
+			font-weight="700"
+		>không?</tspan>
+	</text>
 </svg>

@@ -22,6 +22,7 @@ export interface SimulationAiCharacter {
 export interface SimulationAiScenario {
   id: string;
   title: string;
+  description: string;
   systemPrompt: string;
   requiredLevel: string;
   difficulty: string;
@@ -357,6 +358,7 @@ export class SimulationAiService {
       scenario: {
         systemPrompt: scenario.systemPrompt,
         title: scenario.title,
+        description: scenario.description ?? '',
       },
       learner: {
         nativeLanguage: learner.nativeLanguage,
@@ -365,6 +367,14 @@ export class SimulationAiService {
       },
       charactersDescription,
       chosenCharacter: {
+        id: chosenCharacter.id,
+        name: chosenCharacter.name,
+        role: chosenCharacter.role,
+      },
+      // Alias for `chosenCharacter` — admin authoring experience uses
+      // `{{playable.*}}` because it reads more naturally in the system prompt
+      // (the character the learner plays).
+      playable: {
         id: chosenCharacter.id,
         name: chosenCharacter.name,
         role: chosenCharacter.role,
@@ -456,6 +466,7 @@ export class SimulationAiService {
       scenario: {
         id: scenario.id,
         title: scenario.title,
+        description: scenario.description ?? '',
         systemPrompt: scenario.systemPrompt,
         requiredLevel: scenario.requiredLevel,
         difficulty: scenario.difficulty,

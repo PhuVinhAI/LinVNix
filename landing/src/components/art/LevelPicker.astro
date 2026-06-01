@@ -1,8 +1,13 @@
 ---
+import { defaultLang, type Lang } from '../../i18n/config';
+import { useArtTranslations } from '../../i18n/art';
+
 interface Props {
 	class?: string;
+	lang?: Lang;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', lang = defaultLang } = Astro.props;
+const t = useArtTranslations(lang);
 
 const levels = [
 	{ code: 'A1', state: 'done' },
@@ -28,7 +33,7 @@ const startY = 58;
 >
 	<!-- Header -->
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.55">
-		<text x="14" y="18">ĐÁNH GIÁ · CHỌN CẤP</text>
+		<text x="14" y="18">{t('picker.title')}</text>
 	</g>
 	<g
 		font-size="7"
@@ -38,7 +43,7 @@ const startY = 58;
 		opacity="0.4"
 		text-anchor="end"
 	>
-		<text x="226" y="18">06 BẬC</text>
+		<text x="226" y="18">{t('picker.tiers')}</text>
 	</g>
 
 	<!-- Divider + placement progress -->
@@ -53,7 +58,7 @@ const startY = 58;
 		data-draw
 	/>
 	<g font-size="7" letter-spacing="0.2em" font-weight="500" fill="currentColor" opacity="0.5">
-		<text x="14" y="44">ĐÁNH GIÁ NHANH</text>
+		<text x="14" y="44">{t('picker.quick')}</text>
 	</g>
 	<g transform="translate(196, 41)">
 		<circle cx="0" cy="0" r="2" fill="var(--primary)" />
@@ -152,7 +157,7 @@ const startY = 58;
 							text-anchor="middle"
 							opacity="0.85"
 						>
-							ĐÃ CHỌN
+							{t('picker.selected')}
 						</text>
 					)}
 				</g>
@@ -172,7 +177,7 @@ const startY = 58;
 		data-draw
 	/>
 	<g font-size="8" letter-spacing="0.22em" font-weight="600" fill="currentColor" opacity="0.6">
-		<text x="14" y="216">A1 · A2 TỰ MỞ KHOÁ</text>
+		<text x="14" y="216">{t('picker.autoUnlock')}</text>
 	</g>
 	<circle cx="222" cy="213" r="2.5" fill="var(--primary)" />
 </svg>

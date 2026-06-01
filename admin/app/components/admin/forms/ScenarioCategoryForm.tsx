@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Palette, Hash, MessageSquare } from 'lucide-react'
+import { Palette, Hash, FileText } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
@@ -46,25 +46,8 @@ export function ScenarioCategoryForm({
 
   return (
     <form id={id} onSubmit={submit} className="space-y-8">
-      <FormSection icon={MessageSquare} title="Thông tin danh mục">
-        <div className="rounded-lg border-2 border-border bg-card p-4">
-          <div className="flex items-center gap-3">
-            <div
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-white"
-              style={{ backgroundColor: values.color || '#6366F1' }}
-            >
-              <MessageSquare className="h-7 w-7" strokeWidth={2.5} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-base font-bold truncate">{values.name || 'Tên danh mục'}</p>
-              <p className="text-xs text-muted-foreground truncate mt-0.5">
-                {values.description || 'Mô tả danh mục'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <FormField label="Tên danh mục" required>
+      <FormSection icon={FileText} title="Thông tin danh mục" description="Tên và mô tả hiển thị với học viên">
+        <FormField label="Tên danh mục" required help="Tiêu đề ngắn gọn">
           <Input
             value={values.name}
             onChange={(e) => update('name', e.target.value)}
@@ -73,11 +56,11 @@ export function ScenarioCategoryForm({
           />
         </FormField>
 
-        <FormField label="Mô tả danh mục" required>
+        <FormField label="Mô tả danh mục" required help="Mô tả ngắn gọn nội dung danh mục">
           <Textarea
             value={values.description}
             onChange={(e) => update('description', e.target.value)}
-            placeholder="Mô tả nội dung và mục đích của danh mục"
+            placeholder="VD: Các tình huống giao tiếp khi gọi đồ uống tại quán cà phê"
             className="min-h-24"
             required
           />
@@ -85,17 +68,17 @@ export function ScenarioCategoryForm({
       </FormSection>
 
       <FormSection icon={Palette} title="Giao diện" description="Tùy chỉnh màu sắc và biểu tượng">
-        <FormField label="Màu sắc" required>
+        <FormField label="Màu sắc" required help="Nền của biểu tượng trong danh sách">
           <ColorPicker value={values.color} onChange={(v) => update('color', v)} />
         </FormField>
 
-        <FormField label="Biểu tượng" required>
+        <FormField label="Biểu tượng" required help="Chọn một biểu tượng đại diện cho danh mục">
           <IconPicker value={values.icon} onChange={(v) => update('icon', v)} color={values.color} />
         </FormField>
       </FormSection>
 
-      <FormSection icon={Hash} title="Sắp xếp">
-        <FormField label="Thứ tự hiển thị" required>
+      <FormSection icon={Hash} title="Sắp xếp" description="Thứ tự hiển thị trong danh sách danh mục">
+        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
           <OrderIndexStepper
             value={values.orderIndex}
             onChange={(v) => update('orderIndex', v)}

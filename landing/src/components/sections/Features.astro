@@ -125,12 +125,12 @@ const features = [
 
 							<!-- Art -->
 							<div class="flex-1 flex items-center justify-center py-8 md:py-10 text-foreground">
-								{f.art === 'wave' && <SoundWave class="w-full max-w-md" />}
-								{f.art === 'compass' && <Compass class="w-full max-w-xs" />}
-								{f.art === 'duet' && <ScriptDuet class="w-full max-w-sm" />}
-								{f.art === 'words' && <WordCloud class="w-full max-w-sm" />}
-								{f.art === 'grid' && <CheckGrid class="w-full max-w-xs" />}
-								{f.art === 'roleplay' && <Roleplay class="w-full max-w-md" />}
+								{f.art === 'wave' && <SoundWave lang={lang} class="w-full max-w-md" />}
+								{f.art === 'compass' && <Compass lang={lang} class="w-full max-w-xs" />}
+								{f.art === 'duet' && <ScriptDuet lang={lang} class="w-full max-w-sm" />}
+								{f.art === 'words' && <WordCloud lang={lang} class="w-full max-w-sm" />}
+								{f.art === 'grid' && <CheckGrid lang={lang} class="w-full max-w-xs" />}
+								{f.art === 'roleplay' && <Roleplay lang={lang} class="w-full max-w-md" />}
 							</div>
 
 							<!-- Footer -->
