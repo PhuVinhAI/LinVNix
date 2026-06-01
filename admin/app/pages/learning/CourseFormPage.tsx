@@ -32,7 +32,7 @@ export function CourseFormPage({ mode }: { mode: 'create' | 'edit' }) {
   }
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="space-y-6">
       <Breadcrumbs
         items={[
           { label: 'Khóa học', href: learningPath.courses() },
@@ -40,36 +40,38 @@ export function CourseFormPage({ mode }: { mode: 'create' | 'edit' }) {
         ]}
       />
 
-      <div className="flex items-center gap-3">
-        <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
-          <Link to={backTo}>
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {mode === 'edit' ? 'Sửa khóa học' : 'Tạo khóa học mới'}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1.5">
-            {mode === 'edit' ? 'Cập nhật thông tin khóa học' : 'Điền thông tin để tạo khóa học mới'}
-          </p>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
+            <Link to={backTo}>
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {mode === 'edit' ? 'Sửa khóa học' : 'Tạo khóa học mới'}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              {mode === 'edit' ? 'Cập nhật thông tin khóa học' : 'Điền thông tin để tạo khóa học mới'}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <CourseForm
-        id="course-form"
-        initialValue={course}
-        onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
-      />
+        <CourseForm
+          id="course-form"
+          initialValue={course}
+          onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
+        />
 
-      <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
-        <Button asChild variant="ghost">
-          <Link to={backTo}>Hủy</Link>
-        </Button>
-        <Button type="submit" form="course-form">
-          <Save className="h-4 w-4" />
-          {mode === 'edit' ? 'Cập nhật' : 'Tạo khóa học'}
-        </Button>
+        <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
+          <Button asChild variant="ghost">
+            <Link to={backTo}>Hủy</Link>
+          </Button>
+          <Button type="submit" form="course-form">
+            <Save className="h-4 w-4" />
+            {mode === 'edit' ? 'Cập nhật' : 'Tạo khóa học'}
+          </Button>
+        </div>
       </div>
     </div>
   )

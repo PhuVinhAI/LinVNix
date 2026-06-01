@@ -56,7 +56,7 @@ export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'cr
   const handleSubmit = (values: unknown) => submit(values as Record<string, unknown>)
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="space-y-6">
       <Breadcrumbs
         items={[
           { label: lesson?.module?.course?.title ?? 'Khóa học', href: lesson?.module?.courseId ? learningPath.course(lesson.module.courseId) : learningPath.courses() },
@@ -66,59 +66,61 @@ export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'cr
         ]}
       />
 
-      <div className="flex items-center gap-3">
-        <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
-          <Link to={backPath}>
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {titleAction} {meta.title}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1.5">
-            {lesson?.title ? `Trong bài học "${lesson.title}"` : 'Điền thông tin để tiếp tục'}
-          </p>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
+            <Link to={backPath}>
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {titleAction} {meta.title}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              {lesson?.title ? `Trong bài học "${lesson.title}"` : 'Điền thông tin để tiếp tục'}
+            </p>
+          </div>
         </div>
-      </div>
 
-      {kind === 'contents' && (
-        <ContentForm
-          id="child-form"
-          initialValue={initialValue as never}
-          onSubmit={handleSubmit}
-        />
-      )}
-      {kind === 'vocabularies' && (
-        <VocabularyForm
-          id="child-form"
-          initialValue={initialValue as never}
-          onSubmit={handleSubmit}
-        />
-      )}
-      {kind === 'grammar' && (
-        <GrammarForm
-          id="child-form"
-          initialValue={initialValue as never}
-          onSubmit={handleSubmit}
-        />
-      )}
-      {kind === 'exercise-sets' && (
-        <ExerciseSetForm
-          id="child-form"
-          initialValue={initialValue as never}
-          onSubmit={handleSubmit}
-        />
-      )}
+        {kind === 'contents' && (
+          <ContentForm
+            id="child-form"
+            initialValue={initialValue as never}
+            onSubmit={handleSubmit}
+          />
+        )}
+        {kind === 'vocabularies' && (
+          <VocabularyForm
+            id="child-form"
+            initialValue={initialValue as never}
+            onSubmit={handleSubmit}
+          />
+        )}
+        {kind === 'grammar' && (
+          <GrammarForm
+            id="child-form"
+            initialValue={initialValue as never}
+            onSubmit={handleSubmit}
+          />
+        )}
+        {kind === 'exercise-sets' && (
+          <ExerciseSetForm
+            id="child-form"
+            initialValue={initialValue as never}
+            onSubmit={handleSubmit}
+          />
+        )}
 
-      <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
-        <Button asChild variant="ghost">
-          <Link to={backPath}>Hủy</Link>
-        </Button>
-        <Button type="submit" form="child-form">
-          <Save className="h-4 w-4" />
-          {mode === 'edit' ? 'Cập nhật' : 'Tạo mới'}
-        </Button>
+        <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
+          <Button asChild variant="ghost">
+            <Link to={backPath}>Hủy</Link>
+          </Button>
+          <Button type="submit" form="child-form">
+            <Save className="h-4 w-4" />
+            {mode === 'edit' ? 'Cập nhật' : 'Tạo mới'}
+          </Button>
+        </div>
       </div>
     </div>
   )

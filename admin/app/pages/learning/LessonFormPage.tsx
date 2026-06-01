@@ -34,7 +34,7 @@ export function LessonFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const backPath = parentModuleId ? learningPath.module(parentModuleId) : learningPath.courses()
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="space-y-6">
       <Breadcrumbs
         items={[
           { label: module?.course?.title ?? 'Khóa học', href: module?.courseId ? learningPath.course(module.courseId) : learningPath.courses() },
@@ -43,36 +43,38 @@ export function LessonFormPage({ mode }: { mode: 'create' | 'edit' }) {
         ]}
       />
 
-      <div className="flex items-center gap-3">
-        <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
-          <Link to={backPath}>
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {mode === 'edit' ? 'Sửa bài học' : 'Tạo bài học mới'}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1.5">
-            {mode === 'edit' ? 'Cập nhật thông tin bài học' : 'Điền thông tin để tạo bài học mới'}
-          </p>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
+            <Link to={backPath}>
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {mode === 'edit' ? 'Sửa bài học' : 'Tạo bài học mới'}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              {mode === 'edit' ? 'Cập nhật thông tin bài học' : 'Điền thông tin để tạo bài học mới'}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <LessonForm
-        id="lesson-form"
-        initialValue={lesson}
-        onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
-      />
+        <LessonForm
+          id="lesson-form"
+          initialValue={lesson}
+          onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
+        />
 
-      <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
-        <Button asChild variant="ghost">
-          <Link to={backPath}>Hủy</Link>
-        </Button>
-        <Button type="submit" form="lesson-form">
-          <Save className="h-4 w-4" />
-          {mode === 'edit' ? 'Cập nhật' : 'Tạo bài học'}
-        </Button>
+        <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
+          <Button asChild variant="ghost">
+            <Link to={backPath}>Hủy</Link>
+          </Button>
+          <Button type="submit" form="lesson-form">
+            <Save className="h-4 w-4" />
+            {mode === 'edit' ? 'Cập nhật' : 'Tạo bài học'}
+          </Button>
+        </div>
       </div>
     </div>
   )

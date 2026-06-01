@@ -1,4 +1,4 @@
-import { Pencil, Trash2, MoreVertical, Clock, Award } from 'lucide-react'
+import { Pencil, Trash2, MoreVertical } from 'lucide-react'
 import { Button } from '../ui/button'
 import {
   DropdownMenu,
@@ -9,40 +9,35 @@ import {
 import type { Exercise } from '../../features/learning/types'
 
 const TYPE_COLORS: Record<string, string> = {
-  MULTIPLE_CHOICE: 'text-blue-600 dark:text-blue-400',
-  FILL_IN_BLANK: 'text-emerald-600 dark:text-emerald-400',
-  MATCHING: 'text-purple-600 dark:text-purple-400',
-  TRANSLATION: 'text-amber-600 dark:text-amber-400',
-  LISTENING: 'text-rose-600 dark:text-rose-400',
-  SPEAKING: 'text-cyan-600 dark:text-cyan-400',
+  multiple_choice: 'text-blue-600 dark:text-blue-400',
+  fill_blank: 'text-emerald-600 dark:text-emerald-400',
+  matching: 'text-purple-600 dark:text-purple-400',
+  ordering: 'text-indigo-600 dark:text-indigo-400',
+  translation: 'text-amber-600 dark:text-amber-400',
+  listening: 'text-rose-600 dark:text-rose-400',
+  speaking: 'text-cyan-600 dark:text-cyan-400',
 }
 
 const TYPE_LABELS: Record<string, string> = {
-  MULTIPLE_CHOICE: 'Trắc nghiệm',
-  FILL_IN_BLANK: 'Điền chỗ trống',
-  MATCHING: 'Ghép cặp',
-  TRANSLATION: 'Dịch',
-  LISTENING: 'Nghe',
-  SPEAKING: 'Nói',
+  multiple_choice: 'Trắc nghiệm',
+  fill_blank: 'Điền chỗ trống',
+  matching: 'Ghép cặp',
+  ordering: 'Sắp xếp',
+  translation: 'Dịch',
+  listening: 'Nghe',
+  speaking: 'Nói',
 }
 
-const DIFFICULTY: Record<string, { label: string; color: string; dot: string }> = {
-  BEGINNER: {
-    label: 'Dễ',
-    color: 'text-emerald-600 dark:text-emerald-400',
-    dot: 'bg-emerald-500',
-  },
-  INTERMEDIATE: {
-    label: 'Trung bình',
-    color: 'text-amber-600 dark:text-amber-400',
-    dot: 'bg-amber-500',
-  },
-  ADVANCED: {
-    label: 'Khó',
-    color: 'text-rose-600 dark:text-rose-400',
-    dot: 'bg-rose-500',
-  },
-}
+const DIFFICULTY_LABELS = ['', 'Rất dễ', 'Dễ', 'Trung bình', 'Khó', 'Rất khó']
+const DIFFICULTY_COLORS = [
+  '',
+  'text-emerald-600 dark:text-emerald-400',
+  'text-teal-600 dark:text-teal-400',
+  'text-amber-600 dark:text-amber-400',
+  'text-rose-600 dark:text-rose-400',
+  'text-red-700 dark:text-red-400',
+]
+const DIFFICULTY_DOTS = ['', 'bg-emerald-500', 'bg-teal-500', 'bg-amber-500', 'bg-rose-500', 'bg-red-600']
 
 interface ExerciseCardProps {
   exercise: Exercise
@@ -52,9 +47,15 @@ interface ExerciseCardProps {
 }
 
 export function ExerciseCard({ exercise, onEdit, onDelete, onClick }: ExerciseCardProps) {
-  const typeColor = TYPE_COLORS[exercise.exerciseType] ?? 'text-muted-foreground'
-  const typeLabel = TYPE_LABELS[exercise.exerciseType] ?? exercise.exerciseType
-  const difficulty = DIFFICULTY[exercise.difficultyLevel] ?? DIFFICULTY.BEGINNER
+  const key = (exercise.exerciseType ?? '').toLowerCase()
+  const typeColor = TYPE_COLORS[key] ?? 'text-muted-foreground'
+  const typeLabel = TYPE_LABELS[key] ?? exercise.exerciseType
+  const level = Math.min(5, Math.max(1, exercise.difficultyLevel || 1))
+  const difficulty = {
+    label: DIFFICULTY_LABELS[level],
+    color: DIFFICULTY_COLORS[level],
+    dot: DIFFICULTY_DOTS[level],
+  }
 
   const handleClick = () => onClick?.()
 
@@ -109,26 +110,28 @@ export function ExerciseCard({ exercise, onEdit, onDelete, onClick }: ExerciseCa
       </div>
 
       {/* Question */}
-      <p className="text-sm font-bold text-foreground line-clamp-2 leading-relaxed mb-3">
+      <p className="text-sm font-bold text-foreground line-clamp-2 leading-relaxed">
         {exercise.question}
       </p>
 
-      {/* Footer meta */}
-      {(exercise.points || exercise.timeLimit) && (
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          {exercise.points != null && (
-            <span className="flex items-center gap-1">
-              <Award className="h-3 w-3" />
-              <span className="font-medium tabular-nums">{exercise.points}</span>
-              <span>điểm</span>
-            </span>
-          )}
-          {exercise.timeLimit != null && (
-            <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3" />
-              <span className="font-medium tabular-nums">{exercise.timeLimit}s</span>
-            </span>
-          )}
+      {/* Options preview for multiple choice */}
+      {key === 'multiple_choice' && Array.isArray(exercise.options) && (exercise.options as string[]).length > 0 && (
+        <div className="mt-3 grid grid-cols-2 gap-1">
+          {(exercise.options as string[]).slice(0, 4).map((opt, i) => {
+            const isCorrect = exercise.correctAnswer === opt
+            return (
+              <div
+                key={i}
+                className={`text-xs rounded border-2 px-2 py-1 truncate ${
+                  isCorrect
+                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 text-foreground font-semibold'
+                    : 'border-border bg-muted/30 text-muted-foreground'
+                }`}
+              >
+                {String.fromCharCode(65 + i)}. {opt || '—'}
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

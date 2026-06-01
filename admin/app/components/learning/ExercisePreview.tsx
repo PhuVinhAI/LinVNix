@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle } from 'lucide-react'
+import { CheckCircle2, Circle, Lightbulb } from 'lucide-react'
 import { Badge } from '../ui/badge'
 
 interface ExercisePreviewProps {
@@ -30,7 +30,7 @@ export function ExercisePreview({
       <div>
         <div className="flex items-center gap-3 mb-4">
           <Badge variant="secondary" className="text-sm font-semibold">
-            Preview
+            Xem trước
           </Badge>
           <Badge className={`text-sm font-semibold ${difficulty.color}`}>
             {difficulty.label}
@@ -108,7 +108,7 @@ export function ExercisePreview({
 
         {exerciseType === 'TRANSLATION' && (
           <div className="space-y-3">
-            <p className="text-sm font-semibold text-muted-foreground">Dịch sang tiếng Anh</p>
+            <p className="text-sm font-semibold text-muted-foreground">Bản dịch của học viên</p>
             <div className="rounded-xl border-2 border-border bg-card p-4">
               <textarea
                 placeholder="Học viên sẽ nhập bản dịch vào đây..."
@@ -150,9 +150,12 @@ export function ExercisePreview({
       </div>
 
       {/* Info */}
-      <div className="rounded-xl bg-primary/5 border border-primary/20 p-4">
-        <p className="text-sm text-muted-foreground">
-          💡 <span className="font-semibold">Tip:</span> Preview sẽ cập nhật tự động khi bạn thay đổi nội dung bên trái
+      <div className="rounded-xl bg-primary/5 border-2 border-primary/20 p-4">
+        <p className="text-sm text-muted-foreground flex items-start gap-2">
+          <Lightbulb className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+          <span>
+            <span className="font-semibold">Mẹo:</span> Xem trước sẽ tự cập nhật khi bạn chỉnh sửa bài tập
+          </span>
         </p>
       </div>
     </div>

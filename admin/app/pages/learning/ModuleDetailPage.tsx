@@ -2,7 +2,11 @@ import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { Plus, Pencil, BookOpen, Clock, MoreVertical, Trash2 } from 'lucide-react'
+import {
+  Plus, Pencil, BookOpen, Clock, MoreVertical, Trash2, Layers, GraduationCap,
+  Lightbulb, Headphones, MessageCircle, Edit3, Mic, Globe, FileText,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import {
@@ -25,26 +29,15 @@ import { useAdminModule, useLearningAdminMutation } from '../../features/learnin
 import type { Lesson } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
-const lessonTypeColors: Record<string, string> = {
-  vocabulary: 'text-emerald-600 dark:text-emerald-400',
-  grammar: 'text-blue-600 dark:text-blue-400',
-  reading: 'text-indigo-600 dark:text-indigo-400',
-  listening: 'text-purple-600 dark:text-purple-400',
-  speaking: 'text-rose-600 dark:text-rose-400',
-  writing: 'text-amber-600 dark:text-amber-400',
-  pronunciation: 'text-teal-600 dark:text-teal-400',
-  culture: 'text-fuchsia-600 dark:text-fuchsia-400',
-}
-
-const lessonTypeLabels: Record<string, string> = {
-  vocabulary: 'Từ vựng',
-  grammar: 'Ngữ pháp',
-  reading: 'Đọc',
-  listening: 'Nghe',
-  speaking: 'Nói',
-  writing: 'Viết',
-  pronunciation: 'Phát âm',
-  culture: 'Văn hóa',
+const lessonTypes: Record<string, { Icon: LucideIcon; label: string; bg: string; color: string }> = {
+  vocabulary: { Icon: BookOpen, label: 'Từ vựng', bg: 'bg-emerald-500', color: 'text-emerald-700 dark:text-emerald-300' },
+  grammar: { Icon: Lightbulb, label: 'Ngữ pháp', bg: 'bg-blue-500', color: 'text-blue-700 dark:text-blue-300' },
+  reading: { Icon: FileText, label: 'Đọc', bg: 'bg-indigo-500', color: 'text-indigo-700 dark:text-indigo-300' },
+  listening: { Icon: Headphones, label: 'Nghe', bg: 'bg-purple-500', color: 'text-purple-700 dark:text-purple-300' },
+  speaking: { Icon: MessageCircle, label: 'Nói', bg: 'bg-rose-500', color: 'text-rose-700 dark:text-rose-300' },
+  writing: { Icon: Edit3, label: 'Viết', bg: 'bg-amber-500', color: 'text-amber-700 dark:text-amber-300' },
+  pronunciation: { Icon: Mic, label: 'Phát âm', bg: 'bg-teal-500', color: 'text-teal-700 dark:text-teal-300' },
+  culture: { Icon: Globe, label: 'Văn hóa', bg: 'bg-fuchsia-500', color: 'text-fuchsia-700 dark:text-fuchsia-300' },
 }
 
 export function ModuleDetailPage() {
@@ -65,11 +58,16 @@ export function ModuleDetailPage() {
     }
   }
 
-  const stop = (e: MouseEvent | KeyboardEvent) => {
-    e.stopPropagation()
-  }
+  const stop = (e: MouseEvent | KeyboardEvent) => e.stopPropagation()
 
   const totalMinutes = module?.lessons?.reduce((sum, l) => sum + (l.estimatedDuration ?? 0), 0) ?? 0
+  const assessmentCount = module?.lessons?.filter((l) => l.isAssessment).length ?? 0
+
+  // Group lessons by type for the type breakdown
+  const typeCounts = (module?.lessons ?? []).reduce<Record<string, number>>((acc, lesson) => {
+    acc[lesson.lessonType] = (acc[lesson.lessonType] ?? 0) + 1
+    return acc
+  }, {})
 
   return (
     <div className="space-y-6">
@@ -80,23 +78,24 @@ export function ModuleDetailPage() {
         ]}
       />
 
-      {/* Module Header */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 text-xs">
-          <span className="font-bold text-muted-foreground">CHỦ ĐỀ</span>
-          <span className="text-muted-foreground">·</span>
-          <span className="text-muted-foreground">#{module?.orderIndex ?? 0}</span>
-          {module?.topic && (
-            <>
-              <span className="text-muted-foreground">·</span>
-              <span className="font-medium text-foreground">{module.topic}</span>
-            </>
-          )}
-        </div>
-
-        <div className="flex items-start justify-between gap-4">
+      {/* Header card */}
+      <div className="rounded-xl border-2 border-border bg-card p-5">
+        <div className="flex items-start gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary text-xl font-bold">
+            {module?.orderIndex ?? '—'}
+          </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-3xl font-bold text-foreground tracking-tight">
+            <div className="flex items-center gap-2 text-xs mb-1.5">
+              <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="font-bold uppercase tracking-wider text-muted-foreground">Chủ đề</span>
+              {module?.topic && (
+                <>
+                  <span className="text-muted-foreground">·</span>
+                  <span className="font-medium text-foreground">{module.topic}</span>
+                </>
+              )}
+            </div>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">
               {module?.title ?? 'Chủ đề'}
             </h1>
             {module?.description && (
@@ -115,33 +114,48 @@ export function ModuleDetailPage() {
           )}
         </div>
 
-        <div className="flex items-center gap-6 pt-2 border-t-2 border-border">
-          <div className="flex items-center gap-2 pt-4">
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-bold text-foreground tabular-nums">
-              {module?.lessons?.length ?? 0}
-            </span>
-            <span className="text-sm text-muted-foreground">bài học</span>
-          </div>
-          {totalMinutes > 0 && (
-            <div className="flex items-center gap-2 pt-4">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-bold text-foreground tabular-nums">
-                {totalMinutes}
-              </span>
-              <span className="text-sm text-muted-foreground">phút</span>
-            </div>
-          )}
+        {/* Inline metric strip */}
+        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t-2 border-border">
+          <MetricCell icon={BookOpen} label="Bài học" value={module?.lessons?.length ?? 0} />
+          <MetricCell icon={GraduationCap} label="Bài đánh giá" value={assessmentCount} />
+          <MetricCell icon={Clock} label="Tổng phút" value={totalMinutes} />
         </div>
+
+        {/* Lesson type distribution */}
+        {Object.keys(typeCounts).length > 0 && (
+          <div className="mt-4 pt-4 border-t-2 border-border">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+              Phân bố kỹ năng
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {Object.entries(typeCounts).map(([type, count]) => {
+                const t = lessonTypes[type]
+                if (!t) return null
+                return (
+                  <div
+                    key={type}
+                    className="flex items-center gap-1.5 rounded-md border-2 border-border bg-card px-2 py-1"
+                  >
+                    <div className={`flex h-5 w-5 items-center justify-center rounded text-white ${t.bg}`}>
+                      <t.Icon className="h-3 w-3" />
+                    </div>
+                    <span className="text-xs font-semibold">{t.label}</span>
+                    <span className="text-xs font-bold tabular-nums text-muted-foreground">{count}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Lessons Section */}
-      <div className="space-y-4 pt-2">
+      {/* Lessons timeline */}
+      <div className="space-y-4">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Bài học</h2>
+            <h2 className="text-xl font-bold tracking-tight">Bài học theo lộ trình</h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Quản lý các bài học trong chủ đề này.
+              Trình tự các bài học trong chủ đề này.
             </p>
           </div>
           {moduleId && (
@@ -180,82 +194,97 @@ export function ModuleDetailPage() {
             )}
           </div>
         ) : (
-          <div className="rounded-lg border-2 border-border overflow-hidden">
-            {module.lessons.map((lesson, index) => (
-              <div
-                key={lesson.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => navigate(learningPath.lesson(lesson.id))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') navigate(learningPath.lesson(lesson.id))
-                }}
-                className={`group flex items-center gap-4 p-4 bg-card cursor-pointer transition-colors hover:bg-muted/40 focus:outline-none focus:bg-muted/40 ${
-                  index > 0 ? 'border-t-2 border-border' : ''
-                }`}
-              >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-bold text-foreground tabular-nums">
-                  {lesson.orderIndex}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-base font-bold text-foreground truncate">
-                      {lesson.title}
-                    </h3>
-                    <span
-                      className={`text-xs font-bold ${lessonTypeColors[lesson.lessonType] ?? 'text-muted-foreground'}`}
+          <div className="relative">
+            {/* Vertical timeline line */}
+            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-border" aria-hidden />
+            <div className="space-y-3">
+              {module.lessons.map((lesson) => {
+                const t = lessonTypes[lesson.lessonType] ?? {
+                  Icon: BookOpen,
+                  label: lesson.lessonType,
+                  bg: 'bg-muted',
+                  color: 'text-muted-foreground',
+                }
+                return (
+                  <div
+                    key={lesson.id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => navigate(learningPath.lesson(lesson.id))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') navigate(learningPath.lesson(lesson.id))
+                    }}
+                    className="group relative flex items-start gap-3 rounded-lg border-2 border-border bg-card pl-3 pr-3 py-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+                  >
+                    {/* Timeline node */}
+                    <div
+                      className={`relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white text-sm font-bold ${t.bg}`}
                     >
-                      {lessonTypeLabels[lesson.lessonType] ?? lesson.lessonType}
-                    </span>
-                    {lesson.estimatedDuration && (
-                      <>
-                        <span className="text-xs text-muted-foreground">·</span>
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          <span className="font-medium tabular-nums">{lesson.estimatedDuration}p</span>
-                        </span>
-                      </>
-                    )}
-                  </div>
-                  {lesson.description && (
-                    <p className="text-sm text-muted-foreground line-clamp-1 mt-0.5">
-                      {lesson.description}
-                    </p>
-                  )}
-                </div>
+                      <t.Icon className="h-4 w-4" />
+                    </div>
 
-                <div onClick={stop} onKeyDown={stop} className="shrink-0">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                      >
-                        <MoreVertical className="h-4 w-4" />
-                        <span className="sr-only">Tùy chọn</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-44">
-                      <DropdownMenuItem asChild>
-                        <Link to={learningPath.lessonEdit(lesson.moduleId, lesson.id)}>
-                          <Pencil className="h-4 w-4" />
-                          Chỉnh sửa
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        variant="destructive"
-                        onSelect={() => setPendingDelete(lesson)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Xóa bài học
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-            ))}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-base font-bold text-foreground truncate">
+                          {lesson.title}
+                        </h3>
+                        <span className={`text-xs font-bold ${t.color}`}>{t.label}</span>
+                        {lesson.isAssessment && (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-amber-100 dark:bg-amber-950/40 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">
+                            <GraduationCap className="h-3 w-3" />
+                            ĐÁNH GIÁ
+                          </span>
+                        )}
+                        {lesson.estimatedDuration && (
+                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            <span className="font-medium tabular-nums">{lesson.estimatedDuration}p</span>
+                          </span>
+                        )}
+                      </div>
+                      {lesson.description && (
+                        <p className="text-sm text-muted-foreground line-clamp-1 mt-1">
+                          {lesson.description}
+                        </p>
+                      )}
+                    </div>
+
+                    <span className="hidden md:block text-xs font-mono text-muted-foreground/50 shrink-0 tabular-nums">
+                      #{lesson.orderIndex}
+                    </span>
+
+                    <div onClick={stop} onKeyDown={stop} className="shrink-0">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                          >
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-44">
+                          <DropdownMenuItem asChild>
+                            <Link to={learningPath.lessonEdit(lesson.moduleId, lesson.id)}>
+                              <Pencil className="h-4 w-4" />
+                              Chỉnh sửa
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            variant="destructive"
+                            onSelect={() => setPendingDelete(lesson)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Xóa bài học
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>
@@ -285,6 +314,22 @@ export function ModuleDetailPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+    </div>
+  )
+}
+
+function MetricCell({ icon: Icon, label, value }: { icon: typeof BookOpen; label: string; value: number }) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="min-w-0">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground leading-tight">
+          {label}
+        </p>
+        <p className="text-base font-bold tabular-nums leading-tight">{value}</p>
+      </div>
     </div>
   )
 }

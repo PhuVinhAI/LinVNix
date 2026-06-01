@@ -1,18 +1,22 @@
 import { useNavigate, useParams } from 'react-router'
-import { TrendingUp, Target, BookOpen, MessageSquare, Bot, Sparkles } from 'lucide-react'
+import {
+  TrendingUp, Target, BookOpen, MessageSquare, Bot, Sparkles,
+  Mail, Flame, Award, CheckCircle2, XCircle, Clock, Calendar,
+  ChevronRight,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { DataTable } from '../../components/admin/DataTable'
 import { useAdminLearner } from '../../features/learners/api/use-learners-admin'
 import { learnerPath } from './route-utils'
 
-const levelColors: Record<string, string> = {
-  A1: 'text-emerald-600 dark:text-emerald-400',
-  A2: 'text-teal-600 dark:text-teal-400',
-  B1: 'text-blue-600 dark:text-blue-400',
-  B2: 'text-indigo-600 dark:text-indigo-400',
-  C1: 'text-purple-600 dark:text-purple-400',
-  C2: 'text-rose-600 dark:text-rose-400',
+const levelMeta: Record<string, { label: string; bg: string }> = {
+  A1: { label: 'Mới bắt đầu', bg: 'bg-emerald-500' },
+  A2: { label: 'Sơ cấp', bg: 'bg-teal-500' },
+  B1: { label: 'Trung cấp', bg: 'bg-blue-500' },
+  B2: { label: 'Trên trung cấp', bg: 'bg-indigo-500' },
+  C1: { label: 'Cao cấp', bg: 'bg-purple-500' },
+  C2: { label: 'Thông thạo', bg: 'bg-rose-500' },
 }
 
 const avatarColors = [
@@ -41,10 +45,26 @@ function hashColor(id: string): string {
   return avatarColors[Math.abs(hash) % avatarColors.length]
 }
 
-const statusColors: Record<string, string> = {
-  completed: 'text-emerald-600 dark:text-emerald-400',
-  in_progress: 'text-blue-600 dark:text-blue-400',
-  not_started: 'text-muted-foreground',
+const STATUS_LABELS: Record<string, string> = {
+  completed: 'Hoàn thành',
+  in_progress: 'Đang học',
+  not_started: 'Chưa bắt đầu',
+  active: 'Đang diễn ra',
+  ended: 'Kết thúc',
+}
+
+const STATUS_COLORS: Record<string, string> = {
+  completed: 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300',
+  in_progress: 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300',
+  not_started: 'bg-muted text-muted-foreground',
+  active: 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300',
+  ended: 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300',
+}
+
+const UNIT_TYPE_LABELS: Record<string, string> = {
+  course: 'Khóa học',
+  module: 'Chủ đề',
+  lesson: 'Bài học',
 }
 
 export function LearnerDetailPage() {
@@ -53,10 +73,28 @@ export function LearnerDetailPage() {
   const { data, isLoading, error } = useAdminLearner(learnerId)
 
   const learner = data?.user
+  const meta = levelMeta[learner?.currentLevel ?? ''] ?? { label: '—', bg: 'bg-muted' }
+  const progressPercent = data
+    ? data.summary.progressCount > 0
+      ? Math.round((data.summary.completedProgressCount / data.summary.progressCount) * 100)
+      : 0
+    : 0
+  const accuracyPercent = data
+    ? data.summary.exerciseResultsCount > 0
+      ? Math.round(
+          (data.summary.correctExerciseResultsCount / data.summary.exerciseResultsCount) * 100
+        )
+      : 0
+    : 0
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: 'Học viên', href: learnerPath.learners() }, { label: learner?.fullName ?? 'Chi tiết' }]} />
+      <Breadcrumbs
+        items={[
+          { label: 'Học viên', href: learnerPath.learners() },
+          { label: learner?.fullName ?? 'Chi tiết' },
+        ]}
+      />
 
       {isLoading ? (
         <div className="text-center py-12">
@@ -71,196 +109,340 @@ export function LearnerDetailPage() {
         </div>
       ) : data ? (
         <>
-          {/* Profile Header */}
-          <div className="flex items-start gap-4">
-            <div
-              className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl text-white text-xl font-bold ${hashColor(learner?.id ?? '')}`}
-            >
-              {getInitials(learner?.fullName)}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 text-xs mb-1">
-                <span className="font-bold text-muted-foreground">HỌC VIÊN</span>
-                <span className="text-muted-foreground">·</span>
-                <span className={`font-bold ${levelColors[learner?.currentLevel ?? ''] ?? 'text-muted-foreground'}`}>
-                  {learner?.currentLevel ?? '—'}
-                </span>
-                <span className="text-muted-foreground">·</span>
-                <span className="font-medium text-muted-foreground capitalize">
-                  {learner?.role ?? '—'}
-                </span>
-                {learner?.preferredDialect && (
-                  <>
-                    <span className="text-muted-foreground">·</span>
-                    <span className="text-muted-foreground">
+          {/* Profile hero */}
+          <div className="rounded-xl border-2 border-border bg-card p-5">
+            <div className="flex items-start gap-4 flex-wrap">
+              <div
+                className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl text-white text-2xl font-bold ${hashColor(learner?.id ?? '')}`}
+              >
+                {getInitials(learner?.fullName)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold text-white ${meta.bg}`}
+                  >
+                    {learner?.currentLevel ?? '—'} · {meta.label}
+                  </span>
+                  <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-bold text-muted-foreground capitalize">
+                    {learner?.role ?? '—'}
+                  </span>
+                  {learner?.preferredDialect && (
+                    <span className="inline-flex items-center rounded-md border-2 border-border px-2 py-0.5 text-xs font-medium text-muted-foreground">
                       Giọng {learner.preferredDialect}
                     </span>
-                  </>
+                  )}
+                </div>
+                <h1 className="text-2xl font-bold text-foreground tracking-tight">
+                  {learner?.fullName ?? 'Học viên'}
+                </h1>
+                <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
+                  <Mail className="h-3.5 w-3.5" />
+                  {learner?.email}
+                </p>
+                {learner?.createdAt && (
+                  <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5">
+                    <Calendar className="h-3 w-3" />
+                    Tham gia: {formatDate(learner.createdAt)}
+                  </p>
                 )}
               </div>
-              <h1 className="text-3xl font-bold text-foreground tracking-tight">
-                {learner?.fullName ?? 'Học viên'}
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">{learner?.email}</p>
+              <div className="flex items-center gap-3 shrink-0">
+                <StreakBadge
+                  current={data.summary.currentStreak}
+                  longest={data.summary.longestStreak}
+                />
+              </div>
+            </div>
+
+            {/* Progress bars */}
+            <div className="mt-4 pt-4 border-t-2 border-border grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ProgressBar
+                label="Tiến độ học"
+                hint={`${data.summary.completedProgressCount} / ${data.summary.progressCount} hạng mục`}
+                percent={progressPercent}
+                color="bg-primary"
+              />
+              <ProgressBar
+                label="Độ chính xác bài tập"
+                hint={`${data.summary.correctExerciseResultsCount} / ${data.summary.exerciseResultsCount} câu đúng`}
+                percent={accuracyPercent}
+                color="bg-emerald-500"
+              />
             </div>
           </div>
 
-          {/* Metrics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 border-t-2 border-border">
-            <Metric label="Tiến độ" value={`${data.summary.completedProgressCount}/${data.summary.progressCount}`} />
-            <Metric label="Bài tập đúng" value={`${data.summary.correctExerciseResultsCount}/${data.summary.exerciseResultsCount}`} />
-            <Metric label="Từ cá nhân" value={data.summary.personalVocabularyCount} />
-            <Metric
-              label="Streak"
-              value={`${data.summary.currentStreak} / ${data.summary.longestStreak}`}
-              hint="hiện tại / dài nhất"
+          {/* Metrics grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <MetricCard
+              icon={BookOpen}
+              label="Bài tập đã làm"
+              value={data.summary.exerciseResultsCount}
+              tone="blue"
+            />
+            <MetricCard
+              icon={Sparkles}
+              label="Từ vựng cá nhân"
+              value={data.summary.personalVocabularyCount}
+              tone="purple"
+            />
+            <MetricCard
+              icon={MessageSquare}
+              label="Phiên mô phỏng"
+              value={data.summary.simulationCount}
+              tone="rose"
+            />
+            <MetricCard
+              icon={Bot}
+              label="Hội thoại AI"
+              value={data.summary.conversationCount}
+              tone="amber"
             />
           </div>
 
           {/* Tabs */}
-          <Tabs defaultValue="progress" className="space-y-4 pt-2">
+          <Tabs defaultValue="progress" className="space-y-4">
             <div className="border-b-2 border-border">
               <TabsList variant="line" className="flex h-auto p-0 gap-0 -mb-0.5 overflow-x-auto">
-                <TabsTrigger
-                  value="progress"
-                  className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-                >
-                  <TrendingUp className="h-4 w-4" />
-                  <span className="text-sm">Tiến độ</span>
-                  <span className="text-xs font-bold tabular-nums text-muted-foreground group-data-active:text-foreground">
-                    {data.progress.length}
-                  </span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="goals"
-                  className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-                >
-                  <Target className="h-4 w-4" />
-                  <span className="text-sm">Mục tiêu</span>
-                  <span className="text-xs font-bold tabular-nums text-muted-foreground">
-                    {data.dailyGoals.length}
-                  </span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="exercises"
-                  className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  <span className="text-sm">Bài tập</span>
-                  <span className="text-xs font-bold tabular-nums text-muted-foreground">
-                    {data.exerciseResults.length}
-                  </span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="vocabulary"
-                  className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  <span className="text-sm">Từ vựng</span>
-                  <span className="text-xs font-bold tabular-nums text-muted-foreground">
-                    {data.personalVocabularies.length}
-                  </span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="simulations"
-                  className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-                >
-                  <MessageSquare className="h-4 w-4" />
-                  <span className="text-sm">Mô phỏng</span>
-                  <span className="text-xs font-bold tabular-nums text-muted-foreground">
-                    {data.simulations.length}
-                  </span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="ai"
-                  className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-                >
-                  <Bot className="h-4 w-4" />
-                  <span className="text-sm">AI</span>
-                  <span className="text-xs font-bold tabular-nums text-muted-foreground">
-                    {data.conversations.length}
-                  </span>
-                </TabsTrigger>
+                <TabTrigger value="progress" icon={TrendingUp} label="Tiến độ" count={data.progress.length} />
+                <TabTrigger value="exercises" icon={BookOpen} label="Bài tập" count={data.exerciseResults.length} />
+                <TabTrigger value="vocabulary" icon={Sparkles} label="Từ vựng" count={data.personalVocabularies.length} />
+                <TabTrigger value="simulations" icon={MessageSquare} label="Mô phỏng" count={data.simulations.length} />
+                <TabTrigger value="ai" icon={Bot} label="Hội thoại AI" count={data.conversations.length} />
+                <TabTrigger value="goals" icon={Target} label="Mục tiêu" count={data.dailyGoals.length} />
               </TabsList>
             </div>
 
-            <TabsContent value="progress" className="mt-4">
-              <DataTable data={data.progress} empty="Chưa có tiến độ" columns={[
-                { key: 'unit', header: 'Hạng mục', cell: (row) => <span className="font-semibold text-foreground">{row.lesson?.title ?? row.module?.title ?? row.course?.title ?? row.unitType}</span> },
-                { key: 'type', header: 'Loại', cell: (row) => <span className="text-muted-foreground capitalize">{row.unitType}</span> },
-                { key: 'status', header: 'Trạng thái', cell: (row) => (
-                  <span className={`font-medium capitalize ${statusColors[row.status] ?? 'text-muted-foreground'}`}>
-                    {row.status.replace('_', ' ')}
-                  </span>
-                ) },
-                { key: 'score', header: 'Điểm', cell: (row) => <span className="font-bold tabular-nums">{row.score ?? '—'}</span> },
-                { key: 'time', header: 'Thời gian', cell: (row) => <span className="text-muted-foreground tabular-nums">{row.timeSpent}s</span> },
-              ]} />
+            {/* PROGRESS — timeline-style list */}
+            <TabsContent value="progress" className="mt-4 space-y-2">
+              {data.progress.length === 0 ? (
+                <EmptyState icon={TrendingUp} message="Chưa có tiến độ học tập" />
+              ) : (
+                data.progress.map((row) => (
+                  <div
+                    key={row.id}
+                    className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-3"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <TrendingUp className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold text-foreground truncate">
+                        {row.lesson?.title ?? row.module?.title ?? row.course?.title ?? row.unitType}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                        <span>{UNIT_TYPE_LABELS[row.unitType] ?? row.unitType}</span>
+                        <span>·</span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {row.timeSpent}s
+                        </span>
+                        {row.completedAt && (
+                          <>
+                            <span>·</span>
+                            <span>Hoàn thành {formatDate(row.completedAt)}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {row.score != null && (
+                      <span className="text-base font-bold tabular-nums text-foreground">
+                        {row.score}
+                      </span>
+                    )}
+                    <StatusPill status={row.status} />
+                  </div>
+                ))
+              )}
             </TabsContent>
 
-            <TabsContent value="goals" className="mt-4">
-              <DataTable data={data.dailyGoals} empty="Chưa có mục tiêu" columns={[
-                { key: 'type', header: 'Loại', cell: (row) => <span className="font-semibold capitalize">{row.goalType}</span> },
-                { key: 'target', header: 'Mục tiêu', cell: (row) => <span className="font-bold tabular-nums">{row.targetValue}</span> },
-              ]} />
+            {/* EXERCISES — correct/wrong cards */}
+            <TabsContent value="exercises" className="mt-4 space-y-2">
+              {data.exerciseResults.length === 0 ? (
+                <EmptyState icon={BookOpen} message="Chưa có kết quả bài tập" />
+              ) : (
+                data.exerciseResults.map((row) => (
+                  <div
+                    key={row.id}
+                    className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-3"
+                  >
+                    <div
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+                        row.isCorrect
+                          ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'
+                          : 'bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400'
+                      }`}
+                    >
+                      {row.isCorrect ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground line-clamp-1">
+                        {row.exercise?.question ?? '—'}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                        <span className="capitalize">
+                          {row.exercise?.exerciseType?.replaceAll('_', ' ') ?? '—'}
+                        </span>
+                        <span>·</span>
+                        <span>{row.attemptCount} lần làm</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground">Điểm cao nhất</p>
+                      <p className="text-base font-bold tabular-nums">{row.bestScore || row.score}</p>
+                    </div>
+                  </div>
+                ))
+              )}
             </TabsContent>
 
-            <TabsContent value="exercises" className="mt-4">
-              <DataTable data={data.exerciseResults} empty="Chưa có kết quả" columns={[
-                { key: 'question', header: 'Câu hỏi', cell: (row) => <span className="font-semibold line-clamp-1">{row.exercise?.question ?? '—'}</span> },
-                { key: 'type', header: 'Kiểu', cell: (row) => <span className="text-muted-foreground capitalize">{row.exercise?.exerciseType ?? '—'}</span> },
-                { key: 'correct', header: 'Đúng', cell: (row) => (
-                  <span className={`flex items-center gap-1.5 font-medium ${row.isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-destructive'}`}>
-                    <span className={`h-1.5 w-1.5 rounded-full ${row.isCorrect ? 'bg-emerald-500' : 'bg-destructive'}`} />
-                    {row.isCorrect ? 'Đúng' : 'Sai'}
-                  </span>
-                ) },
-                { key: 'score', header: 'Điểm', cell: (row) => <span className="font-bold tabular-nums">{row.bestScore || row.score}</span> },
-                { key: 'attempts', header: 'Lần làm', cell: (row) => <span className="tabular-nums">{row.attemptCount}</span> },
-              ]} />
-            </TabsContent>
-
+            {/* VOCABULARY — grid cards */}
             <TabsContent value="vocabulary" className="mt-4">
-              <DataTable data={data.personalVocabularies} empty="Chưa có từ cá nhân" columns={[
-                { key: 'word', header: 'Từ', cell: (row) => <span className="font-bold text-foreground">{row.word}</span> },
-                { key: 'translation', header: 'Dịch', cell: (row) => <span className="text-muted-foreground">{row.translation}</span> },
-                { key: 'source', header: 'Nguồn', cell: (row) => <span className="text-xs text-muted-foreground capitalize">{row.source}</span> },
-                { key: 'pos', header: 'Loại từ', cell: (row) => <span className="text-muted-foreground">{row.partOfSpeech ?? '—'}</span> },
-              ]} />
+              {data.personalVocabularies.length === 0 ? (
+                <EmptyState icon={Sparkles} message="Chưa có từ vựng cá nhân" />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {data.personalVocabularies.map((row) => (
+                    <div key={row.id} className="rounded-lg border-2 border-border bg-card p-4">
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center rounded-md bg-purple-100 dark:bg-purple-950/40 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300">
+                          {row.partOfSpeech ?? row.source ?? 'Từ'}
+                        </span>
+                      </div>
+                      <p className="text-xl font-bold text-foreground leading-tight mt-2">{row.word}</p>
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{row.translation}</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mt-3">
+                        Nguồn: {row.source}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
-            <TabsContent value="simulations" className="mt-4">
-              <DataTable
-                data={data.simulations}
-                empty="Chưa có phiên mô phỏng"
-                onRowClick={learnerId ? (row) => navigate(learnerPath.simulation(learnerId, row.id)) : undefined}
-                columns={[
-                  { key: 'scenario', header: 'Tình huống', cell: (row) => <span className="font-semibold line-clamp-1">{row.scenario?.title ?? '—'}</span> },
-                  { key: 'character', header: 'Nhân vật', cell: (row) => <span className="text-muted-foreground">{row.chosenCharacter?.name ?? '—'}</span> },
-                  { key: 'status', header: 'Trạng thái', cell: (row) => (
-                    <span className={`font-medium capitalize ${statusColors[row.status] ?? 'text-muted-foreground'}`}>
-                      {row.status}
+            {/* SIMULATIONS — clickable cards */}
+            <TabsContent value="simulations" className="mt-4 space-y-2">
+              {data.simulations.length === 0 ? (
+                <EmptyState icon={MessageSquare} message="Chưa có phiên mô phỏng" />
+              ) : (
+                data.simulations.map((row) => (
+                  <button
+                    key={row.id}
+                    type="button"
+                    onClick={() =>
+                      learnerId && navigate(learnerPath.simulation(learnerId, row.id))
+                    }
+                    className="w-full flex items-center gap-3 rounded-lg border-2 border-border bg-card p-3 text-left transition-colors hover:border-primary"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400">
+                      <MessageSquare className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold text-foreground truncate">
+                        {row.scenario?.title ?? 'Tình huống'}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                        {row.chosenCharacter?.name && (
+                          <>
+                            <span>Vai: {row.chosenCharacter.name}</span>
+                            <span>·</span>
+                          </>
+                        )}
+                        <span>{row.totalMessages} tin nhắn</span>
+                      </div>
+                    </div>
+                    {row.totalScore != null && (
+                      <div className="text-right shrink-0">
+                        <p className="text-xs text-muted-foreground">Điểm</p>
+                        <p className="text-base font-bold tabular-nums">{row.totalScore}</p>
+                      </div>
+                    )}
+                    <StatusPill status={row.status} />
+                    <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                  </button>
+                ))
+              )}
+            </TabsContent>
+
+            {/* AI — conversation cards */}
+            <TabsContent value="ai" className="mt-4 space-y-2">
+              {data.conversations.length === 0 ? (
+                <EmptyState icon={Bot} message="Chưa có hội thoại AI" />
+              ) : (
+                data.conversations.map((row) => (
+                  <button
+                    key={row.id}
+                    type="button"
+                    onClick={() =>
+                      learnerId && navigate(learnerPath.conversation(learnerId, row.id))
+                    }
+                    className="w-full flex items-center gap-3 rounded-lg border-2 border-border bg-card p-3 text-left transition-colors hover:border-primary"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
+                      <Bot className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold text-foreground truncate">
+                        {row.title || 'Hội thoại không có tiêu đề'}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                        <code className="font-mono text-[10px] bg-muted px-1.5 py-0.5 rounded">
+                          {row.model}
+                        </code>
+                        {(row.lesson?.title || row.course?.title) && (
+                          <>
+                            <span>·</span>
+                            <span className="truncate">
+                              {row.lesson?.title ?? row.course?.title}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0 hidden sm:block">
+                      <p className="text-xs text-muted-foreground">Token</p>
+                      <p className="text-sm font-bold tabular-nums">
+                        {row.totalTokens.toLocaleString('vi-VN')}
+                      </p>
+                    </div>
+                    <span className="text-xs text-muted-foreground tabular-nums shrink-0 hidden md:block">
+                      {formatDate(row.updatedAt)}
                     </span>
-                  ) },
-                  { key: 'score', header: 'Điểm', cell: (row) => <span className="font-bold tabular-nums">{row.totalScore ?? '—'}</span> },
-                  { key: 'messages', header: 'Tin nhắn', cell: (row) => <span className="tabular-nums">{row.totalMessages}</span> },
-                ]}
-              />
+                    <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                  </button>
+                ))
+              )}
             </TabsContent>
 
-            <TabsContent value="ai" className="mt-4">
-              <DataTable
-                data={data.conversations}
-                empty="Chưa có hội thoại"
-                onRowClick={learnerId ? (row) => navigate(learnerPath.conversation(learnerId, row.id)) : undefined}
-                columns={[
-                  { key: 'title', header: 'Tiêu đề', cell: (row) => <span className="font-semibold line-clamp-1">{row.title || 'Không tiêu đề'}</span> },
-                  { key: 'model', header: 'Mô hình AI', cell: (row) => <span className="text-xs font-mono text-muted-foreground">{row.model}</span> },
-                  { key: 'scope', header: 'Ngữ cảnh', cell: (row) => <span className="text-muted-foreground line-clamp-1">{row.lesson?.title ?? row.course?.title ?? '—'}</span> },
-                  { key: 'tokens', header: 'Số token', cell: (row) => <span className="font-bold tabular-nums">{row.totalTokens}</span> },
-                  { key: 'updated', header: 'Cập nhật', cell: (row) => <span className="text-muted-foreground tabular-nums">{formatDate(row.updatedAt)}</span> },
-                ]}
-              />
+            {/* GOALS — chip list */}
+            <TabsContent value="goals" className="mt-4">
+              {data.dailyGoals.length === 0 ? (
+                <EmptyState icon={Target} message="Chưa có mục tiêu hàng ngày" />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {data.dailyGoals.map((row) => (
+                    <div
+                      key={row.id}
+                      className="rounded-lg border-2 border-border bg-card p-4 flex items-center gap-3"
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <Target className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          Mục tiêu / ngày
+                        </p>
+                        <p className="text-base font-bold text-foreground capitalize">
+                          {row.goalType}
+                        </p>
+                      </div>
+                      <p className="text-xl font-bold tabular-nums text-primary shrink-0">
+                        {row.targetValue}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </>
@@ -269,12 +451,131 @@ export function LearnerDetailPage() {
   )
 }
 
-function Metric({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
+function TabTrigger({
+  value,
+  icon: Icon,
+  label,
+  count,
+}: {
+  value: string
+  icon: LucideIcon
+  label: string
+  count: number
+}) {
+  return (
+    <TabsTrigger
+      value={value}
+      className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
+    >
+      <Icon className="h-4 w-4" />
+      <span className="text-sm">{label}</span>
+      <span className="inline-flex items-center justify-center min-w-5 h-5 rounded-full bg-muted px-1.5 text-[10px] font-bold tabular-nums text-muted-foreground">
+        {count}
+      </span>
+    </TabsTrigger>
+  )
+}
+
+function MetricCard({
+  icon: Icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: LucideIcon
+  label: string
+  value: number
+  tone: 'blue' | 'purple' | 'rose' | 'amber'
+}) {
+  const toneMap = {
+    blue: 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300',
+    purple: 'bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300',
+    rose: 'bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300',
+    amber: 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300',
+  }
   return (
     <div className="rounded-lg border-2 border-border bg-card p-4">
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className="text-2xl font-bold text-foreground mt-1.5 tabular-nums">{value}</p>
-      {hint && <p className="text-xs text-muted-foreground mt-0.5">{hint}</p>}
+      <div className={`inline-flex h-9 w-9 items-center justify-center rounded-lg ${toneMap[tone]}`}>
+        <Icon className="h-4 w-4" />
+      </div>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-3">
+        {label}
+      </p>
+      <p className="text-2xl font-bold tabular-nums mt-1">{value}</p>
+    </div>
+  )
+}
+
+function ProgressBar({
+  label,
+  hint,
+  percent,
+  color,
+}: {
+  label: string
+  hint: string
+  percent: number
+  color: string
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-2 mb-1.5">
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          {label}
+        </span>
+        <span className="text-sm font-bold tabular-nums">{percent}%</span>
+      </div>
+      <div className="h-2 rounded-full bg-muted overflow-hidden">
+        <div className={`h-full ${color} transition-all`} style={{ width: `${percent}%` }} />
+      </div>
+      <p className="text-xs text-muted-foreground mt-1">{hint}</p>
+    </div>
+  )
+}
+
+function StreakBadge({ current, longest }: { current: number; longest: number }) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border-2 border-border bg-card px-3 py-2">
+      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
+        <Flame className="h-5 w-5" />
+      </div>
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          Streak
+        </p>
+        <p className="text-lg font-bold tabular-nums">
+          {current} <span className="text-xs font-normal text-muted-foreground">ngày</span>
+        </p>
+      </div>
+      <div className="h-10 w-0.5 bg-border hidden sm:block" aria-hidden />
+      <div className="hidden sm:block">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+          <Award className="h-3 w-3" />
+          Kỷ lục
+        </p>
+        <p className="text-sm font-bold tabular-nums">{longest} ngày</p>
+      </div>
+    </div>
+  )
+}
+
+function StatusPill({ status }: { status: string }) {
+  const label = STATUS_LABELS[status] ?? status.replace('_', ' ')
+  const color = STATUS_COLORS[status] ?? 'bg-muted text-muted-foreground'
+  return (
+    <span
+      className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-bold ${color}`}
+    >
+      {label}
+    </span>
+  )
+}
+
+function EmptyState({ icon: Icon, message }: { icon: LucideIcon; message: string }) {
+  return (
+    <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
+      <Icon className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+      <p className="text-sm text-muted-foreground">{message}</p>
     </div>
   )
 }
