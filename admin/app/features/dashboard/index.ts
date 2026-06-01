@@ -1,2 +1,20 @@
 export { dashboardRepository, DashboardRepository } from './api/dashboard.repository'
-export type { DashboardStats, TopCourse, HighErrorExercise, IDashboardRepository } from './types'
+export type {
+  DashboardStats,
+  TopCourse,
+  HighErrorExercise,
+  IDashboardRepository,
+  DashboardOverview,
+  OverviewKpis,
+  OverviewActivityPoint,
+  OverviewDistributions,
+  LevelBucket,
+  RoleBucket,
+  ExerciseTypeBucket,
+  SimulationStatusBucket,
+  TopStreakRow,
+  RecentUserRow,
+  UserLevelCode,
+  RoleCode,
+  SimulationStatusCode,
+} from './types'

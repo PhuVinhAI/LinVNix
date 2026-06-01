@@ -4,6 +4,7 @@ import { AdminLearningController } from './presentation/admin-learning.controlle
 import { AdminSimulationsController } from './presentation/admin-simulations.controller';
 import { AdminLearnersController } from './presentation/admin-learners.controller';
 import { AdminDashboardService } from './application/admin-dashboard.service';
+import { AdminOverviewService } from './application/admin-overview.service';
 import { AdminLearningService } from './application/admin-learning.service';
 import { AdminSimulationsService } from './application/admin-simulations.service';
 import { AdminLearnersService } from './application/admin-learners.service';
@@ -26,6 +27,9 @@ import { PersonalVocabulariesModule } from '../personal-vocabularies/personal-vo
 import { ConversationsModule } from '../conversations/conversations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/domain/user.entity';
+import { Course } from '../courses/domain/course.entity';
+import { Lesson } from '../courses/domain/lesson.entity';
+import { Exercise } from '../exercises/domain/exercise.entity';
 import { LearningProgress } from '../progress/domain/learning-progress.entity';
 import { DailyGoal } from '../daily-goals/domain/daily-goal.entity';
 import { DailyGoalProgress } from '../daily-goals/domain/daily-goal-progress.entity';
@@ -52,6 +56,9 @@ import { ConversationMessage } from '../conversations/domain/conversation-messag
     ConversationsModule,
     TypeOrmModule.forFeature([
       User,
+      Course,
+      Lesson,
+      Exercise,
       LearningProgress,
       DailyGoal,
       DailyGoalProgress,
@@ -74,6 +81,7 @@ import { ConversationMessage } from '../conversations/domain/conversation-messag
   ],
   providers: [
     AdminDashboardService,
+    AdminOverviewService,
     AdminLearningService,
     AdminSimulationsService,
     AdminLearnersService,
@@ -92,6 +100,7 @@ import { ConversationMessage } from '../conversations/domain/conversation-messag
   ],
   exports: [
     AdminDashboardService,
+    AdminOverviewService,
     AdminLearningService,
     AdminSimulationsService,
     AdminLearnersService,
