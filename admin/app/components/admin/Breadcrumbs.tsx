@@ -1,25 +1,48 @@
 import { Link } from 'react-router'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Home } from 'lucide-react'
 
 export interface BreadcrumbItem {
   label: string
   href?: string
 }
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+export function Breadcrumbs({ items, homeHref = '/' }: { items: BreadcrumbItem[]; homeHref?: string }) {
   return (
-    <nav className="flex flex-wrap items-center gap-3 text-base text-muted-foreground">
+    <nav
+      aria-label="Breadcrumb"
+      className="flex flex-wrap items-center gap-0.5 rounded-full border-2 border-border bg-card p-1 w-fit max-w-full"
+    >
+      <Link
+        to={homeHref}
+        aria-label="Trang chủ"
+        className="inline-flex items-center justify-center h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+      >
+        <Home className="h-4 w-4" />
+      </Link>
       {items.map((item, index) => {
         const isLast = index === items.length - 1
+        const key = `${item.label}-${index}`
         return (
-          <span key={`${item.label}-${index}`} className="inline-flex items-center gap-3 h-10">
-            {index > 0 ? <ChevronRight className="size-5" /> : null}
-            {item.href ? (
-              <Link to={item.href} className="hover:text-primary hover:underline">
+          <span key={key} className="inline-flex items-center gap-0.5">
+            <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0" />
+            {item.href && !isLast ? (
+              <Link
+                to={item.href}
+                title={item.label}
+                className="inline-block h-8 leading-8 rounded-full px-3 max-w-[22ch] truncate align-middle text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
                 {item.label}
               </Link>
             ) : (
-              <span className={`${isLast ? 'text-primary font-bold' : 'text-foreground'}`}>{item.label}</span>
+              <span
+                aria-current={isLast ? 'page' : undefined}
+                title={item.label}
+                className={`inline-block h-8 leading-8 rounded-full px-3 max-w-[28ch] truncate align-middle text-sm font-bold ${
+                  isLast ? 'bg-primary/10 text-primary' : 'text-foreground'
+                }`}
+              >
+                {item.label}
+              </span>
             )}
           </span>
         )

@@ -22,7 +22,8 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
+import { Tabs, TabsContent } from '../../components/ui/tabs'
+import { AdminTabsList, AdminTabTrigger } from '../../components/admin/AdminTabs'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { LessonContentSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
@@ -192,14 +193,12 @@ export function LessonDetailPage() {
         />
       ) : lesson && lessonId ? (
         <Tabs defaultValue="contents" className="space-y-4">
-          <div className="border-b-2 border-border">
-            <TabsList variant="line" className="flex h-auto p-0 gap-0 -mb-0.5 overflow-x-auto">
-              <TabTrigger value="contents" icon={FileText} label="Nội dung" count={lesson.contents?.length ?? 0} />
-              <TabTrigger value="vocabularies" icon={BookMarked} label="Từ vựng" count={lesson.vocabularies?.length ?? 0} />
-              <TabTrigger value="grammar" icon={Lightbulb} label="Ngữ pháp" count={lesson.grammarRules?.length ?? 0} />
-              <TabTrigger value="sets" icon={ClipboardList} label="Bộ bài tập" count={lesson.exerciseSets?.length ?? 0} />
-            </TabsList>
-          </div>
+          <AdminTabsList>
+            <AdminTabTrigger value="contents" icon={FileText} label="Nội dung" count={lesson.contents?.length ?? 0} />
+            <AdminTabTrigger value="vocabularies" icon={BookMarked} label="Từ vựng" count={lesson.vocabularies?.length ?? 0} />
+            <AdminTabTrigger value="grammar" icon={Lightbulb} label="Ngữ pháp" count={lesson.grammarRules?.length ?? 0} />
+            <AdminTabTrigger value="sets" icon={ClipboardList} label="Bộ bài tập" count={lesson.exerciseSets?.length ?? 0} />
+          </AdminTabsList>
 
           {/* CONTENTS — media-aware rows */}
           <TabsContent value="contents" className="mt-4 space-y-4">
@@ -393,31 +392,6 @@ export function LessonDetailPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
-}
-
-function TabTrigger({
-  value,
-  icon: Icon,
-  label,
-  count,
-}: {
-  value: string
-  icon: LucideIcon
-  label: string
-  count: number
-}) {
-  return (
-    <TabsTrigger
-      value={value}
-      className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-    >
-      <Icon className="h-4 w-4" />
-      <span className="text-sm">{label}</span>
-      <span className="inline-flex items-center justify-center min-w-5 h-5 rounded-full bg-muted px-1.5 text-[10px] font-bold tabular-nums text-muted-foreground">
-        {count}
-      </span>
-    </TabsTrigger>
   )
 }
 

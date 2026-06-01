@@ -5,7 +5,8 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
+import { Tabs, TabsContent } from '../../components/ui/tabs'
+import { AdminTabsList, AdminTabTrigger } from '../../components/admin/AdminTabs'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { LearnerDetailSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
@@ -201,16 +202,14 @@ export function LearnerDetailPage() {
 
           {/* Tabs */}
           <Tabs defaultValue="progress" className="space-y-4">
-            <div className="border-b-2 border-border">
-              <TabsList variant="line" className="flex h-auto p-0 gap-0 -mb-0.5 overflow-x-auto">
-                <TabTrigger value="progress" icon={TrendingUp} label="Tiến độ" count={data.progress.length} />
-                <TabTrigger value="exercises" icon={BookOpen} label="Bài tập" count={data.exerciseResults.length} />
-                <TabTrigger value="vocabulary" icon={Sparkles} label="Từ vựng" count={data.personalVocabularies.length} />
-                <TabTrigger value="simulations" icon={MessageSquare} label="Mô phỏng" count={data.simulations.length} />
-                <TabTrigger value="ai" icon={Bot} label="Hội thoại AI" count={data.conversations.length} />
-                <TabTrigger value="goals" icon={Target} label="Mục tiêu" count={data.dailyGoals.length} />
-              </TabsList>
-            </div>
+            <AdminTabsList>
+              <AdminTabTrigger value="progress" icon={TrendingUp} label="Tiến độ" count={data.progress.length} />
+              <AdminTabTrigger value="exercises" icon={BookOpen} label="Bài tập" count={data.exerciseResults.length} />
+              <AdminTabTrigger value="vocabulary" icon={Sparkles} label="Từ vựng" count={data.personalVocabularies.length} />
+              <AdminTabTrigger value="simulations" icon={MessageSquare} label="Mô phỏng" count={data.simulations.length} />
+              <AdminTabTrigger value="ai" icon={Bot} label="Hội thoại AI" count={data.conversations.length} />
+              <AdminTabTrigger value="goals" icon={Target} label="Mục tiêu" count={data.dailyGoals.length} />
+            </AdminTabsList>
 
             {/* PROGRESS — timeline-style list */}
             <TabsContent value="progress" className="mt-4 space-y-2">
@@ -447,31 +446,6 @@ export function LearnerDetailPage() {
         </>
       ) : null}
     </div>
-  )
-}
-
-function TabTrigger({
-  value,
-  icon: Icon,
-  label,
-  count,
-}: {
-  value: string
-  icon: LucideIcon
-  label: string
-  count: number
-}) {
-  return (
-    <TabsTrigger
-      value={value}
-      className="gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-active:border-primary data-active:text-foreground data-active:font-bold transition-colors hover:text-foreground after:hidden"
-    >
-      <Icon className="h-4 w-4" />
-      <span className="text-sm">{label}</span>
-      <span className="inline-flex items-center justify-center min-w-5 h-5 rounded-full bg-muted px-1.5 text-[10px] font-bold tabular-nums text-muted-foreground">
-        {count}
-      </span>
-    </TabsTrigger>
   )
 }
 
