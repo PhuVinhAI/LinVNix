@@ -3,8 +3,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { ResourceForm } from '../../components/admin/ResourceForm'
-import { scenarioCategoryFields } from '../../features/simulations/types/forms'
+import { ScenarioCategoryForm } from '../../components/admin/forms/ScenarioCategoryForm'
 import { useAdminScenarioCategory, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
 import { simulationPath } from './route-utils'
 
@@ -57,12 +56,10 @@ export function ScenarioCategoryFormPage({ mode }: { mode: 'create' | 'edit' }) 
         </div>
       </div>
 
-      <ResourceForm
+      <ScenarioCategoryForm
         id="category-form"
-        fields={scenarioCategoryFields}
         initialValue={category}
-        onSubmit={submit}
-        hideSubmit
+        onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
       />
 
       <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">

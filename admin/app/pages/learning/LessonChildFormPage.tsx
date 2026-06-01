@@ -3,30 +3,26 @@ import { toast } from 'sonner'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { ResourceForm } from '../../components/admin/ResourceForm'
-import {
-  contentFields,
-  exerciseSetFields,
-  grammarFields,
-  vocabularyFields,
-  type FieldConfig,
-} from '../../features/learning/types/forms'
+import { ContentForm } from '../../components/admin/forms/ContentForm'
+import { VocabularyForm } from '../../components/admin/forms/VocabularyForm'
+import { GrammarForm } from '../../components/admin/forms/GrammarForm'
+import { ExerciseSetForm } from '../../components/admin/forms/ExerciseSetForm'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import { learningPath } from './route-utils'
 
 type ChildKind = 'contents' | 'vocabularies' | 'grammar' | 'exercise-sets'
 
-const childConfig: Record<ChildKind, { title: string; fields: FieldConfig[] }> = {
-  contents: { title: 'nội dung', fields: contentFields },
-  vocabularies: { title: 'từ vựng', fields: vocabularyFields },
-  grammar: { title: 'ngữ pháp', fields: grammarFields },
-  'exercise-sets': { title: 'bộ bài tập', fields: exerciseSetFields },
+const childMeta: Record<ChildKind, { title: string }> = {
+  contents: { title: 'nội dung' },
+  vocabularies: { title: 'từ vựng' },
+  grammar: { title: 'ngữ pháp' },
+  'exercise-sets': { title: 'bộ bài tập' },
 }
 
 export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'create' | 'edit' }) {
   const { lessonId, id } = useParams()
   const navigate = useNavigate()
-  const config = childConfig[kind]
+  const meta = childMeta[kind]
   const { data: lesson } = useAdminLesson(lessonId)
   const mutations = useLearningAdminMutation()
 
@@ -57,6 +53,8 @@ export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'cr
   const backPath = lessonId ? learningPath.lesson(lessonId) : learningPath.courses()
   const titleAction = mode === 'edit' ? 'Sửa' : 'Tạo mới'
 
+  const handleSubmit = (values: unknown) => submit(values as Record<string, unknown>)
+
   return (
     <div className="max-w-3xl space-y-6">
       <Breadcrumbs
@@ -64,7 +62,7 @@ export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'cr
           { label: lesson?.module?.course?.title ?? 'Khóa học', href: lesson?.module?.courseId ? learningPath.course(lesson.module.courseId) : learningPath.courses() },
           { label: lesson?.module?.title ?? 'Chủ đề', href: lesson?.moduleId ? learningPath.module(lesson.moduleId) : undefined },
           { label: lesson?.title ?? 'Bài học', href: lessonId ? learningPath.lesson(lessonId) : undefined },
-          { label: `${titleAction} ${config.title}` },
+          { label: `${titleAction} ${meta.title}` },
         ]}
       />
 
@@ -76,7 +74,7 @@ export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'cr
         </Button>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            {titleAction} {config.title}
+            {titleAction} {meta.title}
           </h1>
           <p className="text-sm text-muted-foreground mt-1.5">
             {lesson?.title ? `Trong bài học "${lesson.title}"` : 'Điền thông tin để tiếp tục'}
@@ -84,13 +82,34 @@ export function LessonChildFormPage({ kind, mode }: { kind: ChildKind; mode: 'cr
         </div>
       </div>
 
-      <ResourceForm
-        id="child-form"
-        fields={config.fields}
-        initialValue={initialValue as Record<string, unknown> | undefined}
-        onSubmit={submit}
-        hideSubmit
-      />
+      {kind === 'contents' && (
+        <ContentForm
+          id="child-form"
+          initialValue={initialValue as never}
+          onSubmit={handleSubmit}
+        />
+      )}
+      {kind === 'vocabularies' && (
+        <VocabularyForm
+          id="child-form"
+          initialValue={initialValue as never}
+          onSubmit={handleSubmit}
+        />
+      )}
+      {kind === 'grammar' && (
+        <GrammarForm
+          id="child-form"
+          initialValue={initialValue as never}
+          onSubmit={handleSubmit}
+        />
+      )}
+      {kind === 'exercise-sets' && (
+        <ExerciseSetForm
+          id="child-form"
+          initialValue={initialValue as never}
+          onSubmit={handleSubmit}
+        />
+      )}
 
       <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
         <Button asChild variant="ghost">

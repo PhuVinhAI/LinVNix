@@ -3,8 +3,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { ResourceForm } from '../../components/admin/ResourceForm'
-import { scenarioCharacterFields } from '../../features/simulations/types/forms'
+import { ScenarioCharacterForm } from '../../components/admin/forms/ScenarioCharacterForm'
 import { useAdminScenario, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
 import { simulationPath } from './route-utils'
 
@@ -60,12 +59,10 @@ export function ScenarioCharacterFormPage({ mode }: { mode: 'create' | 'edit' })
         </div>
       </div>
 
-      <ResourceForm
+      <ScenarioCharacterForm
         id="character-form"
-        fields={scenarioCharacterFields}
         initialValue={character}
-        onSubmit={submit}
-        hideSubmit
+        onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
       />
 
       <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">

@@ -80,12 +80,12 @@ export function CourseDetailPage() {
           {course?.isPublished ? (
             <span className="flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Public
+              Đã xuất bản
             </span>
           ) : (
             <span className="flex items-center gap-1 font-medium text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
-              Draft
+              Bản nháp
             </span>
           )}
         </div>

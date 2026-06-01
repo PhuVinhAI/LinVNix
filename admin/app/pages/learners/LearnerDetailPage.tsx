@@ -255,9 +255,9 @@ export function LearnerDetailPage() {
                 onRowClick={learnerId ? (row) => navigate(learnerPath.conversation(learnerId, row.id)) : undefined}
                 columns={[
                   { key: 'title', header: 'Tiêu đề', cell: (row) => <span className="font-semibold line-clamp-1">{row.title || 'Không tiêu đề'}</span> },
-                  { key: 'model', header: 'Model', cell: (row) => <span className="text-xs font-mono text-muted-foreground">{row.model}</span> },
+                  { key: 'model', header: 'Mô hình AI', cell: (row) => <span className="text-xs font-mono text-muted-foreground">{row.model}</span> },
                   { key: 'scope', header: 'Ngữ cảnh', cell: (row) => <span className="text-muted-foreground line-clamp-1">{row.lesson?.title ?? row.course?.title ?? '—'}</span> },
-                  { key: 'tokens', header: 'Tokens', cell: (row) => <span className="font-bold tabular-nums">{row.totalTokens}</span> },
+                  { key: 'tokens', header: 'Số token', cell: (row) => <span className="font-bold tabular-nums">{row.totalTokens}</span> },
                   { key: 'updated', header: 'Cập nhật', cell: (row) => <span className="text-muted-foreground tabular-nums">{formatDate(row.updatedAt)}</span> },
                 ]}
               />

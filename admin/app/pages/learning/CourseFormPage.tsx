@@ -3,8 +3,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { ResourceForm } from '../../components/admin/ResourceForm'
-import { courseFields } from '../../features/learning/types/forms'
+import { CourseForm } from '../../components/admin/forms/CourseForm'
 import { useAdminCourses, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import { learningPath } from './route-utils'
 
@@ -41,7 +40,6 @@ export function CourseFormPage({ mode }: { mode: 'create' | 'edit' }) {
         ]}
       />
 
-      {/* Compact header */}
       <div className="flex items-center gap-3">
         <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
           <Link to={backTo}>
@@ -58,16 +56,12 @@ export function CourseFormPage({ mode }: { mode: 'create' | 'edit' }) {
         </div>
       </div>
 
-      {/* Inline form, no card wrapper */}
-      <ResourceForm
+      <CourseForm
         id="course-form"
-        fields={courseFields}
         initialValue={course}
-        onSubmit={submit}
-        hideSubmit
+        onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
       />
 
-      {/* Bottom actions */}
       <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
         <Button asChild variant="ghost">
           <Link to={backTo}>Hủy</Link>

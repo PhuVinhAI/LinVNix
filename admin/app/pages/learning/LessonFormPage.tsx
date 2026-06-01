@@ -3,8 +3,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { ResourceForm } from '../../components/admin/ResourceForm'
-import { lessonFields } from '../../features/learning/types/forms'
+import { LessonForm } from '../../components/admin/forms/LessonForm'
 import { useAdminLesson, useAdminModule, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import { learningPath } from './route-utils'
 
@@ -60,12 +59,10 @@ export function LessonFormPage({ mode }: { mode: 'create' | 'edit' }) {
         </div>
       </div>
 
-      <ResourceForm
+      <LessonForm
         id="lesson-form"
-        fields={lessonFields}
         initialValue={lesson}
-        onSubmit={submit}
-        hideSubmit
+        onSubmit={(values) => submit(values as unknown as Record<string, unknown>)}
       />
 
       <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">

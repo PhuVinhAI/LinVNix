@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
-import { Plus, MessageSquare, Pencil, Trash2, MoreVertical } from 'lucide-react'
+import { Plus, MessageSquare, Pencil, Trash2, MoreVertical, Users } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import {
   AlertDialog,
@@ -41,19 +41,19 @@ export function ScenarioCategoriesPage() {
     }
   }
 
-  const stop = (e: MouseEvent | KeyboardEvent) => {
-    e.stopPropagation()
-  }
+  const stop = (e: MouseEvent | KeyboardEvent) => e.stopPropagation()
+
+  const totalScenarios = data.reduce((sum, c) => sum + (c.scenarios?.length ?? 0), 0)
 
   return (
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-foreground tracking-tight">
-            Danh mục tình huống
+            Mô phỏng hội thoại
           </h1>
           <p className="text-sm text-muted-foreground mt-1.5">
-            Tổ chức tình huống và nhân vật cho hội thoại mô phỏng.
+            Tổ chức tình huống và nhân vật cho mô phỏng AI.
           </p>
         </div>
         <Button asChild>
@@ -63,6 +63,23 @@ export function ScenarioCategoriesPage() {
           </Link>
         </Button>
       </div>
+
+      {!isLoading && !error && data.length > 0 && (
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg border-2 border-border bg-card p-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Danh mục
+            </p>
+            <p className="mt-1 text-2xl font-bold tabular-nums">{data.length}</p>
+          </div>
+          <div className="rounded-lg border-2 border-border bg-card p-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Tổng tình huống
+            </p>
+            <p className="mt-1 text-2xl font-bold tabular-nums">{totalScenarios}</p>
+          </div>
+        </div>
+      )}
 
       {isLoading ? (
         <div className="text-center py-12">
@@ -90,89 +107,90 @@ export function ScenarioCategoriesPage() {
           </Button>
         </div>
       ) : (
-        <div className="rounded-lg border-2 border-border overflow-hidden">
-          {data.map((category, index) => (
-            <div
-              key={category.id}
-              role="button"
-              tabIndex={0}
-              onClick={() => navigate(simulationPath.category(category.id))}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') navigate(simulationPath.category(category.id))
-              }}
-              className={`group flex items-center gap-4 p-4 bg-card cursor-pointer transition-colors hover:bg-muted/40 focus:outline-none focus:bg-muted/40 ${
-                index > 0 ? 'border-t-2 border-border' : ''
-              }`}
-            >
-              {/* Color signature box */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {data.map((category) => {
+            const color = category.color || '#6366F1'
+            const characterCount = category.scenarios?.reduce(
+              (sum, s) => sum + (s.characters?.length ?? 0),
+              0
+            ) ?? 0
+            return (
               <div
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white"
-                style={{ backgroundColor: category.color || '#6366F1' }}
+                key={category.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate(simulationPath.category(category.id))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') navigate(simulationPath.category(category.id))
+                }}
+                className="group relative rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
               >
-                <MessageSquare className="h-5 w-5" strokeWidth={2.5} />
-              </div>
+                {/* Color band */}
+                <div
+                  className="relative h-20 overflow-hidden flex items-center justify-center"
+                  style={{ backgroundColor: color }}
+                >
+                  <MessageSquare className="h-10 w-10 text-white" strokeWidth={2} />
+                  <div className="absolute top-2 right-2">
+                    <div onClick={stop} onKeyDown={stop}>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-md bg-black/30 backdrop-blur-sm text-white hover:bg-black/50 hover:text-white"
+                          >
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-44">
+                          <DropdownMenuItem asChild>
+                            <Link to={simulationPath.categoryEdit(category.id)}>
+                              <Pencil className="h-4 w-4" />
+                              Chỉnh sửa
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            variant="destructive"
+                            onSelect={() => setPendingDelete(category)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Xóa danh mục
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-base font-bold text-foreground truncate">
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="text-base font-bold text-foreground line-clamp-1">
                     {category.name}
                   </h3>
-                  <span className="text-xs text-muted-foreground">·</span>
-                  <span className="text-xs text-muted-foreground">#{category.orderIndex}</span>
-                </div>
-                {category.description ? (
-                  <p className="text-sm text-muted-foreground line-clamp-1 mt-0.5">
+                  <p className="text-xs text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
                     {category.description}
                   </p>
-                ) : category.icon ? (
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    Icon: <code className="font-mono">{category.icon}</code>
-                  </p>
-                ) : null}
+                  <div className="mt-3 flex items-center gap-3 text-xs">
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <MessageSquare className="h-3.5 w-3.5" />
+                      <span className="font-bold tabular-nums text-foreground">
+                        {category.scenarios?.length ?? 0}
+                      </span>
+                      <span>tình huống</span>
+                    </span>
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <Users className="h-3.5 w-3.5" />
+                      <span className="font-bold tabular-nums text-foreground">
+                        {characterCount}
+                      </span>
+                      <span>nhân vật</span>
+                    </span>
+                  </div>
+                </div>
               </div>
-
-              {/* Stats */}
-              <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground shrink-0">
-                <MessageSquare className="h-3.5 w-3.5" />
-                <span className="font-medium tabular-nums">
-                  {category.scenarios?.length ?? 0}
-                </span>
-                <span>tình huống</span>
-              </div>
-
-              {/* Actions */}
-              <div onClick={stop} onKeyDown={stop} className="shrink-0">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                    >
-                      <MoreVertical className="h-4 w-4" />
-                      <span className="sr-only">Tùy chọn</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-44">
-                    <DropdownMenuItem asChild>
-                      <Link to={simulationPath.categoryEdit(category.id)}>
-                        <Pencil className="h-4 w-4" />
-                        Chỉnh sửa
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      variant="destructive"
-                      onSelect={() => setPendingDelete(category)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      Xóa danh mục
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 

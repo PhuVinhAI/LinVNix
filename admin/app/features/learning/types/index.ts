@@ -87,6 +87,7 @@ export interface GrammarRule {
 export interface ExerciseSet {
   id: string
   lessonId?: string | null
+  lesson?: Lesson | null
   title: string
   description?: string | null
   isCustom: boolean
