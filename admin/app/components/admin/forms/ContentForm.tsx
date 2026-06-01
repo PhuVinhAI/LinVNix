@@ -4,6 +4,7 @@ import type { LucideIcon } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
+import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 const CONTENT_TYPES: Array<{ value: string; label: string; Icon: LucideIcon }> = [
   { value: 'text', label: 'Văn bản', Icon: Type },
@@ -163,10 +164,9 @@ export function ContentForm({
 
       <FormSection title="Sắp xếp và ghi chú">
         <FormField label="Thứ tự hiển thị" required>
-          <Input
-            type="number"
+          <OrderIndexStepper
             value={values.orderIndex}
-            onChange={(e) => update('orderIndex', Number(e.target.value) || 0)}
+            onChange={(v) => update('orderIndex', v)}
             required
           />
         </FormField>

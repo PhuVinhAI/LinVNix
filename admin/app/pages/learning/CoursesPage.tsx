@@ -26,15 +26,7 @@ import { CourseGridSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import type { Course } from '../../features/learning/types'
 import { learningPath } from './route-utils'
-
-const levelMeta: Record<string, { label: string; color: string; bg: string }> = {
-  A1: { label: 'Mới bắt đầu', color: 'text-emerald-700 dark:text-emerald-300', bg: 'bg-emerald-500' },
-  A2: { label: 'Sơ cấp', color: 'text-teal-700 dark:text-teal-300', bg: 'bg-teal-500' },
-  B1: { label: 'Trung cấp', color: 'text-blue-700 dark:text-blue-300', bg: 'bg-blue-500' },
-  B2: { label: 'Trên trung cấp', color: 'text-indigo-700 dark:text-indigo-300', bg: 'bg-indigo-500' },
-  C1: { label: 'Cao cấp', color: 'text-purple-700 dark:text-purple-300', bg: 'bg-purple-500' },
-  C2: { label: 'Thông thạo', color: 'text-rose-700 dark:text-rose-300', bg: 'bg-rose-500' },
-}
+import { levelBg, levelLabel } from '../../features/learning/level-meta'
 
 export function CoursesPage() {
   const navigate = useNavigate()
@@ -137,7 +129,8 @@ export function CoursesPage() {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {filtered.map((course) => {
-              const meta = levelMeta[course.level] ?? { label: '—', color: 'text-muted-foreground', bg: 'bg-muted' }
+              const bg = levelBg(course.level)
+              const label = levelLabel(course.level, course.vietnameseLevelName)
               return (
                 <div
                   key={course.id}
@@ -150,7 +143,7 @@ export function CoursesPage() {
                   className="group relative rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
                 >
                   {/* Thumbnail area */}
-                  <div className={`relative h-32 ${meta.bg} overflow-hidden`}>
+                  <div className={`relative h-32 ${bg} overflow-hidden`}>
                     {course.thumbnailUrl ? (
                       <img
                         src={course.thumbnailUrl}
@@ -164,7 +157,7 @@ export function CoursesPage() {
                     )}
                     <div className="absolute top-2 left-2">
                       <span className="inline-flex items-center gap-1 rounded-md bg-black/40 backdrop-blur-sm px-2 py-1 text-xs font-bold text-white">
-                        {course.level} · {meta.label}
+                        {course.level} · {label}
                       </span>
                     </div>
                     <div className="absolute top-2 right-2">

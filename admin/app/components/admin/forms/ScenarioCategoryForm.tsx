@@ -5,6 +5,7 @@ import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
 import { ColorPicker } from '../editors/ColorPicker'
 import { IconPicker } from '../editors/IconPicker'
+import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 export interface ScenarioCategoryFormValues {
   name: string
@@ -95,10 +96,9 @@ export function ScenarioCategoryForm({
 
       <FormSection icon={Hash} title="Sắp xếp">
         <FormField label="Thứ tự hiển thị" required>
-          <Input
-            type="number"
+          <OrderIndexStepper
             value={values.orderIndex}
-            onChange={(e) => update('orderIndex', Number(e.target.value) || 0)}
+            onChange={(v) => update('orderIndex', v)}
             required
           />
         </FormField>

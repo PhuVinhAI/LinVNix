@@ -3,6 +3,7 @@ import { ClipboardList } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
+import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 export interface ExerciseSetFormValues {
   title: string
@@ -56,10 +57,9 @@ export function ExerciseSetForm({
         </FormField>
 
         <FormField label="Thứ tự hiển thị" required>
-          <Input
-            type="number"
+          <OrderIndexStepper
             value={values.orderIndex}
-            onChange={(e) => update('orderIndex', Number(e.target.value) || 0)}
+            onChange={(v) => update('orderIndex', v)}
             required
           />
         </FormField>

@@ -8,6 +8,7 @@ import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
+import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 const AVATAR_PRESETS: Array<{ key: string; Icon: LucideIcon; label: string }> = [
   { key: 'waiter', Icon: UtensilsCrossed, label: 'Phục vụ' },
@@ -152,10 +153,9 @@ export function ScenarioCharacterForm({
 
       <FormSection icon={Hash} title="Cấu hình">
         <FormField label="Thứ tự hiển thị" required>
-          <Input
-            type="number"
+          <OrderIndexStepper
             value={values.orderIndex}
-            onChange={(e) => update('orderIndex', Number(e.target.value) || 0)}
+            onChange={(v) => update('orderIndex', v)}
             required
           />
         </FormField>

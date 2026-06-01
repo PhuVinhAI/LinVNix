@@ -8,6 +8,7 @@ import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
+import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 const LESSON_TYPES: Array<{ value: string; label: string; Icon: LucideIcon; color: string }> = [
   { value: 'vocabulary', label: 'Từ vựng', Icon: BookOpen, color: 'text-emerald-600 dark:text-emerald-400' },
@@ -105,10 +106,9 @@ export function LessonForm({
       <FormSection title="Cấu hình bài học">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-            <Input
-              type="number"
+            <OrderIndexStepper
               value={values.orderIndex}
-              onChange={(e) => update('orderIndex', Number(e.target.value) || 0)}
+              onChange={(v) => update('orderIndex', v)}
               required
             />
           </FormField>

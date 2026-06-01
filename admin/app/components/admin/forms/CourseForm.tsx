@@ -5,6 +5,7 @@ import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { LevelPicker } from '../editors/PickerControls'
+import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 export interface CourseFormValues {
   title: string
@@ -88,7 +89,7 @@ export function CourseForm({
             />
           </FormField>
 
-          <FormField label="Giờ học ước tính">
+          <FormField label="Giờ học ước tính" help="Tổng thời lượng dự kiến để hoàn thành">
             <Input
               type="number"
               min="0"
@@ -99,11 +100,10 @@ export function CourseForm({
           </FormField>
         </div>
 
-        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-          <Input
-            type="number"
+        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước trong danh sách">
+          <OrderIndexStepper
             value={values.orderIndex}
-            onChange={(e) => update('orderIndex', Number(e.target.value) || 0)}
+            onChange={(v) => update('orderIndex', v)}
             required
           />
         </FormField>

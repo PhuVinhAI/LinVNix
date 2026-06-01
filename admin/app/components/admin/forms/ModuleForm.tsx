@@ -3,6 +3,7 @@ import { Layers, Hash } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
+import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 export interface ModuleFormValues {
   title: string
@@ -76,10 +77,9 @@ export function ModuleForm({
       <FormSection icon={Hash} title="Sắp xếp và thời lượng">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-            <Input
-              type="number"
+            <OrderIndexStepper
               value={values.orderIndex}
-              onChange={(e) => update('orderIndex', Number(e.target.value) || 0)}
+              onChange={(v) => update('orderIndex', v)}
               required
             />
           </FormField>

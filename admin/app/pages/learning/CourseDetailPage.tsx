@@ -29,15 +29,7 @@ import {
 import { useAdminCourse, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { Module } from '../../features/learning/types'
 import { learningPath } from './route-utils'
-
-const levelMeta: Record<string, { label: string; bg: string }> = {
-  A1: { label: 'Mới bắt đầu', bg: 'bg-emerald-500' },
-  A2: { label: 'Sơ cấp', bg: 'bg-teal-500' },
-  B1: { label: 'Trung cấp', bg: 'bg-blue-500' },
-  B2: { label: 'Trên trung cấp', bg: 'bg-indigo-500' },
-  C1: { label: 'Cao cấp', bg: 'bg-purple-500' },
-  C2: { label: 'Thông thạo', bg: 'bg-rose-500' },
-}
+import { levelBg, levelLabel } from '../../features/learning/level-meta'
 
 export function CourseDetailPage() {
   const { courseId } = useParams()
@@ -64,7 +56,8 @@ export function CourseDetailPage() {
     (sum, m) => sum + (m.lessons?.filter((l) => l.isAssessment).length ?? 0),
     0
   ) ?? 0
-  const meta = levelMeta[course?.level ?? ''] ?? { label: '—', bg: 'bg-muted' }
+  const bg = levelBg(course?.level)
+  const label = levelLabel(course?.level, course?.vietnameseLevelName)
 
   return (
     <div className="space-y-6">
@@ -77,7 +70,7 @@ export function CourseDetailPage() {
 
       {/* Hero banner */}
       <div className="rounded-xl border-2 border-border overflow-hidden bg-card">
-        <div className={`relative h-40 ${meta.bg}`}>
+        <div className={`relative h-40 ${bg}`}>
           {course?.thumbnailUrl && (
             <img
               src={course.thumbnailUrl}
@@ -92,7 +85,7 @@ export function CourseDetailPage() {
           )}
           <div className="absolute top-3 left-3 flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-md bg-black/40 backdrop-blur-sm px-2.5 py-1 text-xs font-bold text-white">
-              {course?.level ?? '—'} · {meta.label}
+              {course?.level ?? '—'} · {label}
             </span>
             {course?.isPublished ? (
               <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold text-white">
