@@ -40,7 +40,6 @@ export const ROUTES = {
   EXERCISE_NEW: '/exercise-sets/:setId/exercises/new',
   EXERCISE_EDIT: '/exercise-sets/:setId/exercises/:id/edit',
   // Hội thoại mô phỏng
-  SCENARIOS: '/scenarios',
   SCENARIO_CATEGORIES: '/scenario-categories',
   SCENARIO_CATEGORY_NEW: '/scenario-categories/new',
   SCENARIO_CATEGORY_EDIT: '/scenario-categories/:id/edit',

@@ -215,14 +215,6 @@ export function LearnerDetailSkeleton() {
   )
 }
 
-export function CourseDetailSkeleton() {
-  return (
-    <div className="space-y-4">
-      <ModuleListSkeleton count={4} />
-    </div>
-  )
-}
-
 export function LessonContentSkeleton() {
   return (
     <div className="space-y-4">
