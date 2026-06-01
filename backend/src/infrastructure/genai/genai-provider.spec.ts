@@ -743,5 +743,36 @@ describe('GenaiProvider', () => {
         expect(out).toContain('{{user.nativeLanguage}}');
       });
     });
+
+    describe('with array values', () => {
+      const yaml = `t:
+  description: "T"
+  template: |
+    First: {{cast[0].name}} ({{cast[0].role}}).
+    Second: {{cast[1].name}}.
+    Tags: {{tags[0]}}, {{tags[1]}}.
+`;
+
+      beforeEach(() => {
+        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        (fs.readdirSync as jest.Mock).mockReturnValue(['t.yaml']);
+        (fs.readFileSync as jest.Mock).mockReturnValue(yaml);
+        service = new GenaiProvider(createConfigService(), mockKeyPool);
+        service.onModuleInit();
+      });
+
+      it('substitutes bracketed array indices for objects in arrays', () => {
+        const out = service.renderPrompt('t', {
+          cast: [
+            { name: 'Cô Hoa', role: 'Người bán' },
+            { name: 'Khách', role: 'Người mua' },
+          ],
+          tags: ['easy', 'market'],
+        });
+        expect(out).toContain('First: Cô Hoa (Người bán).');
+        expect(out).toContain('Second: Khách.');
+        expect(out).toContain('Tags: easy, market.');
+      });
+    });
   });
 });

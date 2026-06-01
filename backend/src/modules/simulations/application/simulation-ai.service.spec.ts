@@ -123,10 +123,10 @@ describe('SimulationAiService', () => {
       expect(router.renderPrompt).toHaveBeenCalledWith(
         'simulation-conversation',
         expect.objectContaining({
-          scenario: {
+          scenario: expect.objectContaining({
             systemPrompt: scenario.systemPrompt,
             title: scenario.title,
-          },
+          }),
           learner: {
             nativeLanguage: 'English',
             level: 'A1',
@@ -139,6 +139,35 @@ describe('SimulationAiService', () => {
           },
         }),
       );
+    });
+
+    it('passes the full characters array for {{characters[i].*}} substitution', () => {
+      const scenario = makeScenario();
+      const learner = {
+        nativeLanguage: 'English',
+        level: 'A1',
+        preferredDialect: 'STANDARD',
+      };
+
+      service.buildSystemInstruction(scenario, 'ch-1', learner);
+
+      const callArgs = router.renderPrompt.mock.calls[0][1]!;
+      expect(callArgs.characters).toEqual([
+        expect.objectContaining({
+          id: 'ch-1',
+          name: 'Minh',
+          role: 'Khách hàng',
+          personality: 'Friendly and curious',
+          speechStyle: 'Casual, standard Vietnamese',
+        }),
+        expect.objectContaining({
+          id: 'ch-2',
+          name: 'Bà Lan',
+          role: 'Người bán rau',
+          personality: 'Warm and chatty',
+          speechStyle: 'Southern dialect, informal',
+        }),
+      ]);
     });
 
     it('includes character descriptions in the prompt variables', () => {

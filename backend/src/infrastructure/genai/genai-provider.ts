@@ -277,23 +277,36 @@ export class GenaiProvider implements IAiProvider, OnModuleInit {
 
   // Flattens `{ a: { b: 'x' }, c: 1 }` → `{ 'a.b': 'x', c: '1' }` so a flat
   // `{{a.b}}` substitution can resolve nested template variables without
-  // pulling in a Jinja-style template engine.
+  // pulling in a Jinja-style template engine. Arrays expand to bracketed
+  // index keys: `{ list: [{name:'x'}] }` → `{ 'list[0].name': 'x' }` so
+  // templates can use `{{list[0].name}}`.
   private flattenVariables(
-    input: Record<string, any>,
+    input: Record<string, any> | unknown[],
     prefix = '',
   ): Record<string, string> {
     const out: Record<string, string> = {};
-    for (const [key, value] of Object.entries(input)) {
-      const fullKey = prefix ? `${prefix}.${key}` : key;
+    const entries: Array<[string, unknown]> = Array.isArray(input)
+      ? input.map((v, i): [string, unknown] => [String(i), v])
+      : Object.entries(input);
+    for (const [key, value] of entries) {
+      const fullKey = Array.isArray(input)
+        ? `${prefix}[${key}]`
+        : prefix
+          ? `${prefix}.${key}`
+          : key;
       if (value === null || value === undefined) {
         out[fullKey] = '';
+      } else if (Array.isArray(value)) {
+        Object.assign(out, this.flattenVariables(value, fullKey));
       } else if (
         typeof value === 'object' &&
-        !Array.isArray(value) &&
         !(value instanceof Date) &&
         !(value instanceof Buffer)
       ) {
-        Object.assign(out, this.flattenVariables(value, fullKey));
+        Object.assign(
+          out,
+          this.flattenVariables(value as Record<string, any>, fullKey),
+        );
       } else {
         out[fullKey] = String(value);
       }

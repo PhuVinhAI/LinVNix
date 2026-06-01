@@ -40,10 +40,10 @@ const HANDLEBARS_VARIABLES = [
 ];
 
 const NPC_HANDLEBARS_VARIABLES = [
-  '{{npc.name}}',
-  '{{npc.role}}',
-  '{{npc.personality}}',
-  '{{npc.speechStyle}}',
+  '{{characters[0].name}}',
+  '{{characters[0].role}}',
+  '{{characters[0].personality}}',
+  '{{characters[0].speechStyle}}',
   '{{playable.name}}',
 ];
 

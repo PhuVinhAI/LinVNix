@@ -1,8 +1,11 @@
 import {
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type ClipboardEvent as ReactClipboardEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
 } from 'react'
 import { Plus } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
@@ -18,9 +21,15 @@ export interface PromptVariableGroup {
   variables: PromptVariable[]
 }
 
-// Variables actually substituted at runtime by `SimulationAiService.buildSystemInstruction`.
-// Adding a chip here is a no-op unless the backend kwargs include it.
-const PROMPT_VARIABLES: PromptVariableGroup[] = [
+export interface SystemPromptCharacterRef {
+  id?: string
+  name: string
+  role?: string
+  isPlayable?: boolean
+  orderIndex?: number
+}
+
+const STATIC_GROUPS: PromptVariableGroup[] = [
   {
     groupLabel: 'Học viên',
     variables: [
@@ -38,21 +47,6 @@ const PROMPT_VARIABLES: PromptVariableGroup[] = [
         key: 'learner.preferredDialect',
         label: 'Phương ngữ ưa thích',
         description: 'Phương ngữ tiếng Việt ưa thích (Bắc, Trung, Nam)',
-      },
-    ],
-  },
-  {
-    groupLabel: 'Nhân vật học viên đóng vai',
-    variables: [
-      {
-        key: 'playable.name',
-        label: 'Tên nhân vật',
-        description: 'Tên nhân vật mà học viên đang đóng vai trong tình huống',
-      },
-      {
-        key: 'playable.role',
-        label: 'Vai trò nhân vật',
-        description: 'Vai trò của nhân vật học viên (ví dụ: du khách, học sinh)',
       },
     ],
   },
@@ -83,24 +77,67 @@ const PROMPT_VARIABLES: PromptVariableGroup[] = [
   },
 ]
 
-const VARIABLES_BY_KEY = new Map<string, PromptVariable>()
-for (const group of PROMPT_VARIABLES) {
-  for (const variable of group.variables) {
-    VARIABLES_BY_KEY.set(variable.key, variable)
-  }
+function buildVariableGroups(
+  characters: SystemPromptCharacterRef[] | undefined,
+): PromptVariableGroup[] {
+  const groups: PromptVariableGroup[] = [...STATIC_GROUPS]
+  if (!characters || characters.length === 0) return groups
+
+  const sorted = [...characters].sort(
+    (a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0),
+  )
+
+  sorted.forEach((char, idx) => {
+    const playableNote = char.isPlayable ? ' (học viên đóng vai)' : ''
+    const roleNote = char.role ? ` · ${char.role}` : ''
+    groups.push({
+      groupLabel: `${char.name}${roleNote}${playableNote}`,
+      variables: [
+        {
+          key: `characters[${idx}].name`,
+          label: `Tên — ${char.name}`,
+          description: `Tên nhân vật ${char.name}`,
+        },
+        {
+          key: `characters[${idx}].role`,
+          label: `Vai trò — ${char.name}`,
+          description: `Vai trò của ${char.name}`,
+        },
+        {
+          key: `characters[${idx}].personality`,
+          label: `Tính cách — ${char.name}`,
+          description: `Tính cách của ${char.name}`,
+        },
+        {
+          key: `characters[${idx}].speechStyle`,
+          label: `Phong cách nói — ${char.name}`,
+          description: `Phong cách nói của ${char.name}`,
+        },
+      ],
+    })
+  })
+
+  return groups
 }
 
 const PLACEHOLDER_REGEX = /\{\{([^{}]+?)\}\}/g
+// Matches `{{` followed by optional partial key right before the caret.
+// `[\w.\[\]]` allows letters, digits, `_`, `.`, `[`, `]` — exactly the
+// charset used in variable keys like `characters[0].name`.
+const INLINE_TRIGGER_REGEX = /\{\{([\w.[\]]*)$/
 
 const CHIP_CLASS =
-  'inline-flex items-center align-baseline rounded-md bg-primary/10 text-primary border-2 border-primary/30 px-1.5 py-0.5 mx-0.5 text-xs font-bold select-none cursor-default'
+  'inline-flex items-center align-baseline rounded-md bg-primary/10 text-primary border-2 border-primary/30 px-1.5 py-0.5 mx-0.5 text-xs font-bold cursor-default'
 
-function createChip(key: string): HTMLElement {
+function createChip(
+  key: string,
+  lookup: Map<string, PromptVariable>,
+): HTMLElement {
   const span = document.createElement('span')
   span.setAttribute('data-prompt-variable', key)
   span.setAttribute('contenteditable', 'false')
   span.className = CHIP_CLASS
-  const variable = VARIABLES_BY_KEY.get(key)
+  const variable = lookup.get(key)
   span.textContent = variable?.label ?? key
   return span
 }
@@ -114,7 +151,11 @@ function appendText(root: HTMLElement, text: string) {
   })
 }
 
-function renderTemplate(template: string, root: HTMLElement) {
+function renderTemplate(
+  template: string,
+  root: HTMLElement,
+  lookup: Map<string, PromptVariable>,
+) {
   root.replaceChildren()
   if (!template) return
   PLACEHOLDER_REGEX.lastIndex = 0
@@ -125,7 +166,7 @@ function renderTemplate(template: string, root: HTMLElement) {
       appendText(root, template.slice(lastIndex, match.index))
     }
     const key = match[1].trim()
-    root.appendChild(createChip(key))
+    root.appendChild(createChip(key, lookup))
     lastIndex = match.index + match[0].length
   }
   if (lastIndex < template.length) {
@@ -168,46 +209,188 @@ function isEditorEmpty(root: HTMLElement): boolean {
   return (root.textContent ?? '').length === 0
 }
 
+interface InlinePickerState {
+  query: string
+  caretLeft: number
+  caretBottom: number
+  caretTop: number
+}
+
 export function SystemPromptEditor({
   value,
   onChange,
   placeholder,
   required,
+  characters,
+  readOnly,
 }: {
   value: string
-  onChange: (next: string) => void
+  onChange?: (next: string) => void
   placeholder?: string
   required?: boolean
+  characters?: SystemPromptCharacterRef[]
+  readOnly?: boolean
 }) {
   const editorRef = useRef<HTMLDivElement>(null)
   const placeholderRef = useRef<HTMLDivElement>(null)
+  const pickerListRef = useRef<HTMLDivElement>(null)
   const lastSerialized = useRef<string>(value)
-  const initialized = useRef(false)
   const [empty, setEmpty] = useState(value.length === 0)
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [inlinePicker, setInlinePicker] = useState<InlinePickerState | null>(
+    null,
+  )
+  const [inlineIndex, setInlineIndex] = useState(0)
+
+  const variableGroups = useMemo(
+    () => buildVariableGroups(characters),
+    [characters],
+  )
+  const variablesByKey = useMemo(() => {
+    const map = new Map<string, PromptVariable>()
+    for (const group of variableGroups) {
+      for (const variable of group.variables) {
+        map.set(variable.key, variable)
+      }
+    }
+    return map
+  }, [variableGroups])
+  const flatVariables = useMemo(
+    () =>
+      variableGroups.flatMap((g) =>
+        g.variables.map((v) => ({ ...v, groupLabel: g.groupLabel })),
+      ),
+    [variableGroups],
+  )
+
+  const inlineMatches = useMemo(() => {
+    if (!inlinePicker) return []
+    const q = inlinePicker.query.toLowerCase()
+    if (!q) return flatVariables
+    return flatVariables.filter(
+      (v) =>
+        v.key.toLowerCase().includes(q) ||
+        v.label.toLowerCase().includes(q) ||
+        v.groupLabel.toLowerCase().includes(q),
+    )
+  }, [inlinePicker, flatVariables])
+
+  useEffect(() => {
+    setInlineIndex(0)
+  }, [inlinePicker?.query])
+
+  useLayoutEffect(() => {
+    const list = pickerListRef.current
+    if (!list) return
+    const item = list.children[inlineIndex] as HTMLElement | undefined
+    item?.scrollIntoView({ block: 'nearest' })
+  }, [inlineIndex])
 
   useEffect(() => {
     const editor = editorRef.current
     if (!editor) return
-    if (initialized.current && value === lastSerialized.current) return
-    renderTemplate(value, editor)
+    const editorHasContent = editor.childNodes.length > 0
+    // Re-render template into the editor DOM when:
+    //   - the prop `value` no longer matches what we last serialized, OR
+    //   - the editor DOM is out of sync with the value (e.g. just remounted
+    //     after toggling readOnly, so the new node is empty even though we
+    //     have content to display).
+    if (
+      value === lastSerialized.current &&
+      editorHasContent === Boolean(value)
+    ) {
+      return
+    }
+    renderTemplate(value, editor, variablesByKey)
     lastSerialized.current = value
-    initialized.current = true
     setEmpty(isEditorEmpty(editor))
-  }, [value])
+  }, [value, variablesByKey, readOnly])
 
   useEffect(() => {
     if (!placeholderRef.current) return
-    renderTemplate(placeholder ?? '', placeholderRef.current)
-  }, [placeholder])
+    renderTemplate(placeholder ?? '', placeholderRef.current, variablesByKey)
+  }, [placeholder, variablesByKey])
 
   const emitChange = () => {
     const editor = editorRef.current
-    if (!editor) return
+    if (!editor || !onChange) return
     const serialized = serializeEditor(editor)
     lastSerialized.current = serialized
     setEmpty(isEditorEmpty(editor))
     onChange(serialized)
+  }
+
+  const detectInlineTrigger = () => {
+    const editor = editorRef.current
+    if (!editor) return
+    const selection = window.getSelection()
+    if (
+      !selection ||
+      selection.rangeCount === 0 ||
+      !selection.isCollapsed ||
+      !selection.anchorNode ||
+      !editor.contains(selection.anchorNode)
+    ) {
+      setInlinePicker(null)
+      return
+    }
+    const range = selection.getRangeAt(0)
+    const node = range.startContainer
+    if (node.nodeType !== Node.TEXT_NODE) {
+      setInlinePicker(null)
+      return
+    }
+    const textBefore = (node as Text).data.slice(0, range.startOffset)
+    const match = textBefore.match(INLINE_TRIGGER_REGEX)
+    if (!match) {
+      setInlinePicker(null)
+      return
+    }
+    const caretRange = range.cloneRange()
+    caretRange.collapse(true)
+    const rect = caretRange.getBoundingClientRect()
+    setInlinePicker({
+      query: match[1],
+      caretLeft: rect.left,
+      caretBottom: rect.bottom,
+      caretTop: rect.top,
+    })
+  }
+
+  const acceptInlineVariable = (variable: PromptVariable) => {
+    const editor = editorRef.current
+    if (!editor) return
+    const selection = window.getSelection()
+    if (!selection || selection.rangeCount === 0) return
+    const range = selection.getRangeAt(0)
+    const node = range.startContainer
+    if (node.nodeType !== Node.TEXT_NODE) return
+    const textNode = node as Text
+    const textBefore = textNode.data.slice(0, range.startOffset)
+    const match = textBefore.match(INLINE_TRIGGER_REGEX)
+    if (!match) return
+
+    const matchLen = match[0].length
+    const startOffset = range.startOffset - matchLen
+    textNode.deleteData(startOffset, matchLen)
+
+    const insertRange = document.createRange()
+    insertRange.setStart(textNode, startOffset)
+    insertRange.collapse(true)
+
+    const chip = createChip(variable.key, variablesByKey)
+    const trailingSpace = document.createTextNode(' ')
+    insertRange.insertNode(trailingSpace)
+    insertRange.insertNode(chip)
+
+    const newRange = document.createRange()
+    newRange.setStartAfter(trailingSpace)
+    newRange.collapse(true)
+    selection.removeAllRanges()
+    selection.addRange(newRange)
+
+    setInlinePicker(null)
+    emitChange()
   }
 
   const handlePaste = (e: ReactClipboardEvent<HTMLDivElement>) => {
@@ -235,6 +418,37 @@ export function SystemPromptEditor({
     emitChange()
   }
 
+  const handleKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (!inlinePicker) return
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      setInlinePicker(null)
+      return
+    }
+    if (inlineMatches.length === 0) {
+      if (e.key === 'Tab') {
+        e.preventDefault()
+        setInlinePicker(null)
+      }
+      return
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setInlineIndex((i) => (i + 1) % inlineMatches.length)
+      return
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setInlineIndex((i) => (i - 1 + inlineMatches.length) % inlineMatches.length)
+      return
+    }
+    if (e.key === 'Tab' || e.key === 'Enter') {
+      e.preventDefault()
+      acceptInlineVariable(inlineMatches[inlineIndex])
+      return
+    }
+  }
+
   const insertVariable = (key: string) => {
     const editor = editorRef.current
     if (!editor) return
@@ -254,7 +468,8 @@ export function SystemPromptEditor({
       range.collapse(false)
     }
     range.deleteContents()
-    const chip = createChip(key)
+    const variable = variablesByKey.get(key)
+    const chip = createChip(key, variablesByKey)
     const trailingSpace = document.createTextNode(' ')
     range.insertNode(trailingSpace)
     range.insertNode(chip)
@@ -264,90 +479,300 @@ export function SystemPromptEditor({
       selection.removeAllRanges()
       selection.addRange(range)
     }
+    void variable
     emitChange()
     setPickerOpen(false)
   }
 
-  return (
-    <div className="relative rounded-lg border-2 border-input bg-card transition-colors focus-within:border-primary overflow-hidden">
-      <div className="flex items-center gap-2 border-b-2 border-border bg-muted/30 px-2 py-1.5">
-        <Popover open={pickerOpen} onOpenChange={setPickerOpen}>
-          <PopoverTrigger asChild>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 rounded-md border-2 border-border bg-card px-2.5 py-1 text-xs font-bold text-foreground hover:border-primary hover:bg-primary/5 transition-colors"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Chèn biến
-            </button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            sideOffset={6}
-            onCloseAutoFocus={(e) => e.preventDefault()}
-            className="w-80 max-h-[420px] overflow-y-auto p-3"
-          >
-            <div className="space-y-3">
-              <p className="text-xs text-muted-foreground">
-                Chọn biến để chèn vào vị trí con trỏ.
-              </p>
-              {PROMPT_VARIABLES.map((group) => (
-                <div key={group.groupLabel} className="space-y-1.5">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    {group.groupLabel}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {group.variables.map((v) => (
-                      <button
-                        key={v.key}
-                        type="button"
-                        onClick={() => insertVariable(v.key)}
-                        title={v.description}
-                        className="inline-flex items-center rounded-md border-2 border-border bg-card px-2 py-1 text-xs font-semibold text-foreground hover:border-primary hover:bg-primary/5 transition-colors"
-                      >
-                        {v.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
-        <p className="text-[11px] text-muted-foreground">
-          Biến sẽ được thay bằng giá trị thật khi học viên bắt đầu hội thoại
-        </p>
-      </div>
+  const hasCharacters = (characters?.length ?? 0) > 0
 
-      <div className="relative">
+  return (
+    <div className="space-y-2">
+      {!readOnly && (
+        <div className="flex flex-wrap items-center gap-2">
+          <Popover open={pickerOpen} onOpenChange={setPickerOpen}>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 rounded-md border-2 border-border bg-card px-2.5 py-1 text-xs font-bold text-foreground hover:border-primary hover:bg-primary/5 transition-colors"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Chèn biến
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="start"
+              sideOffset={8}
+              collisionPadding={16}
+              onCloseAutoFocus={(e) => e.preventDefault()}
+              className="w-96 overflow-hidden rounded-xl border-2 border-border bg-card p-0 flex flex-col"
+              style={{
+                maxHeight:
+                  'var(--radix-popover-content-available-height, 480px)',
+              }}
+            >
+              <div className="border-b-2 border-border bg-muted/30 px-3 py-2 flex items-center justify-between gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  Tất cả biến
+                </span>
+                <span className="text-xs font-bold text-foreground tabular-nums">
+                  {flatVariables.length}
+                </span>
+              </div>
+              <div className="flex-1 overflow-y-auto p-1.5 space-y-3">
+                {!hasCharacters && (
+                  <div className="rounded-lg border-2 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/20 px-3 py-2">
+                    <p className="text-xs font-bold text-amber-800 dark:text-amber-300">
+                      Chưa có nhân vật
+                    </p>
+                    <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-0.5">
+                      Thêm nhân vật trong tình huống để dùng biến nhân vật.
+                    </p>
+                  </div>
+                )}
+                {variableGroups.map((group) => (
+                  <div key={group.groupLabel} className="space-y-1">
+                    <p className="px-2 pt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      {group.groupLabel}
+                    </p>
+                    <div className="space-y-1">
+                      {group.variables.map((v) => (
+                        <VariableRow
+                          key={v.key}
+                          variable={v}
+                          groupLabel={group.groupLabel}
+                          onPick={() => insertVariable(v.key)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+          <p className="text-[11px] text-muted-foreground">
+            Hoặc gõ <code className="rounded bg-muted px-1 font-mono">{'{{'}</code> trong nội dung, Tab/Enter để chèn
+          </p>
+        </div>
+      )}
+
+      <div className={readOnly ? '' : 'relative'}>
         <div
           ref={editorRef}
-          contentEditable
+          contentEditable={!readOnly}
           suppressContentEditableWarning
-          role="textbox"
-          aria-multiline="true"
-          aria-required={required}
-          onInput={emitChange}
-          onPaste={handlePaste}
-          className="min-h-44 w-full px-3 py-2 text-sm leading-relaxed outline-none whitespace-pre-wrap break-words"
+          role={readOnly ? undefined : 'textbox'}
+          aria-multiline={readOnly ? undefined : true}
+          aria-required={readOnly ? undefined : required}
+          onInput={
+            readOnly
+              ? undefined
+              : () => {
+                  emitChange()
+                  detectInlineTrigger()
+                }
+          }
+          onKeyUp={readOnly ? undefined : detectInlineTrigger}
+          onClick={readOnly ? undefined : detectInlineTrigger}
+          onKeyDown={readOnly ? undefined : handleKeyDown}
+          onPaste={readOnly ? undefined : handlePaste}
+          onBlur={
+            readOnly
+              ? undefined
+              : () => {
+                  requestAnimationFrame(() => setInlinePicker(null))
+                }
+          }
+          className={
+            readOnly
+              ? 'text-sm leading-relaxed whitespace-pre-wrap break-words text-foreground'
+              : 'min-h-44 w-full rounded-md bg-muted/30 px-3 py-2 text-sm leading-relaxed outline-none whitespace-pre-wrap break-words focus:bg-card focus:ring-2 focus:ring-primary/40 transition-colors'
+          }
         />
-        <div
-          ref={placeholderRef}
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-x-3 top-2 text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground opacity-70 ${empty ? '' : 'hidden'}`}
-        />
+        {!readOnly && (
+          <>
+            <div
+              ref={placeholderRef}
+              aria-hidden="true"
+              className={`pointer-events-none absolute inset-x-3 top-2 text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground opacity-70 ${empty ? '' : 'hidden'}`}
+            />
+            {required && (
+              <input
+                tabIndex={-1}
+                aria-hidden="true"
+                required
+                value={value}
+                onChange={() => {}}
+                className="absolute inset-0 h-px w-px opacity-0 pointer-events-none"
+              />
+            )}
+          </>
+        )}
       </div>
 
-      {required && (
-        <input
-          tabIndex={-1}
-          aria-hidden="true"
-          required
-          value={value}
-          onChange={() => {}}
-          className="absolute inset-0 h-px w-px opacity-0 pointer-events-none"
+      {!readOnly && inlinePicker && (
+        <InlinePicker
+          state={inlinePicker}
+          matches={inlineMatches}
+          selectedIndex={inlineIndex}
+          onPick={acceptInlineVariable}
+          onHover={setInlineIndex}
+          listRef={pickerListRef}
         />
       )}
+    </div>
+  )
+}
+
+function VariableRow({
+  variable,
+  groupLabel,
+  selected,
+  onPick,
+  onHover,
+}: {
+  variable: PromptVariable
+  groupLabel: string
+  selected?: boolean
+  onPick: () => void
+  onHover?: () => void
+}) {
+  const charName = groupLabel.split('·')[0].trim()
+  return (
+    <button
+      type="button"
+      role="option"
+      aria-selected={selected}
+      onMouseDown={(e) => {
+        e.preventDefault()
+        onPick()
+      }}
+      onMouseEnter={onHover}
+      title={variable.description}
+      className={`flex w-full items-center gap-3 rounded-lg border-2 px-3 py-2 text-left transition-colors ${
+        selected
+          ? 'border-primary bg-primary/10'
+          : 'border-transparent hover:border-border hover:bg-muted/40'
+      }`}
+    >
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-bold text-foreground truncate">
+          {variable.label}
+        </div>
+        <div className="text-[11px] text-muted-foreground truncate font-mono mt-0.5">
+          {`{{${variable.key}}}`}
+        </div>
+      </div>
+      <span className="rounded-md border-2 border-border bg-muted/30 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground shrink-0 max-w-[7rem] truncate">
+        {charName}
+      </span>
+    </button>
+  )
+}
+
+function InlinePicker({
+  state,
+  matches,
+  selectedIndex,
+  onPick,
+  onHover,
+  listRef,
+}: {
+  state: InlinePickerState
+  matches: Array<PromptVariable & { groupLabel: string }>
+  selectedIndex: number
+  onPick: (variable: PromptVariable) => void
+  onHover: (index: number) => void
+  listRef: React.RefObject<HTMLDivElement | null>
+}) {
+  const VIEW_MARGIN = 8
+  const POPUP_MAX_H = 420
+  const POPUP_WIDTH = 384
+  const wouldOverflowBottom =
+    state.caretBottom + POPUP_MAX_H + VIEW_MARGIN > window.innerHeight
+  const top = wouldOverflowBottom
+    ? Math.max(VIEW_MARGIN, state.caretTop - POPUP_MAX_H - 8)
+    : state.caretBottom + 8
+  const left = Math.min(
+    Math.max(VIEW_MARGIN, state.caretLeft),
+    window.innerWidth - POPUP_WIDTH - VIEW_MARGIN,
+  )
+
+  return (
+    <div
+      role="listbox"
+      style={{
+        position: 'fixed',
+        top,
+        left,
+        width: POPUP_WIDTH,
+        maxHeight: POPUP_MAX_H,
+        zIndex: 100,
+      }}
+      className="overflow-hidden rounded-xl border-2 border-border bg-card flex flex-col"
+    >
+      <div className="border-b-2 border-border bg-muted/30 px-3 py-2 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground shrink-0">
+            {state.query ? 'Lọc' : 'Tất cả biến'}
+          </span>
+          {state.query && (
+            <code className="rounded-md bg-card border-2 border-border px-1.5 py-0.5 text-xs font-mono font-bold text-foreground truncate">
+              {state.query}
+            </code>
+          )}
+        </div>
+        <span className="text-xs font-bold text-foreground tabular-nums shrink-0">
+          {matches.length}
+        </span>
+      </div>
+
+      <div ref={listRef} className="flex-1 overflow-y-auto p-1.5 space-y-1">
+        {matches.length === 0 ? (
+          <div className="rounded-lg border-2 border-dashed border-border px-4 py-6 text-center">
+            <p className="text-sm font-bold text-foreground mb-1">
+              Không có biến phù hợp
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Đổi từ khoá hoặc bấm Esc để đóng
+            </p>
+          </div>
+        ) : (
+          matches.map((v, i) => (
+            <VariableRow
+              key={v.key}
+              variable={v}
+              groupLabel={v.groupLabel}
+              selected={i === selectedIndex}
+              onPick={() => onPick(v)}
+              onHover={() => onHover(i)}
+            />
+          ))
+        )}
+      </div>
+
+      <div className="border-t-2 border-border bg-muted/30 px-3 py-2 flex items-center justify-between gap-3 text-[11px] text-muted-foreground">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5">
+            <kbd className="rounded-md border-2 border-border bg-card px-1.5 py-0.5 font-mono font-bold text-[10px] text-foreground">
+              ↑↓
+            </kbd>
+            <span>chọn</span>
+          </span>
+          <span className="flex items-center gap-1.5">
+            <kbd className="rounded-md border-2 border-border bg-card px-1.5 py-0.5 font-mono font-bold text-[10px] text-foreground">
+              Tab
+            </kbd>
+            <span>chèn</span>
+          </span>
+        </div>
+        <span className="flex items-center gap-1.5">
+          <kbd className="rounded-md border-2 border-border bg-card px-1.5 py-0.5 font-mono font-bold text-[10px] text-foreground">
+            Esc
+          </kbd>
+          <span>đóng</span>
+        </span>
+      </div>
     </div>
   )
 }

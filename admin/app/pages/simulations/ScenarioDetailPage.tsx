@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
@@ -6,13 +6,15 @@ import {
   Plus, Pencil, Users, MoreVertical, Trash2, UserCheck, Eye, EyeOff,
   Clock, Sparkles, MessageCircle, Target, Quote, User, GraduationCap,
   Stethoscope, Car, BookOpen, Store, Plane, Shield, Sprout, Wrench,
-  UtensilsCrossed,
+  UtensilsCrossed, Save, X,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
+import { Textarea } from '../../components/ui/textarea'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { ScenarioDetailSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
+import { SystemPromptEditor } from '../../components/admin/editors/SystemPromptEditor'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -69,7 +71,41 @@ export function ScenarioDetailPage() {
   const { data: scenario, isLoading, error, refetch, isFetching } = useAdminScenario(scenarioId)
   const mutations = useSimulationsAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<ScenarioCharacter | null>(null)
-  const [showFullPrompt, setShowFullPrompt] = useState(false)
+  const [editingAi, setEditingAi] = useState(false)
+  const [draftSystemPrompt, setDraftSystemPrompt] = useState('')
+  const [draftOpeningMessage, setDraftOpeningMessage] = useState('')
+
+  useEffect(() => {
+    if (!editingAi && scenario) {
+      setDraftSystemPrompt(scenario.systemPrompt ?? '')
+      setDraftOpeningMessage(scenario.openingMessage ?? '')
+    }
+  }, [scenario, editingAi])
+
+  const startEditAi = () => {
+    setDraftSystemPrompt(scenario?.systemPrompt ?? '')
+    setDraftOpeningMessage(scenario?.openingMessage ?? '')
+    setEditingAi(true)
+  }
+
+  const cancelEditAi = () => setEditingAi(false)
+
+  const saveAi = async () => {
+    if (!scenarioId) return
+    try {
+      await mutations.updateScenario.mutateAsync({
+        id: scenarioId,
+        payload: {
+          systemPrompt: draftSystemPrompt,
+          openingMessage: draftOpeningMessage || null,
+        },
+      })
+      toast.success('Đã cập nhật cấu hình AI')
+      setEditingAi(false)
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Không thể lưu')
+    }
+  }
 
   const confirmDelete = async () => {
     if (!pendingDelete) return
@@ -172,53 +208,113 @@ export function ScenarioDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left column — AI configuration */}
           <div className="lg:col-span-2 space-y-6">
-            {/* System prompt */}
+            {/* AI configuration — system prompt + opening message */}
             <section className="rounded-xl border-2 border-border bg-card overflow-hidden">
               <div className="flex items-center justify-between gap-2 px-4 py-3 border-b-2 border-border bg-muted/30">
                 <div className="flex items-center gap-2">
                   <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/10 text-primary">
                     <Sparkles className="h-4 w-4" />
                   </div>
-                  <h2 className="text-sm font-bold tracking-tight">Lời nhắc hệ thống cho AI</h2>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowFullPrompt((v) => !v)}
-                  className="text-xs font-bold text-primary hover:underline"
-                >
-                  {showFullPrompt ? 'Thu gọn' : 'Hiện đầy đủ'}
-                </button>
-              </div>
-              <pre
-                className={`p-4 text-xs font-mono leading-relaxed whitespace-pre-wrap text-foreground ${
-                  showFullPrompt ? 'max-h-none' : 'max-h-48 overflow-hidden'
-                }`}
-              >
-                {scenario.systemPrompt || '(Chưa thiết lập)'}
-              </pre>
-              {!showFullPrompt && scenario.systemPrompt && scenario.systemPrompt.length > 200 && (
-                <div className="px-4 pb-3 -mt-6 pt-6 bg-gradient-to-t from-card to-transparent" />
-              )}
-            </section>
-
-            {/* Opening message */}
-            {scenario.openingMessage && (
-              <section className="rounded-xl border-2 border-border bg-card overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-3 border-b-2 border-border bg-muted/30">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                    <Quote className="h-4 w-4" />
-                  </div>
-                  <h2 className="text-sm font-bold tracking-tight">Tin nhắn mở đầu</h2>
-                </div>
-                <div className="p-4">
-                  <div className="rounded-lg bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-200 dark:border-blue-900 p-4">
-                    <p className="text-base text-foreground italic leading-relaxed">
-                      &quot;{scenario.openingMessage}&quot;
+                  <div>
+                    <h2 className="text-sm font-bold tracking-tight">Cấu hình AI</h2>
+                    <p className="text-[11px] text-muted-foreground">
+                      Lời nhắc hệ thống và tin nhắn mở đầu
                     </p>
                   </div>
                 </div>
-              </section>
-            )}
+                {editingAi ? (
+                  <div className="flex items-center gap-1.5">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={cancelEditAi}
+                      disabled={mutations.updateScenario.isPending}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                      Hủy
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={saveAi}
+                      disabled={mutations.updateScenario.isPending}
+                    >
+                      <Save className="h-3.5 w-3.5" />
+                      Lưu
+                    </Button>
+                  </div>
+                ) : (
+                  <Button type="button" size="sm" variant="ghost" onClick={startEditAi}>
+                    <Pencil className="h-3.5 w-3.5" />
+                    Sửa
+                  </Button>
+                )}
+              </div>
+
+              <div className="divide-y-2 divide-border">
+                {/* System prompt sub-section */}
+                <div className="p-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-3.5 w-3.5 text-primary" />
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Lời nhắc hệ thống cho AI
+                    </h3>
+                  </div>
+                  {editingAi ? (
+                    <SystemPromptEditor
+                      value={draftSystemPrompt}
+                      onChange={setDraftSystemPrompt}
+                      characters={scenario.characters}
+                      placeholder={`VD:\nBạn đóng vai {{characters[0].name}} ({{characters[0].role}}), nói chuyện với học viên đóng vai {{playable.name}}, trình độ {{learner.level}}, ngôn ngữ mẹ đẻ {{learner.nativeLanguage}}.\n\nBối cảnh: {{scenario.title}} — {{scenario.description}}`}
+                    />
+                  ) : scenario.systemPrompt ? (
+                    <SystemPromptEditor
+                      value={scenario.systemPrompt}
+                      characters={scenario.characters}
+                      readOnly
+                    />
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic">
+                      Chưa thiết lập. Bấm <span className="font-semibold not-italic">Sửa</span> để cấu hình.
+                    </p>
+                  )}
+                </div>
+
+                {/* Opening message sub-section */}
+                <div className="p-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Quote className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Tin nhắn mở đầu của AI
+                    </h3>
+                  </div>
+                  {editingAi ? (
+                    <>
+                      <Textarea
+                        value={draftOpeningMessage}
+                        onChange={(e) => setDraftOpeningMessage(e.target.value)}
+                        placeholder="VD: Xin chào, anh/chị muốn dùng gì ạ?"
+                        className="min-h-20"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Câu chào AI nói trước. Để trống nếu không cần.
+                      </p>
+                    </>
+                  ) : scenario.openingMessage ? (
+                    <div className="rounded-lg border-2 border-border bg-muted/30 p-3">
+                      <p className="text-sm text-foreground italic leading-relaxed">
+                        &quot;{scenario.openingMessage}&quot;
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic">
+                      Chưa có tin nhắn mở đầu.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
 
             {/* Scoring criteria */}
             <section className="rounded-xl border-2 border-border bg-card overflow-hidden">

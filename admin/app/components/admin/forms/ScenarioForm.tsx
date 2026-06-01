@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { MessageSquare, Sparkles, Target, Settings, Eye, EyeOff, GraduationCap } from 'lucide-react'
+import { MessageSquare, Target, Settings, Eye, EyeOff, GraduationCap } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
@@ -7,13 +7,10 @@ import { FormField, FormSection } from '../FormSection'
 import { LevelPicker, DifficultyPicker } from '../editors/PickerControls'
 import { ScoringCriteriaEditor, type ScoringCriterion } from '../editors/ScoringCriteriaEditor'
 import { NumberStepper } from '../editors/NumberStepper'
-import { SystemPromptEditor } from '../editors/SystemPromptEditor'
 
 export interface ScenarioFormValues {
   title: string
   description: string
-  systemPrompt: string
-  openingMessage?: string | null
   requiredLevel: string
   difficulty: string
   scoringCriteria: ScoringCriterion[]
@@ -34,8 +31,6 @@ export function ScenarioForm({
   const [values, setValues] = useState<ScenarioFormValues>({
     title: initialValue?.title ?? '',
     description: initialValue?.description ?? '',
-    systemPrompt: initialValue?.systemPrompt ?? '',
-    openingMessage: initialValue?.openingMessage ?? '',
     requiredLevel: initialValue?.requiredLevel ?? 'A1',
     difficulty: initialValue?.difficulty ?? 'EASY',
     scoringCriteria: Array.isArray(initialValue?.scoringCriteria) ? initialValue.scoringCriteria : [],
@@ -52,7 +47,6 @@ export function ScenarioForm({
     e.preventDefault()
     await onSubmit({
       ...values,
-      openingMessage: values.openingMessage || null,
       maxTurns: values.maxTurns || null,
       scoringCriteria: values.scoringCriteria.filter((c) => c.name.trim()),
     })
@@ -77,30 +71,6 @@ export function ScenarioForm({
             placeholder="VD: Bạn đang ngồi tại quán cà phê và muốn gọi đồ uống. Hãy giao tiếp với nhân viên để gọi món, hỏi giá và thanh toán."
             className="min-h-24"
             required
-          />
-        </FormField>
-      </FormSection>
-
-      <FormSection icon={Sparkles} title="Cấu hình AI" description="Chỉ thị cho AI đóng vai trong hội thoại">
-        <FormField
-          label="Lời nhắc hệ thống cho AI"
-          required
-          help="Mô tả vai trò AI cần đóng. Bấm Chèn biến để cá nhân hoá theo từng học viên."
-        >
-          <SystemPromptEditor
-            value={values.systemPrompt}
-            onChange={(v) => update('systemPrompt', v)}
-            placeholder={`VD:\nBạn đóng vai một nhân viên phục vụ quán cà phê Việt Nam. Học viên đóng vai {{playable.name}} ({{playable.role}}), trình độ tiếng Việt {{learner.level}}, ngôn ngữ mẹ đẻ {{learner.nativeLanguage}}.\n\nBối cảnh: {{scenario.title}} — {{scenario.description}}\n\nHãy thân thiện, dùng từ vựng đơn giản phù hợp với cấp độ học viên.`}
-            required
-          />
-        </FormField>
-
-        <FormField label="Tin nhắn mở đầu" help="Câu chào của AI khi bắt đầu hội thoại">
-          <Textarea
-            value={values.openingMessage ?? ''}
-            onChange={(e) => update('openingMessage', e.target.value)}
-            placeholder="VD: Xin chào, anh/chị muốn dùng gì ạ?"
-            className="min-h-20"
           />
         </FormField>
       </FormSection>

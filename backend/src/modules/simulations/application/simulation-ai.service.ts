@@ -371,14 +371,20 @@ export class SimulationAiService {
         name: chosenCharacter.name,
         role: chosenCharacter.role,
       },
-      // Alias for `chosenCharacter` — admin authoring experience uses
-      // `{{playable.*}}` because it reads more naturally in the system prompt
-      // (the character the learner plays).
-      playable: {
-        id: chosenCharacter.id,
-        name: chosenCharacter.name,
-        role: chosenCharacter.role,
-      },
+      // Full scenario cast — exposes `{{characters[i].name}}`,
+      // `{{characters[i].role}}`, `{{characters[i].personality}}`,
+      // `{{characters[i].speechStyle}}` for admin-authored system prompts.
+      // Must appear AFTER `scenario` so the outer template inserts the
+      // scenario prompt first; the next iteration then substitutes the
+      // inner `{{characters[i].*}}` placeholders inside it.
+      characters: scenario.characters.map((c) => ({
+        id: c.id,
+        name: c.name,
+        role: c.role,
+        personality: c.personality,
+        speechStyle: c.speechStyle,
+        isPlayable: c.isPlayable,
+      })),
       scoringCriteriaDescription,
       maxTurns: scenario.maxTurns?.toString() ?? 'unlimited',
       forceWrapUpInstruction,

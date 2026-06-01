@@ -40,7 +40,12 @@ export class AdminSimulationsService {
   }
 
   async createScenario(categoryId: string, dto: Partial<Scenario>) {
-    return this.scenariosRepository.create({ ...dto, categoryId });
+    return this.scenariosRepository.create({
+      systemPrompt: '',
+      openingMessage: null,
+      ...dto,
+      categoryId,
+    });
   }
 
   async updateScenario(id: string, dto: Partial<Scenario>) {
