@@ -25,6 +25,7 @@ describe('Exercise Options Types', () => {
     it('should enforce correct structure for FillBlank', () => {
       const options: FillBlankOptions = {
         type: ExerciseType.FILL_BLANK,
+        sentence: '___ là ___ .',
         blanks: 2,
         acceptedAnswers: [
           ['answer1a', 'answer1b'],
@@ -67,6 +68,7 @@ describe('Exercise Options Types', () => {
     it('should correctly identify FillBlank options', () => {
       const options: ExerciseOptions = {
         type: ExerciseType.FILL_BLANK,
+        sentence: '___',
         blanks: 1,
       };
 
@@ -107,6 +109,7 @@ describe('Exercise Options Types', () => {
         },
         {
           type: ExerciseType.FILL_BLANK,
+          sentence: '___ ___',
           blanks: 2,
         },
         {

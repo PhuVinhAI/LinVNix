@@ -18,7 +18,8 @@ export interface MultipleChoiceAnswer {
 // Fill in the Blank Options
 export interface FillBlankOptions extends BaseExerciseOptions {
   type: ExerciseType.FILL_BLANK;
-  blanks: number; // Số chỗ trống
+  sentence: string; // Câu có chỗ trống, mỗi chỗ trống đánh dấu bằng ___ (3 dấu gạch dưới)
+  blanks: number; // Số chỗ trống (= số ___ trong sentence)
   acceptedAnswers?: string[][]; // Mảng các đáp án chấp nhận được cho mỗi chỗ trống
 }
 
@@ -55,6 +56,7 @@ export interface OrderingAnswer {
 // Translation Options
 export interface TranslationOptions extends BaseExerciseOptions {
   type: ExerciseType.TRANSLATION;
+  sourceText: string; // Văn bản gốc cần dịch
   sourceLanguage: string;
   targetLanguage: string;
   acceptedTranslations?: string[]; // Các bản dịch chấp nhận được

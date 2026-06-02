@@ -27,7 +27,7 @@ class OrderingRenderer extends ExerciseRenderer {
   Widget buildQuestion(Exercise exercise, BuildContext context) {
     final c = AppTheme.colors(context);
     return Text(
-      exercise.question,
+      exercise.question ?? '',
       style: GoogleFonts.inter(
         fontSize: AppTypography.headlineSmall,
         fontWeight: FontWeight.w600,

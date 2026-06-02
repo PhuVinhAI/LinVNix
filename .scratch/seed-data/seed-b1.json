@@ -55,10 +55,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi đã _____ vào vị trí quản lý dự án."
                   },
                   "order_index": 2,
-                  "question": "Tôi đã _____ vào vị trí quản lý dự án.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -108,7 +109,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -126,10 +127,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I applied for the project manager position."
                   },
                   "order_index": 4,
-                  "question": "I applied for the project manager position.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -629,10 +631,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cửa hàng _____ trộm đêm qua. (bị/được)"
                   },
                   "order_index": 2,
-                  "question": "Cửa hàng _____ trộm đêm qua. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -652,10 +655,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Dự án mới _____ hội đồng duyệt tuần trước. (bị/được)"
                   },
                   "order_index": 3,
-                  "question": "Dự án mới _____ hội đồng duyệt tuần trước. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -674,10 +678,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I was fired by the company."
                   },
                   "order_index": 4,
-                  "question": "I was fired by the company.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1043,10 +1048,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Lan _____ sếp giao thêm một dự án mới. (bị/được)"
                   },
                   "order_index": 2,
-                  "question": "Lan _____ sếp giao thêm một dự án mới. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1064,10 +1070,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "She was required to submit the report earlier than expected."
                   },
                   "order_index": 3,
-                  "question": "She was required to submit the report earlier than expected.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1216,10 +1223,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Đi làm _____ bị coi là thiếu tôn trọng ở Việt Nam."
                   },
                   "order_index": 2,
-                  "question": "Đi làm _____ bị coi là thiếu tôn trọng ở Việt Nam.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1237,10 +1245,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Younger staff should call the boss sếp or anh/chị + name."
                   },
                   "order_index": 3,
-                  "question": "Younger staff should call the boss sếp or anh/chị + name.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1452,7 +1461,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1472,10 +1481,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Em _____ nhận học bổng toàn phần năm nay. (bị/được)"
                   },
                   "order_index": 2,
-                  "question": "Em _____ nhận học bổng toàn phần năm nay. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1514,10 +1524,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I have to retake the Math exam."
                   },
                   "order_index": 4,
-                  "question": "I have to retake the Math exam.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1921,10 +1932,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ bạn học chăm thì bạn sẽ thi đậu."
                   },
                   "order_index": 1,
-                  "question": "_____ bạn học chăm thì bạn sẽ thi đậu.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1998,10 +2010,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "If you don't submit the assignment on time, points will be deducted."
                   },
                   "order_index": 4,
-                  "question": "If you don't submit the assignment on time, points will be deducted.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2021,10 +2034,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Bạn phải đi ngay, _____ không thì sẽ muộn."
                   },
                   "order_index": 5,
-                  "question": "Bạn phải đi ngay, _____ không thì sẽ muộn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2310,10 +2324,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ chúng ta được học hành tốt thì sẽ có nhiều cơ hội trong cuộc sống."
                   },
                   "order_index": 2,
-                  "question": "_____ chúng ta được học hành tốt thì sẽ có nhiều cơ hội trong cuộc sống.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2331,10 +2346,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "If there are no scholarships, many students cannot continue studying."
                   },
                   "order_index": 3,
-                  "question": "If there are no scholarships, many students cannot continue studying.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2502,7 +2518,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2522,10 +2538,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Em đã _____ vé máy bay đi Đà Nẵng rồi."
                   },
                   "order_index": 2,
-                  "question": "Em đã _____ vé máy bay đi Đà Nẵng rồi.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2564,10 +2581,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I booked a hotel room online."
                   },
                   "order_index": 4,
-                  "question": "I booked a hotel room online.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2932,10 +2950,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ xe rồi rẽ trái là đến khách sạn."
                   },
                   "order_index": 2,
-                  "question": "_____ xe rồi rẽ trái là đến khách sạn.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2981,10 +3000,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "After exiting the airport, call a taxi."
                   },
                   "order_index": 4,
-                  "question": "After exiting the airport, call a taxi.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3316,10 +3336,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cửa cổng sẽ _____ lúc hai giờ bốn mươi lăm."
                   },
                   "order_index": 3,
-                  "question": "Cửa cổng sẽ _____ lúc hai giờ bốn mươi lăm.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3533,10 +3554,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Go straight, pass the intersection, then turn right."
                   },
                   "order_index": 3,
-                  "question": "Go straight, pass the intersection, then turn right.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3770,7 +3792,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3790,10 +3812,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tình yêu cần sự _____ và thấu hiểu."
                   },
                   "order_index": 2,
-                  "question": "Tình yêu cần sự _____ và thấu hiểu.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3833,10 +3856,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "We've been dating for three years."
                   },
                   "order_index": 4,
-                  "question": "We've been dating for three years.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4201,10 +4225,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ trời mưa, tôi vẫn đi làm."
                   },
                   "order_index": 1,
-                  "question": "_____ trời mưa, tôi vẫn đi làm.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4271,10 +4296,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "It is trust that keeps love lasting long."
                   },
                   "order_index": 4,
-                  "question": "It is trust that keeps love lasting long.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4294,10 +4320,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ là tình bạn mới giúp tôi vượt qua khó khăn."
                   },
                   "order_index": 5,
-                  "question": "_____ là tình bạn mới giúp tôi vượt qua khó khăn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4580,10 +4607,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Dù cãi nhau, họ _____ yêu nhau."
                   },
                   "order_index": 2,
-                  "question": "Dù cãi nhau, họ _____ yêu nhau.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4601,10 +4629,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "It is understanding that is the most important thing in love."
                   },
                   "order_index": 3,
-                  "question": "It is understanding that is the most important thing in love.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4862,7 +4891,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4882,10 +4911,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ xe ở trung tâm rất khó và đắt."
                   },
                   "order_index": 2,
-                  "question": "_____ xe ở trung tâm rất khó và đắt.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4924,10 +4954,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Wear a helmet when riding a motorbike."
                   },
                   "order_index": 4,
-                  "question": "Wear a helmet when riding a motorbike.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -5332,10 +5363,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ đi quá nhanh! Nguy hiểm lắm."
                   },
                   "order_index": 2,
-                  "question": "_____ đi quá nhanh! Nguy hiểm lắm.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5381,10 +5413,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Don't drink and drive!"
                   },
                   "order_index": 4,
-                  "question": "Don't drink and drive!",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5425,10 +5458,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hãy ngồi xuống _____. (đi/rồi)"
                   },
                   "order_index": 6,
-                  "question": "Hãy ngồi xuống _____. (đi/rồi)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -5716,10 +5750,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hãy _____ mũ bảo hiểm khi đi xe máy."
                   },
                   "order_index": 2,
-                  "question": "Hãy _____ mũ bảo hiểm khi đi xe máy.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5737,10 +5772,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Don't drink and drive, obey traffic laws."
                   },
                   "order_index": 3,
-                  "question": "Don't drink and drive, obey traffic laws.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],

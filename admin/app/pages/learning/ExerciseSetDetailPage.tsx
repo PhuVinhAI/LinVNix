@@ -271,7 +271,7 @@ export function ExerciseSetDetailPage() {
               <AlertDialogTitle>Xóa bài tập?</AlertDialogTitle>
             </div>
             <AlertDialogDescription>
-              Bài tập <span className="font-semibold text-foreground">&quot;{pendingDelete?.question}&quot;</span> và toàn bộ kết quả làm bài của học viên cho bài tập này sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
+              Bài tập <span className="font-semibold text-foreground">&quot;{exerciseLabel(pendingDelete)}&quot;</span> và toàn bộ kết quả làm bài của học viên cho bài tập này sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -303,6 +303,21 @@ function Metric({ icon: Icon, label, value, suffix }: { icon: LucideIcon; label:
       </p>
     </div>
   )
+}
+
+function exerciseLabel(exercise: Exercise | null): string {
+  if (!exercise) return ''
+  if (exercise.question && exercise.question.trim()) return exercise.question
+  const opts = exercise.options as Record<string, unknown> | null | undefined
+  if (opts) {
+    if (typeof opts.sentence === 'string' && opts.sentence) return opts.sentence
+    if (typeof opts.sourceText === 'string' && opts.sourceText) return opts.sourceText
+    if (Array.isArray(opts.pairs) && opts.pairs.length > 0) {
+      const first = opts.pairs[0] as { left?: string; right?: string }
+      return `${first.left ?? ''} ↔ ${first.right ?? ''}`
+    }
+  }
+  return exercise.exerciseType ?? 'Bài tập'
 }
 
 function FilterPill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {

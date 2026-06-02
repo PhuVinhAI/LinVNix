@@ -120,7 +120,7 @@ export interface ExerciseSet {
 export interface Exercise {
   id: string
   exerciseType: string
-  question: string
+  question?: string | null
   questionAudioUrl?: string | null
   options?: unknown
   correctAnswer: unknown

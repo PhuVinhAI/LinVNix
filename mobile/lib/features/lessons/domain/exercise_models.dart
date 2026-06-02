@@ -43,9 +43,9 @@ class Exercise {
   const Exercise({
     required this.id,
     required this.exerciseType,
-    required this.question,
     required this.options,
     required this.correctAnswer,
+    this.question,
     this.questionAudioUrl,
     this.explanation,
     this.orderIndex = 0,
@@ -59,7 +59,7 @@ class Exercise {
     return Exercise(
       id: json['id'] as String,
       exerciseType: type,
-      question: json['question'] as String,
+      question: json['question'] as String?,
       questionAudioUrl: json['questionAudioUrl'] as String?,
       options: ExerciseOptions.fromJson(
         type,
@@ -93,7 +93,7 @@ class Exercise {
 
   final String id;
   final ExerciseType exerciseType;
-  final String question;
+  final String? question;
   final String? questionAudioUrl;
   final ExerciseOptions options;
   final ExerciseAnswer correctAnswer;
@@ -114,10 +114,14 @@ sealed class ExerciseOptions {
     if (json == null) {
       return switch (type) {
         ExerciseType.multipleChoice => const MultipleChoiceOptions(choices: []),
-        ExerciseType.fillBlank => const FillBlankOptions(blanks: 1),
+        ExerciseType.fillBlank => const FillBlankOptions(
+          sentence: '',
+          blanks: 1,
+        ),
         ExerciseType.matching => const MatchingOptions(pairs: []),
         ExerciseType.ordering => const OrderingOptions(items: []),
         ExerciseType.translation => const TranslationOptions(
+          sourceText: '',
           sourceLanguage: '',
           targetLanguage: '',
         ),
@@ -163,9 +167,14 @@ class MultipleChoiceOptions extends ExerciseOptions {
 }
 
 class FillBlankOptions extends ExerciseOptions {
-  const FillBlankOptions({required this.blanks, this.acceptedAnswers});
+  const FillBlankOptions({
+    required this.sentence,
+    required this.blanks,
+    this.acceptedAnswers,
+  });
   factory FillBlankOptions.fromJson(Map<String, dynamic> json) {
     return FillBlankOptions(
+      sentence: json['sentence'] as String? ?? '',
       blanks: (json['blanks'] as num?)?.toInt() ?? 1,
       acceptedAnswers: (json['acceptedAnswers'] as List<dynamic>?)
           ?.map(
@@ -175,11 +184,13 @@ class FillBlankOptions extends ExerciseOptions {
           .toList(),
     );
   }
+  final String sentence;
   final int blanks;
   final List<List<String>>? acceptedAnswers;
 
   @override
   Map<String, dynamic> toJson() => {
+    'sentence': sentence,
     'blanks': blanks,
     'acceptedAnswers': acceptedAnswers,
   };
@@ -221,12 +232,14 @@ class OrderingOptions extends ExerciseOptions {
 
 class TranslationOptions extends ExerciseOptions {
   const TranslationOptions({
+    required this.sourceText,
     required this.sourceLanguage,
     required this.targetLanguage,
     this.acceptedTranslations,
   });
   factory TranslationOptions.fromJson(Map<String, dynamic> json) {
     return TranslationOptions(
+      sourceText: json['sourceText'] as String? ?? '',
       sourceLanguage: json['sourceLanguage'] as String? ?? '',
       targetLanguage: json['targetLanguage'] as String? ?? '',
       acceptedTranslations: (json['acceptedTranslations'] as List<dynamic>?)
@@ -234,12 +247,14 @@ class TranslationOptions extends ExerciseOptions {
           .toList(),
     );
   }
+  final String sourceText;
   final String sourceLanguage;
   final String targetLanguage;
   final List<String>? acceptedTranslations;
 
   @override
   Map<String, dynamic> toJson() => {
+    'sourceText': sourceText,
     'sourceLanguage': sourceLanguage,
     'targetLanguage': targetLanguage,
     'acceptedTranslations': acceptedTranslations,

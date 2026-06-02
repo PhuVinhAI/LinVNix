@@ -375,7 +375,7 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
-                          exercise.question,
+                          _summaryLabel(exercise),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
@@ -416,6 +416,26 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
         ],
       ),
     );
+  }
+
+  String _summaryLabel(Exercise exercise) {
+    if (exercise.question != null && exercise.question!.isNotEmpty) {
+      return exercise.question!;
+    }
+    final options = exercise.options;
+    if (options is FillBlankOptions && options.sentence.isNotEmpty) {
+      return options.sentence;
+    }
+    if (options is TranslationOptions && options.sourceText.isNotEmpty) {
+      return options.sourceText;
+    }
+    if (options is MatchingOptions && options.pairs.isNotEmpty) {
+      return options.pairs
+          .map((p) => '${p.left} ↔ ${p.right}')
+          .take(2)
+          .join(' · ');
+    }
+    return exercise.exerciseType.value;
   }
 
   void _syncAssistantContext() {
@@ -882,10 +902,10 @@ class QuestionHeader extends StatelessWidget {
             ],
           ],
         ),
-        if (renderer.showsQuestion) ...[
+        if (renderer.showsQuestion && (exercise.question?.isNotEmpty ?? false)) ...[
           const SizedBox(height: AppSpacing.md),
           Text(
-            exercise.question,
+            exercise.question!,
             style: GoogleFonts.inter(
               fontSize: AppTypography.titleSmall,
               fontWeight: FontWeight.w600,

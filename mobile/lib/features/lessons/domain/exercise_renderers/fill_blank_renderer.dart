@@ -13,10 +13,14 @@ class FillBlankRenderer extends ExerciseRenderer {
   ExerciseType get type => ExerciseType.fillBlank;
 
   @override
+  bool get showsQuestion => false;
+
+  @override
   bool validateAnswer(Exercise exercise, dynamic answer) {
     if (answer is! List<String>) return false;
     final options = exercise.options as FillBlankOptions;
-    if (answer.length != options.blanks) return false;
+    final blankCount = _countBlanks(options.sentence, options.blanks);
+    if (answer.length != blankCount) return false;
     return answer.every((a) => a.trim().isNotEmpty);
   }
 
@@ -26,17 +30,8 @@ class FillBlankRenderer extends ExerciseRenderer {
   }
 
   @override
-  Widget buildQuestion(Exercise exercise, BuildContext context) {
-    final c = AppTheme.colors(context);
-    return Text(
-      exercise.question,
-      style: GoogleFonts.inter(
-        fontSize: AppTypography.headlineSmall,
-        fontWeight: FontWeight.w600,
-        color: c.foreground,
-      ),
-    );
-  }
+  Widget buildQuestion(Exercise exercise, BuildContext context) =>
+      const SizedBox.shrink();
 
   @override
   Widget buildInput(
@@ -46,30 +41,73 @@ class FillBlankRenderer extends ExerciseRenderer {
     ValueChanged<dynamic> onAnswerChanged,
   ) {
     final options = exercise.options as FillBlankOptions;
+    final segments = _parseSentence(options.sentence);
+    final blankCount = segments.whereType<_BlankSegment>().length;
+    final fallbackBlanks =
+        blankCount > 0 ? blankCount : (options.blanks > 0 ? options.blanks : 1);
     final answers = (currentAnswer is List<String>)
         ? currentAnswer
-        : List<String>.filled(options.blanks, '');
+        : List<String>.filled(fallbackBlanks, '');
 
     return _FillBlankInput(
-      blanks: options.blanks,
+      segments: segments.isEmpty
+          ? List<_Segment>.generate(
+              fallbackBlanks * 2 + 1,
+              (i) => i.isEven ? const _TextSegment('') : const _BlankSegment(),
+            )
+          : segments,
       answers: answers,
-      question: exercise.question,
       onAnswerChanged: onAnswerChanged,
     );
   }
+
+  static int _countBlanks(String sentence, int fallback) {
+    final matches = RegExp(r'_{3,}').allMatches(sentence).length;
+    return matches > 0 ? matches : fallback;
+  }
+}
+
+/// One token in the rendered sentence: either literal text or a blank to fill.
+sealed class _Segment {
+  const _Segment();
+}
+
+class _TextSegment extends _Segment {
+  const _TextSegment(this.text);
+  final String text;
+}
+
+class _BlankSegment extends _Segment {
+  const _BlankSegment();
+}
+
+List<_Segment> _parseSentence(String sentence) {
+  if (sentence.isEmpty) return const <_Segment>[];
+  final result = <_Segment>[];
+  final regex = RegExp(r'_{3,}');
+  int cursor = 0;
+  for (final match in regex.allMatches(sentence)) {
+    if (match.start > cursor) {
+      result.add(_TextSegment(sentence.substring(cursor, match.start)));
+    }
+    result.add(const _BlankSegment());
+    cursor = match.end;
+  }
+  if (cursor < sentence.length) {
+    result.add(_TextSegment(sentence.substring(cursor)));
+  }
+  return result;
 }
 
 class _FillBlankInput extends StatefulWidget {
   const _FillBlankInput({
-    required this.blanks,
+    required this.segments,
     required this.answers,
-    required this.question,
     required this.onAnswerChanged,
   });
 
-  final int blanks;
+  final List<_Segment> segments;
   final List<String> answers;
-  final String question;
   final ValueChanged<dynamic> onAnswerChanged;
 
   @override
@@ -77,17 +115,43 @@ class _FillBlankInput extends StatefulWidget {
 }
 
 class _FillBlankInputState extends State<_FillBlankInput> {
+  late int _blankCount;
   late List<TextEditingController> _controllers;
   late List<FocusNode> _focusNodes;
 
   @override
   void initState() {
     super.initState();
+    _blankCount = widget.segments.whereType<_BlankSegment>().length;
     _controllers = List.generate(
-      widget.blanks,
-      (i) => TextEditingController(text: widget.answers[i]),
+      _blankCount,
+      (i) => TextEditingController(
+        text: i < widget.answers.length ? widget.answers[i] : '',
+      ),
     );
-    _focusNodes = List.generate(widget.blanks, (_) => FocusNode());
+    _focusNodes = List.generate(_blankCount, (_) => FocusNode());
+  }
+
+  @override
+  void didUpdateWidget(covariant _FillBlankInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newCount = widget.segments.whereType<_BlankSegment>().length;
+    if (newCount != _blankCount) {
+      for (final c in _controllers) {
+        c.dispose();
+      }
+      for (final f in _focusNodes) {
+        f.dispose();
+      }
+      _blankCount = newCount;
+      _controllers = List.generate(
+        _blankCount,
+        (i) => TextEditingController(
+          text: i < widget.answers.length ? widget.answers[i] : '',
+        ),
+      );
+      _focusNodes = List.generate(_blankCount, (_) => FocusNode());
+    }
   }
 
   @override
@@ -106,19 +170,63 @@ class _FillBlankInputState extends State<_FillBlankInput> {
     widget.onAnswerChanged(updated);
   }
 
-  static const _circledNumbers = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧'];
-
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final visuals = getExerciseVisuals(context, ExerciseType.fillBlank);
 
+    int blankIndex = 0;
+    final widgets = <Widget>[];
+    for (final seg in widget.segments) {
+      switch (seg) {
+        case _TextSegment(:final text):
+          // Split text on spaces but keep them as separators so the wrap can
+          // break naturally between words.
+          final parts = text.split(RegExp(r'(\s+)'));
+          for (final part in parts) {
+            if (part.isEmpty) continue;
+            widgets.add(
+              Text(
+                part,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.titleSmall,
+                  fontWeight: FontWeight.w600,
+                  color: c.foreground,
+                  height: 1.8,
+                ),
+              ),
+            );
+          }
+        case _BlankSegment():
+          final i = blankIndex;
+          widgets.add(
+            _InlineBlankField(
+              controller: _controllers[i],
+              focusNode: _focusNodes[i],
+              accent: visuals.accent,
+              fillColor: c.muted,
+              onChanged: (_) => _onChanged(),
+              isLast: i == _blankCount - 1,
+              onSubmitted: () {
+                if (i < _blankCount - 1) {
+                  _focusNodes[i + 1].requestFocus();
+                }
+              },
+            ),
+          );
+          blankIndex++;
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Sentence context card
+        // Instruction card
         Container(
-          padding: const EdgeInsets.all(AppSpacing.lg),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm + 2,
+          ),
           decoration: BoxDecoration(
             color: visuals.surface,
             borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -128,19 +236,18 @@ class _FillBlankInputState extends State<_FillBlankInput> {
             ),
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                Icons.text_fields_rounded,
+                Icons.edit_note_rounded,
                 size: 20,
                 color: visuals.accent,
               ),
-              const SizedBox(width: AppSpacing.md),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
-                  widget.blanks == 1
-                      ? 'Fill in the missing word'
-                      : 'Fill in the ${widget.blanks} missing words',
+                  _blankCount == 1
+                      ? 'Điền vào chỗ trống'
+                      : 'Điền $_blankCount chỗ trống',
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.bodyMedium,
                     color: visuals.accent,
@@ -153,104 +260,137 @@ class _FillBlankInputState extends State<_FillBlankInput> {
         ),
         const SizedBox(height: AppSpacing.xl),
 
-        // Blank fields
-        ...List.generate(widget.blanks, (index) {
-          final isFilled = _controllers[index].text.trim().isNotEmpty;
-          final numberLabel = index < _circledNumbers.length
-              ? _circledNumbers[index]
-              : '${index + 1}';
-
-          return Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Number badge
-                Container(
-                  width: 32,
-                  height: 32,
-                  margin: const EdgeInsets.only(top: 10),
-                  decoration: BoxDecoration(
-                    color: isFilled
-                        ? visuals.accent
-                        : visuals.accent.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(AppRadius.sm + 2),
-                  ),
-                  child: Center(
-                    child: Text(
-                      numberLabel,
-                      style: GoogleFonts.inter(
-                        fontSize: AppTypography.bodyMedium,
-                        fontWeight: FontWeight.w700,
-                        color: isFilled
-                            ? Colors.white
-                            : visuals.accent,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                // Input field
-                Expanded(
-                  child: TextFormField(
-                    controller: _controllers[index],
-                    focusNode: _focusNodes[index],
-                    onChanged: (_) => _onChanged(),
-                    textInputAction: index < widget.blanks - 1
-                        ? TextInputAction.next
-                        : TextInputAction.done,
-                    onFieldSubmitted: (_) {
-                      if (index < widget.blanks - 1) {
-                        _focusNodes[index + 1].requestFocus();
-                      }
-                    },
-                    style: GoogleFonts.inter(
-                      fontSize: AppTypography.bodyLarge,
-                      fontWeight: FontWeight.w500,
-                      color: c.foreground,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: S.of(context).typeAnswerHint,
-                      hintStyle: GoogleFonts.inter(
-                        fontSize: AppTypography.bodyMedium,
-                        color: c.mutedForeground,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      filled: true,
-                      fillColor: c.muted,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.md),
-                        borderSide: BorderSide(
-                          color: visuals.accent.withValues(alpha: 0.50),
-                          width: 1.5,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.md),
-                        borderSide: BorderSide(
-                          color: visuals.accent.withValues(alpha: 0.50),
-                          width: 1.5,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.md),
-                        borderSide: BorderSide(
-                          color: visuals.accent,
-                          width: 2,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.lg,
-                        vertical: AppSpacing.md,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
+        // Sentence with inline blanks
+        Container(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          decoration: BoxDecoration(
+            color: c.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: c.border, width: 1),
+          ),
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 10,
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: widgets,
+          ),
+        ),
       ],
     );
   }
 }
+
+class _InlineBlankField extends StatefulWidget {
+  const _InlineBlankField({
+    required this.controller,
+    required this.focusNode,
+    required this.accent,
+    required this.fillColor,
+    required this.onChanged,
+    required this.isLast,
+    required this.onSubmitted,
+  });
+
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final Color accent;
+  final Color fillColor;
+  final ValueChanged<String> onChanged;
+  final bool isLast;
+  final VoidCallback onSubmitted;
+
+  @override
+  State<_InlineBlankField> createState() => _InlineBlankFieldState();
+}
+
+class _InlineBlankFieldState extends State<_InlineBlankField> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_handleTextChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_handleTextChanged);
+    super.dispose();
+  }
+
+  void _handleTextChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    final isFilled = widget.controller.text.trim().isNotEmpty;
+    // Width grows with content; min keeps it tappable, max prevents overflow.
+    final textLen = widget.controller.text.length;
+    final width = (textLen * 14.0 + 56).clamp(96.0, 220.0);
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: width, minWidth: 96),
+      child: SizedBox(
+        height: 44,
+        child: TextField(
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          onChanged: widget.onChanged,
+          textInputAction:
+              widget.isLast ? TextInputAction.done : TextInputAction.next,
+          onSubmitted: (_) => widget.onSubmitted(),
+          textAlign: TextAlign.center,
+          style: GoogleFonts.inter(
+            fontSize: AppTypography.titleSmall,
+            fontWeight: FontWeight.w700,
+            color: isFilled ? widget.accent : c.foreground,
+            height: 1.2,
+          ),
+          decoration: InputDecoration(
+            hintText: '____',
+            hintStyle: GoogleFonts.inter(
+              fontSize: AppTypography.titleSmall,
+              fontWeight: FontWeight.w600,
+              color: c.mutedForeground.withValues(alpha: 0.5),
+              height: 1.2,
+            ),
+            filled: true,
+            fillColor: isFilled
+                ? widget.accent.withValues(alpha: 0.08)
+                : widget.fillColor,
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: 0,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              borderSide: BorderSide(
+                color: widget.accent.withValues(alpha: 0.40),
+                width: 1.5,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              borderSide: BorderSide(
+                color: isFilled
+                    ? widget.accent
+                    : widget.accent.withValues(alpha: 0.40),
+                width: 1.5,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              borderSide: BorderSide(color: widget.accent, width: 2),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Hint to avoid an unused-import warning when S is only referenced indirectly.
+// ignore: unused_element
+String _typeAnswerHint(BuildContext context) => S.of(context).typeAnswerHint;

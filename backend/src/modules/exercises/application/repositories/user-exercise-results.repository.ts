@@ -188,7 +188,7 @@ export class UserExerciseResultsRepository {
   ): Promise<
     {
       exerciseId: string;
-      question: string;
+      question: string | null;
       type: string;
       totalAttempts: number;
       incorrectCount: number;
@@ -197,7 +197,7 @@ export class UserExerciseResultsRepository {
   > {
     const stats: {
       exerciseId: string;
-      exerciseQuestion: string;
+      exerciseQuestion: string | null;
       exerciseType: string;
       totalAttempts: string;
       incorrectCount: string;

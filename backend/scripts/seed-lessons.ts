@@ -191,7 +191,7 @@ async function main() {
                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
               [
                 exerciseData.exercise_type,
-                exerciseData.question,
+                exerciseData.question ?? null,
                 exerciseData.question_audio_url || null,
                 exerciseData.options
                   ? JSON.stringify(exerciseData.options)

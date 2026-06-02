@@ -55,10 +55,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Ở chợ Việt Nam người ta hay _____ giá khi mua hàng."
                   },
                   "order_index": 2,
-                  "question": "Ở chợ Việt Nam người ta hay _____ giá khi mua hàng.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -108,7 +109,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -127,10 +128,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "How much is this?"
                   },
                   "order_index": 4,
-                  "question": "How much is this?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -550,10 +552,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Chợ này rẻ _____ chợ kia."
                   },
                   "order_index": 1,
-                  "question": "Chợ này rẻ _____ chợ kia.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -621,10 +624,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I want to buy a little beef."
                   },
                   "order_index": 4,
-                  "question": "I want to buy a little beef.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -965,10 +969,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Give me a kilo of tomatoes."
                   },
                   "order_index": 2,
-                  "question": "Give me a kilo of tomatoes.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -988,10 +993,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tổng _____ bao nhiêu? (How much in total?)"
                   },
                   "order_index": 3,
-                  "question": "Tổng _____ bao nhiêu? (How much in total?)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1205,10 +1211,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Siêu thị sạch _____ chợ. (Supermarkets are cleaner than markets.)"
                   },
                   "order_index": 2,
-                  "question": "Siêu thị sạch _____ chợ. (Supermarkets are cleaner than markets.)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1226,10 +1233,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I spend about one hundred thousand dong each time."
                   },
                   "order_index": 3,
-                  "question": "I spend about one hundred thousand dong each time.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1413,7 +1421,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1457,10 +1465,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi phải _____ thuốc ba lần một ngày. (I have to ___ medicine three times a day.)"
                   },
                   "order_index": 3,
-                  "question": "Tôi phải _____ thuốc ba lần một ngày. (I have to ___ medicine three times a day.)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1479,10 +1488,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I have to go to the hospital."
                   },
                   "order_index": 4,
-                  "question": "I have to go to the hospital.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1846,10 +1856,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi _____ cảm rồi, không đi làm được."
                   },
                   "order_index": 1,
-                  "question": "Tôi _____ cảm rồi, không đi làm được.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1889,10 +1900,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I can go to the pharmacy after work."
                   },
                   "order_index": 3,
-                  "question": "I can go to the pharmacy after work.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2247,10 +2259,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Phòng khám tư nhân _____ hơn bệnh viện công nhưng đắt hơn."
                   },
                   "order_index": 3,
-                  "question": "Phòng khám tư nhân _____ hơn bệnh viện công nhưng đắt hơn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2454,7 +2467,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2495,10 +2508,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Trời _____ mưa to quá!"
                   },
                   "order_index": 3,
-                  "question": "Trời _____ mưa to quá!",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2516,10 +2530,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Winter in Hanoi is very cold."
                   },
                   "order_index": 4,
-                  "question": "Winter in Hanoi is very cold.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2903,10 +2918,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Trời _____ mưa to. Chờ tạnh rồi đi."
                   },
                   "order_index": 1,
-                  "question": "Trời _____ mưa to. Chờ tạnh rồi đi.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2972,10 +2988,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "It's sunny today."
                   },
                   "order_index": 4,
-                  "question": "It's sunny today.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3239,10 +3256,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nhớ mang _____ khi ra ngoài mùa mưa."
                   },
                   "order_index": 3,
-                  "question": "Nhớ mang _____ khi ra ngoài mùa mưa.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3441,7 +3459,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3481,10 +3499,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I rent an apartment near the university."
                   },
                   "order_index": 3,
-                  "question": "I rent an apartment near the university.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3504,10 +3523,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Căn hộ có hai phòng _____ và một bếp."
                   },
                   "order_index": 4,
-                  "question": "Căn hộ có hai phòng _____ và một bếp.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3896,10 +3916,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi _____ quận Ba Đình, Hà Nội."
                   },
                   "order_index": 1,
-                  "question": "Tôi _____ quận Ba Đình, Hà Nội.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3967,10 +3988,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "There is a garden behind the house."
                   },
                   "order_index": 4,
-                  "question": "There is a garden behind the house.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4218,7 +4240,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4257,10 +4279,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I like listening to music and reading books."
                   },
                   "order_index": 3,
-                  "question": "I like listening to music and reading books.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4280,10 +4303,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cuối tuần mình đi _____ nhé! (Let's hang out this weekend!)"
                   },
                   "order_index": 4,
-                  "question": "Cuối tuần mình đi _____ nhé! (Let's hang out this weekend!)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4657,10 +4681,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi thích nghe nhạc _____ đọc sách."
                   },
                   "order_index": 1,
-                  "question": "Tôi thích nghe nhạc _____ đọc sách.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4730,10 +4755,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I like it but I don't have time."
                   },
                   "order_index": 4,
-                  "question": "I like it but I don't have time.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4753,10 +4779,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cái áo _____ tôi thích đã bán rồi. (The shirt ___ I like has been sold.)"
                   },
                   "order_index": 5,
-                  "question": "Cái áo _____ tôi thích đã bán rồi. (The shirt ___ I like has been sold.)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -5038,10 +5065,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Môn thể thao _____ tôi thích nhất là bóng đá."
                   },
                   "order_index": 2,
-                  "question": "Môn thể thao _____ tôi thích nhất là bóng đá.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5059,10 +5087,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I like swimming and playing football with friends."
                   },
                   "order_index": 3,
-                  "question": "I like swimming and playing football with friends.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {

@@ -93,7 +93,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -113,10 +113,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền từ phương ngữ Trung: \"_____ mà trờ nay nóng rứa?\" (Sao mà hôm nay nóng vậy?)"
                   },
                   "order_index": 3,
-                  "question": "Điền từ phương ngữ Trung: \"_____ mà trờ nay nóng rứa?\" (Sao mà hôm nay nóng vậy?)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -135,10 +136,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "What is this?"
                   },
                   "order_index": 4,
-                  "question": "What is this?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -572,10 +574,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Sao hôm nay nóng vậy?"
                   },
                   "order_index": 2,
-                  "question": "Sao hôm nay nóng vậy?",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -595,10 +598,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền trợ từ phù hợp phương ngữ Bắc: \"Cháu chào cô _____!\""
                   },
                   "order_index": 3,
-                  "question": "Điền trợ từ phù hợp phương ngữ Bắc: \"Cháu chào cô _____!\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -990,7 +994,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1159,10 +1163,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Người Nam gộp hai thanh _____ và _____ vào nhau."
                   },
                   "order_index": 2,
-                  "question": "Người Nam gộp hai thanh _____ và _____ vào nhau.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1180,10 +1185,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "How would a Southerner pronounce \"trời ơi\"? Write the spelling that reflects their pronunciation."
                   },
                   "order_index": 3,
-                  "question": "How would a Southerner pronounce \"trời ơi\"? Write the spelling that reflects their pronunciation.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1393,7 +1399,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1413,10 +1419,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền tiền tố Hán Việt: \"_____ hình\" nghĩa là \"không có hình dáng\""
                   },
                   "order_index": 3,
-                  "question": "Điền tiền tố Hán Việt: \"_____ hình\" nghĩa là \"không có hình dáng\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1433,10 +1440,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "modernize"
                   },
                   "order_index": 4,
-                  "question": "modernize",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1836,10 +1844,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền hậu tố Hán Việt: \"tâm lý _____\" nghĩa là ngành nghiên cứu tâm lý"
                   },
                   "order_index": 2,
-                  "question": "Điền hậu tố Hán Việt: \"tâm lý _____\" nghĩa là ngành nghiên cứu tâm lý",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1889,7 +1898,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1907,10 +1916,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Explain: What does \"âm dương\" literally mean and what concept does it represent?"
                   },
                   "order_index": 4,
-                  "question": "Explain: What does \"âm dương\" literally mean and what concept does it represent?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2090,10 +2100,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Căn cứ Hiến pháp"
                   },
                   "order_index": 1,
-                  "question": "Căn cứ Hiến pháp",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2143,7 +2154,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2343,7 +2354,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2366,10 +2377,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Mỹ\" là dịch âm Hán Việt từ chữ 美 của tên nước _____"
                   },
                   "order_index": 3,
-                  "question": "\"Mỹ\" là dịch âm Hán Việt từ chữ 美 của tên nước _____",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2537,7 +2549,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2578,10 +2590,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hoàn thành câu lục bát nổi tiếng: \"Trăm năm trong cõi người _____\""
                   },
                   "order_index": 3,
-                  "question": "Hoàn thành câu lục bát nổi tiếng: \"Trăm năm trong cõi người _____\"",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2867,10 +2880,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "bạch mã"
                   },
                   "order_index": 2,
-                  "question": "bạch mã",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2896,10 +2910,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Trong câu cổ \"Dời non lấp biển, nghiệp nhóm nên\", _____ đã bị lược bỏ."
                   },
                   "order_index": 3,
-                  "question": "Trong câu cổ \"Dời non lấp biển, nghiệp nhóm nên\", _____ đã bị lược bỏ.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3099,10 +3114,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hoàn thành vần chân: \"Trăm năm trong cõi người ta / Chữ tài chữ mệnh khéo là ghét _____\""
                   },
                   "order_index": 3,
-                  "question": "Hoàn thành vần chân: \"Trăm năm trong cõi người ta / Chữ tài chữ mệnh khéo là ghét _____\"",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3231,10 +3247,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền từ phù hợp câu bát (chữ 6 vần với \"ta\"): \"Chữ tài chữ mệnh khéo _____ ghét nhau\""
                   },
                   "order_index": 2,
-                  "question": "Điền từ phù hợp câu bát (chữ 6 vần với \"ta\"): \"Chữ tài chữ mệnh khéo _____ ghét nhau\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3252,10 +3269,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Write a two-line lục bát couplet about nature. Lục: B B T T B B. Bát: B B T T B B T B."
                   },
                   "order_index": 3,
-                  "question": "Write a two-line lục bát couplet about nature. Lục: B B T T B B. Bát: B B T T B B T B.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3424,7 +3442,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3450,10 +3468,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hồ Xuân Hương nổi tiếng về nghệ thuật _____ trong thơ Nôm."
                   },
                   "order_index": 3,
-                  "question": "Hồ Xuân Hương nổi tiếng về nghệ thuật _____ trong thơ Nôm.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3471,10 +3490,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "He speaks very wittily"
                   },
                   "order_index": 4,
-                  "question": "He speaks very wittily",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3763,10 +3783,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Thòng lèo\" nói lái thành _____"
                   },
                   "order_index": 2,
-                  "question": "\"Thòng lèo\" nói lái thành _____",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4011,10 +4032,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Đánh trống bỏ _____\" nghĩa là nói một đằng làm một nẻo."
                   },
                   "order_index": 3,
-                  "question": "\"Đánh trống bỏ _____\" nghĩa là nói một đằng làm một nẻo.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4189,7 +4211,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4208,10 +4230,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "She passed away last year"
                   },
                   "order_index": 3,
-                  "question": "She passed away last year",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4359,7 +4382,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4400,10 +4423,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Có công mài sắt có ngày nên _____\" — tục ngữ khuyên kiên trì."
                   },
                   "order_index": 3,
-                  "question": "\"Có công mài sắt có ngày nên _____\" — tục ngữ khuyên kiên trì.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4421,10 +4445,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Lá lành đùm lá rách"
                   },
                   "order_index": 4,
-                  "question": "Lá lành đùm lá rách",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4743,7 +4768,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4763,10 +4788,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hoàn thành ca dao: \"Công cha như núi Thái Sơn / Nghĩa mẹ như nước trong _____ chảy ra\""
                   },
                   "order_index": 3,
-                  "question": "Hoàn thành ca dao: \"Công cha như núi Thái Sơn / Nghĩa mẹ như nước trong _____ chảy ra\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4784,10 +4810,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Muốn sang thì bắc cầu kiều"
                   },
                   "order_index": 4,
-                  "question": "Muốn sang thì bắc cầu kiều",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -4967,10 +4994,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "We should help those less fortunate"
                   },
                   "order_index": 2,
-                  "question": "We should help those less fortunate",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4990,10 +5018,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"_____ quả nhớ kẻ trồng cây\" — khuyên biết ơn."
                   },
                   "order_index": 3,
-                  "question": "\"_____ quả nhớ kẻ trồng cây\" — khuyên biết ơn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -5152,7 +5181,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5170,10 +5199,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Explain in Vietnamese: How are proverbs used in modern Vietnamese society?"
                   },
                   "order_index": 3,
-                  "question": "Explain in Vietnamese: How are proverbs used in modern Vietnamese society?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],

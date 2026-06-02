@@ -317,7 +317,7 @@ void main() {
       () {
         final exercise = _makeExercise(
           ExerciseType.fillBlank,
-          const FillBlankOptions(blanks: 2),
+          const FillBlankOptions(sentence: '___ ___', blanks: 2),
           const FillBlankAnswer(answers: ['a', 'b']),
         );
         expect(renderer.validateAnswer(exercise, ['hello', 'world']), true);
@@ -327,7 +327,7 @@ void main() {
     test('validateAnswer rejects wrong-length list', () {
       final exercise = _makeExercise(
         ExerciseType.fillBlank,
-        const FillBlankOptions(blanks: 2),
+        const FillBlankOptions(sentence: '___ ___', blanks: 2),
         const FillBlankAnswer(answers: ['a', 'b']),
       );
       expect(renderer.validateAnswer(exercise, ['hello']), false);
@@ -336,7 +336,7 @@ void main() {
     test('validateAnswer rejects list with empty values', () {
       final exercise = _makeExercise(
         ExerciseType.fillBlank,
-        const FillBlankOptions(blanks: 2),
+        const FillBlankOptions(sentence: '___ ___', blanks: 2),
         const FillBlankAnswer(answers: ['a', 'b']),
       );
       expect(renderer.validateAnswer(exercise, ['hello', '']), false);
@@ -345,7 +345,7 @@ void main() {
     test('validateAnswer rejects non-list', () {
       final exercise = _makeExercise(
         ExerciseType.fillBlank,
-        const FillBlankOptions(blanks: 1),
+        const FillBlankOptions(sentence: '___', blanks: 1),
         const FillBlankAnswer(answers: ['a']),
       );
       expect(renderer.validateAnswer(exercise, 'hello'), false);
@@ -470,7 +470,7 @@ void main() {
     test('validateAnswer accepts non-empty string', () {
       final exercise = _makeExercise(
         ExerciseType.translation,
-        const TranslationOptions(sourceLanguage: 'vi', targetLanguage: 'en'),
+        const TranslationOptions(sourceText: 'Hello', sourceLanguage: 'vi', targetLanguage: 'en'),
         const TranslationAnswer(translation: 'I love Vietnam'),
       );
       expect(renderer.validateAnswer(exercise, 'I love Vietnam'), true);
@@ -479,7 +479,7 @@ void main() {
     test('validateAnswer rejects empty string', () {
       final exercise = _makeExercise(
         ExerciseType.translation,
-        const TranslationOptions(sourceLanguage: 'vi', targetLanguage: 'en'),
+        const TranslationOptions(sourceText: 'Hello', sourceLanguage: 'vi', targetLanguage: 'en'),
         const TranslationAnswer(translation: 'I love Vietnam'),
       );
       expect(renderer.validateAnswer(exercise, ''), false);
@@ -488,7 +488,7 @@ void main() {
     test('validateAnswer rejects whitespace-only string', () {
       final exercise = _makeExercise(
         ExerciseType.translation,
-        const TranslationOptions(sourceLanguage: 'vi', targetLanguage: 'en'),
+        const TranslationOptions(sourceText: 'Hello', sourceLanguage: 'vi', targetLanguage: 'en'),
         const TranslationAnswer(translation: 'I love Vietnam'),
       );
       expect(renderer.validateAnswer(exercise, '   '), false);

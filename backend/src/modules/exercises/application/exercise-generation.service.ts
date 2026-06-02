@@ -42,7 +42,7 @@ const GeneratedExerciseSchema = z.object({
     'translation',
     'listening',
   ]),
-  question: z.string().min(1),
+  question: z.string().optional().nullable(),
   options: z.any().optional(),
   correctAnswer: z.any(),
   explanation: z.string().optional(),
@@ -69,14 +69,14 @@ const EXERCISE_TYPE_PROMPT_META: Record<
       '- multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}',
   },
   [ExerciseType.FILL_BLANK]: {
-    languageMix: '  - fill_blank: Vietnamese questions',
+    languageMix: '  - fill_blank: Vietnamese sentences with ___ blanks (no question field)',
     shape:
-      '- fill_blank: options={blanks:1,acceptedAnswers:[["answer1","answer2"]]}, correctAnswer={answers:["answer1"]}',
+      '- fill_blank: question=null, options={sentence:"Xin ___ ! Tôi là Nam.",blanks:1,acceptedAnswers:[["chào"]]}, correctAnswer={answers:["chào"]}',
   },
   [ExerciseType.MATCHING]: {
-    languageMix: '  - matching: Vietnamese↔English pairs',
+    languageMix: '  - matching: Vietnamese↔English pairs (no question field)',
     shape:
-      '- matching: options={pairs:[{left:"Vi",right:"En"}]}, correctAnswer={matches:[{left:"Vi",right:"En"}]}',
+      '- matching: question=null, options={pairs:[{left:"Vi",right:"En"}]}, correctAnswer={matches:[{left:"Vi",right:"En"}]}',
   },
   [ExerciseType.ORDERING]: {
     languageMix: '  - ordering: Vietnamese questions',
@@ -85,9 +85,9 @@ const EXERCISE_TYPE_PROMPT_META: Record<
   },
   [ExerciseType.TRANSLATION]: {
     languageMix:
-      '  - translation: either direction (Vietnamese→English or English→Vietnamese)',
+      '  - translation: either direction (Vietnamese→English or English→Vietnamese), no question field — source text goes in options.sourceText',
     shape:
-      '- translation: options={sourceLanguage:"vi",targetLanguage:"en",acceptedTranslations:["Hello"]}, correctAnswer={translation:"Hello"}',
+      '- translation: question=null, options={sourceText:"Good morning!",sourceLanguage:"en",targetLanguage:"vi",acceptedTranslations:["Chào buổi sáng"]}, correctAnswer={translation:"Chào buổi sáng"}',
   },
   [ExerciseType.LISTENING]: {
     languageMix:
@@ -112,7 +112,7 @@ const EXERCISE_TYPE_SCHEMA_FIELDS: Record<
     correctAnswer: ['selectedChoice'],
   },
   [ExerciseType.FILL_BLANK]: {
-    options: ['blanks', 'acceptedAnswers'],
+    options: ['sentence', 'blanks', 'acceptedAnswers'],
     correctAnswer: ['answers'],
   },
   [ExerciseType.MATCHING]: {
@@ -124,7 +124,7 @@ const EXERCISE_TYPE_SCHEMA_FIELDS: Record<
     correctAnswer: ['orderedItems'],
   },
   [ExerciseType.TRANSLATION]: {
-    options: ['sourceLanguage', 'targetLanguage', 'acceptedTranslations'],
+    options: ['sourceText', 'sourceLanguage', 'targetLanguage', 'acceptedTranslations'],
     correctAnswer: ['translation'],
   },
   [ExerciseType.LISTENING]: {
@@ -165,8 +165,9 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
           },
           question: {
             type: Type.STRING,
-            description: 'The question or instruction text',
-            nullable: false,
+            description:
+              'The question or instruction text. Omit/null for fill_blank, matching, translation — those store their text in options.sentence / options.sourceText / not used.',
+            nullable: true,
           },
           options: {
             type: Type.OBJECT,
@@ -329,7 +330,7 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
             nullable: true,
           },
         },
-        required: ['exerciseType', 'question', 'correctAnswer'],
+        required: ['exerciseType', 'correctAnswer'],
       },
     },
   },
@@ -833,7 +834,7 @@ export class ExerciseGenerationService {
 
     const lines = ['\n### Existing Exercises (DO NOT duplicate these)'];
     for (const e of existingExercises) {
-      lines.push(`- [${e.exerciseType}] ${e.question}`);
+      lines.push(`- [${e.exerciseType}] ${e.question ?? ''}`);
     }
     return lines.join('\n');
   }
@@ -848,7 +849,7 @@ export class ExerciseGenerationService {
       const ex = generated.exercises[i];
       const exercise = await this.exercisesRepository.create({
         exerciseType: ex.exerciseType as ExerciseType,
-        question: ex.question,
+        question: ex.question ?? null,
         options: ex.options as ExerciseOptions,
         correctAnswer: ex.correctAnswer as ExerciseAnswer,
         explanation: ex.explanation,

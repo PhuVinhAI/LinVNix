@@ -55,10 +55,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Xin ___ ! Tôi là Nam."
                   },
                   "order_index": 2,
-                  "question": "Xin ___ ! Tôi là Nam.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -108,7 +109,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -126,10 +127,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Good morning!"
                   },
                   "order_index": 4,
-                  "question": "Good morning!",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -786,10 +788,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi ___ sinh viên. (Điền copula)"
                   },
                   "order_index": 3,
-                  "question": "Tôi ___ sinh viên. (Điền copula)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -807,10 +810,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I don't understand."
                   },
                   "order_index": 4,
-                  "question": "I don't understand.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -851,10 +855,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi ___ hiểu. (Phủ định: I don't understand)"
                   },
                   "order_index": 6,
-                  "question": "Tôi ___ hiểu. (Phủ định: I don't understand)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1277,7 +1282,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1318,10 +1323,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Từ ___ (falling tone) có nghĩa là grandmother. (Điền từ: ba với thanh huyền)"
                   },
                   "order_index": 4,
-                  "question": "Từ ___ (falling tone) có nghĩa là grandmother. (Điền từ: ba với thanh huyền)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1521,10 +1527,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Hello, grandmother!"
                   },
                   "order_index": 3,
-                  "question": "Hello, grandmother!",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -1692,7 +1699,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1731,10 +1738,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "seven"
                   },
                   "order_index": 3,
-                  "question": "seven",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -1754,10 +1762,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "25 = hai mươi ___ (Điền từ: lăm hay năm?)"
                   },
                   "order_index": 4,
-                  "question": "25 = hai mươi ___ (Điền từ: lăm hay năm?)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2182,10 +2191,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hai ___ mèo. (Điền classifier cho động vật)"
                   },
                   "order_index": 1,
-                  "question": "Hai ___ mèo. (Điền classifier cho động vật)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2224,10 +2234,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Three books"
                   },
                   "order_index": 3,
-                  "question": "Three books",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2663,7 +2674,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2704,10 +2715,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hai thanh dễ nhầm lẫn nhất là thanh ___ và thanh ngã."
                   },
                   "order_index": 3,
-                  "question": "Hai thanh dễ nhầm lẫn nhất là thanh ___ và thanh ngã.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -2915,7 +2927,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2956,10 +2968,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "___ gái tôi học lớp năm. (younger sister)"
                   },
                   "order_index": 3,
-                  "question": "___ gái tôi học lớp năm. (younger sister)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -2977,10 +2990,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "My mother is a doctor."
                   },
                   "order_index": 4,
-                  "question": "My mother is a doctor.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3442,10 +3456,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "___ yêu mẹ. (I, as a child, love mother)"
                   },
                   "order_index": 2,
-                  "question": "___ yêu mẹ. (I, as a child, love mother)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3490,10 +3505,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Do you have older sisters?"
                   },
                   "order_index": 4,
-                  "question": "Do you have older sisters?",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3513,10 +3529,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nhà ___ tôi ở Hà Nội. (possessive: of)"
                   },
                   "order_index": 5,
-                  "question": "Nhà ___ tôi ở Hà Nội. (possessive: of)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3768,7 +3785,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3786,10 +3803,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "maternal grandmother"
                   },
                   "order_index": 3,
-                  "question": "maternal grandmother",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -3957,7 +3975,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -3996,10 +4014,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I want to eat pho."
                   },
                   "order_index": 3,
-                  "question": "I want to eat pho.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4019,10 +4038,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi ___ cà phê. (I drink coffee)"
                   },
                   "order_index": 4,
-                  "question": "Tôi ___ cà phê. (I drink coffee)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4463,10 +4483,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi ___ ăn cơm. (Past tense: I ate rice)"
                   },
                   "order_index": 1,
-                  "question": "Tôi ___ ăn cơm. (Past tense: I ate rice)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4486,10 +4507,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi ___ đi chợ. (Future: I will go to market)"
                   },
                   "order_index": 2,
-                  "question": "Tôi ___ đi chợ. (Future: I will go to market)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4509,10 +4531,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi ___ uống cà phê. (Progressive: I am drinking)"
                   },
                   "order_index": 3,
-                  "question": "Tôi ___ uống cà phê. (Progressive: I am drinking)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4530,10 +4553,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I like pho."
                   },
                   "order_index": 4,
-                  "question": "I like pho.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4906,10 +4930,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Give me a bowl of pho."
                   },
                   "order_index": 1,
-                  "question": "Give me a bowl of pho.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -4974,10 +4999,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "___ tôi một ly nước. (Give me a glass of water)"
                   },
                   "order_index": 4,
-                  "question": "___ tôi một ly nước. (Give me a glass of water)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -5277,7 +5303,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5316,10 +5342,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Turn left"
                   },
                   "order_index": 3,
-                  "question": "Turn left",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5339,10 +5366,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Đi ___. (Go straight)"
                   },
                   "order_index": 4,
-                  "question": "Đi ___. (Go straight)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5789,10 +5817,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Where is the market?"
                   },
                   "order_index": 1,
-                  "question": "Where is the market?",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5814,10 +5843,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi đi ___ Hà Nội ___ Sài Gòn. (from...to)"
                   },
                   "order_index": 2,
-                  "question": "Tôi đi ___ Hà Nội ___ Sài Gòn. (from...to)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -5882,10 +5912,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Go straight, then turn right."
                   },
                   "order_index": 5,
-                  "question": "Go straight, then turn right.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -6249,10 +6280,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Xe số ___ đi chợ. (bus number five)"
                   },
                   "order_index": 3,
-                  "question": "Xe số ___ đi chợ. (bus number five)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -6270,10 +6302,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The nearest bus station"
                   },
                   "order_index": 4,
-                  "question": "The nearest bus station",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -6543,10 +6576,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Ở chợ Việt Nam người ta hay _____ giá khi mua hàng."
                   },
                   "order_index": 2,
-                  "question": "Ở chợ Việt Nam người ta hay _____ giá khi mua hàng.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -6596,7 +6630,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -6615,10 +6649,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "How much is this?"
                   },
                   "order_index": 4,
-                  "question": "How much is this?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -7038,10 +7073,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Chợ này rẻ _____ chợ kia."
                   },
                   "order_index": 1,
-                  "question": "Chợ này rẻ _____ chợ kia.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -7109,10 +7145,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I want to buy a little beef."
                   },
                   "order_index": 4,
-                  "question": "I want to buy a little beef.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -7453,10 +7490,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Give me a kilo of tomatoes."
                   },
                   "order_index": 2,
-                  "question": "Give me a kilo of tomatoes.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -7476,10 +7514,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tổng _____ bao nhiêu? (How much in total?)"
                   },
                   "order_index": 3,
-                  "question": "Tổng _____ bao nhiêu? (How much in total?)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -7693,10 +7732,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Siêu thị sạch _____ chợ. (Supermarkets are cleaner than markets.)"
                   },
                   "order_index": 2,
-                  "question": "Siêu thị sạch _____ chợ. (Supermarkets are cleaner than markets.)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -7714,10 +7754,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I spend about one hundred thousand dong each time."
                   },
                   "order_index": 3,
-                  "question": "I spend about one hundred thousand dong each time.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -7901,7 +7942,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -7945,10 +7986,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi phải _____ thuốc ba lần một ngày. (I have to ___ medicine three times a day.)"
                   },
                   "order_index": 3,
-                  "question": "Tôi phải _____ thuốc ba lần một ngày. (I have to ___ medicine three times a day.)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -7967,10 +8009,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I have to go to the hospital."
                   },
                   "order_index": 4,
-                  "question": "I have to go to the hospital.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -8334,10 +8377,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi _____ cảm rồi, không đi làm được."
                   },
                   "order_index": 1,
-                  "question": "Tôi _____ cảm rồi, không đi làm được.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -8377,10 +8421,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I can go to the pharmacy after work."
                   },
                   "order_index": 3,
-                  "question": "I can go to the pharmacy after work.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -8735,10 +8780,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Phòng khám tư nhân _____ hơn bệnh viện công nhưng đắt hơn."
                   },
                   "order_index": 3,
-                  "question": "Phòng khám tư nhân _____ hơn bệnh viện công nhưng đắt hơn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -8942,7 +8988,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -8983,10 +9029,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Trời _____ mưa to quá!"
                   },
                   "order_index": 3,
-                  "question": "Trời _____ mưa to quá!",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -9004,10 +9051,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Winter in Hanoi is very cold."
                   },
                   "order_index": 4,
-                  "question": "Winter in Hanoi is very cold.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -9391,10 +9439,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Trời _____ mưa to. Chờ tạnh rồi đi."
                   },
                   "order_index": 1,
-                  "question": "Trời _____ mưa to. Chờ tạnh rồi đi.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -9460,10 +9509,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "It's sunny today."
                   },
                   "order_index": 4,
-                  "question": "It's sunny today.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -9727,10 +9777,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nhớ mang _____ khi ra ngoài mùa mưa."
                   },
                   "order_index": 3,
-                  "question": "Nhớ mang _____ khi ra ngoài mùa mưa.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -9929,7 +9980,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -9969,10 +10020,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I rent an apartment near the university."
                   },
                   "order_index": 3,
-                  "question": "I rent an apartment near the university.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -9992,10 +10044,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Căn hộ có hai phòng _____ và một bếp."
                   },
                   "order_index": 4,
-                  "question": "Căn hộ có hai phòng _____ và một bếp.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -10384,10 +10437,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi _____ quận Ba Đình, Hà Nội."
                   },
                   "order_index": 1,
-                  "question": "Tôi _____ quận Ba Đình, Hà Nội.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -10455,10 +10509,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "There is a garden behind the house."
                   },
                   "order_index": 4,
-                  "question": "There is a garden behind the house.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -10706,7 +10761,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -10745,10 +10800,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I like listening to music and reading books."
                   },
                   "order_index": 3,
-                  "question": "I like listening to music and reading books.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -10768,10 +10824,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cuối tuần mình đi _____ nhé! (Let's hang out this weekend!)"
                   },
                   "order_index": 4,
-                  "question": "Cuối tuần mình đi _____ nhé! (Let's hang out this weekend!)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -11145,10 +11202,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi thích nghe nhạc _____ đọc sách."
                   },
                   "order_index": 1,
-                  "question": "Tôi thích nghe nhạc _____ đọc sách.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -11218,10 +11276,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I like it but I don't have time."
                   },
                   "order_index": 4,
-                  "question": "I like it but I don't have time.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -11241,10 +11300,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cái áo _____ tôi thích đã bán rồi. (The shirt ___ I like has been sold.)"
                   },
                   "order_index": 5,
-                  "question": "Cái áo _____ tôi thích đã bán rồi. (The shirt ___ I like has been sold.)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -11526,10 +11586,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Môn thể thao _____ tôi thích nhất là bóng đá."
                   },
                   "order_index": 2,
-                  "question": "Môn thể thao _____ tôi thích nhất là bóng đá.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -11547,10 +11608,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I like swimming and playing football with friends."
                   },
                   "order_index": 3,
-                  "question": "I like swimming and playing football with friends.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -11754,10 +11816,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tôi đã _____ vào vị trí quản lý dự án."
                   },
                   "order_index": 2,
-                  "question": "Tôi đã _____ vào vị trí quản lý dự án.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -11807,7 +11870,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -11825,10 +11888,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I applied for the project manager position."
                   },
                   "order_index": 4,
-                  "question": "I applied for the project manager position.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -12328,10 +12392,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cửa hàng _____ trộm đêm qua. (bị/được)"
                   },
                   "order_index": 2,
-                  "question": "Cửa hàng _____ trộm đêm qua. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -12351,10 +12416,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Dự án mới _____ hội đồng duyệt tuần trước. (bị/được)"
                   },
                   "order_index": 3,
-                  "question": "Dự án mới _____ hội đồng duyệt tuần trước. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -12373,10 +12439,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I was fired by the company."
                   },
                   "order_index": 4,
-                  "question": "I was fired by the company.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -12742,10 +12809,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Lan _____ sếp giao thêm một dự án mới. (bị/được)"
                   },
                   "order_index": 2,
-                  "question": "Lan _____ sếp giao thêm một dự án mới. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -12763,10 +12831,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "She was required to submit the report earlier than expected."
                   },
                   "order_index": 3,
-                  "question": "She was required to submit the report earlier than expected.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -12915,10 +12984,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Đi làm _____ bị coi là thiếu tôn trọng ở Việt Nam."
                   },
                   "order_index": 2,
-                  "question": "Đi làm _____ bị coi là thiếu tôn trọng ở Việt Nam.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -12936,10 +13006,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Younger staff should call the boss sếp or anh/chị + name."
                   },
                   "order_index": 3,
-                  "question": "Younger staff should call the boss sếp or anh/chị + name.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -13151,7 +13222,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -13171,10 +13242,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Em _____ nhận học bổng toàn phần năm nay. (bị/được)"
                   },
                   "order_index": 2,
-                  "question": "Em _____ nhận học bổng toàn phần năm nay. (bị/được)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -13213,10 +13285,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I have to retake the Math exam."
                   },
                   "order_index": 4,
-                  "question": "I have to retake the Math exam.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -13620,10 +13693,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ bạn học chăm thì bạn sẽ thi đậu."
                   },
                   "order_index": 1,
-                  "question": "_____ bạn học chăm thì bạn sẽ thi đậu.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -13697,10 +13771,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "If you don't submit the assignment on time, points will be deducted."
                   },
                   "order_index": 4,
-                  "question": "If you don't submit the assignment on time, points will be deducted.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -13720,10 +13795,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Bạn phải đi ngay, _____ không thì sẽ muộn."
                   },
                   "order_index": 5,
-                  "question": "Bạn phải đi ngay, _____ không thì sẽ muộn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -14009,10 +14085,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ chúng ta được học hành tốt thì sẽ có nhiều cơ hội trong cuộc sống."
                   },
                   "order_index": 2,
-                  "question": "_____ chúng ta được học hành tốt thì sẽ có nhiều cơ hội trong cuộc sống.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -14030,10 +14107,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "If there are no scholarships, many students cannot continue studying."
                   },
                   "order_index": 3,
-                  "question": "If there are no scholarships, many students cannot continue studying.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -14201,7 +14279,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -14221,10 +14299,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Em đã _____ vé máy bay đi Đà Nẵng rồi."
                   },
                   "order_index": 2,
-                  "question": "Em đã _____ vé máy bay đi Đà Nẵng rồi.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -14263,10 +14342,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "I booked a hotel room online."
                   },
                   "order_index": 4,
-                  "question": "I booked a hotel room online.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -14631,10 +14711,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ xe rồi rẽ trái là đến khách sạn."
                   },
                   "order_index": 2,
-                  "question": "_____ xe rồi rẽ trái là đến khách sạn.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -14680,10 +14761,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "After exiting the airport, call a taxi."
                   },
                   "order_index": 4,
-                  "question": "After exiting the airport, call a taxi.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -15015,10 +15097,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cửa cổng sẽ _____ lúc hai giờ bốn mươi lăm."
                   },
                   "order_index": 3,
-                  "question": "Cửa cổng sẽ _____ lúc hai giờ bốn mươi lăm.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -15232,10 +15315,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Go straight, pass the intersection, then turn right."
                   },
                   "order_index": 3,
-                  "question": "Go straight, pass the intersection, then turn right.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -15469,7 +15553,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -15489,10 +15573,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tình yêu cần sự _____ và thấu hiểu."
                   },
                   "order_index": 2,
-                  "question": "Tình yêu cần sự _____ và thấu hiểu.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -15532,10 +15617,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "We've been dating for three years."
                   },
                   "order_index": 4,
-                  "question": "We've been dating for three years.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -15900,10 +15986,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ trời mưa, tôi vẫn đi làm."
                   },
                   "order_index": 1,
-                  "question": "_____ trời mưa, tôi vẫn đi làm.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -15970,10 +16057,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "It is trust that keeps love lasting long."
                   },
                   "order_index": 4,
-                  "question": "It is trust that keeps love lasting long.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -15993,10 +16081,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ là tình bạn mới giúp tôi vượt qua khó khăn."
                   },
                   "order_index": 5,
-                  "question": "_____ là tình bạn mới giúp tôi vượt qua khó khăn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -16279,10 +16368,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Dù cãi nhau, họ _____ yêu nhau."
                   },
                   "order_index": 2,
-                  "question": "Dù cãi nhau, họ _____ yêu nhau.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -16300,10 +16390,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "It is understanding that is the most important thing in love."
                   },
                   "order_index": 3,
-                  "question": "It is understanding that is the most important thing in love.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -16561,7 +16652,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -16581,10 +16672,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ xe ở trung tâm rất khó và đắt."
                   },
                   "order_index": 2,
-                  "question": "_____ xe ở trung tâm rất khó và đắt.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -16623,10 +16715,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Wear a helmet when riding a motorbike."
                   },
                   "order_index": 4,
-                  "question": "Wear a helmet when riding a motorbike.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -17031,10 +17124,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ đi quá nhanh! Nguy hiểm lắm."
                   },
                   "order_index": 2,
-                  "question": "_____ đi quá nhanh! Nguy hiểm lắm.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -17080,10 +17174,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Don't drink and drive!"
                   },
                   "order_index": 4,
-                  "question": "Don't drink and drive!",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -17124,10 +17219,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hãy ngồi xuống _____. (đi/rồi)"
                   },
                   "order_index": 6,
-                  "question": "Hãy ngồi xuống _____. (đi/rồi)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -17415,10 +17511,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hãy _____ mũ bảo hiểm khi đi xe máy."
                   },
                   "order_index": 2,
-                  "question": "Hãy _____ mũ bảo hiểm khi đi xe máy.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -17436,10 +17533,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Don't drink and drive, obey traffic laws."
                   },
                   "order_index": 3,
-                  "question": "Don't drink and drive, obey traffic laws.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -17611,10 +17709,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Công ty _____ 50 triệu đô la vào dự án xây dựng nhà máy mới."
                   },
                   "order_index": 2,
-                  "question": "Công ty _____ 50 triệu đô la vào dự án xây dựng nhà máy mới.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -17664,7 +17763,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -17682,10 +17781,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The company must compete to gain market share."
                   },
                   "order_index": 4,
-                  "question": "The company must compete to gain market share.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -18131,10 +18231,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nếu chính phủ _____ tăng lãi suất sớm hơn, thì lạm phát đã không tăng cao như vậy."
                   },
                   "order_index": 1,
-                  "question": "Nếu chính phủ _____ tăng lãi suất sớm hơn, thì lạm phát đã không tăng cao như vậy.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -18173,10 +18274,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Only when the bank lowers interest rates can enterprises borrow capital."
                   },
                   "order_index": 3,
-                  "question": "Only when the bank lowers interest rates can enterprises borrow capital.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -18200,10 +18302,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ vốn mạnh _____ dám đầu tư vào thị trường này."
                   },
                   "order_index": 4,
-                  "question": "_____ vốn mạnh _____ dám đầu tư vào thị trường này.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -18528,10 +18631,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Trong trường hợp lạm phát vượt _____ 5%, ngân hàng trung ương sẽ tăng lãi suất."
                   },
                   "order_index": 2,
-                  "question": "Trong trường hợp lạm phát vượt _____ 5%, ngân hàng trung ương sẽ tăng lãi suất.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -18549,10 +18653,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "If the government had provided timely support, many enterprises would not have gone bankrupt."
                   },
                   "order_index": 3,
-                  "question": "If the government had provided timely support, many enterprises would not have gone bankrupt.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -18728,10 +18833,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ chiến lược quản lý chi phí hiệu quả _____ duy trì được sức cạnh tranh."
                   },
                   "order_index": 2,
-                  "question": "_____ chiến lược quản lý chi phí hiệu quả _____ duy trì được sức cạnh tranh.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -18749,10 +18855,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "If fuel prices continue to rise, profit margins will shrink."
                   },
                   "order_index": 3,
-                  "question": "If fuel prices continue to rise, profit margins will shrink.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -18920,7 +19027,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -18961,10 +19068,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Mỗi công dân có _____ bầu cử và ứng cử theo luật định."
                   },
                   "order_index": 3,
-                  "question": "Mỗi công dân có _____ bầu cử và ứng cử theo luật định.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -18982,10 +19090,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The government issued a new policy to encourage foreign investment."
                   },
                   "order_index": 4,
-                  "question": "The government issued a new policy to encourage foreign investment.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -19364,10 +19473,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ sự tham gia của người dân _____ tạo ra sức mạnh cho cải cách."
                   },
                   "order_index": 1,
-                  "question": "_____ sự tham gia của người dân _____ tạo ra sức mạnh cho cải cách.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -19406,10 +19516,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "How could we remain silent before injustice?"
                   },
                   "order_index": 3,
-                  "question": "How could we remain silent before injustice?",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -19429,10 +19540,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ một chính sách phi lý! (nhấn mạnh xác nhận cảm xúc)"
                   },
                   "order_index": 4,
-                  "question": "_____ một chính sách phi lý! (nhấn mạnh xác nhận cảm xúc)",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -19664,10 +19776,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Although I agree that social justice is important, raising taxes isn't the only way."
                   },
                   "order_index": 1,
-                  "question": "Although I agree that social justice is important, raising taxes isn't the only way.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -19909,10 +20022,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Dân biết, dân bàn, dân làm, dân _____, dân giám sát, dân thụ hưởng."
                   },
                   "order_index": 2,
-                  "question": "Dân biết, dân bàn, dân làm, dân _____, dân giám sát, dân thụ hưởng.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -19954,7 +20068,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -20130,7 +20244,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -20150,10 +20264,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ nhân tạo đang thay đổi mọi ngành công nghiệp."
                   },
                   "order_index": 2,
-                  "question": "_____ nhân tạo đang thay đổi mọi ngành công nghiệp.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -20192,10 +20307,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The new algorithm helps increase processing speed."
                   },
                   "order_index": 4,
-                  "question": "The new algorithm helps increase processing speed.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -20564,10 +20680,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nghiên cứu _____ tại phòng thí nghiệm quốc gia cho thấy kết quả tích cực. (rút gọn mệnh đề quan hệ)"
                   },
                   "order_index": 1,
-                  "question": "Nghiên cứu _____ tại phòng thí nghiệm quốc gia cho thấy kết quả tích cực. (rút gọn mệnh đề quan hệ)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -20606,10 +20723,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "After analyzing the data, the scientists concluded that the proposed model is more effective."
                   },
                   "order_index": 3,
-                  "question": "After analyzing the data, the scientists concluded that the proposed model is more effective.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -20846,10 +20964,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Sau khi _____ độc lập tại ba bệnh viện khác, kết quả xác nhận tính khả thi."
                   },
                   "order_index": 2,
-                  "question": "Sau khi _____ độc lập tại ba bệnh viện khác, kết quả xác nhận tính khả thi.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -20867,10 +20986,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Data collected from over 10,000 patients was analyzed using a deep learning model."
                   },
                   "order_index": 3,
-                  "question": "Data collected from over 10,000 patients was analyzed using a deep learning model.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -21026,7 +21146,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -21046,10 +21166,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Truyện Kiều là _____ của Nguyễn Du."
                   },
                   "order_index": 2,
-                  "question": "Truyện Kiều là _____ của Nguyễn Du.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -21088,10 +21209,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "This work is considered a masterpiece of modern literature."
                   },
                   "order_index": 4,
-                  "question": "This work is considered a masterpiece of modern literature.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -21536,10 +21658,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Tác phẩm _____ sâu sắc _____ tinh tế. (cấu trúc song hành)"
                   },
                   "order_index": 2,
-                  "question": "Tác phẩm _____ sâu sắc _____ tinh tế. (cấu trúc song hành)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -21557,10 +21680,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The work is both profound and subtle."
                   },
                   "order_index": 3,
-                  "question": "The work is both profound and subtle.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -21580,10 +21704,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nỗ lực của anh ấy như nước đổ _____ — hoàn toàn vô tác dụng."
                   },
                   "order_index": 4,
-                  "question": "Nỗ lực của anh ấy như nước đổ _____ — hoàn toàn vô tác dụng.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -21817,10 +21942,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The work is both classical and richly folk-inspired."
                   },
                   "order_index": 2,
-                  "question": "The work is both classical and richly folk-inspired.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -21844,10 +21970,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Truyện Kiều mang âm hưởng _____ dầm _____ lâu."
                   },
                   "order_index": 3,
-                  "question": "Truyện Kiều mang âm hưởng _____ dầm _____ lâu.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -21980,10 +22107,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ quả nhớ _____ trồng cây. (lòng biết ơn)"
                   },
                   "order_index": 2,
-                  "question": "_____ quả nhớ _____ trồng cây. (lòng biết ơn)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -22025,7 +22153,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -22201,7 +22329,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -22221,10 +22349,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ không khí ở Hà Nội vượt mức cảnh báo."
                   },
                   "order_index": 2,
-                  "question": "_____ không khí ở Hà Nội vượt mức cảnh báo.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -22263,10 +22392,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Recycling waste helps reduce environmental pollution."
                   },
                   "order_index": 4,
-                  "question": "Recycling waste helps reduce environmental pollution.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -22670,10 +22800,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Việt Nam phát triển nhanh. _____, vẫn còn nhiều thách thức về môi trường."
                   },
                   "order_index": 1,
-                  "question": "Việt Nam phát triển nhanh. _____, vẫn còn nhiều thách thức về môi trường.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -22712,10 +22843,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Not only does it reduce pollution, but it also saves costs."
                   },
                   "order_index": 3,
-                  "question": "Not only does it reduce pollution, but it also saves costs.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -22735,10 +22867,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ dùng túi nilon, hãy dùng túi vải."
                   },
                   "order_index": 4,
-                  "question": "_____ dùng túi nilon, hãy dùng túi vải.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -23007,10 +23140,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ theo đuổi lợi nhuận ngắn hạn, doanh nghiệp cần tích hợp trách nhiệm xã hội."
                   },
                   "order_index": 2,
-                  "question": "_____ theo đuổi lợi nhuận ngắn hạn, doanh nghiệp cần tích hợp trách nhiệm xã hội.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -23028,10 +23162,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Therefore, sustainable development is not just a choice but a mandatory requirement."
                   },
                   "order_index": 3,
-                  "question": "Therefore, sustainable development is not just a choice but a mandatory requirement.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -23227,10 +23362,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Không _____ giúp bảo vệ môi trường _____ tiết kiệm chi phí."
                   },
                   "order_index": 3,
-                  "question": "Không _____ giúp bảo vệ môi trường _____ tiết kiệm chi phí.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -23421,10 +23557,11 @@
                       "duy vật"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Chủ nghĩa _____ cho rằng vật chất quyết định ý thức."
                   },
                   "order_index": 1,
-                  "question": "Chủ nghĩa _____ cho rằng vật chất quyết định ý thức.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -23442,10 +23579,11 @@
                       "hiện sinh"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Triết học _____ nhấn mạnh sự tồn tại cá nhân."
                   },
                   "order_index": 1,
-                  "question": "Triết học _____ nhấn mạnh sự tồn tại cá nhân.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -23503,7 +23641,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -23520,10 +23658,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Freedom of thought is a prerequisite for scientific creativity."
                   },
                   "order_index": 1,
-                  "question": "Freedom of thought is a prerequisite for scientific creativity.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -23910,10 +24049,11 @@
                       "Có thể"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ nói là, tư tưởng triết học chịu ảnh hưởng từ bối cảnh lịch sử."
                   },
                   "order_index": 1,
-                  "question": "_____ nói là, tư tưởng triết học chịu ảnh hưởng từ bối cảnh lịch sử.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -23930,10 +24070,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "It is commonly held that cognition reflects the objective world."
                   },
                   "order_index": 1,
-                  "question": "It is commonly held that cognition reflects the objective world.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -24230,10 +24371,11 @@
                       "vô sản"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Mâu thuẫn chủ yếu không phải giữa tư sản và _____, mà giữa dân tộc và đế quốc."
                   },
                   "order_index": 1,
-                  "question": "Mâu thuẫn chủ yếu không phải giữa tư sản và _____, mà giữa dân tộc và đế quốc.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -24250,10 +24392,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The essence of humaneness is to bring peace to the people."
                   },
                   "order_index": 1,
-                  "question": "The essence of humaneness is to bring peace to the people.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -24466,10 +24609,11 @@
                       "Theo"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ quan điểm duy vật biện chứng, vật chất có trước ý thức."
                   },
                   "order_index": 1,
-                  "question": "_____ quan điểm duy vật biện chứng, vật chất có trước ý thức.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -24486,10 +24630,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Furthermore, through practice, humans not only cognize but also transform the world."
                   },
                   "order_index": 1,
-                  "question": "Furthermore, through practice, humans not only cognize but also transform the world.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -24686,7 +24831,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -24704,10 +24849,11 @@
                       "lập"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Quốc hội thực hiện quyền _____ pháp."
                   },
                   "order_index": 1,
-                  "question": "Quốc hội thực hiện quyền _____ pháp.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -24745,10 +24891,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The defendant has the right to hire a defense attorney."
                   },
                   "order_index": 1,
-                  "question": "The defendant has the right to hire a defense attorney.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -25115,10 +25262,11 @@
                       "Căn cứ"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ quy định tại Điều 10 Luật Đất đai, người sử dụng đất có quyền chuyển nhượng."
                   },
                   "order_index": 1,
-                  "question": "_____ quy định tại Điều 10 Luật Đất đai, người sử dụng đất có quyền chuyển nhượng.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -25156,10 +25304,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Although regulations are clear, the actual situation is still complex."
                   },
                   "order_index": 1,
-                  "question": "Although regulations are clear, the actual situation is still complex.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -25179,10 +25328,11 @@
                       "còn"
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Cá nhân này không _____ vi phạm quy định mà _____ chống đối công vụ."
                   },
                   "order_index": 1,
-                  "question": "Cá nhân này không _____ vi phạm quy định mà _____ chống đối công vụ.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -25442,10 +25592,11 @@
                       "thẩm quyền"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Mỗi hành vi chỉ bị xử phạt một lần bởi cơ quan có _____."
                   },
                   "order_index": 1,
-                  "question": "Mỗi hành vi chỉ bị xử phạt một lần bởi cơ quan có _____.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -25462,10 +25613,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "based on the provisions of Article 15"
                   },
                   "order_index": 1,
-                  "question": "based on the provisions of Article 15",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -25641,7 +25793,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -25659,10 +25811,11 @@
                       "Chẩn đoán"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ sớm giúp nâng cao hiệu quả điều trị."
                   },
                   "order_index": 1,
-                  "question": "_____ sớm giúp nâng cao hiệu quả điều trị.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -25700,10 +25853,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Antibiotic abuse leads to drug resistance."
                   },
                   "order_index": 1,
-                  "question": "Antibiotic abuse leads to drug resistance.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -26069,10 +26223,11 @@
                       "bệnh lý"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Ung thư là _____ đặc trưng bởi tăng sinh không kiểm soát."
                   },
                   "order_index": 1,
-                  "question": "Ung thư là _____ đặc trưng bởi tăng sinh không kiểm soát.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -26138,10 +26293,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "This medication may cause side effects in some patients."
                   },
                   "order_index": 1,
-                  "question": "This medication may cause side effects in some patients.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -26337,10 +26493,11 @@
                       "lâm sàng"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nghiên cứu _____ vắc-xin đang ở giai đoạn 3."
                   },
                   "order_index": 1,
-                  "question": "Nghiên cứu _____ vắc-xin đang ở giai đoạn 3.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -26537,7 +26694,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -26555,10 +26712,11 @@
                       "độc lập"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Ngày 2/9/1945, Việt Nam tuyên bố _____."
                   },
                   "order_index": 1,
-                  "question": "Ngày 2/9/1945, Việt Nam tuyên bố _____.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -26596,10 +26754,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Peace is the eternal aspiration of the Vietnamese nation."
                   },
                   "order_index": 1,
-                  "question": "Peace is the eternal aspiration of the Vietnamese nation.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -26986,10 +27145,11 @@
                       "Tương"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ truyền rằng Lý Thường Kiệt đọc Nam quốc sơn hà trong đêm kháng chiến."
                   },
                   "order_index": 1,
-                  "question": "_____ truyền rằng Lý Thường Kiệt đọc Nam quốc sơn hà trong đêm kháng chiến.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -27006,10 +27166,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "In 938, the Southern Han was defeated at the Bach Dang River."
                   },
                   "order_index": 1,
-                  "question": "In 938, the Southern Han was defeated at the Bach Dang River.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -27303,7 +27464,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -27321,10 +27482,11 @@
                       "Bản"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "_____ sắc văn hóa cần được bảo tồn và phát huy."
                   },
                   "order_index": 1,
-                  "question": "_____ sắc văn hóa cần được bảo tồn và phát huy.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -27471,10 +27633,11 @@
                       "Lê"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Sử ký ghi từ thời Hồng Bàng đến thời _____ sơ."
                   },
                   "order_index": 1,
-                  "question": "Sử ký ghi từ thời Hồng Bàng đến thời _____ sơ.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -27491,10 +27654,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "The country was peaceful, the people joyful, commerce prosperous"
                   },
                   "order_index": 1,
-                  "question": "The country was peaceful, the people joyful, commerce prosperous",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -27670,7 +27834,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -27688,10 +27852,11 @@
                       "dân tộc"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Nguyễn Du được mệnh danh đại thi hào _____."
                   },
                   "order_index": 1,
-                  "question": "Nguyễn Du được mệnh danh đại thi hào _____.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -27729,10 +27894,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Critical realist literature exposed colonial society."
                   },
                   "order_index": 1,
-                  "question": "Critical realist literature exposed colonial society.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -28142,10 +28308,11 @@
                       "khuất nửa"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Ông ấy đã _____ — nói giảm thay 'chết'."
                   },
                   "order_index": 1,
-                  "question": "Ông ấy đã _____ — nói giảm thay 'chết'.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -28195,7 +28362,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -28212,10 +28379,11 @@
                     ],
                     "sourceLanguage": "Vietnamese",
                     "targetLanguage": "English",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Gió thu thì thầm bên tai"
                   },
                   "order_index": 1,
-                  "question": "Gió thu thì thầm bên tai",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -28477,10 +28645,11 @@
                       "nhắm mắt"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Người đã _____ nhưng hương hồn còn mãi — nói giảm."
                   },
                   "order_index": 1,
-                  "question": "Người đã _____ nhưng hương hồn còn mãi — nói giảm.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -28523,10 +28692,11 @@
                     ],
                     "sourceLanguage": "Vietnamese",
                     "targetLanguage": "English",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Áo nâu cất cao tiếng hát"
                   },
                   "order_index": 1,
-                  "question": "Áo nâu cất cao tiếng hát",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -28673,10 +28843,11 @@
                       "lục bát"
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Truyện Kiều gồm 3254 câu _____."
                   },
                   "order_index": 1,
-                  "question": "Truyện Kiều gồm 3254 câu _____.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -28734,7 +28905,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -28965,7 +29136,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -28985,10 +29156,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền từ phương ngữ Trung: \"_____ mà trờ nay nóng rứa?\" (Sao mà hôm nay nóng vậy?)"
                   },
                   "order_index": 3,
-                  "question": "Điền từ phương ngữ Trung: \"_____ mà trờ nay nóng rứa?\" (Sao mà hôm nay nóng vậy?)",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -29007,10 +29179,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "What is this?"
                   },
                   "order_index": 4,
-                  "question": "What is this?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -29444,10 +29617,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Sao hôm nay nóng vậy?"
                   },
                   "order_index": 2,
-                  "question": "Sao hôm nay nóng vậy?",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -29467,10 +29641,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền trợ từ phù hợp phương ngữ Bắc: \"Cháu chào cô _____!\""
                   },
                   "order_index": 3,
-                  "question": "Điền trợ từ phù hợp phương ngữ Bắc: \"Cháu chào cô _____!\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -29862,7 +30037,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -30031,10 +30206,11 @@
                       ]
                     ],
                     "blanks": 2,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Người Nam gộp hai thanh _____ và _____ vào nhau."
                   },
                   "order_index": 2,
-                  "question": "Người Nam gộp hai thanh _____ và _____ vào nhau.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -30052,10 +30228,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "How would a Southerner pronounce \"trời ơi\"? Write the spelling that reflects their pronunciation."
                   },
                   "order_index": 3,
-                  "question": "How would a Southerner pronounce \"trời ơi\"? Write the spelling that reflects their pronunciation.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -30265,7 +30442,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -30285,10 +30462,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền tiền tố Hán Việt: \"_____ hình\" nghĩa là \"không có hình dáng\""
                   },
                   "order_index": 3,
-                  "question": "Điền tiền tố Hán Việt: \"_____ hình\" nghĩa là \"không có hình dáng\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -30305,10 +30483,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "modernize"
                   },
                   "order_index": 4,
-                  "question": "modernize",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -30708,10 +30887,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền hậu tố Hán Việt: \"tâm lý _____\" nghĩa là ngành nghiên cứu tâm lý"
                   },
                   "order_index": 2,
-                  "question": "Điền hậu tố Hán Việt: \"tâm lý _____\" nghĩa là ngành nghiên cứu tâm lý",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -30761,7 +30941,7 @@
                     "type": "matching"
                   },
                   "order_index": 3,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -30779,10 +30959,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Explain: What does \"âm dương\" literally mean and what concept does it represent?"
                   },
                   "order_index": 4,
-                  "question": "Explain: What does \"âm dương\" literally mean and what concept does it represent?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -30962,10 +31143,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Căn cứ Hiến pháp"
                   },
                   "order_index": 1,
-                  "question": "Căn cứ Hiến pháp",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -31015,7 +31197,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -31215,7 +31397,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -31238,10 +31420,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Mỹ\" là dịch âm Hán Việt từ chữ 美 của tên nước _____"
                   },
                   "order_index": 3,
-                  "question": "\"Mỹ\" là dịch âm Hán Việt từ chữ 美 của tên nước _____",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -31409,7 +31592,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -31450,10 +31633,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hoàn thành câu lục bát nổi tiếng: \"Trăm năm trong cõi người _____\""
                   },
                   "order_index": 3,
-                  "question": "Hoàn thành câu lục bát nổi tiếng: \"Trăm năm trong cõi người _____\"",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -31739,10 +31923,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "bạch mã"
                   },
                   "order_index": 2,
-                  "question": "bạch mã",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -31768,10 +31953,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Trong câu cổ \"Dời non lấp biển, nghiệp nhóm nên\", _____ đã bị lược bỏ."
                   },
                   "order_index": 3,
-                  "question": "Trong câu cổ \"Dời non lấp biển, nghiệp nhóm nên\", _____ đã bị lược bỏ.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -31971,10 +32157,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hoàn thành vần chân: \"Trăm năm trong cõi người ta / Chữ tài chữ mệnh khéo là ghét _____\""
                   },
                   "order_index": 3,
-                  "question": "Hoàn thành vần chân: \"Trăm năm trong cõi người ta / Chữ tài chữ mệnh khéo là ghét _____\"",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -32103,10 +32290,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Điền từ phù hợp câu bát (chữ 6 vần với \"ta\"): \"Chữ tài chữ mệnh khéo _____ ghét nhau\""
                   },
                   "order_index": 2,
-                  "question": "Điền từ phù hợp câu bát (chữ 6 vần với \"ta\"): \"Chữ tài chữ mệnh khéo _____ ghét nhau\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -32124,10 +32312,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Write a two-line lục bát couplet about nature. Lục: B B T T B B. Bát: B B T T B B T B."
                   },
                   "order_index": 3,
-                  "question": "Write a two-line lục bát couplet about nature. Lục: B B T T B B. Bát: B B T T B B T B.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -32296,7 +32485,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -32322,10 +32511,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hồ Xuân Hương nổi tiếng về nghệ thuật _____ trong thơ Nôm."
                   },
                   "order_index": 3,
-                  "question": "Hồ Xuân Hương nổi tiếng về nghệ thuật _____ trong thơ Nôm.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -32343,10 +32533,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "He speaks very wittily"
                   },
                   "order_index": 4,
-                  "question": "He speaks very wittily",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -32635,10 +32826,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Thòng lèo\" nói lái thành _____"
                   },
                   "order_index": 2,
-                  "question": "\"Thòng lèo\" nói lái thành _____",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -32883,10 +33075,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Đánh trống bỏ _____\" nghĩa là nói một đằng làm một nẻo."
                   },
                   "order_index": 3,
-                  "question": "\"Đánh trống bỏ _____\" nghĩa là nói một đằng làm một nẻo.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -33061,7 +33254,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -33080,10 +33273,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "She passed away last year"
                   },
                   "order_index": 3,
-                  "question": "She passed away last year",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -33231,7 +33425,7 @@
                     "type": "matching"
                   },
                   "order_index": 1,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -33272,10 +33466,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"Có công mài sắt có ngày nên _____\" — tục ngữ khuyên kiên trì."
                   },
                   "order_index": 3,
-                  "question": "\"Có công mài sắt có ngày nên _____\" — tục ngữ khuyên kiên trì.",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -33293,10 +33488,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Lá lành đùm lá rách"
                   },
                   "order_index": 4,
-                  "question": "Lá lành đùm lá rách",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -33615,7 +33811,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -33635,10 +33831,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "Hoàn thành ca dao: \"Công cha như núi Thái Sơn / Nghĩa mẹ như nước trong _____ chảy ra\""
                   },
                   "order_index": 3,
-                  "question": "Hoàn thành ca dao: \"Công cha như núi Thái Sơn / Nghĩa mẹ như nước trong _____ chảy ra\"",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -33656,10 +33853,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Muốn sang thì bắc cầu kiều"
                   },
                   "order_index": 4,
-                  "question": "Muốn sang thì bắc cầu kiều",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -33839,10 +34037,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "We should help those less fortunate"
                   },
                   "order_index": 2,
-                  "question": "We should help those less fortunate",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -33862,10 +34061,11 @@
                       ]
                     ],
                     "blanks": 1,
-                    "type": "fill_blank"
+                    "type": "fill_blank",
+                    "sentence": "\"_____ quả nhớ kẻ trồng cây\" — khuyên biết ơn."
                   },
                   "order_index": 3,
-                  "question": "\"_____ quả nhớ kẻ trồng cây\" — khuyên biết ơn.",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],
@@ -34024,7 +34224,7 @@
                     "type": "matching"
                   },
                   "order_index": 2,
-                  "question": "",
+                  "question": null,
                   "question_audio_url": null
                 },
                 {
@@ -34042,10 +34242,11 @@
                     ],
                     "sourceLanguage": "English",
                     "targetLanguage": "Vietnamese",
-                    "type": "translation"
+                    "type": "translation",
+                    "sourceText": "Explain in Vietnamese: How are proverbs used in modern Vietnamese society?"
                   },
                   "order_index": 3,
-                  "question": "Explain in Vietnamese: How are proverbs used in modern Vietnamese society?",
+                  "question": null,
                   "question_audio_url": null
                 }
               ],

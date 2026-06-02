@@ -19,9 +19,10 @@ export class CreateExerciseDto {
   @IsEnum(ExerciseType)
   exerciseType: ExerciseType;
 
-  @ApiProperty({ example: '_____ là sinh viên.' })
+  @ApiProperty({ example: '_____ là sinh viên.', required: false })
   @IsString()
-  question: string;
+  @IsOptional()
+  question?: string;
 
   @ApiProperty({ example: '/uploads/audio/abc.mp3', required: false })
   @IsMediaUrl()

@@ -26,17 +26,8 @@ class TranslationRenderer extends ExerciseRenderer {
   }
 
   @override
-  Widget buildQuestion(Exercise exercise, BuildContext context) {
-    final c = AppTheme.colors(context);
-    return Text(
-      exercise.question,
-      style: GoogleFonts.inter(
-        fontSize: AppTypography.headlineSmall,
-        fontWeight: FontWeight.w600,
-        color: c.foreground,
-      ),
-    );
-  }
+  Widget buildQuestion(Exercise exercise, BuildContext context) =>
+      const SizedBox.shrink();
 
   @override
   Widget buildInput(
@@ -216,7 +207,7 @@ class _TranslationInputState extends State<_TranslationInput> {
               const SizedBox(height: AppSpacing.md),
               // Vietnamese text uses vnStyle, otherwise standard
               Text(
-                widget.exercise.question,
+                widget.options.sourceText,
                 style: srcLang.toLowerCase() == 'vi' ||
                         srcLang.toLowerCase() == 'vietnamese'
                     ? AppTheme.vnStyle(

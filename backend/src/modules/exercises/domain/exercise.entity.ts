@@ -23,8 +23,8 @@ export class Exercise extends BaseEntity {
   })
   exerciseType: ExerciseType;
 
-  @Column({ type: 'text' })
-  question: string;
+  @Column({ type: 'text', nullable: true })
+  question?: string | null;
 
   @Column({ name: 'question_audio_url', nullable: true })
   questionAudioUrl?: string;

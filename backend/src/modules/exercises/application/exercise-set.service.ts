@@ -26,7 +26,7 @@ export interface ResumeInfo {
 
 export interface WrongQuestion {
   exerciseId: string;
-  question: string;
+  question: string | null;
   exerciseType: string;
   correctAnswer: any;
   explanation?: string;
@@ -550,7 +550,7 @@ export class ExerciseSetService {
       if (exercise) {
         wrongQuestions.push({
           exerciseId: exercise.id,
-          question: exercise.question,
+          question: exercise.question ?? null,
           exerciseType: exercise.exerciseType,
           correctAnswer: exercise.correctAnswer,
           explanation: exercise.explanation,

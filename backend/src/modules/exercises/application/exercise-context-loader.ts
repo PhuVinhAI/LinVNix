@@ -27,7 +27,7 @@ export interface LessonContext {
   }>;
   existingExercises: Array<{
     exerciseType: string;
-    question: string;
+    question: string | null;
     correctAnswer: any;
   }>;
 }
@@ -65,7 +65,7 @@ export class ExerciseContextLoader {
 
     const existingExercises: Array<{
       exerciseType: string;
-      question: string;
+      question: string | null;
       correctAnswer: any;
     }> = [];
 
@@ -74,7 +74,7 @@ export class ExerciseContextLoader {
       existingExercises.push(
         ...exercises.map((e) => ({
           exerciseType: e.exerciseType,
-          question: e.question,
+          question: e.question ?? null,
           correctAnswer: e.correctAnswer,
         })),
       );

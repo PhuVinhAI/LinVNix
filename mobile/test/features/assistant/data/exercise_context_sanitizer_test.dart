@@ -99,6 +99,7 @@ void main() {
       final ex = _ex(
         ExerciseType.fillBlank,
         options: const FillBlankOptions(
+          sentence: 'Xin ___ ___ !',
           blanks: 2,
           acceptedAnswers: [
             ['chào', 'hello'],
@@ -153,6 +154,7 @@ void main() {
       final ex = _ex(
         ExerciseType.translation,
         options: const TranslationOptions(
+          sourceText: 'xin chào',
           sourceLanguage: 'vi',
           targetLanguage: 'en',
           acceptedTranslations: ['hello', 'hi there'],
@@ -209,6 +211,7 @@ void main() {
       final ex = _ex(
         ExerciseType.fillBlank,
         options: const FillBlankOptions(
+          sentence: 'Xin ___ ___ !',
           blanks: 2,
           acceptedAnswers: [
             ['chào', 'hello'],

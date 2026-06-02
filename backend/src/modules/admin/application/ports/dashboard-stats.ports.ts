@@ -11,7 +11,7 @@ export interface CourseStatsResult {
 
 export interface ExerciseStatsResult {
   exerciseId: string;
-  question: string;
+  question: string | null;
   type: string;
   totalAttempts: number;
   incorrectCount: number;
