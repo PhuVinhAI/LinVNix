@@ -128,5 +128,30 @@ export function useLearningAdminMutation() {
       mutationFn: (id: string) => learningAdminRepository.deleteExercise(id),
       onSuccess: invalidate,
     }),
+    reorderCourses: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderCourses(items),
+      onSuccess: invalidate,
+    }),
+    reorderModules: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderModules(items),
+      onSuccess: invalidate,
+    }),
+    reorderLessons: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderLessons(items),
+      onSuccess: invalidate,
+    }),
+    reorderExerciseSets: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderExerciseSets(items),
+      onSuccess: invalidate,
+    }),
+    reorderExercises: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderExercises(items),
+      onSuccess: invalidate,
+    }),
   }
 }

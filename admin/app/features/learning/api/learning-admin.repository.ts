@@ -114,6 +114,26 @@ export class LearningAdminRepository {
   async deleteExercise(id: string) {
     await apiClient.delete(`/admin/learning/exercises/${id}`)
   }
+
+  async reorderCourses(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/courses/reorder', { items })
+  }
+
+  async reorderModules(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/modules/reorder', { items })
+  }
+
+  async reorderLessons(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/lessons/reorder', { items })
+  }
+
+  async reorderExerciseSets(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/exercise-sets/reorder', { items })
+  }
+
+  async reorderExercises(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/exercises/reorder', { items })
+  }
 }
 
 export const learningAdminRepository = new LearningAdminRepository()

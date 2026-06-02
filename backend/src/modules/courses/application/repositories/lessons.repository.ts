@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Lesson } from '../../domain/lesson.entity';
 import { LessonType, UserLevel } from '../../../../common/enums';
+import { bulkReorder, ReorderItem } from '../../../../common/utils/bulk-reorder';
 
 export interface LessonFilterOptions {
   topic?: string;
@@ -26,6 +27,10 @@ export class LessonsRepository {
   async create(data: Partial<Lesson>): Promise<Lesson> {
     const lesson = this.repository.create(data);
     return this.repository.save(lesson);
+  }
+
+  async reorder(items: ReorderItem[]): Promise<void> {
+    await bulkReorder(this.repository, items);
   }
 
   async findByModuleId(moduleId: string): Promise<Lesson[]> {

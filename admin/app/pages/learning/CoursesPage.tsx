@@ -55,8 +55,7 @@ export function CoursesPage() {
   const { sensors, handleDragEnd } = useAdminListReorder<Course>({
     getItems: () => qc.getQueryData<Course[]>(['admin-learning', 'courses']) ?? [],
     setItems: (next) => qc.setQueryData<Course[]>(['admin-learning', 'courses'], next),
-    updateOrderIndex: (id, orderIndex) =>
-      mutations.updateCourse.mutateAsync({ id, payload: { orderIndex } }),
+    reorder: (items) => mutations.reorderCourses.mutateAsync(items),
     onError: () => toast.error('Không thể sắp xếp lại khóa học'),
   })
 

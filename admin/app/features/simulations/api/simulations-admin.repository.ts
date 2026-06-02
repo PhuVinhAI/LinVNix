@@ -67,6 +67,14 @@ export class SimulationsAdminRepository {
   async deleteCharacter(id: string) {
     await apiClient.delete(`/admin/simulations/characters/${id}`)
   }
+
+  async reorderCategories(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/simulations/categories/reorder', { items })
+  }
+
+  async reorderCharacters(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/simulations/characters/reorder', { items })
+  }
 }
 
 export const simulationsAdminRepository = new SimulationsAdminRepository()

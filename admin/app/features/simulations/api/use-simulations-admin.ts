@@ -75,5 +75,15 @@ export function useSimulationsAdminMutation() {
       mutationFn: (id: string) => simulationsAdminRepository.deleteCharacter(id),
       onSuccess: invalidate,
     }),
+    reorderCategories: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        simulationsAdminRepository.reorderCategories(items),
+      onSuccess: invalidate,
+    }),
+    reorderCharacters: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        simulationsAdminRepository.reorderCharacters(items),
+      onSuccess: invalidate,
+    }),
   }
 }

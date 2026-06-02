@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CoursesRepository } from './repositories/courses.repository';
 import { Course } from '../domain/course.entity';
 import { CacheService } from '../../../infrastructure/cache/cache.service';
+import { ReorderItem } from '../../../common/utils/bulk-reorder';
 
 @Injectable()
 export class CoursesService {
@@ -61,5 +62,10 @@ export class CoursesService {
     // Invalidate cache
     await this.cacheService.del(`courses:${id}`);
     await this.cacheService.invalidatePattern('courses:all');
+  }
+
+  async reorder(items: ReorderItem[]): Promise<void> {
+    await this.coursesRepository.reorder(items);
+    await this.cacheService.invalidatePattern('courses:*');
   }
 }

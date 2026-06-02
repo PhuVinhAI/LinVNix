@@ -22,6 +22,7 @@ import { Course } from '../domain/course.entity';
 import { Module } from '../domain/module.entity';
 import { Lesson } from '../domain/lesson.entity';
 import { ContentType, LessonType, UserLevel } from '../../../common/enums';
+import { ReorderItem } from '../../../common/utils/bulk-reorder';
 import { LessonContent } from '../../contents/domain/lesson-content.entity';
 import { DialogueData } from '../../contents/domain/dialogue-data.types';
 import { GrammarRule } from '../../grammar/domain/grammar-rule.entity';
@@ -195,6 +196,14 @@ export class CourseContentService implements CourseStatsPort {
   async deleteLesson(id: string): Promise<void> {
     await this.findLessonById(id);
     await this.lessonsRepository.delete(id);
+  }
+
+  async reorderModules(items: ReorderItem[]): Promise<void> {
+    await this.modulesRepository.reorder(items);
+  }
+
+  async reorderLessons(items: ReorderItem[]): Promise<void> {
+    await this.lessonsRepository.reorder(items);
   }
 
   async createContent(data: Partial<LessonContent>): Promise<LessonContent> {

@@ -70,8 +70,7 @@ export function ScenarioDetailPage() {
       qc.setQueryData<Scenario>(scenarioKey, (prev) =>
         prev ? { ...prev, characters: next } : prev,
       ),
-    updateOrderIndex: (id, orderIndex) =>
-      mutations.updateCharacter.mutateAsync({ id, payload: { orderIndex } }),
+    reorder: (items) => mutations.reorderCharacters.mutateAsync(items),
     onError: () => toast.error('Không thể sắp xếp lại nhân vật'),
   })
 

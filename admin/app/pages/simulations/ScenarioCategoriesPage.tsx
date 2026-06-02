@@ -46,8 +46,7 @@ export function ScenarioCategoriesPage() {
       qc.getQueryData<ScenarioCategory[]>(['admin-simulations', 'categories']) ?? [],
     setItems: (next) =>
       qc.setQueryData<ScenarioCategory[]>(['admin-simulations', 'categories'], next),
-    updateOrderIndex: (id, orderIndex) =>
-      mutations.updateCategory.mutateAsync({ id, payload: { orderIndex } }),
+    reorder: (items) => mutations.reorderCategories.mutateAsync(items),
     onError: () => toast.error('Không thể sắp xếp lại danh mục'),
   })
 

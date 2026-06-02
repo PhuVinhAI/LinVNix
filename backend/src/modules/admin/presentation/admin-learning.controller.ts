@@ -22,6 +22,7 @@ import { CreateExerciseDto } from '../../exercises/dto/create-exercise.dto';
 import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
 import { AdminLearningService } from '../application/admin-learning.service';
 import { SetPublishedDto } from '../dto/set-published.dto';
+import { ReorderDto } from '../dto/reorder.dto';
 
 @ApiTags('Admin Learning')
 @ApiBearerAuth()
@@ -34,6 +35,31 @@ export class AdminLearningController {
   @Get('courses')
   getCourses() {
     return this.adminLearningService.getCourses();
+  }
+
+  @Post('courses/reorder')
+  reorderCourses(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderCourses(dto.items);
+  }
+
+  @Post('modules/reorder')
+  reorderModules(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderModules(dto.items);
+  }
+
+  @Post('lessons/reorder')
+  reorderLessons(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderLessons(dto.items);
+  }
+
+  @Post('exercise-sets/reorder')
+  reorderExerciseSets(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderExerciseSets(dto.items);
+  }
+
+  @Post('exercises/reorder')
+  reorderExercises(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderExercises(dto.items);
   }
 
   @Post('courses')

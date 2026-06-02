@@ -55,8 +55,7 @@ export function ExerciseSetDetailPage() {
       qc.setQueryData<ExerciseSet>(setKey, (prev) =>
         prev ? { ...prev, exercises: next } : prev,
       ),
-    updateOrderIndex: (id, orderIndex) =>
-      mutations.updateExercise.mutateAsync({ id, payload: { orderIndex } }),
+    reorder: (items) => mutations.reorderExercises.mutateAsync(items),
     onError: () => toast.error('Không thể sắp xếp lại bài tập'),
   })
 

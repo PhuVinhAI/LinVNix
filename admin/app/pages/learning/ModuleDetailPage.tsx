@@ -63,8 +63,7 @@ export function ModuleDetailPage() {
       qc.setQueryData<Module>(moduleKey, (prev) =>
         prev ? { ...prev, lessons: next } : prev,
       ),
-    updateOrderIndex: (id, orderIndex) =>
-      mutations.updateLesson.mutateAsync({ id, payload: { orderIndex } }),
+    reorder: (items) => mutations.reorderLessons.mutateAsync(items),
     onError: () => toast.error('Không thể sắp xếp lại bài học'),
   })
 

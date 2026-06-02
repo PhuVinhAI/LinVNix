@@ -95,8 +95,7 @@ export function LessonDetailPage() {
       qc.setQueryData<Lesson>(lessonKey, (prev) =>
         prev ? { ...prev, exerciseSets: next } : prev,
       ),
-    updateOrderIndex: (id, orderIndex) =>
-      mutations.updateExerciseSet.mutateAsync({ id, payload: { orderIndex } }),
+    reorder: (items) => mutations.reorderExerciseSets.mutateAsync(items),
     onError: () => toast.error('Không thể sắp xếp lại bộ bài tập'),
   })
 

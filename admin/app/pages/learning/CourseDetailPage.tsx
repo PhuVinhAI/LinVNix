@@ -53,8 +53,7 @@ export function CourseDetailPage() {
       qc.setQueryData<Course>(courseKey, (prev) =>
         prev ? { ...prev, modules: next } : prev,
       ),
-    updateOrderIndex: (id, orderIndex) =>
-      mutations.updateModule.mutateAsync({ id, payload: { orderIndex } }),
+    reorder: (items) => mutations.reorderModules.mutateAsync(items),
     onError: () => toast.error('Không thể sắp xếp lại chủ đề'),
   })
 

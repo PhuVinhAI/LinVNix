@@ -16,6 +16,7 @@ import { ProgressRepository } from '../../progress/application/progress.reposito
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
 import { ModulesRepository } from '../../courses/application/repositories/modules.repository';
 import { CoursesRepository } from '../../courses/application/repositories/courses.repository';
+import { ReorderItem } from '../../../common/utils/bulk-reorder';
 
 export interface ResumeInfo {
   canResume: boolean;
@@ -283,6 +284,14 @@ export class ExerciseSetService {
     }
     await this.exercisesRepository.softDeleteBySetId(id);
     await this.exerciseSetsRepository.softDelete(id);
+  }
+
+  async reorderExerciseSets(items: ReorderItem[]): Promise<void> {
+    await this.exerciseSetsRepository.reorder(items);
+  }
+
+  async reorderExercises(items: ReorderItem[]): Promise<void> {
+    await this.exercisesRepository.reorder(items);
   }
 
   async generate(

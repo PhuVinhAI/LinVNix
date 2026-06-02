@@ -16,14 +16,14 @@ export interface ReorderItem {
 interface UseAdminListReorderOpts<T extends ReorderItem> {
   getItems: () => T[]
   setItems: (next: T[]) => void
-  updateOrderIndex: (id: string, orderIndex: number) => Promise<unknown>
+  reorder: (items: { id: string; orderIndex: number }[]) => Promise<unknown>
   onError?: (err: unknown) => void
 }
 
 export function useAdminListReorder<T extends ReorderItem>({
   getItems,
   setItems,
-  updateOrderIndex,
+  reorder,
   onError,
 }: UseAdminListReorderOpts<T>) {
   const sensors = useSensors(
@@ -49,18 +49,20 @@ export function useAdminListReorder<T extends ReorderItem>({
       setItems(reindexed)
 
       try {
-        const changed = reindexed.filter(
-          (r) => sorted.find((s) => s.id === r.id)?.orderIndex !== r.orderIndex,
-        )
-        await Promise.all(
-          changed.map((r) => updateOrderIndex(r.id, r.orderIndex)),
-        )
+        const changed = reindexed
+          .filter(
+            (r) =>
+              sorted.find((s) => s.id === r.id)?.orderIndex !== r.orderIndex,
+          )
+          .map((r) => ({ id: r.id, orderIndex: r.orderIndex }))
+        if (changed.length === 0) return
+        await reorder(changed)
       } catch (err) {
         setItems(sorted)
         onError?.(err)
       }
     },
-    [getItems, setItems, updateOrderIndex, onError],
+    [getItems, setItems, reorder, onError],
   )
 
   return { sensors, handleDragEnd }

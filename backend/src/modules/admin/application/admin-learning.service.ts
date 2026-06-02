@@ -12,6 +12,7 @@ import { CreateVocabularyDto } from '../../vocabularies/dto/create-vocabulary.dt
 import { CreateGrammarDto } from '../../grammar/dto/create-grammar.dto';
 import { CreateExerciseDto } from '../../exercises/dto/create-exercise.dto';
 import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
+import { ReorderItem } from '../../../common/utils/bulk-reorder';
 
 @Injectable()
 export class AdminLearningService {
@@ -186,6 +187,31 @@ export class AdminLearningService {
 
   async deleteExercise(id: string) {
     await this.exercisesService.delete(id);
+    return { success: true };
+  }
+
+  async reorderCourses(items: ReorderItem[]) {
+    await this.coursesService.reorder(items);
+    return { success: true };
+  }
+
+  async reorderModules(items: ReorderItem[]) {
+    await this.courseContentService.reorderModules(items);
+    return { success: true };
+  }
+
+  async reorderLessons(items: ReorderItem[]) {
+    await this.courseContentService.reorderLessons(items);
+    return { success: true };
+  }
+
+  async reorderExerciseSets(items: ReorderItem[]) {
+    await this.exerciseSetService.reorderExerciseSets(items);
+    return { success: true };
+  }
+
+  async reorderExercises(items: ReorderItem[]) {
+    await this.exerciseSetService.reorderExercises(items);
     return { success: true };
   }
 }
