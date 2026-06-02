@@ -48,6 +48,10 @@ export default defineConfig({
     },
     resolve: {
       alias: aliases,
+      dedupe: ['react', 'react-dom'],
+    },
+    optimizeDeps: {
+      include: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
     },
     plugins: [tailwindcss(), react()],
   },

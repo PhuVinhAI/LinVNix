@@ -11,7 +11,7 @@ import { ModuleDetailPage } from '../pages/learning/ModuleDetailPage'
 import { ModuleFormPage } from '../pages/learning/ModuleFormPage'
 import { LessonDetailPage } from '../pages/learning/LessonDetailPage'
 import { LessonFormPage } from '../pages/learning/LessonFormPage'
-import { LessonChildFormPage } from '../pages/learning/LessonChildFormPage'
+import { ExerciseSetFormPage } from '../pages/learning/ExerciseSetFormPage'
 import { ExerciseSetDetailPage } from '../pages/learning/ExerciseSetDetailPage'
 import { ExerciseFormPage } from '../pages/learning/ExerciseFormPage'
 import { ScenarioCategoriesPage } from '../pages/simulations/ScenarioCategoriesPage'
@@ -92,36 +92,12 @@ export const router = createBrowserRouter([
         element: <LessonDetailPage />,
       },
       {
-        path: ROUTES.CONTENT_NEW,
-        element: <LessonChildFormPage kind="contents" mode="create" />,
-      },
-      {
-        path: ROUTES.CONTENT_EDIT,
-        element: <LessonChildFormPage kind="contents" mode="edit" />,
-      },
-      {
-        path: ROUTES.VOCABULARY_NEW,
-        element: <LessonChildFormPage kind="vocabularies" mode="create" />,
-      },
-      {
-        path: ROUTES.VOCABULARY_EDIT,
-        element: <LessonChildFormPage kind="vocabularies" mode="edit" />,
-      },
-      {
-        path: ROUTES.GRAMMAR_NEW,
-        element: <LessonChildFormPage kind="grammar" mode="create" />,
-      },
-      {
-        path: ROUTES.GRAMMAR_EDIT,
-        element: <LessonChildFormPage kind="grammar" mode="edit" />,
-      },
-      {
         path: ROUTES.EXERCISE_SET_NEW,
-        element: <LessonChildFormPage kind="exercise-sets" mode="create" />,
+        element: <ExerciseSetFormPage mode="create" />,
       },
       {
         path: ROUTES.EXERCISE_SET_EDIT,
-        element: <LessonChildFormPage kind="exercise-sets" mode="edit" />,
+        element: <ExerciseSetFormPage mode="edit" />,
       },
       {
         path: ROUTES.EXERCISE_SET_DETAIL,

@@ -25,6 +25,10 @@ export default defineConfig({
       '@/lib': resolve(__dirname, 'lib'),
       '@/resources': resolve(__dirname, 'resources'),
     },
+    dedupe: ['react', 'react-dom'],
+  },
+  optimizeDeps: {
+    include: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
   },
   plugins: [tailwindcss(), react()],
   server: {

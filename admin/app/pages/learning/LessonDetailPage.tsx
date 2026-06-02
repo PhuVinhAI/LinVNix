@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { ReactNode, MouseEvent, KeyboardEvent } from 'react'
+import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import {
@@ -12,14 +12,7 @@ import {
   Clock,
   MoreVertical,
   Trash2,
-  Volume2,
-  Image as ImageIcon,
-  Video as VideoIcon,
-  MessagesSquare,
-  Type,
-  ChevronRight,
 } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Tabs, TabsContent } from '../../components/ui/tabs'
 import { AdminTabsList, AdminTabTrigger } from '../../components/admin/AdminTabs'
@@ -42,8 +35,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
+import { VocabularyEditor } from '../../components/admin/lesson-editors/VocabularyEditor'
+import { ContentEditor } from '../../components/admin/lesson-editors/ContentEditor'
+import { GrammarEditor } from '../../components/admin/lesson-editors/GrammarEditor'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
-import type { ExerciseSet, GrammarRule, LessonContent, Vocabulary } from '../../features/learning/types'
+import type { ExerciseSet } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
 const lessonTypeColors: Record<string, string> = {
@@ -66,34 +62,6 @@ const lessonTypeLabels: Record<string, string> = {
   writing: 'Viết',
   pronunciation: 'Phát âm',
   culture: 'Văn hóa',
-}
-
-const contentTypeIcons: Record<string, LucideIcon> = {
-  text: Type,
-  audio: Volume2,
-  image: ImageIcon,
-  video: VideoIcon,
-  dialogue: MessagesSquare,
-}
-
-const contentTypeLabels: Record<string, string> = {
-  text: 'Văn bản',
-  audio: 'Âm thanh',
-  image: 'Hình ảnh',
-  video: 'Video',
-  dialogue: 'Hội thoại',
-}
-
-const posLabels: Record<string, string> = {
-  noun: 'Danh từ',
-  verb: 'Động từ',
-  adjective: 'Tính từ',
-  adverb: 'Trạng từ',
-  pronoun: 'Đại từ',
-  preposition: 'Giới từ',
-  conjunction: 'Liên từ',
-  phrase: 'Cụm từ',
-  interjection: 'Thán từ',
 }
 
 type DeleteTarget = {
@@ -193,136 +161,47 @@ export function LessonDetailPage() {
             <AdminTabTrigger value="sets" icon={ClipboardList} label="Bộ bài tập" count={lesson.exerciseSets?.length ?? 0} />
           </AdminTabsList>
 
-          {/* CONTENTS — media-aware rows */}
-          <TabsContent value="contents" className="mt-4 space-y-4">
-            <SectionHeader
-              title="Nội dung bài học"
-              description="Văn bản, audio, hình ảnh và đoạn hội thoại."
-              actionHref={learningPath.contentNew(lessonId)}
-              actionLabel="Thêm nội dung"
-            />
-            {(lesson.contents?.length ?? 0) === 0 ? (
-              <EmptyState
-                icon={FileText}
-                title="Chưa có nội dung"
-                description="Thêm nội dung đầu tiên cho bài học này"
-                actionHref={learningPath.contentNew(lessonId)}
-                actionLabel="Tạo nội dung đầu tiên"
-              />
-            ) : (
-              <div className="space-y-2">
-                {(lesson.contents ?? []).map((row) => (
-                  <ContentRow
-                    key={row.id}
-                    row={row}
-                    onEdit={() => navigate(learningPath.contentEdit(lessonId, row.id))}
-                    onDelete={() =>
-                      setPendingDelete({
-                        kind: 'contents',
-                        id: row.id,
-                        label: row.vietnameseText,
-                        resource: 'nội dung',
-                      })
-                    }
-                    stop={stop}
-                  />
-                ))}
-              </div>
-            )}
+          {/* CONTENTS — inline visual editor */}
+          <TabsContent value="contents" className="mt-4">
+            <ContentEditor lessonId={lessonId} />
           </TabsContent>
 
-          {/* VOCABULARIES — flashcard grid */}
-          <TabsContent value="vocabularies" className="mt-4 space-y-4">
-            <SectionHeader
-              title="Từ vựng tiếng Việt"
-              description="Bộ từ vựng học viên cần ghi nhớ."
-              actionHref={learningPath.vocabularyNew(lessonId)}
-              actionLabel="Thêm từ vựng"
-            />
-            {(lesson.vocabularies?.length ?? 0) === 0 ? (
-              <EmptyState
-                icon={BookMarked}
-                title="Chưa có từ vựng"
-                description="Thêm từ vựng đầu tiên cho bài học này"
-                actionHref={learningPath.vocabularyNew(lessonId)}
-                actionLabel="Tạo từ vựng đầu tiên"
-              />
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {(lesson.vocabularies ?? []).map((row) => (
-                  <VocabFlashcard
-                    key={row.id}
-                    row={row}
-                    onEdit={() => navigate(learningPath.vocabularyEdit(lessonId, row.id))}
-                    onDelete={() =>
-                      setPendingDelete({
-                        kind: 'vocabularies',
-                        id: row.id,
-                        label: row.word,
-                        resource: 'từ vựng',
-                      })
-                    }
-                    stop={stop}
-                  />
-                ))}
-              </div>
-            )}
+          {/* VOCABULARIES — spreadsheet editor */}
+          <TabsContent value="vocabularies" className="mt-4">
+            <VocabularyEditor lessonId={lessonId} />
           </TabsContent>
 
-          {/* GRAMMAR — expandable cards */}
-          <TabsContent value="grammar" className="mt-4 space-y-4">
-            <SectionHeader
-              title="Quy tắc ngữ pháp"
-              description="Các điểm ngữ pháp trọng tâm của bài."
-              actionHref={learningPath.grammarNew(lessonId)}
-              actionLabel="Thêm quy tắc"
-            />
-            {(lesson.grammarRules?.length ?? 0) === 0 ? (
-              <EmptyState
-                icon={Lightbulb}
-                title="Chưa có quy tắc ngữ pháp"
-                description="Thêm điểm ngữ pháp đầu tiên cho bài học này"
-                actionHref={learningPath.grammarNew(lessonId)}
-                actionLabel="Tạo điểm ngữ pháp đầu tiên"
-              />
-            ) : (
-              <div className="space-y-3">
-                {(lesson.grammarRules ?? []).map((row) => (
-                  <GrammarCard
-                    key={row.id}
-                    row={row}
-                    onEdit={() => navigate(learningPath.grammarEdit(lessonId, row.id))}
-                    onDelete={() =>
-                      setPendingDelete({
-                        kind: 'grammar',
-                        id: row.id,
-                        label: row.title,
-                        resource: 'điểm ngữ pháp',
-                      })
-                    }
-                    stop={stop}
-                  />
-                ))}
-              </div>
-            )}
+          {/* GRAMMAR — expandable inline editor */}
+          <TabsContent value="grammar" className="mt-4">
+            <GrammarEditor lessonId={lessonId} />
           </TabsContent>
 
-          {/* SETS — clickable stat tiles */}
+          {/* SETS — clickable stat tiles (unchanged) */}
           <TabsContent value="sets" className="mt-4 space-y-4">
-            <SectionHeader
-              title="Bộ bài tập"
-              description="Mỗi bộ chứa nhiều bài tập cùng chủ đề."
-              actionHref={learningPath.exerciseSetNew(lessonId)}
-              actionLabel="Thêm bộ bài tập"
-            />
+            <div className="flex items-end justify-between gap-4 flex-wrap">
+              <div>
+                <h2 className="text-lg font-bold tracking-tight">Bộ bài tập</h2>
+                <p className="text-sm text-muted-foreground mt-0.5">Mỗi bộ chứa nhiều bài tập cùng chủ đề.</p>
+              </div>
+              <Button asChild>
+                <Link to={learningPath.exerciseSetNew(lessonId)}>
+                  <Plus className="h-4 w-4" />
+                  Thêm bộ bài tập
+                </Link>
+              </Button>
+            </div>
             {(lesson.exerciseSets?.length ?? 0) === 0 ? (
-              <EmptyState
-                icon={ClipboardList}
-                title="Chưa có bộ bài tập"
-                description="Tạo bộ bài tập đầu tiên cho bài học này"
-                actionHref={learningPath.exerciseSetNew(lessonId)}
-                actionLabel="Tạo bộ bài tập đầu tiên"
-              />
+              <div className="rounded-xl border-2 border-dashed border-border bg-muted/30 p-12 text-center">
+                <ClipboardList className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+                <h3 className="text-lg font-bold mb-1">Chưa có bộ bài tập</h3>
+                <p className="text-sm text-muted-foreground mb-4">Tạo bộ bài tập đầu tiên cho bài học này</p>
+                <Button asChild>
+                  <Link to={learningPath.exerciseSetNew(lessonId)}>
+                    <Plus className="h-4 w-4" />
+                    Tạo bộ bài tập đầu tiên
+                  </Link>
+                </Button>
+              </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {(lesson.exerciseSets ?? []).map((row) => (
@@ -388,62 +267,7 @@ export function LessonDetailPage() {
   )
 }
 
-function SectionHeader({
-  title,
-  description,
-  actionHref,
-  actionLabel,
-}: {
-  title: string
-  description: string
-  actionHref: string
-  actionLabel: string
-}) {
-  return (
-    <div className="flex items-end justify-between gap-4 flex-wrap">
-      <div>
-        <h2 className="text-lg font-bold tracking-tight">{title}</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
-      </div>
-      <Button asChild>
-        <Link to={actionHref}>
-          <Plus className="h-4 w-4" />
-          {actionLabel}
-        </Link>
-      </Button>
-    </div>
-  )
-}
-
-function EmptyState({
-  icon: Icon,
-  title,
-  description,
-  actionHref,
-  actionLabel,
-}: {
-  icon: LucideIcon
-  title: string
-  description: string
-  actionHref: string
-  actionLabel: string
-}) {
-  return (
-    <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
-      <Icon className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
-      <h3 className="text-lg font-bold mb-1">{title}</h3>
-      <p className="text-sm text-muted-foreground mb-4">{description}</p>
-      <Button asChild>
-        <Link to={actionHref}>
-          <Plus className="h-4 w-4" />
-          {actionLabel}
-        </Link>
-      </Button>
-    </div>
-  )
-}
-
-function RowMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }): ReactNode {
+function RowMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -469,227 +293,6 @@ function RowMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => voi
   )
 }
 
-// ===== CONTENT ROW =====
-function ContentRow({
-  row,
-  onEdit,
-  onDelete,
-  stop,
-}: {
-  row: LessonContent
-  onEdit: () => void
-  onDelete: () => void
-  stop: (e: MouseEvent | KeyboardEvent) => void
-}) {
-  const Icon = contentTypeIcons[row.contentType] ?? Type
-  const typeLabel = contentTypeLabels[row.contentType] ?? row.contentType
-  const hasMedia = row.audioUrl || row.imageUrl || row.videoUrl
-
-  return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={onEdit}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') onEdit()
-      }}
-      className="group rounded-lg border-2 border-border bg-card p-4 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
-    >
-      <div className="flex items-start gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-          <Icon className="h-4 w-4" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {typeLabel}
-            </span>
-            <span className="text-xs text-muted-foreground">·</span>
-            <span className="text-xs text-muted-foreground tabular-nums">#{row.orderIndex}</span>
-            {hasMedia && (
-              <>
-                <span className="text-xs text-muted-foreground">·</span>
-                <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
-                  Có media
-                </span>
-              </>
-            )}
-          </div>
-          <p className="text-base font-bold text-foreground line-clamp-2 leading-snug">
-            {row.vietnameseText}
-          </p>
-          {row.translation && (
-            <p className="text-sm text-muted-foreground line-clamp-1 mt-1 italic">{row.translation}</p>
-          )}
-        </div>
-        <div onClick={stop} onKeyDown={stop} className="shrink-0">
-          <RowMenu onEdit={onEdit} onDelete={onDelete} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ===== VOCABULARY FLASHCARD =====
-function VocabFlashcard({
-  row,
-  onEdit,
-  onDelete,
-  stop,
-}: {
-  row: Vocabulary
-  onEdit: () => void
-  onDelete: () => void
-  stop: (e: MouseEvent | KeyboardEvent) => void
-}) {
-  const posLabel = posLabels[row.partOfSpeech] ?? row.partOfSpeech
-  const difficulty = Math.min(5, Math.max(1, row.difficultyLevel || 1))
-  return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={onEdit}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') onEdit()
-      }}
-      className="group rounded-lg border-2 border-border bg-card p-4 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-            {posLabel}
-          </span>
-        </div>
-        <div onClick={stop} onKeyDown={stop}>
-          <RowMenu onEdit={onEdit} onDelete={onDelete} />
-        </div>
-      </div>
-      <p className="text-xl font-bold text-foreground leading-tight mt-2">{row.word}</p>
-      {row.phonetic && (
-        <p className="text-xs font-mono text-muted-foreground mt-0.5">/{row.phonetic.replace(/^\/|\/$/g, '')}/</p>
-      )}
-      <p className="text-sm text-muted-foreground mt-2 line-clamp-1">{row.translation}</p>
-      {row.exampleSentence && (
-        <p className="text-xs text-muted-foreground/80 mt-2 line-clamp-2 italic border-t border-border pt-2">
-          &quot;{row.exampleSentence}&quot;
-        </p>
-      )}
-      <div className="mt-3 flex items-center gap-2">
-        <span className="text-[10px] font-semibold text-muted-foreground">Độ khó:</span>
-        <div className="flex gap-0.5">
-          {[1, 2, 3, 4, 5].map((level) => (
-            <span
-              key={level}
-              className={`h-1.5 w-3 rounded-full ${
-                level <= difficulty ? 'bg-primary' : 'bg-muted'
-              }`}
-            />
-          ))}
-        </div>
-        {row.audioUrl && <Volume2 className="h-3 w-3 text-primary ml-auto" />}
-      </div>
-    </div>
-  )
-}
-
-// ===== GRAMMAR CARD =====
-function GrammarCard({
-  row,
-  onEdit,
-  onDelete,
-  stop,
-}: {
-  row: GrammarRule
-  onEdit: () => void
-  onDelete: () => void
-  stop: (e: MouseEvent | KeyboardEvent) => void
-}) {
-  const [expanded, setExpanded] = useState(false)
-  const exampleCount = Array.isArray(row.examples) ? row.examples.length : 0
-  const difficulty = Math.min(5, Math.max(1, row.difficultyLevel || 1))
-
-  return (
-    <div className="rounded-lg border-2 border-border bg-card overflow-hidden">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => setExpanded((v) => !v)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') setExpanded((v) => !v)
-        }}
-        className="flex items-start gap-3 p-4 cursor-pointer transition-colors hover:bg-muted/30 focus:outline-none focus:bg-muted/30"
-      >
-        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 transition-transform ${expanded ? 'rotate-90' : ''}`}>
-          <ChevronRight className="h-4 w-4" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-base font-bold text-foreground">{row.title}</h3>
-            {row.structure && (
-              <code className="text-xs font-mono text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded">
-                {row.structure}
-              </code>
-            )}
-          </div>
-          <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-            <span>{exampleCount} ví dụ</span>
-            <span>·</span>
-            <div className="flex items-center gap-1">
-              <span>Độ khó:</span>
-              <div className="flex gap-0.5">
-                {[1, 2, 3, 4, 5].map((level) => (
-                  <span
-                    key={level}
-                    className={`h-1.5 w-2 rounded-full ${
-                      level <= difficulty ? 'bg-blue-500' : 'bg-muted'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div onClick={stop} onKeyDown={stop} className="shrink-0">
-          <RowMenu onEdit={onEdit} onDelete={onDelete} />
-        </div>
-      </div>
-      {expanded && (
-        <div className="border-t-2 border-border bg-muted/20 p-4 space-y-3">
-          {row.explanation && (
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
-                Giải thích
-              </p>
-              <p className="text-sm text-foreground leading-relaxed">{row.explanation}</p>
-            </div>
-          )}
-          {exampleCount > 0 && (
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
-                Ví dụ
-              </p>
-              <div className="space-y-2">
-                {row.examples.slice(0, 5).map((ex, i) => (
-                  <div key={i} className="rounded-md border border-border bg-card p-2.5">
-                    <p className="text-sm font-semibold text-foreground">{ex.vi}</p>
-                    {ex.en && <p className="text-xs text-muted-foreground italic mt-0.5">{ex.en}</p>}
-                  </div>
-                ))}
-                {exampleCount > 5 && (
-                  <p className="text-xs text-muted-foreground text-center">
-                    +{exampleCount - 5} ví dụ khác
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ===== EXERCISE SET TILE =====
 function ExerciseSetTile({
   row,
   onOpen,
