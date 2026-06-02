@@ -120,6 +120,7 @@ export const ui = {
 		'footer.copyright': 'All rights reserved.',
 		'footer.madeIn': 'Made in Vietnam',
 		'footer.language': 'Language',
+		'footer.adminCta': 'Open admin dashboard',
 	},
 
 	vi: {
@@ -241,6 +242,7 @@ export const ui = {
 		'footer.copyright': 'Bảo lưu mọi quyền.',
 		'footer.madeIn': 'Sản xuất tại Việt Nam',
 		'footer.language': 'Ngôn ngữ',
+		'footer.adminCta': 'Mở trang quản trị',
 	},
 
 	de: {
@@ -361,6 +363,7 @@ export const ui = {
 		'footer.copyright': 'Alle Rechte vorbehalten.',
 		'footer.madeIn': 'Made in Vietnam',
 		'footer.language': 'Sprache',
+		'footer.adminCta': 'Admin-Dashboard öffnen',
 	},
 
 	es: {
@@ -481,6 +484,7 @@ export const ui = {
 		'footer.copyright': 'Todos los derechos reservados.',
 		'footer.madeIn': 'Hecho en Vietnam',
 		'footer.language': 'Idioma',
+		'footer.adminCta': 'Abrir panel de administración',
 	},
 
 	fr: {
@@ -601,6 +605,7 @@ export const ui = {
 		'footer.copyright': 'Tous droits réservés.',
 		'footer.madeIn': 'Fait au Vietnam',
 		'footer.language': 'Langue',
+		'footer.adminCta': 'Ouvrir le tableau de bord admin',
 	},
 
 	ja: {
@@ -721,6 +726,7 @@ export const ui = {
 		'footer.copyright': 'All rights reserved.',
 		'footer.madeIn': 'Made in Vietnam',
 		'footer.language': '言語',
+		'footer.adminCta': '管理ダッシュボードを開く',
 	},
 
 	ko: {
@@ -840,6 +846,7 @@ export const ui = {
 		'footer.copyright': '모든 권리 보유.',
 		'footer.madeIn': 'Made in Vietnam',
 		'footer.language': '언어',
+		'footer.adminCta': '관리자 대시보드 열기',
 	},
 
 	th: {
@@ -959,6 +966,7 @@ export const ui = {
 		'footer.copyright': 'สงวนลิขสิทธิ์',
 		'footer.madeIn': 'Made in Vietnam',
 		'footer.language': 'ภาษา',
+		'footer.adminCta': 'เปิดแดชบอร์ดผู้ดูแลระบบ',
 	},
 
 	zh: {
@@ -1078,6 +1086,7 @@ export const ui = {
 		'footer.copyright': '保留所有权利。',
 		'footer.madeIn': 'Made in Vietnam',
 		'footer.language': '语言',
+		'footer.adminCta': '打开管理后台',
 	},
 } as const satisfies Record<Lang, Record<string, string>>;
 

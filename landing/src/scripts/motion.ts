@@ -210,6 +210,7 @@ function initMarquees() {
 
 function initMagnetic() {
 	if (reduced) return;
+	if (window.matchMedia('(pointer: coarse)').matches) return;
 	const els = document.querySelectorAll<HTMLElement>('[data-magnet]');
 	els.forEach((el) => {
 		const strength = parseFloat(el.getAttribute('data-magnet') || '0.35');
