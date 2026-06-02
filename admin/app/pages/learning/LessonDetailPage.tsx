@@ -219,7 +219,12 @@ export function LessonDetailPage() {
           <TabsContent value="sets" className="mt-4 space-y-4">
             <div className="flex items-end justify-between gap-4 flex-wrap">
               <div>
-                <h2 className="text-lg font-bold tracking-tight">Bộ bài tập</h2>
+                <div className="flex items-baseline gap-2">
+                  <h2 className="text-lg font-bold tracking-tight">Bộ bài tập</h2>
+                  <span className="text-sm font-bold tabular-nums text-muted-foreground">
+                    {lesson.exerciseSets?.length ?? 0}
+                  </span>
+                </div>
                 <p className="text-sm text-muted-foreground mt-0.5">Mỗi bộ chứa nhiều bài tập cùng chủ đề.</p>
               </div>
               <Button asChild>
@@ -340,6 +345,16 @@ function RowMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => voi
   )
 }
 
+const EXERCISE_TYPE_META: Record<string, { label: string; dot: string; text: string }> = {
+  multiple_choice: { label: 'Trắc nghiệm', dot: 'bg-blue-500', text: 'text-blue-700 dark:text-blue-300' },
+  fill_blank: { label: 'Điền', dot: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-300' },
+  matching: { label: 'Ghép', dot: 'bg-purple-500', text: 'text-purple-700 dark:text-purple-300' },
+  ordering: { label: 'Sắp xếp', dot: 'bg-indigo-500', text: 'text-indigo-700 dark:text-indigo-300' },
+  translation: { label: 'Dịch', dot: 'bg-amber-500', text: 'text-amber-700 dark:text-amber-300' },
+  listening: { label: 'Nghe', dot: 'bg-rose-500', text: 'text-rose-700 dark:text-rose-300' },
+  speaking: { label: 'Nói', dot: 'bg-cyan-500', text: 'text-cyan-700 dark:text-cyan-300' },
+}
+
 function ExerciseSetTile({
   row,
   onOpen,
@@ -370,48 +385,66 @@ function ExerciseSetTile({
           onKeyDown={(e) => {
             if (e.key === 'Enter') onOpen()
           }}
-          className="group rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+          className="group flex flex-col gap-3 rounded-lg border-2 border-border bg-card p-4 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
         >
-          <div className="flex items-center justify-between gap-2 border-b-2 border-border bg-muted/30 px-2 py-2">
-            <div className="flex items-center gap-2 text-xs">
-              <div onClick={stop} onKeyDown={stop}>
-                <DragHandle {...listeners} {...attributes} />
-              </div>
-              <span className="font-bold tabular-nums">{exerciseCount}</span>
-              <span className="text-muted-foreground">bài tập</span>
+          <div className="flex items-start gap-3">
+            <div onClick={stop} onKeyDown={stop} className="shrink-0 mt-1">
+              <DragHandle {...listeners} {...attributes} />
             </div>
-            <div onClick={stop} onKeyDown={stop}>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <ClipboardList className="h-5 w-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-base font-bold text-foreground leading-tight line-clamp-1">
+                  {row.title}
+                </h3>
+                {row.isAIGenerated && (
+                  <span className="inline-flex items-center rounded-md bg-purple-100 dark:bg-purple-950/40 px-1.5 py-0.5 text-[10px] font-bold text-purple-700 dark:text-purple-300">
+                    AI tạo
+                  </span>
+                )}
+              </div>
+              {row.description ? (
+                <p className="text-sm text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
+                  {row.description}
+                </p>
+              ) : (
+                <p className="text-sm text-muted-foreground/60 italic mt-1">Chưa có mô tả</p>
+              )}
+            </div>
+            <div onClick={stop} onKeyDown={stop} className="shrink-0 -mr-1 -mt-1">
               <RowMenu onEdit={onEdit} onDelete={onDelete} />
             </div>
           </div>
-          <div className="p-4">
-            <h3 className="text-base font-bold text-foreground line-clamp-1">{row.title}</h3>
-            {row.description && (
-              <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{row.description}</p>
-            )}
-            {Object.keys(typeCounts).length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-border">
+
+          <div className="flex items-center justify-between gap-2 pt-3 border-t-2 border-border">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-bold tabular-nums text-foreground">
+                {exerciseCount}
+              </span>
+              <span className="text-xs text-muted-foreground font-medium">bài tập</span>
+            </div>
+            {Object.keys(typeCounts).length > 0 ? (
+              <div className="flex flex-wrap items-center gap-1 justify-end">
                 {Object.entries(typeCounts).map(([type, count]) => {
-                  const labels: Record<string, string> = {
-                    multiple_choice: 'Trắc nghiệm',
-                    fill_blank: 'Điền',
-                    matching: 'Ghép',
-                    ordering: 'Sắp xếp',
-                    translation: 'Dịch',
-                    listening: 'Nghe',
-                    speaking: 'Nói',
-                  }
+                  const meta = EXERCISE_TYPE_META[type]
                   return (
                     <span
                       key={type}
-                      className="inline-flex items-center gap-1 rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground"
+                      className="inline-flex items-center gap-1 rounded-md border-2 border-border bg-muted/40 px-1.5 py-0.5 text-[11px] font-semibold"
                     >
-                      {labels[type] ?? type}
-                      <span className="font-bold tabular-nums">{count}</span>
+                      <span className={`h-1.5 w-1.5 rounded-full ${meta?.dot ?? 'bg-muted-foreground'}`} />
+                      <span className={meta?.text ?? 'text-muted-foreground'}>
+                        {meta?.label ?? type}
+                      </span>
+                      <span className="font-bold tabular-nums text-foreground">{count}</span>
                     </span>
                   )
                 })}
               </div>
+            ) : (
+              <span className="text-xs text-muted-foreground italic">Chưa có bài tập</span>
             )}
           </div>
         </div>
