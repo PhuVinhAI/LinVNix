@@ -9,7 +9,10 @@ export const learningPath = {
   module: (moduleId: string) => generatePath(ROUTES.MODULE_DETAIL, { moduleId }),
   moduleNew: (courseId: string) => generatePath(ROUTES.MODULE_NEW, { courseId }),
   moduleEdit: (courseId: string, id: string) => generatePath(ROUTES.MODULE_EDIT, { courseId, id }),
-  lesson: (lessonId: string) => generatePath(ROUTES.LESSON_DETAIL, { lessonId }),
+  lesson: (lessonId: string, tab?: string) => {
+    const path = generatePath(ROUTES.LESSON_DETAIL, { lessonId })
+    return tab ? `${path}?tab=${tab}` : path
+  },
   lessonNew: (moduleId: string) => generatePath(ROUTES.LESSON_NEW, { moduleId }),
   lessonEdit: (moduleId: string, id: string) => generatePath(ROUTES.LESSON_EDIT, { moduleId, id }),
   exerciseSet: (setId: string) => generatePath(ROUTES.EXERCISE_SET_DETAIL, { setId }),

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
 import {
   Plus,
@@ -71,12 +71,29 @@ type DeleteTarget = {
   resource: string
 }
 
+const LESSON_TABS = ['contents', 'vocabularies', 'grammar', 'sets'] as const
+
 export function LessonDetailPage() {
   const { lessonId } = useParams()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { data: lesson, isLoading, error, refetch, isFetching } = useAdminLesson(lessonId)
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<DeleteTarget | null>(null)
+
+  const tabParam = searchParams.get('tab') ?? ''
+  const activeTab = (LESSON_TABS as readonly string[]).includes(tabParam) ? tabParam : 'contents'
+  const handleTabChange = (next: string) => {
+    setSearchParams(
+      (prev) => {
+        const params = new URLSearchParams(prev)
+        if (next === 'contents') params.delete('tab')
+        else params.set('tab', next)
+        return params
+      },
+      { replace: true },
+    )
+  }
 
   const confirmDelete = async () => {
     if (!pendingDelete) return
@@ -153,7 +170,7 @@ export function LessonDetailPage() {
           retrying={isFetching}
         />
       ) : lesson && lessonId ? (
-        <Tabs defaultValue="contents" className="space-y-4">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
           <AdminTabsList>
             <AdminTabTrigger value="contents" icon={FileText} label="Nội dung" count={lesson.contents?.length ?? 0} />
             <AdminTabTrigger value="vocabularies" icon={BookMarked} label="Từ vựng" count={lesson.vocabularies?.length ?? 0} />

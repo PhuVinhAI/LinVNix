@@ -316,7 +316,7 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
       <div className="space-y-6 flex-1">
       <Breadcrumbs
         items={[
-          { label: set?.lesson?.title ?? 'Bài học', href: set?.lessonId ? learningPath.lesson(set.lessonId) : undefined },
+          { label: set?.lesson?.title ?? 'Bài học', href: set?.lessonId ? learningPath.lesson(set.lessonId, 'sets') : undefined },
           { label: set?.title ?? 'Bộ bài tập', href: setId ? learningPath.exerciseSet(setId) : undefined },
           { label: mode === 'edit' ? 'Sửa bài tập' : 'Thêm bài tập' },
         ]}

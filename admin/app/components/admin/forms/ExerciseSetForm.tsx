@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { ClipboardList } from 'lucide-react'
+import { ClipboardList, Hash } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
@@ -37,8 +37,8 @@ export function ExerciseSetForm({
 
   return (
     <form id={id} onSubmit={submit} className="space-y-8">
-      <FormSection icon={ClipboardList} title="Bộ bài tập" description="Tập hợp các bài tập liên quan">
-        <FormField label="Tên bộ bài tập" required>
+      <FormSection icon={ClipboardList} title="Thông tin bộ bài tập" description="Tên và mô tả hiển thị với học viên">
+        <FormField label="Tên bộ bài tập" required help="Tiêu đề ngắn gọn, gợi rõ nội dung luyện tập">
           <Input
             value={values.title}
             onChange={(e) => update('title', e.target.value)}
@@ -47,16 +47,18 @@ export function ExerciseSetForm({
           />
         </FormField>
 
-        <FormField label="Mô tả">
+        <FormField label="Mô tả bộ bài tập" help="Mục tiêu và phạm vi kiến thức được rèn luyện trong bộ bài tập">
           <Textarea
             value={values.description ?? ''}
             onChange={(e) => update('description', e.target.value)}
-            placeholder="Mục tiêu và nội dung bộ bài tập"
+            placeholder="VD: Tập hợp bài tập giúp học viên thực hành các mẫu câu chào hỏi, giới thiệu bản thân trong giao tiếp hàng ngày."
             className="min-h-24"
           />
         </FormField>
+      </FormSection>
 
-        <FormField label="Thứ tự hiển thị" required>
+      <FormSection icon={Hash} title="Sắp xếp" description="Thứ tự hiển thị trong danh sách bộ bài tập của bài học">
+        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
           <OrderIndexStepper
             value={values.orderIndex}
             onChange={(v) => update('orderIndex', v)}

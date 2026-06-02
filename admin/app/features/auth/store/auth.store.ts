@@ -25,11 +25,16 @@ interface AuthState {
 // Create service instance
 const authService = new AuthService(authRepository)
 
+// Synchronously read persisted auth state so ProtectedRoute sees the
+// authenticated user on the first render after a page reload.
+const persistedUser = authService.getCurrentUser()
+const persistedAuthenticated = authService.isAuthenticated()
+
 export const useAuthStore = create<AuthState>()(
   devtools(
     (set) => ({
-      user: null,
-      isAuthenticated: false,
+      user: persistedUser,
+      isAuthenticated: persistedAuthenticated,
       isLoading: false,
       error: null,
 
