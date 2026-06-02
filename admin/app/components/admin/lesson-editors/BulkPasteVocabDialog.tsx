@@ -24,12 +24,51 @@ type ParsedItem = {
 
 const POS_VALUES = new Set(POS_OPTIONS.map((p) => p.value))
 
+// Map Vietnamese labels (and lowercase forms) → enum value
+const POS_VIET_TO_VALUE: Record<string, string> = (() => {
+  const map: Record<string, string> = {}
+  for (const opt of POS_OPTIONS) {
+    map[opt.value.toLowerCase()] = opt.value
+    map[opt.label.toLowerCase()] = opt.value
+    // unaccented form
+    map[stripAccents(opt.label).toLowerCase()] = opt.value
+  }
+  return map
+})()
+
+function stripAccents(s: string): string {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '')
+}
+
+function normalizePos(raw: string): string | undefined {
+  const k = raw.trim().toLowerCase()
+  if (!k) return undefined
+  if (POS_VALUES.has(k)) return k
+  if (POS_VIET_TO_VALUE[k]) return POS_VIET_TO_VALUE[k]
+  const stripped = stripAccents(k)
+  if (POS_VIET_TO_VALUE[stripped]) return POS_VIET_TO_VALUE[stripped]
+  return undefined
+}
+
 const HEADER_ALIASES: Record<keyof ParsedItem, string[]> = {
-  word: ['word', 'từ', 'tu', 'vietnamese', 'vi', 'tiếng việt', 'tieng viet'],
-  translation: ['translation', 'bản dịch', 'ban dich', 'meaning', 'english', 'en', 'nghĩa'],
-  partOfSpeech: ['partofspeech', 'part of speech', 'loại từ', 'loai tu', 'loại', 'loai', 'pos'],
-  phonetic: ['phonetic', 'phiên âm', 'phien am', 'pronunciation', 'ipa'],
-  exampleSentence: ['example', 'examplesentence', 'ví dụ', 'vi du', 'câu ví dụ', 'cau vi du'],
+  word: [
+    'từ tiếng việt', 'từ', 'tu tieng viet', 'tu', 'word', 'vietnamese', 'vi', 'tiếng việt', 'tieng viet',
+  ],
+  translation: [
+    'bản dịch', 'ban dich', 'nghĩa', 'nghia', 'dịch', 'dich',
+    'translation', 'meaning', 'english', 'en',
+  ],
+  partOfSpeech: [
+    'loại từ', 'loai tu', 'loại', 'loai', 'từ loại', 'tu loai',
+    'partofspeech', 'part of speech', 'pos',
+  ],
+  phonetic: [
+    'phiên âm', 'phien am', 'ipa', 'phonetic', 'pronunciation',
+  ],
+  exampleSentence: [
+    'câu ví dụ', 'cau vi du', 'ví dụ', 'vi du',
+    'example', 'examplesentence', 'example sentence',
+  ],
 }
 
 function normalizeHeader(h: unknown): string {
@@ -39,6 +78,11 @@ function normalizeHeader(h: unknown): string {
 function findField(header: string): keyof ParsedItem | null {
   for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
     if (aliases.includes(header)) return field as keyof ParsedItem
+  }
+  // Try unaccented match
+  const stripped = stripAccents(header)
+  for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
+    if (aliases.some((a) => stripAccents(a) === stripped)) return field as keyof ParsedItem
   }
   return null
 }
@@ -51,11 +95,10 @@ function parseTSV(input: string): ParsedItem[] {
   return lines.map((line) => {
     const cols = line.split(/\t|\s{2,}|\s\|\s|;/).map((c) => c.trim())
     const [word, translation, maybePos, phonetic, example] = cols
-    const pos = maybePos && POS_VALUES.has(maybePos.toLowerCase()) ? maybePos.toLowerCase() : undefined
     return {
       word: word ?? '',
       translation: translation ?? '',
-      partOfSpeech: pos,
+      partOfSpeech: maybePos ? normalizePos(maybePos) : undefined,
       phonetic: phonetic || undefined,
       exampleSentence: example || undefined,
     }
@@ -64,7 +107,6 @@ function parseTSV(input: string): ParsedItem[] {
 
 function parseSheet(rows: unknown[][]): ParsedItem[] {
   if (rows.length === 0) return []
-  // Detect header row
   const firstRow = rows[0].map(normalizeHeader)
   const hasHeader = firstRow.some((h) => findField(h) !== null)
 
@@ -77,7 +119,7 @@ function parseSheet(rows: unknown[][]): ParsedItem[] {
         if (!field) return
         const val = String(cell ?? '').trim()
         if (field === 'partOfSpeech') {
-          item.partOfSpeech = val && POS_VALUES.has(val.toLowerCase()) ? val.toLowerCase() : undefined
+          item.partOfSpeech = val ? normalizePos(val) : undefined
         } else if (val) {
           ;(item as Record<string, string>)[field] = val
         }
@@ -86,32 +128,72 @@ function parseSheet(rows: unknown[][]): ParsedItem[] {
     })
   }
 
-  // No header — assume column order [word, translation, partOfSpeech, phonetic, example]
   return rows.map((row) => {
     const cells = row.map((c) => String(c ?? '').trim())
     const [word, translation, maybePos, phonetic, example] = cells
-    const pos = maybePos && POS_VALUES.has(maybePos.toLowerCase()) ? maybePos.toLowerCase() : undefined
     return {
       word: word ?? '',
       translation: translation ?? '',
-      partOfSpeech: pos,
+      partOfSpeech: maybePos ? normalizePos(maybePos) : undefined,
       phonetic: phonetic || undefined,
       exampleSentence: example || undefined,
     }
   })
 }
 
+const TEMPLATE_EXAMPLES: Array<[string, string, string, string, string]> = [
+  ['xin chào', 'hello', 'Cụm từ', '/sin˧˧ tʃaːw˨˩/', 'Tôi xin chào bạn.'],
+  ['tạm biệt', 'goodbye', 'Cụm từ', '/taːm˨˩ biət˨˩/', 'Tạm biệt, hẹn gặp lại.'],
+  ['cảm ơn', 'thank you', 'Cụm từ', '/kaːm˧˩˧ ʔən˧˧/', 'Cảm ơn bạn rất nhiều.'],
+  ['xin lỗi', 'sorry', 'Cụm từ', '', 'Xin lỗi vì đến muộn.'],
+  ['quyển sách', 'book', 'Danh từ', '', 'Tôi đọc quyển sách mới.'],
+  ['nhà', 'house', 'Danh từ', '/ɲaː˨˩/', 'Nhà tôi ở Hà Nội.'],
+  ['người', 'person', 'Danh từ', '', 'Anh ấy là người tốt.'],
+  ['ăn', 'to eat', 'Động từ', '/an˧˧/', 'Tôi ăn cơm trưa.'],
+  ['đi', 'to go', 'Động từ', '', 'Chúng tôi đi học.'],
+  ['học', 'to study', 'Động từ', '', 'Em học tiếng Anh.'],
+  ['đẹp', 'beautiful', 'Tính từ', '/ɗɛp˨˩/', 'Cô ấy rất đẹp.'],
+  ['lớn', 'big', 'Tính từ', '', 'Ngôi nhà này lớn.'],
+  ['nhanh', 'quickly', 'Trạng từ', '', 'Anh ấy chạy nhanh.'],
+  ['tôi', 'I, me', 'Đại từ', '/toj˧˧/', 'Tôi là sinh viên.'],
+  ['trong', 'in', 'Giới từ', '', 'Sách ở trong cặp.'],
+  ['và', 'and', 'Liên từ', '', 'Tôi và bạn.'],
+  ['ôi', 'oh', 'Thán từ', '', 'Ôi, đẹp quá!'],
+]
+
 function downloadTemplate() {
-  const data = [
-    ['word', 'translation', 'partOfSpeech', 'phonetic', 'exampleSentence'],
-    ['xin chào', 'hello', 'phrase', '/sin tʃaːw/', 'Tôi xin chào bạn.'],
-    ['cảm ơn', 'thank you', 'phrase', '', ''],
-    ['quyển sách', 'book', 'noun', '', 'Tôi đọc quyển sách này.'],
-  ]
-  const ws = utils.aoa_to_sheet(data)
-  ws['!cols'] = [{ wch: 16 }, { wch: 18 }, { wch: 14 }, { wch: 16 }, { wch: 28 }]
   const wb = utils.book_new()
+
+  // Sheet 1 — Từ vựng (data)
+  const headers = ['Từ tiếng Việt', 'Bản dịch', 'Loại từ', 'Phiên âm', 'Câu ví dụ']
+  const data: unknown[][] = [headers, ...TEMPLATE_EXAMPLES]
+  const ws = utils.aoa_to_sheet(data)
+  ws['!cols'] = [{ wch: 18 }, { wch: 20 }, { wch: 14 }, { wch: 22 }, { wch: 32 }]
+  // Freeze header row
+  ws['!freeze'] = { xSplit: 0, ySplit: 1 }
   utils.book_append_sheet(wb, ws, 'Từ vựng')
+
+  // Sheet 2 — Hướng dẫn loại từ
+  const guideHeaders = ['Loại từ (tiếng Việt)', 'Mã hệ thống', 'Ví dụ']
+  const guideRows = POS_OPTIONS.map((opt) => {
+    const example = TEMPLATE_EXAMPLES.find((row) => stripAccents(row[2]).toLowerCase() === stripAccents(opt.label).toLowerCase())
+    return [opt.label, opt.value, example?.[0] ?? '']
+  })
+  const guideData: unknown[][] = [
+    ['Cột "Loại từ" trong sheet "Từ vựng" có thể nhập tiếng Việt hoặc mã hệ thống.'],
+    ['Hệ thống tự nhận diện các giá trị sau:'],
+    [],
+    guideHeaders,
+    ...guideRows,
+  ]
+  const guideWs = utils.aoa_to_sheet(guideData)
+  guideWs['!cols'] = [{ wch: 22 }, { wch: 16 }, { wch: 24 }]
+  guideWs['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 2 } },
+  ]
+  utils.book_append_sheet(wb, guideWs, 'Hướng dẫn loại từ')
+
   const buf = write(wb, { bookType: 'xlsx', type: 'array' })
   const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
   const url = URL.createObjectURL(blob)
@@ -194,11 +276,7 @@ export function BulkPasteVocabDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="sm:max-w-2xl"
-        dimBackdrop={false}
-        onInteractOutside={(e) => e.preventDefault()}
-      >
+      <DialogContent variant="drop" dimBackdrop={false} showCloseButton={false}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileSpreadsheet className="h-5 w-5 text-primary" />
@@ -210,10 +288,10 @@ export function BulkPasteVocabDialog({
         </DialogHeader>
 
         <div className="space-y-3">
-          {/* File upload + template */}
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+          {/* File upload + template (parallel tiles, same height) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-stretch">
             {fileName ? (
-              <div className="flex items-center gap-2 rounded-lg border-2 border-primary/40 bg-primary/5 px-3 py-2.5">
+              <div className="flex items-center gap-3 rounded-lg border-2 border-primary/40 bg-primary/5 px-4 py-3 h-full">
                 <FileSpreadsheet className="h-5 w-5 text-primary shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-bold truncate">{fileName}</div>
@@ -221,7 +299,7 @@ export function BulkPasteVocabDialog({
                     {parsed.length} dòng đọc được
                   </div>
                 </div>
-                <Button variant="ghost" size="icon" onClick={clearFile} className="h-8 w-8" aria-label="Bỏ file">
+                <Button variant="ghost" size="icon" onClick={clearFile} className="h-8 w-8 shrink-0" aria-label="Bỏ file">
                   <X className="h-4 w-4" />
                 </Button>
               </div>
@@ -242,21 +320,30 @@ export function BulkPasteVocabDialog({
                   const file = e.dataTransfer.files?.[0]
                   if (file) handleFile(file)
                 }}
-                className="flex items-center gap-3 rounded-lg border-2 border-dashed border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 text-left"
+                className="flex items-center gap-3 rounded-lg border-2 border-dashed border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 text-left h-full"
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
                   <Upload className="h-5 w-5 text-primary" />
                 </div>
-                <div>
-                  <div className="text-sm font-bold">Chọn file hoặc kéo thả vào đây</div>
+                <div className="min-w-0">
+                  <div className="text-sm font-bold">Chọn file hoặc kéo thả</div>
                   <div className="text-xs text-muted-foreground">Hỗ trợ .xlsx, .xls, .csv</div>
                 </div>
               </button>
             )}
-            <Button variant="outline" onClick={downloadTemplate} className="sm:w-auto">
-              <Download className="h-4 w-4" />
-              Tải mẫu Excel
-            </Button>
+            <button
+              type="button"
+              onClick={downloadTemplate}
+              className="flex items-center gap-3 rounded-lg border-2 border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 hover:bg-primary/5 text-left h-full"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
+                <Download className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-bold">Tải mẫu Excel</div>
+                <div className="text-xs text-muted-foreground">Có sẵn ví dụ + hướng dẫn</div>
+              </div>
+            </button>
           </div>
           <input
             ref={fileRef}
