@@ -3,12 +3,10 @@ import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import {
-  Plus, Pencil, Users, MoreVertical, Trash2, UserCheck,
-  Clock, Sparkles, MessageCircle, Target, Quote, User, GraduationCap,
-  Stethoscope, Car, BookOpen, Store, Plane, Shield, Sprout, Wrench,
-  UtensilsCrossed, Save, X,
+  Plus, Pencil, Users, MoreVertical, Trash2,
+  Clock, Sparkles, MessageCircle, Target, Quote,
+  Save, X, Copy, Check,
 } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Textarea } from '../../components/ui/textarea'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
@@ -49,21 +47,6 @@ const difficultyMeta: Record<string, { label: string; bg: string; color: string 
   EASY: { label: 'Dễ', bg: 'bg-emerald-100 dark:bg-emerald-950/40', color: 'text-emerald-700 dark:text-emerald-300' },
   MEDIUM: { label: 'Trung bình', bg: 'bg-amber-100 dark:bg-amber-950/40', color: 'text-amber-700 dark:text-amber-300' },
   HARD: { label: 'Khó', bg: 'bg-rose-100 dark:bg-rose-950/40', color: 'text-rose-700 dark:text-rose-300' },
-}
-
-const AVATAR_ICONS: Record<string, LucideIcon> = {
-  waiter: UtensilsCrossed,
-  teacher: GraduationCap,
-  doctor: Stethoscope,
-  driver: Car,
-  student: BookOpen,
-  shopkeeper: Store,
-  friend: User,
-  family: Users,
-  tourist: Plane,
-  police: Shield,
-  farmer: Sprout,
-  engineer: Wrench,
 }
 
 export function ScenarioDetailPage() {
@@ -264,11 +247,17 @@ export function ScenarioDetailPage() {
               <div className="divide-y-2 divide-border">
                 {/* System prompt sub-section */}
                 <div className="p-4 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-3.5 w-3.5 text-primary" />
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                      Lời nhắc hệ thống cho AI
-                    </h3>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-3.5 w-3.5 text-primary" />
+                      <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Lời nhắc hệ thống cho AI
+                      </h3>
+                    </div>
+                    <CopyButton
+                      value={editingAi ? draftSystemPrompt : scenario.systemPrompt ?? ''}
+                      label="Sao chép lời nhắc"
+                    />
                   </div>
                   {editingAi ? (
                     <SystemPromptEditor
@@ -395,7 +384,7 @@ export function ScenarioDetailPage() {
                   <h2 className="text-sm font-bold tracking-tight">Dàn nhân vật</h2>
                 </div>
                 {scenarioId && (
-                  <Button asChild size="sm" variant="ghost" className="h-7">
+                  <Button asChild size="sm">
                     <Link to={simulationPath.characterNew(scenarioId)}>
                       <Plus className="h-3.5 w-3.5" />
                       Thêm
@@ -492,6 +481,39 @@ export function ScenarioDetailPage() {
   )
 }
 
+function CopyButton({ value, label }: { value: string; label: string }) {
+  const [copied, setCopied] = useState(false)
+  const disabled = !value.trim()
+
+  const onCopy = async () => {
+    if (disabled) return
+    try {
+      await navigator.clipboard.writeText(value)
+      setCopied(true)
+      toast.success('Đã sao chép')
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      toast.error('Không thể sao chép')
+    }
+  }
+
+  return (
+    <Button
+      type="button"
+      size="sm"
+      variant="ghost"
+      onClick={onCopy}
+      disabled={disabled}
+      title={label}
+      aria-label={label}
+      className="h-7 px-2 text-[11px]"
+    >
+      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+      {copied ? 'Đã chép' : 'Sao chép'}
+    </Button>
+  )
+}
+
 function CharacterCard({
   character,
   onEdit,
@@ -503,7 +525,7 @@ function CharacterCard({
   onDelete: () => void
   stop: (e: MouseEvent | KeyboardEvent) => void
 }) {
-  const AvatarIcon = character.avatarKey ? AVATAR_ICONS[character.avatarKey] ?? User : User
+  const initial = character.name.trim().charAt(0).toUpperCase() || '?'
 
   return (
     <div
@@ -516,8 +538,8 @@ function CharacterCard({
       className="group rounded-lg border-2 border-border bg-card p-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
     >
       <div className="flex items-start gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-          <AvatarIcon className="h-5 w-5" />
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-lg font-bold">
+          {initial}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
@@ -525,8 +547,7 @@ function CharacterCard({
               <h3 className="text-sm font-bold text-foreground truncate">{character.name}</h3>
               {character.isPlayable && (
                 <span className="inline-flex items-center rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary shrink-0">
-                  <UserCheck className="h-2.5 w-2.5 mr-0.5" />
-                  Chơi
+                  Học viên chơi
                 </span>
               )}
             </div>

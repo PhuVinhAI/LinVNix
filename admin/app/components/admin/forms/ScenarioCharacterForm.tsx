@@ -1,29 +1,10 @@
 import { useState, type FormEvent } from 'react'
-import {
-  User, UserCircle2, Sparkles, Hash, Users, GraduationCap, Stethoscope,
-  Car, BookOpen, Store, Plane, Shield, Sprout, Wrench, UtensilsCrossed,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { User, UserCircle2, Sparkles, Hash } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
 import { OrderIndexStepper } from '../editors/OrderIndexStepper'
-
-const AVATAR_PRESETS: Array<{ key: string; Icon: LucideIcon; label: string }> = [
-  { key: 'waiter', Icon: UtensilsCrossed, label: 'Phục vụ' },
-  { key: 'teacher', Icon: GraduationCap, label: 'Giáo viên' },
-  { key: 'doctor', Icon: Stethoscope, label: 'Bác sĩ' },
-  { key: 'driver', Icon: Car, label: 'Tài xế' },
-  { key: 'student', Icon: BookOpen, label: 'Sinh viên' },
-  { key: 'shopkeeper', Icon: Store, label: 'Cửa hàng' },
-  { key: 'friend', Icon: User, label: 'Bạn bè' },
-  { key: 'family', Icon: Users, label: 'Gia đình' },
-  { key: 'tourist', Icon: Plane, label: 'Du khách' },
-  { key: 'police', Icon: Shield, label: 'Công an' },
-  { key: 'farmer', Icon: Sprout, label: 'Nông dân' },
-  { key: 'engineer', Icon: Wrench, label: 'Kỹ sư' },
-]
 
 export interface ScenarioCharacterFormValues {
   name: string
@@ -66,27 +47,11 @@ export function ScenarioCharacterForm({
     await onSubmit({ ...values, avatarKey: values.avatarKey || null })
   }
 
-  const activeAvatar = AVATAR_PRESETS.find((a) => a.key === values.avatarKey)
-  const ActiveIcon = activeAvatar?.Icon ?? User
-
   return (
     <form id={id} onSubmit={submit} className="space-y-8">
-      <FormSection icon={UserCircle2} title="Nhân vật">
-        {/* Live preview card */}
-        <div className="rounded-lg border-2 border-border bg-card p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <ActiveIcon className="h-6 w-6" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-base font-bold truncate">{values.name || 'Tên nhân vật'}</p>
-              <p className="text-xs text-muted-foreground truncate">{values.role || 'Vai trò'}</p>
-            </div>
-          </div>
-        </div>
-
+      <FormSection icon={UserCircle2} title="Thông tin nhân vật" description="Tên và vai trò hiển thị khi học viên chọn">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Tên nhân vật" required>
+          <FormField label="Tên nhân vật" required help="Tên hiển thị trong danh sách và đoạn hội thoại">
             <Input
               value={values.name}
               onChange={(e) => update('name', e.target.value)}
@@ -95,7 +60,7 @@ export function ScenarioCharacterForm({
             />
           </FormField>
 
-          <FormField label="Vai trò" required>
+          <FormField label="Vai trò" required help="Vai trò của nhân vật trong bối cảnh">
             <Input
               value={values.role}
               onChange={(e) => update('role', e.target.value)}
@@ -104,32 +69,9 @@ export function ScenarioCharacterForm({
             />
           </FormField>
         </div>
-
-        <FormField label="Chọn ảnh đại diện">
-          <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-            {AVATAR_PRESETS.map(({ key, Icon, label }) => {
-              const isActive = values.avatarKey === key
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => update('avatarKey', key)}
-                  className={`flex flex-col items-center gap-1.5 rounded-lg border-2 p-3 transition-colors ${
-                    isActive ? 'border-primary bg-primary/5 text-primary' : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground'
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span className={`text-[10px] font-semibold line-clamp-1 ${isActive ? 'text-foreground' : ''}`}>
-                    {label}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </FormField>
       </FormSection>
 
-      <FormSection icon={Sparkles} title="Tính cách và phong cách">
+      <FormSection icon={Sparkles} title="Tính cách và phong cách" description="Để AI nhập vai chân thực, sát với bối cảnh">
         <FormField label="Tính cách" required help="Mô tả tính cách để AI nhập vai">
           <Textarea
             value={values.personality}
@@ -151,8 +93,8 @@ export function ScenarioCharacterForm({
         </FormField>
       </FormSection>
 
-      <FormSection icon={Hash} title="Cấu hình">
-        <FormField label="Thứ tự hiển thị" required>
+      <FormSection icon={Hash} title="Cấu hình hiển thị" description="Vai trò trong phiên luyện và thứ tự trong danh sách">
+        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
           <OrderIndexStepper
             value={values.orderIndex}
             onChange={(v) => update('orderIndex', v)}
