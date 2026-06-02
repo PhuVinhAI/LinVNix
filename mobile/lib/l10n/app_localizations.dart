@@ -705,6 +705,30 @@ abstract class S {
   /// **'Xóa câu trả lời và bắt đầu lại'**
   String get clearAnswersStartOver;
 
+  /// No description provided for @clearCacheSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa ảnh đã tải, bộ nhớ đệm tạm thời và dữ liệu trong phiên'**
+  String get clearCacheSubtitle;
+
+  /// No description provided for @clearCacheSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã xóa cache ứng dụng'**
+  String get clearCacheSuccess;
+
+  /// No description provided for @clearCacheTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa cache ứng dụng'**
+  String get clearCacheTitle;
+
+  /// No description provided for @clearCacheWarningDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hành động này sẽ xóa ảnh đã tải, bộ nhớ đệm mạng và dữ liệu trong phiên. Tiến trình học và tài khoản của bạn không bị ảnh hưởng.'**
+  String get clearCacheWarningDesc;
+
   /// No description provided for @clearDataSubtitle.
   ///
   /// In vi, this message translates to:
@@ -861,6 +885,12 @@ abstract class S {
   /// **'Câu trả lời đúng'**
   String get correctAnswers;
 
+  /// No description provided for @couldNotClearCache.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể xóa cache'**
+  String get couldNotClearCache;
+
   /// No description provided for @couldNotClearData.
   ///
   /// In vi, this message translates to:
@@ -1010,6 +1040,12 @@ abstract class S {
   /// In vi, this message translates to:
   /// **'Xóa bộ'**
   String get deleteSet;
+
+  /// No description provided for @developerSection.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhà phát triển'**
+  String get developerSection;
 
   /// No description provided for @didNotReceiveCodePrompt.
   ///
@@ -1238,6 +1274,12 @@ abstract class S {
   /// In vi, this message translates to:
   /// **'Điền vào chỗ trống'**
   String get fillInTheBlank;
+
+  /// No description provided for @fillBlanksCountParam.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điền {count} chỗ trống'**
+  String fillBlanksCountParam(Object count);
 
   /// No description provided for @findVocabulary.
   ///

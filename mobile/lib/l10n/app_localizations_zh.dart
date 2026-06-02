@@ -310,6 +310,18 @@ class SZh extends S {
   String get clearAnswersStartOver => '清除答案并重新开始';
 
   @override
+  String get clearCacheSubtitle => '清除已缓存的图片、临时数据和会话内缓存';
+
+  @override
+  String get clearCacheSuccess => '已清除应用缓存';
+
+  @override
+  String get clearCacheTitle => '清除应用缓存';
+
+  @override
+  String get clearCacheWarningDesc => '此操作将清除已缓存的图片、网络缓冲和会话内数据。不会影响您的学习进度和帐户。';
+
+  @override
   String get clearDataSubtitle => '删除所有进度、书签、统计和 AI 历史记录';
 
   @override
@@ -391,6 +403,9 @@ class SZh extends S {
   String get correctAnswers => '正确答案';
 
   @override
+  String get couldNotClearCache => '无法清除缓存';
+
+  @override
   String get couldNotClearData => '无法清除数据';
 
   @override
@@ -466,6 +481,9 @@ class SZh extends S {
 
   @override
   String get deleteSet => '删除合集';
+
+  @override
+  String get developerSection => '开发者';
 
   @override
   String get didNotReceiveCodePrompt => '没有收到代码?';
@@ -590,6 +608,11 @@ class SZh extends S {
 
   @override
   String get fillInTheBlank => '填空题';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return '填写 $count 个空格';
+  }
 
   @override
   String get findVocabulary => '查找词汇';

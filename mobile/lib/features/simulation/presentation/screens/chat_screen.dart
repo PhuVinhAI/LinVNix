@@ -842,8 +842,12 @@ class _LearnerBubble extends ConsumerWidget {
                       behavior: HitTestBehavior.opaque,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: c.primary.withValues(alpha: 0.1),
+                          color: c.primary.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(AppRadius.lg),
+                          border: Border.all(
+                            color: c.primary.withValues(alpha: 0.3),
+                            width: 1,
+                          ),
                         ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.lg,

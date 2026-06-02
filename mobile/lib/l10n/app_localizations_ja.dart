@@ -312,6 +312,19 @@ class SJa extends S {
   String get clearAnswersStartOver => '回答をクリアしてやり直す';
 
   @override
+  String get clearCacheSubtitle => 'キャッシュされた画像、一時データ、セッション内キャッシュを削除します';
+
+  @override
+  String get clearCacheSuccess => 'アプリのキャッシュを削除しました';
+
+  @override
+  String get clearCacheTitle => 'アプリのキャッシュをクリア';
+
+  @override
+  String get clearCacheWarningDesc =>
+      'キャッシュ画像、ネットワークバッファ、セッションデータを削除します。学習の進捗とアカウントには影響しません。';
+
+  @override
   String get clearDataSubtitle => 'すべての進行状況、ブックマーク、統計、AI履歴を削除';
 
   @override
@@ -393,6 +406,9 @@ class SJa extends S {
   String get correctAnswers => '正解';
 
   @override
+  String get couldNotClearCache => 'キャッシュをクリアできませんでした';
+
+  @override
   String get couldNotClearData => 'データを削除できませんでした';
 
   @override
@@ -470,6 +486,9 @@ class SJa extends S {
 
   @override
   String get deleteSet => 'セットを削除';
+
+  @override
+  String get developerSection => '開発者';
 
   @override
   String get didNotReceiveCodePrompt => 'コードを受け取りませんか？';
@@ -595,6 +614,11 @@ class SJa extends S {
 
   @override
   String get fillInTheBlank => '穴埋め問題';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return '$count個の空欄を埋めてください';
+  }
 
   @override
   String get findVocabulary => '単語を見つける';

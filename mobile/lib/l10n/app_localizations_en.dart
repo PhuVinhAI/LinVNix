@@ -316,6 +316,20 @@ class SEn extends S {
   String get clearAnswersStartOver => 'Clear your answers and start over';
 
   @override
+  String get clearCacheSubtitle =>
+      'Remove cached images, temporary data and in-session caches';
+
+  @override
+  String get clearCacheSuccess => 'App cache cleared';
+
+  @override
+  String get clearCacheTitle => 'Clear app cache';
+
+  @override
+  String get clearCacheWarningDesc =>
+      'This will remove cached images, network buffers, and in-session data. Your learning progress and account are not affected.';
+
+  @override
   String get clearDataSubtitle =>
       'Delete all progress, bookmarks, stats, and AI history';
 
@@ -402,6 +416,9 @@ class SEn extends S {
   String get correctAnswers => 'Correct Answers';
 
   @override
+  String get couldNotClearCache => 'Could not clear cache';
+
+  @override
   String get couldNotClearData => 'Could not clear data';
 
   @override
@@ -481,6 +498,9 @@ class SEn extends S {
 
   @override
   String get deleteSet => 'Delete set';
+
+  @override
+  String get developerSection => 'Developer';
 
   @override
   String get didNotReceiveCodePrompt => 'Didn\'t receive a code?';
@@ -607,6 +627,11 @@ class SEn extends S {
 
   @override
   String get fillInTheBlank => 'Fill in the Blank';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return 'Fill in $count blanks';
+  }
 
   @override
   String get findVocabulary => 'Find vocabulary';

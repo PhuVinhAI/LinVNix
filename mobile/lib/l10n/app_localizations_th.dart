@@ -315,6 +315,20 @@ class STh extends S {
   String get clearAnswersStartOver => 'ล้างคำตอบและเริ่มใหม่';
 
   @override
+  String get clearCacheSubtitle =>
+      'ลบรูปภาพแคช ข้อมูลชั่วคราว และแคชภายในเซสชัน';
+
+  @override
+  String get clearCacheSuccess => 'ล้างแคชแอปแล้ว';
+
+  @override
+  String get clearCacheTitle => 'ล้างแคชแอป';
+
+  @override
+  String get clearCacheWarningDesc =>
+      'การกระทำนี้จะลบรูปภาพแคช บัฟเฟอร์เครือข่าย และข้อมูลในเซสชัน ความคืบหน้าการเรียนและบัญชีของคุณจะไม่ได้รับผลกระทบ';
+
+  @override
   String get clearDataSubtitle =>
       'ลบความคืบหน้า ที่คั่นหน้า สถิติ และประวัติ AI';
 
@@ -400,6 +414,9 @@ class STh extends S {
   String get correctAnswers => 'คำตอบที่ถูกต้อง';
 
   @override
+  String get couldNotClearCache => 'ไม่สามารถล้างแคชได้';
+
+  @override
   String get couldNotClearData => 'ไม่สามารถล้างข้อมูลได้';
 
   @override
@@ -479,6 +496,9 @@ class STh extends S {
 
   @override
   String get deleteSet => 'ลบชุด';
+
+  @override
+  String get developerSection => 'นักพัฒนา';
 
   @override
   String get didNotReceiveCodePrompt => 'ไม่ได้รับรหัส?';
@@ -605,6 +625,11 @@ class STh extends S {
 
   @override
   String get fillInTheBlank => 'เติมคำในช่องว่าง';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return 'เติมคำในช่องว่าง $count ช่อง';
+  }
 
   @override
   String get findVocabulary => 'ค้นหาคำศัพท์';

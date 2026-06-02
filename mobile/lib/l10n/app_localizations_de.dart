@@ -319,6 +319,20 @@ class SDe extends S {
   String get clearAnswersStartOver => 'Antworten löschen und neu starten';
 
   @override
+  String get clearCacheSubtitle =>
+      'Zwischengespeicherte Bilder, temporäre Daten und Sitzungs-Caches entfernen';
+
+  @override
+  String get clearCacheSuccess => 'App-Cache geleert';
+
+  @override
+  String get clearCacheTitle => 'App-Cache leeren';
+
+  @override
+  String get clearCacheWarningDesc =>
+      'Dies entfernt zwischengespeicherte Bilder, Netzwerkpuffer und Sitzungsdaten. Ihr Lernfortschritt und Konto sind nicht betroffen.';
+
+  @override
   String get clearDataSubtitle =>
       'Löschen Sie alle Fortschritte, Lesezeichen, Statistiken und KI-Verlauf';
 
@@ -406,6 +420,9 @@ class SDe extends S {
   String get correctAnswers => 'Richtige Antworten';
 
   @override
+  String get couldNotClearCache => 'Cache konnte nicht geleert werden';
+
+  @override
   String get couldNotClearData => 'Daten konnten nicht gelöscht werden';
 
   @override
@@ -487,6 +504,9 @@ class SDe extends S {
 
   @override
   String get deleteSet => 'Set löschen';
+
+  @override
+  String get developerSection => 'Entwickler';
 
   @override
   String get didNotReceiveCodePrompt => 'Sie haben den Code nicht erhalten?';
@@ -616,6 +636,11 @@ class SDe extends S {
 
   @override
   String get fillInTheBlank => 'Ausfüllen';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return '$count Lücken ausfüllen';
+  }
 
   @override
   String get findVocabulary => 'Vokabeln finden';

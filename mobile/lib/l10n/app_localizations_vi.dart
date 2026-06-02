@@ -317,6 +317,20 @@ class SVi extends S {
   String get clearAnswersStartOver => 'Xóa câu trả lời và bắt đầu lại';
 
   @override
+  String get clearCacheSubtitle =>
+      'Xóa ảnh đã tải, bộ nhớ đệm tạm thời và dữ liệu trong phiên';
+
+  @override
+  String get clearCacheSuccess => 'Đã xóa cache ứng dụng';
+
+  @override
+  String get clearCacheTitle => 'Xóa cache ứng dụng';
+
+  @override
+  String get clearCacheWarningDesc =>
+      'Hành động này sẽ xóa ảnh đã tải, bộ nhớ đệm mạng và dữ liệu trong phiên. Tiến trình học và tài khoản của bạn không bị ảnh hưởng.';
+
+  @override
   String get clearDataSubtitle =>
       'Xóa tất cả tiến độ, dấu trang, thống kê và lịch sử AI';
 
@@ -404,6 +418,9 @@ class SVi extends S {
   String get correctAnswers => 'Câu trả lời đúng';
 
   @override
+  String get couldNotClearCache => 'Không thể xóa cache';
+
+  @override
   String get couldNotClearData => 'Không thể xóa dữ liệu';
 
   @override
@@ -483,6 +500,9 @@ class SVi extends S {
 
   @override
   String get deleteSet => 'Xóa bộ';
+
+  @override
+  String get developerSection => 'Nhà phát triển';
 
   @override
   String get didNotReceiveCodePrompt => 'Không nhận được mã?';
@@ -608,6 +628,11 @@ class SVi extends S {
 
   @override
   String get fillInTheBlank => 'Điền vào chỗ trống';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return 'Điền $count chỗ trống';
+  }
 
   @override
   String get findVocabulary => 'Tìm từ vựng';

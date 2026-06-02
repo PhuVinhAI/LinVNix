@@ -271,7 +271,6 @@ class DialogueContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = AppTheme.colors(context);
     final dialogue = content.dialogueData;
 
     return SingleChildScrollView(
@@ -279,21 +278,6 @@ class DialogueContentWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(Icons.chat_bubble_outline, size: 20, color: c.primary),
-              const SizedBox(width: 8),
-              Text(
-                S.of(context).dialogueTitle,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.titleMedium,
-                  fontWeight: FontWeight.w700,
-                  color: c.primary,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
           if (dialogue == null || dialogue.characters.isEmpty)
             _EmptyDialoguePlaceholder()
           else
@@ -473,82 +457,77 @@ class _ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
     final isLeft = character.side == DialogueSide.left;
-    final color = colorForCharacter(character.id);
 
-    final avatar = Container(
-      width: 32,
-      height: 32,
-      decoration: BoxDecoration(
-        color: color.avatarBackground,
-        shape: BoxShape.circle,
-      ),
-      alignment: Alignment.center,
+    final avatar = AppAvatar(
+      radius: 20,
+      backgroundColor: c.muted,
       child: Text(
         initialFor(character.name),
         style: GoogleFonts.inter(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: color.avatarForeground,
+          color: c.foreground,
+          fontWeight: FontWeight.w600,
+          fontSize: AppTypography.caption,
         ),
       ),
     );
 
-    final bubble = Column(
+    final bubbleDecoration = isLeft
+        ? BoxDecoration(
+            color: c.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: c.border, width: 1),
+          )
+        : BoxDecoration(
+            color: c.primary.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(
+              color: c.primary.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          );
+
+    final column = Column(
       crossAxisAlignment:
           isLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
       children: [
-        if (showHeader && character.name.trim().isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4, left: 2, right: 2),
-            child: Text(
-              character.name,
-              style: GoogleFonts.inter(
-                fontSize: AppTypography.bodySmall,
-                fontWeight: FontWeight.w700,
-                color: color.foreground,
-              ),
+        if (showHeader && character.name.trim().isNotEmpty) ...[
+          Text(
+            character.name,
+            style: GoogleFonts.inter(
+              fontSize: AppTypography.caption,
+              fontWeight: FontWeight.w600,
+              color: c.mutedForeground,
             ),
           ),
+          const SizedBox(height: 2),
+        ],
         Container(
+          decoration: bubbleDecoration,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.md,
           ),
-          decoration: BoxDecoration(
-            color: color.background,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(AppRadius.lg),
-              topRight: const Radius.circular(AppRadius.lg),
-              bottomLeft: isLeft
-                  ? const Radius.circular(2)
-                  : const Radius.circular(AppRadius.lg),
-              bottomRight: isLeft
-                  ? const Radius.circular(AppRadius.lg)
-                  : const Radius.circular(2),
-            ),
-            border: Border.all(color: color.border, width: 1),
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 line.vi,
                 style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyLarge,
-                  fontWeight: FontWeight.w500,
-                  height: 1.5,
+                  fontSize: AppTypography.bodyMedium,
                   color: c.foreground,
+                  height: 1.4,
                 ),
               ),
               if (line.en != null && line.en!.trim().isNotEmpty) ...[
-                const SizedBox(height: 6),
+                const SizedBox(height: AppSpacing.xs),
                 Text(
                   line.en!,
                   style: GoogleFonts.inter(
                     fontSize: AppTypography.bodySmall,
                     color: c.mutedForeground,
-                    height: 1.4,
                     fontStyle: FontStyle.italic,
+                    height: 1.4,
                   ),
                 ),
               ],
@@ -558,25 +537,18 @@ class _ChatBubble extends StatelessWidget {
       ],
     );
 
-    final maxBubbleWidth = MediaQuery.of(context).size.width * 0.72;
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        mainAxisAlignment:
-            isLeft ? MainAxisAlignment.start : MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (isLeft) ...[
             avatar,
-            const SizedBox(width: 8),
-          ],
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxBubbleWidth),
-            child: bubble,
-          ),
-          if (!isLeft) ...[
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(child: column),
+          ] else ...[
+            Expanded(child: column),
+            const SizedBox(width: AppSpacing.sm),
             avatar,
           ],
         ],

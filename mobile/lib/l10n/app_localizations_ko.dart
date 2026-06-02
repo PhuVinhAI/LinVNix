@@ -312,6 +312,19 @@ class SKo extends S {
   String get clearAnswersStartOver => '답변 지우고 다시 시작';
 
   @override
+  String get clearCacheSubtitle => '캐시된 이미지, 임시 데이터 및 세션 내 캐시를 삭제합니다';
+
+  @override
+  String get clearCacheSuccess => '앱 캐시를 지웠습니다';
+
+  @override
+  String get clearCacheTitle => '앱 캐시 지우기';
+
+  @override
+  String get clearCacheWarningDesc =>
+      '캐시된 이미지, 네트워크 버퍼 및 세션 데이터가 삭제됩니다. 학습 진행 상황과 계정은 영향을 받지 않습니다.';
+
+  @override
   String get clearDataSubtitle => '모든 진행 상황, 북마크, 통계 및 AI 기록 삭제';
 
   @override
@@ -393,6 +406,9 @@ class SKo extends S {
   String get correctAnswers => '정답';
 
   @override
+  String get couldNotClearCache => '캐시를 지울 수 없습니다';
+
+  @override
   String get couldNotClearData => '데이터를 삭제할 수 없습니다';
 
   @override
@@ -470,6 +486,9 @@ class SKo extends S {
 
   @override
   String get deleteSet => '세트 삭제';
+
+  @override
+  String get developerSection => '개발자';
 
   @override
   String get didNotReceiveCodePrompt => '코드를 받지 못하셨나요?';
@@ -595,6 +614,11 @@ class SKo extends S {
 
   @override
   String get fillInTheBlank => '빈칸 채우기';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return '$count개 빈칸 채우기';
+  }
 
   @override
   String get findVocabulary => '어휘 찾기';

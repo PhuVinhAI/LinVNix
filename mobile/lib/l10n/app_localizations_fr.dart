@@ -320,6 +320,20 @@ class SFr extends S {
   String get clearAnswersStartOver => 'Effacer les réponses et recommencer';
 
   @override
+  String get clearCacheSubtitle =>
+      'Supprime les images en cache, les données temporaires et les caches de session';
+
+  @override
+  String get clearCacheSuccess => 'Cache de l\'application vidé';
+
+  @override
+  String get clearCacheTitle => 'Vider le cache de l\'application';
+
+  @override
+  String get clearCacheWarningDesc =>
+      'Cela supprimera les images en cache, les tampons réseau et les données de session. Votre progression et votre compte ne sont pas affectés.';
+
+  @override
   String get clearDataSubtitle =>
       'Supprimez tout votre progression, signets, stats et historique';
 
@@ -407,6 +421,9 @@ class SFr extends S {
   String get correctAnswers => 'Réponses correctes';
 
   @override
+  String get couldNotClearCache => 'Impossible de vider le cache';
+
+  @override
   String get couldNotClearData => 'Impossible de supprimer les données';
 
   @override
@@ -488,6 +505,9 @@ class SFr extends S {
 
   @override
   String get deleteSet => 'Supprimer l\'ensemble';
+
+  @override
+  String get developerSection => 'Développeur';
 
   @override
   String get didNotReceiveCodePrompt => 'Vous n\'avez pas reçu le code?';
@@ -617,6 +637,11 @@ class SFr extends S {
 
   @override
   String get fillInTheBlank => 'Remplir les blancs';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return 'Remplissez $count blancs';
+  }
 
   @override
   String get findVocabulary => 'Trouver du vocabulaire';

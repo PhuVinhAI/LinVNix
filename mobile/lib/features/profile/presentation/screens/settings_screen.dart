@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -90,6 +91,11 @@ class SettingsScreen extends ConsumerWidget {
             _SettingsGroup(
               title: S.of(context).accountSection,
               child: _AccountActions(profile: profile),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            _SettingsGroup(
+              title: S.of(context).developerSection,
+              child: const _DeveloperActions(),
             ),
             const SizedBox(height: AppSpacing.xl),
             AppButton(
@@ -353,6 +359,64 @@ void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
         ],
       ),
     );
+}
+
+void _showClearCacheDialog(BuildContext context, WidgetRef ref) {
+  AppDialog.show(
+    context,
+    builder: (ctx) => AppDialog(
+      icon: Icons.cached_outlined,
+      title: S.of(context).clearCacheTitle,
+      content: S.of(context).clearCacheWarningDesc,
+      actions: [
+        AppDialogAction(
+          label: S.of(context).cancelButton2,
+          onPressed: () => Navigator.pop(ctx),
+        ),
+        AppDialogAction(
+          label: S.of(context).clearCacheTitle,
+          isPrimary: true,
+          isDestructive: true,
+          onPressed: () async {
+            Navigator.pop(ctx);
+            try {
+              PaintingBinding.instance.imageCache
+                ..clear()
+                ..clearLiveImages();
+              await DefaultCacheManager().emptyCache();
+
+              ref.read(dataChangeBusProvider.notifier).emit({
+                'auth',
+                'exercise',
+                'progress',
+                'exercise-set',
+                'bookmark',
+                'daily-goal',
+                'simulation',
+                'simulation-results',
+              });
+
+              if (context.mounted) {
+                AppToast.show(
+                  context,
+                  message: S.of(context).clearCacheSuccess,
+                  type: AppToastType.success,
+                );
+              }
+            } catch (_) {
+              if (context.mounted) {
+                AppToast.show(
+                  context,
+                  message: S.of(context).couldNotClearCache,
+                  type: AppToastType.error,
+                );
+              }
+            }
+          },
+        ),
+      ],
+    ),
+  );
 }
 
 String formatDialect(BuildContext context, String dialect) {
@@ -695,6 +759,26 @@ class _AccountActions extends ConsumerWidget {
           subtitle: S.of(context).permanentlyRemoveAccountData,
           isDestructive: true,
           onTap: () => _showDeleteAccountDialog(context, ref),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Developer actions ────────────────────────────────────────────────────
+
+class _DeveloperActions extends ConsumerWidget {
+  const _DeveloperActions();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return _SettingsCard(
+      children: [
+        _SettingsRow(
+          icon: Icons.cached_outlined,
+          title: S.of(context).clearCacheTitle,
+          subtitle: S.of(context).clearCacheSubtitle,
+          onTap: () => _showClearCacheDialog(context, ref),
         ),
       ],
     );

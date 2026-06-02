@@ -221,44 +221,45 @@ class _FillBlankInputState extends State<_FillBlankInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Instruction card
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.sm + 2,
-          ),
-          decoration: BoxDecoration(
-            color: visuals.surface,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            border: Border.all(
-              color: visuals.accent.withValues(alpha: 0.20),
-              width: 1,
+        // Count hint shown only when there's more than one blank — for a
+        // single blank the parent header pill already says "Fill in the Blank".
+        if (_blankCount > 1) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.sm + 2,
             ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.edit_note_rounded,
-                size: 20,
-                color: visuals.accent,
+            decoration: BoxDecoration(
+              color: visuals.surface,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(
+                color: visuals.accent.withValues(alpha: 0.20),
+                width: 1,
               ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  _blankCount == 1
-                      ? 'Điền vào chỗ trống'
-                      : 'Điền $_blankCount chỗ trống',
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.bodyMedium,
-                    color: visuals.accent,
-                    fontWeight: FontWeight.w600,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.edit_note_rounded,
+                  size: 20,
+                  color: visuals.accent,
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    S.of(context).fillBlanksCountParam(_blankCount),
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      color: visuals.accent,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: AppSpacing.xl),
+          const SizedBox(height: AppSpacing.xl),
+        ],
 
         // Sentence with inline blanks
         Container(
@@ -332,7 +333,7 @@ class _InlineBlankFieldState extends State<_InlineBlankField> {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: width, minWidth: 96),
       child: SizedBox(
-        height: 44,
+        height: 42,
         child: TextField(
           controller: widget.controller,
           focusNode: widget.focusNode,
@@ -341,11 +342,12 @@ class _InlineBlankFieldState extends State<_InlineBlankField> {
               widget.isLast ? TextInputAction.done : TextInputAction.next,
           onSubmitted: (_) => widget.onSubmitted(),
           textAlign: TextAlign.center,
+          textAlignVertical: TextAlignVertical.center,
           style: GoogleFonts.inter(
             fontSize: AppTypography.titleSmall,
             fontWeight: FontWeight.w700,
             color: isFilled ? widget.accent : c.foreground,
-            height: 1.2,
+            height: 1.8,
           ),
           decoration: InputDecoration(
             hintText: '____',
@@ -353,7 +355,7 @@ class _InlineBlankFieldState extends State<_InlineBlankField> {
               fontSize: AppTypography.titleSmall,
               fontWeight: FontWeight.w600,
               color: c.mutedForeground.withValues(alpha: 0.5),
-              height: 1.2,
+              height: 1.8,
             ),
             filled: true,
             fillColor: isFilled

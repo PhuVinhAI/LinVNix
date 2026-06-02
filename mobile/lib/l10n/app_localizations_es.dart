@@ -318,6 +318,20 @@ class SEs extends S {
   String get clearAnswersStartOver => 'Borrar respuestas y comenzar de nuevo';
 
   @override
+  String get clearCacheSubtitle =>
+      'Elimina imágenes en caché, datos temporales y cachés de sesión';
+
+  @override
+  String get clearCacheSuccess => 'Caché de la app borrada';
+
+  @override
+  String get clearCacheTitle => 'Borrar caché de la app';
+
+  @override
+  String get clearCacheWarningDesc =>
+      'Esto eliminará imágenes en caché, búferes de red y datos de sesión. Tu progreso de aprendizaje y tu cuenta no se verán afectados.';
+
+  @override
   String get clearDataSubtitle =>
       'Elimina tu progreso, marcadores, estadísticas e historial de IA';
 
@@ -404,6 +418,9 @@ class SEs extends S {
   String get correctAnswers => 'Respuestas correctas';
 
   @override
+  String get couldNotClearCache => 'No se pudo borrar la caché';
+
+  @override
   String get couldNotClearData => 'No se pudieron borrar los datos';
 
   @override
@@ -485,6 +502,9 @@ class SEs extends S {
 
   @override
   String get deleteSet => 'Eliminar conjunto';
+
+  @override
+  String get developerSection => 'Desarrollador';
 
   @override
   String get didNotReceiveCodePrompt => '¿No recibiste el código?';
@@ -611,6 +631,11 @@ class SEs extends S {
 
   @override
   String get fillInTheBlank => 'Rellenar huecos';
+
+  @override
+  String fillBlanksCountParam(Object count) {
+    return 'Rellena $count huecos';
+  }
 
   @override
   String get findVocabulary => 'Buscar vocabulario';
