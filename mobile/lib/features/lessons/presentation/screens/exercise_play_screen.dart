@@ -402,7 +402,14 @@ class _ExercisePlayScreenState extends ConsumerState<ExercisePlayScreen> {
                 try {
                   final repo = ref.read(lessonRepositoryProvider);
                   await repo.markContentReviewed(widget.lessonId!);
-                  await repo.completeLesson(widget.lessonId!);
+                  final totalScore = _results.values.fold<int>(
+                    0,
+                    (sum, r) => sum + r.score,
+                  );
+                  final avgScore = _results.isEmpty
+                      ? 0
+                      : (totalScore / _results.length).round();
+                  await repo.completeLesson(widget.lessonId!, score: avgScore);
                 } catch (_) {}
               }
               ref.read(dataChangeBusProvider.notifier).emit({

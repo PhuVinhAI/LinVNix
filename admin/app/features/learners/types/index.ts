@@ -103,6 +103,29 @@ export interface DailyProgress {
   lessonsCompleted: number
 }
 
+export interface ExerciseOptionsLike {
+  type?: string
+  // multiple_choice
+  choices?: string[]
+  // fill_blank
+  sentence?: string
+  blanks?: number
+  // matching
+  pairs?: Array<{ left: string; right: string }>
+  // ordering
+  items?: string[]
+  // translation
+  sourceText?: string
+  sourceLanguage?: string
+  targetLanguage?: string
+  // listening / speaking
+  audioUrl?: string
+  promptText?: string
+  promptAudioUrl?: string
+  transcriptType?: 'exact' | 'keywords'
+  keywords?: string[]
+}
+
 export interface ExerciseResult {
   id: string
   isCorrect: boolean
@@ -112,10 +135,19 @@ export interface ExerciseResult {
   attemptedAt: string
   exercise?: {
     id: string
-    question: string
+    question?: string | null
+    questionAudioUrl?: string | null
     exerciseType: string
+    difficultyLevel?: number
+    options?: ExerciseOptionsLike | null
     exerciseSet?: { id: string; title: string }
   }
+  lastAttempt?: {
+    id: string
+    isCorrect: boolean
+    score: number
+    attemptedAt: string
+  } | null
 }
 
 export interface ExerciseAttempt {
@@ -123,7 +155,12 @@ export interface ExerciseAttempt {
   isCorrect: boolean
   score: number
   attemptedAt: string
-  exercise?: { id: string; question: string; exerciseType: string }
+  exercise?: {
+    id: string
+    question?: string | null
+    exerciseType: string
+    options?: ExerciseOptionsLike | null
+  }
 }
 
 export interface PersonalVocabulary {
@@ -132,12 +169,34 @@ export interface PersonalVocabulary {
   translation: string
   source: string
   partOfSpeech?: string | null
+  phonetic?: string | null
+  exampleSentence?: string | null
+}
+
+export interface BookmarkVocabularyRef {
+  id: string
+  word: string
+  translation: string
+  partOfSpeech?: string | null
+  phonetic?: string | null
+  exampleSentence?: string | null
+  region?: string | null
+}
+
+export interface BookmarkPersonalVocabularyRef {
+  id: string
+  word: string
+  translation: string
+  source: string
+  partOfSpeech?: string | null
+  phonetic?: string | null
+  exampleSentence?: string | null
 }
 
 export interface Bookmark {
   id: string
-  vocabulary?: { word: string; translation: string } | null
-  personalVocabulary?: { word: string; translation: string } | null
+  vocabulary?: BookmarkVocabularyRef | null
+  personalVocabulary?: BookmarkPersonalVocabularyRef | null
   createdAt: string
 }
 
