@@ -44,7 +44,7 @@ export class SimulationsController {
   @RequirePermissions(Permission.SIMULATION_ACCESS)
   @ApiOperation({
     summary: 'Danh sách danh mục tình huống',
-    description: 'Lấy tất cả danh mục tình huống, sắp xếp theo orderIndex',
+    description: 'Lấy tất cả danh mục tình huống, sắp xếp theo tên',
   })
   @ApiResponse({
     status: 200,
@@ -57,7 +57,6 @@ export class SimulationsController {
           description: 'Các tình huống mua bán tại chợ, siêu thị',
           icon: 'shopping-cart',
           color: '#FF6B6B',
-          orderIndex: 1,
         },
       ],
     },
@@ -140,7 +139,6 @@ export class SimulationsController {
             name: 'Khách hàng',
             role: 'Người mua hàng',
             isPlayable: true,
-            orderIndex: 1,
           },
         ],
       },

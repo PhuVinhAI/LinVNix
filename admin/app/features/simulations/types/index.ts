@@ -4,7 +4,6 @@ export interface ScenarioCategory {
   description: string
   icon: string
   color: string
-  orderIndex: number
   scenarios?: Scenario[]
 }
 
@@ -35,5 +34,4 @@ export interface ScenarioCharacter {
   speechStyle: string
   avatarKey?: string | null
   isPlayable: boolean
-  orderIndex: number
 }

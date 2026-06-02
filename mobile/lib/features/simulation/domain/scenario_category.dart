@@ -5,7 +5,6 @@ class ScenarioCategory {
     required this.description,
     required this.icon,
     required this.color,
-    required this.orderIndex,
   });
 
   factory ScenarioCategory.fromJson(Map<String, dynamic> json) {
@@ -15,7 +14,6 @@ class ScenarioCategory {
       description: json['description'] as String? ?? '',
       icon: json['icon'] as String? ?? 'category',
       color: json['color'] as String? ?? '#6366F1',
-      orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -24,7 +22,6 @@ class ScenarioCategory {
   final String description;
   final String icon;
   final String color;
-  final int orderIndex;
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,7 +30,6 @@ class ScenarioCategory {
       'description': description,
       'icon': icon,
       'color': color,
-      'orderIndex': orderIndex,
     };
   }
 }

@@ -33,7 +33,7 @@ export class ScenariosRepository {
     return this.repository.find({
       where,
       relations: ['category', 'characters'],
-      order: { createdAt: 'DESC', characters: { orderIndex: 'ASC' } },
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -53,7 +53,7 @@ export class ScenariosRepository {
     return this.repository.find({
       where,
       relations: ['category', 'characters'],
-      order: { createdAt: 'DESC', characters: { orderIndex: 'ASC' } },
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -61,9 +61,6 @@ export class ScenariosRepository {
     return this.repository.findOne({
       where: { id },
       relations: ['category', 'characters'],
-      order: {
-        characters: { orderIndex: 'ASC' },
-      },
     });
   }
 

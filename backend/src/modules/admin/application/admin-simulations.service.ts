@@ -5,7 +5,6 @@ import { ScenarioCharacter } from '../../simulations/domain/scenario-character.e
 import { ScenarioCategoriesRepository } from '../../simulations/application/repositories/scenario-categories.repository';
 import { ScenariosRepository } from '../../simulations/application/repositories/scenarios.repository';
 import { ScenarioCharactersRepository } from '../../simulations/application/repositories/scenario-characters.repository';
-import { ReorderItem } from '../../../common/utils/bulk-reorder';
 
 @Injectable()
 export class AdminSimulationsService {
@@ -86,16 +85,6 @@ export class AdminSimulationsService {
 
   async deleteCharacter(id: string) {
     await this.charactersRepository.delete(id);
-    return { success: true };
-  }
-
-  async reorderCategories(items: ReorderItem[]) {
-    await this.categoriesRepository.reorder(items);
-    return { success: true };
-  }
-
-  async reorderCharacters(items: ReorderItem[]) {
-    await this.charactersRepository.reorder(items);
     return { success: true };
   }
 }

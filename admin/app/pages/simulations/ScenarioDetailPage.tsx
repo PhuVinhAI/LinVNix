@@ -2,18 +2,12 @@ import { useEffect, useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { useQueryClient } from '@tanstack/react-query'
-import { DndContext, closestCenter } from '@dnd-kit/core'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   Plus, Pencil, Users, MoreVertical, Trash2,
   Clock, Sparkles, MessageCircle, Target, Quote,
   Save, X, Copy, Check,
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { DragHandle } from '../../components/admin/shared/DragHandle'
-import { SortableRow } from '../../components/admin/shared/SortableRow'
-import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { Textarea } from '../../components/ui/textarea'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { PublishStatusToggle } from '../../components/admin/PublishStatusToggle'
@@ -37,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
 import { useAdminScenario, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
-import type { Scenario, ScenarioCharacter } from '../../features/simulations/types'
+import type { ScenarioCharacter } from '../../features/simulations/types'
 import { simulationPath } from './route-utils'
 
 const levelMeta: Record<string, string> = {
@@ -58,25 +52,11 @@ const difficultyMeta: Record<string, { label: string; bg: string; color: string 
 export function ScenarioDetailPage() {
   const { scenarioId } = useParams()
   const navigate = useNavigate()
-  const qc = useQueryClient()
   const { data: scenario, isLoading, error, refetch, isFetching } = useAdminScenario(scenarioId)
   const mutations = useSimulationsAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<ScenarioCharacter | null>(null)
 
-  const scenarioKey = ['admin-simulations', 'scenario', scenarioId] as const
-  const { sensors, handleDragEnd } = useAdminListReorder<ScenarioCharacter>({
-    getItems: () => qc.getQueryData<Scenario>(scenarioKey)?.characters ?? [],
-    setItems: (next) =>
-      qc.setQueryData<Scenario>(scenarioKey, (prev) =>
-        prev ? { ...prev, characters: next } : prev,
-      ),
-    reorder: (items) => mutations.reorderCharacters.mutateAsync(items),
-    onError: () => toast.error('Không thể sắp xếp lại nhân vật'),
-  })
-
-  const sortedCharacters = [...(scenario?.characters ?? [])].sort(
-    (a, b) => a.orderIndex - b.orderIndex,
-  )
+  const characters = scenario?.characters ?? []
   const [editingAi, setEditingAi] = useState(false)
   const [draftSystemPrompt, setDraftSystemPrompt] = useState('')
   const [draftOpeningMessage, setDraftOpeningMessage] = useState('')
@@ -453,30 +433,19 @@ export function ScenarioDetailPage() {
                       </div>
                     </div>
 
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={handleDragEnd}
-                    >
-                      <SortableContext
-                        items={sortedCharacters.map((c) => c.id)}
-                        strategy={verticalListSortingStrategy}
-                      >
-                        <div className="space-y-2">
-                          {sortedCharacters.map((character) => (
-                            <CharacterCard
-                              key={character.id}
-                              character={character}
-                              onEdit={() =>
-                                navigate(simulationPath.characterEdit(character.scenarioId, character.id))
-                              }
-                              onDelete={() => setPendingDelete(character)}
-                              stop={stop}
-                            />
-                          ))}
-                        </div>
-                      </SortableContext>
-                    </DndContext>
+                    <div className="space-y-2">
+                      {characters.map((character) => (
+                        <CharacterCard
+                          key={character.id}
+                          character={character}
+                          onEdit={() =>
+                            navigate(simulationPath.characterEdit(character.scenarioId, character.id))
+                          }
+                          onDelete={() => setPendingDelete(character)}
+                          stop={stop}
+                        />
+                      ))}
+                    </div>
                   </>
                 )}
               </div>
@@ -561,24 +530,19 @@ function CharacterCard({
   const initial = character.name.trim().charAt(0).toUpperCase() || '?'
 
   return (
-    <SortableRow id={character.id}>
-      {({ listeners, attributes }) => (
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={onEdit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') onEdit()
-          }}
-          className="group rounded-lg border-2 border-border bg-card p-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
-        >
-          <div className="flex items-start gap-3">
-            <div onClick={stop} onKeyDown={stop} className="shrink-0 self-center">
-              <DragHandle {...listeners} {...attributes} />
-            </div>
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-lg font-bold">
-              {initial}
-            </div>
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onEdit}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') onEdit()
+      }}
+      className="group rounded-lg border-2 border-border bg-card p-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-lg font-bold">
+          {initial}
+        </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
@@ -613,16 +577,14 @@ function CharacterCard({
               </DropdownMenu>
             </div>
           </div>
-              <p className="text-xs text-muted-foreground truncate">{character.role}</p>
-              {character.personality && (
-                <p className="text-xs text-muted-foreground/80 line-clamp-2 mt-1.5 leading-relaxed">
-                  {character.personality}
-                </p>
-              )}
-            </div>
-          </div>
+          <p className="text-xs text-muted-foreground truncate">{character.role}</p>
+          {character.personality && (
+            <p className="text-xs text-muted-foreground/80 line-clamp-2 mt-1.5 leading-relaxed">
+              {character.personality}
+            </p>
+          )}
         </div>
-      )}
-    </SortableRow>
+      </div>
+    </div>
   )
 }

@@ -33,18 +33,18 @@ describe('ScenariosService', () => {
   });
 
   describe('listCategories', () => {
-    it('returns all categories ordered by orderIndex', async () => {
+    it('returns all categories', async () => {
       const categories = [
-        { id: 'cat1', name: 'Mua sắm', orderIndex: 1 },
-        { id: 'cat2', name: 'Ăn uống', orderIndex: 2 },
+        { id: 'cat1', name: 'Ăn uống' },
+        { id: 'cat2', name: 'Mua sắm' },
       ];
       categoriesRepo.findAll.mockResolvedValue(categories as any);
 
       const result = await service.listCategories();
 
       expect(result).toHaveLength(2);
-      expect(result[0].name).toBe('Mua sắm');
-      expect(result[1].name).toBe('Ăn uống');
+      expect(result[0].name).toBe('Ăn uống');
+      expect(result[1].name).toBe('Mua sắm');
       expect(categoriesRepo.findAll).toHaveBeenCalledTimes(1);
     });
 
@@ -136,7 +136,7 @@ describe('ScenariosService', () => {
   });
 
   describe('getScenarioDetail', () => {
-    it('returns scenario with characters ordered by orderIndex', async () => {
+    it('returns scenario with characters', async () => {
       const scenario = {
         id: 'sc1',
         title: 'Mua rau',
@@ -144,8 +144,8 @@ describe('ScenariosService', () => {
         scoringCriteria: [{ name: 'Giao tiếp', weight: 50 }],
         category: { id: 'cat1', name: 'Mua sắm' },
         characters: [
-          { id: 'ch2', name: 'Người bán', orderIndex: 2, isPlayable: false },
-          { id: 'ch1', name: 'Khách hàng', orderIndex: 1, isPlayable: true },
+          { id: 'ch1', name: 'Khách hàng', isPlayable: true },
+          { id: 'ch2', name: 'Người bán', isPlayable: false },
         ],
       };
       scenariosRepo.findById.mockResolvedValue(scenario as any);

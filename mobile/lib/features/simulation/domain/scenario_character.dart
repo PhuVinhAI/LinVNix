@@ -7,7 +7,6 @@ class ScenarioCharacter {
     required this.speechStyle,
     this.avatarKey,
     required this.isPlayable,
-    required this.orderIndex,
   });
 
   factory ScenarioCharacter.fromJson(Map<String, dynamic> json) {
@@ -19,7 +18,6 @@ class ScenarioCharacter {
       speechStyle: json['speechStyle'] as String? ?? '',
       avatarKey: json['avatarKey'] as String?,
       isPlayable: json['isPlayable'] as bool? ?? true,
-      orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -30,7 +28,6 @@ class ScenarioCharacter {
   final String speechStyle;
   final String? avatarKey;
   final bool isPlayable;
-  final int orderIndex;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -40,6 +37,5 @@ class ScenarioCharacter {
         'speechStyle': speechStyle,
         'avatarKey': avatarKey,
         'isPlayable': isPlayable,
-        'orderIndex': orderIndex,
       };
 }

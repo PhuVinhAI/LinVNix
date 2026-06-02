@@ -17,7 +17,6 @@ import { Scenario } from '../../simulations/domain/scenario.entity';
 import { ScenarioCharacter } from '../../simulations/domain/scenario-character.entity';
 import { AdminSimulationsService } from '../application/admin-simulations.service';
 import { SetPublishedDto } from '../dto/set-published.dto';
-import { ReorderDto } from '../dto/reorder.dto';
 
 @ApiTags('Admin Simulations')
 @ApiBearerAuth()
@@ -32,16 +31,6 @@ export class AdminSimulationsController {
   @Get('categories')
   listCategories() {
     return this.adminSimulationsService.listCategories();
-  }
-
-  @Post('categories/reorder')
-  reorderCategories(@Body() dto: ReorderDto) {
-    return this.adminSimulationsService.reorderCategories(dto.items);
-  }
-
-  @Post('characters/reorder')
-  reorderCharacters(@Body() dto: ReorderDto) {
-    return this.adminSimulationsService.reorderCharacters(dto.items);
   }
 
   @Post('categories')

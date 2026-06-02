@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ScenarioCharacter } from '../../domain/scenario-character.entity';
-import { bulkReorder, ReorderItem } from '../../../../common/utils/bulk-reorder';
 
 @Injectable()
 export class ScenarioCharactersRepository {
@@ -14,10 +13,6 @@ export class ScenarioCharactersRepository {
   async create(data: Partial<ScenarioCharacter>): Promise<ScenarioCharacter> {
     const character = this.repository.create(data);
     return this.repository.save(character);
-  }
-
-  async reorder(items: ReorderItem[]): Promise<void> {
-    await bulkReorder(this.repository, items);
   }
 
   async findById(id: string): Promise<ScenarioCharacter | null> {
