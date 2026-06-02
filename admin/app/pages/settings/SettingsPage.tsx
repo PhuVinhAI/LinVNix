@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   RefreshCw, Trash2, Database, Server, HardDrive, Activity, Info,
-  Globe, Languages, Calendar, Cpu,
+  Globe, Languages, Calendar, Cpu, Download, AppWindow, Monitor,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '../../components/ui/button'
@@ -148,6 +148,41 @@ export function SettingsPage() {
             value={Intl.DateTimeFormat().resolvedOptions().timeZone}
           />
           <InfoCard icon={Languages} label="Ngôn ngữ" value="Tiếng Việt" />
+        </div>
+      </section>
+
+      {/* Desktop app */}
+      <section className="space-y-4">
+        <SectionHeader
+          icon={Monitor}
+          title="Ứng dụng desktop"
+          description="Tải bản cài đặt Windows để dùng ngoài trình duyệt."
+        />
+
+        <div className="rounded-lg border-2 border-border bg-card p-5 flex items-center gap-4 flex-wrap">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <AppWindow className="h-6 w-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-base font-bold text-foreground">LinVNix Admin cho Windows</p>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              Bản cài đặt NSIS · phiên bản 0.0.03062026 · 148 MB
+            </p>
+            <p className="text-xs font-mono text-muted-foreground mt-1 truncate">
+              linvnix-admin-demo-0.0.3062026-setup.exe
+            </p>
+          </div>
+          <Button asChild className="rounded-full px-6 h-11">
+            <a
+              href="https://github.com/PhuVinhAI/LinVNix/releases/download/v0.0.03062026/linvnix-admin-demo-0.0.3062026-setup.exe"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+            >
+              <Download className="h-4 w-4" />
+              Tải xuống
+            </a>
+          </Button>
         </div>
       </section>
 

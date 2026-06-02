@@ -15,7 +15,7 @@ files:
 win:
   executableName: electron-react-app
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}-demo-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always

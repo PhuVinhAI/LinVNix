@@ -79,20 +79,50 @@ const columns = [
 		</div>
 	</Container>
 
-	<div class="border-t border-border">
+	<a
+		href={ADMIN_URL}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="group block border-t border-border bg-card hover:bg-foreground hover:text-background transition-colors duration-500"
+	>
 		<Container size="xl">
-			<div class="py-6 flex justify-center">
-				<a
-					href={ADMIN_URL}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="inline-flex items-center gap-3 h-12 px-6 rounded-full border border-border bg-background hover:bg-foreground hover:text-background transition-colors font-semibold text-sm"
+			<div class="py-10 sm:py-12 md:py-16 grid grid-cols-12 items-center gap-6 sm:gap-8">
+				<div
+					class="col-span-12 md:col-span-3 flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground group-hover:text-background/60 transition-colors num-tabular"
 				>
-					<Icon name="lucide:shield" class="size-4" />
-					<span>{t('footer.adminCta')}</span>
-					<Icon name="lucide:arrow-up-right" class="size-4" />
-				</a>
+					<span
+						class="size-1 rounded-full bg-primary group-hover:bg-background transition-colors"
+					></span>
+					<span>/ 07 — admin</span>
+				</div>
+
+				<div class="col-span-12 md:col-span-7">
+					<div class="flex items-end gap-3 md:gap-5 flex-wrap">
+						<span
+							class="text-section font-bold leading-[0.95] tracking-[-0.035em]"
+							data-split="word"
+						>
+							{t('footer.adminCta')}
+						</span>
+					</div>
+					<div
+						class="mt-3 text-[11px] uppercase tracking-[0.25em] text-muted-foreground group-hover:text-background/60 transition-colors num-tabular"
+					>
+						linvnix-admin.pages.dev
+					</div>
+				</div>
+
+				<div class="col-span-12 md:col-span-2 flex md:justify-end">
+					<span
+						class="relative inline-flex size-14 md:size-16 items-center justify-center rounded-full border border-border group-hover:border-background/30 group-hover:bg-background group-hover:text-foreground transition-all duration-500 overflow-hidden"
+					>
+						<Icon
+							name="lucide:arrow-up-right"
+							class="size-5 md:size-6 transition-transform duration-500 ease-[cubic-bezier(0.7,0,0.2,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+						/>
+					</span>
+				</div>
 			</div>
 		</Container>
-	</div>
+	</a>
 </footer>
