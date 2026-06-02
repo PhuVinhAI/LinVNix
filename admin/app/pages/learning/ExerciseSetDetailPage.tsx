@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import {
-  Plus, FileText, Trash2, Pencil, ClipboardList,
+  Plus, FileText, Trash2, Pencil, ClipboardList, Hash, Layers, Gauge, Volume2,
   CheckSquare, Edit3, Link2, ArrowDownUp, Languages, Headphones, Mic,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -29,14 +29,14 @@ import { useAdminExerciseSet, useLearningAdminMutation } from '../../features/le
 import type { Exercise, ExerciseSet } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
-const TYPE_META: Record<string, { Icon: LucideIcon; label: string; bg: string }> = {
-  multiple_choice: { Icon: CheckSquare, label: 'Trắc nghiệm', bg: 'bg-blue-500' },
-  fill_blank: { Icon: Edit3, label: 'Điền chỗ trống', bg: 'bg-emerald-500' },
-  matching: { Icon: Link2, label: 'Ghép cặp', bg: 'bg-purple-500' },
-  ordering: { Icon: ArrowDownUp, label: 'Sắp xếp', bg: 'bg-indigo-500' },
-  translation: { Icon: Languages, label: 'Dịch', bg: 'bg-amber-500' },
-  listening: { Icon: Headphones, label: 'Nghe', bg: 'bg-rose-500' },
-  speaking: { Icon: Mic, label: 'Nói', bg: 'bg-cyan-500' },
+const TYPE_META: Record<string, { Icon: LucideIcon; label: string; bg: string; dot: string; text: string }> = {
+  multiple_choice: { Icon: CheckSquare, label: 'Trắc nghiệm', bg: 'bg-blue-500', dot: 'bg-blue-500', text: 'text-blue-700 dark:text-blue-300' },
+  fill_blank: { Icon: Edit3, label: 'Điền chỗ trống', bg: 'bg-emerald-500', dot: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-300' },
+  matching: { Icon: Link2, label: 'Ghép cặp', bg: 'bg-purple-500', dot: 'bg-purple-500', text: 'text-purple-700 dark:text-purple-300' },
+  ordering: { Icon: ArrowDownUp, label: 'Sắp xếp', bg: 'bg-indigo-500', dot: 'bg-indigo-500', text: 'text-indigo-700 dark:text-indigo-300' },
+  translation: { Icon: Languages, label: 'Dịch', bg: 'bg-amber-500', dot: 'bg-amber-500', text: 'text-amber-700 dark:text-amber-300' },
+  listening: { Icon: Headphones, label: 'Nghe', bg: 'bg-rose-500', dot: 'bg-rose-500', text: 'text-rose-700 dark:text-rose-300' },
+  speaking: { Icon: Mic, label: 'Nói', bg: 'bg-cyan-500', dot: 'bg-cyan-500', text: 'text-cyan-700 dark:text-cyan-300' },
 }
 
 export function ExerciseSetDetailPage() {
@@ -143,14 +143,16 @@ export function ExerciseSetDetailPage() {
 
         {/* Metric strip */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 pt-4 border-t-2 border-border">
-          <Metric label="Tổng bài tập" value={exercises.length} />
-          <Metric label="Loại bài tập" value={Object.keys(typeCounts).length} />
+          <Metric icon={Hash} label="Tổng bài tập" value={exercises.length} />
+          <Metric icon={Layers} label="Loại bài tập" value={Object.keys(typeCounts).length} />
           <Metric
+            icon={Gauge}
             label="Độ khó TB"
             value={avgDifficulty.toFixed(1)}
             suffix=" / 5"
           />
           <Metric
+            icon={Volume2}
             label="Có audio"
             value={exercises.filter((ex) => ex.questionAudioUrl).length}
           />
@@ -159,38 +161,45 @@ export function ExerciseSetDetailPage() {
 
       {/* Type filter */}
       {exercises.length > 0 && (
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Lọc theo loại:
-          </span>
-          <div className="flex items-center gap-1 rounded-lg border-2 border-border bg-card p-1 flex-wrap">
-            <FilterPill active={typeFilter === 'all'} onClick={() => setTypeFilter('all')}>
-              Tất cả · {exercises.length}
-            </FilterPill>
-            {Object.entries(typeCounts).map(([type, count]) => {
-              const meta = TYPE_META[type]
-              if (!meta) return null
-              return (
-                <FilterPill
-                  key={type}
-                  active={typeFilter === type}
-                  onClick={() => setTypeFilter(type)}
-                >
-                  <meta.Icon className="h-3 w-3 mr-1 inline" />
-                  {meta.label} · {count}
-                </FilterPill>
-              )
-            })}
-          </div>
+        <div className="inline-flex max-w-full items-center gap-1.5 rounded-lg border-2 border-border bg-card p-1 flex-wrap w-fit">
+          <FilterPill active={typeFilter === 'all'} onClick={() => setTypeFilter('all')}>
+            <span>Tất cả</span>
+            <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums ${
+              typeFilter === 'all' ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-foreground'
+            }`}>
+              {exercises.length}
+            </span>
+          </FilterPill>
+          {Object.entries(typeCounts).map(([type, count]) => {
+            const meta = TYPE_META[type]
+            if (!meta) return null
+            const active = typeFilter === type
+            return (
+              <FilterPill key={type} active={active} onClick={() => setTypeFilter(type)}>
+                <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
+                <span>{meta.label}</span>
+                <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums ${
+                  active ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-foreground'
+                }`}>
+                  {count}
+                </span>
+              </FilterPill>
+            )
+          })}
         </div>
       )}
 
       {/* Exercise list */}
       <div className="space-y-4">
         <div className="flex items-end justify-between gap-4">
-          <h2 className="text-lg font-bold tracking-tight">
-            {typeFilter === 'all' ? 'Tất cả bài tập' : `Bài tập: ${TYPE_META[typeFilter]?.label}`}
-          </h2>
+          <div className="flex items-baseline gap-2">
+            <h2 className="text-lg font-bold tracking-tight">
+              {typeFilter === 'all' ? 'Tất cả bài tập' : `Bài tập: ${TYPE_META[typeFilter]?.label}`}
+            </h2>
+            <span className="text-sm font-bold tabular-nums text-muted-foreground">
+              {filteredExercises.length}
+            </span>
+          </div>
           {setId && (
             <Button asChild>
               <Link to={learningPath.exerciseNew(setId)}>
@@ -281,10 +290,13 @@ export function ExerciseSetDetailPage() {
   )
 }
 
-function Metric({ label, value, suffix }: { label: string; value: number | string; suffix?: string }) {
+function Metric({ icon: Icon, label, value, suffix }: { icon: LucideIcon; label: string; value: number | string; suffix?: string }) {
   return (
     <div className="rounded-lg border-2 border-border bg-muted/30 p-3">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</p>
+      <div className="flex items-center gap-1.5 text-muted-foreground">
+        <Icon className="h-3 w-3" />
+        <p className="text-[10px] font-bold uppercase tracking-wider">{label}</p>
+      </div>
       <p className="mt-1 text-xl font-bold tabular-nums">
         {value}
         {suffix && <span className="text-xs font-normal text-muted-foreground">{suffix}</span>}
@@ -298,7 +310,7 @@ function FilterPill({ active, onClick, children }: { active: boolean; onClick: (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-md px-3 py-1.5 text-xs font-bold transition-colors ${
+      className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-bold transition-colors ${
         active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
       }`}
     >
