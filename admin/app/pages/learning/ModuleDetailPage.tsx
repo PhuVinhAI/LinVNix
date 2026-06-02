@@ -2,6 +2,9 @@ import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   Plus, Pencil, BookOpen, Clock, MoreVertical, Trash2, Layers,
   Lightbulb, Headphones, MessageCircle, Edit3, Mic, Globe, FileText,
@@ -9,6 +12,9 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { DragHandle } from '../../components/admin/shared/DragHandle'
+import { SortableRow } from '../../components/admin/shared/SortableRow'
+import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { LessonTimelineSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
@@ -28,7 +34,7 @@ import {
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
 import { useAdminModule, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
-import type { Lesson } from '../../features/learning/types'
+import type { Lesson, Module } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
 const lessonTypes: Record<string, { Icon: LucideIcon; label: string; bg: string; color: string }> = {
@@ -45,9 +51,26 @@ const lessonTypes: Record<string, { Icon: LucideIcon; label: string; bg: string;
 export function ModuleDetailPage() {
   const { moduleId } = useParams()
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const { data: module, isLoading, error, refetch, isFetching } = useAdminModule(moduleId)
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Lesson | null>(null)
+
+  const moduleKey = ['admin-learning', 'module', moduleId] as const
+  const { sensors, handleDragEnd } = useAdminListReorder<Lesson>({
+    getItems: () => qc.getQueryData<Module>(moduleKey)?.lessons ?? [],
+    setItems: (next) =>
+      qc.setQueryData<Module>(moduleKey, (prev) =>
+        prev ? { ...prev, lessons: next } : prev,
+      ),
+    updateOrderIndex: (id, orderIndex) =>
+      mutations.updateLesson.mutateAsync({ id, payload: { orderIndex } }),
+    onError: () => toast.error('Không thể sắp xếp lại bài học'),
+  })
+
+  const sortedLessons = [...(module?.lessons ?? [])].sort(
+    (a, b) => a.orderIndex - b.orderIndex,
+  )
 
   const confirmDelete = async () => {
     if (!pendingDelete) return
@@ -192,88 +215,97 @@ export function ModuleDetailPage() {
             )}
           </div>
         ) : (
-          <div className="space-y-3">
-            {module.lessons.map((lesson) => {
-                const t = lessonTypes[lesson.lessonType] ?? {
-                  Icon: BookOpen,
-                  label: lesson.lessonType,
-                  bg: 'bg-muted',
-                  color: 'text-muted-foreground',
-                }
-                return (
-                  <div
-                    key={lesson.id}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => navigate(learningPath.lesson(lesson.id))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') navigate(learningPath.lesson(lesson.id))
-                    }}
-                    className="group relative flex items-start gap-3 rounded-lg border-2 border-border bg-card pl-3 pr-3 py-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
-                  >
-                    {/* Timeline node */}
-                    <div
-                      className={`relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white text-sm font-bold ${t.bg}`}
-                    >
-                      <t.Icon className="h-4 w-4" />
-                    </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={sortedLessons.map((l) => l.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-3">
+                {sortedLessons.map((lesson) => {
+                  const t = lessonTypes[lesson.lessonType] ?? {
+                    Icon: BookOpen,
+                    label: lesson.lessonType,
+                    bg: 'bg-muted',
+                    color: 'text-muted-foreground',
+                  }
+                  return (
+                    <SortableRow key={lesson.id} id={lesson.id}>
+                      {({ listeners, attributes }) => (
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => navigate(learningPath.lesson(lesson.id))}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') navigate(learningPath.lesson(lesson.id))
+                          }}
+                          className="group relative flex items-start gap-3 rounded-lg border-2 border-border bg-card pl-3 pr-3 py-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+                        >
+                          <div onClick={stop} onKeyDown={stop} className="shrink-0 self-center">
+                            <DragHandle {...listeners} {...attributes} />
+                          </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-base font-bold text-foreground truncate">
-                          {lesson.title}
-                        </h3>
-                        <span className={`text-xs font-bold ${t.color}`}>{t.label}</span>
-                        {lesson.estimatedDuration && (
-                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Clock className="h-3 w-3" />
-                            <span className="font-medium tabular-nums">{lesson.estimatedDuration}p</span>
-                          </span>
-                        )}
-                      </div>
-                      {lesson.description && (
-                        <p className="text-sm text-muted-foreground line-clamp-1 mt-1">
-                          {lesson.description}
-                        </p>
+                          <div
+                            className={`relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white text-sm font-bold ${t.bg}`}
+                          >
+                            <t.Icon className="h-4 w-4" />
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h3 className="text-base font-bold text-foreground truncate">
+                                {lesson.title}
+                              </h3>
+                              <span className={`text-xs font-bold ${t.color}`}>{t.label}</span>
+                              {lesson.estimatedDuration && (
+                                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                                  <Clock className="h-3 w-3" />
+                                  <span className="font-medium tabular-nums">{lesson.estimatedDuration}p</span>
+                                </span>
+                              )}
+                            </div>
+                            {lesson.description && (
+                              <p className="text-sm text-muted-foreground line-clamp-1 mt-1">
+                                {lesson.description}
+                              </p>
+                            )}
+                          </div>
+
+                          <div onClick={stop} onKeyDown={stop} className="shrink-0">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-44">
+                                <DropdownMenuItem asChild>
+                                  <Link to={learningPath.lessonEdit(lesson.moduleId, lesson.id)}>
+                                    <Pencil className="h-4 w-4" />
+                                    Chỉnh sửa
+                                  </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  variant="destructive"
+                                  onSelect={() => setPendingDelete(lesson)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  Xóa bài học
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        </div>
                       )}
-                    </div>
-
-                    <span className="hidden md:block text-xs font-mono text-muted-foreground/50 shrink-0 tabular-nums">
-                      #{lesson.orderIndex}
-                    </span>
-
-                    <div onClick={stop} onKeyDown={stop} className="shrink-0">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                          >
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-44">
-                          <DropdownMenuItem asChild>
-                            <Link to={learningPath.lessonEdit(lesson.moduleId, lesson.id)}>
-                              <Pencil className="h-4 w-4" />
-                              Chỉnh sửa
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            variant="destructive"
-                            onSelect={() => setPendingDelete(lesson)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Xóa bài học
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                )
-              })}
-          </div>
+                    </SortableRow>
+                  )
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
 

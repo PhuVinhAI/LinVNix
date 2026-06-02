@@ -1,14 +1,12 @@
 import { useState, type FormEvent } from 'react'
-import { ClipboardList, Hash } from 'lucide-react'
+import { ClipboardList } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
-import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 export interface ExerciseSetFormValues {
   title: string
   description?: string | null
-  orderIndex: number
 }
 
 export function ExerciseSetForm({
@@ -23,7 +21,6 @@ export function ExerciseSetForm({
   const [values, setValues] = useState<ExerciseSetFormValues>({
     title: initialValue?.title ?? '',
     description: initialValue?.description ?? '',
-    orderIndex: initialValue?.orderIndex ?? 0,
   })
 
   const update = <K extends keyof ExerciseSetFormValues>(key: K, value: ExerciseSetFormValues[K]) => {
@@ -53,16 +50,6 @@ export function ExerciseSetForm({
             onChange={(e) => update('description', e.target.value)}
             placeholder="VD: Tập hợp bài tập giúp học viên thực hành các mẫu câu chào hỏi, giới thiệu bản thân trong giao tiếp hàng ngày."
             className="min-h-24"
-          />
-        </FormField>
-      </FormSection>
-
-      <FormSection icon={Hash} title="Sắp xếp" description="Thứ tự hiển thị trong danh sách bộ bài tập của bài học">
-        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-          <OrderIndexStepper
-            value={values.orderIndex}
-            onChange={(v) => update('orderIndex', v)}
-            required
           />
         </FormField>
       </FormSection>

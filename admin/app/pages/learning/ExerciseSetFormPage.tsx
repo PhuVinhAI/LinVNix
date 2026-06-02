@@ -21,7 +21,16 @@ export function ExerciseSetFormPage({ mode }: { mode: 'create' | 'edit' }) {
         await mutations.updateLessonChild.mutateAsync({ kind: 'exercise-sets', id, payload })
         toast.success('Đã cập nhật')
       } else if (lessonId) {
-        await mutations.createLessonChild.mutateAsync({ kind: 'exercise-sets', lessonId, payload })
+        const nextOrderIndex =
+          (lesson?.exerciseSets ?? []).reduce(
+            (max, s) => Math.max(max, s.orderIndex ?? -1),
+            -1,
+          ) + 1
+        await mutations.createLessonChild.mutateAsync({
+          kind: 'exercise-sets',
+          lessonId,
+          payload: { ...payload, orderIndex: nextOrderIndex },
+        })
         toast.success('Đã tạo mới')
       }
       if (lessonId) navigate(learningPath.lesson(lessonId, 'sets'))

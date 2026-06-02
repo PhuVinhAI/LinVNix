@@ -4,7 +4,6 @@ import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
 import { LevelPicker } from '../editors/PickerControls'
-import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 import { NumberStepper } from '../editors/NumberStepper'
 import { MediaUpload } from '../editors/MediaUpload'
 
@@ -12,7 +11,6 @@ export interface CourseFormValues {
   title: string
   description: string
   level: string
-  orderIndex: number
   estimatedHours?: number | null
   vietnameseLevelName?: string | null
   thumbnailUrl?: string | null
@@ -31,7 +29,6 @@ export function CourseForm({
     title: initialValue?.title ?? '',
     description: initialValue?.description ?? '',
     level: initialValue?.level ?? 'A1',
-    orderIndex: initialValue?.orderIndex ?? 0,
     estimatedHours: initialValue?.estimatedHours ?? null,
     vietnameseLevelName: initialValue?.vietnameseLevelName ?? '',
     thumbnailUrl: initialValue?.thumbnailUrl ?? '',
@@ -99,14 +96,6 @@ export function CourseForm({
             />
           </FormField>
         </div>
-
-        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước trong danh sách">
-          <OrderIndexStepper
-            value={values.orderIndex}
-            onChange={(v) => update('orderIndex', v)}
-            required
-          />
-        </FormField>
       </FormSection>
 
       <FormSection icon={ImageIcon} title="Hình ảnh đại diện" description="Ảnh thumbnail hiển thị trên danh sách khóa học">

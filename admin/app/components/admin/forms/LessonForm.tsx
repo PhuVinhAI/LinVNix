@@ -1,13 +1,12 @@
 import { useState, type FormEvent } from 'react'
 import {
   BookOpen, Lightbulb, Headphones, MessageCircle, Edit3,
-  Mic, Globe, FileText, Tags, Hash,
+  Mic, Globe, FileText, Tags, Clock,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
-import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 import { NumberStepper } from '../editors/NumberStepper'
 
 const LESSON_TYPES: Array<{ value: string; label: string; Icon: LucideIcon; color: string }> = [
@@ -25,7 +24,6 @@ export interface LessonFormValues {
   title: string
   description: string
   lessonType: string
-  orderIndex: number
   estimatedDuration?: number | null
 }
 
@@ -42,7 +40,6 @@ export function LessonForm({
     title: initialValue?.title ?? '',
     description: initialValue?.description ?? '',
     lessonType: initialValue?.lessonType ?? 'vocabulary',
-    orderIndex: initialValue?.orderIndex ?? 0,
     estimatedDuration: initialValue?.estimatedDuration ?? null,
   })
 
@@ -101,27 +98,17 @@ export function LessonForm({
         </div>
       </FormSection>
 
-      <FormSection icon={Hash} title="Sắp xếp và thời lượng" description="Thứ tự hiển thị và thời lượng bài học">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-            <OrderIndexStepper
-              value={values.orderIndex}
-              onChange={(v) => update('orderIndex', v)}
-              required
-            />
-          </FormField>
-
-          <FormField label="Thời gian ước tính" help="Thời gian hoàn thành dự kiến">
-            <NumberStepper
-              value={values.estimatedDuration ?? null}
-              onChange={(v) => update('estimatedDuration', v)}
-              nullable
-              suffix="phút"
-              ariaLabelDecrement="Giảm thời gian"
-              ariaLabelIncrement="Tăng thời gian"
-            />
-          </FormField>
-        </div>
+      <FormSection icon={Clock} title="Thời lượng" description="Thời gian hoàn thành dự kiến">
+        <FormField label="Thời gian ước tính" help="Thời gian hoàn thành dự kiến">
+          <NumberStepper
+            value={values.estimatedDuration ?? null}
+            onChange={(v) => update('estimatedDuration', v)}
+            nullable
+            suffix="phút"
+            ariaLabelDecrement="Giảm thời gian"
+            ariaLabelIncrement="Tăng thời gian"
+          />
+        </FormField>
       </FormSection>
     </form>
   )

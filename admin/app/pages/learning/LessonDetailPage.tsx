@@ -2,6 +2,9 @@ import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import {
   Plus,
   Pencil,
@@ -38,8 +41,11 @@ import {
 import { VocabularyEditor } from '../../components/admin/lesson-editors/VocabularyEditor'
 import { ContentEditor } from '../../components/admin/lesson-editors/ContentEditor'
 import { GrammarEditor } from '../../components/admin/lesson-editors/GrammarEditor'
+import { DragHandle } from '../../components/admin/shared/DragHandle'
+import { SortableRow } from '../../components/admin/shared/SortableRow'
+import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
-import type { ExerciseSet } from '../../features/learning/types'
+import type { ExerciseSet, Lesson } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
 const lessonTypeColors: Record<string, string> = {
@@ -76,10 +82,27 @@ const LESSON_TABS = ['contents', 'vocabularies', 'grammar', 'sets'] as const
 export function LessonDetailPage() {
   const { lessonId } = useParams()
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const [searchParams, setSearchParams] = useSearchParams()
   const { data: lesson, isLoading, error, refetch, isFetching } = useAdminLesson(lessonId)
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<DeleteTarget | null>(null)
+
+  const lessonKey = ['admin-learning', 'lesson', lessonId] as const
+  const setsReorder = useAdminListReorder<ExerciseSet>({
+    getItems: () => qc.getQueryData<Lesson>(lessonKey)?.exerciseSets ?? [],
+    setItems: (next) =>
+      qc.setQueryData<Lesson>(lessonKey, (prev) =>
+        prev ? { ...prev, exerciseSets: next } : prev,
+      ),
+    updateOrderIndex: (id, orderIndex) =>
+      mutations.updateExerciseSet.mutateAsync({ id, payload: { orderIndex } }),
+    onError: () => toast.error('Không thể sắp xếp lại bộ bài tập'),
+  })
+
+  const sortedSets = [...(lesson?.exerciseSets ?? [])].sort(
+    (a, b) => a.orderIndex - b.orderIndex,
+  )
 
   const tabParam = searchParams.get('tab') ?? ''
   const activeTab = (LESSON_TABS as readonly string[]).includes(tabParam) ? tabParam : 'contents'
@@ -220,25 +243,33 @@ export function LessonDetailPage() {
                 </Button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {(lesson.exerciseSets ?? []).map((row) => (
-                  <ExerciseSetTile
-                    key={row.id}
-                    row={row}
-                    onOpen={() => navigate(learningPath.exerciseSet(row.id))}
-                    onEdit={() => navigate(learningPath.exerciseSetEdit(lessonId, row.id))}
-                    onDelete={() =>
-                      setPendingDelete({
-                        kind: 'exercise-sets',
-                        id: row.id,
-                        label: row.title,
-                        resource: 'bộ bài tập',
-                      })
-                    }
-                    stop={stop}
-                  />
-                ))}
-              </div>
+              <DndContext
+                sensors={setsReorder.sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={setsReorder.handleDragEnd}
+              >
+                <SortableContext items={sortedSets.map((s) => s.id)} strategy={rectSortingStrategy}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {sortedSets.map((row) => (
+                      <ExerciseSetTile
+                        key={row.id}
+                        row={row}
+                        onOpen={() => navigate(learningPath.exerciseSet(row.id))}
+                        onEdit={() => navigate(learningPath.exerciseSetEdit(lessonId, row.id))}
+                        onDelete={() =>
+                          setPendingDelete({
+                            kind: 'exercise-sets',
+                            id: row.id,
+                            label: row.title,
+                            resource: 'bộ bài tập',
+                          })
+                        }
+                        stop={stop}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             )}
           </TabsContent>
         </Tabs>
@@ -331,56 +362,61 @@ function ExerciseSetTile({
   }, {})
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={onOpen}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') onOpen()
-      }}
-      className="group rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
-    >
-      <div className="flex items-center justify-between gap-2 border-b-2 border-border bg-muted/30 px-4 py-2">
-        <div className="flex items-center gap-2 text-xs">
-          <span className="font-bold text-muted-foreground tabular-nums">#{row.orderIndex}</span>
-          <span className="text-muted-foreground">·</span>
-          <span className="font-bold tabular-nums">{exerciseCount}</span>
-          <span className="text-muted-foreground">bài tập</span>
-        </div>
-        <div onClick={stop} onKeyDown={stop}>
-          <RowMenu onEdit={onEdit} onDelete={onDelete} />
-        </div>
-      </div>
-      <div className="p-4">
-        <h3 className="text-base font-bold text-foreground line-clamp-1">{row.title}</h3>
-        {row.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{row.description}</p>
-        )}
-        {Object.keys(typeCounts).length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-border">
-            {Object.entries(typeCounts).map(([type, count]) => {
-              const labels: Record<string, string> = {
-                multiple_choice: 'Trắc nghiệm',
-                fill_blank: 'Điền',
-                matching: 'Ghép',
-                ordering: 'Sắp xếp',
-                translation: 'Dịch',
-                listening: 'Nghe',
-                speaking: 'Nói',
-              }
-              return (
-                <span
-                  key={type}
-                  className="inline-flex items-center gap-1 rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground"
-                >
-                  {labels[type] ?? type}
-                  <span className="font-bold tabular-nums">{count}</span>
-                </span>
-              )
-            })}
+    <SortableRow id={row.id}>
+      {({ listeners, attributes }) => (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onOpen}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') onOpen()
+          }}
+          className="group rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+        >
+          <div className="flex items-center justify-between gap-2 border-b-2 border-border bg-muted/30 px-2 py-2">
+            <div className="flex items-center gap-2 text-xs">
+              <div onClick={stop} onKeyDown={stop}>
+                <DragHandle {...listeners} {...attributes} />
+              </div>
+              <span className="font-bold tabular-nums">{exerciseCount}</span>
+              <span className="text-muted-foreground">bài tập</span>
+            </div>
+            <div onClick={stop} onKeyDown={stop}>
+              <RowMenu onEdit={onEdit} onDelete={onDelete} />
+            </div>
           </div>
-        )}
-      </div>
-    </div>
+          <div className="p-4">
+            <h3 className="text-base font-bold text-foreground line-clamp-1">{row.title}</h3>
+            {row.description && (
+              <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{row.description}</p>
+            )}
+            {Object.keys(typeCounts).length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-border">
+                {Object.entries(typeCounts).map(([type, count]) => {
+                  const labels: Record<string, string> = {
+                    multiple_choice: 'Trắc nghiệm',
+                    fill_blank: 'Điền',
+                    matching: 'Ghép',
+                    ordering: 'Sắp xếp',
+                    translation: 'Dịch',
+                    listening: 'Nghe',
+                    speaking: 'Nói',
+                  }
+                  return (
+                    <span
+                      key={type}
+                      className="inline-flex items-center gap-1 rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground"
+                    >
+                      {labels[type] ?? type}
+                      <span className="font-bold tabular-nums">{count}</span>
+                    </span>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </SortableRow>
   )
 }

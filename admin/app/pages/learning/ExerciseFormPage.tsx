@@ -8,7 +8,6 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Input } from '../../components/ui/input'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { InlineEditable } from '../../components/admin/InlineEditable'
 import {
@@ -40,7 +39,6 @@ interface State {
   question: string
   questionAudioUrl: string
   explanation: string
-  orderIndex: number
   difficultyLevel: number
   choiceOptions: string[]
   choiceCorrect: string
@@ -59,7 +57,6 @@ function deriveInitial(initial: Record<string, unknown> | undefined | null): Sta
     question: String(initial?.question ?? ''),
     questionAudioUrl: String(initial?.questionAudioUrl ?? ''),
     explanation: String(initial?.explanation ?? ''),
-    orderIndex: Number(initial?.orderIndex ?? 0) || 0,
     difficultyLevel: Number(initial?.difficultyLevel ?? 1) || 1,
     choiceOptions: [],
     choiceCorrect: '',
@@ -191,7 +188,6 @@ function buildPayload(state: State): Record<string, unknown> {
     question: state.question,
     questionAudioUrl: state.questionAudioUrl || null,
     explanation: state.explanation || null,
-    orderIndex: state.orderIndex,
     difficultyLevel: state.difficultyLevel,
   }
   switch (state.exerciseType) {
@@ -271,11 +267,11 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const mutations = useLearningAdminMutation()
   const [submitting, setSubmitting] = useState(false)
 
-  const [state, setState] = useState<State>(() => deriveInitial(exercise as Record<string, unknown> | null))
+  const [state, setState] = useState<State>(() => deriveInitial(exercise as unknown as Record<string, unknown> | null))
 
   useEffect(() => {
     if (mode === 'edit' && exercise) {
-      setState(deriveInitial(exercise as Record<string, unknown>))
+      setState(deriveInitial(exercise as unknown as Record<string, unknown>))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exercise?.id])
@@ -300,7 +296,15 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
         await mutations.updateExercise.mutateAsync({ id, payload })
         toast.success('Đã cập nhật bài tập')
       } else if (setId) {
-        await mutations.createExercise.mutateAsync({ setId, payload })
+        const nextOrderIndex =
+          (set?.exercises ?? []).reduce(
+            (max, ex) => Math.max(max, ex.orderIndex ?? -1),
+            -1,
+          ) + 1
+        await mutations.createExercise.mutateAsync({
+          setId,
+          payload: { ...payload, orderIndex: nextOrderIndex },
+        })
         toast.success('Đã tạo bài tập')
       }
       if (setId) navigate(learningPath.exerciseSet(setId))
@@ -328,8 +332,6 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
         <Divider />
         <DifficultyPicker value={state.difficultyLevel} onChange={(v) => update('difficultyLevel', v)} />
         <Divider />
-        <OrderPicker value={state.orderIndex} onChange={(v) => update('orderIndex', v)} />
-        <Divider />
         <AudioPicker value={state.questionAudioUrl} onChange={(v) => update('questionAudioUrl', v)} />
         <Divider />
         <ExplanationPicker value={state.explanation} onChange={(v) => update('explanation', v)} />
@@ -355,7 +357,6 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
                 {DIFFICULTY_LABELS[state.difficultyLevel]}
               </span>
             </div>
-            <span className="text-xs font-mono text-muted-foreground tabular-nums">#{state.orderIndex || 0}</span>
           </div>
 
           {/* Body */}
@@ -548,34 +549,6 @@ function DifficultyPicker({ value, onChange }: { value: number; onChange: (v: nu
             </button>
           ))}
         </div>
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-function OrderPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 hover:bg-muted transition-colors"
-        >
-          <span className="text-xs font-mono text-muted-foreground">Thứ tự</span>
-          <span className="text-sm font-bold tabular-nums">#{value || 0}</span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-48 p-3">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          Thứ tự hiển thị
-        </label>
-        <Input
-          type="number"
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value) || 0)}
-          className="mt-2"
-          min={0}
-        />
       </PopoverContent>
     </Popover>
   )

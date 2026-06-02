@@ -1,18 +1,16 @@
 import { useState, type FormEvent } from 'react'
-import { Palette, Hash, FileText } from 'lucide-react'
+import { Palette, FileText } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
 import { ColorPicker } from '../editors/ColorPicker'
 import { IconPicker } from '../editors/IconPicker'
-import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 export interface ScenarioCategoryFormValues {
   name: string
   description: string
   icon: string
   color: string
-  orderIndex: number
 }
 
 export function ScenarioCategoryForm({
@@ -29,7 +27,6 @@ export function ScenarioCategoryForm({
     description: initialValue?.description ?? '',
     icon: initialValue?.icon ?? 'message-square',
     color: initialValue?.color ?? '#6366F1',
-    orderIndex: initialValue?.orderIndex ?? 0,
   })
 
   const update = <K extends keyof ScenarioCategoryFormValues>(
@@ -74,16 +71,6 @@ export function ScenarioCategoryForm({
 
         <FormField label="Biểu tượng" required help="Chọn một biểu tượng đại diện cho danh mục">
           <IconPicker value={values.icon} onChange={(v) => update('icon', v)} color={values.color} />
-        </FormField>
-      </FormSection>
-
-      <FormSection icon={Hash} title="Sắp xếp" description="Thứ tự hiển thị trong danh sách danh mục">
-        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-          <OrderIndexStepper
-            value={values.orderIndex}
-            onChange={(v) => update('orderIndex', v)}
-            required
-          />
         </FormField>
       </FormSection>
     </form>

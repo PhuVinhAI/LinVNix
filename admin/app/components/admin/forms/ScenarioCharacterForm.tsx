@@ -1,10 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import { User, UserCircle2, Sparkles, Hash } from 'lucide-react'
+import { User, UserCircle2, Sparkles } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Switch } from '../../ui/switch'
 import { FormField, FormSection } from '../FormSection'
-import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 
 export interface ScenarioCharacterFormValues {
   name: string
@@ -13,7 +12,6 @@ export interface ScenarioCharacterFormValues {
   speechStyle: string
   avatarKey?: string | null
   isPlayable: boolean
-  orderIndex: number
 }
 
 export function ScenarioCharacterForm({
@@ -32,7 +30,6 @@ export function ScenarioCharacterForm({
     speechStyle: initialValue?.speechStyle ?? '',
     avatarKey: initialValue?.avatarKey ?? '',
     isPlayable: initialValue?.isPlayable ?? true,
-    orderIndex: initialValue?.orderIndex ?? 0,
   })
 
   const update = <K extends keyof ScenarioCharacterFormValues>(
@@ -93,15 +90,7 @@ export function ScenarioCharacterForm({
         </FormField>
       </FormSection>
 
-      <FormSection icon={Hash} title="Cấu hình hiển thị" description="Vai trò trong phiên luyện và thứ tự trong danh sách">
-        <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-          <OrderIndexStepper
-            value={values.orderIndex}
-            onChange={(v) => update('orderIndex', v)}
-            required
-          />
-        </FormField>
-
+      <FormSection icon={User} title="Cấu hình nhập vai" description="Vai trò trong phiên luyện">
         <div className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
             <User className="h-5 w-5 text-muted-foreground" />

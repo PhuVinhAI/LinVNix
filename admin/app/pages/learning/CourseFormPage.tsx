@@ -22,7 +22,9 @@ export function CourseFormPage({ mode }: { mode: 'create' | 'edit' }) {
         toast.success('Đã cập nhật khóa học')
         navigate(learningPath.course(id))
       } else {
-        await mutations.createCourse.mutateAsync(payload)
+        const nextOrderIndex =
+          data.reduce((max, c) => Math.max(max, c.orderIndex ?? -1), -1) + 1
+        await mutations.createCourse.mutateAsync({ ...payload, orderIndex: nextOrderIndex })
         toast.success('Đã tạo khóa học')
         navigate(learningPath.courses())
       }

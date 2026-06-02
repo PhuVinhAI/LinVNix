@@ -89,6 +89,7 @@ export interface Vocabulary {
   audioUrls?: Record<string, string> | null
   region?: string | null
   difficultyLevel: number
+  orderIndex: number
   lessonId: string
 }
 
@@ -100,6 +101,7 @@ export interface GrammarRule {
   examples: Array<{ vi: string; en: string; note?: string }>
   notes?: string | null
   difficultyLevel: number
+  orderIndex: number
   lessonId: string
 }
 

@@ -6,6 +6,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
+import { DragHandle } from '../admin/shared/DragHandle'
+import { SortableRow } from '../admin/shared/SortableRow'
 import type { Exercise } from '../../features/learning/types'
 
 const TYPE_COLORS: Record<string, string> = {
@@ -44,9 +46,10 @@ interface ExerciseCardProps {
   onEdit: () => void
   onDelete: () => void
   onClick?: () => void
+  sortable?: boolean
 }
 
-export function ExerciseCard({ exercise, onEdit, onDelete, onClick }: ExerciseCardProps) {
+export function ExerciseCard({ exercise, onEdit, onDelete, onClick, sortable = false }: ExerciseCardProps) {
   const key = (exercise.exerciseType ?? '').toLowerCase()
   const typeColor = TYPE_COLORS[key] ?? 'text-muted-foreground'
   const typeLabel = TYPE_LABELS[key] ?? exercise.exerciseType
@@ -59,7 +62,10 @@ export function ExerciseCard({ exercise, onEdit, onDelete, onClick }: ExerciseCa
 
   const handleClick = () => onClick?.()
 
-  return (
+  const renderInner = (drag?: {
+    listeners: React.HTMLAttributes<HTMLButtonElement>
+    attributes: React.HTMLAttributes<HTMLButtonElement>
+  }) => (
     <div
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -74,14 +80,17 @@ export function ExerciseCard({ exercise, onEdit, onDelete, onClick }: ExerciseCa
       {/* Meta row */}
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2 text-xs flex-wrap min-w-0">
+          {drag && (
+            <div onClick={(e) => e.stopPropagation()}>
+              <DragHandle {...drag.listeners} {...drag.attributes} />
+            </div>
+          )}
           <span className={`font-bold ${typeColor}`}>{typeLabel}</span>
           <span className="text-muted-foreground">·</span>
           <span className={`flex items-center gap-1 font-medium ${difficulty.color}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${difficulty.dot}`} />
             {difficulty.label}
           </span>
-          <span className="text-muted-foreground">·</span>
-          <span className="text-muted-foreground tabular-nums">#{exercise.orderIndex}</span>
         </div>
         <div onClick={(e) => e.stopPropagation()} className="shrink-0 -mr-1 -mt-1">
           <DropdownMenu>
@@ -135,5 +144,18 @@ export function ExerciseCard({ exercise, onEdit, onDelete, onClick }: ExerciseCa
         </div>
       )}
     </div>
+  )
+
+  if (!sortable) return renderInner()
+
+  return (
+    <SortableRow id={exercise.id}>
+      {({ listeners, attributes }) =>
+        renderInner({
+          listeners: listeners as unknown as React.HTMLAttributes<HTMLButtonElement>,
+          attributes: attributes as unknown as React.HTMLAttributes<HTMLButtonElement>,
+        })
+      }
+    </SortableRow>
   )
 }

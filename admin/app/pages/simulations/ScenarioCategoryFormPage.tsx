@@ -4,13 +4,14 @@ import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { ScenarioCategoryForm } from '../../components/admin/forms/ScenarioCategoryForm'
-import { useAdminScenarioCategory, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
+import { useAdminScenarioCategories, useAdminScenarioCategory, useSimulationsAdminMutation } from '../../features/simulations/api/use-simulations-admin'
 import { simulationPath } from './route-utils'
 
 export function ScenarioCategoryFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const { id } = useParams()
   const navigate = useNavigate()
   const { data: category } = useAdminScenarioCategory(id)
+  const { data: categories = [] } = useAdminScenarioCategories()
   const mutations = useSimulationsAdminMutation()
 
   const submit = async (payload: Record<string, unknown>) => {
@@ -20,7 +21,9 @@ export function ScenarioCategoryFormPage({ mode }: { mode: 'create' | 'edit' }) 
         toast.success('Đã cập nhật danh mục')
         navigate(simulationPath.category(id))
       } else {
-        await mutations.createCategory.mutateAsync(payload)
+        const nextOrderIndex =
+          categories.reduce((max, c) => Math.max(max, c.orderIndex ?? -1), -1) + 1
+        await mutations.createCategory.mutateAsync({ ...payload, orderIndex: nextOrderIndex })
         toast.success('Đã tạo danh mục')
         navigate(simulationPath.categories())
       }

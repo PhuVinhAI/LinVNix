@@ -105,6 +105,15 @@ export function useLearningAdminMutation() {
       mutationFn: ({ kind, id }: { kind: string; id: string }) => learningAdminRepository.deleteLessonChild(kind, id),
       onSuccess: invalidate,
     }),
+    updateExerciseSet: useMutation({
+      mutationFn: ({ id, payload }: { id: string; payload: Record<string, unknown> }) =>
+        learningAdminRepository.updateExerciseSet(id, payload),
+      onSuccess: invalidate,
+    }),
+    deleteExerciseSet: useMutation({
+      mutationFn: (id: string) => learningAdminRepository.deleteExerciseSet(id),
+      onSuccess: invalidate,
+    }),
     createExercise: useMutation({
       mutationFn: ({ setId, payload }: { setId: string; payload: Record<string, unknown> }) =>
         learningAdminRepository.createExercise(setId, payload),

@@ -1,15 +1,13 @@
 import { useState, type FormEvent } from 'react'
-import { Layers, Hash } from 'lucide-react'
+import { Layers, Clock } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { FormField, FormSection } from '../FormSection'
-import { OrderIndexStepper } from '../editors/OrderIndexStepper'
 import { NumberStepper } from '../editors/NumberStepper'
 
 export interface ModuleFormValues {
   title: string
   description: string
-  orderIndex: number
   estimatedHours?: number | null
 }
 
@@ -25,7 +23,6 @@ export function ModuleForm({
   const [values, setValues] = useState<ModuleFormValues>({
     title: initialValue?.title ?? '',
     description: initialValue?.description ?? '',
-    orderIndex: initialValue?.orderIndex ?? 0,
     estimatedHours: initialValue?.estimatedHours ?? null,
   })
 
@@ -64,27 +61,17 @@ export function ModuleForm({
         </FormField>
       </FormSection>
 
-      <FormSection icon={Hash} title="Sắp xếp và thời lượng" description="Thứ tự hiển thị và thời lượng học tập">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Thứ tự hiển thị" required help="Số nhỏ hiển thị trước">
-            <OrderIndexStepper
-              value={values.orderIndex}
-              onChange={(v) => update('orderIndex', v)}
-              required
-            />
-          </FormField>
-
-          <FormField label="Giờ học ước tính" help="Tổng giờ hoàn thành dự kiến">
-            <NumberStepper
-              value={values.estimatedHours ?? null}
-              onChange={(v) => update('estimatedHours', v)}
-              nullable
-              suffix="h"
-              ariaLabelDecrement="Giảm giờ học"
-              ariaLabelIncrement="Tăng giờ học"
-            />
-          </FormField>
-        </div>
+      <FormSection icon={Clock} title="Thời lượng" description="Tổng giờ hoàn thành dự kiến">
+        <FormField label="Giờ học ước tính" help="Tổng giờ hoàn thành dự kiến">
+          <NumberStepper
+            value={values.estimatedHours ?? null}
+            onChange={(v) => update('estimatedHours', v)}
+            nullable
+            suffix="h"
+            ariaLabelDecrement="Giảm giờ học"
+            ariaLabelIncrement="Tăng giờ học"
+          />
+        </FormField>
       </FormSection>
     </form>
   )

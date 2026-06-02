@@ -22,7 +22,15 @@ export function LessonFormPage({ mode }: { mode: 'create' | 'edit' }) {
         toast.success('Đã cập nhật bài học')
         navigate(learningPath.lesson(id))
       } else if (moduleId) {
-        await mutations.createLesson.mutateAsync({ moduleId, payload })
+        const nextOrderIndex =
+          (module?.lessons ?? []).reduce(
+            (max, l) => Math.max(max, l.orderIndex ?? -1),
+            -1,
+          ) + 1
+        await mutations.createLesson.mutateAsync({
+          moduleId,
+          payload: { ...payload, orderIndex: nextOrderIndex },
+        })
         toast.success('Đã tạo bài học')
         navigate(learningPath.module(moduleId))
       }

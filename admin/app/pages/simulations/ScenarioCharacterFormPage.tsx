@@ -20,7 +20,15 @@ export function ScenarioCharacterFormPage({ mode }: { mode: 'create' | 'edit' })
         await mutations.updateCharacter.mutateAsync({ id, payload })
         toast.success('Đã cập nhật nhân vật')
       } else if (scenarioId) {
-        await mutations.createCharacter.mutateAsync({ scenarioId, payload })
+        const nextOrderIndex =
+          (scenario?.characters ?? []).reduce(
+            (max, c) => Math.max(max, c.orderIndex ?? -1),
+            -1,
+          ) + 1
+        await mutations.createCharacter.mutateAsync({
+          scenarioId,
+          payload: { ...payload, orderIndex: nextOrderIndex },
+        })
         toast.success('Đã tạo nhân vật')
       }
       if (scenarioId) navigate(simulationPath.scenario(scenarioId))

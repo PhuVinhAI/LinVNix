@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import {
   Plus, FileText, Trash2, Pencil, ClipboardList,
   CheckSquare, Edit3, Link2, ArrowDownUp, Languages, Headphones, Mic,
@@ -8,6 +11,7 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { VocabFlashcardSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import {
@@ -22,7 +26,7 @@ import {
 } from '../../components/ui/alert-dialog'
 import { ExerciseCard } from '../../components/learning/ExerciseCard'
 import { useAdminExerciseSet, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
-import type { Exercise } from '../../features/learning/types'
+import type { Exercise, ExerciseSet } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
 const TYPE_META: Record<string, { Icon: LucideIcon; label: string; bg: string }> = {
@@ -38,10 +42,23 @@ const TYPE_META: Record<string, { Icon: LucideIcon; label: string; bg: string }>
 export function ExerciseSetDetailPage() {
   const { setId } = useParams()
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const { data: set, isLoading, error, refetch, isFetching } = useAdminExerciseSet(setId)
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Exercise | null>(null)
   const [typeFilter, setTypeFilter] = useState<string>('all')
+
+  const setKey = ['admin-learning', 'exercise-set', setId] as const
+  const { sensors, handleDragEnd } = useAdminListReorder<Exercise>({
+    getItems: () => qc.getQueryData<ExerciseSet>(setKey)?.exercises ?? [],
+    setItems: (next) =>
+      qc.setQueryData<ExerciseSet>(setKey, (prev) =>
+        prev ? { ...prev, exercises: next } : prev,
+      ),
+    updateOrderIndex: (id, orderIndex) =>
+      mutations.updateExercise.mutateAsync({ id, payload: { orderIndex } }),
+    onError: () => toast.error('Không thể sắp xếp lại bài tập'),
+  })
 
   const confirmDelete = async () => {
     if (!pendingDelete) return
@@ -61,10 +78,12 @@ export function ExerciseSetDetailPage() {
     return acc
   }, {})
 
-  const filteredExercises = exercises.filter((ex) => {
+  const sortedExercises = [...exercises].sort((a, b) => a.orderIndex - b.orderIndex)
+  const filteredExercises = sortedExercises.filter((ex) => {
     if (typeFilter === 'all') return true
     return (ex.exerciseType ?? '').toLowerCase() === typeFilter
   })
+  const canReorder = typeFilter === 'all'
 
   // Calculate average difficulty
   const avgDifficulty = exercises.length > 0
@@ -212,17 +231,25 @@ export function ExerciseSetDetailPage() {
             <p className="text-sm text-muted-foreground">Không có bài tập loại này</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {filteredExercises.map((exercise) => (
-              <ExerciseCard
-                key={exercise.id}
-                exercise={exercise}
-                onClick={() => navigate(learningPath.exerciseEdit(exercise.setId, exercise.id))}
-                onEdit={() => navigate(learningPath.exerciseEdit(exercise.setId, exercise.id))}
-                onDelete={() => setPendingDelete(exercise)}
-              />
-            ))}
-          </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={filteredExercises.map((e) => e.id)}
+              strategy={rectSortingStrategy}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {filteredExercises.map((exercise) => (
+                  <ExerciseCard
+                    key={exercise.id}
+                    exercise={exercise}
+                    sortable={canReorder}
+                    onClick={() => navigate(learningPath.exerciseEdit(exercise.setId, exercise.id))}
+                    onEdit={() => navigate(learningPath.exerciseEdit(exercise.setId, exercise.id))}
+                    onDelete={() => setPendingDelete(exercise)}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
 

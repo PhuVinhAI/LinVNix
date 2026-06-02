@@ -92,6 +92,15 @@ export class LearningAdminRepository {
     await apiClient.delete(`/admin/learning/${kind}/${id}`)
   }
 
+  async updateExerciseSet(id: string, payload: Record<string, unknown>) {
+    const response = await apiClient.patch(`/admin/learning/exercise-sets/${id}`, payload)
+    return unwrap(response)
+  }
+
+  async deleteExerciseSet(id: string) {
+    await apiClient.delete(`/admin/learning/exercise-sets/${id}`)
+  }
+
   async createExercise(setId: string, payload: Record<string, unknown>) {
     const response = await apiClient.post(`/admin/learning/exercise-sets/${setId}/exercises`, payload)
     return unwrap(response)

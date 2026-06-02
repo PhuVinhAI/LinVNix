@@ -2,9 +2,15 @@ import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import { Plus, BookOpen, Layers, Pencil, Trash2, MoreVertical, Clock, Search } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
+import { DragHandle } from '../../components/admin/shared/DragHandle'
+import { SortableRow } from '../../components/admin/shared/SortableRow'
+import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,16 +37,27 @@ import { resolveMediaUrl } from '../../../lib/shared/media-url'
 
 export function CoursesPage() {
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const { data = [], isLoading, error, refetch, isFetching } = useAdminCourses()
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Course | null>(null)
   const [search, setSearch] = useState('')
   const [levelFilter, setLevelFilter] = useState<string>('all')
 
-  const filtered = data.filter((course) => {
+  const sorted = [...data].sort((a, b) => a.orderIndex - b.orderIndex)
+  const filtered = sorted.filter((course) => {
     if (search && !course.title.toLowerCase().includes(search.toLowerCase())) return false
     if (levelFilter !== 'all' && course.level !== levelFilter) return false
     return true
+  })
+  const canReorder = !search && levelFilter === 'all'
+
+  const { sensors, handleDragEnd } = useAdminListReorder<Course>({
+    getItems: () => qc.getQueryData<Course[]>(['admin-learning', 'courses']) ?? [],
+    setItems: (next) => qc.setQueryData<Course[]>(['admin-learning', 'courses'], next),
+    updateOrderIndex: (id, orderIndex) =>
+      mutations.updateCourse.mutateAsync({ id, payload: { orderIndex } }),
+    onError: () => toast.error('Không thể sắp xếp lại khóa học'),
   })
 
   const confirmDelete = async () => {
@@ -128,109 +145,22 @@ export function CoursesPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {filtered.map((course) => {
-              const bg = levelBg(course.level)
-              const label = levelLabel(course.level, course.vietnameseLevelName)
-              return (
-                <div
-                  key={course.id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => navigate(learningPath.course(course.id))}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') navigate(learningPath.course(course.id))
-                  }}
-                  className="group relative rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
-                >
-                  {/* Thumbnail area */}
-                  <div className={`relative h-32 ${bg} overflow-hidden`}>
-                    {course.thumbnailUrl ? (
-                      <img
-                        src={resolveMediaUrl(course.thumbnailUrl) ?? ''}
-                        alt={course.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <BookOpen className="h-16 w-16 text-white/20" strokeWidth={1.5} />
-                      </div>
-                    )}
-                    <div className="absolute top-2 left-2">
-                      <span className="inline-flex items-center gap-1 rounded-md bg-black/40 backdrop-blur-sm px-2 py-1 text-xs font-bold text-white">
-                        {course.level} · {label}
-                      </span>
-                    </div>
-                    <div className="absolute top-2 right-2">
-                      <div onClick={stop} onKeyDown={stop}>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 rounded-md bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 hover:text-white"
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-44">
-                            <DropdownMenuItem asChild>
-                              <Link to={learningPath.courseEdit(course.id)}>
-                                <Pencil className="h-4 w-4" />
-                                Chỉnh sửa
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              variant="destructive"
-                              onSelect={() => setPendingDelete(course)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              Xóa khóa học
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-4">
-                    <h3 className="text-base font-bold text-foreground line-clamp-1 mb-1">
-                      {course.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2 mb-3 leading-relaxed">
-                      {course.description}
-                    </p>
-                    <div className="flex items-center gap-3 text-xs">
-                      <span className="flex items-center gap-1.5 text-muted-foreground">
-                        <Layers className="h-3.5 w-3.5" />
-                        <span className="font-medium">{course.modules?.length ?? 0} chủ đề</span>
-                      </span>
-                      {course.estimatedHours && (
-                        <span className="flex items-center gap-1.5 text-muted-foreground">
-                          <Clock className="h-3.5 w-3.5" />
-                          <span className="font-medium tabular-nums">{course.estimatedHours} giờ</span>
-                        </span>
-                      )}
-                      <span className="ml-auto">
-                        {course.isPublished ? (
-                          <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-1 text-[11px] font-bold">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                            Đang phát hành
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 rounded-md bg-muted text-muted-foreground px-2 py-1 text-[11px] font-bold">
-                            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
-                            Bản nháp
-                          </span>
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={filtered.map((c) => c.id)} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {filtered.map((course) => (
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    canDrag={canReorder}
+                    onOpen={() => navigate(learningPath.course(course.id))}
+                    onDelete={() => setPendingDelete(course)}
+                    stop={stop}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
 
           <AlertDialog open={!!pendingDelete} onOpenChange={(open) => !open && setPendingDelete(null)}>
             <AlertDialogContent>
@@ -260,6 +190,127 @@ export function CoursesPage() {
         </>
       )}
     </div>
+  )
+}
+
+function CourseCard({
+  course,
+  canDrag,
+  onOpen,
+  onDelete,
+  stop,
+}: {
+  course: Course
+  canDrag: boolean
+  onOpen: () => void
+  onDelete: () => void
+  stop: (e: MouseEvent | KeyboardEvent) => void
+}) {
+  const bg = levelBg(course.level)
+  const label = levelLabel(course.level, course.vietnameseLevelName)
+  return (
+    <SortableRow id={course.id} disabled={!canDrag}>
+      {({ listeners, attributes }) => (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onOpen}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') onOpen()
+          }}
+          className="group relative rounded-lg border-2 border-border bg-card overflow-hidden cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+        >
+          <div className={`relative h-32 ${bg} overflow-hidden`}>
+            {course.thumbnailUrl ? (
+              <img
+                src={resolveMediaUrl(course.thumbnailUrl) ?? ''}
+                alt={course.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <BookOpen className="h-16 w-16 text-white/20" strokeWidth={1.5} />
+              </div>
+            )}
+            <div className="absolute top-2 left-2 flex items-center gap-1.5">
+              {canDrag && (
+                <div onClick={stop} onKeyDown={stop}>
+                  <DragHandle
+                    {...listeners}
+                    {...attributes}
+                    className="h-8 w-6 rounded-md bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 hover:text-white"
+                  />
+                </div>
+              )}
+              <span className="inline-flex items-center gap-1 rounded-md bg-black/40 backdrop-blur-sm px-2 py-1 text-xs font-bold text-white">
+                {course.level} · {label}
+              </span>
+            </div>
+            <div className="absolute top-2 right-2">
+              <div onClick={stop} onKeyDown={stop}>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-md bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 hover:text-white"
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44">
+                    <DropdownMenuItem asChild>
+                      <Link to={learningPath.courseEdit(course.id)}>
+                        <Pencil className="h-4 w-4" />
+                        Chỉnh sửa
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem variant="destructive" onSelect={onDelete}>
+                      <Trash2 className="h-4 w-4" />
+                      Xóa khóa học
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4">
+            <h3 className="text-base font-bold text-foreground line-clamp-1 mb-1">
+              {course.title}
+            </h3>
+            <p className="text-xs text-muted-foreground line-clamp-2 mb-3 leading-relaxed">
+              {course.description}
+            </p>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <Layers className="h-3.5 w-3.5" />
+                <span className="font-medium">{course.modules?.length ?? 0} chủ đề</span>
+              </span>
+              {course.estimatedHours && (
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Clock className="h-3.5 w-3.5" />
+                  <span className="font-medium tabular-nums">{course.estimatedHours} giờ</span>
+                </span>
+              )}
+              <span className="ml-auto">
+                {course.isPublished ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-1 text-[11px] font-bold">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    Đang phát hành
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 rounded-md bg-muted text-muted-foreground px-2 py-1 text-[11px] font-bold">
+                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
+                    Bản nháp
+                  </span>
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+    </SortableRow>
   )
 }
 
