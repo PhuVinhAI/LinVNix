@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CoursesRepository } from './repositories/courses.repository';
 import { ModulesRepository } from './repositories/modules.repository';
 import {
@@ -17,8 +21,9 @@ import { ProgressStatus } from '../../../common/enums';
 import { Course } from '../domain/course.entity';
 import { Module } from '../domain/module.entity';
 import { Lesson } from '../domain/lesson.entity';
-import { LessonType, UserLevel } from '../../../common/enums';
+import { ContentType, LessonType, UserLevel } from '../../../common/enums';
 import { LessonContent } from '../../contents/domain/lesson-content.entity';
+import { DialogueData } from '../../contents/domain/dialogue-data.types';
 import { GrammarRule } from '../../grammar/domain/grammar-rule.entity';
 import {
   CourseStatsPort,
@@ -193,20 +198,107 @@ export class CourseContentService implements CourseStatsPort {
   }
 
   async createContent(data: Partial<LessonContent>): Promise<LessonContent> {
-    return this.contentsRepository.create(data);
+    return this.contentsRepository.create(this.prepareContentPayload(data));
   }
 
   async updateContent(
     id: string,
     data: Partial<LessonContent>,
   ): Promise<LessonContent> {
-    await this.findContentById(id);
-    return this.contentsRepository.update(id, data);
+    const existing = await this.findContentById(id);
+    const effectiveType = (data.contentType ?? existing.contentType) as ContentType;
+    const effectiveDialogue =
+      data.dialogueData !== undefined ? data.dialogueData : existing.dialogueData;
+    const merged: Partial<LessonContent> = {
+      ...data,
+      contentType: effectiveType,
+      dialogueData: effectiveDialogue,
+    };
+    return this.contentsRepository.update(id, this.prepareContentPayload(merged));
   }
 
   async deleteContent(id: string): Promise<void> {
     await this.findContentById(id);
     await this.contentsRepository.delete(id);
+  }
+
+  /**
+   * Hợp nhất xử lý dialogue:
+   * - Nếu contentType=dialogue: bắt buộc có dialogueData hợp lệ, derive vietnameseText/translation từ lines.
+   * - Nếu khác: clear dialogueData (tránh dirty data từ lần đổi type).
+   */
+  private prepareContentPayload(
+    data: Partial<LessonContent>,
+  ): Partial<LessonContent> {
+    if (data.contentType !== ContentType.DIALOGUE) {
+      return { ...data, dialogueData: null };
+    }
+    const dialogue = data.dialogueData;
+    if (!dialogue) {
+      throw new BadRequestException(
+        'Hội thoại cần có dialogueData (characters + lines).',
+      );
+    }
+    this.validateDialogue(dialogue);
+    const { vi, en } = this.deriveDialogueText(dialogue);
+    return {
+      ...data,
+      dialogueData: dialogue,
+      vietnameseText: vi,
+      translation: en ?? undefined,
+    };
+  }
+
+  private validateDialogue(dialogue: DialogueData): void {
+    if (!dialogue.characters?.length) {
+      throw new BadRequestException('Hội thoại cần ít nhất 1 nhân vật.');
+    }
+    const ids = new Set<string>();
+    let rightCount = 0;
+    for (const c of dialogue.characters) {
+      if (!c.id) {
+        throw new BadRequestException('Nhân vật cần có id.');
+      }
+      if (ids.has(c.id)) {
+        throw new BadRequestException(`Trùng id nhân vật: ${c.id}`);
+      }
+      ids.add(c.id);
+      if (c.side === 'right') rightCount++;
+    }
+    if (rightCount > 1) {
+      throw new BadRequestException(
+        'Chỉ được phép có tối đa 1 nhân vật ở bên phải.',
+      );
+    }
+    for (const [i, line] of (dialogue.lines ?? []).entries()) {
+      if (!ids.has(line.characterId)) {
+        throw new BadRequestException(
+          `Dòng ${i + 1} tham chiếu nhân vật không tồn tại: ${line.characterId}`,
+        );
+      }
+    }
+  }
+
+  private deriveDialogueText(dialogue: DialogueData): {
+    vi: string;
+    en: string | null;
+  } {
+    const charById = new Map(dialogue.characters.map((c) => [c.id, c]));
+    const viParts: string[] = [];
+    const enParts: string[] = [];
+    let hasEn = false;
+    for (const line of dialogue.lines ?? []) {
+      const name = charById.get(line.characterId)?.name ?? '';
+      const vi = line.vi?.trim() ?? '';
+      const en = line.en?.trim() ?? '';
+      viParts.push(name ? `${name}: ${vi}` : vi);
+      enParts.push(name ? `${name}: ${en}` : en);
+      if (en) hasEn = true;
+    }
+    return {
+      vi: viParts.join('\n'),
+      en: hasEn ? enParts.join('\n') : null,
+    };
   }
 
   async createGrammarRule(data: Partial<GrammarRule>): Promise<GrammarRule> {

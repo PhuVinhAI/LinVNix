@@ -68,9 +68,11 @@ class LessonContent {
     this.imageUrl,
     this.videoUrl,
     this.notes,
+    this.dialogueData,
   });
 
   factory LessonContent.fromJson(Map<String, dynamic> json) {
+    final dialogue = json['dialogueData'];
     return LessonContent(
       id: json['id'] as String,
       contentType: json['contentType'] as String,
@@ -82,6 +84,9 @@ class LessonContent {
       imageUrl: json['imageUrl'] as String?,
       videoUrl: json['videoUrl'] as String?,
       notes: json['notes'] as String?,
+      dialogueData: dialogue is Map<String, dynamic>
+          ? LessonDialogueData.fromJson(dialogue)
+          : null,
     );
   }
 
@@ -95,6 +100,78 @@ class LessonContent {
   final String? imageUrl;
   final String? videoUrl;
   final String? notes;
+  final LessonDialogueData? dialogueData;
+}
+
+enum DialogueSide { left, right }
+
+class DialogueCharacter {
+  const DialogueCharacter({
+    required this.id,
+    required this.name,
+    required this.side,
+  });
+
+  factory DialogueCharacter.fromJson(Map<String, dynamic> json) {
+    final rawSide = json['side'] as String?;
+    return DialogueCharacter(
+      id: json['id'] as String,
+      name: json['name'] as String? ?? '',
+      side: rawSide == 'right' ? DialogueSide.right : DialogueSide.left,
+    );
+  }
+
+  final String id;
+  final String name;
+  final DialogueSide side;
+}
+
+class DialogueLineEntry {
+  const DialogueLineEntry({
+    required this.characterId,
+    required this.vi,
+    this.en,
+    this.audio,
+  });
+
+  factory DialogueLineEntry.fromJson(Map<String, dynamic> json) {
+    return DialogueLineEntry(
+      characterId: json['characterId'] as String,
+      vi: json['vi'] as String? ?? '',
+      en: json['en'] as String?,
+      audio: json['audio'] as String?,
+    );
+  }
+
+  final String characterId;
+  final String vi;
+  final String? en;
+  final String? audio;
+}
+
+class LessonDialogueData {
+  const LessonDialogueData({
+    required this.characters,
+    required this.lines,
+  });
+
+  factory LessonDialogueData.fromJson(Map<String, dynamic> json) {
+    final rawChars = (json['characters'] as List<dynamic>?) ?? const [];
+    final rawLines = (json['lines'] as List<dynamic>?) ?? const [];
+    return LessonDialogueData(
+      characters: rawChars
+          .whereType<Map<String, dynamic>>()
+          .map(DialogueCharacter.fromJson)
+          .toList(growable: false),
+      lines: rawLines
+          .whereType<Map<String, dynamic>>()
+          .map(DialogueLineEntry.fromJson)
+          .toList(growable: false),
+    );
+  }
+
+  final List<DialogueCharacter> characters;
+  final List<DialogueLineEntry> lines;
 }
 
 class LessonVocabulary {

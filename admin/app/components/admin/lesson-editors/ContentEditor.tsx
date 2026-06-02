@@ -23,6 +23,9 @@ import {
   Languages,
   Type,
   Trash2,
+  UserPlus,
+  ArrowLeftRight,
+  ChevronDown,
 } from 'lucide-react'
 import { Button } from '@/app/components/ui/button'
 import { MediaUpload } from '@/app/components/admin/editors/MediaUpload'
@@ -36,7 +39,14 @@ import { ContentTypePicker } from './shared/ContentTypePicker'
 import { DragHandle } from './shared/DragHandle'
 import { SortableRow } from './shared/SortableRow'
 import { DeleteRowButton } from './shared/DeleteRowButton'
-import type { LessonContent } from '@/app/features/learning/types'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/app/components/ui/dropdown-menu'
+import type { DialogueCharacter, DialogueData, DialogueLine, DialogueSide, LessonContent } from '@/app/features/learning/types'
+import { colorForCharacter, initialFor, type DialogueColor } from './shared/dialogue-color'
 import { cn } from '@/lib/utils'
 
 const NEW_DEFAULTS = {
@@ -348,38 +358,22 @@ function TextBody({
 }
 
 // ===== TYPE: DIALOGUE =====
-type DialogueLine = { speaker: string; vi: string; en: string }
 
-function parseDialogue(text: string, translation: string | null | undefined): DialogueLine[] {
-  const viLines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
-  const enLines = (translation ?? '').split(/\r?\n/).map((l) => l.trim())
-  return viLines.map((line, i) => {
-    const match = line.match(/^([^:：]+)[:：]\s*(.*)$/)
-    const speaker = match ? match[1].trim() : ''
-    const vi = match ? match[2].trim() : line
-    const enRaw = enLines[i] ?? ''
-    const enMatch = enRaw.match(/^([^:：]+)[:：]\s*(.*)$/)
-    const en = enMatch ? enMatch[2].trim() : enRaw
-    return { speaker, vi, en }
-  })
+function makeCharacterId() {
+  return `c_${Math.random().toString(36).slice(2, 10)}`
 }
 
-function serializeDialogue(lines: DialogueLine[]) {
-  const meaningful = lines.filter((l) => l.vi.trim() || l.en.trim())
-  const vi = meaningful
-    .map((l) => (l.speaker ? `${l.speaker}: ${l.vi}` : l.vi))
-    .join('\n')
-  const en = meaningful
-    .map((l) => (l.speaker ? `${l.speaker}: ${l.en}` : l.en))
-    .join('\n')
-  return { vi, en }
+function emptyDialogueData(): DialogueData {
+  const protagonist: DialogueCharacter = {
+    id: makeCharacterId(),
+    name: '',
+    side: 'right',
+  }
+  return { characters: [protagonist], lines: [{ characterId: protagonist.id, vi: '', en: '' }] }
 }
 
-function dialogueSignature(lines: DialogueLine[]) {
-  return lines
-    .filter((l) => l.vi.trim() || l.en.trim())
-    .map((l) => `${l.speaker}|${l.vi}|${l.en}`)
-    .join('\n')
+function dialogueSignature(data: DialogueData): string {
+  return JSON.stringify(data)
 }
 
 function DialogueBody({
@@ -391,74 +385,131 @@ function DialogueBody({
   onPatch: (p: Partial<LessonContent>) => void
   autoFocus: boolean
 }) {
-  // Local source of truth — keeps blank trailing lines and unsaved input
-  const [lines, setLines] = useState<DialogueLine[]>(() => {
-    const parsed = parseDialogue(row.vietnameseText, row.translation)
-    return parsed.length ? parsed : [{ speaker: '', vi: '', en: '' }]
-  })
+  const [data, setData] = useState<DialogueData>(() => row.dialogueData ?? emptyDialogueData())
 
-  // Re-sync from props ONLY when the server data diverges from what we last committed
-  // (handles external refetch / undo cases without nuking in-progress empty rows)
-  const lastSignatureRef = useRef(dialogueSignature(lines))
+  const lastSigRef = useRef(dialogueSignature(data))
   useEffect(() => {
-    const incomingSig = dialogueSignature(parseDialogue(row.vietnameseText, row.translation))
-    if (incomingSig !== lastSignatureRef.current) {
-      const parsed = parseDialogue(row.vietnameseText, row.translation)
-      setLines(parsed.length ? parsed : [{ speaker: '', vi: '', en: '' }])
-      lastSignatureRef.current = incomingSig
+    const incoming = row.dialogueData ?? emptyDialogueData()
+    const sig = dialogueSignature(incoming)
+    if (sig !== lastSigRef.current) {
+      setData(incoming)
+      lastSigRef.current = sig
     }
-  }, [row.vietnameseText, row.translation])
+  }, [row.dialogueData])
 
   const [showAudio, setShowAudio] = useState(!!row.audioUrl)
 
-  const speakerOrder = useMemo(() => {
-    const seen: string[] = []
-    for (const l of lines) {
-      const s = l.speaker.trim()
-      if (s && !seen.includes(s)) seen.push(s)
+  const apply = (next: DialogueData) => {
+    setData(next)
+    lastSigRef.current = dialogueSignature(next)
+    onPatch({ dialogueData: next })
+  }
+
+  const charById = useMemo(() => {
+    const map = new Map<string, DialogueCharacter>()
+    for (const c of data.characters) map.set(c.id, c)
+    return map
+  }, [data.characters])
+
+  const lineCountByCharacter = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const line of data.lines) {
+      counts.set(line.characterId, (counts.get(line.characterId) ?? 0) + 1)
     }
-    return seen
-  }, [lines])
+    return counts
+  }, [data.lines])
 
-  const sideOf = (speaker: string): 'left' | 'right' | 'center' => {
-    const s = speaker.trim()
-    if (!s) return 'center'
-    const idx = speakerOrder.indexOf(s)
-    if (idx === 0) return 'left'
-    if (idx === 1) return 'right'
-    return 'center'
+  const rightCharacter = data.characters.find((c) => c.side === 'right') ?? null
+
+  const addCharacter = () => {
+    const c: DialogueCharacter = { id: makeCharacterId(), name: '', side: 'left' }
+    apply({ ...data, characters: [...data.characters, c] })
   }
 
-  const apply = (next: DialogueLine[]) => {
-    setLines(next)
-    const { vi, en } = serializeDialogue(next)
-    lastSignatureRef.current = dialogueSignature(next)
-    onPatch({ vietnameseText: vi, translation: en || null })
+  const updateCharacter = (id: string, patch: Partial<DialogueCharacter>) => {
+    apply({
+      ...data,
+      characters: data.characters.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+    })
   }
 
-  const updateLine = (i: number, patch: Partial<DialogueLine>) =>
-    apply(lines.map((l, idx) => (idx === i ? { ...l, ...patch } : l)))
-
-  const removeLine = (i: number) => {
-    if (lines.length <= 1) return
-    apply(lines.filter((_, idx) => idx !== i))
-  }
-
-  const addLine = (preferredSpeaker?: string) => {
-    const lastSpeaker = lines[lines.length - 1]?.speaker ?? ''
-    let inferred = preferredSpeaker ?? ''
-    if (!inferred) {
-      if (speakerOrder.length >= 2) {
-        inferred = lastSpeaker === speakerOrder[0] ? speakerOrder[1] : speakerOrder[0]
-      } else if (speakerOrder.length === 1) {
-        inferred = lastSpeaker === speakerOrder[0] ? '' : speakerOrder[0]
-      }
+  const toggleSide = (id: string) => {
+    const target = charById.get(id)
+    if (!target) return
+    if (target.side === 'right') {
+      apply({
+        ...data,
+        characters: data.characters.map((c) => (c.id === id ? { ...c, side: 'left' as DialogueSide } : c)),
+      })
+      return
     }
-    apply([...lines, { speaker: inferred, vi: '', en: '' }])
+    apply({
+      ...data,
+      characters: data.characters.map((c) => {
+        if (c.id === id) return { ...c, side: 'right' as DialogueSide }
+        if (c.side === 'right') return { ...c, side: 'left' as DialogueSide }
+        return c
+      }),
+    })
+  }
+
+  const removeCharacter = (id: string) => {
+    if (data.characters.length <= 1) return
+    if ((lineCountByCharacter.get(id) ?? 0) > 0) return
+    apply({ ...data, characters: data.characters.filter((c) => c.id !== id) })
+  }
+
+  const addLine = (characterId: string) => {
+    apply({ ...data, lines: [...data.lines, { characterId, vi: '', en: '' }] })
+  }
+
+  const updateLine = (index: number, patch: Partial<DialogueLine>) => {
+    apply({
+      ...data,
+      lines: data.lines.map((l, i) => (i === index ? { ...l, ...patch } : l)),
+    })
+  }
+
+  const removeLine = (index: number) => {
+    apply({ ...data, lines: data.lines.filter((_, i) => i !== index) })
   }
 
   return (
     <div className="p-4 space-y-4">
+      {/* Character roster */}
+      <div className="rounded-xl border-2 border-border bg-muted/20 p-3 space-y-2">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Nhân vật ({data.characters.length})
+          </span>
+          <span className="text-[10px] text-muted-foreground">
+            Bên phải = nhân vật chính · các nhân vật còn lại ở bên trái
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {data.characters.map((c) => (
+            <CharacterChip
+              key={c.id}
+              character={c}
+              lineCount={lineCountByCharacter.get(c.id) ?? 0}
+              isOnlyRight={c.side === 'right' && rightCharacter?.id === c.id}
+              canDelete={data.characters.length > 1 && (lineCountByCharacter.get(c.id) ?? 0) === 0}
+              onRename={(name) => updateCharacter(c.id, { name })}
+              onToggleSide={() => toggleSide(c.id)}
+              onRemove={() => removeCharacter(c.id)}
+            />
+          ))}
+          <button
+            type="button"
+            onClick={addCharacter}
+            className="inline-flex items-center gap-1.5 rounded-full border-2 border-dashed border-border bg-card px-3 py-1.5 text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+          >
+            <UserPlus className="h-3.5 w-3.5" />
+            Thêm nhân vật
+          </button>
+        </div>
+      </div>
+
       {showAudio && (
         <FieldRow icon={<Volume2 className="h-3.5 w-3.5" />} label="File âm thanh cho cả đoạn">
           <MediaUpload
@@ -472,77 +523,55 @@ function DialogueBody({
         </FieldRow>
       )}
 
-      {/* Speaker legend */}
-      {speakerOrder.length > 0 && (
-        <div className="flex items-center gap-2 flex-wrap text-xs">
-          <span className="font-bold uppercase tracking-wider text-muted-foreground">Nhân vật:</span>
-          {speakerOrder.slice(0, 2).map((sp, i) => (
-            <span
-              key={sp}
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-bold',
-                i === 0
-                  ? 'bg-blue-500/10 text-blue-700 dark:text-blue-300'
-                  : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
-              )}
-            >
-              <SpeakerAvatar name={sp} variant={i === 0 ? 'left' : 'right'} size="sm" />
-              {sp}
-              <span className="text-muted-foreground font-medium">· {i === 0 ? 'bên trái' : 'bên phải'}</span>
-            </span>
-          ))}
-          {speakerOrder.slice(2).map((sp) => (
-            <span
-              key={sp}
-              className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 font-bold text-muted-foreground"
-            >
-              <SpeakerAvatar name={sp} variant="center" size="sm" />
-              {sp}
-            </span>
-          ))}
-        </div>
-      )}
-
       {/* Chat thread */}
-      <div className="rounded-xl border-2 border-input bg-[radial-gradient(circle_at_1px_1px,_var(--border)_1px,_transparent_0)] [background-size:16px_16px] p-4 space-y-3">
-        {lines.map((line, i) => (
-          <DialogueBubble
-            key={i}
-            line={line}
-            side={sideOf(line.speaker)}
-            speakerOrder={speakerOrder}
-            canDelete={lines.length > 1}
-            autoFocus={autoFocus && i === 0 && !line.speaker && !line.vi}
-            onUpdate={(patch) => updateLine(i, patch)}
-            onDelete={() => removeLine(i)}
-          />
-        ))}
-      </div>
-
-      {/* Add buttons */}
-      <div className="space-y-2">
-        {speakerOrder.length >= 2 ? (
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => addLine(speakerOrder[0])}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-blue-500/40 bg-blue-500/5 py-2.5 text-sm font-semibold text-blue-700 dark:text-blue-300 hover:bg-blue-500/10 transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              Thêm lượt {speakerOrder[0]}
-            </button>
-            <button
-              type="button"
-              onClick={() => addLine(speakerOrder[1])}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-emerald-500/40 bg-emerald-500/5 py-2.5 text-sm font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              Thêm lượt {speakerOrder[1]}
-            </button>
+      <div className="rounded-xl border-2 border-input bg-muted/10 p-4 space-y-3 min-h-[140px]">
+        {data.lines.length === 0 ? (
+          <div className="text-center text-sm text-muted-foreground py-6">
+            Chưa có lượt thoại. Bấm "Thêm lượt …" bên dưới.
           </div>
         ) : (
-          <InlineAddButton onClick={() => addLine()}>Thêm lượt thoại</InlineAddButton>
+          data.lines.map((line, i) => {
+            const character = charById.get(line.characterId) ?? data.characters[0]
+            return (
+              <DialogueBubble
+                key={i}
+                index={i}
+                line={line}
+                character={character}
+                characters={data.characters}
+                canDelete={data.lines.length > 1}
+                autoFocus={autoFocus && i === 0 && !line.vi}
+                onUpdate={(patch) => updateLine(i, patch)}
+                onDelete={() => removeLine(i)}
+                onReassign={(characterId) => updateLine(i, { characterId })}
+              />
+            )
+          })
         )}
+      </div>
+
+      {/* Add line buttons — one per character */}
+      <div className={cn('grid gap-2', data.characters.length >= 3 ? 'grid-cols-3' : 'grid-cols-2')}>
+        {data.characters.map((c) => {
+          const color = colorForCharacter(c.id)
+          return (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => addLine(c.id)}
+              className={cn(
+                'inline-flex items-center justify-center gap-2 rounded-lg border-2 border-dashed py-2.5 text-sm font-semibold transition-colors',
+                color.borderClass,
+                color.bgClass,
+                color.textClass,
+                'hover:opacity-80',
+              )}
+            >
+              <Plus className="h-4 w-4" />
+              Thêm lượt {c.name.trim() || 'nhân vật'}
+            </button>
+          )
+        })}
       </div>
 
       {!showAudio && (
@@ -554,174 +583,50 @@ function DialogueBody({
   )
 }
 
-function DialogueBubble({
-  line,
-  side,
-  speakerOrder,
+function CharacterChip({
+  character,
+  lineCount,
   canDelete,
-  autoFocus,
-  onUpdate,
-  onDelete,
+  onRename,
+  onToggleSide,
+  onRemove,
 }: {
-  line: DialogueLine
-  side: 'left' | 'right' | 'center'
-  speakerOrder: string[]
+  character: DialogueCharacter
+  lineCount: number
+  isOnlyRight: boolean
   canDelete: boolean
-  autoFocus: boolean
-  onUpdate: (patch: Partial<DialogueLine>) => void
-  onDelete: () => void
+  onRename: (name: string) => void
+  onToggleSide: () => void
+  onRemove: () => void
 }) {
-  const alignRow = side === 'right' ? 'justify-end' : side === 'left' ? 'justify-start' : 'justify-center'
+  const color = colorForCharacter(character.id)
+  const sideLabel = character.side === 'right' ? 'bên phải' : 'bên trái'
+  const [draft, setDraft] = useState(character.name)
+  const lastRef = useRef(character.name)
 
-  const bubbleColor =
-    side === 'left'
-      ? 'border-blue-500/30 bg-blue-500/[0.06]'
-      : side === 'right'
-      ? 'border-emerald-500/30 bg-emerald-500/[0.06]'
-      : 'border-input bg-card'
-
-  const radius =
-    side === 'left'
-      ? 'rounded-2xl rounded-tl-sm'
-      : side === 'right'
-      ? 'rounded-2xl rounded-tr-sm'
-      : 'rounded-2xl'
-
-  const labelColor =
-    side === 'left'
-      ? 'text-blue-700 dark:text-blue-300'
-      : side === 'right'
-      ? 'text-emerald-700 dark:text-emerald-300'
-      : 'text-muted-foreground'
-
-  const bubble = (
-    <div className={cn('flex flex-col gap-0.5 max-w-[85%] group/bubble min-w-0 flex-1', side === 'right' && 'items-end')}>
-      <div className={cn('flex items-center gap-2 px-1', side === 'right' && 'flex-row-reverse')}>
-        <SpeakerLabelInput
-          value={line.speaker}
-          suggestions={speakerOrder}
-          onChange={(v) => onUpdate({ speaker: v })}
-          colorClass={labelColor}
-          align={side}
-        />
-        {canDelete && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={onDelete}
-            className="h-6 w-6 text-muted-foreground/0 group-hover/bubble:text-muted-foreground hover:text-destructive transition-colors"
-            aria-label="Xóa lượt"
-          >
-            <Trash2 className="h-3 w-3" />
-          </Button>
-        )}
-      </div>
-      <div className={cn('border-2 px-3.5 py-2 space-y-0.5 w-full', radius, bubbleColor)}>
-        <InlineTextarea
-          value={line.vi}
-          onCommit={(v) => onUpdate({ vi: v })}
-          placeholder="Câu thoại tiếng Việt..."
-          minRows={1}
-          autoFocus={autoFocus}
-          className="border-0 bg-transparent px-0 py-0 hover:bg-transparent focus:bg-transparent focus:ring-0 text-foreground"
-        />
-        {(line.en || line.vi) && (
-          <InlineTextarea
-            value={line.en}
-            onCommit={(v) => onUpdate({ en: v })}
-            placeholder="Bản dịch..."
-            minRows={1}
-            size="sm"
-            className="border-0 bg-transparent px-0 py-0 hover:bg-transparent focus:bg-transparent focus:ring-0 text-muted-foreground italic"
-          />
-        )}
-      </div>
-    </div>
-  )
-
-  const avatar = (
-    <SpeakerAvatar
-      name={line.speaker}
-      variant={side}
-      size="md"
-      className={cn('shrink-0', side === 'center' && 'opacity-60')}
-    />
-  )
-
-  return (
-    <div className={cn('flex items-end gap-2', alignRow)}>
-      {side === 'left' && avatar}
-      {bubble}
-      {side === 'right' && avatar}
-    </div>
-  )
-}
-
-function SpeakerAvatar({
-  name,
-  variant,
-  size = 'md',
-  className,
-}: {
-  name: string
-  variant: 'left' | 'right' | 'center'
-  size?: 'sm' | 'md'
-  className?: string
-}) {
-  const initial = (name.trim()[0] || '?').toUpperCase()
-  const color =
-    variant === 'left'
-      ? 'bg-blue-500 text-white'
-      : variant === 'right'
-      ? 'bg-emerald-500 text-white'
-      : 'bg-muted text-muted-foreground'
-  return (
-    <div
-      className={cn(
-        'flex items-center justify-center rounded-full font-bold',
-        size === 'sm' ? 'h-5 w-5 text-[10px]' : 'h-8 w-8 text-sm',
-        color,
-        className,
-      )}
-    >
-      {initial}
-    </div>
-  )
-}
-
-function SpeakerLabelInput({
-  value,
-  suggestions,
-  onChange,
-  colorClass,
-  align,
-}: {
-  value: string
-  suggestions: string[]
-  onChange: (next: string) => void
-  colorClass: string
-  align: 'left' | 'right' | 'center'
-}) {
-  const [draft, setDraft] = useState(value)
-  const lastRef = useRef(value)
   useEffect(() => {
-    if (value !== lastRef.current) {
-      setDraft(value)
-      lastRef.current = value
+    if (character.name !== lastRef.current) {
+      setDraft(character.name)
+      lastRef.current = character.name
     }
-  }, [value])
+  }, [character.name])
 
   const commit = () => {
     if (draft === lastRef.current) return
     lastRef.current = draft
-    onChange(draft)
+    onRename(draft)
   }
 
-  const others = suggestions.filter((s) => s !== value).slice(0, 2)
-
   return (
-    <div className={cn('inline-flex items-center gap-1', align === 'right' && 'flex-row-reverse')}>
+    <div
+      className={cn(
+        'inline-flex items-center gap-2 rounded-full border-2 px-2 py-1.5 text-sm font-bold',
+        color.borderClass,
+        color.bgClass,
+        color.textClass,
+      )}
+    >
+      <DialogueInitialAvatar character={character} size="md" />
       <input
         type="text"
         value={draft}
@@ -738,28 +643,266 @@ function SpeakerLabelInput({
             ;(e.target as HTMLInputElement).blur()
           }
         }}
-        placeholder="Tên vai"
-        size={Math.max(draft.length || 6, 6)}
-        className={cn(
-          'rounded-md border border-transparent bg-transparent px-1 py-0 text-xs font-bold outline-none focus:border-input focus:bg-card',
-          colorClass,
-        )}
+        placeholder="Tên nhân vật"
+        className="bg-transparent outline-none placeholder:font-medium placeholder:text-muted-foreground/70 min-w-[7rem] text-sm"
       />
-      {others.length > 0 && (
-        <div className="inline-flex items-center gap-0.5 opacity-0 group-hover/bubble:opacity-100 transition-opacity">
-          {others.map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => onChange(s)}
-              className="rounded-md px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"
-              title={`Đổi vai sang ${s}`}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+      <button
+        type="button"
+        onClick={onToggleSide}
+        className="inline-flex items-center gap-1 rounded-full bg-background/50 px-2 py-0.5 text-xs font-bold hover:bg-background/80 transition-colors"
+        title="Đổi sang phía bên kia"
+      >
+        <ArrowLeftRight className="h-3 w-3" />
+        {sideLabel}
+      </button>
+      <span className="text-xs font-medium opacity-70 px-1">{lineCount} lượt</span>
+      {canDelete && (
+        <button
+          type="button"
+          onClick={onRemove}
+          className="opacity-50 hover:opacity-100 hover:text-destructive pr-1"
+          aria-label={`Xoá nhân vật ${character.name || ''}`}
+          title="Xoá nhân vật"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
       )}
+    </div>
+  )
+}
+
+function DialogueBubble({
+  line,
+  character,
+  characters,
+  canDelete,
+  autoFocus,
+  onUpdate,
+  onDelete,
+  onReassign,
+}: {
+  line: DialogueLine
+  index: number
+  character: DialogueCharacter
+  characters: DialogueCharacter[]
+  canDelete: boolean
+  autoFocus: boolean
+  onUpdate: (patch: Partial<DialogueLine>) => void
+  onDelete: () => void
+  onReassign: (characterId: string) => void
+}) {
+  const side = character.side
+  const color = colorForCharacter(character.id)
+  const alignRow = side === 'right' ? 'justify-end' : 'justify-start'
+  const tail = side === 'right' ? 'rounded-tr-md' : 'rounded-tl-md'
+
+  const avatar = <DialogueInitialAvatar character={character} size="md" className="shrink-0" />
+
+  return (
+    <div className={cn('group/bubble flex items-start gap-2.5', alignRow)}>
+      {side === 'left' && avatar}
+      <div className={cn('flex flex-col gap-1 min-w-0 w-full max-w-[28rem]', side === 'right' && 'items-end')}>
+        {/* Header */}
+        <div className={cn('flex items-center gap-1.5 px-1', side === 'right' && 'flex-row-reverse')}>
+          <CharacterPicker
+            characters={characters}
+            selectedId={character.id}
+            onChange={onReassign}
+            align={side}
+          />
+          {canDelete && (
+            <button
+              type="button"
+              onClick={onDelete}
+              className="rounded-md p-1 text-muted-foreground/0 group-hover/bubble:text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+              aria-label="Xóa lượt"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Bubble */}
+        <div
+          className={cn(
+            'w-full rounded-2xl border-2 p-2.5 space-y-1.5',
+            tail,
+            color.borderClass,
+            color.bgClass,
+          )}
+        >
+          <DialogueLineInput
+            value={line.vi}
+            onCommit={(v) => onUpdate({ vi: v })}
+            placeholder="Câu thoại tiếng Việt..."
+            autoFocus={autoFocus}
+            color={color}
+            minRows={2}
+            tone="primary"
+          />
+          <DialogueLineInput
+            value={line.en ?? ''}
+            onCommit={(v) => onUpdate({ en: v || null })}
+            placeholder="Bản dịch (tuỳ chọn)..."
+            color={color}
+            minRows={1}
+            tone="muted"
+          />
+        </div>
+      </div>
+      {side === 'right' && avatar}
+    </div>
+  )
+}
+
+function DialogueLineInput({
+  value,
+  onCommit,
+  placeholder,
+  autoFocus,
+  color,
+  minRows,
+  tone,
+}: {
+  value: string
+  onCommit: (next: string) => void
+  placeholder: string
+  autoFocus?: boolean
+  color: DialogueColor
+  minRows: number
+  tone: 'primary' | 'muted'
+}) {
+  const [draft, setDraft] = useState(value)
+  const lastRef = useRef(value)
+  const ref = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    if (value !== lastRef.current) {
+      setDraft(value)
+      lastRef.current = value
+    }
+  }, [value])
+
+  useEffect(() => {
+    if (autoFocus) {
+      const el = ref.current
+      el?.focus()
+      if (el) el.selectionStart = el.selectionEnd = el.value.length
+    }
+  }, [autoFocus])
+
+  const commit = () => {
+    if (draft === lastRef.current) return
+    lastRef.current = draft
+    onCommit(draft)
+  }
+
+  return (
+    <textarea
+      ref={ref}
+      rows={minRows}
+      value={draft}
+      placeholder={placeholder}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault()
+          setDraft(lastRef.current)
+          ref.current?.blur()
+        } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault()
+          commit()
+          ref.current?.blur()
+        }
+      }}
+      className={cn(
+        'w-full resize-none rounded-md border-0 bg-transparent px-2 py-1.5 outline-none transition-colors field-sizing-content leading-relaxed',
+        color.hoverBgClass,
+        'focus:ring-2',
+        color.focusBgClass,
+        color.ringClass,
+        'placeholder:text-muted-foreground/60',
+        tone === 'primary'
+          ? 'text-sm font-medium text-foreground'
+          : 'text-xs italic text-muted-foreground',
+      )}
+    />
+  )
+}
+
+function CharacterPicker({
+  characters,
+  selectedId,
+  onChange,
+  align,
+}: {
+  characters: DialogueCharacter[]
+  selectedId: string
+  onChange: (id: string) => void
+  align: DialogueSide
+}) {
+  const selected = characters.find((c) => c.id === selectedId)
+  const color = selected ? colorForCharacter(selected.id) : null
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            'inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-bold whitespace-nowrap transition-colors hover:bg-muted',
+            color?.textClass,
+          )}
+        >
+          {selected?.name.trim() || 'Chọn nhân vật'}
+          <ChevronDown className="h-3 w-3" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align={align === 'right' ? 'end' : 'start'} className="w-auto">
+        {characters.map((c) => {
+          const cc = colorForCharacter(c.id)
+          return (
+            <DropdownMenuItem
+              key={c.id}
+              onSelect={() => onChange(c.id)}
+              className={cn('gap-2 whitespace-nowrap', c.id === selectedId && 'bg-muted')}
+            >
+              <DialogueInitialAvatar character={c} size="sm" />
+              <span className={cn('font-semibold', cc.textClass)}>
+                {c.name.trim() || '(chưa đặt tên)'}
+              </span>
+              <span className="ml-3 text-[10px] text-muted-foreground">
+                {c.side === 'right' ? 'phải' : 'trái'}
+              </span>
+            </DropdownMenuItem>
+          )
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+function DialogueInitialAvatar({
+  character,
+  size = 'md',
+  className,
+}: {
+  character: DialogueCharacter
+  size?: 'sm' | 'md'
+  className?: string
+}) {
+  const color: DialogueColor = colorForCharacter(character.id)
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-center rounded-full font-bold',
+        size === 'sm' ? 'h-5 w-5 text-[10px]' : 'h-8 w-8 text-sm',
+        color.chipClass,
+        className,
+      )}
+    >
+      {initialFor(character.name)}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 import { ContentType } from '../../../common/enums';
+import { DialogueData } from './dialogue-data.types';
 
 @Entity('lesson_contents')
 @Index(['lessonId', 'orderIndex'], {
@@ -20,6 +21,9 @@ export class LessonContent extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   translation?: string;
+
+  @Column({ name: 'dialogue_data', type: 'jsonb', nullable: true })
+  dialogueData?: DialogueData | null;
 
   @Column({ nullable: true })
   phonetic?: string;

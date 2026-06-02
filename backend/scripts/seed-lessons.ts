@@ -112,8 +112,8 @@ async function main() {
 
         for (const contentData of lessonData.lesson_contents) {
           await client.query(
-            `INSERT INTO lesson_contents (content_type, vietnamese_text, translation, phonetic, audio_url, image_url, video_url, order_index, notes, lesson_id)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+            `INSERT INTO lesson_contents (content_type, vietnamese_text, translation, phonetic, audio_url, image_url, video_url, order_index, notes, lesson_id, dialogue_data)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
             [
               contentData.content_type,
               contentData.vietnamese_text,
@@ -125,6 +125,9 @@ async function main() {
               contentData.order_index,
               contentData.notes || null,
               lessonId,
+              contentData.dialogue_data
+                ? JSON.stringify(contentData.dialogue_data)
+                : null,
             ],
           );
           totalContents++;

@@ -192,7 +192,48 @@
                   "phonetic": null,
                   "translation": "Minh: What do you think of the stock market this week?\nHung: Overall it's fairly stable. The VN-Index rose slightly, but trading volume hasn't been high.\nMinh: In your opinion, which sector should we invest in right now?\nHung: I think the technology and renewable energy sectors have great potential. However, we have to consider inflation risk before making a decision.\nMinh: That's right, inflation directly affects investment returns.",
                   "video_url": null,
-                  "vietnamese_text": "Minh: Anh thấy thị trường chứng khoán tuần này thế nào?\nHùng: Nhìn chung khá ổn. Chỉ số VN-Index tăng nhẹ, nhưng khối lượng giao dịch chưa cao.\nMinh: Theo anh, nên đầu tư vào ngành nào lúc này?\nHùng: Tôi nghĩ ngành công nghệ và năng lượng tái tạo đang có tiềm năng lớn. Tuy nhiên, phải cân nhắc rủi ro lạm phát trước khi ra quyết định.\nMinh: Đúng vậy, lạm phát ảnh hưởng trực tiếp đến lợi nhuận đầu tư."
+                  "vietnamese_text": "Minh: Anh thấy thị trường chứng khoán tuần này thế nào?\nHùng: Nhìn chung khá ổn. Chỉ số VN-Index tăng nhẹ, nhưng khối lượng giao dịch chưa cao.\nMinh: Theo anh, nên đầu tư vào ngành nào lúc này?\nHùng: Tôi nghĩ ngành công nghệ và năng lượng tái tạo đang có tiềm năng lớn. Tuy nhiên, phải cân nhắc rủi ro lạm phát trước khi ra quyết định.\nMinh: Đúng vậy, lạm phát ảnh hưởng trực tiếp đến lợi nhuận đầu tư.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Minh",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Hùng",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh thấy thị trường chứng khoán tuần này thế nào?",
+                        "en": "What do you think of the stock market this week?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Nhìn chung khá ổn. Chỉ số VN-Index tăng nhẹ, nhưng khối lượng giao dịch chưa cao.",
+                        "en": "Overall it's fairly stable. The VN-Index rose slightly, but trading volume hasn't been high."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Theo anh, nên đầu tư vào ngành nào lúc này?",
+                        "en": "In your opinion, which sector should we invest in right now?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi nghĩ ngành công nghệ và năng lượng tái tạo đang có tiềm năng lớn. Tuy nhiên, phải cân nhắc rủi ro lạm phát trước khi ra quyết định.",
+                        "en": "I think the technology and renewable energy sectors have great potential. However, we have to consider inflation risk before making a decision."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Đúng vậy, lạm phát ảnh hưởng trực tiếp đến lợi nhuận đầu tư.",
+                        "en": "That's right, inflation directly affects investment returns."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -732,7 +773,43 @@
                   "phonetic": null,
                   "translation": "Lan: What if we expand business into the European market?\nMinh: If we expand into Europe, shipping costs will increase significantly. But if the euro strengthens against the dollar, profits could offset that.\nLan: So we have to wait and see how the exchange rate develops before deciding?\nMinh: That's right. If the exchange rate is favorable, we'll proceed; otherwise, we'll consider other markets.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Nếu mình mở rộng kinh doanh sang thị trường châu Âu thì sao?\nMinh: Nếu mở rộng sang châu Âu, thì chi phí vận chuyển sẽ tăng đáng kể. Nhưng nếu đồng euro mạnh lên so với đồng đô la, thì lợi nhuận có thể bù đắp được.\nLan: Vậy tức là mình phải chờ xem tỷ giá hối đoái diễn biến thế nào rồi mới quyết định?\nMinh: Đúng vậy. Nếu tỷ giá có lợi cho mình thì mình sẽ tiến hành, còn không thì mình sẽ xem xét thị trường khác."
+                  "vietnamese_text": "Lan: Nếu mình mở rộng kinh doanh sang thị trường châu Âu thì sao?\nMinh: Nếu mở rộng sang châu Âu, thì chi phí vận chuyển sẽ tăng đáng kể. Nhưng nếu đồng euro mạnh lên so với đồng đô la, thì lợi nhuận có thể bù đắp được.\nLan: Vậy tức là mình phải chờ xem tỷ giá hối đoái diễn biến thế nào rồi mới quyết định?\nMinh: Đúng vậy. Nếu tỷ giá có lợi cho mình thì mình sẽ tiến hành, còn không thì mình sẽ xem xét thị trường khác.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Minh",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Nếu mình mở rộng kinh doanh sang thị trường châu Âu thì sao?",
+                        "en": "What if we expand business into the European market?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Nếu mở rộng sang châu Âu, thì chi phí vận chuyển sẽ tăng đáng kể. Nhưng nếu đồng euro mạnh lên so với đồng đô la, thì lợi nhuận có thể bù đắp được.",
+                        "en": "If we expand into Europe, shipping costs will increase significantly. But if the euro strengthens against the dollar, profits could offset that."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Vậy tức là mình phải chờ xem tỷ giá hối đoái diễn biến thế nào rồi mới quyết định?",
+                        "en": "So we have to wait and see how the exchange rate develops before deciding?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đúng vậy. Nếu tỷ giá có lợi cho mình thì mình sẽ tiến hành, còn không thì mình sẽ xem xét thị trường khác.",
+                        "en": "That's right. If the exchange rate is favorable, we'll proceed; otherwise, we'll consider other markets."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -1389,7 +1466,43 @@
                   "phonetic": null,
                   "translation": "Hoa: Do you think this year's administrative reform policy has been effective?\nTuan: In my view, it's precisely the government's determination that creates change.\nHoa: The problem truly lies in implementation. But don't you think citizens also need to participate more?\nTuấn: It is the people themselves who are the driving force of all reform. Without citizen participation, all policies remain only on paper.",
                   "video_url": null,
-                  "vietnamese_text": "Hoa: Em thấy chính sách cải cách hành chính năm nay có hiệu quả không?\nTuấn: Theo tôi, chính là quyết tâm của chính phủ mới tạo ra sự thay đổi. Trước đây, nhiều chính sách ban hành nhưng không được thực thi.\nHoa: Đúng là vấn đề nằm ở khâu thực thi. Nhưng anh không nghĩ rằng người dân cũng cần tham gia nhiều hơn vào quá trình cải cách?\nTuấn: Chính người dân mới là động lực của mọi cải cách. Nếu không có sự tham gia của công dân, thì mọi chính sách đều chỉ nằm trên giấy."
+                  "vietnamese_text": "Hoa: Em thấy chính sách cải cách hành chính năm nay có hiệu quả không?\nTuấn: Theo tôi, chính là quyết tâm của chính phủ mới tạo ra sự thay đổi. Trước đây, nhiều chính sách ban hành nhưng không được thực thi.\nHoa: Đúng là vấn đề nằm ở khâu thực thi. Nhưng anh không nghĩ rằng người dân cũng cần tham gia nhiều hơn vào quá trình cải cách?\nTuấn: Chính người dân mới là động lực của mọi cải cách. Nếu không có sự tham gia của công dân, thì mọi chính sách đều chỉ nằm trên giấy.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Hoa",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Tuấn",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Em thấy chính sách cải cách hành chính năm nay có hiệu quả không?",
+                        "en": "Do you think this year's administrative reform policy has been effective?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Theo tôi, chính là quyết tâm của chính phủ mới tạo ra sự thay đổi. Trước đây, nhiều chính sách ban hành nhưng không được thực thi.",
+                        "en": "In my view, it's precisely the government's determination that creates change."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Đúng là vấn đề nằm ở khâu thực thi. Nhưng anh không nghĩ rằng người dân cũng cần tham gia nhiều hơn vào quá trình cải cách?",
+                        "en": "The problem truly lies in implementation. But don't you think citizens also need to participate more?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chính người dân mới là động lực của mọi cải cách. Nếu không có sự tham gia của công dân, thì mọi chính sách đều chỉ nằm trên giấy.",
+                        "en": "It is the people themselves who are the driving force of all reform. Without citizen participation, all policies remain only on paper."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -1865,7 +1978,48 @@
                   "phonetic": null,
                   "translation": "Mai: What do you think of the new regulation on land management?\nPhong: It really is an irrational regulation! It is precisely the lack of consultation with the people that led to opposition.\nMai: Could it be that the authorities didn't anticipate the consequences?\nPhong: How could they not know that the people are directly affected? Who would issue a law without asking those concerned?\nMai: That is precisely the core issue — lack of democracy in policy-making.",
                   "video_url": null,
-                  "vietnamese_text": "Mai: Anh thấy quy định mới về quản lý đất đai thế nào?\nPhong: Đúng là một quy định phi lý! Chính là sự thiếu tham vấn người dân mới dẫn đến phản đối.\nMai: Phải chăng chính quyền không lường trước được hậu quả?\nPhong: Lẽ nào họ không biết rằng người dân là bên chịu ảnh hưởng trực tiếp? Ai lại ban hành luật mà không hỏi ý kiến những người liên quan?\nMai: Chính là vấn đề cốt lõi — thiếu dân chủ trong quy hoạch chính sách."
+                  "vietnamese_text": "Mai: Anh thấy quy định mới về quản lý đất đai thế nào?\nPhong: Đúng là một quy định phi lý! Chính là sự thiếu tham vấn người dân mới dẫn đến phản đối.\nMai: Phải chăng chính quyền không lường trước được hậu quả?\nPhong: Lẽ nào họ không biết rằng người dân là bên chịu ảnh hưởng trực tiếp? Ai lại ban hành luật mà không hỏi ý kiến những người liên quan?\nMai: Chính là vấn đề cốt lõi — thiếu dân chủ trong quy hoạch chính sách.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Mai",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Phong",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh thấy quy định mới về quản lý đất đai thế nào?",
+                        "en": "What do you think of the new regulation on land management?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đúng là một quy định phi lý! Chính là sự thiếu tham vấn người dân mới dẫn đến phản đối.",
+                        "en": "It really is an irrational regulation! It is precisely the lack of consultation with the people that led to opposition."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Phải chăng chính quyền không lường trước được hậu quả?",
+                        "en": "Could it be that the authorities didn't anticipate the consequences?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Lẽ nào họ không biết rằng người dân là bên chịu ảnh hưởng trực tiếp? Ai lại ban hành luật mà không hỏi ý kiến những người liên quan?",
+                        "en": "How could they not know that the people are directly affected? Who would issue a law without asking those concerned?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Chính là vấn đề cốt lõi — thiếu dân chủ trong quy hoạch chính sách.",
+                        "en": "That is precisely the core issue — lack of democracy in policy-making."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -2030,7 +2184,53 @@
                   "phonetic": null,
                   "translation": "Discussion: Should personal income tax be increased? Uses emphatic structures and rhetorical questions.",
                   "video_url": null,
-                  "vietnamese_text": "Thảo luận: Có nên tăng thuế thu nhập cá nhân?\n\nHùng: Theo tôi, chính là việc tăng thuế mới đảm bảo công bằng xã hội. Những người thu nhập cao phải đóng góp nhiều hơn.\n\nLan: Dù tôi đồng ý rằng công bằng xã hội quan trọng, nhưng tăng thuế cũng không phải là cách duy nhất. Phải chăng chúng ta không thể cải thiện hiệu quả chi tiêu ngân sách trước?\n\nHùng: Lẽ nào người giàu lại không đóng góp công bằng? Chính sự chênh lệch thu nhập mới là vấn đề cốt lõi.\n\nLan: Đúng là sự chênh lệch đáng lo ngại. Tuy nhiên, chỉ khi cải cách hệ thống thuế toàn diện, chúng ta mới giải quyết được vấn đề từ gốc."
+                  "vietnamese_text": "Thảo luận: Có nên tăng thuế thu nhập cá nhân?\n\nHùng: Theo tôi, chính là việc tăng thuế mới đảm bảo công bằng xã hội. Những người thu nhập cao phải đóng góp nhiều hơn.\n\nLan: Dù tôi đồng ý rằng công bằng xã hội quan trọng, nhưng tăng thuế cũng không phải là cách duy nhất. Phải chăng chúng ta không thể cải thiện hiệu quả chi tiêu ngân sách trước?\n\nHùng: Lẽ nào người giàu lại không đóng góp công bằng? Chính sự chênh lệch thu nhập mới là vấn đề cốt lõi.\n\nLan: Đúng là sự chênh lệch đáng lo ngại. Tuy nhiên, chỉ khi cải cách hệ thống thuế toàn diện, chúng ta mới giải quyết được vấn đề từ gốc.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Thảo luận",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Hùng",
+                        "side": "right"
+                      },
+                      {
+                        "id": "c3",
+                        "name": "Lan",
+                        "side": "left"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Có nên tăng thuế thu nhập cá nhân?",
+                        "en": "Should personal income tax be increased? Uses emphatic structures and rhetorical questions."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Theo tôi, chính là việc tăng thuế mới đảm bảo công bằng xã hội. Những người thu nhập cao phải đóng góp nhiều hơn.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c3",
+                        "vi": "Dù tôi đồng ý rằng công bằng xã hội quan trọng, nhưng tăng thuế cũng không phải là cách duy nhất. Phải chăng chúng ta không thể cải thiện hiệu quả chi tiêu ngân sách trước?",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Lẽ nào người giàu lại không đóng góp công bằng? Chính sự chênh lệch thu nhập mới là vấn đề cốt lõi.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c3",
+                        "vi": "Đúng là sự chênh lệch đáng lo ngại. Tuy nhiên, chỉ khi cải cách hệ thống thuế toàn diện, chúng ta mới giải quyết được vấn đề từ gốc.",
+                        "en": null
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -2476,7 +2676,48 @@
                   "phonetic": null,
                   "translation": "Dialogue about satellite technology and its impact on daily life and research.",
                   "video_url": null,
-                  "vietnamese_text": "Thảo: Anh nghe về vệ tinh Vinasat-2 chưa?\nKhoa: Rồi, đây là vệ tinh viễn thông thứ hai của Việt Nam. Nó giúp nâng cao chất lượng truyền thông và phủ sóng rộng hơn.\nThảo: Theo anh, công nghệ vệ tinh có tác động thế nào đến đời sống?\nKhoa: Thu nhỏ khoảng cách địa lý, tạo cơ hội cho các vùng sâu vùng xa tiếp cận thông tin. Ngoài ra, dữ liệu từ vệ tinh cũng hỗ trợ nghiên cứu biến đổi khí hậu.\nThảo: Vậy là vừa phát triển công nghệ vừa bảo vệ môi trường — đúng là đầu tư đáng giá."
+                  "vietnamese_text": "Thảo: Anh nghe về vệ tinh Vinasat-2 chưa?\nKhoa: Rồi, đây là vệ tinh viễn thông thứ hai của Việt Nam. Nó giúp nâng cao chất lượng truyền thông và phủ sóng rộng hơn.\nThảo: Theo anh, công nghệ vệ tinh có tác động thế nào đến đời sống?\nKhoa: Thu nhỏ khoảng cách địa lý, tạo cơ hội cho các vùng sâu vùng xa tiếp cận thông tin. Ngoài ra, dữ liệu từ vệ tinh cũng hỗ trợ nghiên cứu biến đổi khí hậu.\nThảo: Vậy là vừa phát triển công nghệ vừa bảo vệ môi trường — đúng là đầu tư đáng giá.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Thảo",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Khoa",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh nghe về vệ tinh Vinasat-2 chưa?",
+                        "en": "Dialogue about satellite technology and its impact on daily life and research."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Rồi, đây là vệ tinh viễn thông thứ hai của Việt Nam. Nó giúp nâng cao chất lượng truyền thông và phủ sóng rộng hơn.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Theo anh, công nghệ vệ tinh có tác động thế nào đến đời sống?",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Thu nhỏ khoảng cách địa lý, tạo cơ hội cho các vùng sâu vùng xa tiếp cận thông tin. Ngoài ra, dữ liệu từ vệ tinh cũng hỗ trợ nghiên cứu biến đổi khí hậu.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Vậy là vừa phát triển công nghệ vừa bảo vệ môi trường — đúng là đầu tư đáng giá.",
+                        "en": null
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "vocabulary",
@@ -3331,7 +3572,48 @@
                   "phonetic": null,
                   "translation": "Dialogue about an art exhibition, discussing how Vietnamese art uses idioms and classical allusions.",
                   "video_url": null,
-                  "vietnamese_text": "Hương: Em vừa xem triển lãm hội họa của họa sĩ Nguyễn Tư Nghiêm, ấn tượng thật sự!\nĐức: Tôi cũng đã xem. Tác phẩm của ông kết hợp giữa nét vẽ dân gian và nghệ thuật đương đại rất tài tình.\nHương: Anh thích sáng tác nào nhất?\nĐức: Tôi ấn tượng với bức tranh lấy cảm hứng từ thành ngữ 'mưa dầm thấm lâu' — vừa sâu sắc về ý nghĩa vừa tinh tế về hình thức.\nHương: Đúng vậy, nghệ thuật Việt Nam thường mượn điển cố và thành ngữ để tạo chiều sâu cho tác phẩm."
+                  "vietnamese_text": "Hương: Em vừa xem triển lãm hội họa của họa sĩ Nguyễn Tư Nghiêm, ấn tượng thật sự!\nĐức: Tôi cũng đã xem. Tác phẩm của ông kết hợp giữa nét vẽ dân gian và nghệ thuật đương đại rất tài tình.\nHương: Anh thích sáng tác nào nhất?\nĐức: Tôi ấn tượng với bức tranh lấy cảm hứng từ thành ngữ 'mưa dầm thấm lâu' — vừa sâu sắc về ý nghĩa vừa tinh tế về hình thức.\nHương: Đúng vậy, nghệ thuật Việt Nam thường mượn điển cố và thành ngữ để tạo chiều sâu cho tác phẩm.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Hương",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Đức",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Em vừa xem triển lãm hội họa của họa sĩ Nguyễn Tư Nghiêm, ấn tượng thật sự!",
+                        "en": "Dialogue about an art exhibition, discussing how Vietnamese art uses idioms and classical allusions."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi cũng đã xem. Tác phẩm của ông kết hợp giữa nét vẽ dân gian và nghệ thuật đương đại rất tài tình.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh thích sáng tác nào nhất?",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi ấn tượng với bức tranh lấy cảm hứng từ thành ngữ 'mưa dầm thấm lâu' — vừa sâu sắc về ý nghĩa vừa tinh tế về hình thức.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Đúng vậy, nghệ thuật Việt Nam thường mượn điển cố và thành ngữ để tạo chiều sâu cho tác phẩm.",
+                        "en": null
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -4465,7 +4747,43 @@
                   "phonetic": null,
                   "translation": "Dialogue about renewable energy in Vietnam, using complex conjunctions like 'tuy nhiên', 'mặt khác', 'do đó', 'ngoài ra', 'thay vì'.",
                   "video_url": null,
-                  "vietnamese_text": "Hạnh: Em nghe Việc Nam đang xây nhiều nhà máy điện mặt trời?\nThành: Đúng vậy. Năng lượng tái tạo đang được ưu tiên phát triển. Mặt khác, than đá vẫn chiếm tỷ trọng lớn trong cơ cấu điện lực.\nHạnh: Vậy vẫn còn phụ thuộc vào nhiên liệu hóa thạch. Tuy nhiên, ít nhất hướng đi đã thay đổi.\nThành: Đúng. Do đó, mục tiêu trung hòa carbon vào năm 2050 là khả thi, ngoài ra cần thêm nỗ lực từ cộng đồng. Thay vì chỉ trông chờ chính phủ, mỗi người cũng cần thay đổi thói quen sinh hoạt."
+                  "vietnamese_text": "Hạnh: Em nghe Việc Nam đang xây nhiều nhà máy điện mặt trời?\nThành: Đúng vậy. Năng lượng tái tạo đang được ưu tiên phát triển. Mặt khác, than đá vẫn chiếm tỷ trọng lớn trong cơ cấu điện lực.\nHạnh: Vậy vẫn còn phụ thuộc vào nhiên liệu hóa thạch. Tuy nhiên, ít nhất hướng đi đã thay đổi.\nThành: Đúng. Do đó, mục tiêu trung hòa carbon vào năm 2050 là khả thi, ngoài ra cần thêm nỗ lực từ cộng đồng. Thay vì chỉ trông chờ chính phủ, mỗi người cũng cần thay đổi thói quen sinh hoạt.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Hạnh",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Thành",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Em nghe Việc Nam đang xây nhiều nhà máy điện mặt trời?",
+                        "en": "Dialogue about renewable energy in Vietnam, using complex conjunctions like 'tuy nhiên', 'mặt khác', 'do đó', 'ngoài ra', 'thay vì'."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đúng vậy. Năng lượng tái tạo đang được ưu tiên phát triển. Mặt khác, than đá vẫn chiếm tỷ trọng lớn trong cơ cấu điện lực.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Vậy vẫn còn phụ thuộc vào nhiên liệu hóa thạch. Tuy nhiên, ít nhất hướng đi đã thay đổi.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đúng. Do đó, mục tiêu trung hòa carbon vào năm 2050 là khả thi, ngoài ra cần thêm nỗ lực từ cộng đồng. Thay vì chỉ trông chờ chính phủ, mỗi người cũng cần thay đổi thói quen sinh hoạt.",
+                        "en": null
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "vocabulary",
@@ -4985,7 +5303,43 @@
                   "phonetic": null,
                   "translation": "Dialogue using all six complex conjunctions in a discussion about energy transition.",
                   "video_url": null,
-                  "vietnamese_text": "Hạnh: Theo em, có nên đóng cửa các nhà máy than?\nThành: Vấn đề này phức tạp. Tuy nhiên, về lâu dài, năng lượng sạch là tất yếu. Mặt khác, hàng ngàn công nhân sẽ mất việc làm nếu đóng ngay lập tức.\nHạnh: Do đó, cần lộ trình chuyển đổi từng bước. Ngoài ra, chính phủ phải hỗ trợ chuyển đổi nghề cho công nhân.\nThành: Đúng vậy. Thay vì đóng ngay, có thể giảm dần công suất. Không những bảo vệ môi trường mà còn đảm bảo sinh kế cho người lao động."
+                  "vietnamese_text": "Hạnh: Theo em, có nên đóng cửa các nhà máy than?\nThành: Vấn đề này phức tạp. Tuy nhiên, về lâu dài, năng lượng sạch là tất yếu. Mặt khác, hàng ngàn công nhân sẽ mất việc làm nếu đóng ngay lập tức.\nHạnh: Do đó, cần lộ trình chuyển đổi từng bước. Ngoài ra, chính phủ phải hỗ trợ chuyển đổi nghề cho công nhân.\nThành: Đúng vậy. Thay vì đóng ngay, có thể giảm dần công suất. Không những bảo vệ môi trường mà còn đảm bảo sinh kế cho người lao động.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Hạnh",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Thành",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Theo em, có nên đóng cửa các nhà máy than?",
+                        "en": "Dialogue using all six complex conjunctions in a discussion about energy transition."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Vấn đề này phức tạp. Tuy nhiên, về lâu dài, năng lượng sạch là tất yếu. Mặt khác, hàng ngàn công nhân sẽ mất việc làm nếu đóng ngay lập tức.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Do đó, cần lộ trình chuyển đổi từng bước. Ngoài ra, chính phủ phải hỗ trợ chuyển đổi nghề cho công nhân.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đúng vậy. Thay vì đóng ngay, có thể giảm dần công suất. Không những bảo vệ môi trường mà còn đảm bảo sinh kế cho người lao động.",
+                        "en": null
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",

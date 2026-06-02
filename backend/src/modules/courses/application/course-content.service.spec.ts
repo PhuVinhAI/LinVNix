@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { CourseContentService } from './course-content.service';
 import { CoursesRepository } from './repositories/courses.repository';
 import { ModulesRepository } from './repositories/modules.repository';
@@ -9,7 +9,7 @@ import { GrammarRepository } from '../../grammar/application/grammar.repository'
 import { ProgressRepository } from '../../progress/application/progress.repository';
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
 import { CourseProgressRepository } from '../../progress/application/course-progress.repository';
-import { ProgressStatus } from '../../../common/enums';
+import { ContentType, ProgressStatus } from '../../../common/enums';
 
 describe('CourseContentService', () => {
   let service: CourseContentService;
@@ -696,20 +696,90 @@ describe('CourseContentService', () => {
 
   describe('createContent', () => {
     it('creates and returns content', async () => {
-      const data = { vietnameseText: 'Xin chào', lessonId: 'l1' };
+      const data = {
+        vietnameseText: 'Xin chào',
+        lessonId: 'l1',
+        contentType: ContentType.TEXT,
+      };
       const created = { id: 'ct1', ...data };
       contentsRepo.create.mockResolvedValue(created as any);
 
       const result = await service.createContent(data);
 
       expect(result.id).toBe('ct1');
-      expect(contentsRepo.create).toHaveBeenCalledWith(data);
+      expect(contentsRepo.create).toHaveBeenCalledWith({
+        ...data,
+        dialogueData: null,
+      });
+    });
+
+    it('derives vietnameseText and translation from dialogue lines', async () => {
+      const data = {
+        contentType: ContentType.DIALOGUE,
+        orderIndex: 1,
+        lessonId: 'l1',
+        dialogueData: {
+          characters: [
+            { id: 'c1', name: 'Nam', side: 'left' as const },
+            { id: 'c2', name: 'Lan', side: 'right' as const },
+          ],
+          lines: [
+            { characterId: 'c1', vi: 'Xin chào!', en: 'Hello!' },
+            { characterId: 'c2', vi: 'Chào bạn!', en: 'Hi!' },
+          ],
+        },
+      };
+      contentsRepo.create.mockImplementation(async (payload: any) => ({
+        id: 'ct2',
+        ...payload,
+      }));
+
+      await service.createContent(data as any);
+
+      expect(contentsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          vietnameseText: 'Nam: Xin chào!\nLan: Chào bạn!',
+          translation: 'Nam: Hello!\nLan: Hi!',
+          dialogueData: data.dialogueData,
+        }),
+      );
+    });
+
+    it('rejects dialogue with two right-side characters', async () => {
+      await expect(
+        service.createContent({
+          contentType: ContentType.DIALOGUE,
+          orderIndex: 1,
+          lessonId: 'l1',
+          dialogueData: {
+            characters: [
+              { id: 'c1', name: 'A', side: 'right' as const },
+              { id: 'c2', name: 'B', side: 'right' as const },
+            ],
+            lines: [],
+          },
+        } as any),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('rejects dialogue when contentType=dialogue but dialogueData missing', async () => {
+      await expect(
+        service.createContent({
+          contentType: ContentType.DIALOGUE,
+          orderIndex: 1,
+          lessonId: 'l1',
+        } as any),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('updateContent', () => {
     it('updates and returns content', async () => {
-      const existing = { id: 'ct1', vietnameseText: 'Old' };
+      const existing = {
+        id: 'ct1',
+        vietnameseText: 'Old',
+        contentType: ContentType.TEXT,
+      };
       const updated = { id: 'ct1', vietnameseText: 'New' };
       contentsRepo.findById.mockResolvedValue(existing as any);
       contentsRepo.update.mockResolvedValue(updated as any);
@@ -719,9 +789,13 @@ describe('CourseContentService', () => {
       });
 
       expect(result.vietnameseText).toBe('New');
-      expect(contentsRepo.update).toHaveBeenCalledWith('ct1', {
-        vietnameseText: 'New',
-      });
+      expect(contentsRepo.update).toHaveBeenCalledWith(
+        'ct1',
+        expect.objectContaining({
+          vietnameseText: 'New',
+          dialogueData: null,
+        }),
+      );
     });
 
     it('throws NotFoundException when content not found', async () => {

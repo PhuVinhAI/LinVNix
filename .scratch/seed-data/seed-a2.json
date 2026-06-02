@@ -156,7 +156,48 @@
                   "phonetic": "Lan: Chow chi, cai nay bao nhieu tien mot can? Ba ban hang: Hai muoi nghin mot can em oi. Lan: Dat qua! Muoi lam nghin duoc khong chi? Ba ban hang: Duoc, muoi lam nghin cho em ne, lay them khong? Lan: Lay them nua can nua. Cam on chi nhe!",
                   "translation": "Lan: Hello, how much is this per kilogram?\nSeller: Twenty thousand per kilo, dear.\nLan: Too expensive! Fifteen thousand, can you do it?\nSeller: Sure, fifteen thousand for you here, want more?\nLan: Give me another half kilo. Thanks!",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Chào chị, cái này bao nhiêu tiền một cân?\nBà bán hàng: Hai mươi nghìn một cân em ơi.\nLan: Đắt quá! Mười lăm nghìn được không chị?\nBà bán hàng: Được, mười lăm nghìn cho em nè, lấy thêm không?\nLan: Lấy thêm nửa cân nữa. Cảm ơn chị nhé!"
+                  "vietnamese_text": "Lan: Chào chị, cái này bao nhiêu tiền một cân?\nBà bán hàng: Hai mươi nghìn một cân em ơi.\nLan: Đắt quá! Mười lăm nghìn được không chị?\nBà bán hàng: Được, mười lăm nghìn cho em nè, lấy thêm không?\nLan: Lấy thêm nửa cân nữa. Cảm ơn chị nhé!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Bà bán hàng",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Chào chị, cái này bao nhiêu tiền một cân?",
+                        "en": "Hello, how much is this per kilogram?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Hai mươi nghìn một cân em ơi.",
+                        "en": "Twenty thousand per kilo, dear."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Đắt quá! Mười lăm nghìn được không chị?",
+                        "en": "Too expensive! Fifteen thousand, can you do it?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Được, mười lăm nghìn cho em nè, lấy thêm không?",
+                        "en": "Sure, fifteen thousand for you here, want more?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Lấy thêm nửa cân nữa. Cảm ơn chị nhé!",
+                        "en": "Give me another half kilo. Thanks!"
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -738,7 +779,43 @@
                   "phonetic": "Nam: Sieu thi nay dat hon cho phai khong anh? Anh Nam: Dung roi, nhung hang o sieu thi sach hon. Nam: Vay cho nao re nhat o day? Anh Nam: Cho Dau Moi re nhat, nhung xa lam.",
                   "translation": "Nam: Is this supermarket more expensive than the market?\nOlder brother Nam: That's right, but goods at the supermarket are cleaner.\nNam: So which market is the cheapest here?\nOlder brother Nam: The wholesale market is the cheapest, but it's very far.",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Siêu thị này đắt hơn chợ phải không anh?\nAnh Nam: Đúng rồi, nhưng hàng ở siêu thị sạch hơn.\nNam: Vậy chợ nào rẻ nhất ở đây?\nAnh Nam: Chợ Đầu Mối rẻ nhất, nhưng xa lắm."
+                  "vietnamese_text": "Nam: Siêu thị này đắt hơn chợ phải không anh?\nAnh Nam: Đúng rồi, nhưng hàng ở siêu thị sạch hơn.\nNam: Vậy chợ nào rẻ nhất ở đây?\nAnh Nam: Chợ Đầu Mối rẻ nhất, nhưng xa lắm.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Anh Nam",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Siêu thị này đắt hơn chợ phải không anh?",
+                        "en": "Is this supermarket more expensive than the market?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đúng rồi, nhưng hàng ở siêu thị sạch hơn.",
+                        "en": "That's right, but goods at the supermarket are cleaner."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Vậy chợ nào rẻ nhất ở đây?",
+                        "en": "So which market is the cheapest here?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chợ Đầu Mối rẻ nhất, nhưng xa lắm.",
+                        "en": "The wholesale market is the cheapest, but it's very far."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -940,7 +1017,63 @@
                   "phonetic": "Khach: Chow co, cho toi mot can ca chua. Ba ban: Ca chua nay chin lam nha con, muoi nghin mot can. Khach: Cho co xem cai can nhe. Ua, thieu roi co oi! Ba ban: Troi oi, toi can lai cho. Xong roi ne, them hai qua cho con nha! Khach: Da cam on co. Co co ban rau muong khong? Ba ban: Co, nam nghin mot mo. Lay khong con? Khach: Cho toi mot mo. Tong cong bao nhieu co? Ba ban: Muoi lam nghin thoi con oi.",
                   "translation": "Customer: Hello, give me a kilo of tomatoes.\nSeller: These tomatoes are very ripe dear, ten thousand a kilo.\nCustomer: Let me check the scale. Oh, it's short!\nSeller: Oh my, let me weigh again. Done, I'll add two more for you!\nCustomer: Thank you. Do you sell water spinach?\nSeller: Yes, five thousand a bunch. Do you want some?\nCustomer: Give me one bunch. How much in total?\nSeller: Just fifteen thousand dear.",
                   "video_url": null,
-                  "vietnamese_text": "Khách: Chào cô, cho tôi một cân cà chua.\nBà bán: Cà chua nay chín lắm nha con, mười nghìn một cân.\nKhách: Cho cô xem cái cân nhé. Ủa, thiếu rồi cô ơi!\nBà bán: Trời ơi, tôi cân lại cho. Xong rồi nè, thêm hai quả cho con nha!\nKhách: Dạ cảm ơn cô. Cô có bán rau muống không?\nBà bán: Có, năm nghìn một mớ. Lấy không con?\nKhách: Cho tôi một mớ. Tổng cộng bao nhiêu cô?\nBà bán: Mười lăm nghìn thôi con ơi."
+                  "vietnamese_text": "Khách: Chào cô, cho tôi một cân cà chua.\nBà bán: Cà chua nay chín lắm nha con, mười nghìn một cân.\nKhách: Cho cô xem cái cân nhé. Ủa, thiếu rồi cô ơi!\nBà bán: Trời ơi, tôi cân lại cho. Xong rồi nè, thêm hai quả cho con nha!\nKhách: Dạ cảm ơn cô. Cô có bán rau muống không?\nBà bán: Có, năm nghìn một mớ. Lấy không con?\nKhách: Cho tôi một mớ. Tổng cộng bao nhiêu cô?\nBà bán: Mười lăm nghìn thôi con ơi.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Khách",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Bà bán",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Chào cô, cho tôi một cân cà chua.",
+                        "en": "Hello, give me a kilo of tomatoes."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Cà chua nay chín lắm nha con, mười nghìn một cân.",
+                        "en": "These tomatoes are very ripe dear, ten thousand a kilo."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cho cô xem cái cân nhé. Ủa, thiếu rồi cô ơi!",
+                        "en": "Let me check the scale. Oh, it's short!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Trời ơi, tôi cân lại cho. Xong rồi nè, thêm hai quả cho con nha!",
+                        "en": "Oh my, let me weigh again. Done, I'll add two more for you!"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Dạ cảm ơn cô. Cô có bán rau muống không?",
+                        "en": "Thank you. Do you sell water spinach?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Có, năm nghìn một mớ. Lấy không con?",
+                        "en": "Yes, five thousand a bunch. Do you want some?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cho tôi một mớ. Tổng cộng bao nhiêu cô?",
+                        "en": "Give me one bunch. How much in total?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Mười lăm nghìn thôi con ơi.",
+                        "en": "Just fifteen thousand dear."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -1133,7 +1266,43 @@
                   "phonetic": "Minh: Chi oi, sang nay di cho mua gi vay? Chi Minh: Toi mua rau, thit va ca. O cho nay re hon sieu thi nhieu. Minh: Em cung muon di cho. Nge noi cho Dau Moi re nhat ma xa lam. Chi Minh: Dung roi, xa nhat nhung re nhat. Em muon di thi thu bay minh cung di nhe!",
                   "translation": "Minh: Sister, what did you buy at the market this morning?\nSister Minh: I bought vegetables, meat and fish. At this market it is much cheaper than the supermarket.\nMinh: I want to go to the market too. I heard the wholesale market is the cheapest but very far.\nSister Minh: That is right, the farthest but the cheapest. If you want to go, let us go together on Saturday!",
                   "video_url": null,
-                  "vietnamese_text": "Minh: Chị ơi, sáng nay đi chợ mua gì vậy?\nChị Minh: Tôi mua rau, thịt và cá. Ở chợ này rẻ hơn siêu thị nhiều.\nMinh: Em cũng muốn đi chợ. Nghe nói chợ Đầu Mối rẻ nhất mà xa lắm.\nChị Minh: Đúng rồi, xa nhất nhưng rẻ nhất. Em muốn đi thì thứ bảy mình cùng đi nhé!"
+                  "vietnamese_text": "Minh: Chị ơi, sáng nay đi chợ mua gì vậy?\nChị Minh: Tôi mua rau, thịt và cá. Ở chợ này rẻ hơn siêu thị nhiều.\nMinh: Em cũng muốn đi chợ. Nghe nói chợ Đầu Mối rẻ nhất mà xa lắm.\nChị Minh: Đúng rồi, xa nhất nhưng rẻ nhất. Em muốn đi thì thứ bảy mình cùng đi nhé!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Minh",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Chị Minh",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Chị ơi, sáng nay đi chợ mua gì vậy?",
+                        "en": "Sister, what did you buy at the market this morning?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi mua rau, thịt và cá. Ở chợ này rẻ hơn siêu thị nhiều.",
+                        "en": "I bought vegetables, meat and fish. At this market it is much cheaper than the supermarket."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Em cũng muốn đi chợ. Nghe nói chợ Đầu Mối rẻ nhất mà xa lắm.",
+                        "en": "I want to go to the market too. I heard the wholesale market is the cheapest but very far."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đúng rồi, xa nhất nhưng rẻ nhất. Em muốn đi thì thứ bảy mình cùng đi nhé!",
+                        "en": "That is right, the farthest but the cheapest. If you want to go, let us go together on Saturday!"
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "writing",
@@ -1339,7 +1508,43 @@
                   "phonetic": "Benh nhan: Chow bac si, toi bi dau dau va ho hai ngay nay roi. Bac si: Co bi sot khong anh? De toi kham xem nao. Benh nhan: Da co, hom qua toi bi sot 38 do. Bac si: Anh bi cam roi. Toi ke cho anh don thuoc nay. Uong thuoc ba lan mot ngay nhe. Neu ba ngay sau chua khoe thi phai quay lai kham.",
                   "translation": "Patient: Hello doctor, I have a headache and have been coughing for two days.\nDoctor: Do you have a fever? Let me examine you.\nPatient: Yes, yesterday I had a 38-degree fever.\nDoctor: You have a cold. I'll prescribe this for you. Take the medicine three times a day. If you're not better after three days, you must come back.",
                   "video_url": null,
-                  "vietnamese_text": "Bệnh nhân: Chào bác sĩ, tôi bị đau đầu và ho hai ngày nay rồi.\nBác sĩ: Có bị sốt không anh? Để tôi khám xem nào.\nBệnh nhân: Dạ có, hôm qua tôi bị sốt 38 độ.\nBác sĩ: Anh bị cảm rồi. Tôi kê cho anh đơn thuốc này. Uống thuốc ba lần một ngày nhé. Nếu ba ngày sau chưa khỏe thì phải quay lại khám."
+                  "vietnamese_text": "Bệnh nhân: Chào bác sĩ, tôi bị đau đầu và ho hai ngày nay rồi.\nBác sĩ: Có bị sốt không anh? Để tôi khám xem nào.\nBệnh nhân: Dạ có, hôm qua tôi bị sốt 38 độ.\nBác sĩ: Anh bị cảm rồi. Tôi kê cho anh đơn thuốc này. Uống thuốc ba lần một ngày nhé. Nếu ba ngày sau chưa khỏe thì phải quay lại khám.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Bệnh nhân",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Bác sĩ",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Chào bác sĩ, tôi bị đau đầu và ho hai ngày nay rồi.",
+                        "en": "Hello doctor, I have a headache and have been coughing for two days."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Có bị sốt không anh? Để tôi khám xem nào.",
+                        "en": "Do you have a fever? Let me examine you."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Dạ có, hôm qua tôi bị sốt 38 độ.",
+                        "en": "Yes, yesterday I had a 38-degree fever."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Anh bị cảm rồi. Tôi kê cho anh đơn thuốc này. Uống thuốc ba lần một ngày nhé. Nếu ba ngày sau chưa khỏe thì phải quay lại khám.",
+                        "en": "You have a cold. I'll prescribe this for you. Take the medicine three times a day. If you're not better after three days, you must come back."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -1825,7 +2030,48 @@
                   "phonetic": "Minh: Sao anh khong di lam hom nay? Hung: Toi bi om roi, bi cam ba ngay nay. Minh: Anh da di kham chua? Hung: Chua, nhung toi phai di kham chieu nay. Bac si bao toi phai uong thuoc dung gio. Minh: Anh phai nghi ngoi nhieu nhe. Co gi goi toi.",
                   "translation": "Minh: Why aren't you going to work today?\nHùng: I'm sick, I've had a cold for three days.\nMinh: Have you been to the doctor yet?\nHùng: Not yet, but I have to go this afternoon. The doctor told me I have to take medicine on time.\nMinh: You have to rest a lot. Call me if you need anything.",
                   "video_url": null,
-                  "vietnamese_text": "Minh: Sao anh không đi làm hôm nay?\nHùng: Tôi bị ốm rồi, bị cảm ba ngày nay.\nMinh: Anh đã đi khám chưa?\nHùng: Chưa, nhưng tôi phải đi khám chiều nay. Bác sĩ bảo tôi phải uống thuốc đúng giờ.\nMinh: Anh phải nghỉ ngơi nhiều nhé. Có gì gọi tôi."
+                  "vietnamese_text": "Minh: Sao anh không đi làm hôm nay?\nHùng: Tôi bị ốm rồi, bị cảm ba ngày nay.\nMinh: Anh đã đi khám chưa?\nHùng: Chưa, nhưng tôi phải đi khám chiều nay. Bác sĩ bảo tôi phải uống thuốc đúng giờ.\nMinh: Anh phải nghỉ ngơi nhiều nhé. Có gì gọi tôi.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Minh",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Hùng",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Sao anh không đi làm hôm nay?",
+                        "en": "Why aren't you going to work today?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi bị ốm rồi, bị cảm ba ngày nay.",
+                        "en": "I'm sick, I've had a cold for three days."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh đã đi khám chưa?",
+                        "en": "Have you been to the doctor yet?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chưa, nhưng tôi phải đi khám chiều nay. Bác sĩ bảo tôi phải uống thuốc đúng giờ.",
+                        "en": "Not yet, but I have to go this afternoon. The doctor told me I have to take medicine on time."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh phải nghỉ ngơi nhiều nhé. Có gì gọi tôi.",
+                        "en": "You have to rest a lot. Call me if you need anything."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -2041,7 +2287,43 @@
                   "phonetic": "Lan: Anh oi, em bi om hai ngay roi. Phai di kham khong anh? Anh: Em phai di kham ngay di. Dung tu mua thuoc mai, khong khoe thi phai di benh vien. Lan: Nhung em so benh vien dong lam. Phong kham tu nhan duoc khong? Anh: Duoc, phong kham tu nhan sach hon va nhanh hon. Nhung dat hon. Em phai di thoi, khong thi benh nang hon.",
                   "translation": "Lan: Brother, I have been sick for two days. Do I have to go to the doctor?\nBrother: You have to go right away. Do not keep buying medicine yourself, if you are not better you must go to the hospital.\nLan: But I am afraid the hospital is very crowded. Can I go to a private clinic?\nBrother: Yes, private clinics are cleaner and faster. But more expensive. You have to go, otherwise the illness gets worse.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Anh ơi, em bị ốm hai ngày rồi. Phải đi khám không anh?\nAnh: Em phải đi khám ngay đi. Đừng tự mua thuốc mãi, không khỏe thì phải đi bệnh viện.\nLan: Nhưng em sợ bệnh viện đông lắm. Phòng khám tư nhân được không?\nAnh: Được, phòng khám tư nhân sạch hơn và nhanh hơn. Nhưng đắt hơn. Em phải đi thôi, không thì bệnh nặng hơn."
+                  "vietnamese_text": "Lan: Anh ơi, em bị ốm hai ngày rồi. Phải đi khám không anh?\nAnh: Em phải đi khám ngay đi. Đừng tự mua thuốc mãi, không khỏe thì phải đi bệnh viện.\nLan: Nhưng em sợ bệnh viện đông lắm. Phòng khám tư nhân được không?\nAnh: Được, phòng khám tư nhân sạch hơn và nhanh hơn. Nhưng đắt hơn. Em phải đi thôi, không thì bệnh nặng hơn.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Anh",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh ơi, em bị ốm hai ngày rồi. Phải đi khám không anh?",
+                        "en": "Brother, I have been sick for two days. Do I have to go to the doctor?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Em phải đi khám ngay đi. Đừng tự mua thuốc mãi, không khỏe thì phải đi bệnh viện.",
+                        "en": "You have to go right away. Do not keep buying medicine yourself, if you are not better you must go to the hospital."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Nhưng em sợ bệnh viện đông lắm. Phòng khám tư nhân được không?",
+                        "en": "But I am afraid the hospital is very crowded. Can I go to a private clinic?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Được, phòng khám tư nhân sạch hơn và nhanh hơn. Nhưng đắt hơn. Em phải đi thôi, không thì bệnh nặng hơn.",
+                        "en": "Yes, private clinics are cleaner and faster. But more expensive. You have to go, otherwise the illness gets worse."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "reading",
@@ -2263,7 +2545,43 @@
                   "phonetic": "Lan: Troi dang mua to qua, minh khong di choi duoc roi. Mai: Vay o nha xem phim di. Nge noi tuan sau troi nang lai. Lan: U, mua mua o Sai Gon keo dai lam. Mai: O Ha Noi thi dang la mua thu, troi lanh va hanh kho.",
                   "translation": "Lan: It's raining heavily, we can't go out anymore.\nMai: Then let's stay home and watch a movie.\nLan: Yeah, the rainy season in Saigon lasts a long time.\nMai: In Hanoi it's autumn now, it's cold and dry.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Trời đang mưa to quá, mình không đi chơi được rồi.\nMai: Vậy ở nhà xem phim đi. Nghe nói tuần sau trời nắng lại.\nLan: Ừ, mùa mưa ở Sài Gòn kéo dài lắm. Đến tháng mười một mới hết mưa.\nMai: Ở Hà Nội thì đang là mùa thu, trời lạnh và hanh khô."
+                  "vietnamese_text": "Lan: Trời đang mưa to quá, mình không đi chơi được rồi.\nMai: Vậy ở nhà xem phim đi. Nghe nói tuần sau trời nắng lại.\nLan: Ừ, mùa mưa ở Sài Gòn kéo dài lắm. Đến tháng mười một mới hết mưa.\nMai: Ở Hà Nội thì đang là mùa thu, trời lạnh và hanh khô.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Mai",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Trời đang mưa to quá, mình không đi chơi được rồi.",
+                        "en": "It's raining heavily, we can't go out anymore."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Vậy ở nhà xem phim đi. Nghe nói tuần sau trời nắng lại.",
+                        "en": "Then let's stay home and watch a movie."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Ừ, mùa mưa ở Sài Gòn kéo dài lắm. Đến tháng mười một mới hết mưa.",
+                        "en": "Yeah, the rainy season in Saigon lasts a long time."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Ở Hà Nội thì đang là mùa thu, trời lạnh và hanh khô.",
+                        "en": "In Hanoi it's autumn now, it's cold and dry."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -2743,7 +3061,48 @@
                   "phonetic": "Hung: Troi dang lam gi ngoai do em? Lan: Dang mua rao, sam chop luon anh oi! Hung: Vay thi o nha di. Dang mua ma ra ngoai thi bi uot day. Lan: Nhung ma minh dang muon di sieu thi mua do. Mua tanh chua nhi? Hung: Chua tanh dau, dang mua to lam. Doi mot luc nua di.",
                   "translation": "Hùng: What's the weather doing outside?\nLan: It's raining heavily, with thunder and lightning!\nHùng: Then stay home. Going out while it's raining, you'll get wet.\nLan: But I want to go to the supermarket. Has the rain stopped?\nHùng: Not yet, it's raining really hard. Wait a bit.",
                   "video_url": null,
-                  "vietnamese_text": "Hùng: Trời đang làm gì ngoài đó em?\nLan: Đang mưa rào, sấm chớp luôn anh ơi!\nHùng: Vậy thì ở nhà đi. Đang mưa mà ra ngoài thì bị ướt đấy.\nLan: Nhưng mà mình đang muốn đi siêu thị mua đồ. Mưa tạnh chưa nhỉ?\nHùng: Chưa tạnh đâu, đang mưa to lắm. Đợi một lúc nữa đi."
+                  "vietnamese_text": "Hùng: Trời đang làm gì ngoài đó em?\nLan: Đang mưa rào, sấm chớp luôn anh ơi!\nHùng: Vậy thì ở nhà đi. Đang mưa mà ra ngoài thì bị ướt đấy.\nLan: Nhưng mà mình đang muốn đi siêu thị mua đồ. Mưa tạnh chưa nhỉ?\nHùng: Chưa tạnh đâu, đang mưa to lắm. Đợi một lúc nữa đi.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Hùng",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Lan",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Trời đang làm gì ngoài đó em?",
+                        "en": "What's the weather doing outside?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đang mưa rào, sấm chớp luôn anh ơi!",
+                        "en": "It's raining heavily, with thunder and lightning!"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Vậy thì ở nhà đi. Đang mưa mà ra ngoài thì bị ướt đấy.",
+                        "en": "Then stay home. Going out while it's raining, you'll get wet."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Nhưng mà mình đang muốn đi siêu thị mua đồ. Mưa tạnh chưa nhỉ?",
+                        "en": "But I want to go to the supermarket. Has the rain stopped?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Chưa tạnh đâu, đang mưa to lắm. Đợi một lúc nữa đi.",
+                        "en": "Not yet, it's raining really hard. Wait a bit."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -2920,7 +3279,38 @@
                   "phonetic": "Bac si thoi tiet: Xin chao cac ban, day la du bao thoi tiet ngay mai. O mien Bac, troi dang lanh dan, co the co mua nho buoi sang. O mien Trung, troi nang va hanh kho. O mien Nam, dang la mua mua, nho mang o khi ra ngoai nhe! Nguoi hoi: Bac si oi, tuan sau troi co nang khong a? Bac si thoi tiet: Tuan sau mien Bac nang lai, nhung mien Nam van dang mua. Nhiet do mien Bac khoang muoi tam den hai muoi ba do.",
                   "translation": "Weather presenter: Hello everyone, this is tomorrow's weather forecast. In the North, it is getting colder, there may be light rain in the morning. In the Central region, it is sunny and dry. In the South, it is the rainy season, remember to bring an umbrella when going out!\nCaller: Doctor, will it be sunny next week?\nWeather presenter: Next week the North will be sunny again, but the South will still have rain. Temperature in the North about 18 to 23 degrees.",
                   "video_url": null,
-                  "vietnamese_text": "Bác sĩ thời tiết: Xin chào các bạn, đây là dự báo thời tiết ngày mai. Ở miền Bắc, trời đang lạnh dần, có thể có mưa nhỏ buổi sáng. Ở miền Trung, trời nắng và hanh khô. Ở miền Nam, đang là mùa mưa, nhớ mang ô khi ra ngoài nhé!\nNgười hỏi: Bác sĩ ơi, tuần sau trời có nắng không ạ?\nBác sĩ thời tiết: Tuần sau miền Bắc nắng lại, nhưng miền Nam vẫn đang mưa. Nhiệt độ miền Bắc khoảng mười tám đến hai mươi ba độ."
+                  "vietnamese_text": "Bác sĩ thời tiết: Xin chào các bạn, đây là dự báo thời tiết ngày mai. Ở miền Bắc, trời đang lạnh dần, có thể có mưa nhỏ buổi sáng. Ở miền Trung, trời nắng và hanh khô. Ở miền Nam, đang là mùa mưa, nhớ mang ô khi ra ngoài nhé!\nNgười hỏi: Bác sĩ ơi, tuần sau trời có nắng không ạ?\nBác sĩ thời tiết: Tuần sau miền Bắc nắng lại, nhưng miền Nam vẫn đang mưa. Nhiệt độ miền Bắc khoảng mười tám đến hai mươi ba độ.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Bác sĩ thời tiết",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Người hỏi",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Xin chào các bạn, đây là dự báo thời tiết ngày mai. Ở miền Bắc, trời đang lạnh dần, có thể có mưa nhỏ buổi sáng. Ở miền Trung, trời nắng và hanh khô. Ở miền Nam, đang là mùa mưa, nhớ mang ô khi ra ngoài nhé!",
+                        "en": "Hello everyone, this is tomorrow's weather forecast. In the North, it is getting colder, there may be light rain in the morning. In the Central region, it is sunny and dry. In the South, it is the rainy season, remember to bring an umbrella when going out!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Bác sĩ ơi, tuần sau trời có nắng không ạ?",
+                        "en": "Doctor, will it be sunny next week?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Tuần sau miền Bắc nắng lại, nhưng miền Nam vẫn đang mưa. Nhiệt độ miền Bắc khoảng mười tám đến hai mươi ba độ.",
+                        "en": "Next week the North will be sunny again, but the South will still have rain. Temperature in the North about 18 to 23 degrees."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "listening",
@@ -3143,7 +3533,48 @@
                   "phonetic": "Lan: Nha em o dau the? Hoa: Em o thue can ho gan truong dai hoc. Can ho co hai phong ngu, mot bep va mot ve sinh. Lan: Zia thue bao nhieu mot thang? Hoa: Nam trieu dong mot thang. Dat hon nha tro nhung sach hon va yen tinh hon. Lan: Nha toi o ngoai o, co san rong va vuon cay. Nhung xa trung tam thanh pho.",
                   "translation": "Lan: Where do you live?\nHoa: I rent an apartment near the university. The apartment has two bedrooms, a kitchen, and a bathroom.\nLan: How much is the rent per month?\nHoa: Five million dong per month. More expensive but cleaner and quieter.\nLan: My house is in the suburbs, with a big yard and garden. But far from the city center.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Nhà em ở đâu thế?\nHoa: Em ở thuê căn hộ gần trường đại học. Căn hộ có hai phòng ngủ, một bếp và một vệ sinh.\nLan: Giá thuê bao nhiêu một tháng?\nHoa: Năm triệu đồng một tháng. Đắt hơn nhà trọ nhưng sạch hơn và yên tĩnh hơn.\nLan: Nhà tôi ở ngoại ô, có sân rộng và vườn cây. Nhưng xa trung tâm thành phố."
+                  "vietnamese_text": "Lan: Nhà em ở đâu thế?\nHoa: Em ở thuê căn hộ gần trường đại học. Căn hộ có hai phòng ngủ, một bếp và một vệ sinh.\nLan: Giá thuê bao nhiêu một tháng?\nHoa: Năm triệu đồng một tháng. Đắt hơn nhà trọ nhưng sạch hơn và yên tĩnh hơn.\nLan: Nhà tôi ở ngoại ô, có sân rộng và vườn cây. Nhưng xa trung tâm thành phố.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Hoa",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Nhà em ở đâu thế?",
+                        "en": "Where do you live?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Em ở thuê căn hộ gần trường đại học. Căn hộ có hai phòng ngủ, một bếp và một vệ sinh.",
+                        "en": "I rent an apartment near the university. The apartment has two bedrooms, a kitchen, and a bathroom."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Giá thuê bao nhiêu một tháng?",
+                        "en": "How much is the rent per month?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Năm triệu đồng một tháng. Đắt hơn nhà trọ nhưng sạch hơn và yên tĩnh hơn.",
+                        "en": "Five million dong per month. More expensive but cleaner and quieter."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Nhà tôi ở ngoại ô, có sân rộng và vườn cây. Nhưng xa trung tâm thành phố.",
+                        "en": "My house is in the suburbs, with a big yard and garden. But far from the city center."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -3625,7 +4056,38 @@
                   "phonetic": "Nam: Mo ta nha em di, nghe thu nao! Hoa: Nha em o ngoai o, la nha rieng hai tang. Tang mot co phong khach va bep. Tang hai co ba phong ngu va hai ve sinh. Vuon o phia sau nha, co nhieu cay an trai. Nam: Nghe hay qua! Nha anh o chung cu, chi co mot phong ngu thoi. Nhung o gan cho lam nen tien.",
                   "translation": "Nam: Describe your house!\nHoa: My house is in the suburbs, it's a two-story townhouse. The first floor has a living room and kitchen. The second floor has three bedrooms and two bathrooms. The garden is behind the house.\nNam: Sounds nice! My place is an apartment, with only one bedroom. But it's close to work so it's convenient.",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Mô tả nhà em đi, nghe thử nào!\nHoa: Nhà em ở ngoại ô, là nhà riêng hai tầng. Tầng một có phòng khách và bếp. Tầng hai có ba phòng ngủ và hai vệ sinh. Vườn ở phía sau nhà, có nhiều cây ăn trái.\nNam: Nghe hay quá! Nhà anh ở chung cư, chỉ có một phòng ngủ thôi. Nhưng ở gần chỗ làm nên tiện."
+                  "vietnamese_text": "Nam: Mô tả nhà em đi, nghe thử nào!\nHoa: Nhà em ở ngoại ô, là nhà riêng hai tầng. Tầng một có phòng khách và bếp. Tầng hai có ba phòng ngủ và hai vệ sinh. Vườn ở phía sau nhà, có nhiều cây ăn trái.\nNam: Nghe hay quá! Nhà anh ở chung cư, chỉ có một phòng ngủ thôi. Nhưng ở gần chỗ làm nên tiện.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Hoa",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Mô tả nhà em đi, nghe thử nào!",
+                        "en": "Describe your house!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Nhà em ở ngoại ô, là nhà riêng hai tầng. Tầng một có phòng khách và bếp. Tầng hai có ba phòng ngủ và hai vệ sinh. Vườn ở phía sau nhà, có nhiều cây ăn trái.",
+                        "en": "My house is in the suburbs, it's a two-story townhouse. The first floor has a living room and kitchen. The second floor has three bedrooms and two bathrooms. The garden is behind the house."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Nghe hay quá! Nhà anh ở chung cư, chỉ có một phòng ngủ thôi. Nhưng ở gần chỗ làm nên tiện.",
+                        "en": "Sounds nice! My place is an apartment, with only one bedroom. But it's close to work so it's convenient."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "speaking",
@@ -3847,7 +4309,53 @@
                   "phonetic": "Minh: Em thich lam gi luc ranh? Hoa: Em thich nghe nhac va doc sach. Con anh? Minh: Anh thich xem phim va choi bong da. Cuoi tuan anh hay di boi. Hoa: Em cung thich boi nhung em boi khong gioi lam. Minh: Khong sao, tap nhieu la gioi. Mua he nay minh di du lich Da Lat nhe? Hoa: Duoc qua! Da Lat mat hon Sai Gon nhieu.",
                   "translation": "Minh: What do you like to do in your free time?\nHoa: I like listening to music and reading books.\nMinh: I like watching movies and playing football. On weekends I usually go swimming.\nHoa: I also like swimming but I'm not very good at it.\nMinh: That's okay, practice makes perfect. Let's travel to Da Lat this summer?\nHoa: Great! Da Lat is much cooler than Saigon.",
                   "video_url": null,
-                  "vietnamese_text": "Minh: Em thích làm gì lúc rảnh?\nHoa: Em thích nghe nhạc và đọc sách. Còn anh?\nMinh: Anh thích xem phim và chơi bóng đá. Cuối tuần anh hay đi bơi.\nHoa: Em cũng thích bơi nhưng em bơi không giỏi lắm.\nMinh: Không sao, tập nhiều là giỏi. Mùa hè này mình đi du lịch Đà Lạt nhé?\nHoa: Được quá! Đà Lạt mát hơn Sài Gòn nhiều."
+                  "vietnamese_text": "Minh: Em thích làm gì lúc rảnh?\nHoa: Em thích nghe nhạc và đọc sách. Còn anh?\nMinh: Anh thích xem phim và chơi bóng đá. Cuối tuần anh hay đi bơi.\nHoa: Em cũng thích bơi nhưng em bơi không giỏi lắm.\nMinh: Không sao, tập nhiều là giỏi. Mùa hè này mình đi du lịch Đà Lạt nhé?\nHoa: Được quá! Đà Lạt mát hơn Sài Gòn nhiều.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Minh",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Hoa",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Em thích làm gì lúc rảnh?",
+                        "en": "What do you like to do in your free time?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Em thích nghe nhạc và đọc sách. Còn anh?",
+                        "en": "I like listening to music and reading books."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh thích xem phim và chơi bóng đá. Cuối tuần anh hay đi bơi.",
+                        "en": "I like watching movies and playing football. On weekends I usually go swimming."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Em cũng thích bơi nhưng em bơi không giỏi lắm.",
+                        "en": "I also like swimming but I'm not very good at it."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Không sao, tập nhiều là giỏi. Mùa hè này mình đi du lịch Đà Lạt nhé?",
+                        "en": "That's okay, practice makes perfect. Let's travel to Da Lat this summer?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Được quá! Đà Lạt mát hơn Sài Gòn nhiều.",
+                        "en": "Great! Da Lat is much cooler than Saigon."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -4358,7 +4866,38 @@
                   "phonetic": "Lan: Em thich nghe nhac va doc sach, nhung anh thich xem phim va choi the thao. Minh: Anh thich bong da ma khong co thoi gian choi. Thay nguoi khac choi ma them qua! Lan: Cuoi tuan ranh thi di choi ma! Ca nha cung di boi va an ngoai nhe.",
                   "translation": "Lan: I like listening to music and reading books, but you like watching movies and playing sports.\nMinh: I like football but don't have time to play. Seeing others play makes me jealous!\nLan: When you're free on weekends, go play! Let's all go swimming and eat out.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Em thích nghe nhạc và đọc sách, nhưng anh thích xem phim và chơi thể thao.\nMinh: Anh thích bóng đá mà không có thời gian chơi. Thấy người khác chơi mà thèm quá!\nLan: Cuối tuần rảnh thì đi chơi mà! Cả nhà cùng đi bơi và ăn ngoài nhé."
+                  "vietnamese_text": "Lan: Em thích nghe nhạc và đọc sách, nhưng anh thích xem phim và chơi thể thao.\nMinh: Anh thích bóng đá mà không có thời gian chơi. Thấy người khác chơi mà thèm quá!\nLan: Cuối tuần rảnh thì đi chơi mà! Cả nhà cùng đi bơi và ăn ngoài nhé.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Minh",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Em thích nghe nhạc và đọc sách, nhưng anh thích xem phim và chơi thể thao.",
+                        "en": "I like listening to music and reading books, but you like watching movies and playing sports."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Anh thích bóng đá mà không có thời gian chơi. Thấy người khác chơi mà thèm quá!",
+                        "en": "I like football but don't have time to play. Seeing others play makes me jealous!"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cuối tuần rảnh thì đi chơi mà! Cả nhà cùng đi bơi và ăn ngoài nhé.",
+                        "en": "When you're free on weekends, go play! Let's all go swimming and eat out."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -4581,7 +5120,38 @@
                   "phonetic": "Lan: Em thich lam gi luc ranh? Minh: Toi thich doc sach va nghe nhac. Sach Viet Nam hay hon sach dich, va nhac Viet Nam de nghe hon. Nhung toi cung thich xem phim My vi hap dan hon. Con em? Lan: Em thich di du lich nhat! Noi ma em thich nhat la Da Lat vi mat hon Sai Gon nhieu. Mua he di Da Lat la tuyet nhat!",
                   "translation": "Lan: What do you like to do in your free time?\nMinh: I like reading books and listening to music. Vietnamese books are better than translated ones, and Vietnamese music is easier to listen to. But I also like watching American movies because they are more exciting. What about you?\nLan: I like traveling the most! The place that I like the most is Da Lat because it is much cooler than Saigon. Going to Da Lat in summer is the best!",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Em thích làm gì lúc rảnh?\nMinh: Tôi thích đọc sách và nghe nhạc. Sách Việt Nam hay hơn sách dịch, và nhạc Việt Nam dễ nghe hơn. Nhưng tôi cũng thích xem phim Mỹ vì hấp dẫn hơn. Còn em?\nLan: Em thích đi du lịch nhất! Nơi mà em thích nhất là Đà Lạt vì mát hơn Sài Gòn nhiều. Mùa hè đi Đà Lạt là tuyệt nhất!"
+                  "vietnamese_text": "Lan: Em thích làm gì lúc rảnh?\nMinh: Tôi thích đọc sách và nghe nhạc. Sách Việt Nam hay hơn sách dịch, và nhạc Việt Nam dễ nghe hơn. Nhưng tôi cũng thích xem phim Mỹ vì hấp dẫn hơn. Còn em?\nLan: Em thích đi du lịch nhất! Nơi mà em thích nhất là Đà Lạt vì mát hơn Sài Gòn nhiều. Mùa hè đi Đà Lạt là tuyệt nhất!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Minh",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Em thích làm gì lúc rảnh?",
+                        "en": "What do you like to do in your free time?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi thích đọc sách và nghe nhạc. Sách Việt Nam hay hơn sách dịch, và nhạc Việt Nam dễ nghe hơn. Nhưng tôi cũng thích xem phim Mỹ vì hấp dẫn hơn. Còn em?",
+                        "en": "I like reading books and listening to music. Vietnamese books are better than translated ones, and Vietnamese music is easier to listen to. But I also like watching American movies because they are more exciting. What about you?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Em thích đi du lịch nhất! Nơi mà em thích nhất là Đà Lạt vì mát hơn Sài Gòn nhiều. Mùa hè đi Đà Lạt là tuyệt nhất!",
+                        "en": "I like traveling the most! The place that I like the most is Da Lat because it is much cooler than Saigon. Going to Da Lat in summer is the best!"
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "writing",

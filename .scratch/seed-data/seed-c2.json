@@ -164,7 +164,43 @@
                   "phonetic": "Hwe: Rang ma tro nay nong qua rura? Minh: Ua, Hwe noi giong Trung ghe! Nguoi Nam minh noi: Sao ma hom nay nong qua vay? Hwe: Hihi, tui quen noi rura roi. Con nguoi Bac noi the nao? Minh: Nguoi Bac noi: Sao hom nay nong the?",
                   "translation": "Huệ: Why is it so hot today? Minh: You speak with a Central accent! Southerners say it differently. Huệ: I am used to it. And Northerners? Minh: They say: Sao hôm nay nóng thế?",
                   "video_url": null,
-                  "vietnamese_text": "Huệ: Răng mà trờ này nóng quá rứa?\nMinh: Ủa, Huệ nói giọng Trung ghê! Người Nam mình nói: Sao mà hôm nay nóng quá vậy?\nHuệ: Hihi, tui quen nói rứa rồi. Còn người Bắc nói thế nào?\nMinh: Người Bắc nói: Sao hôm nay nóng thế? Hoặc: Thế mà hôm nay nóng nhỉ?"
+                  "vietnamese_text": "Huệ: Răng mà trờ này nóng quá rứa?\nMinh: Ủa, Huệ nói giọng Trung ghê! Người Nam mình nói: Sao mà hôm nay nóng quá vậy?\nHuệ: Hihi, tui quen nói rứa rồi. Còn người Bắc nói thế nào?\nMinh: Người Bắc nói: Sao hôm nay nóng thế? Hoặc: Thế mà hôm nay nóng nhỉ?",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Huệ",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Minh",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Răng mà trờ này nóng quá rứa?",
+                        "en": "Why is it so hot today? Minh: You speak with a Central accent! Southerners say it differently. Huệ: I am used to it. And Northerners? Minh: They say: Sao hôm nay nóng thế?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Ủa, Huệ nói giọng Trung ghê! Người Nam mình nói: Sao mà hôm nay nóng quá vậy?",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Hihi, tui quen nói rứa rồi. Còn người Bắc nói thế nào?",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Người Bắc nói: Sao hôm nay nóng thế? Hoặc: Thế mà hôm nay nóng nhỉ?",
+                        "en": null
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -698,7 +734,48 @@
                   "phonetic": null,
                   "translation": "Same conversation in three dialects.",
                   "video_url": null,
-                  "vietnamese_text": "Bà Huế: Bây chừ mình đi mô rứa?\nÔng Sài Gòn: Dạ, bây giờ mình đi đâu đó ạ?\nBà Hà Nội: Thế bây giờ bà đi đâu đấy ạ?\nBà Huế: Tui đi chợ ni, mua cá ni nấu canh rứa!"
+                  "vietnamese_text": "Bà Huế: Bây chừ mình đi mô rứa?\nÔng Sài Gòn: Dạ, bây giờ mình đi đâu đó ạ?\nBà Hà Nội: Thế bây giờ bà đi đâu đấy ạ?\nBà Huế: Tui đi chợ ni, mua cá ni nấu canh rứa!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Bà Huế",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Ông Sài Gòn",
+                        "side": "right"
+                      },
+                      {
+                        "id": "c3",
+                        "name": "Bà Hà Nội",
+                        "side": "left"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Bây chừ mình đi mô rứa?",
+                        "en": "Same conversation in three dialects."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Dạ, bây giờ mình đi đâu đó ạ?",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c3",
+                        "vi": "Thế bây giờ bà đi đâu đấy ạ?",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Tui đi chợ ni, mua cá ni nấu canh rứa!",
+                        "en": null
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -939,7 +1016,43 @@
                   "phonetic": null,
                   "translation": "Same question in three dialects.",
                   "video_url": null,
-                  "vietnamese_text": "Tiếng Bắc: \"Thưa cụ, cháu xin phép hỏi cụ đi đâu đấy ạ?\"\nTiếng Trung: \"Tề ni, tau hỏi mi đi mô rứa?\"\nTiếng Nam: \"Xi ông, tui hỏi ông đi đâu data?\""
+                  "vietnamese_text": "Tiếng Bắc: \"Thưa cụ, cháu xin phép hỏi cụ đi đâu đấy ạ?\"\nTiếng Trung: \"Tề ni, tau hỏi mi đi mô rứa?\"\nTiếng Nam: \"Xi ông, tui hỏi ông đi đâu data?\"",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Tiếng Bắc",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Tiếng Trung",
+                        "side": "right"
+                      },
+                      {
+                        "id": "c3",
+                        "name": "Tiếng Nam",
+                        "side": "left"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "\"Thưa cụ, cháu xin phép hỏi cụ đi đâu đấy ạ?\"",
+                        "en": "Same question in three dialects."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "\"Tề ni, tau hỏi mi đi mô rứa?\"",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c3",
+                        "vi": "\"Xi ông, tui hỏi ông đi đâu data?\"",
+                        "en": null
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -1107,7 +1220,48 @@
                   "phonetic": null,
                   "translation": "Pronunciation practice dialogue.",
                   "video_url": null,
-                  "vietnamese_text": "Giáo viên: Hãy đọc \"trời\" theo giọng Bắc.\nHọc viên: Trời!\nGiáo viên: Giờ đọc theo giọng Nam.\nHọc viên: Giời!\nGiáo viên: Đúng rồi! Người Nam đọc tr thành gi."
+                  "vietnamese_text": "Giáo viên: Hãy đọc \"trời\" theo giọng Bắc.\nHọc viên: Trời!\nGiáo viên: Giờ đọc theo giọng Nam.\nHọc viên: Giời!\nGiáo viên: Đúng rồi! Người Nam đọc tr thành gi.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Giáo viên",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Học viên",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Hãy đọc \"trời\" theo giọng Bắc.",
+                        "en": "Pronunciation practice dialogue."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Trời!",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Giờ đọc theo giọng Nam.",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Giời!",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Đúng rồi! Người Nam đọc tr thành gi.",
+                        "en": null
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "pronunciation",
@@ -3886,7 +4040,43 @@
                   "phonetic": null,
                   "translation": "Humorous dialogue with spoonerism and slang.",
                   "video_url": null,
-                  "vietnamese_text": "Tùng: Ê, hôm qua tui đi ăn \"chè bưởi\" với bà xã, hén!\nLan: Ủa, \"bưởi chè\" hả? Nói lái hoài!\nTùng: Haha, tui nói rứa cho vui thôi mà! Bà xã tui nấu chè bưởi xịn lắm, đỉnh!\nLan: Chè bưởi à, tui cũng thích lắm. Nhưng nói lái nghe buồn cười quá chừng!"
+                  "vietnamese_text": "Tùng: Ê, hôm qua tui đi ăn \"chè bưởi\" với bà xã, hén!\nLan: Ủa, \"bưởi chè\" hả? Nói lái hoài!\nTùng: Haha, tui nói rứa cho vui thôi mà! Bà xã tui nấu chè bưởi xịn lắm, đỉnh!\nLan: Chè bưởi à, tui cũng thích lắm. Nhưng nói lái nghe buồn cười quá chừng!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Tùng",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Lan",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Ê, hôm qua tui đi ăn \"chè bưởi\" với bà xã, hén!",
+                        "en": "Humorous dialogue with spoonerism and slang."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Ủa, \"bưởi chè\" hả? Nói lái hoài!",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Haha, tui nói rứa cho vui thôi mà! Bà xã tui nấu chè bưởi xịn lắm, đỉnh!",
+                        "en": null
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chè bưởi à, tui cũng thích lắm. Nhưng nói lái nghe buồn cười quá chừng!",
+                        "en": null
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,

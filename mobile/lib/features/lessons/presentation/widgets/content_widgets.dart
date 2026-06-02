@@ -10,6 +10,7 @@ import '../../../../core/network/media_url.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../domain/lesson_models.dart';
+import 'dialogue_color.dart';
 
 class TextContentWidget extends StatelessWidget {
   const TextContentWidget({super.key, required this.content});
@@ -268,30 +269,10 @@ class DialogueContentWidget extends StatelessWidget {
   const DialogueContentWidget({super.key, required this.content});
   final LessonContent content;
 
-  List<_DialogueLine> _parseLines() {
-    final viLines = content.vietnameseText.split('\n');
-    final trLines =
-        content.translation?.split('\n') ?? List.filled(viLines.length, '');
-
-    final lines = <_DialogueLine>[];
-    for (var i = 0; i < viLines.length; i++) {
-      final vi = viLines[i].trim();
-      if (vi.isEmpty) continue;
-      final tr = i < trLines.length ? trLines[i].trim() : '';
-      final isSpeaker1 = lines.length.isEven;
-      lines.add(_DialogueLine(
-        vietnamese: vi,
-        translation: tr.isNotEmpty ? tr : null,
-        isSpeaker1: isSpeaker1,
-      ));
-    }
-    return lines;
-  }
-
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final lines = _parseLines();
+    final dialogue = content.dialogueData;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -313,12 +294,54 @@ class DialogueContentWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          ...lines.map((line) => _ChatBubble(line: line)),
+          if (dialogue == null || dialogue.characters.isEmpty)
+            _EmptyDialoguePlaceholder()
+          else
+            ..._buildBubbles(dialogue),
           if (content.audioUrl != null) ...[
             const SizedBox(height: 16),
             _DialogueAudioCard(audioUrl: content.audioUrl!),
           ],
         ],
+      ),
+    );
+  }
+
+  List<Widget> _buildBubbles(LessonDialogueData dialogue) {
+    final byId = {for (final c in dialogue.characters) c.id: c};
+    final widgets = <Widget>[];
+    DialogueCharacter? previous;
+    for (final line in dialogue.lines) {
+      final character = byId[line.characterId] ?? dialogue.characters.first;
+      final showHeader = previous?.id != character.id;
+      widgets.add(_ChatBubble(
+        character: character,
+        line: line,
+        showHeader: showHeader,
+      ));
+      previous = character;
+    }
+    return widgets;
+  }
+}
+
+class _EmptyDialoguePlaceholder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final c = AppTheme.colors(context);
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: c.muted,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: c.border),
+      ),
+      child: Text(
+        'Hội thoại chưa được cấu hình.',
+        style: GoogleFonts.inter(
+          fontSize: AppTypography.bodyMedium,
+          color: c.mutedForeground,
+        ),
       ),
     );
   }
@@ -435,83 +458,128 @@ class _DialogueAudioCardState extends State<_DialogueAudioCard> {
   }
 }
 
-class _DialogueLine {
-  const _DialogueLine({
-    required this.vietnamese,
-    this.translation,
-    required this.isSpeaker1,
+class _ChatBubble extends StatelessWidget {
+  const _ChatBubble({
+    required this.character,
+    required this.line,
+    required this.showHeader,
   });
 
-  final String vietnamese;
-  final String? translation;
-  final bool isSpeaker1;
-}
-
-class _ChatBubble extends StatelessWidget {
-  const _ChatBubble({required this.line});
-  final _DialogueLine line;
+  final DialogueCharacter character;
+  final DialogueLineEntry line;
+  final bool showHeader;
 
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final isLeft = line.isSpeaker1;
+    final isLeft = character.side == DialogueSide.left;
+    final color = colorForCharacter(character.id);
+
+    final avatar = Container(
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        color: color.avatarBackground,
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        initialFor(character.name),
+        style: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: color.avatarForeground,
+        ),
+      ),
+    );
+
+    final bubble = Column(
+      crossAxisAlignment:
+          isLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+      children: [
+        if (showHeader && character.name.trim().isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4, left: 2, right: 2),
+            child: Text(
+              character.name,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                fontWeight: FontWeight.w700,
+                color: color.foreground,
+              ),
+            ),
+          ),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
+          decoration: BoxDecoration(
+            color: color.background,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(AppRadius.lg),
+              topRight: const Radius.circular(AppRadius.lg),
+              bottomLeft: isLeft
+                  ? const Radius.circular(2)
+                  : const Radius.circular(AppRadius.lg),
+              bottomRight: isLeft
+                  ? const Radius.circular(AppRadius.lg)
+                  : const Radius.circular(2),
+            ),
+            border: Border.all(color: color.border, width: 1),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                line.vi,
+                style: GoogleFonts.inter(
+                  fontSize: AppTypography.bodyLarge,
+                  fontWeight: FontWeight.w500,
+                  height: 1.5,
+                  color: c.foreground,
+                ),
+              ),
+              if (line.en != null && line.en!.trim().isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text(
+                  line.en!,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodySmall,
+                    color: c.mutedForeground,
+                    height: 1.4,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+
+    final maxBubbleWidth = MediaQuery.of(context).size.width * 0.72;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Align(
-        alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.78,
+      child: Row(
+        mainAxisAlignment:
+            isLeft ? MainAxisAlignment.start : MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (isLeft) ...[
+            avatar,
+            const SizedBox(width: 8),
+          ],
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxBubbleWidth),
+            child: bubble,
           ),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.md,
-            ),
-            decoration: BoxDecoration(
-              color: isLeft ? c.card : c.primary,
-              borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(AppRadius.lg),
-                topRight: const Radius.circular(AppRadius.lg),
-                bottomLeft:
-                    isLeft ? const Radius.circular(2) : const Radius.circular(AppRadius.lg),
-                bottomRight:
-                    isLeft ? const Radius.circular(AppRadius.lg) : const Radius.circular(2),
-              ),
-              border: isLeft
-                  ? Border.all(color: c.border, width: 1)
-                  : null,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  line.vietnamese,
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.bodyLarge,
-                    fontWeight: FontWeight.w500,
-                    height: 1.5,
-                    color: isLeft ? c.foreground : c.primaryForeground,
-                  ),
-                ),
-                if (line.translation != null && line.translation!.isNotEmpty) ...[
-                  const SizedBox(height: 6),
-                  Text(
-                    line.translation!,
-                    style: GoogleFonts.inter(
-                      fontSize: AppTypography.bodySmall,
-                      color: isLeft
-                          ? c.mutedForeground
-                          : c.primaryForeground.withValues(alpha: 0.8),
-                      height: 1.4,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
+          if (!isLeft) ...[
+            const SizedBox(width: 8),
+            avatar,
+          ],
+        ],
       ),
     );
   }

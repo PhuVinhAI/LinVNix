@@ -220,7 +220,38 @@
                   "phonetic": null,
                   "translation": "Nam: Hello! I am Nam.\nLan: Hello! I am Lan. Very nice to meet you.\nNam: Thank you! Me too.",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Xin chào! Tôi là Nam.\nLan: Chào bạn! Tôi là Lan. Rất vui được gặp bạn.\nNam: Cảm ơn! Tôi cũng rất vui."
+                  "vietnamese_text": "Nam: Xin chào! Tôi là Nam.\nLan: Chào bạn! Tôi là Lan. Rất vui được gặp bạn.\nNam: Cảm ơn! Tôi cũng rất vui.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Lan",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Xin chào! Tôi là Nam.",
+                        "en": "Hello! I am Nam."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chào bạn! Tôi là Lan. Rất vui được gặp bạn.",
+                        "en": "Hello! I am Lan. Very nice to meet you."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cảm ơn! Tôi cũng rất vui.",
+                        "en": "Thank you! Me too."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "vocabulary",
@@ -588,7 +619,38 @@
                   "phonetic": null,
                   "translation": "Nam: Hello! I am Nam.\nLan: Hello! I am Lan. Very nice to meet you.\nNam: Thank you! Me too.",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Xin chào! Tôi là Nam.\nLan: Chào bạn! Tôi là Lan. Rất vui được gặp bạn.\nNam: Cảm ơn! Tôi cũng rất vui."
+                  "vietnamese_text": "Nam: Xin chào! Tôi là Nam.\nLan: Chào bạn! Tôi là Lan. Rất vui được gặp bạn.\nNam: Cảm ơn! Tôi cũng rất vui.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Lan",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Xin chào! Tôi là Nam.",
+                        "en": "Hello! I am Nam."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chào bạn! Tôi là Lan. Rất vui được gặp bạn.",
+                        "en": "Hello! I am Lan. Very nice to meet you."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cảm ơn! Tôi cũng rất vui.",
+                        "en": "Thank you! Me too."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "listening",
@@ -937,7 +999,43 @@
                   "phonetic": null,
                   "translation": "Nam: Hello! My name is Nam. I am from Hanoi.\nLan: Hello Nam! I am Lan. I live in Ho Chi Minh City.\nNam: Very nice to meet you, Lan!\nLan: Me too. See you again!",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Xin chào! Tôi tên là Nam. Tôi từ Hà Nội.\nLan: Chào Nam! Tôi là Lan. Tôi ở TP. Hồ Chí Minh.\nNam: Rất vui được gặp bạn, Lan!\nLan: Tôi cũng vậy. Hẹn gặp lại nhé!"
+                  "vietnamese_text": "Nam: Xin chào! Tôi tên là Nam. Tôi từ Hà Nội.\nLan: Chào Nam! Tôi là Lan. Tôi ở TP. Hồ Chí Minh.\nNam: Rất vui được gặp bạn, Lan!\nLan: Tôi cũng vậy. Hẹn gặp lại nhé!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Lan",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Xin chào! Tôi tên là Nam. Tôi từ Hà Nội.",
+                        "en": "Hello! My name is Nam. I am from Hanoi."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chào Nam! Tôi là Lan. Tôi ở TP. Hồ Chí Minh.",
+                        "en": "Hello Nam! I am Lan. I live in Ho Chi Minh City."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Rất vui được gặp bạn, Lan!",
+                        "en": "Very nice to meet you, Lan!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi cũng vậy. Hẹn gặp lại nhé!",
+                        "en": "Me too. See you again!"
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -1717,7 +1815,43 @@
                   "phonetic": null,
                   "translation": "Lan: How much is one banh mi?\nSeller: Five thousand dong each, ma'am.\nLan: Give me two, please.\nSeller: That is ten thousand dong.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Bánh mì bao nhiêu tiền một cái?\nHàng: Năm nghìn đồng một cái ạ.\nLan: Cho tôi hai cái.\nHàng: Mười nghìn đồng ạ."
+                  "vietnamese_text": "Lan: Bánh mì bao nhiêu tiền một cái?\nHàng: Năm nghìn đồng một cái ạ.\nLan: Cho tôi hai cái.\nHàng: Mười nghìn đồng ạ.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Hàng",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Bánh mì bao nhiêu tiền một cái?",
+                        "en": "How much is one banh mi?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Năm nghìn đồng một cái ạ.",
+                        "en": "Five thousand dong each, ma'am."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cho tôi hai cái.",
+                        "en": "Give me two, please."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Mười nghìn đồng ạ.",
+                        "en": "That is ten thousand dong."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "vocabulary",
@@ -2915,7 +3049,48 @@
                   "phonetic": null,
                   "translation": "Lan: How many siblings do you have?\nNam: I have one older brother and two younger sisters. And you?\nLan: I am an only child, I don't have siblings.\nNam: Oh! How many people are there in your family?\nLan: Three people: dad, mom, and me.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Bạn có mấy người anh chị em?\nNam: Tôi có một người anh trai và hai người em gái. Còn bạn?\nLan: Tôi là con một, không có anh chị em.\nNam: Vậy à! Gia đình bạn có mấy người?\nLan: Ba người: bố, mẹ và tôi."
+                  "vietnamese_text": "Lan: Bạn có mấy người anh chị em?\nNam: Tôi có một người anh trai và hai người em gái. Còn bạn?\nLan: Tôi là con một, không có anh chị em.\nNam: Vậy à! Gia đình bạn có mấy người?\nLan: Ba người: bố, mẹ và tôi.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Nam",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Bạn có mấy người anh chị em?",
+                        "en": "How many siblings do you have?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi có một người anh trai và hai người em gái. Còn bạn?",
+                        "en": "I have one older brother and two younger sisters. And you?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Tôi là con một, không có anh chị em.",
+                        "en": "I am an only child, I don't have siblings."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Vậy à! Gia đình bạn có mấy người?",
+                        "en": "Oh! How many people are there in your family?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Ba người: bố, mẹ và tôi.",
+                        "en": "Three people: dad, mom, and me."
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "vocabulary",
@@ -3905,7 +4080,48 @@
                   "phonetic": null,
                   "translation": "Lan: What would you like to eat?\nNam: I want to eat pho. And you?\nLan: I want to eat rice. Anything to drink?\nNam: Give me a glass of iced milk coffee, please.\nLan: And I will have iced tea.",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Anh muốn ăn gì?\nNam: Tôi muốn ăn phở. Còn chị?\nLan: Tôi muốn ăn cơm. Uống gì không?\nNam: Cho tôi một ly cà phê sữa đá.\nLan: Còn tôi uống trà đá."
+                  "vietnamese_text": "Lan: Anh muốn ăn gì?\nNam: Tôi muốn ăn phở. Còn chị?\nLan: Tôi muốn ăn cơm. Uống gì không?\nNam: Cho tôi một ly cà phê sữa đá.\nLan: Còn tôi uống trà đá.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Nam",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh muốn ăn gì?",
+                        "en": "What would you like to eat?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi muốn ăn phở. Còn chị?",
+                        "en": "I want to eat pho. And you?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Tôi muốn ăn cơm. Uống gì không?",
+                        "en": "I want to eat rice. Anything to drink?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Cho tôi một ly cà phê sữa đá.",
+                        "en": "Give me a glass of iced milk coffee, please."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Còn tôi uống trà đá.",
+                        "en": "And I will have iced tea."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -4520,7 +4736,48 @@
                   "phonetic": null,
                   "translation": "Nam: What do you like to eat?\nLan: I like to eat pho. I don't like fish.\nNam: Yesterday I ate beef pho. Very delicious!\nLan: Tomorrow I will try bun cha.\nNam: Now I am drinking coffee. Would you like something to drink?",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Chị thích ăn gì?\nLan: Tôi thích ăn phở. Tôi không thích cá.\nNam: Hôm qua tôi đã ăn phở bò. Rất ngon!\nLan: Ngày mai tôi sẽ thử bún chả.\nNam: Bây giờ tôi đang uống cà phê. Chị uống gì không?"
+                  "vietnamese_text": "Nam: Chị thích ăn gì?\nLan: Tôi thích ăn phở. Tôi không thích cá.\nNam: Hôm qua tôi đã ăn phở bò. Rất ngon!\nLan: Ngày mai tôi sẽ thử bún chả.\nNam: Bây giờ tôi đang uống cà phê. Chị uống gì không?",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Lan",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Chị thích ăn gì?",
+                        "en": "What do you like to eat?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Tôi thích ăn phở. Tôi không thích cá.",
+                        "en": "I like to eat pho. I don't like fish."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Hôm qua tôi đã ăn phở bò. Rất ngon!",
+                        "en": "Yesterday I ate beef pho. Very delicious!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Ngày mai tôi sẽ thử bún chả.",
+                        "en": "Tomorrow I will try bun cha."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Bây giờ tôi đang uống cà phê. Chị uống gì không?",
+                        "en": "Now I am drinking coffee. Would you like something to drink?"
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -4735,7 +4992,63 @@
                   "phonetic": null,
                   "translation": "Staff: Hello! What would you like to eat?\nNam: Give me a bowl of beef pho, please.\nLan: And I want chicken rice.\nStaff: Anything to drink?\nNam: Give me a glass of iced milk coffee, please.\nLan: I will drink hot tea.\nStaff: Yes, please wait a moment.",
                   "video_url": null,
-                  "vietnamese_text": "Nhân viên: Chào anh chị! Anh chị muốn ăn gì?\nNam: Cho tôi một bát phở bò.\nLan: Còn tôi muốn cơm gà.\nNhân viên: Uống gì không ạ?\nNam: Cho tôi một ly cà phê sữa đá.\nLan: Tôi uống trà nóng.\nNhân viên: Dạ, xin chờ một lát ạ."
+                  "vietnamese_text": "Nhân viên: Chào anh chị! Anh chị muốn ăn gì?\nNam: Cho tôi một bát phở bò.\nLan: Còn tôi muốn cơm gà.\nNhân viên: Uống gì không ạ?\nNam: Cho tôi một ly cà phê sữa đá.\nLan: Tôi uống trà nóng.\nNhân viên: Dạ, xin chờ một lát ạ.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nhân viên",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Nam",
+                        "side": "right"
+                      },
+                      {
+                        "id": "c3",
+                        "name": "Lan",
+                        "side": "left"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Chào anh chị! Anh chị muốn ăn gì?",
+                        "en": "Hello! What would you like to eat?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Cho tôi một bát phở bò.",
+                        "en": "Give me a bowl of beef pho, please."
+                      },
+                      {
+                        "characterId": "c3",
+                        "vi": "Còn tôi muốn cơm gà.",
+                        "en": "And I want chicken rice."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Uống gì không ạ?",
+                        "en": "Anything to drink?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Cho tôi một ly cà phê sữa đá.",
+                        "en": "Give me a glass of iced milk coffee, please."
+                      },
+                      {
+                        "characterId": "c3",
+                        "vi": "Tôi uống trà nóng.",
+                        "en": "I will drink hot tea."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Dạ, xin chờ một lát ạ.",
+                        "en": "Yes, please wait a moment."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -4746,7 +5059,43 @@
                   "phonetic": null,
                   "translation": "Nam: Waiter/Waitress, check please!\nStaff: Yes, for two people it is one hundred and fifty thousand dong in total.\nNam: Here it is. Thank you!\nStaff: Thank you. See you again!",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Anh chị ơi, tính tiền!\nNhân viên: Dạ, hai người dùng hết một trăm năm mươi nghìn đồng ạ.\nNam: Đây ạ. Cảm ơn!\nNhân viên: Cảm ơn anh chị. Hẹn gặp lại!"
+                  "vietnamese_text": "Nam: Anh chị ơi, tính tiền!\nNhân viên: Dạ, hai người dùng hết một trăm năm mươi nghìn đồng ạ.\nNam: Đây ạ. Cảm ơn!\nNhân viên: Cảm ơn anh chị. Hẹn gặp lại!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Nhân viên",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Anh chị ơi, tính tiền!",
+                        "en": "Waiter/Waitress, check please!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Dạ, hai người dùng hết một trăm năm mươi nghìn đồng ạ.",
+                        "en": "Yes, for two people it is one hundred and fifty thousand dong in total."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Đây ạ. Cảm ơn!",
+                        "en": "Here it is. Thank you!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Cảm ơn anh chị. Hẹn gặp lại!",
+                        "en": "Thank you. See you again!"
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -5054,7 +5403,53 @@
                   "phonetic": null,
                   "translation": "Lan: Excuse me, let me ask for directions.\nNam: Yes, where do you want to go?\nLan: I want to go to the bus station. Which way should I go?\nNam: You go straight, then turn left. The bus station is over there.\nLan: Thank you very much!\nNam: You're welcome!",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Xin lỗi anh, cho em hỏi đường.\nNam: Vâng, chị muốn đi đâu?\nLan: Em muốn đến bến xe. Đi đường nào ạ?\nNam: Chị đi thẳng, rồi rẽ bên trái. Bến xe ở kia.\nLan: Cảm ơn anh nhiều!\nNam: Không có gì!"
+                  "vietnamese_text": "Lan: Xin lỗi anh, cho em hỏi đường.\nNam: Vâng, chị muốn đi đâu?\nLan: Em muốn đến bến xe. Đi đường nào ạ?\nNam: Chị đi thẳng, rồi rẽ bên trái. Bến xe ở kia.\nLan: Cảm ơn anh nhiều!\nNam: Không có gì!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Nam",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Xin lỗi anh, cho em hỏi đường.",
+                        "en": "Excuse me, let me ask for directions."
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Vâng, chị muốn đi đâu?",
+                        "en": "Yes, where do you want to go?"
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Em muốn đến bến xe. Đi đường nào ạ?",
+                        "en": "I want to go to the bus station. Which way should I go?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Chị đi thẳng, rồi rẽ bên trái. Bến xe ở kia.",
+                        "en": "You go straight, then turn left. The bus station is over there."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cảm ơn anh nhiều!",
+                        "en": "Thank you very much!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Không có gì!",
+                        "en": "You're welcome!"
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -5635,7 +6030,53 @@
                   "phonetic": null,
                   "translation": "Nam: Excuse me, where is the bus station?\nPasserby: You go straight for two hundred meters, then turn right.\nNam: Thank you! Walking or riding?\nPasserby: Ten minutes walking. Five minutes by motorbike.\nNam: Thank you very much!\nPasserby: You're welcome!",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Xin lỗi, bến xe ở đâu?\nNgười qua đường: Bạn đi thẳng hai trăm mét, rồi rẽ bên phải.\nNam: Cảm ơn! Đi bộ hay đi xe?\nNgười qua đường: Đi bộ mười phút. Đi xe máy năm phút.\nNam: Cảm ơn chị nhiều!\nNgười qua đường: Không có gì!"
+                  "vietnamese_text": "Nam: Xin lỗi, bến xe ở đâu?\nNgười qua đường: Bạn đi thẳng hai trăm mét, rồi rẽ bên phải.\nNam: Cảm ơn! Đi bộ hay đi xe?\nNgười qua đường: Đi bộ mười phút. Đi xe máy năm phút.\nNam: Cảm ơn chị nhiều!\nNgười qua đường: Không có gì!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Người qua đường",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Xin lỗi, bến xe ở đâu?",
+                        "en": "Excuse me, where is the bus station?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Bạn đi thẳng hai trăm mét, rồi rẽ bên phải.",
+                        "en": "You go straight for two hundred meters, then turn right."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cảm ơn! Đi bộ hay đi xe?",
+                        "en": "Thank you! Walking or riding?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đi bộ mười phút. Đi xe máy năm phút.",
+                        "en": "Ten minutes walking. Five minutes by motorbike."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cảm ơn chị nhiều!",
+                        "en": "Thank you very much!"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Không có gì!",
+                        "en": "You're welcome!"
+                      }
+                    ]
+                  }
                 }
               ],
               "lesson_type": "grammar",
@@ -5868,7 +6309,48 @@
                   "phonetic": null,
                   "translation": "Lan: Excuse me, where is the hospital?\nNam: The hospital is on Nguyen Hue Street. You go straight, then turn left.\nLan: Is it far?\nNam: Not far. A ten-minute walk.\nLan: Thank you!",
                   "video_url": null,
-                  "vietnamese_text": "Lan: Xin lỗi anh, bệnh viện ở đâu?\nNam: Bệnh viện ở đường Nguyễn Huệ. Chị đi thẳng, rồi rẽ bên trái.\nLan: Xa không anh?\nNam: Không xa đâu. Đi bộ mười phút.\nLan: Cảm ơn anh!"
+                  "vietnamese_text": "Lan: Xin lỗi anh, bệnh viện ở đâu?\nNam: Bệnh viện ở đường Nguyễn Huệ. Chị đi thẳng, rồi rẽ bên trái.\nLan: Xa không anh?\nNam: Không xa đâu. Đi bộ mười phút.\nLan: Cảm ơn anh!",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Lan",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Nam",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Xin lỗi anh, bệnh viện ở đâu?",
+                        "en": "Excuse me, where is the hospital?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Bệnh viện ở đường Nguyễn Huệ. Chị đi thẳng, rồi rẽ bên trái.",
+                        "en": "The hospital is on Nguyen Hue Street. You go straight, then turn left."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Xa không anh?",
+                        "en": "Is it far?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Không xa đâu. Đi bộ mười phút.",
+                        "en": "Not far. A ten-minute walk."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cảm ơn anh!",
+                        "en": "Thank you!"
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
@@ -5879,7 +6361,43 @@
                   "phonetic": null,
                   "translation": "Nam: Hello! Where is the nearest bus stop?\nPasserby: Go straight for three hundred meters, the bus stop is on the right.\nNam: Thank you! Does the bus go to the market?\nPasserby: Yes, bus number five goes to the market.",
                   "video_url": null,
-                  "vietnamese_text": "Nam: Chào chị! Bến xe buýt gần nhất ở đâu?\nNgười qua đường: Đi thẳng ba trăm mét, bến xe ở bên phải.\nNam: Cảm ơn chị! Xe buýt đi chợ không?\nNgười qua đường: Có, xe số năm đi chợ."
+                  "vietnamese_text": "Nam: Chào chị! Bến xe buýt gần nhất ở đâu?\nNgười qua đường: Đi thẳng ba trăm mét, bến xe ở bên phải.\nNam: Cảm ơn chị! Xe buýt đi chợ không?\nNgười qua đường: Có, xe số năm đi chợ.",
+                  "dialogue_data": {
+                    "characters": [
+                      {
+                        "id": "c1",
+                        "name": "Nam",
+                        "side": "left"
+                      },
+                      {
+                        "id": "c2",
+                        "name": "Người qua đường",
+                        "side": "right"
+                      }
+                    ],
+                    "lines": [
+                      {
+                        "characterId": "c1",
+                        "vi": "Chào chị! Bến xe buýt gần nhất ở đâu?",
+                        "en": "Hello! Where is the nearest bus stop?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Đi thẳng ba trăm mét, bến xe ở bên phải.",
+                        "en": "Go straight for three hundred meters, the bus stop is on the right."
+                      },
+                      {
+                        "characterId": "c1",
+                        "vi": "Cảm ơn chị! Xe buýt đi chợ không?",
+                        "en": "Thank you! Does the bus go to the market?"
+                      },
+                      {
+                        "characterId": "c2",
+                        "vi": "Có, xe số năm đi chợ.",
+                        "en": "Yes, bus number five goes to the market."
+                      }
+                    ]
+                  }
                 },
                 {
                   "audio_url": null,
