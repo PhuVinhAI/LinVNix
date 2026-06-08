@@ -40,7 +40,7 @@ class GoalProgress {
 class DailyGoalProgress {
   const DailyGoalProgress({
     required this.date,
-    required this.exercisesCompleted,
+    required this.questionsCompleted,
     required this.simulationsCompleted,
     required this.lessonsCompleted,
     required this.allGoalsMet,
@@ -52,7 +52,7 @@ class DailyGoalProgress {
   factory DailyGoalProgress.fromJson(Map<String, dynamic> json) {
     return DailyGoalProgress(
       date: json['date'] as String,
-      exercisesCompleted: (json['exercisesCompleted'] as num).toInt(),
+      questionsCompleted: (json['questionsCompleted'] as num).toInt(),
       simulationsCompleted:
           (json['simulationsCompleted'] as num?)?.toInt() ?? 0,
       lessonsCompleted: (json['lessonsCompleted'] as num).toInt(),
@@ -66,7 +66,7 @@ class DailyGoalProgress {
   }
 
   final String date;
-  final int exercisesCompleted;
+  final int questionsCompleted;
   final int simulationsCompleted;
   final int lessonsCompleted;
   final bool allGoalsMet;
@@ -77,7 +77,7 @@ class DailyGoalProgress {
   Map<String, dynamic> toJson() {
     return {
       'date': date,
-      'exercisesCompleted': exercisesCompleted,
+      'questionsCompleted': questionsCompleted,
       'simulationsCompleted': simulationsCompleted,
       'lessonsCompleted': lessonsCompleted,
       'allGoalsMet': allGoalsMet,

@@ -445,11 +445,11 @@ class SVi extends S {
   String get createCustomPractice => 'Tạo luyện tập tùy chỉnh';
 
   @override
-  String get createCustomSet => 'Tạo bộ tùy chỉnh';
+  String get createCustomExercise => 'Tạo bài tập tùy chỉnh';
 
   @override
-  String get createCustomSetPrompt =>
-      'Tạo một bộ thực hành tùy chỉnh để bắt đầu luyện tập!';
+  String get createCustomExercisePrompt =>
+      'Tạo bài tập tùy chỉnh để bắt đầu luyện tập!';
 
   @override
   String get currentLevelLabel => 'Trình độ hiện tại';
@@ -474,11 +474,11 @@ class SVi extends S {
   String get deleteConversation => 'Xóa cuộc trò chuyện';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      'Bộ thực hành này sẽ bị xóa khỏi danh sách của bạn. Bạn có thể tạo bộ mới bất cứ lúc nào.';
+  String get deleteCustomPracticeExerciseWarning =>
+      'Bài tập này sẽ bị xóa khỏi danh sách của bạn. Bạn có thể tạo bài tập mới bất cứ lúc nào.';
 
   @override
-  String get deleteCustomSetQuestion => 'Xóa bộ tùy chỉnh?';
+  String get deleteCustomExerciseQuestion => 'Xóa bài tập tùy chỉnh?';
 
   @override
   String get deleteData => 'Xóa dữ liệu';
@@ -499,7 +499,7 @@ class SVi extends S {
       'Tin nhắn này và toàn bộ tin nhắn phía sau sẽ bị xóa. Bạn có chắc chắn không?';
 
   @override
-  String get deleteSet => 'Xóa bộ';
+  String get deleteExercise => 'Xóa bài tập';
 
   @override
   String get developerSection => 'Nhà phát triển';
@@ -585,6 +585,9 @@ class SVi extends S {
 
   @override
   String get exercisesDone => 'Bài tập đã làm';
+
+  @override
+  String get questionsTitle => 'Câu hỏi';
 
   @override
   String get exercisesTitle => 'Bài tập';
@@ -831,8 +834,8 @@ class SVi extends S {
   String get noCoursesAvailableIcon => 'Biểu tượng không có khóa học';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      'Chưa có bộ thực hành tùy chỉnh nào. Hãy tạo một bộ để ôn tập những gì bạn đã học.';
+  String get noCustomExercisesYet =>
+      'Chưa có bài tập tùy chỉnh nào. Hãy tạo một bài tập để ôn tập những gì bạn đã học.';
 
   @override
   String get noExercisesYet => 'Chưa có bài tập nào';
@@ -1010,14 +1013,14 @@ class SVi extends S {
 
   @override
   String get resetCourseProgressWarning =>
-      'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả bài tập và bộ thực hành tùy chỉnh sẽ bị xóa.';
+      'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả câu hỏi và bài tập tùy chỉnh sẽ bị xóa.';
 
   @override
   String get resetLabel => 'Đặt lại';
 
   @override
   String get resetModuleProgressWarning =>
-      'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả bài tập và bộ thực hành tùy chỉnh trong học phần này sẽ bị xóa.';
+      'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả câu hỏi và bài tập tùy chỉnh trong học phần này sẽ bị xóa.';
 
   @override
   String get resetPasswordButton => 'Đặt lại mật khẩu';
@@ -1548,7 +1551,7 @@ class SVi extends S {
   String get creatingStatus => 'Đang tạo...';
 
   @override
-  String get createExercisesButton => 'Tạo bài tập';
+  String get createQuestionsButton => 'Tạo bài tập';
 
   @override
   String get feedbackTitle => 'Phản hồi';
@@ -1568,7 +1571,7 @@ class SVi extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'Thao tác này sẽ tạo một bộ câu hỏi mới thay thế \"$title\" bằng các câu hỏi được tạo từ AI mới.';
+    return 'Thao tác này sẽ tạo một bài tập mới thay thế \"$title\" bằng các câu hỏi được tạo từ AI mới.';
   }
 
   @override
@@ -1665,7 +1668,7 @@ class SVi extends S {
   }
 
   @override
-  String get exerciseTypesLabel => 'Các dạng bài tập';
+  String get questionTypesLabel => 'Các dạng bài tập';
 
   @override
   String get focusLabel => 'Tập trung';

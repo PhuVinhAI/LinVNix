@@ -5,7 +5,7 @@ import { OpenaiProvider } from '../openai/openai.provider';
 import type { IAiProvider } from '@linvnix/shared';
 
 export type FeatureName =
-  | 'exercise'
+  | 'question'
   | 'simulation'
   | 'assistant'
   | 'image-analysis';
@@ -37,7 +37,7 @@ export class AiProviderRouter implements OnModuleInit {
 
   onModuleInit(): void {
     const features: FeatureName[] = [
-      'exercise',
+      'question',
       'simulation',
       'assistant',
       'image-analysis',

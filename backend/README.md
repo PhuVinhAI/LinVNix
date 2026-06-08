@@ -55,7 +55,7 @@ src/
     ├── contents/            # Nội dung bài (text/audio/video)
     ├── vocabularies/        # Từ vựng + search index + upload audio/ảnh
     ├── grammar/             # Quy tắc ngữ pháp
-    ├── exercises/           # Bài tập + Bộ bài tập + kết quả + Custom set (AI-sinh)
+    ├── exercises/           # Bài tập + Câu hỏi + kết quả + Custom exercise (AI-sinh)
     ├── progress/            # Tiến trình bài học / chủ đề / khóa học
     ├── daily-goals/         # Mục tiêu ngày + chuỗi mục tiêu + study minutes
     ├── simulations/         # Hội thoại mô phỏng (scenario + character + session + result)
@@ -146,8 +146,8 @@ Tất cả endpoint dưới `/api/v1`. Response bọc `{ data: T }` qua `Transfo
 | contents | `/contents` | `GET /lesson/:lessonId`, CRUD nội dung bài |
 | vocabularies | `/vocabularies` | `/search`, `/bookmarks`, `/bookmarks/stats`, `POST /:id/bookmark`, `POST /upload-audio`, `POST /upload-image`, CRUD |
 | grammar | `/grammar` | `GET /lesson/:lessonId`, CRUD quy tắc |
-| exercises | `/exercises` | `/my-results`, `/my-stats`, `/lesson/:lessonId`, `/set/:setId`, `POST /:id/submit` |
-| exercise-sets | `/exercise-sets` | `POST /custom`, `/generate`, `/regenerate`, `/:id/progress`, `/:id/resume`, `/:id/reset`, `/:id/summary` |
+| exercises | `/exercises` | `/my-results`, `/my-stats`, `/lesson/:lessonId`, `/exercise/:exerciseId`, `POST /:id/submit` |
+| exercises | `/exercises` | `POST /custom`, `/generate`, `/regenerate`, `/:id/progress`, `/:id/resume`, `/:id/reset`, `/:id/summary` |
 | progress | `/progress` | `/lesson/:id`, `/module/:id`, `/course/:id`; `POST /lesson/:id/start | content-viewed | complete`; `POST /{module,course}/:id/{complete-all,reset}` |
 | daily-goals | `/daily-goals` | CRUD + `/progress/today`, `PATCH /progress/study-minutes` |
 | simulations | `/simulations` | `/categories`, `/scenarios`, `/sessions/active`, `POST /sessions`, `POST /sessions/:id/messages`, `/results`, `/stats` |
@@ -159,7 +159,7 @@ Tất cả endpoint dưới `/api/v1`. Response bọc `{ data: T }` qua `Transfo
 ## AI architecture
 
 - **`infrastructure/genai/`** — wrap `@google/genai` với key pool xoay vòng + cooldown, fallback model, retry, timeout.
-- **`modules/agent/`** — `AgentService` chạy vòng lặp Reason-Act. Tool catalog V1 (12 tool) gồm read (`get_user_summary`, `list_bookmarks`, `search_vocabulary`, `find_lessons`…), direct-write (`toggle_bookmark`), và propose (`propose_create_daily_goal`, `propose_generate_custom_exercise_set`…). Mỗi tool định nghĩa params bằng Zod schema và có `displayName` tiếng Việt cho UI.
+- **`modules/agent/`** — `AgentService` chạy vòng lặp Reason-Act. Tool catalog V1 (12 tool) gồm read (`get_user_summary`, `list_bookmarks`, `search_vocabulary`, `find_lessons`…), direct-write (`toggle_bookmark`), và propose (`propose_create_daily_goal`, `propose_generate_custom_exercise`…). Mỗi tool định nghĩa params bằng Zod schema và có `displayName` tiếng Việt cho UI.
 - **`modules/ai/`** — REST controller. Endpoint streaming `POST /ai/chat/stream` trả SSE typed events (`tool_start`, `tool_result`, `text_chunk`, `propose`, `error`, `done`). Mobile gửi kèm `screenContext` JSON, backend lưu thành `JSONB` trên `Conversation` (đóng băng tại thời điểm tạo hội thoại).
 - **`modules/simulations/`** — không dùng agent loop. `SimulationAiService` gọi Gemini trực tiếp với prompt template riêng (`simulation-conversation.yaml`), trả structured response (`speakerCharacterId`, `nextTurnCharacterId`, `corrections`, `review`, `sessionEnded`…).
 - **`modules/image-analysis/`** — gọi Gemini vision, trả về text + danh sách từ vựng cá nhân đề xuất.

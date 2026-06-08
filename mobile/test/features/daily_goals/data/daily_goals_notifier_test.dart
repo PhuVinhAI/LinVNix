@@ -15,7 +15,7 @@ void main() {
   late PreferencesService prefsService;
 
   setUpAll(() {
-    registerFallbackValue(GoalType.exercises);
+    registerFallbackValue(GoalType.questions);
   });
 
   setUp(() async {
@@ -27,7 +27,7 @@ void main() {
 
   group('DailyGoalsNotifier migration', () {
     test(
-        'auto-creates EXERCISES and SIMULATIONS defaults when onboarding completed and goals empty',
+        'auto-creates QUESTIONS and SIMULATIONS defaults when onboarding completed and goals empty',
         () async {
       when(() => mockRepo.getGoals()).thenAnswer((_) async => []);
       when(() => mockRepo.createGoal(any(), any())).thenAnswer(
@@ -50,11 +50,11 @@ void main() {
 
       final goals = await container.read(dailyGoalsProvider.future);
 
-      verify(() => mockRepo.createGoal(GoalType.exercises, 10)).called(1);
+      verify(() => mockRepo.createGoal(GoalType.questions, 10)).called(1);
       verify(() => mockRepo.createGoal(GoalType.simulations, 3)).called(1);
       verifyNever(() => mockRepo.createGoal(GoalType.lessons, any()));
       expect(goals, hasLength(2));
-      expect(goals.any((g) => g.goalType == GoalType.exercises), isTrue);
+      expect(goals.any((g) => g.goalType == GoalType.questions), isTrue);
       expect(goals.any((g) => g.goalType == GoalType.simulations), isTrue);
 
       expect(prefsService.isDailyGoalsMigrated, isTrue);
@@ -81,7 +81,7 @@ void main() {
     test('does not migrate when goals already exist', () async {
       when(() => mockRepo.getGoals()).thenAnswer((_) async => [
             DailyGoal(
-                id: 'g1', goalType: GoalType.exercises, targetValue: 20),
+                id: 'g1', goalType: GoalType.questions, targetValue: 20),
           ]);
 
       await prefsService.setOnboardingCompleted();

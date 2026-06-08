@@ -32,7 +32,6 @@ void main() {
             description: 'Say hello',
             orderIndex: 0,
             courseId: courseId,
-            topic: 'Daily life',
             estimatedHours: 3,
             lessons: [
               Lesson(

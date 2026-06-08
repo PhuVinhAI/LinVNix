@@ -7,7 +7,7 @@ void main() {
       const patterns = [
         '/courses',
         '/courses/:id',
-        '/courses/:id/exercises/play/:setId',
+        '/courses/:id/exercises/play/:exerciseId',
       ];
 
       expect(
@@ -20,7 +20,7 @@ void main() {
       );
       expect(
         bestPatternForLocation('/courses/c1/exercises/play/s1', patterns),
-        '/courses/:id/exercises/play/:setId',
+        '/courses/:id/exercises/play/:exerciseId',
       );
     });
 

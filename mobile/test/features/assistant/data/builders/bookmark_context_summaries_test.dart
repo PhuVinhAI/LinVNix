@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:linvnix/features/assistant/data/builders/bookmark_context_summaries.dart';
 import 'package:linvnix/features/assistant/data/builders/exercise_context_summaries.dart';
 import 'package:linvnix/features/bookmarks/domain/bookmark_models.dart';
-import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
+import 'package:linvnix/features/lessons/domain/exercise_models.dart';
 
 void main() {
   group('bookmarkContextSummary', () {
@@ -70,13 +70,13 @@ void main() {
     });
   });
 
-  group('setProgressContextSummary', () {
+  group('exerciseProgressContextSummary', () {
     test('maps progress state from set progress', () {
-      final summary = setProgressContextSummary(
-        SetProgress(
-          setId: 'set-1',
+      final summary = exerciseProgressContextSummary(
+        ExerciseProgress(
+          exerciseId: 'set-1',
           title: 'Drill',
-          totalExercises: 5,
+          totalQuestions: 5,
           attempted: 5,
           percentComplete: 100,
           percentCorrect: 90,

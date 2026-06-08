@@ -1,7 +1,7 @@
 # Exercise Generation Module Prompt Template
 # Variables: {{questionCount}}, {{label}}, {{focusAreaDescription}}, {{preferredTypes}},
 #            {{moduleTitle}}, {{lessonCount}}, {{lessonContexts}}, {{userPromptSection}},
-#            {{languageMixGuidelines}}, {{exerciseTypeShapes}}
+#            {{languageMixGuidelines}}, {{questionTypeShapes}}
 
 exercise-generation-module:
   description: "Generate Vietnamese language exercises for module-level custom practice emphasizing cross-lesson integrative questions"
@@ -26,7 +26,7 @@ exercise-generation-module:
     - Mix Vietnamese and English naturally per exercise type
     {{languageMixGuidelines}}
 
-    Also provide a short descriptive title (5-8 words) for this exercise set, and an optional brief description (1-2 sentences) summarizing what it covers.
+    Also provide a short descriptive title (5-8 words) for this exercise, and an optional brief description (1-2 sentences) summarizing what it covers.
 
     Exercise-type option/answer shapes (use only the types listed above):
-    {{exerciseTypeShapes}}
+    {{questionTypeShapes}}

@@ -32,11 +32,11 @@ export function useAdminLesson(lessonId?: string) {
   })
 }
 
-export function useAdminExerciseSet(setId?: string) {
+export function useAdminExercise(exerciseId?: string) {
   return useQuery({
-    queryKey: ['admin-learning', 'exercise-set', setId],
-    queryFn: () => learningAdminRepository.getExerciseSet(setId as string),
-    enabled: !!setId,
+    queryKey: ['admin-learning', 'exercise', exerciseId],
+    queryFn: () => learningAdminRepository.getExercise(exerciseId as string),
+    enabled: !!exerciseId,
   })
 }
 
@@ -105,20 +105,6 @@ export function useLearningAdminMutation() {
       mutationFn: ({ kind, id }: { kind: string; id: string }) => learningAdminRepository.deleteLessonChild(kind, id),
       onSuccess: invalidate,
     }),
-    updateExerciseSet: useMutation({
-      mutationFn: ({ id, payload }: { id: string; payload: Record<string, unknown> }) =>
-        learningAdminRepository.updateExerciseSet(id, payload),
-      onSuccess: invalidate,
-    }),
-    deleteExerciseSet: useMutation({
-      mutationFn: (id: string) => learningAdminRepository.deleteExerciseSet(id),
-      onSuccess: invalidate,
-    }),
-    createExercise: useMutation({
-      mutationFn: ({ setId, payload }: { setId: string; payload: Record<string, unknown> }) =>
-        learningAdminRepository.createExercise(setId, payload),
-      onSuccess: invalidate,
-    }),
     updateExercise: useMutation({
       mutationFn: ({ id, payload }: { id: string; payload: Record<string, unknown> }) =>
         learningAdminRepository.updateExercise(id, payload),
@@ -126,6 +112,20 @@ export function useLearningAdminMutation() {
     }),
     deleteExercise: useMutation({
       mutationFn: (id: string) => learningAdminRepository.deleteExercise(id),
+      onSuccess: invalidate,
+    }),
+    createQuestion: useMutation({
+      mutationFn: ({ exerciseId, payload }: { exerciseId: string; payload: Record<string, unknown> }) =>
+        learningAdminRepository.createQuestion(exerciseId, payload),
+      onSuccess: invalidate,
+    }),
+    updateQuestion: useMutation({
+      mutationFn: ({ id, payload }: { id: string; payload: Record<string, unknown> }) =>
+        learningAdminRepository.updateQuestion(id, payload),
+      onSuccess: invalidate,
+    }),
+    deleteQuestion: useMutation({
+      mutationFn: (id: string) => learningAdminRepository.deleteQuestion(id),
       onSuccess: invalidate,
     }),
     reorderCourses: useMutation({
@@ -143,14 +143,14 @@ export function useLearningAdminMutation() {
         learningAdminRepository.reorderLessons(items),
       onSuccess: invalidate,
     }),
-    reorderExerciseSets: useMutation({
-      mutationFn: (items: { id: string; orderIndex: number }[]) =>
-        learningAdminRepository.reorderExerciseSets(items),
-      onSuccess: invalidate,
-    }),
     reorderExercises: useMutation({
       mutationFn: (items: { id: string; orderIndex: number }[]) =>
         learningAdminRepository.reorderExercises(items),
+      onSuccess: invalidate,
+    }),
+    reorderQuestions: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderQuestions(items),
       onSuccess: invalidate,
     }),
   }

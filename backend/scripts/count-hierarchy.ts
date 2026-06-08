@@ -19,7 +19,7 @@ for (const course of data.courses) {
       console.log(`        Contents: ${les.lesson_contents.length}`);
       console.log(`        Vocabularies: ${les.vocabularies.length}`);
       console.log(`        GrammarRules: ${les.grammar_rules.length}`);
-      console.log(`        Exercises: ${les.exercises.length}`);
+      console.log(`        Exercises: ${les.questions.length}`);
     });
   });
 }

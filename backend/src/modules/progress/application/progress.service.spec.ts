@@ -490,8 +490,8 @@ describe('ProgressService', () => {
       );
 
       expect(result.contentViewed).toBe(true);
-      expect(result.hasIncompleteSet).toBe(false);
-      expect(result.incompleteSetId).toBeNull();
+      expect(result.hasIncompleteExercise).toBe(false);
+      expect(result.incompleteExerciseId).toBeNull();
     });
 
     it('returns false when no progress exists', async () => {

@@ -76,14 +76,14 @@ function buildListeningLesson(): Record<string, unknown> {
     description:
       'Luyện nghe hiểu qua hội thoại chào hỏi và giới thiệu — ôn lại từ vựng bài "Từ vựng chào hỏi cơ bản".',
     estimated_duration: 15,
-    exercises: [
+    questions: [
       {
         correct_answer: {
           transcript: 'bạn',
           type: 'listening',
         },
         difficulty_level: 1,
-        exercise_type: 'listening',
+        question_type: 'listening',
         explanation: "Lan nói: 'Chào bạn! Tôi là Lan.'",
         options: {
           audioUrl: `${AUDIO_URL_PREFIX}/greeting-dialogue.mp3`,
@@ -102,7 +102,7 @@ function buildListeningLesson(): Record<string, unknown> {
           type: 'multiple_choice',
         },
         difficulty_level: 1,
-        exercise_type: 'multiple_choice',
+        question_type: 'multiple_choice',
         explanation: "Lan nói: 'Rất vui được gặp bạn.'",
         options: {
           choices: [
@@ -123,7 +123,7 @@ function buildListeningLesson(): Record<string, unknown> {
           type: 'listening',
         },
         difficulty_level: 1,
-        exercise_type: 'listening',
+        question_type: 'listening',
         explanation: "Nam đáp: 'Cảm ơn! Tôi cũng rất vui.'",
         options: {
           audioUrl: `${AUDIO_URL_PREFIX}/greeting-dialogue.mp3`,
@@ -274,7 +274,7 @@ function buildSpeakingExercise(
       type: 'speaking',
     },
     difficulty_level: 1,
-    exercise_type: 'speaking',
+    question_type: 'speaking',
     explanation: 'Cụm từ cần nói là "xin chào".',
     options: {
       promptText: 'xin chào',
@@ -293,11 +293,11 @@ function ensureSpeakingExercise(
   lesson: Record<string, unknown>,
   generated: Map<string, string>,
 ): boolean {
-  const exercises = lesson.exercises as Array<Record<string, unknown>>;
+  const exercises = lesson.questions as Array<Record<string, unknown>>;
   if (!Array.isArray(exercises)) return false;
 
   const hasSpeaking = exercises.some(
-    (exercise) => exercise.exercise_type === 'speaking',
+    (exercise) => exercise.question_type === 'speaking',
   );
   if (hasSpeaking) return false;
 

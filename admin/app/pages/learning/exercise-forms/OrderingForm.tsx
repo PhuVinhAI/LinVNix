@@ -18,7 +18,7 @@ import {
 import { InlineEditable } from '../../../components/admin/InlineEditable'
 import { SortableRow } from '../../../components/admin/shared/SortableRow'
 import { DragHandle } from '../../../components/admin/shared/DragHandle'
-import type { ExerciseFormProps } from './types'
+import type { QuestionFormProps } from './types'
 import { getCorrectAnswerObject, getOptionsObject } from './types'
 
 interface Item {
@@ -40,7 +40,7 @@ function toItems(values: string[]): Item[] {
   return values.map((v) => ({ id: genId(), value: v }))
 }
 
-function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
+function initialFromProps(initial: QuestionFormProps['initial']): DraftState {
   const opts = getOptionsObject(initial)
   const correct = getCorrectAnswerObject(initial)
   let items: string[] = []
@@ -56,7 +56,7 @@ function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
   }
 }
 
-export function OrderingForm({ initial, onChange }: ExerciseFormProps) {
+export function OrderingForm({ initial, onChange }: QuestionFormProps) {
   const [state, setState] = useState<DraftState>(() => initialFromProps(initial))
 
   useEffect(() => {

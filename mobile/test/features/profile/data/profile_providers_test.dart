@@ -9,10 +9,10 @@ class _TestExerciseStatsNotifier extends ExerciseStatsNotifier {
 
   @override
   Future<ExerciseStats> build() async {
-    watchTags({'exercise'});
+    watchTags({'question'});
     fetchCallCount++;
     return const ExerciseStats(
-      totalExercises: 0,
+      totalQuestions: 0,
       completedExercises: 0,
       correctAnswers: 0,
       accuracy: 0,
@@ -38,7 +38,7 @@ void main() {
       await container.read(_testExerciseStatsProvider.future);
       expect(notifier.fetchCallCount, 1);
 
-      container.read(dataChangeBusProvider.notifier).emit({'exercise'});
+      container.read(dataChangeBusProvider.notifier).emit({'question'});
       await Future.delayed(Duration.zero);
 
       final secondRead = await container.read(

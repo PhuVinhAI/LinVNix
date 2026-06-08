@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
 import { InlineEditable } from '../../../components/admin/InlineEditable'
-import type { ExerciseFormProps } from './types'
+import type { QuestionFormProps } from './types'
 import { getCorrectAnswerObject, getOptionsObject } from './types'
 
 interface Pair {
@@ -13,7 +13,7 @@ interface DraftState {
   pairs: Pair[]
 }
 
-function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
+function initialFromProps(initial: QuestionFormProps['initial']): DraftState {
   const opts = getOptionsObject(initial)
   const correct = getCorrectAnswerObject(initial)
   let pairs: Pair[] = []
@@ -32,7 +32,7 @@ function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
   return { pairs }
 }
 
-export function MatchingForm({ initial, onChange }: ExerciseFormProps) {
+export function MatchingForm({ initial, onChange }: QuestionFormProps) {
   const [state, setState] = useState<DraftState>(() => initialFromProps(initial))
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DailyGoalProgressService } from './daily-goal-progress.service';
 import { DailyGoalsRepository } from './daily-goals.repository';
 import { DailyStreakService } from './daily-streak.service';
-import { UserExerciseResultsRepository } from '../../exercises/application/repositories/user-exercise-results.repository';
+import { UserQuestionResultsRepository } from '../../exercises/application/repositories/user-question-results.repository';
 import { ProgressRepository } from '../../progress/application/progress.repository';
 import { SimulationResultsRepository } from '../../simulations/application/repositories/simulation-results.repository';
 import { DailyGoal } from '../domain/daily-goal.entity';
@@ -13,7 +13,7 @@ describe('DailyGoalProgressService', () => {
   let service: DailyGoalProgressService;
   let goalsRepo: jest.Mocked<DailyGoalsRepository>;
   let streakService: jest.Mocked<DailyStreakService>;
-  let exerciseResultsRepo: jest.Mocked<UserExerciseResultsRepository>;
+  let questionResultsRepo: jest.Mocked<UserQuestionResultsRepository>;
   let userProgressRepo: jest.Mocked<ProgressRepository>;
   let simulationResultsRepo: jest.Mocked<SimulationResultsRepository>;
 
@@ -32,7 +32,7 @@ describe('DailyGoalProgressService', () => {
       getStreak: jest.fn(),
     };
 
-    const exerciseResultsRepoMock = {
+    const questionResultsRepoMock = {
       countByUserIdAndDateRange: jest.fn(),
     };
 
@@ -50,8 +50,8 @@ describe('DailyGoalProgressService', () => {
         { provide: DailyGoalsRepository, useValue: goalsRepoMock },
         { provide: DailyStreakService, useValue: streakServiceMock },
         {
-          provide: UserExerciseResultsRepository,
-          useValue: exerciseResultsRepoMock,
+          provide: UserQuestionResultsRepository,
+          useValue: questionResultsRepoMock,
         },
         { provide: ProgressRepository, useValue: userProgressRepoMock },
         {
@@ -64,7 +64,7 @@ describe('DailyGoalProgressService', () => {
     service = module.get<DailyGoalProgressService>(DailyGoalProgressService);
     goalsRepo = module.get(DailyGoalsRepository);
     streakService = module.get(DailyStreakService);
-    exerciseResultsRepo = module.get(UserExerciseResultsRepository);
+    questionResultsRepo = module.get(UserQuestionResultsRepository);
     userProgressRepo = module.get(ProgressRepository);
     simulationResultsRepo = module.get(SimulationResultsRepository);
   });
@@ -75,7 +75,7 @@ describe('DailyGoalProgressService', () => {
         {
           id: 'g1',
           userId: 'user-1',
-          goalType: GoalType.EXERCISES,
+          goalType: GoalType.QUESTIONS,
           targetValue: 5,
           user: null as any,
           createdAt: new Date(),
@@ -95,7 +95,7 @@ describe('DailyGoalProgressService', () => {
       ] as DailyGoal[];
 
       goalsRepo.findByUserId.mockResolvedValue(mockGoals);
-      exerciseResultsRepo.countByUserIdAndDateRange.mockResolvedValue(8);
+      questionResultsRepo.countByUserIdAndDateRange.mockResolvedValue(8);
       userProgressRepo.countCompletedByUserIdAndDateRange.mockResolvedValue(3);
       simulationResultsRepo.countByUserIdAndDateRange.mockResolvedValue(4);
       streakService.updateStreak.mockResolvedValue({
@@ -112,7 +112,7 @@ describe('DailyGoalProgressService', () => {
 
       const result = await service.getTodayProgress('user-1');
 
-      expect(result.exercisesCompleted).toBe(8);
+      expect(result.questionsCompleted).toBe(8);
       expect(result.lessonsCompleted).toBe(3);
       expect(result.simulationsCompleted).toBe(4);
       expect(result.allGoalsMet).toBe(true);
@@ -128,7 +128,7 @@ describe('DailyGoalProgressService', () => {
         {
           id: 'g1',
           userId: 'user-1',
-          goalType: GoalType.EXERCISES,
+          goalType: GoalType.QUESTIONS,
           targetValue: 10,
           user: null as any,
           createdAt: new Date(),
@@ -148,7 +148,7 @@ describe('DailyGoalProgressService', () => {
       ] as DailyGoal[];
 
       goalsRepo.findByUserId.mockResolvedValue(mockGoals);
-      exerciseResultsRepo.countByUserIdAndDateRange.mockResolvedValue(5);
+      questionResultsRepo.countByUserIdAndDateRange.mockResolvedValue(5);
       userProgressRepo.countCompletedByUserIdAndDateRange.mockResolvedValue(0);
       simulationResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
       streakService.updateStreak.mockResolvedValue({
@@ -174,7 +174,7 @@ describe('DailyGoalProgressService', () => {
 
     it('returns allGoalsMet false when no goals exist', async () => {
       goalsRepo.findByUserId.mockResolvedValue([]);
-      exerciseResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
+      questionResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
       userProgressRepo.countCompletedByUserIdAndDateRange.mockResolvedValue(0);
       simulationResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
       streakService.updateStreak.mockResolvedValue({
@@ -208,7 +208,7 @@ describe('DailyGoalProgressService', () => {
           deletedAt: undefined,
         },
       ] as DailyGoal[]);
-      exerciseResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
+      questionResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
       userProgressRepo.countCompletedByUserIdAndDateRange.mockResolvedValue(0);
       simulationResultsRepo.countByUserIdAndDateRange.mockResolvedValue(2);
       streakService.updateStreak.mockResolvedValue({
@@ -246,7 +246,7 @@ describe('DailyGoalProgressService', () => {
           deletedAt: undefined,
         },
       ] as DailyGoal[]);
-      exerciseResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
+      questionResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
       userProgressRepo.countCompletedByUserIdAndDateRange.mockResolvedValue(3);
       simulationResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
       streakService.updateStreak.mockResolvedValue({
@@ -273,7 +273,7 @@ describe('DailyGoalProgressService', () => {
         {
           id: 'g1',
           userId: 'user-1',
-          goalType: GoalType.EXERCISES,
+          goalType: GoalType.QUESTIONS,
           targetValue: 5,
           user: null as any,
           createdAt: new Date(),
@@ -281,7 +281,7 @@ describe('DailyGoalProgressService', () => {
           deletedAt: undefined,
         },
       ] as DailyGoal[]);
-      exerciseResultsRepo.countByUserIdAndDateRange.mockResolvedValue(8);
+      questionResultsRepo.countByUserIdAndDateRange.mockResolvedValue(8);
       userProgressRepo.countCompletedByUserIdAndDateRange.mockResolvedValue(0);
       simulationResultsRepo.countByUserIdAndDateRange.mockResolvedValue(0);
       streakService.updateStreak.mockResolvedValue({
@@ -309,8 +309,8 @@ describe('DailyGoalProgressService', () => {
   });
 
   describe('getProgressForGoalType', () => {
-    it('returns exercisesCompleted for EXERCISES', () => {
-      expect(service.getProgressForGoalType(GoalType.EXERCISES, 8, 2, 3)).toBe(
+    it('returns questionsCompleted for QUESTIONS', () => {
+      expect(service.getProgressForGoalType(GoalType.QUESTIONS, 8, 2, 3)).toBe(
         8,
       );
     });

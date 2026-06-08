@@ -9,9 +9,9 @@ import {
 import { User } from '../../users/domain/user.entity';
 import { Course } from '../../courses/domain/course.entity';
 import { Lesson } from '../../courses/domain/lesson.entity';
-import { Exercise } from '../../exercises/domain/exercise.entity';
-import { ExerciseAttempt } from '../../exercises/domain/exercise-attempt.entity';
-import { UserExerciseResult } from '../../exercises/domain/user-exercise-result.entity';
+import { Question } from '../../exercises/domain/question.entity';
+import { QuestionAttempt } from '../../exercises/domain/question-attempt.entity';
+import { UserQuestionResult } from '../../exercises/domain/user-question-result.entity';
 import { LearningProgress } from '../../progress/domain/learning-progress.entity';
 import { DailyStreak } from '../../daily-goals/domain/daily-streak.entity';
 import { PersonalVocabulary } from '../../personal-vocabularies/domain/personal-vocabulary.entity';
@@ -68,12 +68,12 @@ export class AdminOverviewService {
     private readonly coursesRepository: Repository<Course>,
     @InjectRepository(Lesson)
     private readonly lessonsRepository: Repository<Lesson>,
-    @InjectRepository(Exercise)
-    private readonly exercisesRepository: Repository<Exercise>,
-    @InjectRepository(ExerciseAttempt)
-    private readonly exerciseAttemptsRepository: Repository<ExerciseAttempt>,
-    @InjectRepository(UserExerciseResult)
-    private readonly exerciseResultsRepository: Repository<UserExerciseResult>,
+    @InjectRepository(Question)
+    private readonly exercisesRepository: Repository<Question>,
+    @InjectRepository(QuestionAttempt)
+    private readonly questionAttemptsRepository: Repository<QuestionAttempt>,
+    @InjectRepository(UserQuestionResult)
+    private readonly questionResultsRepository: Repository<UserQuestionResult>,
     @InjectRepository(LearningProgress)
     private readonly progressRepository: Repository<LearningProgress>,
     @InjectRepository(DailyStreak)
@@ -110,8 +110,8 @@ export class AdminOverviewService {
       totalCourses,
       publishedCourses,
       totalLessons,
-      totalExercises,
-      totalExerciseAttempts,
+      totalQuestions,
+      totalQuestionAttempts,
       correctAttemptsRecent,
       attemptsRecent,
       totalSimulations,
@@ -148,14 +148,14 @@ export class AdminOverviewService {
       this.coursesRepository.count({ where: { isPublished: true } }),
       this.lessonsRepository.count(),
       this.exercisesRepository.count(),
-      this.exerciseAttemptsRepository.count(),
-      this.exerciseAttemptsRepository.count({
+      this.questionAttemptsRepository.count(),
+      this.questionAttemptsRepository.count({
         where: {
           attemptedAt: MoreThanOrEqual(sevenDaysAgo),
           isCorrect: true,
         },
       }),
-      this.exerciseAttemptsRepository.count({
+      this.questionAttemptsRepository.count({
         where: { attemptedAt: MoreThanOrEqual(sevenDaysAgo) },
       }),
       this.simulationSessionsRepository.count(),
@@ -189,7 +189,7 @@ export class AdminOverviewService {
       this.groupCount(this.usersRepository, 'user', 'current_level'),
       this.groupCount(this.usersRepository, 'user', 'role'),
       this.groupCount(this.coursesRepository, 'course', 'level'),
-      this.groupCount(this.exercisesRepository, 'exercise', 'exercise_type'),
+      this.groupCount(this.exercisesRepository, 'question', 'question_type'),
       this.groupCount(this.simulationSessionsRepository, 'session', 'status'),
       this.dailySeries(
         this.usersRepository,
@@ -198,7 +198,7 @@ export class AdminOverviewService {
         thirtyDaysAgo,
       ),
       this.dailySeries(
-        this.exerciseAttemptsRepository,
+        this.questionAttemptsRepository,
         'attempt',
         'attempted_at',
         thirtyDaysAgo,
@@ -258,7 +258,7 @@ export class AdminOverviewService {
     const activity30Days = dateRange.map((date) => ({
       date,
       registrations: registrationsMap.get(date) ?? 0,
-      exerciseAttempts: attemptsMap.get(date) ?? 0,
+      questionAttempts: attemptsMap.get(date) ?? 0,
       simulationsCompleted: simulationsCompletedMap.get(date) ?? 0,
     }));
 
@@ -272,8 +272,8 @@ export class AdminOverviewService {
         totalCourses,
         publishedCourses,
         totalLessons,
-        totalExercises,
-        totalExerciseAttempts,
+        totalQuestions,
+        totalQuestionAttempts,
         accuracyLast7Days: Number(accuracyRecent.toFixed(4)),
         totalSimulations,
         completedSimulations,

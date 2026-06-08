@@ -21,7 +21,7 @@ export type GetLessonDetailOutput = GetLessonDetailResult | { error: string };
 
 /**
  * Read tool — returns the full lesson body (contents, vocabularies, grammar
- * rules, exercises, exercise sets) for a single lesson id. Backs PRD user
+ * rules, exercises, exercises) for a single lesson id. Backs PRD user
  * story #41 ("fetch the full content of a lesson when the learner is
  * asking about something off-screen").
  *
@@ -38,7 +38,7 @@ export class GetLessonDetailTool extends BaseTool<
   readonly displayName = 'Reading lesson content...';
   readonly description =
     'Returns the full content of a single lesson by id: contents (slides), ' +
-    'vocabulary list, grammar rules, exercises, and exercise sets. Use this ' +
+    'vocabulary list, grammar rules, exercises, and exercises. Use this ' +
     'when the learner is asking about a specific lesson that is NOT on ' +
     'their current screen — for the current screen, prefer the data already ' +
     'in screenContext. Returns `{ error }` if the lesson does not exist.';

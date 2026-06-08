@@ -278,10 +278,10 @@ export class ProgressService {
     lessonId: string,
   ): Promise<{
     contentViewed: boolean;
-    hasIncompleteSet: boolean;
-    incompleteSetId: string | null;
-    incompleteSetAttempted: number;
-    incompleteSetTotal: number;
+    hasIncompleteExercise: boolean;
+    incompleteExerciseId: string | null;
+    incompleteExerciseAttempted: number;
+    incompleteExerciseTotal: number;
   }> {
     const progress = await this.progressRepository.findByUserAndLesson(
       userId,
@@ -292,10 +292,10 @@ export class ProgressService {
 
     return {
       contentViewed,
-      hasIncompleteSet: false,
-      incompleteSetId: null,
-      incompleteSetAttempted: 0,
-      incompleteSetTotal: 0,
+      hasIncompleteExercise: false,
+      incompleteExerciseId: null,
+      incompleteExerciseAttempted: 0,
+      incompleteExerciseTotal: 0,
     };
   }
 

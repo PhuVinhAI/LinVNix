@@ -2,26 +2,26 @@
 //
 // Each form owns its own draft state and exposes:
 //   - `payload`: the body of options + correctAnswer the parent will merge with
-//     the common toolbar fields (exerciseType / difficulty / audio / explanation).
+//     the common toolbar fields (questionType / difficulty / audio / explanation).
 //   - `question`: nullable; only MULTIPLE_CHOICE / ORDERING / LISTENING / SPEAKING
 //     fill this. FILL_BLANK / MATCHING / TRANSLATION return null.
 //   - `validate(): string | null`: returns an error string when the draft is not
 //     ready to save.
 
-export interface ExerciseFormPayload {
+export interface QuestionFormPayload {
   question: string | null
   options: Record<string, unknown> | null
   correctAnswer: Record<string, unknown>
 }
 
-export interface ExerciseFormHandle {
-  payload: ExerciseFormPayload
+export interface QuestionFormHandle {
+  payload: QuestionFormPayload
   validate: () => string | null
 }
 
-export interface ExerciseFormProps {
+export interface QuestionFormProps {
   initial: Record<string, unknown> | null
-  onChange: (handle: ExerciseFormHandle) => void
+  onChange: (handle: QuestionFormHandle) => void
 }
 
 export const LANGUAGE_OPTIONS: Array<{ value: string; label: string }> = [

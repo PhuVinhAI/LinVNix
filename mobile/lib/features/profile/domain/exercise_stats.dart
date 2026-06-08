@@ -1,6 +1,6 @@
 class ExerciseStats {
   const ExerciseStats({
-    required this.totalExercises,
+    required this.totalQuestions,
     required this.completedExercises,
     required this.correctAnswers,
     required this.accuracy,
@@ -9,7 +9,7 @@ class ExerciseStats {
 
   factory ExerciseStats.fromJson(Map<String, dynamic> json) {
     return ExerciseStats(
-      totalExercises: (json['totalExercises'] as num?)?.toInt() ?? 0,
+      totalQuestions: (json['totalQuestions'] as num?)?.toInt() ?? 0,
       completedExercises: (json['completedExercises'] as num?)?.toInt() ?? 0,
       correctAnswers: (json['correctAnswers'] as num?)?.toInt() ?? 0,
       accuracy: (json['accuracy'] as num?)?.toDouble() ?? 0.0,
@@ -17,7 +17,7 @@ class ExerciseStats {
     );
   }
 
-  final int totalExercises;
+  final int totalQuestions;
   final int completedExercises;
   final int correctAnswers;
   final double accuracy;
@@ -25,7 +25,7 @@ class ExerciseStats {
 
   Map<String, dynamic> toJson() {
     return {
-      'totalExercises': totalExercises,
+      'totalQuestions': totalQuestions,
       'completedExercises': completedExercises,
       'correctAnswers': correctAnswers,
       'accuracy': accuracy,

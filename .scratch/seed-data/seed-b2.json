@@ -16,14 +16,14 @@
               "__uuid": "les-b2-001-001",
               "description": "Các thuật ngữ kinh tế và kinh doanh phổ biến trong báo chí và thảo luận chuyên môn.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "lạm phát",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Lạm phát là hiện tượng mức giá chung tăng lên trong nền kinh tế.",
                   "options": {
                     "choices": [
@@ -46,7 +46,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Đầu tư' nghĩa là bỏ tiền vào một dự án với hy vọng sinh lời.",
                   "options": {
                     "acceptedAnswers": [
@@ -85,7 +85,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Đây là các thuật ngữ kinh tế cơ bản trong tiếng Việt.",
                   "options": {
                     "pairs": [
@@ -118,7 +118,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Cạnh tranh' tương đương 'compete', 'thị phần' tương đương 'market share'.",
                   "options": {
                     "acceptedTranslations": [
@@ -145,7 +145,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Câu đúng: 'Kinh tế tăng trưởng ổn định năm nay.'",
                   "options": {
                     "items": [
@@ -559,7 +559,7 @@
               "__uuid": "les-b2-001-002",
               "description": "Học các cấu trúc câu điều kiện phức tạp hơn ở B2: điều kiện giả định (counterfactual), điều kiện với 'nếu...thì' kết hợp các thì và trạng ngữ, điều kiện lồng, và cách diễn đạt điều kiện không có 'nếu'.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -568,7 +568,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Câu điều kiện giả định quá khứ dùng 'đã' trong cả hai vế.",
                   "options": {
                     "acceptedAnswers": [
@@ -590,7 +590,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Câu có 'đã...đã' trong cả hai vế là câu điều kiện giả định, trái thực tế.",
                   "options": {
                     "choices": [
@@ -611,7 +611,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Dùng cấu trúc 'Chỉ khi...mới' để diễn đạt 'only when...can'.",
                   "options": {
                     "acceptedTranslations": [
@@ -636,7 +636,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Có...mới' diễn đạt điều kiện cần.",
                   "options": {
                     "acceptedAnswers": [
@@ -938,14 +938,14 @@
               "__uuid": "les-b2-001-003",
               "description": "Thực hành đọc hiểu bài báo cáo kinh tế với các thuật ngữ chuyên ngành và cấu trúc câu điều kiện phức.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Tăng trưởng sẽ chững lại",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu rõ: 'nếu không kiểm soát được lạm phát, thì tăng trưởng sẽ chững lại'.",
                   "options": {
                     "choices": [
@@ -968,7 +968,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Vượt ngưỡng' nghĩa là vượt quá mức giới hạn.",
                   "options": {
                     "acceptedAnswers": [
@@ -990,7 +990,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Câu điều kiện giả định quá khứ: dùng 'đã' ở cả hai vế.",
                   "options": {
                     "acceptedTranslations": [
@@ -1133,7 +1133,7 @@
               "__uuid": "les-b2-001-004",
               "description": "Thực hành viết báo cáo kinh doanh ngắn sử dụng câu điều kiện phức và từ vựng kinh tế. Học cách tổ chức ý tưởng trong văn phong trang trọng.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -1144,7 +1144,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc báo cáo: Tóm tắt → Phân tích → Kiến nghị.",
                   "options": {
                     "items": [
@@ -1167,7 +1167,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Có...mới' diễn đạt điều kiện cần trong văn phong trang trọng.",
                   "options": {
                     "acceptedAnswers": [
@@ -1192,7 +1192,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Biên lợi nhuận' = profit margin, 'thu hẹp' = shrink/narrow.",
                   "options": {
                     "acceptedTranslations": [
@@ -1325,7 +1325,7 @@
               "__uuid": "les-b2-002-001",
               "description": "Các thuật ngữ chính trị và xã hội phổ biến trong thảo luận công cộng và báo chí.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -1349,7 +1349,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Đây là các thuật ngữ chính trị cơ bản.",
                   "options": {
                     "pairs": [
@@ -1382,7 +1382,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Theo hiến pháp, Quốc hội là cơ quan quyền lực nhà nước cao nhất.",
                   "options": {
                     "choices": [
@@ -1405,7 +1405,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Quyền' ở đây nghĩa là 'right' — quyền lợi hợp pháp.",
                   "options": {
                     "acceptedAnswers": [
@@ -1427,7 +1427,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Ban hành' = issue/enact, 'khuyến khích' = encourage.",
                   "options": {
                     "acceptedTranslations": [
@@ -1797,7 +1797,7 @@
               "__uuid": "les-b2-002-002",
               "description": "Học cách dùng cấu trúc nhấn mạnh (chính là, mới là, đúng là) và câu hỏi tu từ để diễn đạt quan điểm mạnh mẽ trong tranh luận xã hội.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -1807,7 +1807,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Chính là...mới' nhấn mạnh yếu tố then chốt.",
                   "options": {
                     "acceptedAnswers": [
@@ -1832,7 +1832,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Ai lại...?' là câu hỏi tu từ phủ định theo lẽ thường, hàm ý 'không ai'.",
                   "options": {
                     "choices": [
@@ -1853,7 +1853,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Lẽ nào...?' là câu hỏi tu từ phủ định theo lẽ phải.",
                   "options": {
                     "acceptedTranslations": [
@@ -1877,7 +1877,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Đúng là' thể hiện xác nhận kèm cảm xúc.",
                   "options": {
                     "acceptedAnswers": [
@@ -2106,14 +2106,14 @@
               "__uuid": "les-b2-002-003",
               "description": "Thực hành nói và tranh luận về chính sách xã hội, sử dụng cấu trúc nhấn mạnh và câu hỏi tu từ.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "translation": "Dù tôi đồng ý rằng công bằng xã hội quan trọng, nhưng tăng thuế không phải là cách duy nhất.",
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Cấu trúc nhượng bộ 'Dù...nhưng...' (although...but).",
                   "options": {
                     "acceptedTranslations": [
@@ -2140,7 +2140,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc bài nói: Nêu vấn đề → Trình bày quan điểm → Phản biện → Kết luận.",
                   "options": {
                     "items": [
@@ -2161,7 +2161,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Mới là' nhấn mạnh tính chân chính, duy nhất.",
                   "options": {
                     "choices": [
@@ -2329,14 +2329,14 @@
               "__uuid": "les-b2-002-004",
               "description": "Tìm hiểu về hệ thống chính trị và xã hội Việt Nam, vai trò của công dân và văn hóa tranh luận trong bối cảnh Việt Nam.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Tập trung dân chủ",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Hệ thống chính trị Việt Nam hoạt động theo nguyên tắc tập trung dân chủ.",
                   "options": {
                     "choices": [
@@ -2359,7 +2359,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Nguyên tắc mở rộng: Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng.",
                   "options": {
                     "acceptedAnswers": [
@@ -2394,7 +2394,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các thuật ngữ chính trị Hán Việt thường gặp.",
                   "options": {
                     "pairs": [
@@ -2534,7 +2534,7 @@
               "__uuid": "les-b2-003-001",
               "description": "Thuật ngữ khoa học và công nghệ phổ biến trong báo chí và thảo luận chuyên môn.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -2562,7 +2562,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các thuật ngữ khoa học công nghệ phổ biến.",
                   "options": {
                     "pairs": [
@@ -2601,7 +2601,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Trí tuệ nhân tạo' = artificial intelligence.",
                   "options": {
                     "acceptedAnswers": [
@@ -2623,7 +2623,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu: thu thập dữ liệu lớn đặt ra vấn đề về quyền riêng tư và an ninh mạng.",
                   "options": {
                     "choices": [
@@ -2644,7 +2644,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Thuật toán' = algorithm, 'tốc độ xử lý' = processing speed.",
                   "options": {
                     "acceptedTranslations": [
@@ -3008,7 +3008,7 @@
               "__uuid": "les-b2-003-002",
               "description": "Học cách rút gọn mệnh đề quan hệ và mệnh đề trạng ngữ trong văn phong khoa học, giúp viết súc tích và trang trọng hơn.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -3017,7 +3017,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Rút gọn: bỏ 'được', dùng 'tiến hành' trực tiếp sau danh từ.",
                   "options": {
                     "acceptedAnswers": [
@@ -3039,7 +3039,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Rút gọn mệnh đề quan hệ bị động: bỏ 'được', giữ động từ không thì.",
                   "options": {
                     "choices": [
@@ -3060,7 +3060,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Rút gọn mệnh đề trạng ngữ: 'Sau khi + V' với cùng chủ ngữ.",
                   "options": {
                     "acceptedTranslations": [
@@ -3088,7 +3088,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Câu đúng: 'Dữ liệu thu thập từ 500 mẫu cho thấy kết quả tích cực.'",
                   "options": {
                     "items": [
@@ -3271,14 +3271,14 @@
               "__uuid": "les-b2-003-003",
               "description": "Thực hành đọc hiểu bài báo khoa học với văn phong rút gọn mệnh đề và thuật ngữ chuyên ngành.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "30%",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu: thuật toán phát hiện ung thư gan sớm hơn 30%.",
                   "options": {
                     "choices": [
@@ -3301,7 +3301,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Kiểm chứng' = verify. Rút gọn: 'Sau khi + V' với cùng chủ ngữ.",
                   "options": {
                     "acceptedAnswers": [
@@ -3323,7 +3323,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Văn phong khoa học: có thể bỏ 'được' trước 'phân tích'.",
                   "options": {
                     "acceptedTranslations": [
@@ -3436,7 +3436,7 @@
               "__uuid": "les-b2-004-001",
               "description": "Thuật ngữ nghệ thuật, văn học: hội họa, âm nhạc, điêu khắc, sân khấu, văn học, tác phẩm, sáng tác, biểu diễn, triển lãm.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -3464,7 +3464,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các thuật ngữ nghệ thuật và văn học.",
                   "options": {
                     "pairs": [
@@ -3503,7 +3503,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Kiệt tác' = masterpiece.",
                   "options": {
                     "acceptedAnswers": [
@@ -3525,7 +3525,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Cải lương là hình thức sân khấu đặc sắc của miền Nam.",
                   "options": {
                     "choices": [
@@ -3546,7 +3546,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Kiệt tác' = masterpiece, 'văn học hiện đại' = modern literature.",
                   "options": {
                     "acceptedTranslations": [
@@ -3961,14 +3961,14 @@
               "__uuid": "les-b2-004-002",
               "description": "Học cách dùng điển cố (classical allusions) và thành ngữ (idioms) trong văn phong trang trọng, đặc biệt trong phê bình nghệ thuật và văn học.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Ảnh hưởng từ từ nhưng sâu sắc",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Mưa dầm thấm lâu' = ảnh hưởng từ từ nhưng sâu sắc, thấm sâu vào tâm hồn.",
                   "options": {
                     "choices": [
@@ -3992,7 +3992,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'vừa...vừa' diễn đạt hai đặc tính song hành.",
                   "options": {
                     "acceptedAnswers": [
@@ -4017,7 +4017,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Dùng cấu trúc 'vừa...vừa' cho 'both...and'.",
                   "options": {
                     "acceptedTranslations": [
@@ -4041,7 +4041,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Nước đổ lá khoai' = vô tác dụng, phí công.",
                   "options": {
                     "acceptedAnswers": [
@@ -4248,7 +4248,7 @@
               "__uuid": "les-b2-004-003",
               "description": "Thực hành viết bài phê bình văn học ngắn sử dụng thành ngữ, điển cố và cấu trúc 'vừa...vừa'.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -4259,7 +4259,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc phê bình: Giới thiệu → Phân tích → Đánh giá.",
                   "options": {
                     "items": [
@@ -4279,7 +4279,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Dùng 'vừa...vừa' cho 'both...and'.",
                   "options": {
                     "acceptedTranslations": [
@@ -4304,7 +4304,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Thành ngữ 'mưa dầm thấm lâu' = ảnh hưởng từ từ nhưng sâu sắc.",
                   "options": {
                     "acceptedAnswers": [
@@ -4410,14 +4410,14 @@
               "__uuid": "les-b2-004-004",
               "description": "Tìm hiểu về vai trò của thành ngữ, ca dao và tục ngữ trong văn hóa Việt Nam, và cách chúng phản ánh tư duy và giá trị xã hội.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Tương thân tương ái",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Lá lành đùm lá rách' = người khá giúp người khó, tương thân tương ái.",
                   "options": {
                     "choices": [
@@ -4441,7 +4441,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Ăn quả nhớ kẻ trồng cây' = lòng biết ơn người đi trước.",
                   "options": {
                     "acceptedAnswers": [
@@ -4479,7 +4479,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các thành ngữ phản ánh giá trị văn hóa Việt Nam.",
                   "options": {
                     "pairs": [
@@ -4619,7 +4619,7 @@
               "__uuid": "les-b2-005-001",
               "description": "Thuật ngữ môi trường và phát triển: môi trường, ô nhiễm, khí hậu, phát triển bền vững, tái chế, năng lượng tái tạo, sinh thái, bảo tồn, rừng, động vật hoang dã.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -4647,7 +4647,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các thuật ngữ môi trường phổ biến.",
                   "options": {
                     "pairs": [
@@ -4686,7 +4686,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Ô nhiễm' = pollution.",
                   "options": {
                     "acceptedAnswers": [
@@ -4708,7 +4708,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Việt Nam là một trong những nước bị ảnh hưởng nặng nề nhất bởi biến đổi khí hậu.",
                   "options": {
                     "choices": [
@@ -4729,7 +4729,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Tái chế' = recycle, 'ô nhiễm môi trường' = environmental pollution.",
                   "options": {
                     "acceptedTranslations": [
@@ -5128,7 +5128,7 @@
               "__uuid": "les-b2-005-002",
               "description": "Học cách dùng các liên từ phức tạp: tuy nhiên, mặt khác, do đó, vì vậy, ngoài ra, thay vì, cũng như, không những...mà còn. Đây là công cụ quan trọng để viết và thảo luận có tính lập luận.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -5137,7 +5137,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Tuy nhiên' = however, liên từ tương phản trang trọng.",
                   "options": {
                     "acceptedAnswers": [
@@ -5159,7 +5159,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Ngoài ra' = besides/furthermore, bổ sung cùng hướng với câu trước.",
                   "options": {
                     "choices": [
@@ -5180,7 +5180,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Dùng cấu trúc 'Không những...mà còn' cho 'not only...but also'.",
                   "options": {
                     "acceptedTranslations": [
@@ -5204,7 +5204,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Thay vì' = instead of, diễn đạt sự thay thế.",
                   "options": {
                     "acceptedAnswers": [
@@ -5447,14 +5447,14 @@
               "__uuid": "les-b2-005-003",
               "description": "Đọc hiểu bài viết về phát triển bền vững tại Việt Nam, sử dụng liên từ phức tạp và từ vựng môi trường.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Vì bị ảnh hưởng nặng nề bởi biến đổi khí hậu",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu: Việt Nam bị ảnh hưởng nặng nề nhất bởi biến đổi khí hậu, do đó phát triển bền vững là bắt buộc.",
                   "options": {
                     "choices": [
@@ -5477,7 +5477,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Thay vì' = instead of, diễn đạt sự thay thế.",
                   "options": {
                     "acceptedAnswers": [
@@ -5499,7 +5499,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Do đó' = therefore, 'không chỉ...mà còn/là' = not only...but also.",
                   "options": {
                     "acceptedTranslations": [
@@ -5642,14 +5642,14 @@
               "__uuid": "les-b2-005-004",
               "description": "Thực hành nghe hiểu thảo luận về biến đổi khí hậu tại Việt Nam, với các liên từ phức tạp và thuật ngữ môi trường.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "transcript": "Việt Nam xếp thứ 6 trong bảng xếp hạng các quốc gia bị ảnh hưởng nặng nhất bởi thiên tai.",
                     "type": "listening"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "listening",
+                  "question_type": "listening",
                   "explanation": "Bài nghe nêu rõ: Việt Nam xếp thứ 6.",
                   "options": {
                     "audioUrl": "/audio/b2/mod5-discussion.mp3",
@@ -5672,7 +5672,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bài nghe nêu: 'thay vì dùng xe cá nhân, hãy đi xe buýt'.",
                   "options": {
                     "choices": [
@@ -5696,7 +5696,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Không những...mà còn' = not only...but also.",
                   "options": {
                     "acceptedAnswers": [

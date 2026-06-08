@@ -13,20 +13,20 @@ export class ArchivingService {
 
   // Run monthly at 2 AM on the 1st day
   @Cron('0 2 1 * *')
-  async archiveOldExerciseResults() {
+  async archiveOldQuestionResults() {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
     try {
       await this.dataSource.query(
-        `CREATE TABLE IF NOT EXISTS exercise_attempts_archive
-         (LIKE exercise_attempts INCLUDING ALL)`,
+        `CREATE TABLE IF NOT EXISTS question_attempts_archive
+         (LIKE question_attempts INCLUDING ALL)`,
       );
 
       const result = await this.dataSource.query(
         `
-        INSERT INTO exercise_attempts_archive
-        SELECT * FROM exercise_attempts
+        INSERT INTO question_attempts_archive
+        SELECT * FROM question_attempts
         WHERE attempted_at < $1
         ON CONFLICT DO NOTHING
         `,
@@ -40,7 +40,7 @@ export class ArchivingService {
 
       // Delete archived records
       await this.dataSource.query(
-        `DELETE FROM exercise_attempts WHERE attempted_at < $1`,
+        `DELETE FROM question_attempts WHERE attempted_at < $1`,
         [sixMonthsAgo],
       );
 
@@ -105,7 +105,7 @@ export class ArchivingService {
 
   // Manual trigger for testing
   async manualArchive() {
-    await this.archiveOldExerciseResults();
+    await this.archiveOldQuestionResults();
     await this.archiveOldProgress();
   }
 }

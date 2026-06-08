@@ -6,7 +6,7 @@ import 'package:linvnix/features/courses/data/courses_providers.dart';
 import 'package:linvnix/features/courses/domain/course_models.dart';
 import 'package:linvnix/features/courses/presentation/screens/course_detail_screen.dart';
 import 'package:linvnix/features/lessons/data/lesson_providers.dart';
-import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
+import 'package:linvnix/features/lessons/domain/exercise_models.dart';
 import 'package:linvnix/features/profile/data/profile_providers.dart';
 import 'package:linvnix/features/user/domain/user_profile.dart';
 
@@ -100,15 +100,15 @@ class _FakeCourseDetail extends CourseDetail {
   Future<Course> build(String id) async => course;
 }
 
-class _FakeCourseExerciseSetsNotifier extends CourseExerciseSetsNotifier {
+class _FakeCourseExercisesNotifier extends CourseExercisesNotifier {
   final CourseExerciseSummary _data;
 
-  _FakeCourseExerciseSetsNotifier(String courseId, this._data)
+  _FakeCourseExercisesNotifier(String courseId, this._data)
       : super(courseId);
 
   @override
   Future<CourseExerciseSummary> build() async {
-    watchTags({'exercise-set', 'course-$courseId'});
+    watchTags({'question', 'course-$courseId'});
     return _data;
   }
 }
@@ -143,7 +143,7 @@ void main() {
         eligible: false,
         completedModulesCount: 0,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const user = UserProfile(
@@ -158,8 +158,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', notEligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', notEligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -191,7 +191,7 @@ void main() {
         eligible: true,
         completedModulesCount: 1,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const user = UserProfile(
@@ -206,8 +206,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', eligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -229,13 +229,13 @@ void main() {
     });
 
     testWidgets(
-        'custom practice shows empty state when eligible with no sets',
+        'custom practice shows empty state when eligible with no exercises',
         (tester) async {
       final eligibleSummary = const CourseExerciseSummary(
         eligible: true,
         completedModulesCount: 1,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const user = UserProfile(
@@ -250,8 +250,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', eligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -269,7 +269,7 @@ void main() {
 
       expect(
         find.text(
-          'No custom practice sets yet. Create one to review what you\'ve learned.',
+          'No custom exercises yet. Create one to review what you\'ve learned.',
         ),
         findsOneWidget,
       );
@@ -281,14 +281,14 @@ void main() {
         eligible: true,
         completedModulesCount: 2,
         totalModulesCount: 2,
-        courseSets: [
-          SetProgress(
-            setId: 'set-1',
+        courseExercises: [
+          ExerciseProgress(
+            exerciseId: 'set-1',
             title: 'Course Review',
             description: 'AI-generated review',
             isCustom: true,
             isAIGenerated: true,
-            totalExercises: 10,
+            totalQuestions: 10,
             attempted: 5,
             correct: 4,
             percentComplete: 50,
@@ -309,8 +309,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', summaryWithSets),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', summaryWithSets),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -343,7 +343,7 @@ void main() {
         eligible: true,
         completedModulesCount: 1,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const b2User = UserProfile(
@@ -358,8 +358,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', eligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -385,7 +385,7 @@ void main() {
         eligible: true,
         completedModulesCount: 1,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const a1User = UserProfile(
@@ -400,8 +400,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', eligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -427,7 +427,7 @@ void main() {
         eligible: true,
         completedModulesCount: 1,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const a2User = UserProfile(
@@ -442,8 +442,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourseB1)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-b1', eligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-b1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -468,7 +468,7 @@ void main() {
         eligible: true,
         completedModulesCount: 1,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const b2User = UserProfile(
@@ -483,8 +483,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', eligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -513,7 +513,7 @@ void main() {
         eligible: false,
         completedModulesCount: 0,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const a1User = UserProfile(
@@ -528,8 +528,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', notEligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', notEligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -554,7 +554,7 @@ void main() {
         eligible: true,
         completedModulesCount: 2,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const b2User = UserProfile(
@@ -569,8 +569,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', bypassSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', bypassSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -595,7 +595,7 @@ void main() {
         eligible: false,
         completedModulesCount: 0,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const a1User = UserProfile(
@@ -618,8 +618,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', notEligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', notEligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(lessonProgress)),
@@ -644,7 +644,7 @@ void main() {
         eligible: true,
         completedModulesCount: 2,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const b2User = UserProfile(
@@ -659,8 +659,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', bypassSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', bypassSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),
@@ -689,7 +689,7 @@ void main() {
         eligible: true,
         completedModulesCount: 1,
         totalModulesCount: 2,
-        courseSets: [],
+        courseExercises: [],
       );
 
       const a1User = UserProfile(
@@ -704,8 +704,8 @@ void main() {
         ProviderScope(
           overrides: [
             courseDetailProvider.overrideWith(() => _FakeCourseDetail(_testCourse)),
-            courseExerciseSetsProvider.overrideWith(
-              () => _FakeCourseExerciseSetsNotifier('course-1', eligibleSummary),
+            courseExercisesProvider.overrideWith(
+              () => _FakeCourseExercisesNotifier('course-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier(const [])),

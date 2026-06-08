@@ -12,7 +12,7 @@ describe('DailyGoalsService', () => {
   const mockGoal: DailyGoal = {
     id: 'goal-1',
     userId: 'user-1',
-    goalType: GoalType.EXERCISES,
+    goalType: GoalType.QUESTIONS,
     targetValue: 10,
     user: null as any,
     createdAt: new Date(),
@@ -46,12 +46,12 @@ describe('DailyGoalsService', () => {
       repository.findByUserIdAndGoalType.mockResolvedValue(null);
       repository.create.mockResolvedValue(mockGoal);
 
-      const result = await service.create('user-1', GoalType.EXERCISES, 10);
+      const result = await service.create('user-1', GoalType.QUESTIONS, 10);
 
       expect(result).toEqual(mockGoal);
       expect(repository.create).toHaveBeenCalledWith({
         userId: 'user-1',
-        goalType: GoalType.EXERCISES,
+        goalType: GoalType.QUESTIONS,
         targetValue: 10,
       });
     });
@@ -60,7 +60,7 @@ describe('DailyGoalsService', () => {
       repository.findByUserIdAndGoalType.mockResolvedValue(mockGoal);
 
       await expect(
-        service.create('user-1', GoalType.EXERCISES, 15),
+        service.create('user-1', GoalType.QUESTIONS, 15),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -72,24 +72,24 @@ describe('DailyGoalsService', () => {
         userId: 'user-2',
       });
 
-      const result = await service.create('user-2', GoalType.EXERCISES, 10);
+      const result = await service.create('user-2', GoalType.QUESTIONS, 10);
 
       expect(result.userId).toBe('user-2');
     });
 
-    it('validates EXERCISES range 1-50', async () => {
+    it('validates QUESTIONS range 1-50', async () => {
       repository.findByUserIdAndGoalType.mockResolvedValue(null);
 
       await expect(
-        service.create('user-1', GoalType.EXERCISES, 0),
+        service.create('user-1', GoalType.QUESTIONS, 0),
       ).rejects.toThrow(BadRequestException);
 
       await expect(
-        service.create('user-1', GoalType.EXERCISES, 51),
+        service.create('user-1', GoalType.QUESTIONS, 51),
       ).rejects.toThrow(BadRequestException);
 
       repository.create.mockResolvedValue(mockGoal);
-      const valid = await service.create('user-1', GoalType.EXERCISES, 1);
+      const valid = await service.create('user-1', GoalType.QUESTIONS, 1);
       expect(valid).toBeDefined();
     });
 
@@ -135,7 +135,7 @@ describe('DailyGoalsService', () => {
       repository.findByUserIdAndGoalType.mockResolvedValue(null);
       repository.create.mockResolvedValue(mockGoal);
 
-      await service.create('user-1', GoalType.EXERCISES, 10);
+      await service.create('user-1', GoalType.QUESTIONS, 10);
       await service.create('user-1', GoalType.SIMULATIONS, 3);
       await service.create('user-1', GoalType.LESSONS, 3);
 

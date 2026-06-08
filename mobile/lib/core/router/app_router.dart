@@ -22,7 +22,7 @@ import '../../features/profile/data/profile_providers.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/lessons/presentation/screens/lesson_wizard_screen.dart';
 import '../../features/lessons/presentation/screens/exercise_hub_screen.dart';
-import '../../features/lessons/presentation/screens/exercise_play_screen.dart';
+import '../../features/lessons/presentation/screens/question_play_screen.dart';
 import '../../features/simulation/presentation/screens/practice_screen.dart';
 import '../../features/simulation/presentation/screens/scenario_detail_screen.dart';
 import '../../features/simulation/presentation/screens/character_selection_screen.dart';
@@ -184,11 +184,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/courses/:id/exercises/play/:setId',
+        path: '/courses/:id/exercises/play/:exerciseId',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
-          final setId = state.pathParameters['setId']!;
-          return ExercisePlayScreen(courseId: id, setId: setId);
+          final exerciseId = state.pathParameters['exerciseId']!;
+          return QuestionPlayScreen(courseId: id, exerciseId: exerciseId);
         },
       ),
       GoRoute(
@@ -199,11 +199,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/modules/:id/exercises/play/:setId',
+        path: '/modules/:id/exercises/play/:exerciseId',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
-          final setId = state.pathParameters['setId']!;
-          return ExercisePlayScreen(moduleId: id, setId: setId);
+          final exerciseId = state.pathParameters['exerciseId']!;
+          return QuestionPlayScreen(moduleId: id, exerciseId: exerciseId);
         },
       ),
       GoRoute(
@@ -233,11 +233,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/lessons/:id/exercises/play/:setId',
+        path: '/lessons/:id/exercises/play/:exerciseId',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
-          final setId = state.pathParameters['setId']!;
-          return ExercisePlayScreen(lessonId: id, setId: setId);
+          final exerciseId = state.pathParameters['exerciseId']!;
+          return QuestionPlayScreen(lessonId: id, exerciseId: exerciseId);
         },
       ),
       GoRoute(

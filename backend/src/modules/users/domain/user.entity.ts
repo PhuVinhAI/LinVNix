@@ -79,11 +79,11 @@ export class User extends BaseEntity {
   @OneToMany('LearningProgress', 'user')
   progress: any[];
 
-  @OneToMany('UserExerciseResult', 'user')
-  exerciseResults: any[];
+  @OneToMany('UserQuestionResult', 'user')
+  questionResults: any[];
 
-  @OneToMany('ExerciseAttempt', 'user')
-  exerciseAttempts: any[];
+  @OneToMany('QuestionAttempt', 'user')
+  questionAttempts: any[];
 
   @OneToMany('RefreshToken', 'user')
   refreshTokens: any[];

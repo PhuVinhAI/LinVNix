@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DailyGoalsRepository } from './daily-goals.repository';
 import { DailyStreakService } from './daily-streak.service';
-import { UserExerciseResultsRepository } from '../../exercises/application/repositories/user-exercise-results.repository';
+import { UserQuestionResultsRepository } from '../../exercises/application/repositories/user-question-results.repository';
 import { ProgressRepository } from '../../progress/application/progress.repository';
 import { SimulationResultsRepository } from '../../simulations/application/repositories/simulation-results.repository';
 import { GoalType } from '../../../common/enums';
@@ -17,7 +17,7 @@ export class DailyGoalProgressService {
   constructor(
     private readonly goalsRepository: DailyGoalsRepository,
     private readonly streakService: DailyStreakService,
-    private readonly exerciseResultsRepository: UserExerciseResultsRepository,
+    private readonly questionResultsRepository: UserQuestionResultsRepository,
     private readonly userProgressRepository: ProgressRepository,
     private readonly simulationResultsRepository: SimulationResultsRepository,
   ) {}
@@ -29,8 +29,8 @@ export class DailyGoalProgressService {
     const { start, end } = this.getVnTodayRange();
 
     const goals = await this.goalsRepository.findByUserId(userId);
-    const exercisesCompleted =
-      await this.exerciseResultsRepository.countByUserIdAndDateRange(
+    const questionsCompleted =
+      await this.questionResultsRepository.countByUserIdAndDateRange(
         userId,
         start,
         end,
@@ -51,7 +51,7 @@ export class DailyGoalProgressService {
     const goalProgresses: GoalProgressDto[] = goals.map((goal) => {
       const currentValue = this.getProgressForGoalType(
         goal.goalType,
-        exercisesCompleted,
+        questionsCompleted,
         simulationsCompleted,
         lessonsCompleted,
       );
@@ -73,7 +73,7 @@ export class DailyGoalProgressService {
 
     return {
       date: today,
-      exercisesCompleted,
+      questionsCompleted,
       simulationsCompleted,
       lessonsCompleted,
       allGoalsMet,
@@ -85,13 +85,13 @@ export class DailyGoalProgressService {
 
   getProgressForGoalType(
     goalType: GoalType,
-    exercisesCompleted: number,
+    questionsCompleted: number,
     simulationsCompleted: number,
     lessonsCompleted: number,
   ): number {
     switch (goalType) {
-      case GoalType.EXERCISES:
-        return exercisesCompleted;
+      case GoalType.QUESTIONS:
+        return questionsCompleted;
       case GoalType.SIMULATIONS:
         return simulationsCompleted;
       case GoalType.LESSONS:

@@ -34,8 +34,8 @@ async function main() {
   const existing = await client.query('SELECT COUNT(*) FROM courses');
   if (parseInt(existing.rows[0].count) > 0) {
     console.log('Clearing old data...');
+    await client.query('DELETE FROM questions');
     await client.query('DELETE FROM exercises');
-    await client.query('DELETE FROM exercise_sets');
     await client.query('DELETE FROM grammar_rules');
     await client.query('DELETE FROM vocabularies');
     await client.query('DELETE FROM lesson_contents');
@@ -52,7 +52,7 @@ async function main() {
     totalContents = 0,
     totalVocab = 0,
     totalGrammar = 0,
-    totalExercises = 0;
+    totalQuestions = 0;
 
   for (const courseData of data.courses) {
     const fakeUuid = courseData.__uuid;
@@ -176,34 +176,35 @@ async function main() {
           totalGrammar++;
         }
 
-        if (lessonData.exercises.length > 0) {
+        const lessonQuestions = lessonData.questions ?? [];
+        if (lessonQuestions.length > 0) {
           const setRes = await client.query(
-            `INSERT INTO exercise_sets (lesson_id, is_custom, is_ai_generated, title, order_index)
+            `INSERT INTO exercises (lesson_id, is_custom, is_ai_generated, title, order_index)
              VALUES ($1, $2, $3, $4, $5) RETURNING id`,
             [lessonId, false, false, 'Basic Exercises', 0],
           );
-          const setId = setRes.rows[0].id;
+          const exerciseId = setRes.rows[0].id;
 
-          for (let i = 0; i < lessonData.exercises.length; i++) {
-            const exerciseData = lessonData.exercises[i];
+          for (let i = 0; i < lessonQuestions.length; i++) {
+            const questionData = lessonQuestions[i];
             await client.query(
-              `INSERT INTO exercises (exercise_type, question, question_audio_url, options, correct_answer, explanation, order_index, difficulty_level, set_id)
+              `INSERT INTO questions (question_type, question, question_audio_url, options, correct_answer, explanation, order_index, difficulty_level, exercise_id)
                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
               [
-                exerciseData.exercise_type,
-                exerciseData.question ?? null,
-                exerciseData.question_audio_url || null,
-                exerciseData.options
-                  ? JSON.stringify(exerciseData.options)
+                questionData.question_type,
+                questionData.question ?? null,
+                questionData.question_audio_url || null,
+                questionData.options
+                  ? JSON.stringify(questionData.options)
                   : null,
-                JSON.stringify(exerciseData.correct_answer),
-                exerciseData.explanation || null,
+                JSON.stringify(questionData.correct_answer),
+                questionData.explanation || null,
                 i + 1,
-                exerciseData.difficulty_level || 1,
-                setId,
+                questionData.difficulty_level || 1,
+                exerciseId,
               ],
             );
-            totalExercises++;
+            totalQuestions++;
           }
         }
       }
@@ -217,7 +218,7 @@ async function main() {
   console.log(`LessonContents:  ${totalContents}`);
   console.log(`Vocabularies:    ${totalVocab}`);
   console.log(`GrammarRules:    ${totalGrammar}`);
-  console.log(`Exercises:       ${totalExercises}`);
+  console.log(`Questions:       ${totalQuestions}`);
 
   await client.end();
 }

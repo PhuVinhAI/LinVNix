@@ -433,10 +433,10 @@ class SKo extends S {
   String get createCustomPractice => '맞춤 연습 생성';
 
   @override
-  String get createCustomSet => '맞춤 세트 생성';
+  String get createCustomExercise => '맞춤 연습 생성';
 
   @override
-  String get createCustomSetPrompt => '연습을 시작하려면 맞춤 세트를 만드세요!';
+  String get createCustomExercisePrompt => '연습을 시작하려면 맞춤 연습을 만드세요!';
 
   @override
   String get currentLevelLabel => '현재 레벨';
@@ -460,11 +460,11 @@ class SKo extends S {
   String get deleteConversation => '대화 삭제';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      '이 연습 세트가 목록에서 제거됩니다. 언제든지 새 세트를 만들 수 있습니다.';
+  String get deleteCustomPracticeExerciseWarning =>
+      '이 연습이 목록에서 제거됩니다. 언제든지 새 연습을 만들 수 있습니다.';
 
   @override
-  String get deleteCustomSetQuestion => '맞춤 세트를 삭제하시겠습니까?';
+  String get deleteCustomExerciseQuestion => '맞춤 연습을 삭제하시겠습니까?';
 
   @override
   String get deleteData => '데이터 삭제';
@@ -485,7 +485,7 @@ class SKo extends S {
       '이 메시지와 그 이후의 모든 메시지가 삭제됩니다. 정말 삭제하시겠습니까?';
 
   @override
-  String get deleteSet => '세트 삭제';
+  String get deleteExercise => '연습 삭제';
 
   @override
   String get developerSection => '개발자';
@@ -571,6 +571,9 @@ class SKo extends S {
 
   @override
   String get exercisesDone => '완료한 연습';
+
+  @override
+  String get questionsTitle => '문제';
 
   @override
   String get exercisesTitle => '연습';
@@ -816,8 +819,7 @@ class SKo extends S {
   String get noCoursesAvailableIcon => '코스 없음 아이콘';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      '맞춤 학습 세트가 없습니다. 배운 내용을 복습하기 위해 하나를 만들어보세요.';
+  String get noCustomExercisesYet => '맞춤 연습이 없습니다. 배운 내용을 복습하기 위해 하나를 만들어보세요.';
 
   @override
   String get noExercisesYet => '아직 연습 문제가 없습니다';
@@ -1518,7 +1520,7 @@ class SKo extends S {
   String get creatingStatus => '생성 중...';
 
   @override
-  String get createExercisesButton => '연습 문제 생성';
+  String get createQuestionsButton => '연습 문제 생성';
 
   @override
   String get feedbackTitle => '피드백';
@@ -1538,7 +1540,7 @@ class SKo extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return '이렇게 하면 \"$title\"을(를) 새로운 AI 생성 질문으로 대체하는 새 세트가 만들어집니다.';
+    return '이렇게 하면 \"$title\"을(를) 새로운 AI 생성 질문으로 대체하는 새 연습이 만들어집니다.';
   }
 
   @override
@@ -1628,7 +1630,7 @@ class SKo extends S {
   }
 
   @override
-  String get exerciseTypesLabel => '연습 유형';
+  String get questionTypesLabel => '연습 유형';
 
   @override
   String get focusLabel => '집중';

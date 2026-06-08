@@ -47,7 +47,7 @@ class ExerciseStatsNotifier extends AsyncNotifier<ExerciseStats>
     with CachedNotifierMixin<ExerciseStats>, DataChangeBusSubscriber<ExerciseStats> {
   @override
   Future<ExerciseStats> build() async {
-    watchTags({'exercise'});
+    watchTags({'question'});
     final repository = ref.read(userRepositoryProvider);
     final data = await repository.getMyStats();
     return ExerciseStats.fromJson(data);

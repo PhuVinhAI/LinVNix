@@ -50,8 +50,8 @@ export class Lesson extends BaseEntity {
   @OneToMany('GrammarRule', 'lesson')
   grammarRules: any[];
 
-  @OneToMany('ExerciseSet', 'lesson')
-  exerciseSets: any[];
+  @OneToMany('Exercise', 'lesson')
+  questions: any[];
 
   @OneToMany('LearningProgress', 'lesson')
   userProgress: any[];

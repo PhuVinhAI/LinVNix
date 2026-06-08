@@ -23,13 +23,13 @@ void main() {
     group('getMyStats', () {
       test('returns exercise stats on success', () async {
         when(() => mockDio.get<Map<String, dynamic>>(
-              '/exercises/my-stats',
+              '/questions/my-stats',
             )).thenAnswer(
           (_) async => Response(
-            requestOptions: RequestOptions(path: '/exercises/my-stats'),
+            requestOptions: RequestOptions(path: '/questions/my-stats'),
             statusCode: 200,
             data: {
-              'totalExercises': 100,
+              'totalQuestions': 100,
               'correctAnswers': 60,
               'incorrectAnswers': 40,
               'accuracy': 60.0,
@@ -41,7 +41,7 @@ void main() {
 
         final result = await repository.getMyStats();
 
-        expect(result['totalExercises'], 100);
+        expect(result['totalQuestions'], 100);
         expect(result['correctAnswers'], 60);
         expect(result['incorrectAnswers'], 40);
         expect(result['accuracy'], 60.0);
@@ -51,12 +51,12 @@ void main() {
 
       test('throws AuthException on 401 response', () async {
         when(() => mockDio.get<Map<String, dynamic>>(
-              '/exercises/my-stats',
+              '/questions/my-stats',
             )).thenThrow(
           DioException(
-            requestOptions: RequestOptions(path: '/exercises/my-stats'),
+            requestOptions: RequestOptions(path: '/questions/my-stats'),
             response: Response(
-              requestOptions: RequestOptions(path: '/exercises/my-stats'),
+              requestOptions: RequestOptions(path: '/questions/my-stats'),
               statusCode: 401,
               data: {'message': 'Unauthorized'},
             ),
@@ -72,12 +72,12 @@ void main() {
 
       test('throws ServerException on 500 response', () async {
         when(() => mockDio.get<Map<String, dynamic>>(
-              '/exercises/my-stats',
+              '/questions/my-stats',
             )).thenThrow(
           DioException(
-            requestOptions: RequestOptions(path: '/exercises/my-stats'),
+            requestOptions: RequestOptions(path: '/questions/my-stats'),
             response: Response(
-              requestOptions: RequestOptions(path: '/exercises/my-stats'),
+              requestOptions: RequestOptions(path: '/questions/my-stats'),
               statusCode: 500,
               data: {'message': 'Internal server error'},
             ),
@@ -93,10 +93,10 @@ void main() {
 
       test('throws NetworkException on connection timeout', () async {
         when(() => mockDio.get<Map<String, dynamic>>(
-              '/exercises/my-stats',
+              '/questions/my-stats',
             )).thenThrow(
           DioException(
-            requestOptions: RequestOptions(path: '/exercises/my-stats'),
+            requestOptions: RequestOptions(path: '/questions/my-stats'),
             type: DioExceptionType.connectionTimeout,
           ),
         );

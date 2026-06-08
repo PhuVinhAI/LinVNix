@@ -65,7 +65,7 @@ void main() {
   group('ExerciseStats', () {
     test('creates from JSON correctly', () {
       final json = {
-        'totalExercises': 100,
+        'totalQuestions': 100,
         'completedExercises': 12,
         'correctAnswers': 60,
         'accuracy': 80.0,
@@ -74,7 +74,7 @@ void main() {
 
       final stats = ExerciseStats.fromJson(json);
 
-      expect(stats.totalExercises, 100);
+      expect(stats.totalQuestions, 100);
       expect(stats.completedExercises, 12);
       expect(stats.correctAnswers, 60);
       expect(stats.accuracy, 80.0);
@@ -85,7 +85,7 @@ void main() {
       // completedExercises = lessons completed; correctAnswers = exercise answers
       // They should NOT share the same value
       final json = {
-        'totalExercises': 50,
+        'totalQuestions': 50,
         'completedExercises': 5,
         'correctAnswers': 40,
         'accuracy': 80.0,
@@ -102,7 +102,7 @@ void main() {
     test('defaults to zero when fields are missing', () {
       final stats = ExerciseStats.fromJson({});
 
-      expect(stats.totalExercises, 0);
+      expect(stats.totalQuestions, 0);
       expect(stats.completedExercises, 0);
       expect(stats.correctAnswers, 0);
       expect(stats.accuracy, 0.0);
@@ -111,7 +111,7 @@ void main() {
 
     test('converts to JSON correctly', () {
       const stats = ExerciseStats(
-        totalExercises: 100,
+        totalQuestions: 100,
         completedExercises: 12,
         correctAnswers: 60,
         accuracy: 80.0,
@@ -120,7 +120,7 @@ void main() {
 
       final json = stats.toJson();
 
-      expect(json['totalExercises'], 100);
+      expect(json['totalQuestions'], 100);
       expect(json['completedExercises'], 12);
       expect(json['correctAnswers'], 60);
       expect(json['accuracy'], 80.0);

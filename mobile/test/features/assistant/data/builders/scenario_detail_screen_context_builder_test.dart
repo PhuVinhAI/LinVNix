@@ -47,7 +47,6 @@ ScenarioDetail _sampleDetail() {
         personality: 'friendly',
         speechStyle: 'casual',
         isPlayable: true,
-        orderIndex: 0,
       ),
       ScenarioCharacter(
         id: 'char-2',
@@ -56,7 +55,6 @@ ScenarioDetail _sampleDetail() {
         personality: 'helpful',
         speechStyle: 'polite',
         isPlayable: false,
-        orderIndex: 1,
       ),
     ],
     categoryInfo: CategoryInfo(id: 'cat-1', name: 'Food & drink'),

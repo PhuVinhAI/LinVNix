@@ -91,7 +91,7 @@ export class ProgressController {
   @ApiOperation({
     summary: 'Lấy trạng thái exercise của lesson cho revisit flow',
     description:
-      'Trả về contentViewed, hasIncompleteSet, incompleteSetId — dùng cho mobile quyết định "Review content" hoặc "Do exercises" khi quay lại lesson',
+      'Trả về contentViewed, hasIncompleteExercise, incompleteExerciseId — dùng cho mobile quyết định "Review content" hoặc "Do exercises" khi quay lại lesson',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -100,10 +100,10 @@ export class ProgressController {
     schema: {
       example: {
         contentViewed: true,
-        hasIncompleteSet: true,
-        incompleteSetId: 'uuid',
-        incompleteSetAttempted: 5,
-        incompleteSetTotal: 10,
+        hasIncompleteExercise: true,
+        incompleteExerciseId: 'uuid',
+        incompleteExerciseAttempted: 5,
+        incompleteExerciseTotal: 10,
       },
     },
   })
@@ -319,7 +319,7 @@ export class ProgressController {
   @ApiOperation({
     summary: 'Reset toàn bộ tiến độ module',
     description:
-      'Xoá tất cả tiến độ, kết quả bài tập, và custom practice sets của module.',
+      'Xoá tất cả tiến độ, kết quả bài tập, và custom practice exercises của module.',
   })
   @ApiParam({ name: 'moduleId', description: 'ID của module' })
   @ApiResponse({
@@ -367,7 +367,7 @@ export class ProgressController {
   @ApiOperation({
     summary: 'Reset toàn bộ tiến độ course',
     description:
-      'Xoá tất cả tiến độ, kết quả bài tập, và custom practice sets của course.',
+      'Xoá tất cả tiến độ, kết quả bài tập, và custom practice exercises của course.',
   })
   @ApiParam({ name: 'courseId', description: 'ID của course' })
   @ApiResponse({

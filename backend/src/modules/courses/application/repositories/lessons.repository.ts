@@ -45,14 +45,14 @@ export class LessonsRepository {
       where: { id },
       order: {
         contents: { orderIndex: 'ASC' },
-        exerciseSets: { orderIndex: 'ASC' },
+        questions: { orderIndex: 'ASC' },
       },
       relations: [
         'module',
         'contents',
         'vocabularies',
         'grammarRules',
-        'exerciseSets',
+        'exercises',
       ],
     });
   }

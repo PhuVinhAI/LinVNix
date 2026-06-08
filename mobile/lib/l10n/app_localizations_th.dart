@@ -442,10 +442,11 @@ class STh extends S {
   String get createCustomPractice => 'สร้างการฝึกซ้อมแบบกำหนดเอง';
 
   @override
-  String get createCustomSet => 'สร้างชุดแบบกำหนดเอง';
+  String get createCustomExercise => 'สร้างแบบฝึกหัดแบบกำหนดเอง';
 
   @override
-  String get createCustomSetPrompt => 'สร้างชุดแบบกำหนดเองเพื่อเริ่มฝึกฝน!';
+  String get createCustomExercisePrompt =>
+      'สร้างแบบฝึกหัดแบบกำหนดเองเพื่อเริ่มฝึกฝน!';
 
   @override
   String get currentLevelLabel => 'ระดับปัจจุบัน';
@@ -470,11 +471,11 @@ class STh extends S {
   String get deleteConversation => 'ลบการสนทนา';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      'ชุดฝึกฝนนี้จะถูกลบออกจากรายการของคุณ คุณสามารถสร้างชุดใหม่ได้ทุกเมื่อ';
+  String get deleteCustomPracticeExerciseWarning =>
+      'แบบฝึกหัดนี้จะถูกลบออกจากรายการของคุณ คุณสามารถสร้างแบบฝึกหัดใหม่ได้ทุกเมื่อ';
 
   @override
-  String get deleteCustomSetQuestion => 'ลบชุดแบบกำหนดเองหรือไม่?';
+  String get deleteCustomExerciseQuestion => 'ลบแบบฝึกหัดแบบกำหนดเองหรือไม่?';
 
   @override
   String get deleteData => 'ลบข้อมูล';
@@ -495,7 +496,7 @@ class STh extends S {
       'ข้อความนี้และข้อความทั้งหมดหลังจากนี้จะถูกลบ คุณแน่ใจหรือไม่?';
 
   @override
-  String get deleteSet => 'ลบชุด';
+  String get deleteExercise => 'ลบแบบฝึกหัด';
 
   @override
   String get developerSection => 'นักพัฒนา';
@@ -582,6 +583,9 @@ class STh extends S {
 
   @override
   String get exercisesDone => 'แบบฝึกหัดที่ทำเสร็จแล้ว';
+
+  @override
+  String get questionsTitle => 'คำถาม';
 
   @override
   String get exercisesTitle => 'แบบฝึกหัด';
@@ -828,8 +832,8 @@ class STh extends S {
   String get noCoursesAvailableIcon => 'ไอคอนไม่มีหลักสูตร';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      'ยังไม่มีชุดฝึกหัดแบบกำหนดเอง สร้างชุดฝึกหัดขึ้นมาเพื่อทบทวนสิ่งที่คุณได้เรียนรู้';
+  String get noCustomExercisesYet =>
+      'ยังไม่มีแบบฝึกหัดแบบกำหนดเอง สร้างแบบฝึกหัดขึ้นมาเพื่อทบทวนสิ่งที่คุณได้เรียนรู้';
 
   @override
   String get noExercisesYet => 'ยังไม่มีแบบฝึกหัด';
@@ -1540,7 +1544,7 @@ class STh extends S {
   String get creatingStatus => 'กำลังสร้าง...';
 
   @override
-  String get createExercisesButton => 'สร้างแบบฝึกหัด';
+  String get createQuestionsButton => 'สร้างแบบฝึกหัด';
 
   @override
   String get feedbackTitle => 'ข้อเสนอแนะ';
@@ -1560,7 +1564,7 @@ class STh extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'การดำเนินการนี้จะสร้างชุดใหม่แทนที่ \"$title\" ด้วยคำถามที่สร้างโดย AI ใหม่';
+    return 'การดำเนินการนี้จะสร้างแบบฝึกหัดใหม่แทนที่ \"$title\" ด้วยคำถามที่สร้างโดย AI ใหม่';
   }
 
   @override
@@ -1656,7 +1660,7 @@ class STh extends S {
   }
 
   @override
-  String get exerciseTypesLabel => 'ประเภทแบบฝึกหัด';
+  String get questionTypesLabel => 'ประเภทแบบฝึกหัด';
 
   @override
   String get focusLabel => 'จุดเน้น';

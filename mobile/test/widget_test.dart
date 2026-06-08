@@ -233,7 +233,7 @@ class _FakeUserProfileNotifier extends UserProfileNotifier {
 class _FakeExerciseStatsNotifier extends ExerciseStatsNotifier {
   @override
   Future<ExerciseStats> build() async => const ExerciseStats(
-    totalExercises: 0,
+    totalQuestions: 0,
     completedExercises: 0,
     correctAnswers: 0,
     accuracy: 0,

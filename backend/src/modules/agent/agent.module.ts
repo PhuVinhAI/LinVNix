@@ -11,7 +11,7 @@ import { CoursesModule } from '../courses/courses.module';
 import { EchoTool } from './tools/echo.tool';
 import { GetUserSummaryTool } from './tools/get-user-summary.tool';
 import { GetProgressOverviewTool } from './tools/get-progress-overview.tool';
-import { ListRecentExerciseResultsTool } from './tools/list-recent-exercise-results.tool';
+import { ListRecentQuestionResultsTool } from './tools/list-recent-question-results.tool';
 import { ListBookmarksTool } from './tools/list-bookmarks.tool';
 import { SearchVocabularyTool } from './tools/search-vocabulary.tool';
 import { SearchGrammarRulesTool } from './tools/search-grammar-rules.tool';
@@ -34,7 +34,7 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
     EchoTool,
     GetUserSummaryTool,
     GetProgressOverviewTool,
-    ListRecentExerciseResultsTool,
+    ListRecentQuestionResultsTool,
     ListBookmarksTool,
     SearchVocabularyTool,
     SearchGrammarRulesTool,
@@ -46,7 +46,7 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
         echoTool: EchoTool,
         getUserSummaryTool: GetUserSummaryTool,
         getProgressOverviewTool: GetProgressOverviewTool,
-        listRecentExerciseResultsTool: ListRecentExerciseResultsTool,
+        listRecentQuestionResultsTool: ListRecentQuestionResultsTool,
         listBookmarksTool: ListBookmarksTool,
         searchVocabularyTool: SearchVocabularyTool,
         searchGrammarRulesTool: SearchGrammarRulesTool,
@@ -56,7 +56,7 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
         echoTool,
         getUserSummaryTool,
         getProgressOverviewTool,
-        listRecentExerciseResultsTool,
+        listRecentQuestionResultsTool,
         listBookmarksTool,
         searchVocabularyTool,
         searchGrammarRulesTool,
@@ -67,7 +67,7 @@ import { GetLessonDetailTool } from './tools/get-lesson-detail.tool';
         EchoTool,
         GetUserSummaryTool,
         GetProgressOverviewTool,
-        ListRecentExerciseResultsTool,
+        ListRecentQuestionResultsTool,
         ListBookmarksTool,
         SearchVocabularyTool,
         SearchGrammarRulesTool,

@@ -13,7 +13,7 @@ const entityPaths = {
   lesson_content: path.resolve(__dirname, '../src/modules/contents/domain/lesson-content.entity.ts'),
   vocabulary: path.resolve(__dirname, '../src/modules/vocabularies/domain/vocabulary.entity.ts'),
   grammar_rule: path.resolve(__dirname, '../src/modules/grammar/domain/grammar-rule.entity.ts'),
-  exercise: path.resolve(__dirname, '../src/modules/exercises/domain/exercise.entity.ts')
+  question: path.resolve(__dirname, '../src/modules/exercises/domain/question.entity.ts')
 };
 
 function getEntityFields(filePath: string): string[] {
@@ -43,7 +43,7 @@ const mapSeedTypes = {
   lesson_content: seedData.courses[0].modules[0].lessons[0].lesson_contents[0],
   vocabulary: seedData.courses[0].modules[0].lessons[0].vocabularies[0],
   grammar_rule: seedData.courses[0].modules[0].lessons[0].grammar_rules[0], // wait, might be undefined if A1 lesson 1 grammar_rules is empty, let's look for one
-  exercise: seedData.courses[0].modules[0].lessons[0].exercises[0]
+  question: seedData.courses[0].modules[0].lessons[0].questions[0]
 };
 
 // Let's find a grammar rule in seed data

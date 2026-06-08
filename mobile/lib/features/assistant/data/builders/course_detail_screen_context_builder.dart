@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../courses/data/courses_providers.dart';
 import '../../../courses/domain/course_models.dart';
 import '../../../lessons/data/lesson_providers.dart';
-import '../../../lessons/domain/exercise_set_models.dart';
+import '../../../lessons/domain/exercise_models.dart';
 import '../../domain/screen_context.dart';
 import '../assistant_localizations_provider.dart';
 import '../route_match.dart';
@@ -21,7 +21,7 @@ ScreenContext courseDetailScreenContextBuilder(Ref ref, RouteMatch match) {
   final progressAsync = ref.watch(userProgressProvider);
   final exerciseSummaryAsync = courseId.isEmpty
       ? const AsyncValue<CourseExerciseSummary>.loading()
-      : ref.watch(courseExerciseSetsProvider(courseId));
+      : ref.watch(courseExercisesProvider(courseId));
   final status = asyncLoadStatus(courseAsync);
 
   final data = <String, dynamic>{

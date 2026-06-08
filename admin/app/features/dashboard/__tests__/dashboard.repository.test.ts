@@ -19,7 +19,7 @@ describe('DashboardRepository', () => {
     topCourses: [{ courseId: 'c1', courseTitle: 'Vietnamese for Beginners', userCount: 80 }],
     exercisesWithHighestErrors: [
       {
-        exerciseId: 'e1',
+        questionId: 'e1',
         question: 'Translate: Hello',
         type: 'TRANSLATION',
         totalAttempts: 120,

@@ -115,9 +115,9 @@ LinVNix là ứng dụng học tiếng Việt toàn diện, kết hợp khóa h�
 - ✅ Lưu trữ session cục bộ (Hive)
 
 **Files liên quan:**
-- `mobile/lib/features/lessons/domain/exercise_models.dart`
-- `mobile/lib/features/lessons/domain/exercise_session.dart`
-- `mobile/lib/features/lessons/data/exercise_session_service.dart`
+- `mobile/lib/features/lessons/domain/question_models.dart`
+- `mobile/lib/features/lessons/domain/question_session.dart`
+- `mobile/lib/features/lessons/data/question_session_service.dart`
 
 ---
 
@@ -614,15 +614,15 @@ class UserAchievement {
 #### Thiết kế Database
 
 ```dart
-class ExerciseAttempt {
+class QuestionAttempt {
   String id;
   String userId;
-  String exerciseId;
+  String questionId;
   String questionId;
   String userAnswer;
   String correctAnswer;
   bool isCorrect;
-  ExerciseType exerciseType;
+  QuestionType questionType;
   String? explanation;
   DateTime attemptedAt;
   

@@ -1,5 +1,5 @@
 import { apiClient } from '../../../../lib/core/infrastructure/api/client'
-import type { Course, ExerciseSet, Lesson, Module } from '../types'
+import type { Course, Exercise, Lesson, Module } from '../types'
 
 function unwrap<T>(response: { data: T | { data: T } }): T {
   return (response.data as { data?: T }).data ?? (response.data as T)
@@ -26,8 +26,8 @@ export class LearningAdminRepository {
     return unwrap(response)
   }
 
-  async getExerciseSet(setId: string): Promise<ExerciseSet> {
-    const response = await apiClient.get<{ data: ExerciseSet }>(`/admin/learning/exercise-sets/${setId}`)
+  async getExercise(exerciseId: string): Promise<Exercise> {
+    const response = await apiClient.get<{ data: Exercise }>(`/admin/learning/exercises/${exerciseId}`)
     return unwrap(response)
   }
 
@@ -92,20 +92,6 @@ export class LearningAdminRepository {
     await apiClient.delete(`/admin/learning/${kind}/${id}`)
   }
 
-  async updateExerciseSet(id: string, payload: Record<string, unknown>) {
-    const response = await apiClient.patch(`/admin/learning/exercise-sets/${id}`, payload)
-    return unwrap(response)
-  }
-
-  async deleteExerciseSet(id: string) {
-    await apiClient.delete(`/admin/learning/exercise-sets/${id}`)
-  }
-
-  async createExercise(setId: string, payload: Record<string, unknown>) {
-    const response = await apiClient.post(`/admin/learning/exercise-sets/${setId}/exercises`, payload)
-    return unwrap(response)
-  }
-
   async updateExercise(id: string, payload: Record<string, unknown>) {
     const response = await apiClient.patch(`/admin/learning/exercises/${id}`, payload)
     return unwrap(response)
@@ -113,6 +99,20 @@ export class LearningAdminRepository {
 
   async deleteExercise(id: string) {
     await apiClient.delete(`/admin/learning/exercises/${id}`)
+  }
+
+  async createQuestion(exerciseId: string, payload: Record<string, unknown>) {
+    const response = await apiClient.post(`/admin/learning/exercises/${exerciseId}/questions`, payload)
+    return unwrap(response)
+  }
+
+  async updateQuestion(id: string, payload: Record<string, unknown>) {
+    const response = await apiClient.patch(`/admin/learning/questions/${id}`, payload)
+    return unwrap(response)
+  }
+
+  async deleteQuestion(id: string) {
+    await apiClient.delete(`/admin/learning/questions/${id}`)
   }
 
   async reorderCourses(items: { id: string; orderIndex: number }[]) {
@@ -127,12 +127,12 @@ export class LearningAdminRepository {
     await apiClient.post('/admin/learning/lessons/reorder', { items })
   }
 
-  async reorderExerciseSets(items: { id: string; orderIndex: number }[]) {
-    await apiClient.post('/admin/learning/exercise-sets/reorder', { items })
-  }
-
   async reorderExercises(items: { id: string; orderIndex: number }[]) {
     await apiClient.post('/admin/learning/exercises/reorder', { items })
+  }
+
+  async reorderQuestions(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/questions/reorder', { items })
   }
 }
 

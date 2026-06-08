@@ -44,7 +44,7 @@ export class AdminController {
         ],
         exercisesWithHighestErrors: [
           {
-            exerciseId: 'uuid-1',
+            questionId: 'uuid-1',
             question: 'Translate: Hello',
             type: 'TRANSLATION',
             totalAttempts: 120,

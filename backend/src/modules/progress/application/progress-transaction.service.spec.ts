@@ -5,14 +5,14 @@ import {
   isLevelHigher,
 } from './progress-transaction.service';
 import { ProgressRepository } from './progress.repository';
-import { UserExerciseResultsRepository } from '../../exercises/application/repositories/user-exercise-results.repository';
+import { UserQuestionResultsRepository } from '../../exercises/application/repositories/user-question-results.repository';
 import { UserProgress } from '../domain/learning-progress.entity';
 import { ModuleProgress } from '../domain/learning-progress.entity';
 import {
   CourseProgress,
   LearningUnitType,
 } from '../domain/learning-progress.entity';
-import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
+import { Exercise } from '../../exercises/domain/exercise.entity';
 import { ProgressStatus, UserLevel } from '../../../common/enums';
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
 
@@ -29,7 +29,7 @@ describe('ProgressTransactionService', () => {
     getRawMany: jest.Mock;
   };
   let mockProgressRepo: jest.Mocked<ProgressRepository>;
-  let mockExerciseResultsRepo: jest.Mocked<UserExerciseResultsRepository>;
+  let mockQuestionResultsRepo: jest.Mocked<UserQuestionResultsRepository>;
 
   const userId = 'user-1';
   const lessonId = 'lesson-1';
@@ -88,7 +88,7 @@ describe('ProgressTransactionService', () => {
 
     mockProgressRepo = {} as any;
 
-    mockExerciseResultsRepo = {
+    mockQuestionResultsRepo = {
       upsertResult: jest.fn().mockResolvedValue(undefined),
     } as any;
 
@@ -98,8 +98,8 @@ describe('ProgressTransactionService', () => {
         { provide: DataSource, useValue: mockDataSource },
         { provide: ProgressRepository, useValue: mockProgressRepo },
         {
-          provide: UserExerciseResultsRepository,
-          useValue: mockExerciseResultsRepo,
+          provide: UserQuestionResultsRepository,
+          useValue: mockQuestionResultsRepo,
         },
       ],
     }).compile();
@@ -110,16 +110,16 @@ describe('ProgressTransactionService', () => {
   });
 
   describe('completeLessonWithTransaction', () => {
-    const exerciseResults = [
-      { exerciseId: 'ex-1', score: 80, isCorrect: true },
-      { exerciseId: 'ex-2', score: 60, isCorrect: false },
+    const questionResults = [
+      { questionId: 'ex-1', score: 80, isCorrect: true },
+      { questionId: 'ex-2', score: 60, isCorrect: false },
     ];
 
     it('updates progress status to COMPLETED with averaged score', async () => {
       const result = await service.completeLessonWithTransaction(
         userId,
         lessonId,
-        exerciseResults,
+        questionResults,
       );
 
       expect(result.status).toBe(ProgressStatus.COMPLETED);
@@ -138,18 +138,18 @@ describe('ProgressTransactionService', () => {
       await service.completeLessonWithTransaction(
         userId,
         lessonId,
-        exerciseResults,
+        questionResults,
       );
 
-      expect(mockExerciseResultsRepo.upsertResult).toHaveBeenCalledTimes(2);
-      expect(mockExerciseResultsRepo.upsertResult).toHaveBeenCalledWith(
+      expect(mockQuestionResultsRepo.upsertResult).toHaveBeenCalledTimes(2);
+      expect(mockQuestionResultsRepo.upsertResult).toHaveBeenCalledWith(
         mockManager,
         userId,
         'ex-1',
         80,
         true,
       );
-      expect(mockExerciseResultsRepo.upsertResult).toHaveBeenCalledWith(
+      expect(mockQuestionResultsRepo.upsertResult).toHaveBeenCalledWith(
         mockManager,
         userId,
         'ex-2',
@@ -165,13 +165,13 @@ describe('ProgressTransactionService', () => {
         service.completeLessonWithTransaction(
           userId,
           lessonId,
-          exerciseResults,
+          questionResults,
         ),
       ).rejects.toThrow('Progress not found');
     });
 
     it('rolls back transaction when exercise result upsert fails', async () => {
-      (mockExerciseResultsRepo.upsertResult as jest.Mock).mockRejectedValue(
+      (mockQuestionResultsRepo.upsertResult as jest.Mock).mockRejectedValue(
         new Error('DB constraint violation'),
       );
 
@@ -179,7 +179,7 @@ describe('ProgressTransactionService', () => {
         service.completeLessonWithTransaction(
           userId,
           lessonId,
-          exerciseResults,
+          questionResults,
         ),
       ).rejects.toThrow('DB constraint violation');
 
@@ -197,7 +197,7 @@ describe('ProgressTransactionService', () => {
         service.completeLessonWithTransaction(
           userId,
           lessonId,
-          exerciseResults,
+          questionResults,
         ),
       ).rejects.toThrow('Save failed');
 
@@ -209,7 +209,7 @@ describe('ProgressTransactionService', () => {
       await service.completeLessonWithTransaction(
         userId,
         lessonId,
-        exerciseResults,
+        questionResults,
       );
 
       expect(mockQueryRunner.startTransaction).toHaveBeenCalled();
@@ -481,7 +481,7 @@ describe('ProgressTransactionService', () => {
       ).rejects.toThrow(NotFoundException);
     });
 
-    it('deletes CourseProgress, ModuleProgress, UserProgress, UserExerciseResults, and soft-deletes custom ExerciseSets', async () => {
+    it('deletes CourseProgress, ModuleProgress, UserProgress, UserQuestionResults, and soft-deletes custom Exercises', async () => {
       (mockManager.findOne as jest.Mock).mockResolvedValue(mockCourse);
       mockExerciseScopeQueryBuilder.getRawMany.mockResolvedValue([
         { id: 'ex-1' },
@@ -516,7 +516,7 @@ describe('ProgressTransactionService', () => {
       );
 
       expect(mockManager.update).toHaveBeenCalledWith(
-        ExerciseSet,
+        Exercise,
         { isCustom: true, ownerUserId: userId, courseId },
         expect.objectContaining({ deletedAt: expect.any(Date) }),
       );

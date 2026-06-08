@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../domain/exercise_models.dart';
-import '../../domain/exercise_renderer.dart';
-import '../../domain/exercise_theme_helper.dart';
+import '../../domain/question_models.dart';
+import '../../domain/question_renderer.dart';
+import '../../domain/question_theme_helper.dart';
 
 class QuestionHeader extends StatelessWidget {
   const QuestionHeader({
     super.key,
-    required this.exercise,
-    required this.exerciseRenderer,
+    required this.question,
+    required this.renderer,
   });
 
-  final Exercise exercise;
-  final ExerciseRenderer exerciseRenderer;
+  final Question question;
+  final QuestionRenderer renderer;
 
   @override
   Widget build(BuildContext context) {
-    final visuals = getExerciseVisuals(context, exercise.exerciseType);
+    final visuals = getQuestionVisuals(context, question.questionType);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,9 +56,9 @@ class QuestionHeader extends StatelessWidget {
             ],
           ),
         ),
-        if (exerciseRenderer.showsQuestion) ...[
+        if (renderer.showsQuestion) ...[
           const SizedBox(height: 16),
-          exerciseRenderer.buildQuestion(exercise, context),
+          renderer.buildQuestion(question, context),
         ],
       ],
     );

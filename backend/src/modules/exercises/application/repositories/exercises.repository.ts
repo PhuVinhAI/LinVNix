@@ -21,73 +21,90 @@ export class ExercisesRepository {
   }
 
   async findByLessonId(lessonId: string): Promise<Exercise[]> {
-    return this.repository
-      .createQueryBuilder('exercise')
-      .innerJoinAndSelect('exercise.exerciseSet', 'exerciseSet')
-      .leftJoinAndSelect('exerciseSet.lesson', 'lesson')
-      .leftJoinAndSelect('lesson.module', 'lessonModule')
-      .leftJoinAndSelect('lessonModule.course', 'lessonCourse')
-      .where('exerciseSet.lesson_id = :lessonId', { lessonId })
-      .andWhere('exercise.deleted_at IS NULL')
-      .andWhere('exerciseSet.deleted_at IS NULL')
-      .andWhere('exerciseSet.is_custom = false')
-      .orderBy('exercise.order_index', 'ASC')
-      .getMany();
+    return this.repository.find({
+      where: { lessonId },
+      order: { orderIndex: 'ASC' },
+    });
   }
 
-  async findBySetId(setId: string): Promise<Exercise[]> {
+  async findAllByLessonIdForAdmin(lessonId: string): Promise<Exercise[]> {
     return this.repository.find({
-      where: { setId },
-      order: { orderIndex: 'ASC' },
-      relations: [
-        'exerciseSet',
-        'exerciseSet.lesson',
-        'exerciseSet.lesson.module',
-        'exerciseSet.lesson.module.course',
-        'exerciseSet.module',
-        'exerciseSet.module.course',
-        'exerciseSet.course',
-      ],
+      where: { lessonId },
+      order: {
+        orderIndex: 'ASC',
+        createdAt: 'DESC',
+        questions: { orderIndex: 'ASC' },
+      },
+      relations: ['questions'],
     });
+  }
+
+  async findActiveByLessonId(
+    lessonId: string,
+    userId?: string,
+  ): Promise<Exercise[]> {
+    return this.repository
+      .createQueryBuilder('exercise')
+      .where('exercise.lesson_id = :lessonId', { lessonId })
+      .andWhere('exercise.deleted_at IS NULL')
+      .andWhere("exercise.generation_status IS DISTINCT FROM 'generating'")
+      .andWhere(
+        userId
+          ? '(exercise.is_custom = false OR exercise.owner_user_id = :userId)'
+          : 'exercise.is_custom = false',
+        { userId },
+      )
+      .orderBy('exercise.order_index', 'ASC')
+      .addOrderBy('exercise.created_at', 'DESC')
+      .getMany();
   }
 
   async findById(id: string): Promise<Exercise | null> {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findByIdWithCourseLevel(id: string): Promise<Exercise | null> {
+  async findByIdWithQuestions(id: string): Promise<Exercise | null> {
     return this.repository.findOne({
       where: { id },
       relations: [
-        'exerciseSet',
-        'exerciseSet.lesson',
-        'exerciseSet.lesson.module',
-        'exerciseSet.lesson.module.course',
-        'exerciseSet.module',
-        'exerciseSet.module.course',
-        'exerciseSet.course',
+        'lesson',
+        'lesson.module',
+        'lesson.module.course',
+        'questions',
       ],
+      order: { questions: { orderIndex: 'ASC' } },
     });
   }
 
-  async update(id: string, data: Partial<Exercise>): Promise<Exercise> {
+  async update(
+    id: string,
+    data: Partial<Exercise>,
+  ): Promise<Exercise | null> {
     await this.repository.update(id, data);
-    const exercise = await this.findById(id);
-    if (!exercise) {
-      throw new Error('Exercise not found after update');
-    }
-    return exercise;
+    return this.findById(id);
   }
 
-  async delete(id: string): Promise<void> {
+  async softDelete(id: string): Promise<void> {
     await this.repository.softDelete(id);
   }
 
-  async softDeleteBySetId(setId: string): Promise<void> {
-    await this.repository
-      .createQueryBuilder()
-      .softDelete()
-      .where('setId = :setId', { setId })
-      .execute();
+  async findActiveCustomExercisesByModule(
+    moduleId: string,
+    userId: string,
+  ): Promise<Exercise[]> {
+    return this.repository.find({
+      where: { moduleId, isCustom: true, ownerUserId: userId },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async findActiveCustomExercisesByCourse(
+    courseId: string,
+    userId: string,
+  ): Promise<Exercise[]> {
+    return this.repository.find({
+      where: { courseId, isCustom: true, ownerUserId: userId },
+      order: { createdAt: 'DESC' },
+    });
   }
 }

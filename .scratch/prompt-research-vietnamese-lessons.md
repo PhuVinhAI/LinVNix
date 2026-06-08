@@ -137,7 +137,7 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | Cột | Kiểu | Bắt buộc | Ghi chú |
 |---|---|---|---|
 | `id` | UUID | Auto | PK |
-| `exercise_type` | enum | ✅ | Một trong: `multiple_choice`, `fill_blank`, `matching`, `ordering`, `translation`, `listening` |
+| `question_type` | enum | ✅ | Một trong: `multiple_choice`, `fill_blank`, `matching`, `ordering`, `translation`, `listening` |
 | `question` | text | ✅ | Câu hỏi |
 | `question_audio_url` | varchar | ❌ | Nullable |
 | `options` | jsonb | ❌ | Nullable — xem chi tiết bên dưới |
@@ -217,8 +217,8 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 
 **Yêu cầu:**
 - Mỗi Lesson cần 3-6 Exercise.
-- Phân bổ đa dạng exercise_type trong mỗi lesson (ít nhất 2 loại khác nhau).
-- `options` và `correct_answer` PHẢI có field `type` khớp với `exercise_type`.
+- Phân bổ đa dạng question_type trong mỗi lesson (ít nhất 2 loại khác nhau).
+- `options` và `correct_answer` PHẢI có field `type` khớp với `question_type`.
 - `question` bằng tiếng Việt (hoặc tiếng Anh nếu là bài dịch Anh→Việt).
 - `explanation` luôn bằng tiếng Việt.
 
@@ -232,7 +232,7 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | `LessonType` | `vocabulary`, `grammar`, `reading`, `listening`, `speaking`, `writing`, `pronunciation`, `culture` |
 | `ContentType` | `text`, `audio`, `image`, `video`, `dialogue` |
 | `PartOfSpeech` | `noun`, `verb`, `adjective`, `adverb`, `pronoun`, `preposition`, `conjunction`, `phrase`, `interjection` |
-| `ExerciseType` | `multiple_choice`, `fill_blank`, `matching`, `ordering`, `translation`, `listening` |
+| `QuestionType` | `multiple_choice`, `fill_blank`, `matching`, `ordering`, `translation`, `listening` |
 | `Dialect` | `STANDARD`, `NORTHERN`, `CENTRAL`, `SOUTHERN` |
 | `MasteryLevel` | `learning`, `familiar`, `mastered` |
 | `ProgressStatus` | `not_started`, `in_progress`, `completed` |
@@ -385,9 +385,9 @@ Trả về dữ liệu dưới dạng **JSON** theo cấu trúc cây lồng nhau
                 }
               ],
               "grammar_rules": [],
-              "exercises": [
+              "questions": [
                 {
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "question": "Từ nào trong tiếng Việt có nghĩa là 'hello'?",
                   "options": {
                     "type": "multiple_choice",
@@ -469,7 +469,7 @@ Trả về dữ liệu dưới dạng **JSON** theo cấu trúc cây lồng nhau
 
 Trước khi trả output, tự kiểm tra:
 1. ✅ Mỗi UUID giả duy nhất trong toàn bộ JSON
-2. ✅ `options.type` khớp `exercise_type` cho mọi Exercise
+2. ✅ `options.type` khớp `question_type` cho mọi Exercise
 3. ✅ `correct_answer` có format đúng theo loại bài tập
 4. ✅ `dialect_variants` có đủ 4 key: STANDARD, NORTHERN, CENTRAL, SOUTHERN
 5. ✅ `classifier` có cho mọi danh từ vật/con người

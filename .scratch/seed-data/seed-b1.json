@@ -16,14 +16,14 @@
               "__uuid": "lesson-b1-001-001",
               "description": "Các từ vựng quan trọng về công việc, nghề nghiệp, môi trường văn phòng và quy trình ứng tuyển ở Việt Nam.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "đồng nghiệp",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Đồng nghiệp là người làm cùng công ty, cùng phòng ban với mình.",
                   "options": {
                     "choices": [
@@ -46,7 +46,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Ứng tuyển nghĩa là nộp hồ sơ xin việc vào một vị trí nào đó.",
                   "options": {
                     "acceptedAnswers": [
@@ -85,7 +85,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các từ vựng quan trọng về công việc.",
                   "options": {
                     "pairs": [
@@ -118,7 +118,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Ứng tuyển vào vị trí là cách nói phổ biến khi xin việc.",
                   "options": {
                     "acceptedTranslations": [
@@ -146,7 +146,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc: Chủ ngữ + động từ + thời gian.",
                   "options": {
                     "items": [
@@ -592,14 +592,14 @@
               "__uuid": "lesson-b1-001-002",
               "description": "Học cách dùng câu bị động trong tiếng Việt với bị (hậu quả xấu) và được (hậu quả tốt). Đây là cấu trúc ngữ pháp rất quan trọng ở cấp độ B1.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "được",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Vì khen là hậu quả tích cực nên dùng được.",
                   "options": {
                     "choices": [
@@ -622,7 +622,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Bị trộm là hậu quả tiêu cực nên dùng bị.",
                   "options": {
                     "acceptedAnswers": [
@@ -646,7 +646,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Được duyệt (được chấp thuận) là hậu quả tích cực.",
                   "options": {
                     "acceptedAnswers": [
@@ -668,7 +668,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Sa thải là hậu quả tiêu cực nên dùng bị.",
                   "options": {
                     "acceptedTranslations": [
@@ -696,7 +696,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc: Chủ ngữ + bị + người gây ra + động từ.",
                   "options": {
                     "items": [
@@ -717,7 +717,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Tuyển dụng là tích cực nên dùng được, không dùng bị.",
                   "options": {
                     "choices": [
@@ -994,7 +994,7 @@
                     "STANDARD": "mắng"
                   },
                   "difficulty_level": 2,
-                  "example_sentence": "Con bị mẹ mắng vì không chịu làm bài tập.",
+                  "example_sentence": "Con bị mẹ mắng vì không chịu làm câu hỏi.",
                   "example_translation": "The child was scolded by mom for not doing homework.",
                   "image_url": null,
                   "part_of_speech": "verb",
@@ -1009,14 +1009,14 @@
               "__uuid": "lesson-b1-001-003",
               "description": "Bài đọc về một ngày làm việc điển hình của người Việt, kết hợp từ vựng công việc và câu bị động.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "xe máy",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bài đọc nói rõ: xe máy là phương tiện đi lại phổ biến nhất.",
                   "options": {
                     "choices": [
@@ -1039,7 +1039,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Được giao thêm dự án là tích cực nên dùng được.",
                   "options": {
                     "acceptedAnswers": [
@@ -1061,7 +1061,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Bị yêu cầu (bắt buộc) là tiêu cực nên dùng bị.",
                   "options": {
                     "acceptedTranslations": [
@@ -1184,14 +1184,14 @@
               "__uuid": "lesson-b1-001-004",
               "description": "Tìm hiểu văn hóa nơi làm việc ở Việt Nam: cách xưng hô, mối quan hệ sếp-nhân viên, và các phong tục công sở đặc trưng.",
               "estimated_duration": 20,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Gọi sếp hoặc anh/chị + tên",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Gọi sếp bằng tên trực tiếp bị coi là thiếu tôn trọng.",
                   "options": {
                     "choices": [
@@ -1214,7 +1214,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Đi làm muộn bị coi là thiếu tôn trọng trong văn hóa công sở Việt Nam.",
                   "options": {
                     "acceptedAnswers": [
@@ -1236,7 +1236,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Cách xưng hô đúng trong môi trường công sở Việt Nam.",
                   "options": {
                     "acceptedTranslations": [
@@ -1405,7 +1405,7 @@
               "__uuid": "lesson-b1-002-001",
               "description": "Từ vựng về trường học, đại học, thi cử, bằng cấp và hệ thống giáo dục Việt Nam.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -1433,7 +1433,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các từ vựng giáo dục quan trọng.",
                   "options": {
                     "pairs": [
@@ -1472,7 +1472,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Nhận học bổng là tích cực nên dùng được.",
                   "options": {
                     "acceptedAnswers": [
@@ -1494,7 +1494,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Sinh viên năm cuối phải làm khóa luận tốt nghiệp.",
                   "options": {
                     "choices": [
@@ -1515,7 +1515,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Thi lại là từ phổ biến chỉ việc thi lại môn rớt.",
                   "options": {
                     "acceptedTranslations": [
@@ -1914,7 +1914,7 @@
               "__uuid": "lesson-b1-002-002",
               "description": "Học cách diễn đạt điều kiện và kết quả bằng cấu trúc nếu...thì. Đây là cấu trúc cơ bản nhất của câu điều kiện trong tiếng Việt.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -1923,7 +1923,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Nếu bắt đầu vế điều kiện.",
                   "options": {
                     "acceptedAnswers": [
@@ -1945,7 +1945,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Nếu...thì là cặp liên từ điều kiện cơ bản.",
                   "options": {
                     "choices": [
@@ -1975,7 +1975,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc: Nếu + S + V + thì + S + sẽ + V.",
                   "options": {
                     "items": [
@@ -2000,7 +2000,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Cấu trúc điều kiện tiêu cực: Nếu + không + V + thì + bị + kết quả.",
                   "options": {
                     "acceptedTranslations": [
@@ -2025,7 +2025,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Nếu không thì = otherwise.",
                   "options": {
                     "acceptedAnswers": [
@@ -2282,7 +2282,7 @@
               "__uuid": "lesson-b1-002-003",
               "description": "Luyện kỹ năng viết bằng cách viết bài luận ngắn về chủ đề giáo dục, sử dụng câu điều kiện và từ vựng giáo dục.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -2293,7 +2293,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Thứ tự đúng: mở bài → thân bài → kết bài.",
                   "options": {
                     "items": [
@@ -2315,7 +2315,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Dùng Nếu để bắt đầu câu điều kiện.",
                   "options": {
                     "acceptedAnswers": [
@@ -2337,7 +2337,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Câu điều kiện tiêu cực với Nếu không...thì không thể.",
                   "options": {
                     "acceptedTranslations": [
@@ -2470,7 +2470,7 @@
               "__uuid": "lesson-b1-003-001",
               "description": "Từ vựng về du lịch, khách sạn, vé, sân bay, tham quan và hướng dẫn viên du lịch.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -2494,7 +2494,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Từ vựng du lịch cơ bản.",
                   "options": {
                     "pairs": [
@@ -2529,7 +2529,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Đặt vé = book a ticket.",
                   "options": {
                     "acceptedAnswers": [
@@ -2551,7 +2551,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Hướng dẫn viên là người dẫn khách đi tham quan.",
                   "options": {
                     "choices": [
@@ -2572,7 +2572,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Đặt phòng = book a room; trên mạng = online.",
                   "options": {
                     "acceptedTranslations": [
@@ -2911,14 +2911,14 @@
               "__uuid": "lesson-b1-003-002",
               "description": "Học cách dùng trạng ngữ chỉ thời gian, nơi chốn, cách thức ở vị trí phức tạp hơn. Cùng với đó là động từ khuynh hướng: lên, xuống, vào, ra, đi, đến.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "lên",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Lên tàu = get on a train/boat.",
                   "options": {
                     "choices": [
@@ -2941,7 +2941,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Xuống xe = get off the vehicle.",
                   "options": {
                     "acceptedAnswers": [
@@ -2969,7 +2969,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "S + khuynh hướng + O + TG.",
                   "options": {
                     "items": [
@@ -2991,7 +2991,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Ra khỏi = exit from; rồi = then.",
                   "options": {
                     "acceptedTranslations": [
@@ -3013,7 +3013,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Trạng ngữ thời gian ở đầu câu nhấn mạnh nhất.",
                   "options": {
                     "choices": [
@@ -3274,14 +3274,14 @@
               "__uuid": "lesson-b1-003-003",
               "description": "Luyện kỹ năng nghe hiểu qua hội thoại tại sân bay — thông báo, hỏi đường, thủ tục check-in.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "transcript": "lên",
                     "type": "listening"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "listening",
+                  "question_type": "listening",
                   "explanation": "Lên máy bay = board the plane.",
                   "options": {
                     "audioUrl": "/audio/b1/airport-announce.mp3",
@@ -3304,7 +3304,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Nhân viên nói: Quầy check-in ở cửa số năm.",
                   "options": {
                     "choices": [
@@ -3327,7 +3327,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Đóng cổng = the gate closes.",
                   "options": {
                     "acceptedAnswers": [
@@ -3491,14 +3491,14 @@
               "__uuid": "lesson-b1-003-004",
               "description": "Luyện kỹ năng nói khi hỏi đường và chỉ đường trong tình huống du lịch, sử dụng động từ khuynh hướng.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "quẹo trái",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Ở miền Nam, người ta nói quẹo thay vì rẽ.",
                   "options": {
                     "choices": [
@@ -3524,7 +3524,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc chỉ đường: Đi thẳng + đường + rồi + rẽ hướng.",
                   "options": {
                     "items": [
@@ -3545,7 +3545,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Câu chỉ đường tiêu chuẩn.",
                   "options": {
                     "acceptedTranslations": [
@@ -3744,7 +3744,7 @@
               "__uuid": "lesson-b1-004-001",
               "description": "Từ vựng về tình bạn, tình yêu, hẹn hò, kết hôn và các cảm xúc trong quan hệ.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -3768,7 +3768,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Từ vựng tình cảm quan trọng.",
                   "options": {
                     "pairs": [
@@ -3803,7 +3803,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Tin tưởng (trust) là nền tảng của tình yêu.",
                   "options": {
                     "acceptedAnswers": [
@@ -3825,7 +3825,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Miền Nam gọi bồ trai thay vì bạn trai.",
                   "options": {
                     "choices": [
@@ -3846,7 +3846,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Hẹn hò = dating; Bọn em = we (intimate).",
                   "options": {
                     "acceptedTranslations": [
@@ -4206,7 +4206,7 @@
               "__uuid": "lesson-b1-004-002",
               "description": "Học câu nhượng bộ với dù...vẫn (although...still) và cấu trúc nhấn mạnh chính là (it is exactly).",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -4215,7 +4215,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Dù bắt đầu vế nhượng bộ.",
                   "options": {
                     "acceptedAnswers": [
@@ -4238,7 +4238,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Dù...vẫn là cặp từ nhượng bộ phổ biến nhất.",
                   "options": {
                     "choices": [
@@ -4265,7 +4265,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc: Dù + điều kiện + S + vẫn + kết quả.",
                   "options": {
                     "items": [
@@ -4287,7 +4287,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Chính là + danh từ + mới + kết quả.",
                   "options": {
                     "acceptedTranslations": [
@@ -4311,7 +4311,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Chính là cấu trúc nhấn mạnh.",
                   "options": {
                     "acceptedAnswers": [
@@ -4568,14 +4568,14 @@
               "__uuid": "lesson-b1-004-003",
               "description": "Luyện hội thoại về tình bạn và tình yêu, sử dụng câu nhượng bộ và cấu trúc nhấn mạnh.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Sự thấu hiểu",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Chính là sự thấu hiểu mới là điều quan trọng nhất.",
                   "options": {
                     "choices": [
@@ -4598,7 +4598,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Dù...vẫn chỉ kết quả không thay đổi dù điều kiện trái ngược.",
                   "options": {
                     "acceptedAnswers": [
@@ -4620,7 +4620,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Chính là cấu trúc nhấn mạnh.",
                   "options": {
                     "acceptedTranslations": [
@@ -4835,7 +4835,7 @@
               "__uuid": "lesson-b1-005-001",
               "description": "Từ vựng về các phương tiện di chuyển, hạ tầng giao thông và tình huống giao thông ở Việt Nam.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -4863,7 +4863,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Từ vựng giao thông quan trọng.",
                   "options": {
                     "pairs": [
@@ -4902,7 +4902,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Đậu xe = to park.",
                   "options": {
                     "acceptedAnswers": [
@@ -4924,7 +4924,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Xe máy là phương tiện phổ biến nhất ở Việt Nam.",
                   "options": {
                     "choices": [
@@ -4945,7 +4945,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Hãy + động từ = câu mệnh lệnh/khuyến cáo.",
                   "options": {
                     "acceptedTranslations": [
@@ -5324,14 +5324,14 @@
               "__uuid": "lesson-b1-005-002",
               "description": "Học cách dùng hãy (do it!), đừng (don't!), và hãy...đi (please do) để đưa ra mệnh lệnh, khuyến cáo và yêu cầu trong tiếng Việt.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Hãy",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Hãy + V = câu khuyến cáo.",
                   "options": {
                     "choices": [
@@ -5354,7 +5354,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Đừng + V = câu ngăn cấm.",
                   "options": {
                     "acceptedAnswers": [
@@ -5382,7 +5382,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc: Hãy + V + khi + V.",
                   "options": {
                     "items": [
@@ -5404,7 +5404,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Đừng + V = prohibition.",
                   "options": {
                     "acceptedTranslations": [
@@ -5426,7 +5426,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Nhé/nha/đi làm mềm mệnh lệnh hãy.",
                   "options": {
                     "choices": [
@@ -5449,7 +5449,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Hãy + V + đi = yêu cầu nhẹ nhàng.",
                   "options": {
                     "acceptedAnswers": [
@@ -5711,14 +5711,14 @@
               "__uuid": "lesson-b1-005-003",
               "description": "Bài đọc về tình hình giao thông ở Việt Nam, kết hợp từ vựng giao thông và câu mệnh lệnh.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Hơn 60 triệu",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bài đọc nói: hơn 60 triệu xe máy.",
                   "options": {
                     "choices": [
@@ -5741,7 +5741,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Đội mũ bảo hiểm = wear a helmet.",
                   "options": {
                     "acceptedAnswers": [
@@ -5763,7 +5763,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 3,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Đừng ngăn cấm + hãy khuyến cáo.",
                   "options": {
                     "acceptedTranslations": [

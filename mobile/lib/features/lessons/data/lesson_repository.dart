@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import '../../../core/network/exception_mapper.dart';
-import '../domain/lesson_models.dart';
 import '../domain/exercise_models.dart';
-import '../domain/exercise_set_models.dart';
+import '../domain/lesson_models.dart';
+import '../domain/question_models.dart';
 
 class LessonRepository {
   LessonRepository(this._dio);
@@ -25,32 +25,32 @@ class LessonRepository {
     }
   }
 
-  Future<List<Exercise>> getExercisesByLesson(String lessonId) async {
+  Future<List<Question>> getQuestionsByLesson(String lessonId) async {
     try {
       final response =
-          await _dio.get<List<dynamic>>('/exercises/lesson/$lessonId');
+          await _dio.get<List<dynamic>>('/questions/lesson/$lessonId');
       return (response.data as List<dynamic>)
-          .map((e) => Exercise.fromJson(e as Map<String, dynamic>))
+          .map((e) => Question.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<List<Exercise>> getExercisesBySet(String setId) async {
+  Future<List<Question>> getQuestionsByExercise(String exerciseId) async {
     try {
       final response =
-          await _dio.get<List<dynamic>>('/exercises/set/$setId');
+          await _dio.get<List<dynamic>>('/questions/exercise/$exerciseId');
       return (response.data as List<dynamic>)
-          .map((e) => Exercise.fromJson(e as Map<String, dynamic>))
+          .map((e) => Question.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<ExerciseSubmissionResult> submitExerciseAnswer(
-    String exerciseId,
+  Future<ExerciseSubmissionResult> submitQuestionAnswer(
+    String questionId,
     Map<String, dynamic> answer, {
     int? timeSpent,
   }) async {
@@ -58,7 +58,7 @@ class LessonRepository {
       final data = <String, dynamic>{'userAnswer': answer};
       if (timeSpent != null) data['timeSpent'] = timeSpent;
       final response = await _dio.post<Map<String, dynamic>>(
-        '/exercises/$exerciseId/submit',
+        '/questions/$questionId/submit',
         data: data,
       );
       return ExerciseSubmissionResult.fromJson(response.data!);
@@ -133,38 +133,38 @@ class LessonRepository {
     }
   }
 
-  Future<LessonExerciseSummary> getExerciseSetsByLesson(String lessonId) async {
+  Future<LessonExerciseSummary> getExercisesByLesson(String lessonId) async {
     try {
       final response =
-          await _dio.get<Map<String, dynamic>>('/exercise-sets/lesson/$lessonId');
+          await _dio.get<Map<String, dynamic>>('/exercises/lesson/$lessonId');
       return LessonExerciseSummary.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<ExerciseSetModel> getExerciseSet(String setId) async {
+  Future<ExerciseModel> getExercise(String exerciseId) async {
     try {
       final response =
-          await _dio.get<Map<String, dynamic>>('/exercise-sets/$setId');
-      return ExerciseSetModel.fromJson(response.data!);
+          await _dio.get<Map<String, dynamic>>('/exercises/$exerciseId');
+      return ExerciseModel.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<SetProgressDetail> getSetProgress(String setId) async {
+  Future<ExerciseProgressDetail> getExerciseProgress(String exerciseId) async {
     try {
       final response =
-          await _dio.get<Map<String, dynamic>>('/exercise-sets/$setId/progress');
-      return SetProgressDetail.fromJson(response.data!);
+          await _dio.get<Map<String, dynamic>>('/exercises/$exerciseId/progress');
+      return ExerciseProgressDetail.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
   Future<List<dynamic>> generateExercises(
-    String setId, {
+    String exerciseId, {
     String? userPrompt,
     CancelToken? cancelToken,
   }) async {
@@ -172,7 +172,7 @@ class LessonRepository {
       final data = <String, dynamic>{};
       if (userPrompt != null) data['userPrompt'] = userPrompt;
       final response = await _dio.post<dynamic>(
-        '/exercise-sets/$setId/generate',
+        '/exercises/$exerciseId/generate',
         data: data.isNotEmpty ? data : null,
         options: _aiGenerationRequestOptions,
         cancelToken: cancelToken,
@@ -183,14 +183,14 @@ class LessonRepository {
     }
   }
 
-  Future<ExerciseSetModel> createCustomSet(
+  Future<ExerciseModel> createCustomExercise(
     String lessonId,
-    CustomSetConfig config, {
+    CustomExerciseConfig config, {
     CancelToken? cancelToken,
   }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
-        '/exercise-sets/custom',
+        '/exercises/custom',
         data: {
           'lessonId': lessonId,
           'config': config.toJson(),
@@ -200,42 +200,42 @@ class LessonRepository {
       );
       final data = response.data!;
       final setMap = data['set'] as Map<String, dynamic>;
-      return ExerciseSetModel.fromJson(setMap);
+      return ExerciseModel.fromJson(setMap);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<ModuleExerciseSummary> fetchModuleExerciseSets(
+  Future<ModuleExerciseSummary> fetchModuleExercises(
       String moduleId) async {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
-          '/exercise-sets/module/$moduleId');
+          '/exercises/module/$moduleId');
       return ModuleExerciseSummary.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<CourseExerciseSummary> fetchCourseExerciseSets(
+  Future<CourseExerciseSummary> fetchCourseExercises(
       String courseId) async {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
-          '/exercise-sets/course/$courseId');
+          '/exercises/course/$courseId');
       return CourseExerciseSummary.fromJson(response.data!);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<ExerciseSetModel> createCustomSetForModule(
+  Future<ExerciseModel> createCustomExerciseForModule(
     String moduleId,
-    CustomSetConfig config, {
+    CustomExerciseConfig config, {
     CancelToken? cancelToken,
   }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
-        '/exercise-sets/custom',
+        '/exercises/custom',
         data: {
           'moduleId': moduleId,
           'config': config.toJson(),
@@ -245,20 +245,20 @@ class LessonRepository {
       );
       final data = response.data!;
       final setMap = data['set'] as Map<String, dynamic>;
-      return ExerciseSetModel.fromJson(setMap);
+      return ExerciseModel.fromJson(setMap);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<ExerciseSetModel> createCustomSetForCourse(
+  Future<ExerciseModel> createCustomExerciseForCourse(
     String courseId,
-    CustomSetConfig config, {
+    CustomExerciseConfig config, {
     CancelToken? cancelToken,
   }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
-        '/exercise-sets/custom',
+        '/exercises/custom',
         data: {
           'courseId': courseId,
           'config': config.toJson(),
@@ -268,14 +268,14 @@ class LessonRepository {
       );
       final data = response.data!;
       final setMap = data['set'] as Map<String, dynamic>;
-      return ExerciseSetModel.fromJson(setMap);
+      return ExerciseModel.fromJson(setMap);
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
   Future<String> regenerateExercises(
-    String setId, {
+    String exerciseId, {
     String? userPrompt,
     CancelToken? cancelToken,
   }) async {
@@ -283,41 +283,41 @@ class LessonRepository {
       final data = <String, dynamic>{};
       if (userPrompt != null) data['userPrompt'] = userPrompt;
       final response = await _dio.post<Map<String, dynamic>>(
-        '/exercise-sets/$setId/regenerate',
+        '/exercises/$exerciseId/regenerate',
         data: data.isNotEmpty ? data : null,
         options: _aiGenerationRequestOptions,
         cancelToken: cancelToken,
       );
-      return response.data!['newSetId'] as String;
+      return response.data!['newExerciseId'] as String;
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  /// API sinh bài có thể trả mảng exercise trực tiếp hoặc `{ exercises: [...] }`.
+  /// API sinh bài có thể trả mảng exercise trực tiếp hoặc `{ questions: [...] }`.
   List<dynamic> _unwrapExerciseList(Object? data) {
     if (data is List<dynamic>) return data;
     if (data is Map<String, dynamic>) {
-      final list = data['exercises'];
+      final list = data['questions'] ?? data['exercises'];
       if (list is List<dynamic>) return list;
     }
     return [];
   }
 
-  Future<void> deleteCustomExerciseSet(String setId) async {
+  Future<void> deleteCustomExercise(String exerciseId) async {
     try {
       await _dio.delete<Map<String, dynamic>>(
-        '/exercise-sets/$setId/custom',
+        '/exercises/$exerciseId/custom',
       );
     } on DioException catch (e) {
       throw mapDioException(e);
     }
   }
 
-  Future<void> resetExerciseSetProgress(String setId) async {
+  Future<void> resetExerciseProgress(String exerciseId) async {
     try {
       await _dio.post<Map<String, dynamic>>(
-        '/exercise-sets/$setId/reset',
+        '/exercises/$exerciseId/reset',
       );
     } on DioException catch (e) {
       throw mapDioException(e);

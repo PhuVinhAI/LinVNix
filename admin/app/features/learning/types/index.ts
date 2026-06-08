@@ -36,7 +36,7 @@ export interface Lesson {
   contents?: LessonContent[]
   vocabularies?: Vocabulary[]
   grammarRules?: GrammarRule[]
-  exerciseSets?: ExerciseSet[]
+  exercises?: Exercise[]
 }
 
 export interface LessonContent {
@@ -105,7 +105,7 @@ export interface GrammarRule {
   lessonId: string
 }
 
-export interface ExerciseSet {
+export interface Exercise {
   id: string
   lessonId?: string | null
   lesson?: Lesson | null
@@ -114,12 +114,12 @@ export interface ExerciseSet {
   isCustom: boolean
   isAIGenerated: boolean
   orderIndex: number
-  exercises?: Exercise[]
+  questions?: Question[]
 }
 
-export interface Exercise {
+export interface Question {
   id: string
-  exerciseType: string
+  questionType: string
   question?: string | null
   questionAudioUrl?: string | null
   options?: unknown
@@ -127,5 +127,5 @@ export interface Exercise {
   explanation?: string | null
   orderIndex: number
   difficultyLevel: number
-  setId: string
+  exerciseId: string
 }

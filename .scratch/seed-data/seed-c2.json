@@ -16,14 +16,14 @@
               "__uuid": "lesson-c2-001-001",
               "description": "Học các từ vựng mang đậm dấu ấn vùng miền: khẩu âm, từ địa phương, cách gọi khác nhau giữa ba miền Bắc Trung Nam.",
               "estimated_duration": 45,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "răng",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Răng\" là cách nói \"thế nào\" đặc trưng của phương ngữ miền Trung.",
                   "options": {
                     "choices": [
@@ -65,7 +65,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Bắc: thế nào, Trung: răng, Nam: sao.",
                   "options": {
                     "pairs": [
@@ -104,7 +104,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "\"Răng\" thay cho \"sao\" hay \"thế nào\" trong phương ngữ Trung.",
                   "options": {
                     "acceptedAnswers": [
@@ -126,7 +126,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Nam dùng \"nầy\" thay cho \"này\".",
                   "options": {
                     "acceptedTranslations": [
@@ -537,14 +537,14 @@
               "__uuid": "lesson-c2-001-002",
               "description": "Phân tích khác biệt ngữ pháp giữa ba phương ngữ: trợ từ cuối câu, cách đặt câu hỏi, và đại từ nhân xưng vùng miền.",
               "estimated_duration": 50,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "nghe",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Nghe\" là trợ từ cuối câu đặc trưng của phương ngữ Nam.",
                   "options": {
                     "choices": [
@@ -565,7 +565,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Trung: sao → răng, hôm nay → trờ nay, vậy → rứa.",
                   "options": {
                     "acceptedTranslations": [
@@ -589,7 +589,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Ạ là trợ từ kính ngữ đặc trưng của phương ngữ Bắc.",
                   "options": {
                     "acceptedAnswers": [
@@ -616,7 +616,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Câu hỏi Trung: \"Mi đi mô rứa?\" (Cậu đi đâu vậy?)",
                   "options": {
                     "items": [
@@ -903,14 +903,14 @@
               "__uuid": "lesson-c2-001-003",
               "description": "Luyện nghe và nhận diện khẩu âm ba miền.",
               "estimated_duration": 40,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "transcript": "Răng mà trờ nay nóng rứa? Mi đi mô rứa?",
                     "type": "listening"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "listening",
+                  "question_type": "listening",
                   "explanation": "rứa (vậy), mô (đâu), răng (sao) là đặc trưng phương ngữ Trung.",
                   "options": {
                     "audioUrl": "/audio/c2/dialect-central.mp3",
@@ -932,7 +932,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Nghe\" là trợ từ đặc trưng phương ngữ Nam.",
                   "options": {
                     "choices": [
@@ -970,7 +970,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Ạ và nhỉ = Bắc; rứa = Trung; nghe = Nam.",
                   "options": {
                     "pairs": [
@@ -1120,14 +1120,14 @@
               "__uuid": "lesson-c2-001-004",
               "description": "Khác biệt phát âm giữa Bắc, Trung, Nam: phụ âm đầu, thanh điệu, âm cuối.",
               "estimated_duration": 35,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "ch",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Ở Nam, tr và ch phát âm giống nhau.",
                   "options": {
                     "choices": [
@@ -1151,7 +1151,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Thanh hỏi và ngã gộp chung ở phương ngữ Nam.",
                   "options": {
                     "acceptedAnswers": [
@@ -1176,7 +1176,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Người Nam phát âm tr như gi, nên trời nghe như giời.",
                   "options": {
                     "acceptedTranslations": [
@@ -1330,14 +1330,14 @@
               "__uuid": "lesson-c2-002-001",
               "description": "Học các từ Hán Việt: tiền tố phủ định, hậu tố ngành học, từ ghép nghĩa gốc Hán.",
               "estimated_duration": 45,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "bất-",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "bất- (不) mang nghĩa phủ định: bất bình (không bình đẳng), bất hợp pháp (không hợp pháp).",
                   "options": {
                     "choices": [
@@ -1375,7 +1375,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Hậu tố Hán Việt rất năng sản.",
                   "options": {
                     "pairs": [
@@ -1410,7 +1410,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "vô- (無) nghĩa là \"không có\": vô hình = không hình, vô giá = không giá.",
                   "options": {
                     "acceptedAnswers": [
@@ -1432,7 +1432,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "hiện đại hóa = hiện đại (modern) + hóa (-ize).",
                   "options": {
                     "acceptedTranslations": [
@@ -1805,14 +1805,14 @@
               "__uuid": "lesson-c2-002-002",
               "description": "Phân tích cấu trúc nội tại: tiền tố, hậu tố, từ ghép đồng nghĩa, từ ghép phản nghĩa.",
               "estimated_duration": 50,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Ghép đồng nghĩa",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Phụ\" = cha, \"mẫu\" = mẹ — hai tiết đồng nghĩa bổ sung.",
                   "options": {
                     "choices": [
@@ -1835,7 +1835,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Hậu tố -học tạo danh từ ngành khoa học.",
                   "options": {
                     "acceptedAnswers": [
@@ -1874,7 +1874,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Mỗi loại cấu trúc có đặc điểm nhận diện riêng.",
                   "options": {
                     "pairs": [
@@ -1907,7 +1907,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "âm dương là ghép phản nghĩa tạo khái niệm triết học.",
                   "options": {
                     "acceptedTranslations": [
@@ -2083,14 +2083,14 @@
               "__uuid": "lesson-c2-002-003",
               "description": "Luyện đọc văn bản hành chính, khoa học chứa nhiều từ Hán Việt.",
               "estimated_duration": 45,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "translation": "Dựa theo Hiến pháp",
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "\"Căn cứ\" là Hán Việt trang trọng, nghĩa thông thường là \"dựa theo\".",
                   "options": {
                     "acceptedTranslations": [
@@ -2130,7 +2130,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Biết chuyển Hán Việt sang Việt thuần giúp hiểu văn bản dễ hơn.",
                   "options": {
                     "pairs": [
@@ -2163,7 +2163,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Đây là tên chính thức của nước Việt Nam hiện tại.",
                   "options": {
                     "choices": [
@@ -2285,14 +2285,14 @@
               "__uuid": "lesson-c2-002-004",
               "description": "Ảnh hưởng văn hóa Hán Việt: tên riêng, tên nước, Phật giáo, và từ mượn Pháp, Anh.",
               "estimated_duration": 40,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Tiếng Pháp (poupée)",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Búp bê\" mượn từ tiếng Pháp \"poupée\" (doll).",
                   "options": {
                     "choices": [
@@ -2330,7 +2330,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Tiếng Việt mượn từ nhiều nguồn: Pháp, Hán Việt, Anh.",
                   "options": {
                     "pairs": [
@@ -2365,7 +2365,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "\"Mỹ\" (美) từ \"Mỹ Lợi Gia\" (America), rút gọn thành Mỹ.",
                   "options": {
                     "acceptedAnswers": [
@@ -2501,7 +2501,7 @@
               "__uuid": "lesson-c2-003-001",
               "description": "Học từ vựng đặc thù văn học cổ: cổ văn, Hán Nôm, thơ Đường luật, lục bát, tấu, chiếu, hịch, truyền kỳ.",
               "estimated_duration": 45,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -2525,7 +2525,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Mỗi thể văn cổ có chức năng xã hội riêng.",
                   "options": {
                     "pairs": [
@@ -2558,7 +2558,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Truyện Kiều gồm 3.254 câu lục bát — thể thơ 6-8 âm tiết xen kẽ.",
                   "options": {
                     "choices": [
@@ -2581,7 +2581,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "\"Trăm năm trong cõi người ta\" — câu lục đầu tiên Truyện Kiều.",
                   "options": {
                     "acceptedAnswers": [
@@ -2844,14 +2844,14 @@
               "__uuid": "lesson-c2-003-002",
               "description": "Cấu trúc ngữ pháp cổ: trật tự từ Hán, câu rút gọn, đối ngẫu.",
               "estimated_duration": 50,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Bổ ngữ trước, trung tâm sau",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Đại\" (lớn = bổ ngữ) đứng trước \"học\" (trường = trung tâm).",
                   "options": {
                     "choices": [
@@ -2872,7 +2872,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "\"Bạch mã\" = bạch (trắng) + mã (ngựa) → Việt thuần: ngựa (trung tâm) + trắng (bổ ngữ).",
                   "options": {
                     "acceptedTranslations": [
@@ -2895,7 +2895,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Câu cổ thường lược chủ ngữ khi đã rõ từ ngữ cảnh.",
                   "options": {
                     "acceptedAnswers": [
@@ -3053,7 +3053,7 @@
               "__uuid": "lesson-c2-003-003",
               "description": "Đọc và phân tích thơ lục bát qua Truyện Kiều. Hiểu luật bằng trắc, vần điệu và song thất lục bát.",
               "estimated_duration": 50,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -3063,7 +3063,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Lục bát luôn bắt đầu bằng câu lục (6 âm tiết) rồi câu bát (8).",
                   "options": {
                     "items": [
@@ -3082,7 +3082,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Chữ 6 câu lục vần với chữ 6 câu bát (vần chân chính).",
                   "options": {
                     "choices": [
@@ -3105,7 +3105,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Vần: \"ta\" (chữ 6 lục) vần với \"là\" (chữ 6 bát). Chữ 8 \"nhau\" vần với chữ 6 lục tiếp: \"dâu\".",
                   "options": {
                     "acceptedAnswers": [
@@ -3208,14 +3208,14 @@
               "__uuid": "lesson-c2-003-004",
               "description": "Thực hành viết thơ lục bát: luật bằng trắc, vần chân, cách chọn từ tạo hình ảnh thơ.",
               "estimated_duration": 50,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Trăm năm trong cõi người ta (B B T T B B)",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Trăm(B) năm(B) trong(T) cõi(T) người(B) ta(B)\" đúng luật B B T T B B.",
                   "options": {
                     "choices": [
@@ -3238,7 +3238,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Chữ 6 câu bát vần với chữ 6 câu lục (\"ta\"). \"Là\" vần bằng giàu với \"ta\".",
                   "options": {
                     "acceptedAnswers": [
@@ -3260,7 +3260,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Lục bát yêu cầu đúng luật bằng trắc và vần chân.",
                   "options": {
                     "acceptedTranslations": [
@@ -3373,14 +3373,14 @@
               "__uuid": "lesson-c2-004-001",
               "description": "Từ vựng hài hước, tiếng lóng, cách chế giễu, từ uyển chuyển — những thứ chỉ người bản xứ mới dùng tự nhiên.",
               "estimated_duration": 45,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Nói một đằng làm một nẻo",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Đánh trống bỏ dùi\" = nói mà không làm, hứa mà không giữ.",
                   "options": {
                     "choices": [
@@ -3418,7 +3418,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Tiếng lóng thay đổi nhanh theo thế hệ.",
                   "options": {
                     "pairs": [
@@ -3453,7 +3453,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Hồ Xuân Hương dùng chơi chữ và nói lái tài tình trong thơ.",
                   "options": {
                     "acceptedAnswers": [
@@ -3481,7 +3481,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "\"Dí dỏm\" = witty, droll — cách nói hài hước thông minh.",
                   "options": {
                     "acceptedTranslations": [
@@ -3744,14 +3744,14 @@
               "__uuid": "lesson-c2-004-002",
               "description": "Phân tích tu từ ẩn dụ nâng cao, nói lái (spoonerism), chơi chữ trong thơ và đời sống.",
               "estimated_duration": 50,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Hoán đổi phụ âm đầu hai chữ",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Nói lái đổi phụ âm đầu của hai chữ cho nhau tạo từ mới hài hước.",
                   "options": {
                     "choices": [
@@ -3774,7 +3774,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Hoán đổi phụ âm đầu: \"th\" và \"l\" đổi chỗ.",
                   "options": {
                     "acceptedAnswers": [
@@ -3796,7 +3796,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Bánh trôi nước\" dùng ẩn dụ hai nghĩa: tả bánh trôi bề ngoài, ám chỉ thân phận phụ nữ bề trong.",
                   "options": {
                     "choices": [
@@ -3971,14 +3971,14 @@
               "__uuid": "lesson-c2-004-003",
               "description": "Luyện nghe hiểu các câu hài hước, nói lái, và châm biếm trong giao tiếp đời sống.",
               "estimated_duration": 40,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "transcript": "Hôm qua tui đi ăn chè bưởi — bưởi chè! Nói lái cho vui!",
                     "type": "listening"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "listening",
+                  "question_type": "listening",
                   "explanation": "\"Chè bưởi\" → nói lái thành \"bưởi chè\" — trò chơi chữ phổ biến Nam Bộ.",
                   "options": {
                     "audioUrl": "/audio/c2/humor-lai.mp3",
@@ -4000,7 +4000,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Bà xã\" là cách gọi vợ thân mật phổ biến ở miền Nam.",
                   "options": {
                     "choices": [
@@ -4023,7 +4023,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "\"Đánh trống bỏ dùi\" = hứa hẹn mà không làm.",
                   "options": {
                     "acceptedAnswers": [
@@ -4142,14 +4142,14 @@
               "__uuid": "lesson-c2-004-004",
               "description": "Văn hóa hài hước Việt Nam: vai trò hài hước trong giao tiếp, châm biếm xã hội, và cách nói uyển chuyển.",
               "estimated_duration": 40,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Uyển chuyển (euphemism)",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Uyển chuyển là cách nói tránh từ trực tiếp để giữ thể diện.",
                   "options": {
                     "choices": [
@@ -4187,7 +4187,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Uyển chuyển giúp tránh từ nhạy cảm trực tiếp.",
                   "options": {
                     "pairs": [
@@ -4220,7 +4220,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "\"Khuất\" là uyển chuyển thay cho \"chết\".",
                   "options": {
                     "acceptedTranslations": [
@@ -4334,7 +4334,7 @@
               "__uuid": "lesson-c2-005-001",
               "description": "Học từ vựng đặc thù tục ngữ, ca dao, vè, dân ca, đồng dao — ngôn ngữ truyền khẩu dân gian.",
               "estimated_duration": 45,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -4358,7 +4358,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Mỗi loại văn dân gian có chức năng riêng.",
                   "options": {
                     "pairs": [
@@ -4391,7 +4391,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Ăn quả nhớ kẻ trồng cây\" = khi hưởng quả phải biết ơn người tạo ra.",
                   "options": {
                     "choices": [
@@ -4414,7 +4414,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "\"Có công mài sắt có ngày nên kim\" = kiên trì sẽ thành công.",
                   "options": {
                     "acceptedAnswers": [
@@ -4436,7 +4436,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "\"Lá lành đùm lá rách\" = người may mắn giúp người bất hạnh.",
                   "options": {
                     "acceptedTranslations": [
@@ -4699,14 +4699,14 @@
               "__uuid": "lesson-c2-005-002",
               "description": "Phân tích cấu trúc ngữ pháp đặc thù ca dao: câu rút gọn, chủ ngữ ẩn, đối ngẫu, và vần điệu lục bát.",
               "estimated_duration": 50,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Ẩn / lược bỏ",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Ca dao thường lược chủ ngữ — chỉ giữ V + O + so sánh.",
                   "options": {
                     "choices": [
@@ -4744,7 +4744,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Đối ngẫu tạo sự cân bằng và nhịp nhàng.",
                   "options": {
                     "pairs": [
@@ -4779,7 +4779,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "\"nguồn\" vần bằng với \"Sơn\" — vần chân lục bát.",
                   "options": {
                     "acceptedAnswers": [
@@ -4801,7 +4801,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Câu điều kiện rút gọn: muốn + V thì + V — khuyên chuẩn bị trước khi hành động.",
                   "options": {
                     "acceptedTranslations": [
@@ -4957,14 +4957,14 @@
               "__uuid": "lesson-c2-005-003",
               "description": "Thực hành sử dụng tục ngữ và ca dao trong giao tiếp: khi nào dùng, ngữ cảnh phù hợp, cách nói tự nhiên.",
               "estimated_duration": 45,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Có công mài sắt có ngày nên kim",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "\"Có công mài sắt có ngày nên kim\" khuyên kiên trì sẽ thành công.",
                   "options": {
                     "choices": [
@@ -4985,7 +4985,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "\"Lá lành đùm lá rách\" = người may mắn giúp người bất hạnh.",
                   "options": {
                     "acceptedTranslations": [
@@ -5009,7 +5009,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "\"Ăn quả nhớ kẻ trồng cây\" = khi hưởng quả phải biết ơn người tạo ra.",
                   "options": {
                     "acceptedAnswers": [
@@ -5112,14 +5112,14 @@
               "__uuid": "lesson-c2-005-004",
               "description": "Văn hóa dân gian Việt Nam: vai trò truyền khẩu, phong tục, và di sản ca dao tục ngữ trong đời sống hiện đại.",
               "estimated_duration": 40,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Di sản văn hóa phi vật thể",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Quan họ Bắc Ninh là di sản văn hóa phi vật thể của UNESCO.",
                   "options": {
                     "choices": [
@@ -5157,7 +5157,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Mỗi vùng miền có loại dân ca đặc trưng.",
                   "options": {
                     "pairs": [
@@ -5190,7 +5190,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 5,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Tục ngữ không mất đi mà chuyển hóa vào đời sống hiện đại.",
                   "options": {
                     "acceptedTranslations": [

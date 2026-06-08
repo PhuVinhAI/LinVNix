@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../courses/domain/course_models.dart';
-import '../../../lessons/domain/exercise_set_models.dart';
+import '../../../lessons/domain/exercise_models.dart';
 
 /// Compact, JSON-serializable course summary for assistant screen context.
 Map<String, dynamic> courseContextSummary(Course course) {
@@ -83,23 +83,23 @@ Map<String, dynamic> lessonContextSummary(
   };
 }
 
-/// Compact set-progress summary lifted from the existing exercise hub
+/// Compact exercise-progress summary lifted from the existing exercise hub
 /// builder so course/module detail builders can share it.
-Map<String, dynamic> setProgressContextSummary(SetProgress set) {
+Map<String, dynamic> exerciseProgressContextSummary(ExerciseProgress exercise) {
   return {
-    'setId': set.setId,
-    'title': set.title,
-    if (set.description != null && set.description!.isNotEmpty)
-      'description': set.description,
-    'isCustom': set.isCustom,
-    'isAIGenerated': set.isAIGenerated,
-    'totalExercises': set.totalExercises,
-    'attempted': set.attempted,
-    'percentComplete': set.percentComplete,
-    'percentCorrect': set.percentCorrect,
-    'progressState': set.isCompleted
+    'exerciseId': exercise.exerciseId,
+    'title': exercise.title,
+    if (exercise.description != null && exercise.description!.isNotEmpty)
+      'description': exercise.description,
+    'isCustom': exercise.isCustom,
+    'isAIGenerated': exercise.isAIGenerated,
+    'totalQuestions': exercise.totalQuestions,
+    'attempted': exercise.attempted,
+    'percentComplete': exercise.percentComplete,
+    'percentCorrect': exercise.percentCorrect,
+    'progressState': exercise.isCompleted
         ? 'completed'
-        : set.isInProgress
+        : exercise.isInProgress
             ? 'inProgress'
             : 'notStarted',
   };
@@ -107,7 +107,7 @@ Map<String, dynamic> setProgressContextSummary(SetProgress set) {
 
 /// Compact representation of `CourseExerciseSummary` — used by the
 /// course-detail builder to surface "X / Y modules completed", eligibility,
-/// and the per-course custom-practice set list.
+/// and the per-course custom-practice exercise list.
 Map<String, dynamic> courseExerciseSummaryContext(
   CourseExerciseSummary summary,
 ) {
@@ -115,8 +115,8 @@ Map<String, dynamic> courseExerciseSummaryContext(
     'eligible': summary.eligible,
     'completedModulesCount': summary.completedModulesCount,
     'totalModulesCount': summary.totalModulesCount,
-    'sets': summary.courseSets
-        .map(setProgressContextSummary)
+    'exercises': summary.courseExercises
+        .map(exerciseProgressContextSummary)
         .toList(growable: false),
   };
 }
@@ -130,8 +130,8 @@ Map<String, dynamic> moduleExerciseSummaryContext(
     'eligible': summary.eligible,
     'completedLessonsCount': summary.completedLessonsCount,
     'totalLessonsCount': summary.totalLessonsCount,
-    'sets': summary.moduleSets
-        .map(setProgressContextSummary)
+    'exercises': summary.moduleExercises
+        .map(exerciseProgressContextSummary)
         .toList(growable: false),
   };
 }

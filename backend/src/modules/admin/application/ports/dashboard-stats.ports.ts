@@ -9,8 +9,8 @@ export interface CourseStatsResult {
   userCount: number;
 }
 
-export interface ExerciseStatsResult {
-  exerciseId: string;
+export interface QuestionStatsResult {
+  questionId: string;
   question: string | null;
   type: string;
   totalAttempts: number;
@@ -27,11 +27,11 @@ export interface CourseStatsPort {
   getTopCoursesByEnrollment(limit: number): Promise<CourseStatsResult[]>;
 }
 
-export interface ExerciseStatsPort {
-  getExercisesWithHighestErrorRate(
+export interface QuestionStatsPort {
+  getQuestionsWithHighestErrorRate(
     minAttempts: number,
     limit: number,
-  ): Promise<ExerciseStatsResult[]>;
+  ): Promise<QuestionStatsResult[]>;
 }
 
 export const USER_STATS_PORT = Symbol('USER_STATS_PORT');

@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:linvnix/features/assistant/data/route_match.dart';
 import 'package:linvnix/features/assistant/data/screen_context_provider.dart';
 import 'package:linvnix/features/lessons/data/lesson_providers.dart';
-import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
+import 'package:linvnix/features/lessons/domain/exercise_models.dart';
 import 'package:linvnix/features/lessons/domain/lesson_models.dart';
 
-class _StubExerciseSets extends ExerciseSetsNotifier {
-  _StubExerciseSets(super.lessonId, this._summary);
+class _StubExercises extends ExercisesNotifier {
+  _StubExercises(super.lessonId, this._summary);
 
   final LessonExerciseSummary _summary;
 
@@ -26,23 +26,23 @@ class _StubLessonDetail extends LessonDetailNotifier {
 
 void main() {
   group('exerciseHubScreenContextBuilder', () {
-    test('produces exerciseHub context with set summaries', () async {
+    test('produces exerciseHub context with exercise summaries', () async {
       const lessonId = 'lesson-1';
       const summary = LessonExerciseSummary(
-        sets: [
-          SetProgress(
-            setId: 'set-default',
+        exercises: [
+          ExerciseProgress(
+            exerciseId: 'exercise-default',
             title: 'Lesson practice',
-            totalExercises: 10,
+            totalQuestions: 10,
             attempted: 5,
             percentComplete: 50,
           ),
-          SetProgress(
-            setId: 'set-custom',
+          ExerciseProgress(
+            exerciseId: 'exercise-custom',
             title: 'Custom drill',
             isCustom: true,
             isAIGenerated: true,
-            totalExercises: 8,
+            totalQuestions: 8,
           ),
         ],
       );
@@ -57,15 +57,15 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          exerciseSetsProvider(lessonId)
-              .overrideWith(() => _StubExerciseSets(lessonId, summary)),
+          exercisesProvider(lessonId)
+              .overrideWith(() => _StubExercises(lessonId, summary)),
           lessonDetailProvider(lessonId)
               .overrideWith(() => _StubLessonDetail(lessonId, detail)),
         ],
       );
       addTearDown(container.dispose);
 
-      await container.read(exerciseSetsProvider(lessonId).future);
+      await container.read(exercisesProvider(lessonId).future);
       await container.read(lessonDetailProvider(lessonId).future);
 
       container.read(currentRouteMatchProvider.notifier).update(
@@ -82,15 +82,15 @@ void main() {
       expect(ctx.data['status'], 'data');
       expect(ctx.data['lessonId'], lessonId);
       expect(ctx.data['lessonTitle'], 'Greetings');
-      expect(ctx.data['defaultSetCount'], 1);
-      expect(ctx.data['customSetCount'], 1);
+      expect(ctx.data['defaultExerciseCount'], 1);
+      expect(ctx.data['customExerciseCount'], 1);
       expect(ctx.displayName, contains('Greetings'));
 
-      final defaultSets = ctx.data['defaultSets'] as List;
-      expect(defaultSets.first, containsPair('progressState', 'inProgress'));
+      final defaultExercises = ctx.data['defaultExercises'] as List;
+      expect(defaultExercises.first, containsPair('progressState', 'inProgress'));
 
-      final customSets = ctx.data['customSets'] as List;
-      expect(customSets.first, containsPair('isCustom', true));
+      final customExercises = ctx.data['customExercises'] as List;
+      expect(customExercises.first, containsPair('isCustom', true));
     });
   });
 }

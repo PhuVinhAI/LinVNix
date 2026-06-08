@@ -3,7 +3,7 @@ import type {
   AssessmentResult,
   AssessmentContext,
 } from '../../domain/assessment.types';
-import type { SpeakingAnswer } from '../../domain/exercise-options.types';
+import type { SpeakingAnswer } from '../../domain/question-options.types';
 import {
   normalizeVietnamese,
   stripVietnameseDiacritics,

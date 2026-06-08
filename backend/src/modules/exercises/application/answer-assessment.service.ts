@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ExerciseType } from '../../../common/enums';
-import type { ExerciseAnswer } from '../domain/exercise-options.types';
+import { QuestionType } from '../../../common/enums';
+import type { QuestionAnswer } from '../domain/question-options.types';
 import type {
   AssessmentResult,
   AssessmentContext,
@@ -16,31 +16,31 @@ import { SpeakingChecker } from './checkers/speaking.checker';
 
 @Injectable()
 export class AnswerAssessment {
-  private readonly registry: Map<ExerciseType, CheckerAdapter> = new Map<
-    ExerciseType,
+  private readonly registry: Map<QuestionType, CheckerAdapter> = new Map<
+    QuestionType,
     CheckerAdapter
   >([
-    [ExerciseType.MULTIPLE_CHOICE, new MultipleChoiceChecker()],
-    [ExerciseType.FILL_BLANK, new FillBlankChecker()],
-    [ExerciseType.MATCHING, new MatchingChecker()],
-    [ExerciseType.ORDERING, new OrderingChecker()],
-    [ExerciseType.TRANSLATION, new TranslationChecker()],
-    [ExerciseType.LISTENING, new ListeningChecker()],
-    [ExerciseType.SPEAKING, new SpeakingChecker()],
+    [QuestionType.MULTIPLE_CHOICE, new MultipleChoiceChecker()],
+    [QuestionType.FILL_BLANK, new FillBlankChecker()],
+    [QuestionType.MATCHING, new MatchingChecker()],
+    [QuestionType.ORDERING, new OrderingChecker()],
+    [QuestionType.TRANSLATION, new TranslationChecker()],
+    [QuestionType.LISTENING, new ListeningChecker()],
+    [QuestionType.SPEAKING, new SpeakingChecker()],
   ]);
 
   assessAnswer(
-    exerciseType: ExerciseType,
-    userAnswer: ExerciseAnswer,
-    correctAnswer: ExerciseAnswer,
+    questionType: QuestionType,
+    userAnswer: QuestionAnswer,
+    correctAnswer: QuestionAnswer,
     context?: AssessmentContext,
   ): AssessmentResult {
-    const checker = this.registry.get(exerciseType);
+    const checker = this.registry.get(questionType);
 
     if (!checker) {
       return {
         isCorrect: false,
-        feedback: `No checker registered for exercise type: ${exerciseType}`,
+        feedback: `No checker registered for exercise type: ${questionType}`,
       };
     }
 

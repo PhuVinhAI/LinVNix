@@ -1,54 +1,55 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Question } from './domain/question.entity';
 import { Exercise } from './domain/exercise.entity';
-import { ExerciseSet } from './domain/exercise-set.entity';
-import { ExerciseAttempt } from './domain/exercise-attempt.entity';
-import { UserExerciseResult } from './domain/user-exercise-result.entity';
-import { ExercisesService } from './application/exercises.service';
-import { ExerciseSetService } from './application/exercise-set.service';
+import { QuestionAttempt } from './domain/question-attempt.entity';
+import { UserQuestionResult } from './domain/user-question-result.entity';
+import { QuestionsService } from './application/questions.service';
+import { ExerciseService } from './application/exercise.service';
 import { ExerciseGenerationService } from './application/exercise-generation.service';
 import { ExerciseContextLoader } from './application/exercise-context-loader';
 
 import { AnswerAssessment } from './application/answer-assessment.service';
 import { AnswerNormalizer } from './application/answer-normalizer';
+import { QuestionsRepository } from './application/repositories/questions.repository';
 import { ExercisesRepository } from './application/repositories/exercises.repository';
-import { ExerciseSetsRepository } from './application/repositories/exercise-sets.repository';
-import { UserExerciseResultsRepository } from './application/repositories/user-exercise-results.repository';
-import { ExercisesController } from './presentation/exercises.controller';
-import { ExerciseSetController } from './presentation/exercise-set.controller';
+import { UserQuestionResultsRepository } from './application/repositories/user-question-results.repository';
+import { QuestionsController } from './presentation/questions.controller';
+import { ExerciseController } from './presentation/exercise.controller';
 import { ProgressModule } from '../progress/progress.module';
 import { CoursesModule } from '../courses/courses.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Question,
       Exercise,
-      ExerciseSet,
-      ExerciseAttempt,
-      UserExerciseResult,
+      QuestionAttempt,
+      UserQuestionResult,
     ]),
     forwardRef(() => ProgressModule),
     forwardRef(() => CoursesModule),
   ],
-  controllers: [ExercisesController, ExerciseSetController],
+  controllers: [QuestionsController, ExerciseController],
   providers: [
-    ExercisesService,
-    ExerciseSetService,
+    QuestionsService,
+    ExerciseService,
     ExerciseGenerationService,
     ExerciseContextLoader,
     AnswerAssessment,
     AnswerNormalizer,
+    QuestionsRepository,
     ExercisesRepository,
-    ExerciseSetsRepository,
-    UserExerciseResultsRepository,
+    UserQuestionResultsRepository,
   ],
   exports: [
-    ExercisesService,
-    ExerciseSetService,
+    QuestionsService,
+    ExerciseService,
     ExerciseGenerationService,
     ExerciseContextLoader,
+    QuestionsRepository,
     ExercisesRepository,
-    UserExerciseResultsRepository,
+    UserQuestionResultsRepository,
   ],
 })
 export class ExercisesModule {}

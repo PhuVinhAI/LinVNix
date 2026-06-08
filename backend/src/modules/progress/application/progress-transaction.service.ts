@@ -6,7 +6,7 @@ import {
 import { Brackets, DataSource, EntityManager, In } from 'typeorm';
 import { Transactional, TransactionalHost } from '../../../common/decorators';
 import { ProgressRepository } from './progress.repository';
-import { UserExerciseResultsRepository } from '../../exercises/application/repositories/user-exercise-results.repository';
+import { UserQuestionResultsRepository } from '../../exercises/application/repositories/user-question-results.repository';
 import { ProgressStatus, UserLevel } from '../../../common/enums';
 import {
   CourseProgress,
@@ -15,10 +15,10 @@ import {
   UserProgress,
 } from '../domain/learning-progress.entity';
 import { Course } from '../../courses/domain/course.entity';
+import { Question } from '../../exercises/domain/question.entity';
 import { Exercise } from '../../exercises/domain/exercise.entity';
-import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
-import { ExerciseAttempt } from '../../exercises/domain/exercise-attempt.entity';
-import { UserExerciseResult } from '../../exercises/domain/user-exercise-result.entity';
+import { QuestionAttempt } from '../../exercises/domain/question-attempt.entity';
+import { UserQuestionResult } from '../../exercises/domain/user-question-result.entity';
 
 const LEVEL_ORDER: Record<UserLevel, number> = {
   [UserLevel.A1]: 0,
@@ -43,7 +43,7 @@ export class ProgressTransactionService implements TransactionalHost {
   constructor(
     readonly dataSource: DataSource,
     private readonly progressRepository: ProgressRepository,
-    private readonly exerciseResultsRepository: UserExerciseResultsRepository,
+    private readonly questionResultsRepository: UserQuestionResultsRepository,
   ) {}
 
   private getManager(): EntityManager {
@@ -118,25 +118,25 @@ export class ProgressTransactionService implements TransactionalHost {
     scope: { lessonIds?: string[]; moduleIds?: string[]; courseId?: string },
   ): Promise<string[]> {
     const qb = manager
-      .getRepository(Exercise)
-      .createQueryBuilder('exercise')
-      .innerJoin(ExerciseSet, 'set', 'set.id = exercise.set_id')
+      .getRepository(Question)
+      .createQueryBuilder('question')
+      .innerJoin(Exercise, 'exercise', 'exercise.id = question.exercise_id')
       .select('exercise.id', 'id')
       .where('exercise.deleted_at IS NULL')
-      .andWhere('set.deleted_at IS NULL')
+      .andWhere('exercise.deleted_at IS NULL')
       .andWhere(
         new Brackets((scopeQb) => {
           let hasScope = false;
 
           if (scope.lessonIds?.length) {
-            scopeQb.where('set.lesson_id IN (:...lessonIds)', {
+            scopeQb.where('exercise.lesson_id IN (:...lessonIds)', {
               lessonIds: scope.lessonIds,
             });
             hasScope = true;
           }
 
           if (scope.moduleIds?.length) {
-            const clause = 'set.module_id IN (:...moduleIds)';
+            const clause = 'exercise.module_id IN (:...moduleIds)';
             if (hasScope) {
               scopeQb.orWhere(clause, { moduleIds: scope.moduleIds });
             } else {
@@ -146,7 +146,7 @@ export class ProgressTransactionService implements TransactionalHost {
           }
 
           if (scope.courseId) {
-            const clause = 'set.course_id = :courseId';
+            const clause = 'exercise.course_id = :courseId';
             if (hasScope) {
               scopeQb.orWhere(clause, { courseId: scope.courseId });
             } else {
@@ -158,8 +158,8 @@ export class ProgressTransactionService implements TransactionalHost {
       .andWhere(
         new Brackets((ownerQb) => {
           ownerQb
-            .where('set.is_custom = false')
-            .orWhere('set.owner_user_id = :userId', { userId });
+            .where('exercise.is_custom = false')
+            .orWhere('exercise.owner_user_id = :userId', { userId });
         }),
       );
 
@@ -171,8 +171,8 @@ export class ProgressTransactionService implements TransactionalHost {
   async completeLessonWithTransaction(
     userId: string,
     lessonId: string,
-    exerciseResults: Array<{
-      exerciseId: string;
+    questionResults: Array<{
+      questionId: string;
       score: number;
       isCorrect: boolean;
     }>,
@@ -187,8 +187,8 @@ export class ProgressTransactionService implements TransactionalHost {
       throw new Error('Progress not found');
     }
 
-    const totalScore = exerciseResults.reduce((sum, r) => sum + r.score, 0);
-    const avgScore = totalScore / exerciseResults.length;
+    const totalScore = questionResults.reduce((sum, r) => sum + r.score, 0);
+    const avgScore = totalScore / questionResults.length;
 
     progress.status = ProgressStatus.COMPLETED;
     progress.score = avgScore;
@@ -197,11 +197,11 @@ export class ProgressTransactionService implements TransactionalHost {
 
     await manager.save(UserProgress, progress);
 
-    for (const result of exerciseResults) {
-      await this.exerciseResultsRepository.upsertResult(
+    for (const result of questionResults) {
+      await this.questionResultsRepository.upsertResult(
         manager,
         userId,
-        result.exerciseId,
+        result.questionId,
         result.score,
         result.isCorrect,
       );
@@ -362,33 +362,33 @@ export class ProgressTransactionService implements TransactionalHost {
         unitType: LearningUnitType.LESSON,
       });
 
-      const exerciseIds = await this.findExerciseIdsForSetScope(
+      const questionIds = await this.findExerciseIdsForSetScope(
         manager,
         userId,
         { lessonIds, moduleIds: [moduleId] },
       );
 
-      if (exerciseIds.length > 0) {
-        await manager.delete(ExerciseAttempt, {
+      if (questionIds.length > 0) {
+        await manager.delete(QuestionAttempt, {
           userId,
-          exerciseId: In(exerciseIds),
+          questionId: In(questionIds),
         });
-        await manager.delete(UserExerciseResult, {
+        await manager.delete(UserQuestionResult, {
           userId,
-          exerciseId: In(exerciseIds),
+          questionId: In(questionIds),
         });
       }
     }
 
     await manager.update(
-      ExerciseSet,
+      Exercise,
       { isCustom: true, ownerUserId: userId, moduleId },
       { deletedAt: new Date() as any },
     );
 
     if (lessonIds.length > 0) {
       await manager.update(
-        ExerciseSet,
+        Exercise,
         { isCustom: true, ownerUserId: userId, lessonId: In(lessonIds) },
         { deletedAt: new Date() as any },
       );
@@ -435,33 +435,33 @@ export class ProgressTransactionService implements TransactionalHost {
         unitType: LearningUnitType.LESSON,
       });
 
-      const exerciseIds = await this.findExerciseIdsForSetScope(
+      const questionIds = await this.findExerciseIdsForSetScope(
         manager,
         userId,
         { lessonIds, moduleIds, courseId },
       );
 
-      if (exerciseIds.length > 0) {
-        await manager.delete(ExerciseAttempt, {
+      if (questionIds.length > 0) {
+        await manager.delete(QuestionAttempt, {
           userId,
-          exerciseId: In(exerciseIds),
+          questionId: In(questionIds),
         });
-        await manager.delete(UserExerciseResult, {
+        await manager.delete(UserQuestionResult, {
           userId,
-          exerciseId: In(exerciseIds),
+          questionId: In(questionIds),
         });
       }
     }
 
     await manager.update(
-      ExerciseSet,
+      Exercise,
       { isCustom: true, ownerUserId: userId, courseId },
       { deletedAt: new Date() as any },
     );
 
     if (moduleIds.length > 0) {
       await manager.update(
-        ExerciseSet,
+        Exercise,
         { isCustom: true, ownerUserId: userId, moduleId: In(moduleIds) },
         { deletedAt: new Date() as any },
       );
@@ -469,7 +469,7 @@ export class ProgressTransactionService implements TransactionalHost {
 
     if (lessonIds.length > 0) {
       await manager.update(
-        ExerciseSet,
+        Exercise,
         { isCustom: true, ownerUserId: userId, lessonId: In(lessonIds) },
         { deletedAt: new Date() as any },
       );

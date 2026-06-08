@@ -287,19 +287,19 @@ class GrammarExample {
 class ExerciseStub {
   const ExerciseStub({
     required this.id,
-    required this.exerciseType,
+    required this.questionType,
     this.question,
   });
 
   factory ExerciseStub.fromJson(Map<String, dynamic> json) {
     return ExerciseStub(
       id: json['id'] as String,
-      exerciseType: json['exerciseType'] as String,
+      questionType: json['questionType'] as String,
       question: json['question'] as String?,
     );
   }
 
   final String id;
-  final String exerciseType;
+  final String questionType;
   final String? question;
 }

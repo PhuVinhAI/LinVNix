@@ -184,7 +184,7 @@ class _Header extends ConsumerWidget {
     return switch (name) {
       'Bookmarks' => s.bookmarksTitle,
       'Saved Words' => s.savedWordsTitle,
-      'Exercise' => s.exercisePlayTitle,
+      'Question' => s.exercisePlayTitle,
       'Practice' => s.practiceSection,
       'Lesson' => s.lessonTitle,
       'Module' => s.moduleDetailTitle,

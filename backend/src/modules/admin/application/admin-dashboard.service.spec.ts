@@ -3,12 +3,12 @@ import { AdminDashboardService } from './admin-dashboard.service';
 import {
   UserStatsPort,
   CourseStatsPort,
-  ExerciseStatsPort,
+  QuestionStatsPort,
   USER_STATS_PORT,
   COURSE_STATS_PORT,
   EXERCISE_STATS_PORT,
   CourseStatsResult,
-  ExerciseStatsResult,
+  QuestionStatsResult,
 } from './ports/dashboard-stats.ports';
 
 class InMemoryUserStatsPort implements UserStatsPort {
@@ -44,18 +44,18 @@ class InMemoryCourseStatsPort implements CourseStatsPort {
   }
 }
 
-class InMemoryExerciseStatsPort implements ExerciseStatsPort {
-  private exercises: ExerciseStatsResult[] = [];
+class InMemoryQuestionStatsPort implements QuestionStatsPort {
+  private questions: QuestionStatsResult[] = [];
 
-  setExercises(exercises: ExerciseStatsResult[]) {
-    this.exercises = exercises;
+  setQuestions(questions: QuestionStatsResult[]) {
+    this.questions = questions;
   }
 
-  getExercisesWithHighestErrorRate(
+  getQuestionsWithHighestErrorRate(
     _minAttempts: number,
     limit: number,
-  ): Promise<ExerciseStatsResult[]> {
-    return Promise.resolve(this.exercises.slice(0, limit));
+  ): Promise<QuestionStatsResult[]> {
+    return Promise.resolve(this.questions.slice(0, limit));
   }
 }
 
@@ -63,12 +63,12 @@ describe('AdminDashboardService', () => {
   let service: AdminDashboardService;
   let userStatsPort: InMemoryUserStatsPort;
   let courseStatsPort: InMemoryCourseStatsPort;
-  let exerciseStatsPort: InMemoryExerciseStatsPort;
+  let exerciseStatsPort: InMemoryQuestionStatsPort;
 
   beforeEach(async () => {
     userStatsPort = new InMemoryUserStatsPort();
     courseStatsPort = new InMemoryCourseStatsPort();
-    exerciseStatsPort = new InMemoryExerciseStatsPort();
+    exerciseStatsPort = new InMemoryQuestionStatsPort();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -105,10 +105,10 @@ describe('AdminDashboardService', () => {
     expect(result.topCourses[0].userCount).toBe(80);
   });
 
-  it('returns exercises with highest error rate from ExerciseStatsPort', async () => {
-    exerciseStatsPort.setExercises([
+  it('returns exercises with highest error rate from QuestionStatsPort', async () => {
+    exerciseStatsPort.setQuestions([
       {
-        exerciseId: 'e1',
+        questionId: 'e1',
         question: 'Translate: Hello',
         type: 'TRANSLATION',
         totalAttempts: 120,
@@ -120,7 +120,7 @@ describe('AdminDashboardService', () => {
     const result = await service.getDashboardStats();
 
     expect(result.exercisesWithHighestErrors).toHaveLength(1);
-    expect(result.exercisesWithHighestErrors[0].exerciseId).toBe('e1');
+    expect(result.exercisesWithHighestErrors[0].questionId).toBe('e1');
     expect(result.exercisesWithHighestErrors[0].errorRate).toBe('70.83%');
   });
 
@@ -139,9 +139,9 @@ describe('AdminDashboardService', () => {
     courseStatsPort.setTopCourses([
       { courseId: 'c1', courseTitle: 'Course 1', userCount: 10 },
     ]);
-    exerciseStatsPort.setExercises([
+    exerciseStatsPort.setQuestions([
       {
-        exerciseId: 'e1',
+        questionId: 'e1',
         question: 'Q1',
         type: 'MULTIPLE_CHOICE',
         totalAttempts: 20,

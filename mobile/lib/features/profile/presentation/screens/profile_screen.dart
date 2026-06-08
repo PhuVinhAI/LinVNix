@@ -543,7 +543,7 @@ class _StatGrid extends StatelessWidget {
             Expanded(
               child: _StatTile(
                 icon: Icons.fitness_center,
-                value: '${stats.totalExercises}',
+                value: '${stats.totalQuestions}',
                 label: S.of(context).exercisesDone,
               ),
             ),

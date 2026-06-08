@@ -3,7 +3,7 @@ import type {
   AssessmentResult,
   AssessmentContext,
 } from '../../domain/assessment.types';
-import type { FillBlankAnswer } from '../../domain/exercise-options.types';
+import type { FillBlankAnswer } from '../../domain/question-options.types';
 import {
   normalizeVietnamese,
   stripVietnameseDiacritics,

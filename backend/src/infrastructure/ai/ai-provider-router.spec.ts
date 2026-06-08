@@ -3,16 +3,25 @@ import { GenaiProvider } from '../genai/genai-provider';
 import { OpenaiProvider } from '../openai/openai.provider';
 import { ConfigService } from '@nestjs/config';
 
+const emptyGeneration = {
+  temperature: undefined,
+  topP: undefined,
+  topK: undefined,
+  maxTokens: undefined,
+  reasoningEffort: undefined,
+};
+
 function makeRouter(
   featureConfigs: Record<string, Partial<Record<string, any>>> = {},
 ): AiProviderRouter {
   const defaults = {
-    exercise: {
+    question: {
       provider: 'genai',
       baseUrl: '',
       apiKeys: [],
       model: '',
       fallbackModel: '',
+      generation: emptyGeneration,
     },
     simulation: {
       provider: 'genai',
@@ -20,6 +29,7 @@ function makeRouter(
       apiKeys: [],
       model: '',
       fallbackModel: '',
+      generation: emptyGeneration,
     },
     assistant: {
       provider: 'genai',
@@ -27,10 +37,19 @@ function makeRouter(
       apiKeys: [],
       model: '',
       fallbackModel: '',
+      generation: emptyGeneration,
+    },
+    imageAnalysis: {
+      provider: 'genai',
+      baseUrl: '',
+      apiKeys: [],
+      model: '',
+      fallbackModel: '',
+      generation: emptyGeneration,
     },
   };
   const merged = {
-    exercise: { ...defaults.exercise, ...(featureConfigs['exercise'] ?? {}) },
+    question: { ...defaults.question, ...(featureConfigs['question'] ?? {}) },
     simulation: {
       ...defaults.simulation,
       ...(featureConfigs['simulation'] ?? {}),
@@ -39,13 +58,18 @@ function makeRouter(
       ...defaults.assistant,
       ...(featureConfigs['assistant'] ?? {}),
     },
+    imageAnalysis: {
+      ...defaults.imageAnalysis,
+      ...(featureConfigs['imageAnalysis'] ?? {}),
+    },
   };
 
   const configService = {
     get: jest.fn((key: string) => {
-      if (key === 'aiRouter.exercise') return merged.exercise;
+      if (key === 'aiRouter.question') return merged.question;
       if (key === 'aiRouter.simulation') return merged.simulation;
       if (key === 'aiRouter.assistant') return merged.assistant;
+      if (key === 'aiRouter.imageAnalysis') return merged.imageAnalysis;
       return undefined;
     }),
   } as unknown as ConfigService;
@@ -61,7 +85,7 @@ describe('AiProviderRouter', () => {
       const genai = (router as any).genaiProvider as GenaiProvider;
 
       router.onModuleInit();
-      const provider = router.forFeature('exercise');
+      const provider = router.forFeature('question');
 
       expect(provider).toBe(genai);
     });
@@ -70,35 +94,37 @@ describe('AiProviderRouter', () => {
   describe('forFeature - openai provider', () => {
     it('returns OpenaiProvider instance when provider=openai with valid config', () => {
       const router = makeRouter({
-        exercise: {
+        question: {
           provider: 'openai',
           baseUrl: 'https://openrouter.ai/api/v1',
           apiKeys: ['sk-key1'],
           model: 'claude-3-haiku',
           fallbackModel: '',
+          generation: emptyGeneration,
         },
       });
 
       router.onModuleInit();
-      const provider = router.forFeature('exercise');
+      const provider = router.forFeature('question');
 
       expect(provider).toBeInstanceOf(OpenaiProvider);
     });
 
     it('caches provider — two calls return same instance', () => {
       const router = makeRouter({
-        exercise: {
+        question: {
           provider: 'openai',
           baseUrl: 'https://openrouter.ai/api/v1',
           apiKeys: ['sk-key1'],
           model: 'claude-3-haiku',
           fallbackModel: '',
+          generation: emptyGeneration,
         },
       });
 
       router.onModuleInit();
-      const first = router.forFeature('exercise');
-      const second = router.forFeature('exercise');
+      const first = router.forFeature('question');
+      const second = router.forFeature('question');
 
       expect(first).toBe(second);
     });
@@ -110,14 +136,15 @@ describe('AiProviderRouter', () => {
         apiKeys: ['sk-key1'],
         model: 'claude-3-haiku',
         fallbackModel: '',
+        generation: emptyGeneration,
       };
       const router = makeRouter({
-        exercise: openaiConfig,
+        question: openaiConfig,
         simulation: openaiConfig,
       });
 
       router.onModuleInit();
-      const exerciseProvider = router.forFeature('exercise');
+      const exerciseProvider = router.forFeature('question');
       const simulationProvider = router.forFeature('simulation');
 
       expect(exerciseProvider).not.toBe(simulationProvider);
@@ -129,7 +156,7 @@ describe('AiProviderRouter', () => {
   describe('startup validation', () => {
     it('throws when provider=openai but BASE_URL is missing', () => {
       const router = makeRouter({
-        exercise: {
+        question: {
           provider: 'openai',
           baseUrl: '',
           apiKeys: ['sk-key1'],
@@ -139,13 +166,13 @@ describe('AiProviderRouter', () => {
       });
 
       expect(() => router.onModuleInit()).toThrow(
-        /AI_EXERCISE_PROVIDER=openai requires/,
+        /AI_QUESTION_PROVIDER=openai requires/,
       );
     });
 
     it('throws when provider=openai but API_KEYS is empty', () => {
       const router = makeRouter({
-        exercise: {
+        question: {
           provider: 'openai',
           baseUrl: 'https://openrouter.ai/api/v1',
           apiKeys: [],
@@ -155,7 +182,7 @@ describe('AiProviderRouter', () => {
       });
 
       expect(() => router.onModuleInit()).toThrow(
-        /AI_EXERCISE_PROVIDER=openai requires/,
+        /AI_QUESTION_PROVIDER=openai requires/,
       );
     });
 

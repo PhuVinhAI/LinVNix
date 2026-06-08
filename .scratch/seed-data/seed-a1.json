@@ -16,14 +16,14 @@
               "__uuid": "lesson-a1-001-001",
               "description": "Các cách chào phổ biến trong tiếng Việt: xin chào, cảm ơn, tạm biệt, xin lỗi, xin mời và chào theo buổi.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Thank you",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -46,7 +46,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -85,7 +85,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -118,7 +118,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -140,7 +140,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -161,7 +161,7 @@
                     "type": "speaking"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "speaking",
+                  "question_type": "speaking",
                   "explanation": "Cụm từ cần nói là \"xin chào\".",
                   "options": {
                     "promptText": "xin chào",
@@ -531,14 +531,14 @@
               "__uuid": "lesson-a1-001-001-listen",
               "description": "Luyện nghe hiểu qua hội thoại chào hỏi và giới thiệu — ôn lại từ vựng bài \"Từ vựng chào hỏi cơ bản\".",
               "estimated_duration": 15,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "transcript": "bạn",
                     "type": "listening"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "listening",
+                  "question_type": "listening",
                   "explanation": "Lan nói: 'Chào bạn! Tôi là Lan.'",
                   "options": {
                     "audioUrl": "/uploads/audio/seed/a1/lesson-001/greeting-dialogue.mp3",
@@ -561,7 +561,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Lan nói: 'Rất vui được gặp bạn.'",
                   "options": {
                     "choices": [
@@ -582,7 +582,7 @@
                     "type": "listening"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "listening",
+                  "question_type": "listening",
                   "explanation": "Nam đáp: 'Cảm ơn! Tôi cũng rất vui.'",
                   "options": {
                     "audioUrl": "/uploads/audio/seed/a1/lesson-001/greeting-dialogue.mp3",
@@ -725,7 +725,7 @@
               "__uuid": "lesson-a1-001-002",
               "description": "Cấu trúc câu cơ bản tiếng Việt theo thứ tự Chủ-Động-Từ (SVO). Giới thiệu các đại từ nhân xưng phổ biến: tôi, bạn, anh, chị, em.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -736,7 +736,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -756,7 +756,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -779,7 +779,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -801,7 +801,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -823,7 +823,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -846,7 +846,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -1213,14 +1213,14 @@
               "__uuid": "lesson-a1-001-003",
               "description": "Giới thiệu hệ thống thanh điệu tiếng Việt (6 thanh), cách phát âm các âm đầu khó với người nói tiếng Anh, và các nguyên âm đặc trưng.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "6",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1258,7 +1258,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -1291,7 +1291,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1314,7 +1314,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -1468,14 +1468,14 @@
               "__uuid": "lesson-a1-001-004",
               "description": "Tìm hiểu các cách chào hỏi đặc thù văn hóa Việt Nam: chào theo tuổi tác, xưng hô phù hợp, và các quy tắc lịch sự khi giao tiếp.",
               "estimated_duration": 20,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Ông",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1496,7 +1496,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1517,7 +1517,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -1651,7 +1651,7 @@
               "__uuid": "lesson-a1-002-001",
               "description": "Học các số cơ bản trong tiếng Việt: một, hai, ba, bốn, năm, sáu, bảy, tám, chín, mười và các số lớn hơn.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -1675,7 +1675,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -1708,7 +1708,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1729,7 +1729,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -1753,7 +1753,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -1775,7 +1775,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2173,7 +2173,7 @@
               "__uuid": "lesson-a1-002-002",
               "description": "Học cách dùng lượng từ (một, hai, nhiều, ít) với danh từ và phân loại từ. Cách hỏi số lượng bằng bao nhiêu và mấy.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -2182,7 +2182,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -2204,7 +2204,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2225,7 +2225,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -2251,7 +2251,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -2271,7 +2271,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2626,7 +2626,7 @@
               "__uuid": "lesson-a1-002-003",
               "description": "Luyện tập nhận diện và phát âm sáu thanh điệu thông qua từ vựng số đếm và thời gian.",
               "estimated_duration": 20,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -2650,7 +2650,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -2683,7 +2683,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2706,7 +2706,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -2879,7 +2879,7 @@
               "__uuid": "lesson-a1-003-001",
               "description": "Các thành viên trong gia đình: bố/mẹ, anh/chị/em, ông/bà, chú/cô/dì/cậu và cách gọi khác nhau theo miền.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -2903,7 +2903,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -2936,7 +2936,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2959,7 +2959,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -2981,7 +2981,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -3003,7 +3003,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3417,14 +3417,14 @@
               "__uuid": "lesson-a1-003-002",
               "description": "Học cách dùng từ gọi người nhà làm đại từ nhân xưng. Quy tắc xưng hô theo tuổi tác và bậc trong gia đình mở rộng.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "con",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3447,7 +3447,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -3474,7 +3474,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -3495,7 +3495,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -3520,7 +3520,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -3716,14 +3716,14 @@
               "__uuid": "lesson-a1-003-003",
               "description": "Tìm hiểu cấu trúc gia đình truyền thống Việt Nam, vai trò của ông bà, và ý nghĩa của từ nội và ngoại.",
               "estimated_duration": 20,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Cha của bố",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3761,7 +3761,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -3794,7 +3794,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -3927,7 +3927,7 @@
               "__uuid": "lesson-a1-004-001",
               "description": "Các món ăn và đồ uống phổ biến: cơm, phở, bún, nước, trà, cà phê, bánh mì, thịt, cá, rau và cách gọi theo miền.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -3951,7 +3951,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -3984,7 +3984,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4005,7 +4005,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -4029,7 +4029,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4051,7 +4051,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4465,7 +4465,7 @@
               "__uuid": "lesson-a1-004-002",
               "description": "Học cách nói thích và không thích, và cách dùng đã (quá khứ), sẽ (tương lai), đang (tiếp diễn).",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -4474,7 +4474,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4498,7 +4498,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4522,7 +4522,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4544,7 +4544,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -4566,7 +4566,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4592,7 +4592,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -4914,14 +4914,14 @@
               "__uuid": "lesson-a1-004-003",
               "description": "Luyện hội thoại đặt món, hỏi giá, và thanh toán trong nhà hàng Việt Nam.",
               "estimated_duration": 20,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "translation": "Cho tôi một bát phở",
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -4943,7 +4943,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4968,7 +4968,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -4990,7 +4990,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -5255,7 +5255,7 @@
               "__uuid": "lesson-a1-005-001",
               "description": "Học từ vựng về phương tiện, địa điểm, hướng đi và cách hỏi đường cơ bản.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -5279,7 +5279,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -5312,7 +5312,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -5333,7 +5333,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -5357,7 +5357,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -5383,7 +5383,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -5801,14 +5801,14 @@
               "__uuid": "lesson-a1-005-002",
               "description": "Học cấu trúc đi + từ + A + đến + B, cách hỏi đường, và các mẫu câu chỉ hướng đi.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "translation": "Chợ ở đâu?",
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -5833,7 +5833,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -5861,7 +5861,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -5882,7 +5882,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -5903,7 +5903,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -6220,14 +6220,14 @@
               "__uuid": "lesson-a1-005-003",
               "description": "Luyện nghe hiểu các hội thoại về hỏi đường và đi lại trong tình huống thực tế.",
               "estimated_duration": 20,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Bệnh viện",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -6248,7 +6248,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -6271,7 +6271,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -6293,7 +6293,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -6315,7 +6315,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 1,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [

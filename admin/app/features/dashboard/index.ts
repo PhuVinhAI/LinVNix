@@ -2,7 +2,7 @@ export { dashboardRepository, DashboardRepository } from './api/dashboard.reposi
 export type {
   DashboardStats,
   TopCourse,
-  HighErrorExercise,
+  HighErrorQuestion,
   IDashboardRepository,
   DashboardOverview,
   OverviewKpis,
@@ -10,7 +10,7 @@ export type {
   OverviewDistributions,
   LevelBucket,
   RoleBucket,
-  ExerciseTypeBucket,
+  QuestionTypeBucket,
   SimulationStatusBucket,
   TopStreakRow,
   RecentUserRow,

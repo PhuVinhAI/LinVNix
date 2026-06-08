@@ -443,11 +443,11 @@ class SEn extends S {
   String get createCustomPractice => 'Create Custom Practice';
 
   @override
-  String get createCustomSet => 'Create custom set';
+  String get createCustomExercise => 'Create custom exercise';
 
   @override
-  String get createCustomSetPrompt =>
-      'Create a custom set to start practicing!';
+  String get createCustomExercisePrompt =>
+      'Create a custom exercise to start practicing!';
 
   @override
   String get currentLevelLabel => 'Current level';
@@ -472,11 +472,11 @@ class SEn extends S {
   String get deleteConversation => 'Delete conversation';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      'This set will be removed from your list. You can create a new one anytime.';
+  String get deleteCustomPracticeExerciseWarning =>
+      'This exercise will be removed from your list. You can create a new one anytime.';
 
   @override
-  String get deleteCustomSetQuestion => 'Delete custom set?';
+  String get deleteCustomExerciseQuestion => 'Delete custom exercise?';
 
   @override
   String get deleteData => 'Delete data';
@@ -497,7 +497,7 @@ class SEn extends S {
       'This message and all messages after it will be deleted. Are you sure?';
 
   @override
-  String get deleteSet => 'Delete set';
+  String get deleteExercise => 'Delete exercise';
 
   @override
   String get developerSection => 'Developer';
@@ -580,10 +580,13 @@ class SEn extends S {
   String get exerciseComplete => 'Exercise Complete!';
 
   @override
-  String get exercisePlayTitle => 'Exercise';
+  String get exercisePlayTitle => 'Question';
 
   @override
   String get exercisesDone => 'Exercises Done';
+
+  @override
+  String get questionsTitle => 'Questions';
 
   @override
   String get exercisesTitle => 'Exercises';
@@ -830,8 +833,8 @@ class SEn extends S {
   String get noCoursesAvailableIcon => 'No courses available icon';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      'No custom practice sets yet. Create one to review what you\'ve learned.';
+  String get noCustomExercisesYet =>
+      'No custom exercises yet. Create one to review what you\'ve learned.';
 
   @override
   String get noExercisesYet => 'No exercises yet';
@@ -1007,14 +1010,14 @@ class SEn extends S {
 
   @override
   String get resetCourseProgressWarning =>
-      'Reset all progress? This cannot be undone. All lesson progress, exercise results, and custom practice sets will be removed.';
+      'Reset all progress? This cannot be undone. All lesson progress, question results, and custom exercises will be removed.';
 
   @override
   String get resetLabel => 'Reset';
 
   @override
   String get resetModuleProgressWarning =>
-      'Reset all progress? This cannot be undone. All lesson progress, exercise results, and custom practice sets in this module will be removed.';
+      'Reset all progress? This cannot be undone. All lesson progress, question results, and custom exercises in this module will be removed.';
 
   @override
   String get resetPasswordButton => 'Reset Password';
@@ -1572,7 +1575,7 @@ class SEn extends S {
   String get creatingStatus => 'Creating...';
 
   @override
-  String get createExercisesButton => 'Create exercises';
+  String get createQuestionsButton => 'Create exercises';
 
   @override
   String get feedbackTitle => 'Feedback';
@@ -1592,7 +1595,7 @@ class SEn extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'This will create a new set replacing \"$title\" with fresh AI-generated questions.';
+    return 'This will create a new exercise replacing \"$title\" with fresh AI-generated questions.';
   }
 
   @override
@@ -1689,7 +1692,7 @@ class SEn extends S {
   }
 
   @override
-  String get exerciseTypesLabel => 'Exercise types';
+  String get questionTypesLabel => 'Exercise types';
 
   @override
   String get focusLabel => 'Focus';
@@ -1894,7 +1897,7 @@ class SEn extends S {
   String get assistantPracticePlaceholder => 'Ask about practice?';
 
   @override
-  String get assistantExerciseTitle => 'Exercise';
+  String get assistantExerciseTitle => 'Question';
 
   @override
   String get assistantExercisePlaceholder => 'Need a hint?';

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus, Trash2, Mic, Check } from 'lucide-react'
 import { InlineEditable } from '../../../components/admin/InlineEditable'
-import type { ExerciseFormProps } from './types'
+import type { QuestionFormProps } from './types'
 import { getOptionsObject } from './types'
 
 interface DraftState {
@@ -11,7 +11,7 @@ interface DraftState {
   transcriptType: 'exact' | 'keywords'
 }
 
-function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
+function initialFromProps(initial: QuestionFormProps['initial']): DraftState {
   const opts = getOptionsObject(initial)
   const correct = (initial?.correctAnswer ?? {}) as { transcript?: unknown }
   let keywords: string[] = []
@@ -29,7 +29,7 @@ function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
   }
 }
 
-export function SpeakingForm({ initial, onChange }: ExerciseFormProps) {
+export function SpeakingForm({ initial, onChange }: QuestionFormProps) {
   const [state, setState] = useState<DraftState>(() => initialFromProps(initial))
 
   useEffect(() => {

@@ -450,11 +450,11 @@ class SFr extends S {
   String get createCustomPractice => 'Créer une pratique personnalisée';
 
   @override
-  String get createCustomSet => 'Créer un ensemble personnalisé';
+  String get createCustomExercise => 'Créer un exercice personnalisé';
 
   @override
-  String get createCustomSetPrompt =>
-      'Créez un ensemble personnalisé pour commencer à vous entraîner !';
+  String get createCustomExercisePrompt =>
+      'Créez un exercice personnalisé pour commencer à vous entraîner !';
 
   @override
   String get currentLevelLabel => 'Niveau actuel';
@@ -479,11 +479,12 @@ class SFr extends S {
   String get deleteConversation => 'Supprimer la conversation';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      'Cet ensemble sera supprimé de votre liste. Vous pouvez en créer un nouveau à tout moment.';
+  String get deleteCustomPracticeExerciseWarning =>
+      'Cet exercice sera supprimé de votre liste. Vous pouvez en créer un nouveau à tout moment.';
 
   @override
-  String get deleteCustomSetQuestion => 'Supprimer l\'ensemble personnalisé ?';
+  String get deleteCustomExerciseQuestion =>
+      'Supprimer l\'exercice personnalisé ?';
 
   @override
   String get deleteData => 'Supprimer les données';
@@ -504,7 +505,7 @@ class SFr extends S {
       'Ce message et tous les messages suivants seront supprimés. Êtes-vous sûr ?';
 
   @override
-  String get deleteSet => 'Supprimer l\'ensemble';
+  String get deleteExercise => 'Supprimer l\'exercice';
 
   @override
   String get developerSection => 'Développeur';
@@ -592,6 +593,9 @@ class SFr extends S {
 
   @override
   String get exercisesDone => 'Exercices effectués';
+
+  @override
+  String get questionsTitle => 'Questions';
 
   @override
   String get exercisesTitle => 'Exercices';
@@ -840,8 +844,8 @@ class SFr extends S {
   String get noCoursesAvailableIcon => 'Icône sans cours';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      'Pas encore d\'ensembles d\'entraînement personnalisés. Créez-en un pour réviser ce que vous avez appris.';
+  String get noCustomExercisesYet =>
+      'Pas encore d\'exercices personnalisés. Créez-en un pour réviser ce que vous avez appris.';
 
   @override
   String get noExercisesYet => 'Pas encore d\'exercices';
@@ -1588,7 +1592,7 @@ class SFr extends S {
   String get creatingStatus => 'Création en cours...';
 
   @override
-  String get createExercisesButton => 'Créer des exercices';
+  String get createQuestionsButton => 'Créer des exercices';
 
   @override
   String get feedbackTitle => 'Commentaires';
@@ -1608,7 +1612,7 @@ class SFr extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'Cela créera un nouvel ensemble remplaçant \"$title\" par de nouvelles questions générées par l\'IA.';
+    return 'Cela créera un nouvel exercice remplaçant « $title » par de nouvelles questions générées par l\'IA.';
   }
 
   @override
@@ -1705,7 +1709,7 @@ class SFr extends S {
   }
 
   @override
-  String get exerciseTypesLabel => 'Types d\'exercices';
+  String get questionTypesLabel => 'Types d\'exercices';
 
   @override
   String get focusLabel => 'Concentration';

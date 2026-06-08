@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:linvnix/core/sync/sync.dart';
 import 'package:linvnix/features/lessons/data/lesson_providers.dart';
 import 'package:linvnix/features/lessons/domain/exercise_models.dart';
-import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
+import 'package:linvnix/features/lessons/domain/question_models.dart';
 
 class _TestLessonProgressNotifier extends LessonProgressNotifier {
   int fetchCallCount = 0;
@@ -28,24 +28,24 @@ final _testLessonProgressProvider =
   (arg) => _TestLessonProgressNotifier(arg),
 );
 
-class _TestExerciseSetsNotifier extends ExerciseSetsNotifier {
+class _TestExercisesNotifier extends ExercisesNotifier {
   int fetchCallCount = 0;
 
-  _TestExerciseSetsNotifier(super.lessonId);
+  _TestExercisesNotifier(super.lessonId);
 
   @override
   Future<LessonExerciseSummary> build() async {
-    watchTags({'exercise-set', 'lesson-$lessonId'});
+    watchTags({'question', 'lesson-$lessonId'});
     fetchCallCount++;
     return const LessonExerciseSummary(
-      sets: [],
+      exercises: [],
     );
   }
 }
 
-final _testExerciseSetsProvider =
-    AsyncNotifierProvider.family<_TestExerciseSetsNotifier, LessonExerciseSummary, String>(
-  (arg) => _TestExerciseSetsNotifier(arg),
+final _testExercisesProvider =
+    AsyncNotifierProvider.family<_TestExercisesNotifier, LessonExerciseSummary, String>(
+  (arg) => _TestExercisesNotifier(arg),
 );
 
 class _TestLessonExercisesNotifier extends LessonExercisesNotifier {
@@ -54,8 +54,8 @@ class _TestLessonExercisesNotifier extends LessonExercisesNotifier {
   _TestLessonExercisesNotifier(super.args);
 
   @override
-  Future<List<Exercise>> build() async {
-    watchTags({'exercise', 'lesson-${args.lessonId}'});
+  Future<List<Question>> build() async {
+    watchTags({'question', 'lesson-${args.lessonId}'});
     fetchCallCount++;
     return const [];
   }
@@ -63,7 +63,7 @@ class _TestLessonExercisesNotifier extends LessonExercisesNotifier {
 
 final _testLessonExercisesProvider =
     AsyncNotifierProvider.family<_TestLessonExercisesNotifier,
-        List<Exercise>, LessonExercisesArgs>(
+        List<Question>, LessonExercisesArgs>(
   (arg) => _TestLessonExercisesNotifier(arg),
 );
 
@@ -181,22 +181,22 @@ void main() {
     });
   });
 
-  group('ExerciseSetsNotifier', () {
-    test('subscribes to DataChangeBus tag exercise-set and auto-refetches',
+  group('ExercisesNotifier', () {
+    test('subscribes to DataChangeBus tag exercise and auto-refetches',
         () async {
       final container = ProviderContainer();
       final notifier = container.read(
-        _testExerciseSetsProvider('lesson-1').notifier,
+        _testExercisesProvider('lesson-1').notifier,
       );
 
-      await container.read(_testExerciseSetsProvider('lesson-1').future);
+      await container.read(_testExercisesProvider('lesson-1').future);
       expect(notifier.fetchCallCount, 1);
 
-      container.read(dataChangeBusProvider.notifier).emit({'exercise-set'});
+      container.read(dataChangeBusProvider.notifier).emit({'question'});
       await Future.delayed(Duration.zero);
 
       final secondRead = await container.read(
-        _testExerciseSetsProvider('lesson-1').future,
+        _testExercisesProvider('lesson-1').future,
       );
       expect(secondRead, isNotNull);
       expect(notifier.fetchCallCount, 2);
@@ -206,10 +206,10 @@ void main() {
         () async {
       final container = ProviderContainer();
       final notifier = container.read(
-        _testExerciseSetsProvider('lesson-1').notifier,
+        _testExercisesProvider('lesson-1').notifier,
       );
 
-      await container.read(_testExerciseSetsProvider('lesson-1').future);
+      await container.read(_testExercisesProvider('lesson-1').future);
       expect(notifier.fetchCallCount, 1);
 
       container
@@ -218,7 +218,7 @@ void main() {
       await Future.delayed(Duration.zero);
 
       final secondRead = await container.read(
-        _testExerciseSetsProvider('lesson-1').future,
+        _testExercisesProvider('lesson-1').future,
       );
       expect(secondRead, isNotNull);
       expect(notifier.fetchCallCount, 2);
@@ -227,17 +227,17 @@ void main() {
     test('non-matching DataChangeBus tag does not trigger refetch', () async {
       final container = ProviderContainer();
       final notifier = container.read(
-        _testExerciseSetsProvider('lesson-1').notifier,
+        _testExercisesProvider('lesson-1').notifier,
       );
 
-      await container.read(_testExerciseSetsProvider('lesson-1').future);
+      await container.read(_testExercisesProvider('lesson-1').future);
       expect(notifier.fetchCallCount, 1);
 
       container.read(dataChangeBusProvider.notifier).emit({'lesson-other'});
       await Future.delayed(Duration.zero);
 
       final secondRead = await container.read(
-        _testExerciseSetsProvider('lesson-1').future,
+        _testExercisesProvider('lesson-1').future,
       );
       expect(secondRead, isNotNull);
       expect(notifier.fetchCallCount, 1);
@@ -250,7 +250,7 @@ void main() {
       final container = ProviderContainer();
       final args = LessonExercisesArgs(
         lessonId: 'lesson-1',
-        setId: 'set-1',
+        exerciseId: 'set-1',
       );
       final notifier = container.read(
         _testLessonExercisesProvider(args).notifier,
@@ -259,7 +259,7 @@ void main() {
       await container.read(_testLessonExercisesProvider(args).future);
       expect(notifier.fetchCallCount, 1);
 
-      container.read(dataChangeBusProvider.notifier).emit({'exercise'});
+      container.read(dataChangeBusProvider.notifier).emit({'question'});
       await Future.delayed(Duration.zero);
 
       final secondRead = await container.read(
@@ -274,7 +274,7 @@ void main() {
       final container = ProviderContainer();
       final args = LessonExercisesArgs(
         lessonId: 'lesson-1',
-        setId: 'set-1',
+        exerciseId: 'set-1',
       );
       final notifier = container.read(
         _testLessonExercisesProvider(args).notifier,
@@ -299,7 +299,7 @@ void main() {
       final container = ProviderContainer();
       final args = LessonExercisesArgs(
         lessonId: 'lesson-1',
-        setId: 'set-1',
+        exerciseId: 'set-1',
       );
       final notifier = container.read(
         _testLessonExercisesProvider(args).notifier,

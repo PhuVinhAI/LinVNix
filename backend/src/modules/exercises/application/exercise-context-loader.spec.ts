@@ -2,14 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { ExerciseContextLoader } from './exercise-context-loader';
-import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
+import { QuestionsRepository } from './repositories/questions.repository';
 
 describe('ExerciseContextLoader', () => {
   let service: ExerciseContextLoader;
   let dataSource: { getRepository: jest.Mock };
-  let exerciseSetsRepo: jest.Mocked<ExerciseSetsRepository>;
   let exercisesRepo: jest.Mocked<ExercisesRepository>;
+  let questionsRepo: jest.Mocked<QuestionsRepository>;
 
   const makeLesson = (overrides: any = {}) => ({
     id: 'lesson-1',
@@ -40,19 +40,19 @@ describe('ExerciseContextLoader', () => {
 
   beforeEach(async () => {
     dataSource = { getRepository: jest.fn() };
-    exerciseSetsRepo = {
+    exercisesRepo = {
       findActiveByLessonId: jest.fn(),
     } as any;
-    exercisesRepo = {
-      findBySetId: jest.fn(),
+    questionsRepo = {
+      findByExerciseId: jest.fn(),
     } as any;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ExerciseContextLoader,
         { provide: DataSource, useValue: dataSource },
-        { provide: ExerciseSetsRepository, useValue: exerciseSetsRepo },
         { provide: ExercisesRepository, useValue: exercisesRepo },
+        { provide: QuestionsRepository, useValue: questionsRepo },
       ],
     }).compile();
 
@@ -68,7 +68,7 @@ describe('ExerciseContextLoader', () => {
 
       const lessonRepo = { findOne: jest.fn().mockResolvedValue(lesson) };
       dataSource.getRepository.mockReturnValue(lessonRepo);
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+      exercisesRepo.findActiveByLessonId.mockResolvedValue([]);
 
       const context = await service.loadLessonContext('lesson-1');
 
@@ -80,17 +80,17 @@ describe('ExerciseContextLoader', () => {
       expect(context.existingExercises).toEqual([]);
     });
 
-    it('collects existing exercises from all sets', async () => {
+    it('collects existing exercises from all exercises', async () => {
       const lesson = makeLesson();
       const lessonRepo = { findOne: jest.fn().mockResolvedValue(lesson) };
       dataSource.getRepository.mockReturnValue(lessonRepo);
 
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([
+      exercisesRepo.findActiveByLessonId.mockResolvedValue([
         { id: 'set-1' },
       ] as any);
-      exercisesRepo.findBySetId.mockResolvedValue([
+      questionsRepo.findByExerciseId.mockResolvedValue([
         {
-          exerciseType: 'multiple_choice',
+          questionType: 'multiple_choice',
           question: 'Q1',
           correctAnswer: { selectedChoice: 'A' },
         },
@@ -139,7 +139,7 @@ describe('ExerciseContextLoader', () => {
           .mockResolvedValueOnce(lesson2),
       };
       dataSource.getRepository.mockReturnValue(lessonRepo);
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+      exercisesRepo.findActiveByLessonId.mockResolvedValue([]);
 
       const context = await service.loadModuleContext(['lesson-1', 'lesson-2']);
 
@@ -176,7 +176,7 @@ describe('ExerciseContextLoader', () => {
           .mockResolvedValueOnce(lesson2),
       };
       dataSource.getRepository.mockReturnValue(lessonRepo);
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+      exercisesRepo.findActiveByLessonId.mockResolvedValue([]);
 
       const context = await service.loadModuleContext(['lesson-1', 'lesson-2']);
 
@@ -211,7 +211,7 @@ describe('ExerciseContextLoader', () => {
           .mockResolvedValueOnce(lesson2),
       };
       dataSource.getRepository.mockReturnValue(lessonRepo);
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+      exercisesRepo.findActiveByLessonId.mockResolvedValue([]);
 
       const context = await service.loadModuleContext(['lesson-1', 'lesson-2']);
 
@@ -233,7 +233,7 @@ describe('ExerciseContextLoader', () => {
           .mockResolvedValueOnce(null),
       };
       dataSource.getRepository.mockReturnValue(lessonRepo);
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+      exercisesRepo.findActiveByLessonId.mockResolvedValue([]);
 
       const context = await service.loadModuleContext([
         'lesson-1',
@@ -280,7 +280,7 @@ describe('ExerciseContextLoader', () => {
           .mockResolvedValueOnce(lesson2),
       };
       dataSource.getRepository.mockReturnValue(lessonRepo);
-      exerciseSetsRepo.findActiveByLessonId.mockResolvedValue([]);
+      exercisesRepo.findActiveByLessonId.mockResolvedValue([]);
 
       const context = await service.loadCourseContext(['lesson-1', 'lesson-2']);
 

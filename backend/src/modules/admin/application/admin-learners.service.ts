@@ -7,8 +7,8 @@ import { LearningProgress } from '../../progress/domain/learning-progress.entity
 import { DailyGoal } from '../../daily-goals/domain/daily-goal.entity';
 import { DailyGoalProgress } from '../../daily-goals/domain/daily-goal-progress.entity';
 import { DailyStreak } from '../../daily-goals/domain/daily-streak.entity';
-import { UserExerciseResult } from '../../exercises/domain/user-exercise-result.entity';
-import { ExerciseAttempt } from '../../exercises/domain/exercise-attempt.entity';
+import { UserQuestionResult } from '../../exercises/domain/user-question-result.entity';
+import { QuestionAttempt } from '../../exercises/domain/question-attempt.entity';
 import { PersonalVocabulary } from '../../personal-vocabularies/domain/personal-vocabulary.entity';
 import { Bookmark } from '../../vocabularies/domain/bookmark.entity';
 import { SimulationSession } from '../../simulations/domain/simulation-session.entity';
@@ -29,10 +29,10 @@ export class AdminLearnersService {
     private readonly dailyGoalProgressRepository: Repository<DailyGoalProgress>,
     @InjectRepository(DailyStreak)
     private readonly dailyStreaksRepository: Repository<DailyStreak>,
-    @InjectRepository(UserExerciseResult)
-    private readonly exerciseResultsRepository: Repository<UserExerciseResult>,
-    @InjectRepository(ExerciseAttempt)
-    private readonly exerciseAttemptsRepository: Repository<ExerciseAttempt>,
+    @InjectRepository(UserQuestionResult)
+    private readonly questionResultsRepository: Repository<UserQuestionResult>,
+    @InjectRepository(QuestionAttempt)
+    private readonly questionAttemptsRepository: Repository<QuestionAttempt>,
     @InjectRepository(PersonalVocabulary)
     private readonly personalVocabulariesRepository: Repository<PersonalVocabulary>,
     @InjectRepository(Bookmark)
@@ -58,7 +58,7 @@ export class AdminLearnersService {
       users.map(async (user) => {
         const [
           completedLessons,
-          exerciseResults,
+          questionResults,
           personalVocabularyCount,
           simulationCount,
         ] = await Promise.all([
@@ -69,7 +69,7 @@ export class AdminLearnersService {
               status: ProgressStatus.COMPLETED,
             },
           }),
-          this.exerciseResultsRepository.count({ where: { userId: user.id } }),
+          this.questionResultsRepository.count({ where: { userId: user.id } }),
           this.personalVocabulariesRepository.count({
             where: { userId: user.id },
           }),
@@ -82,7 +82,7 @@ export class AdminLearnersService {
           ...user.toJSON(),
           summary: {
             completedLessons,
-            exerciseResults,
+            questionResults,
             personalVocabularyCount,
             simulationCount,
           },
@@ -102,8 +102,8 @@ export class AdminLearnersService {
       dailyGoals,
       dailyProgress,
       dailyStreak,
-      exerciseResults,
-      exerciseAttempts,
+      questionResults,
+      questionAttempts,
       personalVocabularies,
       bookmarks,
       simulations,
@@ -125,15 +125,15 @@ export class AdminLearnersService {
         take: 30,
       }),
       this.dailyStreaksRepository.findOne({ where: { userId } }),
-      this.exerciseResultsRepository.find({
+      this.questionResultsRepository.find({
         where: { userId },
-        relations: ['exercise', 'exercise.exerciseSet', 'lastAttempt'],
+        relations: ['question', 'question.exercise', 'lastAttempt'],
         order: { attemptedAt: 'DESC' },
         take: 50,
       }),
-      this.exerciseAttemptsRepository.find({
+      this.questionAttemptsRepository.find({
         where: { userId },
-        relations: ['exercise'],
+        relations: ['question'],
         order: { attemptedAt: 'DESC' },
         take: 50,
       }),
@@ -162,7 +162,7 @@ export class AdminLearnersService {
       }),
     ]);
 
-    const correctResults = exerciseResults.filter((item) => item.isCorrect);
+    const correctResults = questionResults.filter((item) => item.isCorrect);
     const completedProgress = progress.filter(
       (item) => item.status === ProgressStatus.COMPLETED,
     );
@@ -236,8 +236,8 @@ export class AdminLearnersService {
       summary: {
         progressCount: progress.length,
         completedProgressCount: completedProgress.length,
-        exerciseResultsCount: exerciseResults.length,
-        correctExerciseResultsCount: correctResults.length,
+        questionResultsCount: questionResults.length,
+        correctQuestionResultsCount: correctResults.length,
         personalVocabularyCount: personalVocabularies.length,
         bookmarkCount: bookmarks.length,
         simulationCount: simulations.length,
@@ -250,8 +250,8 @@ export class AdminLearnersService {
       dailyGoals,
       dailyProgress,
       dailyStreak,
-      exerciseResults,
-      exerciseAttempts,
+      questionResults,
+      questionAttempts,
       personalVocabularies,
       bookmarks,
       simulations: simulationsWithCounts,

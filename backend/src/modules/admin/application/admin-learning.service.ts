@@ -2,16 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CoursesService } from '../../courses/application/courses.service';
 import { CourseContentService } from '../../courses/application/course-content.service';
 import { VocabulariesService } from '../../vocabularies/application/vocabularies.service';
-import { ExerciseSetService } from '../../exercises/application/exercise-set.service';
-import { ExercisesService } from '../../exercises/application/exercises.service';
+import { ExerciseService } from '../../exercises/application/exercise.service';
+import { QuestionsService } from '../../exercises/application/questions.service';
 import { CreateCourseDto } from '../../courses/dto/courses/create-course.dto';
 import { CreateModuleDto } from '../../courses/dto/modules/create-module.dto';
 import { CreateLessonDto } from '../../courses/dto/lessons/create-lesson.dto';
 import { CreateContentDto } from '../../contents/dto/create-content.dto';
 import { CreateVocabularyDto } from '../../vocabularies/dto/create-vocabulary.dto';
 import { CreateGrammarDto } from '../../grammar/dto/create-grammar.dto';
-import { CreateExerciseDto } from '../../exercises/dto/create-exercise.dto';
-import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
+import { CreateQuestionDto } from '../../exercises/dto/create-question.dto';
+import { Exercise } from '../../exercises/domain/exercise.entity';
 import { ReorderItem } from '../../../common/utils/bulk-reorder';
 
 @Injectable()
@@ -20,8 +20,8 @@ export class AdminLearningService {
     private readonly coursesService: CoursesService,
     private readonly courseContentService: CourseContentService,
     private readonly vocabulariesService: VocabulariesService,
-    private readonly exerciseSetService: ExerciseSetService,
-    private readonly exercisesService: ExercisesService,
+    private readonly exerciseService: ExerciseService,
+    private readonly questionsService: QuestionsService,
   ) {}
 
   async getCourses() {
@@ -83,12 +83,12 @@ export class AdminLearningService {
 
   async getLessonWorkspace(lessonId: string) {
     const lesson = await this.courseContentService.getLessonDetail(lessonId);
-    const [contents, vocabularies, grammarRules, exerciseSets] =
+    const [contents, vocabularies, grammarRules, exercises] =
       await Promise.all([
         this.courseContentService.getContentsByLesson(lessonId),
         this.vocabulariesService.findByLessonId(lessonId),
         this.courseContentService.getGrammarByLesson(lessonId),
-        this.exerciseSetService.findAllByLessonIdForAdmin(lessonId),
+        this.exerciseService.findAllByLessonIdForAdmin(lessonId),
       ]);
 
     return {
@@ -96,7 +96,7 @@ export class AdminLearningService {
       contents,
       vocabularies,
       grammarRules,
-      exerciseSets,
+      exercises,
     };
   }
 
@@ -148,11 +148,11 @@ export class AdminLearningService {
     return { success: true };
   }
 
-  async createExerciseSet(
+  async createExercise(
     lessonId: string,
-    dto: Pick<ExerciseSet, 'title' | 'description' | 'orderIndex'>,
+    dto: Pick<Exercise, 'title' | 'description' | 'orderIndex'>,
   ) {
-    return this.exerciseSetService.create({
+    return this.exerciseService.create({
       ...dto,
       lessonId,
       isCustom: false,
@@ -160,33 +160,33 @@ export class AdminLearningService {
     });
   }
 
-  async updateExerciseSet(id: string, dto: Partial<ExerciseSet>) {
-    return this.exerciseSetService.updateForAdmin(id, dto);
+  async updateExercise(id: string, dto: Partial<Exercise>) {
+    return this.exerciseService.updateForAdmin(id, dto);
   }
 
-  async deleteExerciseSet(id: string) {
-    await this.exerciseSetService.deleteForAdmin(id);
+  async deleteExercise(id: string) {
+    await this.exerciseService.deleteForAdmin(id);
     return { success: true };
   }
 
-  async getExerciseSetWorkspace(setId: string) {
-    const set = await this.exerciseSetService.findByIdForAdmin(setId);
+  async getExerciseWorkspace(exerciseId: string) {
+    const set = await this.exerciseService.findByIdForAdmin(exerciseId);
     if (!set) {
-      throw new NotFoundException(`ExerciseSet with ID ${setId} not found`);
+      throw new NotFoundException(`Exercise with ID ${exerciseId} not found`);
     }
     return set;
   }
 
-  async createExercise(setId: string, dto: Omit<CreateExerciseDto, 'setId'>) {
-    return this.exercisesService.create({ ...dto, setId });
+  async createQuestion(exerciseId: string, dto: Omit<CreateQuestionDto, 'exerciseId'>) {
+    return this.questionsService.create({ ...dto, exerciseId });
   }
 
-  async updateExercise(id: string, dto: Partial<CreateExerciseDto>) {
-    return this.exercisesService.update(id, dto);
+  async updateQuestion(id: string, dto: Partial<CreateQuestionDto>) {
+    return this.questionsService.update(id, dto);
   }
 
-  async deleteExercise(id: string) {
-    await this.exercisesService.delete(id);
+  async deleteQuestion(id: string) {
+    await this.questionsService.delete(id);
     return { success: true };
   }
 
@@ -205,13 +205,13 @@ export class AdminLearningService {
     return { success: true };
   }
 
-  async reorderExerciseSets(items: ReorderItem[]) {
-    await this.exerciseSetService.reorderExerciseSets(items);
+  async reorderExercises(items: ReorderItem[]) {
+    await this.exerciseService.reorderExercises(items);
     return { success: true };
   }
 
-  async reorderExercises(items: ReorderItem[]) {
-    await this.exerciseSetService.reorderExercises(items);
+  async reorderQuestions(items: ReorderItem[]) {
+    await this.exerciseService.reorderQuestions(items);
     return { success: true };
   }
 }

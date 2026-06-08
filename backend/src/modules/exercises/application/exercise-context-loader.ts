@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
+import { QuestionsRepository } from './repositories/questions.repository';
 
 export interface LessonContext {
   lessonTitle: string;
@@ -26,7 +26,7 @@ export interface LessonContext {
     examples: Array<{ vi: string; en: string }>;
   }>;
   existingExercises: Array<{
-    exerciseType: string;
+    questionType: string;
     question: string | null;
     correctAnswer: any;
   }>;
@@ -41,8 +41,8 @@ export interface MergedContext {
 export class ExerciseContextLoader {
   constructor(
     private readonly dataSource: DataSource,
-    private readonly exerciseSetsRepository: ExerciseSetsRepository,
     private readonly exercisesRepository: ExercisesRepository,
+    private readonly questionsRepository: QuestionsRepository,
   ) {}
 
   async loadLessonContext(
@@ -60,20 +60,20 @@ export class ExerciseContextLoader {
     }
 
     const existingSets = userId
-      ? await this.exerciseSetsRepository.findActiveByLessonId(lessonId, userId)
-      : await this.exerciseSetsRepository.findActiveByLessonId(lessonId);
+      ? await this.exercisesRepository.findActiveByLessonId(lessonId, userId)
+      : await this.exercisesRepository.findActiveByLessonId(lessonId);
 
     const existingExercises: Array<{
-      exerciseType: string;
+      questionType: string;
       question: string | null;
       correctAnswer: any;
     }> = [];
 
     for (const s of existingSets) {
-      const exercises = await this.exercisesRepository.findBySetId(s.id);
+      const questions = await this.questionsRepository.findByExerciseId(s.id);
       existingExercises.push(
-        ...exercises.map((e) => ({
-          exerciseType: e.exerciseType,
+        ...questions.map((e) => ({
+          questionType: e.questionType,
           question: e.question ?? null,
           correctAnswer: e.correctAnswer,
         })),

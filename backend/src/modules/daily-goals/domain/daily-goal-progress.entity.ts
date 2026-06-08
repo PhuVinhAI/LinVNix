@@ -23,7 +23,7 @@ export class DailyGoalProgress extends BaseEntity {
   date: string;
 
   @Column({ name: 'exercises_completed', default: 0 })
-  exercisesCompleted: number;
+  questionsCompleted: number;
 
   @Column({ name: 'lessons_completed', default: 0 })
   lessonsCompleted: number;

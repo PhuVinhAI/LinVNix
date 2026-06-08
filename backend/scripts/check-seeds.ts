@@ -12,7 +12,7 @@ function checkFilesConsistency() {
     lesson_content: new Set(),
     vocabulary: new Set(),
     grammar_rule: new Set(),
-    exercise: new Set()
+    question: new Set()
   };
 
   const records: Record<string, { file: string; data: any }[]> = {
@@ -22,7 +22,7 @@ function checkFilesConsistency() {
     lesson_content: [],
     vocabulary: [],
     grammar_rule: [],
-    exercise: []
+    question: []
   };
 
   for (const fileName of files) {
@@ -57,7 +57,7 @@ function checkFilesConsistency() {
             records.grammar_rule.push({ file: fileName, data: grammar });
             Object.keys(grammar).forEach(k => schemas.grammar_rule.add(k));
           }
-          for (const ex of les.exercises || []) {
+          for (const ex of les.questions || []) {
             records.exercise.push({ file: fileName, data: ex });
             Object.keys(ex).forEach(k => schemas.exercise.add(k));
           }

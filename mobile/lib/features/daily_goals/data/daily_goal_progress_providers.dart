@@ -21,7 +21,7 @@ class DailyGoalProgressNotifier extends CachedRepository<DailyGoalProgress>
 
   @override
   Future<DailyGoalProgress> build() async {
-    watchTags({'daily-goal', 'exercise', 'progress', 'simulation', 'auth'});
+    watchTags({'daily-goal', 'question', 'progress', 'simulation', 'auth'});
     return fetchFromApi();
   }
 

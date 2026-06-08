@@ -37,8 +37,8 @@ class DailyGoalsNotifier extends CachedRepository<List<DailyGoal>>
           final created = <DailyGoal>[];
           try {
             created.add(await repo.createGoal(
-              GoalType.exercises,
-              GoalType.exercises.defaultTarget,
+              GoalType.questions,
+              GoalType.questions.defaultTarget,
             ));
           } catch (_) {}
           try {

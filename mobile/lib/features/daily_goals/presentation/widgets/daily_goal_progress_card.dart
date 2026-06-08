@@ -10,7 +10,7 @@ import '../../data/daily_goal_progress_providers.dart';
 String _goalTypeLabel(BuildContext context, GoalType type) {
   final s = S.of(context);
   return switch (type) {
-    GoalType.exercises => s.exercisesTitle,
+    GoalType.questions => s.questionsTitle,
     GoalType.simulations => s.scenariosTried,
     GoalType.lessons => s.lessonsTitle,
   };

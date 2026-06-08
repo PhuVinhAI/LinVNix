@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../domain/exercise_models.dart';
-import '../../domain/exercise_set_models.dart';
+import '../../domain/question_models.dart';
 
 String _focusAreaLabel(BuildContext context, FocusArea area) {
   final s = S.of(context);
@@ -44,8 +44,8 @@ class CustomPracticeBottomSheet extends StatelessWidget {
 
   final CustomPracticeSheetMode mode;
   final String? initialUserPrompt;
-  final Future<void> Function(CustomSetConfig config)? onSubmit;
-  final SetProgress? progress;
+  final Future<void> Function(CustomExerciseConfig config)? onSubmit;
+  final ExerciseProgress? progress;
   final VoidCallback? onPlay;
   final VoidCallback? onRegenerate;
   final VoidCallback? onReset;
@@ -75,7 +75,7 @@ class _CreationForm extends StatefulWidget {
   const _CreationForm({this.initialUserPrompt, required this.onSubmit});
 
   final String? initialUserPrompt;
-  final Future<void> Function(CustomSetConfig config) onSubmit;
+  final Future<void> Function(CustomExerciseConfig config) onSubmit;
 
   @override
   State<_CreationForm> createState() => _CreationFormState();
@@ -84,19 +84,19 @@ class _CreationForm extends StatefulWidget {
 class _CreationFormState extends State<_CreationForm> {
   double _questionCount = 10;
   final Set<String> _selectedTypes = {
-    ExerciseType.multipleChoice.value,
-    ExerciseType.matching.value,
+    QuestionType.multipleChoice.value,
+    QuestionType.matching.value,
   };
   FocusArea _focusArea = FocusArea.both;
   late final TextEditingController _userPromptController;
   bool _isSubmitting = false;
 
-  static const _selectableExerciseTypes = [
-    ExerciseType.multipleChoice,
-    ExerciseType.fillBlank,
-    ExerciseType.matching,
-    ExerciseType.ordering,
-    ExerciseType.translation,
+  static const _selectableQuestionTypes = [
+    QuestionType.multipleChoice,
+    QuestionType.fillBlank,
+    QuestionType.matching,
+    QuestionType.ordering,
+    QuestionType.translation,
   ];
   static const _maxUserPromptLength = 500;
 
@@ -188,7 +188,7 @@ class _CreationFormState extends State<_CreationForm> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    S.of(context).exerciseTypesLabel,
+                    S.of(context).questionTypesLabel,
                     style: GoogleFonts.inter(
                       fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w600,
@@ -199,7 +199,7 @@ class _CreationFormState extends State<_CreationForm> {
                   Wrap(
                     spacing: AppSpacing.sm,
                     runSpacing: AppSpacing.sm,
-                    children: _selectableExerciseTypes.map((type) {
+                    children: _selectableQuestionTypes.map((type) {
                       final selected = _selectedTypes.contains(type.value);
                       return AppChip(
                         label: _typeDisplayName(type),
@@ -260,7 +260,7 @@ class _CreationFormState extends State<_CreationForm> {
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   AppButton(
-                    label: _isSubmitting ? S.of(context).creatingStatus : S.of(context).createExercisesButton,
+                    label: _isSubmitting ? S.of(context).creatingStatus : S.of(context).createQuestionsButton,
                     variant: AppButtonVariant.primary,
                     onPressed: _selectedTypes.isEmpty || _isSubmitting
                         ? null
@@ -277,24 +277,24 @@ class _CreationFormState extends State<_CreationForm> {
     );
   }
 
-  String _typeDisplayName(ExerciseType type) {
+  String _typeDisplayName(QuestionType type) {
     return switch (type) {
-      ExerciseType.multipleChoice => S.of(context).multipleChoice,
-      ExerciseType.fillBlank => S.of(context).fillInTheBlank,
-      ExerciseType.matching => S.of(context).matchingExercise,
-      ExerciseType.ordering => S.of(context).orderingExercise,
-      ExerciseType.translation => S.of(context).translationLabel,
-      ExerciseType.listening => S.of(context).listeningExercise,
-      ExerciseType.speaking => S.of(context).speakingExercise,
+      QuestionType.multipleChoice => S.of(context).multipleChoice,
+      QuestionType.fillBlank => S.of(context).fillInTheBlank,
+      QuestionType.matching => S.of(context).matchingExercise,
+      QuestionType.ordering => S.of(context).orderingExercise,
+      QuestionType.translation => S.of(context).translationLabel,
+      QuestionType.listening => S.of(context).listeningExercise,
+      QuestionType.speaking => S.of(context).speakingExercise,
     }; // audio-driven types are excluded from custom practice selection
   }
 
   Future<void> _handleSubmit() async {
     setState(() => _isSubmitting = true);
     final userPrompt = _userPromptController.text.trim();
-    final config = CustomSetConfig(
+    final config = CustomExerciseConfig(
       questionCount: _questionCount.round(),
-      exerciseTypes: _selectedTypes.toList(),
+      questionTypes: _selectedTypes.toList(),
       focusArea: _focusArea,
       userPrompt: userPrompt.isEmpty ? null : userPrompt,
     );
@@ -313,7 +313,7 @@ class _InfoView extends StatelessWidget {
     this.onCancel,
   });
 
-  final SetProgress progress;
+  final ExerciseProgress progress;
   final VoidCallback onPlay;
   final VoidCallback onRegenerate;
   final VoidCallback onReset;
@@ -460,7 +460,7 @@ class _InfoView extends StatelessWidget {
 class _ConfigSummary extends StatelessWidget {
   const _ConfigSummary({required this.progress});
 
-  final SetProgress progress;
+  final ExerciseProgress progress;
 
   @override
   Widget build(BuildContext context) {
@@ -477,7 +477,7 @@ class _ConfigSummary extends StatelessWidget {
           Icon(Icons.settings_outlined, size: 18, color: c.mutedForeground),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            '${progress.totalExercises} questions',
+            '${progress.totalQuestions} questions',
             style: GoogleFonts.inter(
               fontSize: AppTypography.bodySmall,
               color: c.mutedForeground,
@@ -509,7 +509,7 @@ class _ConfigSummary extends StatelessWidget {
 class _ProgressStats extends StatelessWidget {
   const _ProgressStats({required this.progress});
 
-  final SetProgress progress;
+  final ExerciseProgress progress;
 
   @override
   Widget build(BuildContext context) {
@@ -536,7 +536,7 @@ class _ProgressStats extends StatelessWidget {
         Expanded(
           child: _StatItem(
             label: S.of(context).completedLabel,
-            value: '${progress.attempted}/${progress.totalExercises}',
+            value: '${progress.attempted}/${progress.totalQuestions}',
             color: progress.isCompleted ? c.success : c.mutedForeground,
           ),
         ),

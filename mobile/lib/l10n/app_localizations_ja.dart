@@ -433,10 +433,10 @@ class SJa extends S {
   String get createCustomPractice => 'カスタム練習を作成';
 
   @override
-  String get createCustomSet => 'カスタムセットを作成';
+  String get createCustomExercise => 'カスタム演習を作成';
 
   @override
-  String get createCustomSetPrompt => '練習を開始するためにカスタムセットを作成しましょう！';
+  String get createCustomExercisePrompt => '練習を開始するためにカスタム演習を作成しましょう！';
 
   @override
   String get currentLevelLabel => '現在のレベル';
@@ -460,11 +460,11 @@ class SJa extends S {
   String get deleteConversation => '会話を削除';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      'この練習セットはリストから削除されます。新しいセットはいつでも作成できます。';
+  String get deleteCustomPracticeExerciseWarning =>
+      'この演習はリストから削除されます。新しい演習はいつでも作成できます。';
 
   @override
-  String get deleteCustomSetQuestion => 'カスタムセットを削除しますか？';
+  String get deleteCustomExerciseQuestion => 'カスタム演習を削除しますか？';
 
   @override
   String get deleteData => 'データを削除';
@@ -485,7 +485,7 @@ class SJa extends S {
       'このメッセージとそれ以降のすべてのメッセージが削除されます。よろしいですか？';
 
   @override
-  String get deleteSet => 'セットを削除';
+  String get deleteExercise => '演習を削除';
 
   @override
   String get developerSection => '開発者';
@@ -571,6 +571,9 @@ class SJa extends S {
 
   @override
   String get exercisesDone => '完了した練習';
+
+  @override
+  String get questionsTitle => '問題';
 
   @override
   String get exercisesTitle => '練習問題';
@@ -816,8 +819,7 @@ class SJa extends S {
   String get noCoursesAvailableIcon => 'コースなしアイコン';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      'カスタム練習セットはまだありません。学習した内容を復習するために作成してください。';
+  String get noCustomExercisesYet => 'カスタム演習はまだありません。学習した内容を復習するために作成してください。';
 
   @override
   String get noExercisesYet => '練習問題はまだありません';
@@ -1517,7 +1519,7 @@ class SJa extends S {
   String get creatingStatus => '作成中...';
 
   @override
-  String get createExercisesButton => '練習問題を作成';
+  String get createQuestionsButton => '練習問題を作成';
 
   @override
   String get feedbackTitle => 'フィードバック';
@@ -1537,7 +1539,7 @@ class SJa extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'これにより、\"$title\"を新しいAI生成の質問に置き換える新しいセットが作成されます。';
+    return 'これにより、「$title」を新しいAI生成の質問に置き換える新しい演習が作成されます。';
   }
 
   @override
@@ -1626,7 +1628,7 @@ class SJa extends S {
   }
 
   @override
-  String get exerciseTypesLabel => '練習の種類';
+  String get questionTypesLabel => '練習の種類';
 
   @override
   String get focusLabel => 'フォーカス';

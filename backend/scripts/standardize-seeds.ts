@@ -65,8 +65,8 @@ function standardizeCourse(course: any): any {
           }
 
           // Process exercises
-          if (Array.isArray(les.exercises)) {
-            les.exercises = les.exercises.map((ex: any) => {
+          if (Array.isArray(les.questions)) {
+            les.questions = les.questions.map((ex: any) => {
               return sortObjectKeys(ex);
             });
           }

@@ -1,21 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Transient UI state owned by `ExerciseHubScreen`: in-flight set generation,
-/// per-set busy spinners, and the last failed-action error banner. Lifted to
+/// Transient UI state owned by `ExerciseHubScreen`: in-flight exercise generation,
+/// per-exercise busy spinners, and the last failed-action error banner. Lifted to
 /// Riverpod so `exerciseHubScreenContextBuilder` can expose what the learner
 /// actually sees (a spinning button, a red error toast) to the assistant.
 @immutable
 class ExerciseHubViewState {
   const ExerciseHubViewState({
     this.isCreatingCustom = false,
-    this.busySetId,
+    this.busyExerciseId,
     this.busyAction,
     this.actionError,
   });
 
   final bool isCreatingCustom;
-  final String? busySetId;
+  final String? busyExerciseId;
 
   /// One of `regenerate`, `delete`, `reset`, `create`.
   final String? busyAction;
@@ -25,13 +25,13 @@ class ExerciseHubViewState {
 
   ExerciseHubViewState copyWith({
     bool? isCreatingCustom,
-    String? busySetId,
+    String? busyExerciseId,
     String? busyAction,
     String? actionError,
   }) {
     return ExerciseHubViewState(
       isCreatingCustom: isCreatingCustom ?? this.isCreatingCustom,
-      busySetId: busySetId ?? this.busySetId,
+      busyExerciseId: busyExerciseId ?? this.busyExerciseId,
       busyAction: busyAction ?? this.busyAction,
       actionError: actionError ?? this.actionError,
     );
@@ -40,7 +40,7 @@ class ExerciseHubViewState {
   ExerciseHubViewState clearBusy() {
     return ExerciseHubViewState(
       isCreatingCustom: false,
-      busySetId: null,
+      busyExerciseId: null,
       busyAction: null,
       actionError: actionError,
     );
@@ -51,13 +51,13 @@ class ExerciseHubViewState {
       identical(this, other) ||
       other is ExerciseHubViewState &&
           isCreatingCustom == other.isCreatingCustom &&
-          busySetId == other.busySetId &&
+          busyExerciseId == other.busyExerciseId &&
           busyAction == other.busyAction &&
           actionError == other.actionError;
 
   @override
   int get hashCode =>
-      Object.hash(isCreatingCustom, busySetId, busyAction, actionError);
+      Object.hash(isCreatingCustom, busyExerciseId, busyAction, actionError);
 }
 
 class ExerciseHubViewStateNotifier extends Notifier<ExerciseHubViewState> {

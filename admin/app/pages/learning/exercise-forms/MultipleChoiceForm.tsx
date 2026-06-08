@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Check, Plus, Trash2 } from 'lucide-react'
 import { InlineEditable } from '../../../components/admin/InlineEditable'
-import type { ExerciseFormProps } from './types'
+import type { QuestionFormProps } from './types'
 import { getCorrectAnswerObject, getOptionsObject } from './types'
 
 interface DraftState {
@@ -10,7 +10,7 @@ interface DraftState {
   correct: string
 }
 
-function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
+function initialFromProps(initial: QuestionFormProps['initial']): DraftState {
   const opts = getOptionsObject(initial)
   const correct = getCorrectAnswerObject(initial)
   let choices: string[] = []
@@ -27,7 +27,7 @@ function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
   }
 }
 
-export function MultipleChoiceForm({ initial, onChange }: ExerciseFormProps) {
+export function MultipleChoiceForm({ initial, onChange }: QuestionFormProps) {
   const [state, setState] = useState<DraftState>(() => initialFromProps(initial))
 
   // Re-initialize when editing a different exercise

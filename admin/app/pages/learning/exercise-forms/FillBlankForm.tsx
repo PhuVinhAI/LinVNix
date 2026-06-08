@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Plus, X, Trash2 } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover'
-import type { ExerciseFormProps } from './types'
+import type { QuestionFormProps } from './types'
 import { getOptionsObject } from './types'
 
 type Part =
@@ -46,7 +46,7 @@ function partsFromSentence(sentence: string, accepted: string[][]): Part[] {
   return parts
 }
 
-function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
+function initialFromProps(initial: QuestionFormProps['initial']): DraftState {
   const opts = getOptionsObject(initial)
   const sentence = String(opts.sentence ?? initial?.question ?? '')
   const accepted = Array.isArray(opts.acceptedAnswers)
@@ -57,7 +57,7 @@ function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
   return { parts: partsFromSentence(sentence, accepted) }
 }
 
-export function FillBlankForm({ initial, onChange }: ExerciseFormProps) {
+export function FillBlankForm({ initial, onChange }: QuestionFormProps) {
   const [state, setState] = useState<DraftState>(() => initialFromProps(initial))
   const [activeTextId, setActiveTextId] = useState<string | null>(null)
   const activeCursorRef = useRef<number | null>(null)

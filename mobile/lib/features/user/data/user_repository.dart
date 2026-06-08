@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import '../../../core/network/exception_mapper.dart';
-import '../../lessons/domain/exercise_models.dart';
+import '../../lessons/domain/question_models.dart';
 
 class UserRepository {
   UserRepository(this._dio);
@@ -43,7 +43,7 @@ class UserRepository {
   Future<Map<String, dynamic>> getMyStats() async {
     try {
       final response =
-          await _dio.get<Map<String, dynamic>>('/exercises/my-stats');
+          await _dio.get<Map<String, dynamic>>('/questions/my-stats');
       return response.data!;
     } on DioException catch (e) {
       throw mapDioException(e);
@@ -53,7 +53,7 @@ class UserRepository {
   Future<List<ExerciseSubmissionResult>> getMyResults() async {
     try {
       final response =
-          await _dio.get<List<dynamic>>('/exercises/my-results');
+          await _dio.get<List<dynamic>>('/questions/my-results');
       return (response.data as List<dynamic>)
           .map((e) =>
               ExerciseSubmissionResult.fromJson(e as Map<String, dynamic>))

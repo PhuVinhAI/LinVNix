@@ -130,7 +130,7 @@ class CustomPracticeSection extends StatelessWidget {
     this.error,
     this.onCreate,
     this.onCancelCreate,
-    this.setCards = const [],
+    this.exerciseCards = const [],
   });
 
   final bool eligible;
@@ -140,7 +140,7 @@ class CustomPracticeSection extends StatelessWidget {
   final String? error;
   final VoidCallback? onCreate;
   final VoidCallback? onCancelCreate;
-  final List<Widget> setCards;
+  final List<Widget> exerciseCards;
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +186,7 @@ class CustomPracticeSection extends StatelessWidget {
               message: lockedMessage,
             )
           else ...[
-            if (setCards.isEmpty && !isCreating) ...[
+            if (exerciseCards.isEmpty && !isCreating) ...[
               _StatusMessage(
                 icon: Icons.auto_awesome_outlined,
                 message: emptyMessage,
@@ -237,9 +237,9 @@ class CustomPracticeSection extends StatelessWidget {
               ),
             ),
           ],
-          if (setCards.isNotEmpty) ...[
+          if (exerciseCards.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.md),
-            ...setCards,
+            ...exerciseCards,
           ],
         ],
       ),

@@ -5,28 +5,28 @@ export class AddPartitioning20260331140000 implements MigrationInterface {
     // Note: PostgreSQL partitioning requires manual setup
     // This migration documents the partitioning strategy
 
-    // For user_exercise_results: Monthly partitioning
+    // For user_question_results: Monthly partitioning
     await queryRunner.query(`
-      -- Create partitioned table for user_exercise_results
-      CREATE TABLE IF NOT EXISTS user_exercise_results_partitioned (
-        LIKE user_exercise_results INCLUDING ALL
+      -- Create partitioned table for user_question_results
+      CREATE TABLE IF NOT EXISTS user_question_results_partitioned (
+        LIKE user_question_results INCLUDING ALL
       ) PARTITION BY RANGE (attempted_at);
       
       -- Create partitions for current and next 3 months
-      CREATE TABLE IF NOT EXISTS user_exercise_results_2026_03 
-        PARTITION OF user_exercise_results_partitioned
+      CREATE TABLE IF NOT EXISTS user_question_results_2026_03 
+        PARTITION OF user_question_results_partitioned
         FOR VALUES FROM ('2026-03-01') TO ('2026-04-01');
         
-      CREATE TABLE IF NOT EXISTS user_exercise_results_2026_04 
-        PARTITION OF user_exercise_results_partitioned
+      CREATE TABLE IF NOT EXISTS user_question_results_2026_04 
+        PARTITION OF user_question_results_partitioned
         FOR VALUES FROM ('2026-04-01') TO ('2026-05-01');
         
-      CREATE TABLE IF NOT EXISTS user_exercise_results_2026_05 
-        PARTITION OF user_exercise_results_partitioned
+      CREATE TABLE IF NOT EXISTS user_question_results_2026_05 
+        PARTITION OF user_question_results_partitioned
         FOR VALUES FROM ('2026-05-01') TO ('2026-06-01');
         
-      CREATE TABLE IF NOT EXISTS user_exercise_results_2026_06 
-        PARTITION OF user_exercise_results_partitioned
+      CREATE TABLE IF NOT EXISTS user_question_results_2026_06 
+        PARTITION OF user_question_results_partitioned
         FOR VALUES FROM ('2026-06-01') TO ('2026-07-01');
     `);
 
@@ -53,8 +53,8 @@ export class AddPartitioning20260331140000 implements MigrationInterface {
 
     // Create archive tables
     await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS user_exercise_results_archive (
-        LIKE user_exercise_results INCLUDING ALL
+      CREATE TABLE IF NOT EXISTS user_question_results_archive (
+        LIKE user_question_results INCLUDING ALL
       );
       
       CREATE TABLE IF NOT EXISTS user_progress_archive (
@@ -65,13 +65,13 @@ export class AddPartitioning20260331140000 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `DROP TABLE IF EXISTS user_exercise_results_archive CASCADE`,
+      `DROP TABLE IF EXISTS user_question_results_archive CASCADE`,
     );
     await queryRunner.query(
       `DROP TABLE IF EXISTS user_progress_archive CASCADE`,
     );
     await queryRunner.query(
-      `DROP TABLE IF EXISTS user_exercise_results_partitioned CASCADE`,
+      `DROP TABLE IF EXISTS user_question_results_partitioned CASCADE`,
     );
     await queryRunner.query(
       `DROP TABLE IF EXISTS user_progress_partitioned CASCADE`,

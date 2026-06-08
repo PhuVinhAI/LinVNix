@@ -80,7 +80,7 @@ export const ui = {
 		'pricing.demoF1': 'All CEFR levels (A1–C2)',
 		'pricing.demoF2': 'Unlimited AI tutor + image discovery',
 		'pricing.demoF3': 'Roleplay simulations (markets, clinics, work…)',
-		'pricing.demoF4': 'AI-generated personalised exercise sets',
+		'pricing.demoF4': 'AI-generated personalised exercises',
 		'pricing.demoF5': 'Daily goals & learning streaks',
 		'pricing.demoF6': 'All 9 native languages, 4 dialect variants',
 
@@ -202,7 +202,7 @@ export const ui = {
 		'pricing.demoF1': 'Tất cả cấp CEFR (A1–C2)',
 		'pricing.demoF2': 'Trợ lý AI + Khám phá ảnh không giới hạn',
 		'pricing.demoF3': 'Hội thoại mô phỏng (chợ, phòng khám, công sở…)',
-		'pricing.demoF4': 'Bộ bài tập tùy chỉnh do AI sinh',
+		'pricing.demoF4': 'Bài tập tùy chỉnh do AI sinh',
 		'pricing.demoF5': 'Mục tiêu ngày & Chuỗi học tập',
 		'pricing.demoF6': 'Đủ 9 ngôn ngữ mẹ đẻ, 4 biến thể phương ngữ',
 

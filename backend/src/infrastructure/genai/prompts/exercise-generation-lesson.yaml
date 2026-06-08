@@ -2,7 +2,7 @@
 # Migrated from inline buildPrompt() in ExerciseGenerationService
 # Variables: {{questionCount}}, {{label}}, {{focusAreaDescription}}, {{preferredTypes}},
 #            {{lessonTitle}}, {{lessonContext}}, {{existingExercises}}, {{userPromptSection}},
-#            {{languageMixGuidelines}}, {{exerciseTypeShapes}}
+#            {{languageMixGuidelines}}, {{questionTypeShapes}}
 
 exercise-generation-lesson:
   description: "Generate Vietnamese language exercises for lesson-level custom practice with AI-generated title and description"
@@ -22,7 +22,7 @@ exercise-generation-lesson:
     - Mix Vietnamese and English naturally per exercise type
     {{languageMixGuidelines}}
 
-    Also provide a short descriptive title (5-8 words) for this exercise set, and an optional brief description (1-2 sentences) summarizing what it covers.
+    Also provide a short descriptive title (5-8 words) for this exercise, and an optional brief description (1-2 sentences) summarizing what it covers.
 
     Exercise-type option/answer shapes (use only the types listed above):
-    {{exerciseTypeShapes}}
+    {{questionTypeShapes}}

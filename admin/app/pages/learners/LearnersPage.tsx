@@ -173,7 +173,7 @@ export function LearnersPage() {
                   <Stat
                     icon={ClipboardCheck}
                     label="Bài tập"
-                    value={learner.summary?.exerciseResults ?? 0}
+                    value={learner.summary?.questionResults ?? 0}
                   />
                   <Stat
                     icon={BookMarked}
@@ -239,7 +239,7 @@ export function LearnersPage() {
               header: 'Bài tập',
               cell: (row) => (
                 <span className="text-sm font-bold tabular-nums">
-                  {row.summary?.exerciseResults ?? 0}
+                  {row.summary?.questionResults ?? 0}
                 </span>
               ),
             },

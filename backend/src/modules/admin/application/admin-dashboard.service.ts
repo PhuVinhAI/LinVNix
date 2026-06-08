@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type {
   UserStatsPort,
   CourseStatsPort,
-  ExerciseStatsPort,
+  QuestionStatsPort,
 } from './ports/dashboard-stats.ports';
 import {
   USER_STATS_PORT,
@@ -18,7 +18,7 @@ export class AdminDashboardService {
     @Inject(COURSE_STATS_PORT)
     private readonly courseStatsPort: CourseStatsPort,
     @Inject(EXERCISE_STATS_PORT)
-    private readonly exerciseStatsPort: ExerciseStatsPort,
+    private readonly exerciseStatsPort: QuestionStatsPort,
   ) {}
 
   async getDashboardStats() {
@@ -31,7 +31,7 @@ export class AdminDashboardService {
       this.userStatsPort.getTotalUsers(),
       this.userStatsPort.getDAU(),
       this.courseStatsPort.getTopCoursesByEnrollment(10),
-      this.exerciseStatsPort.getExercisesWithHighestErrorRate(10, 10),
+      this.exerciseStatsPort.getQuestionsWithHighestErrorRate(10, 10),
     ]);
 
     return {

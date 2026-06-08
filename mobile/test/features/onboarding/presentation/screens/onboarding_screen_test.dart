@@ -24,7 +24,7 @@ void main() {
   late PreferencesService prefsService;
 
   setUpAll(() {
-    registerFallbackValue(GoalType.exercises);
+    registerFallbackValue(GoalType.questions);
   });
 
   setUp(() async {
@@ -235,7 +235,7 @@ void main() {
             'completeLowerCourses': false,
           })).called(1);
 
-      verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
+      verify(() => mockGoalsRepo.createGoal(GoalType.questions, 10))
           .called(1);
       verify(() => mockGoalsRepo.createGoal(GoalType.simulations, 3))
           .called(1);
@@ -265,7 +265,7 @@ void main() {
             'currentLevel': 'A1',
           })).called(1);
 
-      verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
+      verify(() => mockGoalsRepo.createGoal(GoalType.questions, 10))
           .called(1);
       verify(() => mockGoalsRepo.createGoal(GoalType.simulations, 3))
           .called(1);
@@ -354,7 +354,7 @@ void main() {
             'completeLowerCourses': true,
           })).called(1);
 
-      verify(() => mockGoalsRepo.createGoal(GoalType.exercises, 10))
+      verify(() => mockGoalsRepo.createGoal(GoalType.questions, 10))
           .called(1);
       verify(() => mockGoalsRepo.createGoal(GoalType.simulations, 3))
           .called(1);

@@ -1,8 +1,8 @@
-import { ExerciseType } from '../../../common/enums';
-import type { ExerciseAnswer } from '../domain/exercise-options.types';
+import { QuestionType } from '../../../common/enums';
+import type { QuestionAnswer } from '../domain/question-options.types';
 
 /**
- * Normalizes old answer formats to new ExerciseAnswer format.
+ * Normalizes old answer formats to new QuestionAnswer format.
  *
  * Old formats (backward compatibility):
  * - MultipleChoice: string → { selectedChoice }
@@ -17,28 +17,28 @@ import type { ExerciseAnswer } from '../domain/exercise-options.types';
  * @deprecated Remove when all clients send new format.
  */
 export class AnswerNormalizer {
-  normalize(exerciseType: ExerciseType, raw: unknown): ExerciseAnswer {
+  normalize(questionType: QuestionType, raw: unknown): QuestionAnswer {
     if (raw == null) {
-      return this.defaultFor(exerciseType);
+      return this.defaultFor(questionType);
     }
 
-    switch (exerciseType) {
-      case ExerciseType.MULTIPLE_CHOICE:
+    switch (questionType) {
+      case QuestionType.MULTIPLE_CHOICE:
         return this.normalizeMultipleChoice(raw);
-      case ExerciseType.FILL_BLANK:
+      case QuestionType.FILL_BLANK:
         return this.normalizeFillBlank(raw);
-      case ExerciseType.MATCHING:
+      case QuestionType.MATCHING:
         return this.normalizeMatching(raw);
-      case ExerciseType.ORDERING:
+      case QuestionType.ORDERING:
         return this.normalizeOrdering(raw);
-      case ExerciseType.TRANSLATION:
+      case QuestionType.TRANSLATION:
         return this.normalizeTranslation(raw);
-      case ExerciseType.LISTENING:
+      case QuestionType.LISTENING:
         return this.normalizeListening(raw);
-      case ExerciseType.SPEAKING:
+      case QuestionType.SPEAKING:
         return this.normalizeSpeaking(raw);
       default:
-        return {} as ExerciseAnswer;
+        return {} as QuestionAnswer;
     }
   }
 
@@ -46,65 +46,65 @@ export class AnswerNormalizer {
     if (typeof raw === 'string') {
       return { selectedChoice: raw };
     }
-    return raw as ExerciseAnswer;
+    return raw as QuestionAnswer;
   }
 
   private normalizeFillBlank(raw: unknown) {
     if (Array.isArray(raw)) {
       return { answers: raw };
     }
-    return raw as ExerciseAnswer;
+    return raw as QuestionAnswer;
   }
 
   private normalizeMatching(raw: unknown) {
-    return raw as ExerciseAnswer;
+    return raw as QuestionAnswer;
   }
 
   private normalizeOrdering(raw: unknown) {
     if (Array.isArray(raw)) {
       return { orderedItems: raw };
     }
-    return raw as ExerciseAnswer;
+    return raw as QuestionAnswer;
   }
 
   private normalizeTranslation(raw: unknown) {
     if (typeof raw === 'string') {
       return { translation: raw };
     }
-    return raw as ExerciseAnswer;
+    return raw as QuestionAnswer;
   }
 
   private normalizeListening(raw: unknown) {
     if (typeof raw === 'string') {
       return { transcript: raw };
     }
-    return raw as ExerciseAnswer;
+    return raw as QuestionAnswer;
   }
 
   private normalizeSpeaking(raw: unknown) {
     if (typeof raw === 'string') {
       return { transcript: raw };
     }
-    return raw as ExerciseAnswer;
+    return raw as QuestionAnswer;
   }
 
-  private defaultFor(exerciseType: ExerciseType): ExerciseAnswer {
-    switch (exerciseType) {
-      case ExerciseType.MULTIPLE_CHOICE:
+  private defaultFor(questionType: QuestionType): QuestionAnswer {
+    switch (questionType) {
+      case QuestionType.MULTIPLE_CHOICE:
         return { selectedChoice: '' };
-      case ExerciseType.FILL_BLANK:
+      case QuestionType.FILL_BLANK:
         return { answers: [] };
-      case ExerciseType.MATCHING:
+      case QuestionType.MATCHING:
         return { matches: [] };
-      case ExerciseType.ORDERING:
+      case QuestionType.ORDERING:
         return { orderedItems: [] };
-      case ExerciseType.TRANSLATION:
+      case QuestionType.TRANSLATION:
         return { translation: '' };
-      case ExerciseType.LISTENING:
-      case ExerciseType.SPEAKING:
+      case QuestionType.LISTENING:
+      case QuestionType.SPEAKING:
         return { transcript: '' };
       default:
-        return {} as ExerciseAnswer;
+        return {} as QuestionAnswer;
     }
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus, Trash2, ArrowDown, Languages } from 'lucide-react'
-import type { ExerciseFormProps } from './types'
+import type { QuestionFormProps } from './types'
 import { getOptionsObject } from './types'
 
 interface DraftState {
@@ -22,7 +22,7 @@ function normaliseLang(value: string, fallback: string): string {
   return map[value.toLowerCase()] ?? fallback
 }
 
-function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
+function initialFromProps(initial: QuestionFormProps['initial']): DraftState {
   const opts = getOptionsObject(initial)
   const accepted = Array.isArray(opts.acceptedTranslations)
     ? (opts.acceptedTranslations as unknown[]).map((t) => String(t))
@@ -40,7 +40,7 @@ function initialFromProps(initial: ExerciseFormProps['initial']): DraftState {
   }
 }
 
-export function TranslationForm({ initial, onChange }: ExerciseFormProps) {
+export function TranslationForm({ initial, onChange }: QuestionFormProps) {
   const [state, setState] = useState<DraftState>(() => initialFromProps(initial))
 
   useEffect(() => {

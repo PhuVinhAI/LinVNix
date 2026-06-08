@@ -138,7 +138,7 @@ class SettingsScreen extends ConsumerWidget {
             onPressed: () async {
               Navigator.pop(ctx);
               try {
-                await ref.read(exerciseSessionServiceProvider).clearAll();
+                await ref.read(questionSessionServiceProvider).clearAll();
               } catch (_) {}
               await ref.read(authStateProvider.notifier).logout();
               if (ctx.mounted) {
@@ -225,7 +225,7 @@ void _showClearDataDialog(BuildContext context, WidgetRef ref) {
               Navigator.pop(ctx);
               try {
                 await ref.read(userRepositoryProvider).clearUserData();
-                await ref.read(exerciseSessionServiceProvider).clearAll();
+                await ref.read(questionSessionServiceProvider).clearAll();
 
                 try {
                   final prefs = await ref.read(preferencesProvider.future);
@@ -240,9 +240,8 @@ void _showClearDataDialog(BuildContext context, WidgetRef ref) {
                 ref.read(onboardingCompletedProvider.notifier).reset();
                 ref.read(dataChangeBusProvider.notifier).emit({
                   'auth',
-                  'exercise',
+                  'question',
                   'progress',
-                  'exercise-set',
                   'bookmark',
                   'daily-goal',
                   'simulation',
@@ -307,7 +306,7 @@ void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
               try {
                 await ref.read(userRepositoryProvider).deleteAccount();
                 try {
-                  await ref.read(exerciseSessionServiceProvider).clearAll();
+                  await ref.read(questionSessionServiceProvider).clearAll();
                 } catch (_) {}
                 try {
                   final prefs = await ref.read(preferencesProvider.future);
@@ -322,9 +321,8 @@ void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
                   'auth',
                   'daily-goal',
                   'bookmark',
-                  'exercise',
+                  'question',
                   'progress',
-                  'exercise-set',
                   'simulation',
                   'simulation-results',
                 });
@@ -387,9 +385,8 @@ void _showClearCacheDialog(BuildContext context, WidgetRef ref) {
 
               ref.read(dataChangeBusProvider.notifier).emit({
                 'auth',
-                'exercise',
+                'question',
                 'progress',
-                'exercise-set',
                 'bookmark',
                 'daily-goal',
                 'simulation',

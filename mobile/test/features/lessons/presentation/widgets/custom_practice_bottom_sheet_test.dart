@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:linvnix/core/theme/app_theme.dart';
-import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
+import 'package:linvnix/features/lessons/domain/exercise_models.dart';
 import 'package:linvnix/features/lessons/presentation/widgets/custom_practice_bottom_sheet.dart';
 
 Widget _wrapWithTheme(Widget child) {
@@ -76,7 +76,7 @@ void main() {
     });
 
     testWidgets('calls onSubmit with config including userPrompt', (tester) async {
-      CustomSetConfig? captured;
+      CustomExerciseConfig? captured;
       await tester.pumpWidget(
         _wrapWithTheme(
           CustomPracticeBottomSheet.creation(
@@ -165,24 +165,24 @@ void main() {
   });
 
   group('CustomPracticeBottomSheet info view', () {
-    SetProgress makeProgress({
+    ExerciseProgress makeProgress({
       String title = 'Vocabulary Review',
       String? description = 'AI-generated practice focusing on greetings',
       String? userPrompt = 'Focus on greetings',
-      int totalExercises = 10,
+      int totalQuestions = 10,
       int attempted = 5,
       int correct = 4,
       double percentComplete = 50,
       double percentCorrect = 80,
     }) {
-      return SetProgress(
-        setId: 'set-1',
+      return ExerciseProgress(
+        exerciseId: 'set-1',
         title: title,
         description: description,
         userPrompt: userPrompt,
         isCustom: true,
         isAIGenerated: true,
-        totalExercises: totalExercises,
+        totalQuestions: totalQuestions,
         attempted: attempted,
         correct: correct,
         percentComplete: percentComplete,

@@ -939,17 +939,17 @@ abstract class S {
   /// **'Tạo luyện tập tùy chỉnh'**
   String get createCustomPractice;
 
-  /// No description provided for @createCustomSet.
+  /// No description provided for @createCustomExercise.
   ///
   /// In vi, this message translates to:
-  /// **'Tạo bộ tùy chỉnh'**
-  String get createCustomSet;
+  /// **'Tạo bài tập tùy chỉnh'**
+  String get createCustomExercise;
 
-  /// No description provided for @createCustomSetPrompt.
+  /// No description provided for @createCustomExercisePrompt.
   ///
   /// In vi, this message translates to:
-  /// **'Tạo một bộ thực hành tùy chỉnh để bắt đầu luyện tập!'**
-  String get createCustomSetPrompt;
+  /// **'Tạo bài tập tùy chỉnh để bắt đầu luyện tập!'**
+  String get createCustomExercisePrompt;
 
   /// No description provided for @currentLevelLabel.
   ///
@@ -993,17 +993,17 @@ abstract class S {
   /// **'Xóa cuộc trò chuyện'**
   String get deleteConversation;
 
-  /// No description provided for @deleteCustomPracticeSetWarning.
+  /// No description provided for @deleteCustomPracticeExerciseWarning.
   ///
   /// In vi, this message translates to:
-  /// **'Bộ thực hành này sẽ bị xóa khỏi danh sách của bạn. Bạn có thể tạo bộ mới bất cứ lúc nào.'**
-  String get deleteCustomPracticeSetWarning;
+  /// **'Bài tập này sẽ bị xóa khỏi danh sách của bạn. Bạn có thể tạo bài tập mới bất cứ lúc nào.'**
+  String get deleteCustomPracticeExerciseWarning;
 
-  /// No description provided for @deleteCustomSetQuestion.
+  /// No description provided for @deleteCustomExerciseQuestion.
   ///
   /// In vi, this message translates to:
-  /// **'Xóa bộ tùy chỉnh?'**
-  String get deleteCustomSetQuestion;
+  /// **'Xóa bài tập tùy chỉnh?'**
+  String get deleteCustomExerciseQuestion;
 
   /// No description provided for @deleteData.
   ///
@@ -1035,11 +1035,11 @@ abstract class S {
   /// **'Tin nhắn này và toàn bộ tin nhắn phía sau sẽ bị xóa. Bạn có chắc chắn không?'**
   String get deleteMessageChainQuestion;
 
-  /// No description provided for @deleteSet.
+  /// No description provided for @deleteExercise.
   ///
   /// In vi, this message translates to:
-  /// **'Xóa bộ'**
-  String get deleteSet;
+  /// **'Xóa bài tập'**
+  String get deleteExercise;
 
   /// No description provided for @developerSection.
   ///
@@ -1196,6 +1196,12 @@ abstract class S {
   /// In vi, this message translates to:
   /// **'Bài tập đã làm'**
   String get exercisesDone;
+
+  /// No description provided for @questionsTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Câu hỏi'**
+  String get questionsTitle;
 
   /// No description provided for @exercisesTitle.
   ///
@@ -1659,11 +1665,11 @@ abstract class S {
   /// **'Biểu tượng không có khóa học'**
   String get noCoursesAvailableIcon;
 
-  /// No description provided for @noCustomPracticeSetsYet.
+  /// No description provided for @noCustomExercisesYet.
   ///
   /// In vi, this message translates to:
-  /// **'Chưa có bộ thực hành tùy chỉnh nào. Hãy tạo một bộ để ôn tập những gì bạn đã học.'**
-  String get noCustomPracticeSetsYet;
+  /// **'Chưa có bài tập tùy chỉnh nào. Hãy tạo một bài tập để ôn tập những gì bạn đã học.'**
+  String get noCustomExercisesYet;
 
   /// No description provided for @noExercisesYet.
   ///
@@ -1998,7 +2004,7 @@ abstract class S {
   /// No description provided for @resetCourseProgressWarning.
   ///
   /// In vi, this message translates to:
-  /// **'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả bài tập và bộ thực hành tùy chỉnh sẽ bị xóa.'**
+  /// **'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả câu hỏi và bài tập tùy chỉnh sẽ bị xóa.'**
   String get resetCourseProgressWarning;
 
   /// No description provided for @resetLabel.
@@ -2010,7 +2016,7 @@ abstract class S {
   /// No description provided for @resetModuleProgressWarning.
   ///
   /// In vi, this message translates to:
-  /// **'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả bài tập và bộ thực hành tùy chỉnh trong học phần này sẽ bị xóa.'**
+  /// **'Đặt lại toàn bộ tiến trình? Hành động này không thể hoàn tác. Tất cả tiến trình bài học, kết quả câu hỏi và bài tập tùy chỉnh trong học phần này sẽ bị xóa.'**
   String get resetModuleProgressWarning;
 
   /// No description provided for @resetPasswordButton.
@@ -2997,11 +3003,11 @@ abstract class S {
   /// **'Đang tạo...'**
   String get creatingStatus;
 
-  /// No description provided for @createExercisesButton.
+  /// No description provided for @createQuestionsButton.
   ///
   /// In vi, this message translates to:
   /// **'Tạo bài tập'**
-  String get createExercisesButton;
+  String get createQuestionsButton;
 
   /// No description provided for @feedbackTitle.
   ///
@@ -3030,7 +3036,7 @@ abstract class S {
   /// No description provided for @freshAiQuestionsWarningParam.
   ///
   /// In vi, this message translates to:
-  /// **'Thao tác này sẽ tạo một bộ câu hỏi mới thay thế \"{title}\" bằng các câu hỏi được tạo từ AI mới.'**
+  /// **'Thao tác này sẽ tạo một bài tập mới thay thế \"{title}\" bằng các câu hỏi được tạo từ AI mới.'**
   String freshAiQuestionsWarningParam(Object title);
 
   /// No description provided for @quizLabel.
@@ -3183,11 +3189,11 @@ abstract class S {
   /// **'Số lượng câu hỏi: {count}'**
   String numberOfQuestionsParam(Object count);
 
-  /// No description provided for @exerciseTypesLabel.
+  /// No description provided for @questionTypesLabel.
   ///
   /// In vi, this message translates to:
   /// **'Các dạng bài tập'**
-  String get exerciseTypesLabel;
+  String get questionTypesLabel;
 
   /// No description provided for @focusLabel.
   ///

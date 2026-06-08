@@ -7,7 +7,8 @@ import 'package:linvnix/features/courses/data/courses_providers.dart';
 import 'package:linvnix/features/courses/domain/course_models.dart';
 import 'package:linvnix/features/courses/presentation/screens/module_detail_screen.dart';
 import 'package:linvnix/features/lessons/data/lesson_providers.dart';
-import 'package:linvnix/features/lessons/domain/exercise_set_models.dart';
+import 'package:linvnix/features/lessons/domain/exercise_models.dart';
+import 'package:linvnix/features/lessons/domain/question_models.dart';
 import 'package:linvnix/features/profile/data/profile_providers.dart';
 import 'package:linvnix/features/user/domain/user_profile.dart';
 
@@ -56,15 +57,15 @@ class _FakeModuleDetail extends ModuleDetail {
   Future<CourseModule> build(String id) async => _module;
 }
 
-class _FakeModuleExerciseSetsNotifier extends ModuleExerciseSetsNotifier {
+class _FakeModuleExercisesNotifier extends ModuleExercisesNotifier {
   final ModuleExerciseSummary _data;
 
-  _FakeModuleExerciseSetsNotifier(String moduleId, this._data)
+  _FakeModuleExercisesNotifier(String moduleId, this._data)
       : super(moduleId);
 
   @override
   Future<ModuleExerciseSummary> build() async {
-    watchTags({'exercise-set', 'module-$moduleId'});
+    watchTags({'question', 'module-$moduleId'});
     return _data;
   }
 }
@@ -95,15 +96,15 @@ void main() {
         eligible: false,
         completedLessonsCount: 0,
         totalLessonsCount: 2,
-        moduleSets: [],
+        moduleExercises: [],
       );
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
-            moduleExerciseSetsProvider.overrideWith(
-              () => _FakeModuleExerciseSetsNotifier('mod-1', notEligibleSummary),
+            moduleExercisesProvider.overrideWith(
+              () => _FakeModuleExercisesNotifier('mod-1', notEligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier()),
@@ -133,15 +134,15 @@ void main() {
         eligible: true,
         completedLessonsCount: 1,
         totalLessonsCount: 2,
-        moduleSets: [],
+        moduleExercises: [],
       );
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
-            moduleExerciseSetsProvider.overrideWith(
-              () => _FakeModuleExerciseSetsNotifier('mod-1', eligibleSummary),
+            moduleExercisesProvider.overrideWith(
+              () => _FakeModuleExercisesNotifier('mod-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier()),
@@ -161,20 +162,20 @@ void main() {
     });
 
     testWidgets(
-        'custom practice section shows existing sets when available',
+        'custom practice section shows existing exercises when available',
         (tester) async {
       final summaryWithSets = ModuleExerciseSummary(
         eligible: true,
         completedLessonsCount: 2,
         totalLessonsCount: 2,
-        moduleSets: [
-          SetProgress(
-            setId: 'set-1',
+        moduleExercises: [
+          ExerciseProgress(
+            exerciseId: 'set-1',
             title: 'Module Review',
             description: 'AI-generated review',
             isCustom: true,
             isAIGenerated: true,
-            totalExercises: 10,
+            totalQuestions: 10,
             attempted: 5,
             correct: 4,
             percentComplete: 50,
@@ -187,8 +188,8 @@ void main() {
         ProviderScope(
           overrides: [
             moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
-            moduleExerciseSetsProvider.overrideWith(
-              () => _FakeModuleExerciseSetsNotifier('mod-1', summaryWithSets),
+            moduleExercisesProvider.overrideWith(
+              () => _FakeModuleExercisesNotifier('mod-1', summaryWithSets),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier()),
@@ -215,15 +216,15 @@ void main() {
         eligible: true,
         completedLessonsCount: 1,
         totalLessonsCount: 2,
-        moduleSets: [],
+        moduleExercises: [],
       );
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
-            moduleExerciseSetsProvider.overrideWith(
-              () => _FakeModuleExerciseSetsNotifier('mod-1', eligibleSummary),
+            moduleExercisesProvider.overrideWith(
+              () => _FakeModuleExercisesNotifier('mod-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier()),
@@ -256,7 +257,7 @@ void main() {
         eligible: true,
         completedLessonsCount: 1,
         totalLessonsCount: 2,
-        moduleSets: [],
+        moduleExercises: [],
       );
 
       const b2User = UserProfile(
@@ -271,8 +272,8 @@ void main() {
         ProviderScope(
           overrides: [
             moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
-            moduleExerciseSetsProvider.overrideWith(
-              () => _FakeModuleExerciseSetsNotifier('mod-1', eligibleSummary),
+            moduleExercisesProvider.overrideWith(
+              () => _FakeModuleExercisesNotifier('mod-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier()),
@@ -298,7 +299,7 @@ void main() {
         eligible: true,
         completedLessonsCount: 1,
         totalLessonsCount: 2,
-        moduleSets: [],
+        moduleExercises: [],
       );
 
       const a1User = UserProfile(
@@ -313,8 +314,8 @@ void main() {
         ProviderScope(
           overrides: [
             moduleDetailProvider.overrideWith(() => _FakeModuleDetail()),
-            moduleExerciseSetsProvider.overrideWith(
-              () => _FakeModuleExerciseSetsNotifier('mod-1', eligibleSummary),
+            moduleExercisesProvider.overrideWith(
+              () => _FakeModuleExercisesNotifier('mod-1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier()),
@@ -340,7 +341,7 @@ void main() {
         eligible: true,
         completedLessonsCount: 1,
         totalLessonsCount: 2,
-        moduleSets: [],
+        moduleExercises: [],
       );
 
       const a2User = UserProfile(
@@ -382,8 +383,8 @@ void main() {
           overrides: [
             moduleDetailProvider
                 .overrideWith(() => _FakeModuleDetail(b1Module)),
-            moduleExerciseSetsProvider.overrideWith(
-              () => _FakeModuleExerciseSetsNotifier('mod-b1', eligibleSummary),
+            moduleExercisesProvider.overrideWith(
+              () => _FakeModuleExercisesNotifier('mod-b1', eligibleSummary),
             ),
             userProgressProvider
                 .overrideWith(() => _FakeUserProgressNotifier()),

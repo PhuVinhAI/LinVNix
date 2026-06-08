@@ -2,7 +2,7 @@ import type {
   CheckerAdapter,
   AssessmentResult,
 } from '../../domain/assessment.types';
-import type { OrderingAnswer } from '../../domain/exercise-options.types';
+import type { OrderingAnswer } from '../../domain/question-options.types';
 
 export class OrderingChecker implements CheckerAdapter {
   check(

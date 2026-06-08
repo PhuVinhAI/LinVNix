@@ -11,7 +11,7 @@ import { Module } from '../src/modules/courses/domain/module.entity';
 import { Lesson } from '../src/modules/courses/domain/lesson.entity';
 import { UserProgress } from '../src/modules/progress/domain/learning-progress.entity';
 import { ModuleProgress } from '../src/modules/progress/domain/learning-progress.entity';
-import { ExerciseSet } from '../src/modules/exercises/domain/exercise-set.entity';
+import { Exercise } from '../src/modules/exercises/domain/question.entity';
 import { UserLevel, ProgressStatus } from '../src/common/enums';
 import { JwtService } from '@nestjs/jwt';
 
@@ -23,7 +23,7 @@ describe('Course Custom Practice (e2e)', () => {
   let lessonRepo: Repository<Lesson>;
   let progressRepo: Repository<UserProgress>;
   let moduleProgressRepo: Repository<ModuleProgress>;
-  let exerciseSetRepo: Repository<ExerciseSet>;
+  let exerciseRepo: Repository<Exercise>;
   let jwtService: JwtService;
   let authToken: string;
   let testUserId: string;
@@ -46,7 +46,7 @@ describe('Course Custom Practice (e2e)', () => {
     lessonRepo = app.get(getRepositoryToken(Lesson));
     progressRepo = app.get(getRepositoryToken(UserProgress));
     moduleProgressRepo = app.get(getRepositoryToken(ModuleProgress));
-    exerciseSetRepo = app.get(getRepositoryToken(ExerciseSet));
+    exerciseRepo = app.get(getRepositoryToken(Exercise));
     jwtService = app.get(JwtService);
   });
 
@@ -71,7 +71,7 @@ describe('Course Custom Practice (e2e)', () => {
     await userRepo.delete(testUserId);
   });
 
-  describe('POST /exercise-sets/custom with courseId', () => {
+  describe('POST /questions/custom with courseId', () => {
     let courseId: string;
     let moduleId1: string;
     let lessonId1: string;
@@ -128,7 +128,7 @@ describe('Course Custom Practice (e2e)', () => {
     });
 
     afterEach(async () => {
-      await exerciseSetRepo.delete({ courseId } as any);
+      await exerciseRepo.delete({ courseId } as any);
       await moduleProgressRepo.delete({ userId: testUserId, moduleId: moduleId1 });
       await progressRepo.delete({ userId: testUserId, lessonId: lessonId1 });
       await lessonRepo.delete({ moduleId: moduleId1 });
@@ -136,42 +136,42 @@ describe('Course Custom Practice (e2e)', () => {
       await courseRepo.delete(courseId);
     });
 
-    it('creates custom practice set with courseId', async () => {
+    it('creates custom practice exercise with courseId', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/v1/exercise-sets/custom')
+        .post('/api/v1/exercises/custom')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           courseId,
           config: {
             questionCount: 10,
-            exerciseTypes: ['multiple_choice', 'matching'],
+            questionTypes: ['multiple_choice', 'matching'],
             focusArea: 'both',
           },
         })
         .expect(201);
 
-      expect(res.body.data.set.courseId).toBe(courseId);
-      expect(res.body.data.set.isCustom).toBe(true);
-      expect(res.body.data.set.title).toBe('Custom Practice');
+      expect(res.body.data.exercise.courseId).toBe(courseId);
+      expect(res.body.data.exercise.isCustom).toBe(true);
+      expect(res.body.data.exercise.title).toBe('Custom Practice');
     });
 
-    it('creates custom practice set with courseId and userPrompt', async () => {
+    it('creates custom practice exercise with courseId and userPrompt', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/v1/exercise-sets/custom')
+        .post('/api/v1/exercises/custom')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           courseId,
           config: {
             questionCount: 10,
-            exerciseTypes: ['multiple_choice'],
+            questionTypes: ['multiple_choice'],
             focusArea: 'both',
           },
           userPrompt: 'Focus on cross-module review',
         })
         .expect(201);
 
-      expect(res.body.data.set.courseId).toBe(courseId);
-      expect(res.body.data.set.userPrompt).toBe('Focus on cross-module review');
+      expect(res.body.data.exercise.courseId).toBe(courseId);
+      expect(res.body.data.exercise.userPrompt).toBe('Focus on cross-module review');
     });
 
     it('returns 400 when courseId has no completed modules', async () => {
@@ -182,13 +182,13 @@ describe('Course Custom Practice (e2e)', () => {
       await progressRepo.delete({ userId: testUserId, lessonId: lessonId1 });
 
       await request(app.getHttpServer())
-        .post('/api/v1/exercise-sets/custom')
+        .post('/api/v1/exercises/custom')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           courseId,
           config: {
             questionCount: 10,
-            exerciseTypes: ['multiple_choice'],
+            questionTypes: ['multiple_choice'],
             focusArea: 'both',
           },
         })
@@ -197,14 +197,14 @@ describe('Course Custom Practice (e2e)', () => {
 
     it('returns 400 when both courseId and moduleId provided (XOR)', async () => {
       await request(app.getHttpServer())
-        .post('/api/v1/exercise-sets/custom')
+        .post('/api/v1/exercises/custom')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           courseId,
           moduleId: moduleId1,
           config: {
             questionCount: 10,
-            exerciseTypes: ['multiple_choice'],
+            questionTypes: ['multiple_choice'],
             focusArea: 'both',
           },
         })
@@ -212,7 +212,7 @@ describe('Course Custom Practice (e2e)', () => {
     });
   });
 
-  describe('GET /exercise-sets/course/:courseId', () => {
+  describe('GET /questions/course/:courseId', () => {
     let courseId: string;
     let moduleId1: string;
 
@@ -267,7 +267,7 @@ describe('Course Custom Practice (e2e)', () => {
     });
 
     afterEach(async () => {
-      await exerciseSetRepo.delete({ courseId } as any);
+      await exerciseRepo.delete({ courseId } as any);
       await moduleProgressRepo.delete({ userId: testUserId, moduleId: moduleId1 });
       await progressRepo.delete({ userId: testUserId });
       await lessonRepo.delete({ moduleId: moduleId1 });
@@ -275,16 +275,16 @@ describe('Course Custom Practice (e2e)', () => {
       await courseRepo.delete(courseId);
     });
 
-    it('returns eligibility and sets for course', async () => {
+    it('returns eligibility and exercises for course', async () => {
       const res = await request(app.getHttpServer())
-        .get(`/api/v1/exercise-sets/course/${courseId}`)
+        .get(`/api/v1/exercises/course/${courseId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
       expect(res.body.data.eligible).toBe(true);
       expect(res.body.data.completedModulesCount).toBe(1);
       expect(res.body.data.totalModulesCount).toBe(1);
-      expect(res.body.data.courseSets).toEqual([]);
+      expect(res.body.data.courseExercises).toEqual([]);
     });
 
     it('returns eligible=false when no completed modules', async () => {
@@ -295,7 +295,7 @@ describe('Course Custom Practice (e2e)', () => {
       await progressRepo.delete({ userId: testUserId });
 
       const res = await request(app.getHttpServer())
-        .get(`/api/v1/exercise-sets/course/${courseId}`)
+        .get(`/api/v1/exercises/course/${courseId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
@@ -303,26 +303,26 @@ describe('Course Custom Practice (e2e)', () => {
       expect(res.body.data.completedModulesCount).toBe(0);
     });
 
-    it('returns created custom practice sets', async () => {
+    it('returns created custom practice exercises', async () => {
       await request(app.getHttpServer())
-        .post('/api/v1/exercise-sets/custom')
+        .post('/api/v1/exercises/custom')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           courseId,
           config: {
             questionCount: 5,
-            exerciseTypes: ['matching'],
+            questionTypes: ['matching'],
             focusArea: 'vocabulary',
           },
         });
 
       const res = await request(app.getHttpServer())
-        .get(`/api/v1/exercise-sets/course/${courseId}`)
+        .get(`/api/v1/exercises/course/${courseId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(res.body.data.courseSets.length).toBeGreaterThanOrEqual(1);
-      expect(res.body.data.courseSets[0].isCustom).toBe(true);
+      expect(res.body.data.courseExercises.length).toBeGreaterThanOrEqual(1);
+      expect(res.body.data.courseExercises[0].isCustom).toBe(true);
     });
   });
 });

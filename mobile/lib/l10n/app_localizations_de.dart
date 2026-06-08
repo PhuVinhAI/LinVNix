@@ -449,11 +449,11 @@ class SDe extends S {
   String get createCustomPractice => 'Benutzerdefinierte Übung erstellen';
 
   @override
-  String get createCustomSet => 'Benutzerdefiniertes Set erstellen';
+  String get createCustomExercise => 'Benutzerdefinierte Übung erstellen';
 
   @override
-  String get createCustomSetPrompt =>
-      'Erstellen Sie einen benutzerdefinierten Satz, um mit dem Üben zu beginnen!';
+  String get createCustomExercisePrompt =>
+      'Erstellen Sie eine benutzerdefinierte Übung, um mit dem Üben zu beginnen!';
 
   @override
   String get currentLevelLabel => 'Aktuelles Niveau';
@@ -478,11 +478,12 @@ class SDe extends S {
   String get deleteConversation => 'Gespräch löschen';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      'Dieser Übungssatz wird aus Ihrer Liste entfernt. Sie können jederzeit einen neuen erstellen.';
+  String get deleteCustomPracticeExerciseWarning =>
+      'Diese Übung wird aus Ihrer Liste entfernt. Sie können jederzeit eine neue erstellen.';
 
   @override
-  String get deleteCustomSetQuestion => 'Benutzerdefiniertes Set löschen?';
+  String get deleteCustomExerciseQuestion =>
+      'Benutzerdefinierte Übung löschen?';
 
   @override
   String get deleteData => 'Daten löschen';
@@ -503,7 +504,7 @@ class SDe extends S {
       'Diese Nachricht und alle folgenden Nachrichten werden gelöscht. Sind Sie sicher?';
 
   @override
-  String get deleteSet => 'Set löschen';
+  String get deleteExercise => 'Übung löschen';
 
   @override
   String get developerSection => 'Entwickler';
@@ -590,6 +591,9 @@ class SDe extends S {
 
   @override
   String get exercisesDone => 'Abgeschlossene Übungen';
+
+  @override
+  String get questionsTitle => 'Fragen';
 
   @override
   String get exercisesTitle => 'Übungen';
@@ -839,8 +843,8 @@ class SDe extends S {
   String get noCoursesAvailableIcon => 'Kein Kurs-Symbol';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      'Noch keine benutzerdefinierten Übungssätze. Erstellen Sie einen, um das Gelernte zu überprüfen.';
+  String get noCustomExercisesYet =>
+      'Noch keine benutzerdefinierten Übungen. Erstellen Sie eine, um das Gelernte zu überprüfen.';
 
   @override
   String get noExercisesYet => 'Noch keine Übungen';
@@ -1593,7 +1597,7 @@ class SDe extends S {
   String get creatingStatus => 'Wird erstellt...';
 
   @override
-  String get createExercisesButton => 'Übungen erstellen';
+  String get createQuestionsButton => 'Übungen erstellen';
 
   @override
   String get feedbackTitle => 'Feedback';
@@ -1613,7 +1617,7 @@ class SDe extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'Dadurch wird ein neues Set erstellt, das \"$title\" durch neue KI-generierte Fragen ersetzt.';
+    return 'Dadurch wird eine neue Übung erstellt, die „$title\" durch neue KI-generierte Fragen ersetzt.';
   }
 
   @override
@@ -1711,7 +1715,7 @@ class SDe extends S {
   }
 
   @override
-  String get exerciseTypesLabel => 'Übungstypen';
+  String get questionTypesLabel => 'Übungstypen';
 
   @override
   String get focusLabel => 'Fokus';

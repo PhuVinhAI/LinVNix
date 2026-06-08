@@ -37,7 +37,7 @@ type ArtDict = {
 
 	// StreakFlame — Practice & build a streak
 	'streak.today': string;
-	'streak.exercises': string;
+	'streak.questions': string;
 	'streak.simulations': string;
 	'streak.lessons': string;
 	'streak.streak': string;
@@ -118,7 +118,7 @@ const en: ArtDict = {
 	'woven.weave': 'WEAVE 04 SKILLS · 1 LESSON',
 
 	'streak.today': 'TODAY · DAILY GOALS',
-	'streak.exercises': 'EXERCISES',
+	'streak.questions': 'QUESTIONS',
 	'streak.simulations': 'SIMULATIONS',
 	'streak.lessons': 'LESSONS',
 	'streak.streak': 'STREAK',
@@ -192,7 +192,7 @@ const vi: ArtDict = {
 	'woven.weave': 'DỆT 4 KỸ NĂNG · 1 BÀI',
 
 	'streak.today': 'HÔM NAY · MỤC TIÊU NGÀY',
-	'streak.exercises': 'BÀI TẬP',
+	'streak.questions': 'BÀI TẬP',
 	'streak.simulations': 'MÔ PHỎNG',
 	'streak.lessons': 'BÀI HỌC',
 	'streak.streak': 'CHUỖI',
@@ -266,7 +266,7 @@ const de: ArtDict = {
 	'woven.weave': '04 FERTIGKEITEN · 1 LEKTION',
 
 	'streak.today': 'HEUTE · TAGESZIELE',
-	'streak.exercises': 'ÜBUNGEN',
+	'streak.questions': 'ÜBUNGEN',
 	'streak.simulations': 'SZENARIEN',
 	'streak.lessons': 'LEKTIONEN',
 	'streak.streak': 'SERIE',
@@ -340,7 +340,7 @@ const es: ArtDict = {
 	'woven.weave': '04 DESTREZAS · 1 LECCIÓN',
 
 	'streak.today': 'HOY · METAS DIARIAS',
-	'streak.exercises': 'EJERCICIOS',
+	'streak.questions': 'EJERCICIOS',
 	'streak.simulations': 'ROLEPLAY',
 	'streak.lessons': 'LECCIONES',
 	'streak.streak': 'RACHA',
@@ -414,7 +414,7 @@ const fr: ArtDict = {
 	'woven.weave': '04 COMP. · 1 LEÇON',
 
 	'streak.today': 'AUJOURD’HUI · OBJECTIFS',
-	'streak.exercises': 'EXERCICES',
+	'streak.questions': 'EXERCICES',
 	'streak.simulations': 'ROLEPLAY',
 	'streak.lessons': 'LEÇONS',
 	'streak.streak': 'SÉRIE',
@@ -488,7 +488,7 @@ const ja: ArtDict = {
 	'woven.weave': '4技能 · 1レッスン',
 
 	'streak.today': '今日 · デイリー目標',
-	'streak.exercises': '演習',
+	'streak.questions': '演習',
 	'streak.simulations': 'ロールプレイ',
 	'streak.lessons': 'レッスン',
 	'streak.streak': '連続',
@@ -562,7 +562,7 @@ const ko: ArtDict = {
 	'woven.weave': '4영역 · 1수업',
 
 	'streak.today': '오늘 · 일일 목표',
-	'streak.exercises': '연습',
+	'streak.questions': '연습',
 	'streak.simulations': '롤플레이',
 	'streak.lessons': '수업',
 	'streak.streak': '연속',
@@ -636,7 +636,7 @@ const th: ArtDict = {
 	'woven.weave': '4 ทักษะ · 1 บท',
 
 	'streak.today': 'วันนี้ · เป้าหมาย',
-	'streak.exercises': 'แบบฝึก',
+	'streak.questions': 'แบบฝึก',
 	'streak.simulations': 'สวมบทบาท',
 	'streak.lessons': 'บทเรียน',
 	'streak.streak': 'สตรีค',
@@ -710,7 +710,7 @@ const zh: ArtDict = {
 	'woven.weave': '4 项技能 · 1 课',
 
 	'streak.today': '今日 · 每日目标',
-	'streak.exercises': '练习',
+	'streak.questions': '练习',
 	'streak.simulations': '角色扮演',
 	'streak.lessons': '课时',
 	'streak.streak': '连续',

@@ -13,7 +13,7 @@
 - **Models / DTO**: `freezed` + `json_serializable` (build_runner)
 - **Local storage**:
   - `flutter_secure_storage` — JWT access + refresh token
-  - `hive` — phiên làm bài tập (offline-resilient)
+  - `hive` — phiên làm câu hỏi (offline-resilient)
   - `shared_preferences` — onboarding, theme, cài đặt nhắc
   - `drift` — SQLite (đã wire, sẵn sàng mở rộng)
 - **Audio**: `just_audio` (phát audio bài học / prompt nói)
@@ -96,7 +96,7 @@ Streaming SSE cho `/ai/chat/stream`: parse event-stream thủ công, dispatch `t
 | Public | `/splash`, `/login`, `/register`, `/email-verification`, `/forgot-password`, `/reset-password-otp`, `/reset-password`, `/onboarding` |
 | Shell (bottom nav) | `/home`, `/courses`, `/bookmarks`, `/profile` |
 | Course tree | `/courses/:courseId`, `/courses/:courseId/modules/:moduleId` |
-| Lessons | `/lessons/:lessonId/wizard`, `/lessons/:lessonId/exercises`, `/lessons/:lessonId/exercise/:exerciseId` |
+| Lessons | `/lessons/:lessonId/wizard`, `/lessons/:lessonId/exercises`, `/lessons/:lessonId/exercise/:questionId` |
 | Simulation | `/simulation/practice`, `/simulation/scenarios/:scenarioId`, `…/characters`, `…/chat`, `/simulation/results-history` |
 | Khác | `/bookmarks/flashcard/:flashcardId`, `/profile/settings`, `/image-discovery` |
 
@@ -106,17 +106,17 @@ Streaming SSE cho `/ai/chat/stream`: parse event-stream thủ công, dispatch `t
 
 `lib/core/theme/widgets/` có 24 widget primitives (`AppButton`, `AppCard`, `AppNavBar`, `AppInput`, `AppChip`, `AppToast`, `AppBottomSheet`, `AppModal`, `AppSlider`, …). Tất cả UI feature dựng trên các primitives này.
 
-`lib/core/theme/exercise_theme_tokens.dart` định nghĩa token riêng cho UI bài tập (nghe / nói / trắc nghiệm) để giữ visual consistency giữa các renderer.
+`lib/core/theme/question_theme_tokens.dart` định nghĩa token riêng cho UI bài tập (nghe / nói / trắc nghiệm) để giữ visual consistency giữa các renderer.
 
 ## Lessons & exercise engine
 
 `features/lessons/` chứa engine bài tập lớn nhất app:
 
-- **Models** (`domain/exercise_models.dart`, `exercise_set_models.dart`, `lesson_models.dart`) — freezed
-- **7 renderer** trong `domain/exercise_renderers/`: `multiple_choice`, `fill_blank`, `matching`, `ordering`, `translation`, `listening`, `speaking`
-- **Phiên bài tập** (`data/exercise_session_service.dart` + `domain/exercise_session_codec.dart`) — lưu state vào Hive, resume sau khi đóng app
+- **Models** (`domain/question_models.dart`, `question_models.dart`, `lesson_models.dart`) — freezed
+- **7 renderer** trong `domain/question_renderers/`: `multiple_choice`, `fill_blank`, `matching`, `ordering`, `translation`, `listening`, `speaking`
+- **Phiên bài tập** (`data/question_session_service.dart` + `domain/question_session_codec.dart`) — lưu state vào Hive, resume sau khi đóng app
 - **Lesson time tracker** — đếm phút trong bài, đóng góp vào "phút truy cập app" của Mục tiêu ngày
-- **UI** — `exercise_hub_screen`, `exercise_play_screen`, `lesson_wizard_screen`
+- **UI** — `exercise_hub_screen`, `question_play_screen`, `lesson_wizard_screen`
 
 Listening dùng `just_audio` phát audio từ backend (`/uploads/audio/…`). Speaking dùng `speech_to_text` lấy transcript gửi về backend kiểm tra.
 

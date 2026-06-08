@@ -1,4 +1,4 @@
-import type { ExerciseAnswer } from './exercise-options.types';
+import type { QuestionAnswer } from './question-options.types';
 
 export interface AssessmentResult {
   isCorrect: boolean;
@@ -13,8 +13,8 @@ export interface AssessmentContext {
 
 export interface CheckerAdapter {
   check(
-    userAnswer: ExerciseAnswer,
-    correctAnswer: ExerciseAnswer,
+    userAnswer: QuestionAnswer,
+    correctAnswer: QuestionAnswer,
     context?: AssessmentContext,
   ): AssessmentResult;
 }

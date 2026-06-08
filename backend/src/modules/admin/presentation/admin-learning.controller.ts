@@ -18,8 +18,8 @@ import { CreateLessonDto } from '../../courses/dto/lessons/create-lesson.dto';
 import { CreateContentDto } from '../../contents/dto/create-content.dto';
 import { CreateVocabularyDto } from '../../vocabularies/dto/create-vocabulary.dto';
 import { CreateGrammarDto } from '../../grammar/dto/create-grammar.dto';
-import { CreateExerciseDto } from '../../exercises/dto/create-exercise.dto';
-import { ExerciseSet } from '../../exercises/domain/exercise-set.entity';
+import { CreateQuestionDto } from '../../exercises/dto/create-question.dto';
+import { Exercise } from '../../exercises/domain/exercise.entity';
 import { AdminLearningService } from '../application/admin-learning.service';
 import { SetPublishedDto } from '../dto/set-published.dto';
 import { ReorderDto } from '../dto/reorder.dto';
@@ -52,14 +52,14 @@ export class AdminLearningController {
     return this.adminLearningService.reorderLessons(dto.items);
   }
 
-  @Post('exercise-sets/reorder')
-  reorderExerciseSets(@Body() dto: ReorderDto) {
-    return this.adminLearningService.reorderExerciseSets(dto.items);
-  }
-
   @Post('exercises/reorder')
   reorderExercises(@Body() dto: ReorderDto) {
     return this.adminLearningService.reorderExercises(dto.items);
+  }
+
+  @Post('questions/reorder')
+  reorderQuestions(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderQuestions(dto.items);
   }
 
   @Post('courses')
@@ -199,44 +199,18 @@ export class AdminLearningController {
     return this.adminLearningService.deleteGrammar(id);
   }
 
-  @Post('lessons/:lessonId/exercise-sets')
-  createExerciseSet(
-    @Param('lessonId') lessonId: string,
-    @Body() dto: Pick<ExerciseSet, 'title' | 'description' | 'orderIndex'>,
-  ) {
-    return this.adminLearningService.createExerciseSet(lessonId, dto);
-  }
-
-  @Patch('exercise-sets/:id')
-  updateExerciseSet(
-    @Param('id') id: string,
-    @Body() dto: Partial<ExerciseSet>,
-  ) {
-    return this.adminLearningService.updateExerciseSet(id, dto);
-  }
-
-  @Delete('exercise-sets/:id')
-  deleteExerciseSet(@Param('id') id: string) {
-    return this.adminLearningService.deleteExerciseSet(id);
-  }
-
-  @Get('exercise-sets/:setId')
-  getExerciseSetWorkspace(@Param('setId') setId: string) {
-    return this.adminLearningService.getExerciseSetWorkspace(setId);
-  }
-
-  @Post('exercise-sets/:setId/exercises')
+  @Post('lessons/:lessonId/exercises')
   createExercise(
-    @Param('setId') setId: string,
-    @Body() dto: Omit<CreateExerciseDto, 'setId'>,
+    @Param('lessonId') lessonId: string,
+    @Body() dto: Pick<Exercise, 'title' | 'description' | 'orderIndex'>,
   ) {
-    return this.adminLearningService.createExercise(setId, dto);
+    return this.adminLearningService.createExercise(lessonId, dto);
   }
 
   @Patch('exercises/:id')
   updateExercise(
     @Param('id') id: string,
-    @Body() dto: Partial<CreateExerciseDto>,
+    @Body() dto: Partial<Exercise>,
   ) {
     return this.adminLearningService.updateExercise(id, dto);
   }
@@ -244,5 +218,31 @@ export class AdminLearningController {
   @Delete('exercises/:id')
   deleteExercise(@Param('id') id: string) {
     return this.adminLearningService.deleteExercise(id);
+  }
+
+  @Get('exercises/:exerciseId')
+  getExerciseWorkspace(@Param('exerciseId') exerciseId: string) {
+    return this.adminLearningService.getExerciseWorkspace(exerciseId);
+  }
+
+  @Post('exercises/:exerciseId/questions')
+  createQuestion(
+    @Param('exerciseId') exerciseId: string,
+    @Body() dto: Omit<CreateQuestionDto, 'exerciseId'>,
+  ) {
+    return this.adminLearningService.createQuestion(exerciseId, dto);
+  }
+
+  @Patch('questions/:id')
+  updateQuestion(
+    @Param('id') id: string,
+    @Body() dto: Partial<CreateQuestionDto>,
+  ) {
+    return this.adminLearningService.updateQuestion(id, dto);
+  }
+
+  @Delete('questions/:id')
+  deleteQuestion(@Param('id') id: string) {
+    return this.adminLearningService.deleteQuestion(id);
   }
 }

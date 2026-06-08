@@ -34,7 +34,7 @@ function featureConfig(prefix: string) {
 }
 
 export default registerAs('aiRouter', () => ({
-  exercise: featureConfig('AI_EXERCISE'),
+  question: featureConfig('AI_EXERCISE'),
   simulation: featureConfig('AI_SIMULATION'),
   assistant: featureConfig('AI_ASSISTANT'),
   imageAnalysis: featureConfig('AI_IMAGE_ANALYSIS'),

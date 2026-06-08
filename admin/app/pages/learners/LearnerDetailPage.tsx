@@ -14,7 +14,7 @@ import { LearnerDetailSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { useAdminLearner } from '../../features/learners/api/use-learners-admin'
 import type {
-  Bookmark, ExerciseResult, ExerciseOptionsLike,
+  Bookmark, QuestionResult, QuestionOptionsLike,
 } from '../../features/learners/types'
 import { learnerPath } from './route-utils'
 
@@ -145,7 +145,7 @@ const VOCAB_SOURCE_LABELS: Record<string, string> = {
   MANUAL: 'Tự thêm',
 }
 
-function exerciseTypeMeta(type?: string) {
+function questionTypeMeta(type?: string) {
   if (!type) return { label: 'Bài tập', icon: FileQuestion, tone: 'bg-muted text-muted-foreground' }
   return (
     EXERCISE_TYPE_META[type] ?? {
@@ -156,13 +156,13 @@ function exerciseTypeMeta(type?: string) {
   )
 }
 
-function exercisePrompt(row: ExerciseResult): string {
+function exercisePrompt(row: QuestionResult): string {
   const ex = row.exercise
   if (!ex) return 'Không có dữ liệu bài tập'
   if (ex.question && ex.question.trim().length > 0) return ex.question
-  const opts: ExerciseOptionsLike | null | undefined = ex.options
+  const opts: QuestionOptionsLike | null | undefined = ex.options
   if (!opts) return '—'
-  switch (ex.exerciseType) {
+  switch (ex.questionType) {
     case 'fill_blank':
       return opts.sentence?.replaceAll('___', '____') ?? 'Điền vào chỗ trống'
     case 'translation':
@@ -198,9 +198,9 @@ export function LearnerDetailPage() {
       : 0
     : 0
   const accuracyPercent = data
-    ? data.summary.exerciseResultsCount > 0
+    ? data.summary.questionResultsCount > 0
       ? Math.round(
-          (data.summary.correctExerciseResultsCount / data.summary.exerciseResultsCount) * 100
+          (data.summary.correctQuestionResultsCount / data.summary.questionResultsCount) * 100
         )
       : 0
     : 0
@@ -280,7 +280,7 @@ export function LearnerDetailPage() {
               />
               <ProgressBar
                 label="Độ chính xác bài tập"
-                hint={`${data.summary.correctExerciseResultsCount} / ${data.summary.exerciseResultsCount} câu đúng`}
+                hint={`${data.summary.correctQuestionResultsCount} / ${data.summary.questionResultsCount} câu đúng`}
                 percent={accuracyPercent}
                 color="bg-emerald-500"
               />
@@ -292,7 +292,7 @@ export function LearnerDetailPage() {
             <MetricCard
               icon={BookOpen}
               label="Bài tập đã làm"
-              value={data.summary.exerciseResultsCount}
+              value={data.summary.questionResultsCount}
               tone="blue"
             />
             <MetricCard
@@ -319,7 +319,7 @@ export function LearnerDetailPage() {
           <Tabs defaultValue="progress" className="space-y-4">
             <AdminTabsList>
               <AdminTabTrigger value="progress" icon={TrendingUp} label="Tiến độ" count={data.progress.length} />
-              <AdminTabTrigger value="exercises" icon={BookOpen} label="Bài tập" count={data.exerciseResults.length} />
+              <AdminTabTrigger value="exercises" icon={BookOpen} label="Bài tập" count={data.questionResults.length} />
               <AdminTabTrigger value="vocabulary" icon={Sparkles} label="Từ vựng" count={data.bookmarks.length} />
               <AdminTabTrigger value="simulations" icon={MessageSquare} label="Mô phỏng" count={data.simulations.length} />
               <AdminTabTrigger value="ai" icon={Bot} label="Hội thoại AI" count={data.conversations.length} />
@@ -382,16 +382,16 @@ export function LearnerDetailPage() {
               )}
             </TabsContent>
 
-            {/* EXERCISES — per-type prompt cards */}
+            {/* QUESTIONS — per-type prompt cards */}
             <TabsContent value="exercises" className="mt-4 space-y-2.5">
-              {data.exerciseResults.length === 0 ? (
+              {data.questionResults.length === 0 ? (
                 <EmptyState icon={BookOpen} message="Chưa có kết quả bài tập" />
               ) : (
-                data.exerciseResults.map((row) => {
-                  const typeMeta = exerciseTypeMeta(row.exercise?.exerciseType)
+                data.questionResults.map((row) => {
+                  const typeMeta = questionTypeMeta(row.exercise?.questionType)
                   const TypeIcon = typeMeta.icon
                   const prompt = exercisePrompt(row)
-                  const setTitle = row.exercise?.exerciseSet?.title
+                  const setTitle = row.exercise?.exercise?.title
                   const lastCorrect = row.lastAttempt?.isCorrect ?? row.isCorrect
                   return (
                     <div

@@ -11,7 +11,7 @@ export interface TopCourse {
 }
 
 export interface HighErrorExercise {
-  exerciseId: string
+  questionId: string
   question: string
   type: string
   totalAttempts: number
@@ -23,7 +23,7 @@ export interface DashboardStats {
   totalUsers: number
   dailyActiveUsers: number
   topCourses: TopCourse[]
-  exercisesWithHighestErrors: HighErrorExercise[]
+  exercisesWithHighestErrors: HighErrorQuestion[]
 }
 
 export type UserLevelCode = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'
@@ -41,8 +41,8 @@ export interface OverviewKpis {
   totalCourses: number
   publishedCourses: number
   totalLessons: number
-  totalExercises: number
-  totalExerciseAttempts: number
+  totalQuestions: number
+  totalQuestionAttempts: number
   accuracyLast7Days: number
   totalSimulations: number
   completedSimulations: number
@@ -59,7 +59,7 @@ export interface OverviewKpis {
 export interface OverviewActivityPoint {
   date: string
   registrations: number
-  exerciseAttempts: number
+  questionAttempts: number
   simulationsCompleted: number
 }
 
@@ -73,7 +73,7 @@ export interface RoleBucket {
   count: number
 }
 
-export interface ExerciseTypeBucket {
+export interface QuestionTypeBucket {
   type: string
   count: number
 }
@@ -87,7 +87,7 @@ export interface OverviewDistributions {
   usersByLevel: LevelBucket[]
   usersByRole: RoleBucket[]
   coursesByLevel: LevelBucket[]
-  exercisesByType: ExerciseTypeBucket[]
+  exercisesByType: QuestionTypeBucket[]
   simulationsByStatus: SimulationStatusBucket[]
 }
 
@@ -116,7 +116,7 @@ export interface DashboardOverview {
   activity30Days: OverviewActivityPoint[]
   distributions: OverviewDistributions
   topCourses: TopCourse[]
-  exercisesWithHighestErrors: HighErrorExercise[]
+  exercisesWithHighestErrors: HighErrorQuestion[]
   topStreaks: TopStreakRow[]
   recentUsers: RecentUserRow[]
 }

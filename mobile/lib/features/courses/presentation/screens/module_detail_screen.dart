@@ -8,7 +8,7 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/widgets/widgets.dart';
 import '../../../lessons/data/lesson_providers.dart';
-import '../../../lessons/domain/exercise_set_models.dart';
+import '../../../lessons/domain/exercise_models.dart';
 import '../../../lessons/presentation/widgets/custom_practice_bottom_sheet.dart';
 import '../../../profile/data/profile_providers.dart';
 import '../../data/courses_providers.dart';
@@ -37,12 +37,12 @@ enum _BusyAction { none, create, regenerate, delete, reset, completeAll, resetMo
 
 class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     with WidgetsBindingObserver {
-  String? _busySetId;
+  String? _busyExerciseId;
   _BusyAction _busyAction = _BusyAction.none;
   String? _error;
   bool _isCreatingCustom = false;
-  String? _creatingSetId;
-  String? _regeneratingNewSetId;
+  String? _creatingExerciseId;
+  String? _regeneratingNewExerciseId;
   CancelToken? _aiCancelToken;
 
   CancelToken _newAiCancelToken() {
@@ -61,7 +61,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
   @override
   void deactivate() {
     _aiCancelToken?.cancel();
-    _cleanupIncompleteSet();
+    _cleanupIncompleteExercise();
     super.deactivate();
   }
 
@@ -69,26 +69,26 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _aiCancelToken?.cancel();
-    _cleanupIncompleteSet();
+    _cleanupIncompleteExercise();
     super.dispose();
   }
 
-  void _cleanupIncompleteSet() {
+  void _cleanupIncompleteExercise() {
     try {
       final repo = ref.read(lessonRepositoryProvider);
-      if (_creatingSetId != null) {
-        final id = _creatingSetId!;
-        _creatingSetId = null;
-        repo.deleteCustomExerciseSet(id).catchError((_) {});
+      if (_creatingExerciseId != null) {
+        final id = _creatingExerciseId!;
+        _creatingExerciseId = null;
+        repo.deleteCustomExercise(id).catchError((_) {});
       }
-      if (_regeneratingNewSetId != null) {
-        final id = _regeneratingNewSetId!;
-        _regeneratingNewSetId = null;
-        repo.deleteCustomExerciseSet(id).catchError((_) {});
+      if (_regeneratingNewExerciseId != null) {
+        final id = _regeneratingNewExerciseId!;
+        _regeneratingNewExerciseId = null;
+        repo.deleteCustomExercise(id).catchError((_) {});
       }
     } catch (_) {
-      _creatingSetId = null;
-      _regeneratingNewSetId = null;
+      _creatingExerciseId = null;
+      _regeneratingNewExerciseId = null;
     }
   }
 
@@ -96,7 +96,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
-      _cleanupIncompleteSet();
+      _cleanupIncompleteExercise();
     }
   }
 
@@ -118,32 +118,32 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     return false;
   }
 
-  Future<void> _pushExercisePlay(String setId) async {
-    await context.push('/modules/${widget.moduleId}/exercises/play/$setId');
+  Future<void> _pushExercisePlay(String exerciseId) async {
+    await context.push('/modules/${widget.moduleId}/exercises/play/$exerciseId');
     if (!mounted) return;
     await ref
-        .read(moduleExerciseSetsProvider(widget.moduleId).notifier)
+        .read(moduleExercisesProvider(widget.moduleId).notifier)
         .refresh();
   }
 
-  Future<void> _handleCreateCustom(CustomSetConfig config) async {
+  Future<void> _handleCreateCustom(CustomExerciseConfig config) async {
     setState(() {
       _isCreatingCustom = true;
       _busyAction = _BusyAction.create;
       _error = null;
     });
-    String? setId;
+    String? exerciseId;
     try {
       final notifier =
-          ref.read(moduleExerciseSetsProvider(widget.moduleId).notifier);
-      final set = await notifier.createCustomSet(config);
-      setId = set.id;
-      _creatingSetId = setId;
+          ref.read(moduleExercisesProvider(widget.moduleId).notifier);
+      final exercise = await notifier.createCustomExercise(config);
+      exerciseId = exercise.id;
+      _creatingExerciseId = exerciseId;
 
       final token = _newAiCancelToken();
-      await notifier.generateSet(setId,
+      await notifier.generateExercise(exerciseId,
           userPrompt: config.userPrompt, cancelToken: token);
-      _creatingSetId = null;
+      _creatingExerciseId = null;
       if (mounted) {
         setState(() {
           _isCreatingCustom = false;
@@ -154,11 +154,11 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
       if (!mounted) return;
 
       if (e is RequestCancelledException) {
-        if (setId != null) {
+        if (exerciseId != null) {
           final repo = ref.read(lessonRepositoryProvider);
-          await repo.deleteCustomExerciseSet(setId).catchError((_) {});
+          await repo.deleteCustomExercise(exerciseId).catchError((_) {});
         }
-        _creatingSetId = null;
+        _creatingExerciseId = null;
         setState(() {
           _isCreatingCustom = false;
           _busyAction = _BusyAction.none;
@@ -166,11 +166,11 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
         return;
       }
 
-      if (setId != null) {
+      if (exerciseId != null) {
         final repo = ref.read(lessonRepositoryProvider);
-        await repo.deleteCustomExerciseSet(setId).catchError((_) {});
+        await repo.deleteCustomExercise(exerciseId).catchError((_) {});
       }
-      _creatingSetId = null;
+      _creatingExerciseId = null;
       setState(() {
         _isCreatingCustom = false;
         _busyAction = _BusyAction.none;
@@ -179,101 +179,101 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     }
   }
 
-  Future<void> _handleRegenerate(String setId, {String? userPrompt}) async {
+  Future<void> _handleRegenerate(String exerciseId, {String? userPrompt}) async {
     setState(() {
-      _busySetId = setId;
+      _busyExerciseId = exerciseId;
       _busyAction = _BusyAction.regenerate;
       _error = null;
-      _regeneratingNewSetId = null;
+      _regeneratingNewExerciseId = null;
     });
-    String? newSetId;
+    String? newExerciseId;
     try {
       final notifier =
-          ref.read(moduleExerciseSetsProvider(widget.moduleId).notifier);
-      newSetId = await notifier.regenerateSet(setId, userPrompt: userPrompt);
-      _regeneratingNewSetId = newSetId;
+          ref.read(moduleExercisesProvider(widget.moduleId).notifier);
+      newExerciseId = await notifier.regenerateExercise(exerciseId, userPrompt: userPrompt);
+      _regeneratingNewExerciseId = newExerciseId;
 
       final token = _newAiCancelToken();
-      await notifier.generateSet(newSetId,
+      await notifier.generateExercise(newExerciseId,
           userPrompt: userPrompt, cancelToken: token);
-      _regeneratingNewSetId = null;
+      _regeneratingNewExerciseId = null;
       if (mounted) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
       }
     } catch (e) {
       if (!mounted) return;
 
-      if (newSetId != null) {
+      if (newExerciseId != null) {
         final repo = ref.read(lessonRepositoryProvider);
-        await repo.deleteCustomExerciseSet(newSetId).catchError((_) {});
+        await repo.deleteCustomExercise(newExerciseId).catchError((_) {});
       }
-      _regeneratingNewSetId = null;
+      _regeneratingNewExerciseId = null;
 
       if (e is RequestCancelledException) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
         return;
       }
       setState(() {
-        _busySetId = null;
+        _busyExerciseId = null;
         _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
   }
 
-  Future<void> _handleDelete(String setId) async {
+  Future<void> _handleDelete(String exerciseId) async {
     setState(() {
-      _busySetId = setId;
+      _busyExerciseId = exerciseId;
       _busyAction = _BusyAction.delete;
       _error = null;
     });
     try {
       final notifier =
-          ref.read(moduleExerciseSetsProvider(widget.moduleId).notifier);
-      await notifier.deleteSet(setId);
+          ref.read(moduleExercisesProvider(widget.moduleId).notifier);
+      await notifier.deleteExercise(exerciseId);
       if (mounted) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _busySetId = null;
+        _busyExerciseId = null;
         _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
   }
 
-  Future<void> _handleReset(String setId) async {
+  Future<void> _handleReset(String exerciseId) async {
     setState(() {
-      _busySetId = setId;
+      _busyExerciseId = exerciseId;
       _busyAction = _BusyAction.reset;
       _error = null;
     });
     try {
       final notifier =
-          ref.read(moduleExerciseSetsProvider(widget.moduleId).notifier);
-      await notifier.resetSetProgress(setId);
-      await ref.read(exerciseSessionServiceProvider).delete(setId);
+          ref.read(moduleExercisesProvider(widget.moduleId).notifier);
+      await notifier.resetExerciseProgress(exerciseId);
+      await ref.read(questionSessionServiceProvider).delete(exerciseId);
       if (mounted) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _busySetId = null;
+        _busyExerciseId = null;
         _busyAction = _BusyAction.none;
         _error = e.toString();
       });
@@ -287,7 +287,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     });
     try {
       final notifier =
-          ref.read(moduleExerciseSetsProvider(widget.moduleId).notifier);
+          ref.read(moduleExercisesProvider(widget.moduleId).notifier);
       await notifier.completeAllModuleProgress();
       ref.invalidate(userProgressProvider);
       ref.invalidate(moduleDetailProvider(widget.moduleId));
@@ -312,7 +312,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     });
     try {
       final notifier =
-          ref.read(moduleExerciseSetsProvider(widget.moduleId).notifier);
+          ref.read(moduleExercisesProvider(widget.moduleId).notifier);
       await notifier.resetModuleProgress();
       ref.invalidate(userProgressProvider);
       ref.invalidate(moduleDetailProvider(widget.moduleId));
@@ -344,43 +344,43 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     );
   }
 
-  void _showInfoSheet(SetProgress set) {
-    final isRegenerating = _busySetId == set.setId &&
+  void _showInfoSheet(ExerciseProgress exercise) {
+    final isRegenerating = _busyExerciseId == exercise.exerciseId &&
         _busyAction == _BusyAction.regenerate;
 
     AppBottomSheet.show(
       context,
       isScrollControlled: true,
       builder: (ctx) => CustomPracticeBottomSheet.info(
-        progress: set,
+        progress: exercise,
         onPlay: () {
           Navigator.of(ctx).pop();
-          _pushExercisePlay(set.setId);
+          _pushExercisePlay(exercise.exerciseId);
         },
         onRegenerate: () {
           Navigator.of(ctx).pop();
-          _confirmRegenerate(set.setId, set.title, set.userPrompt);
+          _confirmRegenerate(exercise.exerciseId, exercise.title, exercise.userPrompt);
         },
         onReset: () {
           Navigator.of(ctx).pop();
-          _confirmReset(set.setId, set.title);
+          _confirmReset(exercise.exerciseId, exercise.title);
         },
         onDelete: () {
           Navigator.of(ctx).pop();
-          _confirmDelete(set.setId);
+          _confirmDelete(exercise.exerciseId);
         },
         onCancel: isRegenerating ? () => _aiCancelToken?.cancel() : null,
       ),
     );
   }
 
-  void _confirmDelete(String setId) {
+  void _confirmDelete(String exerciseId) {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: S.of(context).deleteCustomSetQuestion,
+        title: S.of(context).deleteCustomExerciseQuestion,
         content:
-            S.of(context).deleteCustomPracticeSetWarning,
+            S.of(context).deleteCustomPracticeExerciseWarning,
         actions: [
           AppDialogAction(
             label: S.of(context).cancelButton2,
@@ -391,7 +391,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
-              _handleDelete(setId);
+              _handleDelete(exerciseId);
             },
           ),
         ],
@@ -399,7 +399,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     );
   }
 
-  void _confirmReset(String setId, String title) {
+  void _confirmReset(String exerciseId, String title) {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
@@ -415,7 +415,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
-              _handleReset(setId);
+              _handleReset(exerciseId);
             },
           ),
         ],
@@ -423,7 +423,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     );
   }
 
-  void _confirmRegenerate(String setId, String title, String? userPrompt) {
+  void _confirmRegenerate(String exerciseId, String title, String? userPrompt) {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
@@ -439,7 +439,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
-              _handleRegenerate(setId, userPrompt: userPrompt);
+              _handleRegenerate(exerciseId, userPrompt: userPrompt);
             },
           ),
         ],
@@ -502,8 +502,8 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
     final moduleAsync = ref.watch(moduleDetailProvider(widget.moduleId));
     final progressAsync = ref.watch(userProgressProvider);
     final userProfileAsync = ref.watch(userProfileProvider);
-    final exerciseSetsAsync =
-        ref.watch(moduleExerciseSetsProvider(widget.moduleId));
+    final exercisesAsync =
+        ref.watch(moduleExercisesProvider(widget.moduleId));
 
     return Scaffold(
       body: moduleAsync.when(
@@ -528,7 +528,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
               ),
               SliverToBoxAdapter(child: _ModuleInfoSection(module: module)),
               _buildListHeaderSliver(
-                exerciseSetsAsync,
+                exercisesAsync,
                 showCompleteAll,
                 hasProgress,
               ),
@@ -542,7 +542,7 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
                   childCount: module.lessons.length,
                 ),
               ),
-              _buildCustomPracticeSliver(context, exerciseSetsAsync),
+              _buildCustomPracticeSliver(context, exercisesAsync),
               const SliverToBoxAdapter(
                   child: SizedBox(height: AppSpacing.lg)),
             ],
@@ -553,11 +553,11 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
   }
 
   Widget _buildListHeaderSliver(
-    AsyncValue<ModuleExerciseSummary> exerciseSetsAsync,
+    AsyncValue<ModuleExerciseSummary> exercisesAsync,
     bool showCompleteAll,
     bool hasProgress,
   ) {
-    return exerciseSetsAsync.when(
+    return exercisesAsync.when(
       loading: () => SliverToBoxAdapter(
         child: ContentListHeader(title: S.of(context).lessonsTitle),
       ),
@@ -589,13 +589,13 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
 
   Widget _buildCustomPracticeSliver(
     BuildContext context,
-    AsyncValue<ModuleExerciseSummary> exerciseSetsAsync,
+    AsyncValue<ModuleExerciseSummary> exercisesAsync,
   ) {
-    return exerciseSetsAsync.when(
+    return exercisesAsync.when(
       loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
       error: (_, _) => const SliverToBoxAdapter(child: SizedBox.shrink()),
       data: (summary) {
-        final customSets = summary.moduleSets;
+        final customExercises = summary.moduleExercises;
 
         return SliverToBoxAdapter(
           child: CustomPracticeSection(
@@ -603,19 +603,19 @@ class _ModuleDetailScreenState extends ConsumerState<ModuleDetailScreen>
             lockedMessage:
                 S.of(context).unlockCustomPracticeModuleHint,
             emptyMessage:
-                S.of(context).noCustomPracticeSetsYet,
+                S.of(context).noCustomExercisesYet,
             isCreating: _isCreatingCustom,
             error: _error,
             onCreate: _showCreationForm,
             onCancelCreate: () => _aiCancelToken?.cancel(),
-            setCards: customSets
+            exerciseCards: customExercises
                 .map(
-                  (set) => _ModuleSetCard(
-                    progress: set,
-                    isBusy: _busySetId == set.setId,
-                    isRegenerating: _busySetId == set.setId &&
+                  (exercise) => _ModuleExerciseCard(
+                    progress: exercise,
+                    isBusy: _busyExerciseId == exercise.exerciseId,
+                    isRegenerating: _busyExerciseId == exercise.exerciseId &&
                         _busyAction == _BusyAction.regenerate,
-                    onTap: () => _showInfoSheet(set),
+                    onTap: () => _showInfoSheet(exercise),
                     onCancel: () => _aiCancelToken?.cancel(),
                   ),
                 )
@@ -723,8 +723,8 @@ class _ModuleMetaChip extends StatelessWidget {
   }
 }
 
-class _ModuleSetCard extends StatelessWidget {
-  const _ModuleSetCard({
+class _ModuleExerciseCard extends StatelessWidget {
+  const _ModuleExerciseCard({
     required this.progress,
     this.isBusy = false,
     this.isRegenerating = false,
@@ -732,7 +732,7 @@ class _ModuleSetCard extends StatelessWidget {
     this.onCancel,
   });
 
-  final SetProgress progress;
+  final ExerciseProgress progress;
   final bool isBusy;
   final bool isRegenerating;
   final VoidCallback? onTap;
@@ -803,7 +803,7 @@ class _ModuleSetCard extends StatelessWidget {
                             ? '${progress.percentCorrect.round()}%'
                             : progress.isInProgress
                                 ? '${progress.percentComplete.round()}%'
-                                : '${progress.totalExercises} questions',
+                                : '${progress.totalQuestions} questions',
                         style: GoogleFonts.inter(
                           fontSize: AppTypography.caption,
                           color: c.mutedForeground,
@@ -813,7 +813,7 @@ class _ModuleSetCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                _ModuleSetTrailing(
+                _ModuleExerciseTrailing(
                   progress: progress,
                   isBusy: isBusy,
                   isRegenerating: isRegenerating,
@@ -828,15 +828,15 @@ class _ModuleSetCard extends StatelessWidget {
   }
 }
 
-class _ModuleSetTrailing extends StatelessWidget {
-  const _ModuleSetTrailing({
+class _ModuleExerciseTrailing extends StatelessWidget {
+  const _ModuleExerciseTrailing({
     required this.progress,
     required this.isBusy,
     required this.isRegenerating,
     this.onCancel,
   });
 
-  final SetProgress progress;
+  final ExerciseProgress progress;
   final bool isBusy;
   final bool isRegenerating;
   final VoidCallback? onCancel;

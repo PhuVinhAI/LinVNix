@@ -5,7 +5,7 @@ import { GoalType } from '../../../common/enums';
 export class CreateDailyGoalDto {
   @ApiProperty({
     enum: GoalType,
-    example: GoalType.EXERCISES,
+    example: GoalType.QUESTIONS,
     description: 'Loại mục tiêu ngày',
   })
   @IsEnum(GoalType)

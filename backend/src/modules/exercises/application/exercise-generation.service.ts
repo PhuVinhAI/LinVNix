@@ -5,17 +5,17 @@ import * as path from 'path';
 import { AiProviderRouter } from '../../../infrastructure/ai/ai-provider-router';
 import { withParseRetry } from '../../../infrastructure/ai/ai-parse-retry';
 import { Type } from '../../../infrastructure/genai/genai-provider';
-import { ExerciseSetsRepository } from './repositories/exercise-sets.repository';
 import { ExercisesRepository } from './repositories/exercises.repository';
+import { QuestionsRepository } from './repositories/questions.repository';
 import { ExerciseContextLoader } from './exercise-context-loader';
 import type { LessonContext, MergedContext } from './exercise-context-loader';
-import { ExerciseType } from '../../../common/enums';
+import { QuestionType } from '../../../common/enums';
+import { Question } from '../domain/question.entity';
 import { Exercise } from '../domain/exercise.entity';
-import { ExerciseSet } from '../domain/exercise-set.entity';
 import type {
-  ExerciseOptions,
-  ExerciseAnswer,
-} from '../domain/exercise-options.types';
+  QuestionOptions,
+  QuestionAnswer,
+} from '../domain/question-options.types';
 import { ProgressRepository } from '../../progress/application/progress.repository';
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
 import { ModulesRepository } from '../../courses/application/repositories/modules.repository';
@@ -24,17 +24,17 @@ import { CoursesRepository } from '../../courses/application/repositories/course
 const DEFAULT_GUIDELINES = {
   questionCount: 10,
   preferredTypes: [
-    ExerciseType.MULTIPLE_CHOICE,
-    ExerciseType.MATCHING,
-    ExerciseType.FILL_BLANK,
-    ExerciseType.TRANSLATION,
+    QuestionType.MULTIPLE_CHOICE,
+    QuestionType.MATCHING,
+    QuestionType.FILL_BLANK,
+    QuestionType.TRANSLATION,
   ],
   description:
     'Mixed difficulty — balanced variety of vocabulary and grammar exercises based on lesson content',
 };
 
 const GeneratedExerciseSchema = z.object({
-  exerciseType: z.enum([
+  questionType: z.enum([
     'multiple_choice',
     'fill_blank',
     'matching',
@@ -51,51 +51,51 @@ const GeneratedExerciseSchema = z.object({
 const GenerationResponseSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
-  exercises: z.array(GeneratedExerciseSchema).min(1),
+  questions: z.array(GeneratedExerciseSchema).min(1),
 });
 
 const CUSTOM_PRACTICE_EXCLUDED_TYPES = [
-  ExerciseType.LISTENING,
-  ExerciseType.SPEAKING,
+  QuestionType.LISTENING,
+  QuestionType.SPEAKING,
 ];
 
 const EXERCISE_TYPE_PROMPT_META: Record<
-  ExerciseType,
+  QuestionType,
   { languageMix: string; shape: string }
 > = {
-  [ExerciseType.MULTIPLE_CHOICE]: {
+  [QuestionType.MULTIPLE_CHOICE]: {
     languageMix: '  - multiple_choice: Vietnamese questions',
     shape:
       '- multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}',
   },
-  [ExerciseType.FILL_BLANK]: {
+  [QuestionType.FILL_BLANK]: {
     languageMix: '  - fill_blank: Vietnamese sentences with ___ blanks (no question field)',
     shape:
       '- fill_blank: question=null, options={sentence:"Xin ___ ! Tôi là Nam.",blanks:1,acceptedAnswers:[["chào"]]}, correctAnswer={answers:["chào"]}',
   },
-  [ExerciseType.MATCHING]: {
+  [QuestionType.MATCHING]: {
     languageMix: '  - matching: Vietnamese↔English pairs (no question field)',
     shape:
       '- matching: question=null, options={pairs:[{left:"Vi",right:"En"}]}, correctAnswer={matches:[{left:"Vi",right:"En"}]}',
   },
-  [ExerciseType.ORDERING]: {
+  [QuestionType.ORDERING]: {
     languageMix: '  - ordering: Vietnamese questions',
     shape:
       '- ordering: options={items:["C","A","B"]}, correctAnswer={orderedItems:["A","B","C"]}',
   },
-  [ExerciseType.TRANSLATION]: {
+  [QuestionType.TRANSLATION]: {
     languageMix:
       '  - translation: either direction (Vietnamese→English or English→Vietnamese), no question field — source text goes in options.sourceText',
     shape:
       '- translation: question=null, options={sourceText:"Good morning!",sourceLanguage:"en",targetLanguage:"vi",acceptedTranslations:["Chào buổi sáng"]}, correctAnswer={translation:"Chào buổi sáng"}',
   },
-  [ExerciseType.LISTENING]: {
+  [QuestionType.LISTENING]: {
     languageMix:
       '  - listening: Vietnamese audio (provide transcript, set audioUrl to empty string)',
     shape:
       '- listening: options={audioUrl:"",transcriptType:"exact",keywords:["keyword"]}, correctAnswer={transcript:"text"}',
   },
-  [ExerciseType.SPEAKING]: {
+  [QuestionType.SPEAKING]: {
     languageMix:
       '  - speaking: Vietnamese speaking prompt (provide promptText, set promptAudioUrl to empty string)',
     shape:
@@ -104,34 +104,34 @@ const EXERCISE_TYPE_PROMPT_META: Record<
 };
 
 const EXERCISE_TYPE_SCHEMA_FIELDS: Record<
-  ExerciseType,
+  QuestionType,
   { options: string[]; correctAnswer: string[] }
 > = {
-  [ExerciseType.MULTIPLE_CHOICE]: {
+  [QuestionType.MULTIPLE_CHOICE]: {
     options: ['choices'],
     correctAnswer: ['selectedChoice'],
   },
-  [ExerciseType.FILL_BLANK]: {
+  [QuestionType.FILL_BLANK]: {
     options: ['sentence', 'blanks', 'acceptedAnswers'],
     correctAnswer: ['answers'],
   },
-  [ExerciseType.MATCHING]: {
+  [QuestionType.MATCHING]: {
     options: ['pairs'],
     correctAnswer: ['matches'],
   },
-  [ExerciseType.ORDERING]: {
+  [QuestionType.ORDERING]: {
     options: ['items'],
     correctAnswer: ['orderedItems'],
   },
-  [ExerciseType.TRANSLATION]: {
+  [QuestionType.TRANSLATION]: {
     options: ['sourceText', 'sourceLanguage', 'targetLanguage', 'acceptedTranslations'],
     correctAnswer: ['translation'],
   },
-  [ExerciseType.LISTENING]: {
+  [QuestionType.LISTENING]: {
     options: ['audioUrl', 'transcriptType', 'keywords'],
     correctAnswer: ['transcript'],
   },
-  [ExerciseType.SPEAKING]: {
+  [QuestionType.SPEAKING]: {
     options: ['promptText', 'promptAudioUrl', 'transcriptType', 'keywords'],
     correctAnswer: ['transcript'],
   },
@@ -143,21 +143,21 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
     title: {
       type: Type.STRING,
       description:
-        'A short descriptive title for this exercise set (5-8 words)',
+        'A short descriptive title for this exercise (5-8 words)',
       nullable: false,
     },
     description: {
       type: Type.STRING,
       description:
-        'An optional brief description (1-2 sentences) summarizing what the exercise set covers',
+        'An optional brief description (1-2 sentences) summarizing what the exercise covers',
       nullable: true,
     },
-    exercises: {
+    questions: {
       type: Type.ARRAY,
       items: {
         type: Type.OBJECT,
         properties: {
-          exerciseType: {
+          questionType: {
             type: Type.STRING,
             description:
               'One of: multiple_choice, fill_blank, matching, ordering, translation, listening',
@@ -172,7 +172,7 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
           options: {
             type: Type.OBJECT,
             description:
-              'Exercise-type-specific options. Include only the fields relevant to the exerciseType.',
+              'Exercise-type-specific options. Include only the fields relevant to the questionType.',
             nullable: true,
             properties: {
               choices: {
@@ -271,7 +271,7 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
           correctAnswer: {
             type: Type.OBJECT,
             description:
-              'Exercise-type-specific answer. Include only the fields relevant to the exerciseType.',
+              'Exercise-type-specific answer. Include only the fields relevant to the questionType.',
             nullable: false,
             properties: {
               selectedChoice: {
@@ -330,14 +330,14 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
             nullable: true,
           },
         },
-        required: ['exerciseType', 'correctAnswer'],
+        required: ['questionType', 'correctAnswer'],
       },
     },
   },
-  required: ['title', 'exercises'],
+  required: ['title', 'questions'],
 };
 
-function buildExerciseResponseSchema(allowedTypes: ExerciseType[]) {
+function buildExerciseResponseSchema(allowedTypes: QuestionType[]) {
   const allowedOptionFields = new Set<string>();
   const allowedAnswerFields = new Set<string>();
   for (const type of allowedTypes) {
@@ -347,10 +347,10 @@ function buildExerciseResponseSchema(allowedTypes: ExerciseType[]) {
   }
 
   const baseOptionsProps =
-    EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items.properties.options
+    EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions.items.properties.options
       .properties;
   const baseAnswerProps =
-    EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items.properties
+    EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions.items.properties
       .correctAnswer.properties;
 
   const filteredOptionsProps = Object.fromEntries(
@@ -370,25 +370,25 @@ function buildExerciseResponseSchema(allowedTypes: ExerciseType[]) {
     ...EXERCISE_RESPONSE_SCHEMA_BASE,
     properties: {
       ...EXERCISE_RESPONSE_SCHEMA_BASE.properties,
-      exercises: {
-        ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises,
+      questions: {
+        ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions,
         items: {
-          ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items,
+          ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions.items,
           properties: {
-            ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
+            ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions.items
               .properties,
-            exerciseType: {
-              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
-                .properties.exerciseType,
+            questionType: {
+              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions.items
+                .properties.questionType,
               description: `One of: ${allowedTypeList}`,
             },
             options: {
-              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
+              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions.items
                 .properties.options,
               properties: filteredOptionsProps,
             },
             correctAnswer: {
-              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.exercises.items
+              ...EXERCISE_RESPONSE_SCHEMA_BASE.properties.questions.items
                 .properties.correctAnswer,
               properties: filteredAnswerProps,
             },
@@ -399,15 +399,15 @@ function buildExerciseResponseSchema(allowedTypes: ExerciseType[]) {
   };
 }
 
-function buildLanguageMixGuidelines(types: ExerciseType[]): string {
+function buildLanguageMixGuidelines(types: QuestionType[]): string {
   return types.map((t) => EXERCISE_TYPE_PROMPT_META[t].languageMix).join('\n');
 }
 
-function buildExerciseTypeShapes(types: ExerciseType[]): string {
+function buildQuestionTypeShapes(types: QuestionType[]): string {
   return types.map((t) => EXERCISE_TYPE_PROMPT_META[t].shape).join('\n');
 }
 
-function filterCustomPracticeTypes(types: ExerciseType[]): ExerciseType[] {
+function filterCustomPracticeTypes(types: QuestionType[]): QuestionType[] {
   return types.filter((t) => !CUSTOM_PRACTICE_EXCLUDED_TYPES.includes(t));
 }
 
@@ -417,8 +417,8 @@ export class ExerciseGenerationService {
 
   constructor(
     private readonly router: AiProviderRouter,
-    private readonly exerciseSetsRepository: ExerciseSetsRepository,
     private readonly exercisesRepository: ExercisesRepository,
+    private readonly questionsRepository: QuestionsRepository,
     private readonly exerciseContextLoader: ExerciseContextLoader,
     private readonly progressRepository: ProgressRepository,
     private readonly moduleProgressRepository: ModuleProgressRepository,
@@ -427,147 +427,147 @@ export class ExerciseGenerationService {
   ) {}
 
   async generate(
-    setId: string,
+    exerciseId: string,
     userId: string,
     userPromptOverride?: string,
-  ): Promise<Exercise[]> {
-    const set = await this.exerciseSetsRepository.findById(setId);
-    if (!set) {
-      throw new BadRequestException(`ExerciseSet ${setId} not found`);
+  ): Promise<Question[]> {
+    const exercise = await this.exercisesRepository.findById(exerciseId);
+    if (!exercise) {
+      throw new BadRequestException(`Exercise ${exerciseId} not found`);
     }
-    this.assertOwnedCustomSet(set, userId);
+    this.assertOwnedCustomExercise(exercise, userId);
 
-    const existing = await this.exercisesRepository.findBySetId(setId);
+    const existing = await this.questionsRepository.findByExerciseId(exerciseId);
     if (existing.length > 0) {
       throw new BadRequestException(
-        'Set already has exercises. Use regenerate instead.',
+        'Exercise already has questions. Use regenerate instead.',
       );
     }
 
-    await this.exerciseSetsRepository.update(setId, {
+    await this.exercisesRepository.update(exerciseId, {
       generationStatus: 'generating' as any,
     });
     try {
-      const exercises = await this.doGenerate(set, userId, userPromptOverride);
-      await this.exerciseSetsRepository.update(setId, {
+      const exercises = await this.doGenerate(exercise, userId, userPromptOverride);
+      await this.exercisesRepository.update(exerciseId, {
         generationStatus: 'ready' as any,
       });
       return exercises;
     } catch (e) {
-      await this.exerciseSetsRepository
-        .update(setId, { generationStatus: 'failed' as any })
+      await this.exercisesRepository
+        .update(exerciseId, { generationStatus: 'failed' as any })
         .catch(() => {});
-      await this.exerciseSetsRepository.softDelete(set.id).catch(() => {});
+      await this.exercisesRepository.softDelete(exercise.id).catch(() => {});
       throw e;
     }
   }
 
-  async createRegeneratedSet(
-    setId: string,
+  async createRegeneratedExercise(
+    exerciseId: string,
     userId: string,
     userPromptOverride?: string,
-  ): Promise<ExerciseSet> {
-    const set = await this.exerciseSetsRepository.findById(setId);
-    if (!set) {
-      throw new BadRequestException(`ExerciseSet ${setId} not found`);
+  ): Promise<Exercise> {
+    const exercise = await this.exercisesRepository.findById(exerciseId);
+    if (!exercise) {
+      throw new BadRequestException(`Exercise ${exerciseId} not found`);
     }
-    this.assertOwnedCustomSet(set, userId);
+    this.assertOwnedCustomExercise(exercise, userId);
 
     const effectiveUserPrompt =
-      userPromptOverride !== undefined ? userPromptOverride : set.userPrompt;
+      userPromptOverride !== undefined ? userPromptOverride : exercise.userPrompt;
 
-    const newSetData: Partial<ExerciseSet> = {
-      lessonId: set.lessonId,
-      moduleId: set.moduleId,
-      courseId: set.courseId,
-      isCustom: set.isCustom,
-      customConfig: set.customConfig,
+    const newExerciseData: Partial<Exercise> = {
+      lessonId: exercise.lessonId,
+      moduleId: exercise.moduleId,
+      courseId: exercise.courseId,
+      isCustom: exercise.isCustom,
+      customConfig: exercise.customConfig,
       isAIGenerated: false,
       title: 'Custom Practice',
-      description: set.description,
+      description: exercise.description,
       userPrompt: effectiveUserPrompt,
-      ownerUserId: set.ownerUserId,
-      orderIndex: set.orderIndex,
+      ownerUserId: exercise.ownerUserId,
+      orderIndex: exercise.orderIndex,
       generationStatus: 'generating' as any,
-      replacesSetId: setId,
+      replacesExerciseId: exerciseId,
     };
 
-    return this.exerciseSetsRepository.create(newSetData);
+    return this.exercisesRepository.create(newExerciseData);
   }
 
   async finalizeRegeneration(
     oldSetId: string,
-    _newSetId: string,
+    _newExerciseId: string,
   ): Promise<void> {
-    await this.exerciseSetsRepository.softDelete(oldSetId);
-    await this.exercisesRepository.softDeleteBySetId(oldSetId);
+    await this.exercisesRepository.softDelete(oldSetId);
+    await this.questionsRepository.softDeleteByExerciseId(oldSetId);
   }
 
   async generateCustom(
-    setId: string,
+    exerciseId: string,
     userId: string,
     userPromptOverride?: string,
-  ): Promise<Exercise[]> {
-    const set = await this.exerciseSetsRepository.findById(setId);
-    if (!set) {
-      throw new BadRequestException(`ExerciseSet ${setId} not found`);
+  ): Promise<Question[]> {
+    const exercise = await this.exercisesRepository.findById(exerciseId);
+    if (!exercise) {
+      throw new BadRequestException(`Exercise ${exerciseId} not found`);
     }
-    if (!set.isCustom) {
+    if (!exercise.isCustom) {
       throw new BadRequestException(
-        'generateCustom() can only be used for custom sets',
+        'generateCustom() can only be used for custom exercises',
       );
     }
-    this.assertOwnedCustomSet(set, userId);
+    this.assertOwnedCustomExercise(exercise, userId);
 
-    const existing = await this.exercisesRepository.findBySetId(setId);
+    const existing = await this.questionsRepository.findByExerciseId(exerciseId);
     if (existing.length > 0) {
       throw new BadRequestException(
-        'Set already has exercises. Use regenerate instead.',
+        'Exercise already has questions. Use regenerate instead.',
       );
     }
 
-    await this.exerciseSetsRepository.update(setId, {
+    await this.exercisesRepository.update(exerciseId, {
       generationStatus: 'generating' as any,
     });
     try {
-      const exercises = await this.doGenerate(set, userId, userPromptOverride);
-      await this.exerciseSetsRepository.update(setId, {
+      const exercises = await this.doGenerate(exercise, userId, userPromptOverride);
+      await this.exercisesRepository.update(exerciseId, {
         generationStatus: 'ready' as any,
       });
       return exercises;
     } catch (e) {
-      await this.exerciseSetsRepository
-        .update(setId, { generationStatus: 'failed' as any })
+      await this.exercisesRepository
+        .update(exerciseId, { generationStatus: 'failed' as any })
         .catch(() => {});
-      await this.exerciseSetsRepository.softDelete(set.id).catch(() => {});
+      await this.exercisesRepository.softDelete(exercise.id).catch(() => {});
       throw e;
     }
   }
 
   private async doGenerate(
-    set: ExerciseSet,
+    exercise: Exercise,
     userId: string,
     userPromptOverride?: string,
-  ): Promise<Exercise[]> {
+  ): Promise<Question[]> {
     let guidelines: {
       questionCount: number;
-      preferredTypes: ExerciseType[];
+      preferredTypes: QuestionType[];
       description: string;
     };
     let label: string;
 
-    if (set.isCustom && set.customConfig) {
-      const config = set.customConfig;
+    if (exercise.isCustom && exercise.customConfig) {
+      const config = exercise.customConfig;
       label = `Custom (${config.focusArea})`;
-      const exerciseTypes = filterCustomPracticeTypes(config.exerciseTypes);
-      if (exerciseTypes.length === 0) {
+      const questionTypes = filterCustomPracticeTypes(config.questionTypes);
+      if (questionTypes.length === 0) {
         throw new BadRequestException(
           'At least one supported exercise type must be selected',
         );
       }
       guidelines = {
         questionCount: config.questionCount,
-        preferredTypes: exerciseTypes,
+        preferredTypes: questionTypes,
         description: this.getFocusAreaDescription(config.focusArea),
       };
     } else {
@@ -576,7 +576,7 @@ export class ExerciseGenerationService {
     }
 
     const effectiveUserPrompt =
-      userPromptOverride !== undefined ? userPromptOverride : set.userPrompt;
+      userPromptOverride !== undefined ? userPromptOverride : exercise.userPrompt;
 
     const userPromptSection = effectiveUserPrompt
       ? `\n### User Request\n${effectiveUserPrompt}\n`
@@ -585,7 +585,7 @@ export class ExerciseGenerationService {
     const languageMixGuidelines = buildLanguageMixGuidelines(
       guidelines.preferredTypes,
     );
-    const exerciseTypeShapes = buildExerciseTypeShapes(
+    const questionTypeShapes = buildQuestionTypeShapes(
       guidelines.preferredTypes,
     );
     const responseSchema = buildExerciseResponseSchema(
@@ -597,7 +597,7 @@ export class ExerciseGenerationService {
       focusAreaDescription: guidelines.description,
       preferredTypes: guidelines.preferredTypes.join(', '),
       languageMixGuidelines,
-      exerciseTypeShapes,
+      questionTypeShapes,
       userPromptSection,
     };
 
@@ -605,10 +605,10 @@ export class ExerciseGenerationService {
     let lessonContextForExercises: LessonContext | null = null;
     let mergedContextForExercises: MergedContext | null = null;
 
-    if (set.courseId) {
-      const course = await this.coursesRepository.findById(set.courseId);
+    if (exercise.courseId) {
+      const course = await this.coursesRepository.findById(exercise.courseId);
       if (!course) {
-        throw new BadRequestException(`Course ${set.courseId} not found`);
+        throw new BadRequestException(`Course ${exercise.courseId} not found`);
       }
 
       const moduleIds = (course.modules || []).map((m: any) => m.id);
@@ -641,10 +641,10 @@ export class ExerciseGenerationService {
         moduleCount: String(completedModuleIds.length),
         lessonContexts: lessonContextsStr,
       });
-    } else if (set.moduleId) {
-      const module = await this.modulesRepository.findById(set.moduleId);
+    } else if (exercise.moduleId) {
+      const module = await this.modulesRepository.findById(exercise.moduleId);
       if (!module) {
-        throw new BadRequestException(`Module ${set.moduleId} not found`);
+        throw new BadRequestException(`Module ${exercise.moduleId} not found`);
       }
 
       const lessonIds = (module.lessons || []).map((l: any) => l.id);
@@ -671,10 +671,10 @@ export class ExerciseGenerationService {
         lessonCount: String(completedLessonIds.length),
         lessonContexts: lessonContextsStr,
       });
-    } else if (set.lessonId) {
+    } else if (exercise.lessonId) {
       lessonContextForExercises =
         await this.exerciseContextLoader.loadLessonContext(
-          set.lessonId,
+          exercise.lessonId,
           userId,
         );
 
@@ -691,7 +691,7 @@ export class ExerciseGenerationService {
       });
     } else {
       throw new BadRequestException(
-        'ExerciseSet must have either lessonId, moduleId, or courseId for generation',
+        'Exercise must have either lessonId, moduleId, or courseId for generation',
       );
     }
 
@@ -699,7 +699,7 @@ export class ExerciseGenerationService {
 
     const debugDir = path.join(process.cwd(), 'debug');
     if (!fs.existsSync(debugDir)) fs.mkdirSync(debugDir, { recursive: true });
-    const debugId = `${set.id}-${Date.now()}`;
+    const debugId = `${exercise.id}-${Date.now()}`;
     fs.writeFileSync(
       path.join(debugDir, `prompt-${debugId}.txt`),
       `=== SYSTEM INSTRUCTION ===\n${systemInstruction}\n\n=== USER PROMPT ===\n${prompt}\n\n=== SCHEMA ===\n${JSON.stringify(responseSchema, null, 2)}`,
@@ -708,7 +708,7 @@ export class ExerciseGenerationService {
 
     const { result: generated } = await withParseRetry(
       () =>
-        this.router.forFeature('exercise').chatStructured({
+        this.router.forFeature('question').chatStructured({
           messages: [{ role: 'user', content: prompt }],
           systemInstruction,
           responseSchema,
@@ -718,9 +718,9 @@ export class ExerciseGenerationService {
       'ExerciseGeneration',
     );
 
-    const exercises = await this.persistExercises(generated, set);
+    const exercises = await this.persistExercises(generated, exercise);
 
-    await this.exerciseSetsRepository.update(set.id, {
+    await this.exercisesRepository.update(exercise.id, {
       isAIGenerated: true,
       promptUsed: prompt,
       title: generated.title,
@@ -728,7 +728,7 @@ export class ExerciseGenerationService {
     });
 
     this.logger.log(
-      `Generated ${exercises.length} exercises for set ${set.id} (${label})`,
+      `Generated ${exercises.length} questions for exercise ${exercise.id} (${label})`,
     );
 
     return exercises;
@@ -834,33 +834,33 @@ export class ExerciseGenerationService {
 
     const lines = ['\n### Existing Exercises (DO NOT duplicate these)'];
     for (const e of existingExercises) {
-      lines.push(`- [${e.exerciseType}] ${e.question ?? ''}`);
+      lines.push(`- [${e.questionType}] ${e.question ?? ''}`);
     }
     return lines.join('\n');
   }
 
   private async persistExercises(
     generated: z.infer<typeof GenerationResponseSchema>,
-    set: ExerciseSet,
-  ): Promise<Exercise[]> {
-    const exercises: Exercise[] = [];
+    exercise: Exercise,
+  ): Promise<Question[]> {
+    const questions: Question[] = [];
 
-    for (let i = 0; i < generated.exercises.length; i++) {
-      const ex = generated.exercises[i];
-      const exercise = await this.exercisesRepository.create({
-        exerciseType: ex.exerciseType as ExerciseType,
+    for (let i = 0; i < generated.questions.length; i++) {
+      const ex = generated.questions[i];
+      const question = await this.questionsRepository.create({
+        questionType: ex.questionType as QuestionType,
         question: ex.question ?? null,
-        options: ex.options as ExerciseOptions,
-        correctAnswer: ex.correctAnswer as ExerciseAnswer,
+        options: ex.options as QuestionOptions,
+        correctAnswer: ex.correctAnswer as QuestionAnswer,
         explanation: ex.explanation,
         orderIndex: i + 1,
         difficultyLevel: 2,
-        setId: set.id,
+        exerciseId: exercise.id,
       });
-      exercises.push(exercise);
+      questions.push(question);
     }
 
-    return exercises;
+    return questions;
   }
 
   private getFocusAreaDescription(focusArea: string): string {
@@ -875,14 +875,14 @@ export class ExerciseGenerationService {
     }
   }
 
-  private assertOwnedCustomSet(set: ExerciseSet, userId: string): void {
-    if (!set.isCustom || set.ownerUserId !== userId) {
+  private assertOwnedCustomExercise(exercise: Exercise, userId: string): void {
+    if (!exercise.isCustom || exercise.ownerUserId !== userId) {
       throw new BadRequestException(
-        'Only your custom practice sets can be generated',
+        'Only your custom practice exercises can be generated',
       );
     }
-    if (!ExerciseSet.isValidCustomConfig(set.customConfig)) {
-      throw new BadRequestException('Custom practice set has invalid config');
+    if (!Exercise.isValidCustomConfig(exercise.customConfig)) {
+      throw new BadRequestException('Custom practice exercise has invalid config');
     }
   }
 }

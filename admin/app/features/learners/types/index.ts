@@ -16,7 +16,7 @@ export interface Learner {
   updatedAt: string
   summary?: {
     completedLessons: number
-    exerciseResults: number
+    questionResults: number
     personalVocabularyCount: number
     simulationCount: number
   }
@@ -27,8 +27,8 @@ export interface LearnerDetail {
   summary: {
     progressCount: number
     completedProgressCount: number
-    exerciseResultsCount: number
-    correctExerciseResultsCount: number
+    questionResultsCount: number
+    correctQuestionResultsCount: number
     personalVocabularyCount: number
     bookmarkCount: number
     simulationCount: number
@@ -40,8 +40,8 @@ export interface LearnerDetail {
   progress: LearnerProgress[]
   dailyGoals: DailyGoal[]
   dailyProgress: DailyProgress[]
-  exerciseResults: ExerciseResult[]
-  exerciseAttempts: ExerciseAttempt[]
+  questionResults: QuestionResult[]
+  questionAttempts: QuestionAttempt[]
   personalVocabularies: PersonalVocabulary[]
   bookmarks: Bookmark[]
   simulations: SimulationSession[]
@@ -127,11 +127,11 @@ export interface DailyGoal {
 export interface DailyProgress {
   id: string
   date: string
-  exercisesCompleted: number
+  questionsCompleted: number
   lessonsCompleted: number
 }
 
-export interface ExerciseOptionsLike {
+export interface QuestionOptionsLike {
   type?: string
   // multiple_choice
   choices?: string[]
@@ -154,7 +154,7 @@ export interface ExerciseOptionsLike {
   keywords?: string[]
 }
 
-export interface ExerciseResult {
+export interface QuestionResult {
   id: string
   isCorrect: boolean
   score: number
@@ -165,10 +165,10 @@ export interface ExerciseResult {
     id: string
     question?: string | null
     questionAudioUrl?: string | null
-    exerciseType: string
+    questionType: string
     difficultyLevel?: number
-    options?: ExerciseOptionsLike | null
-    exerciseSet?: { id: string; title: string }
+    options?: QuestionOptionsLike | null
+    exercise?: { id: string; title: string }
   }
   lastAttempt?: {
     id: string
@@ -178,7 +178,7 @@ export interface ExerciseResult {
   } | null
 }
 
-export interface ExerciseAttempt {
+export interface QuestionAttempt {
   id: string
   isCorrect: boolean
   score: number
@@ -186,8 +186,8 @@ export interface ExerciseAttempt {
   exercise?: {
     id: string
     question?: string | null
-    exerciseType: string
-    options?: ExerciseOptionsLike | null
+    questionType: string
+    options?: QuestionOptionsLike | null
   }
 }
 

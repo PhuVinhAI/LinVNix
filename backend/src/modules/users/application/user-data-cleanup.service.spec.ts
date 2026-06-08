@@ -56,7 +56,7 @@ describe('UserDataCleanupService', () => {
     expect(queries[3]).toContain('DELETE FROM simulation_sessions');
     expect(queries[5]).toContain('DELETE FROM personal_vocabularies');
     expect(queries[8]).toContain('DELETE FROM exercises');
-    expect(queries[9]).toContain('DELETE FROM exercise_sets');
+    expect(queries[9]).toContain('DELETE FROM exercises');
     expect(queries[14]).toContain(
       'UPDATE users SET onboarding_completed = false',
     );

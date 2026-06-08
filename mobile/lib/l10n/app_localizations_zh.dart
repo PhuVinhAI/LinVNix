@@ -430,10 +430,10 @@ class SZh extends S {
   String get createCustomPractice => '创建自定义练习';
 
   @override
-  String get createCustomSet => '创建自定义合集';
+  String get createCustomExercise => '创建自定义练习';
 
   @override
-  String get createCustomSetPrompt => '创建自定义练习集以开始练习！';
+  String get createCustomExercisePrompt => '创建自定义练习以开始练习！';
 
   @override
   String get currentLevelLabel => '当前级别';
@@ -457,10 +457,10 @@ class SZh extends S {
   String get deleteConversation => '删除对话';
 
   @override
-  String get deleteCustomPracticeSetWarning => '该练习集将从您的列表中移除。您可以随时创建新练习集。';
+  String get deleteCustomPracticeExerciseWarning => '该练习将从您的列表中移除。您可以随时创建新练习。';
 
   @override
-  String get deleteCustomSetQuestion => '删除自定义合集？';
+  String get deleteCustomExerciseQuestion => '删除自定义练习？';
 
   @override
   String get deleteData => '删除数据';
@@ -480,7 +480,7 @@ class SZh extends S {
   String get deleteMessageChainQuestion => '该消息及之后的所有消息都将被删除。您确定吗？';
 
   @override
-  String get deleteSet => '删除合集';
+  String get deleteExercise => '删除练习';
 
   @override
   String get developerSection => '开发者';
@@ -565,6 +565,9 @@ class SZh extends S {
 
   @override
   String get exercisesDone => '已完成练习';
+
+  @override
+  String get questionsTitle => '问题';
 
   @override
   String get exercisesTitle => '练习';
@@ -808,7 +811,7 @@ class SZh extends S {
   String get noCoursesAvailableIcon => '无课程图标';
 
   @override
-  String get noCustomPracticeSetsYet => '暂无自定义练习集。创建一个来复习您所学的内容。';
+  String get noCustomExercisesYet => '暂无自定义练习。创建一个来复习您所学的内容。';
 
   @override
   String get noExercisesYet => '暂无练习';
@@ -1501,7 +1504,7 @@ class SZh extends S {
   String get creatingStatus => '正在创建...';
 
   @override
-  String get createExercisesButton => '创建练习';
+  String get createQuestionsButton => '创建练习';
 
   @override
   String get feedbackTitle => '反馈';
@@ -1521,7 +1524,7 @@ class SZh extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return '这将创建一个新集合，用新的AI生成问题替换\"$title\"。';
+    return '这将创建一个新练习，用新的AI生成问题替换\"$title\"。';
   }
 
   @override
@@ -1610,7 +1613,7 @@ class SZh extends S {
   }
 
   @override
-  String get exerciseTypesLabel => '练习类型';
+  String get questionTypesLabel => '练习类型';
 
   @override
   String get focusLabel => '专注';

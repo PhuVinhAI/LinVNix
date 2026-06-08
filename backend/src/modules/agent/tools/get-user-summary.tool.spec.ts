@@ -83,7 +83,7 @@ describe('GetUserSummaryTool', () => {
   describe('execute', () => {
     it('returns level, nativeLanguage, dialect, dailyGoals and streak from ctx + services', async () => {
       dailyGoalsService.findAll.mockResolvedValue([
-        { id: 'g-1', goalType: GoalType.EXERCISES, targetValue: 5 } as any,
+        { id: 'g-1', goalType: GoalType.QUESTIONS, targetValue: 5 } as any,
         { id: 'g-2', goalType: GoalType.SIMULATIONS, targetValue: 3 } as any,
       ]);
       dailyStreakService.getStreak.mockResolvedValue({
@@ -101,7 +101,7 @@ describe('GetUserSummaryTool', () => {
         nativeLanguage: 'English',
         dialect: Dialect.NORTHERN,
         dailyGoals: [
-          { goalType: GoalType.EXERCISES, targetValue: 5 },
+          { goalType: GoalType.QUESTIONS, targetValue: 5 },
           { goalType: GoalType.SIMULATIONS, targetValue: 3 },
         ],
         streak: {

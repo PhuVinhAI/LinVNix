@@ -447,11 +447,11 @@ class SEs extends S {
   String get createCustomPractice => 'Crear práctica personalizada';
 
   @override
-  String get createCustomSet => 'Crear conjunto personalizado';
+  String get createCustomExercise => 'Crear ejercicio personalizado';
 
   @override
-  String get createCustomSetPrompt =>
-      '¡Crea un conjunto personalizado para empezar a practicar!';
+  String get createCustomExercisePrompt =>
+      '¡Crea un ejercicio personalizado para empezar a practicar!';
 
   @override
   String get currentLevelLabel => 'Nivel actual';
@@ -476,11 +476,12 @@ class SEs extends S {
   String get deleteConversation => 'Eliminar conversación';
 
   @override
-  String get deleteCustomPracticeSetWarning =>
-      'Este conjunto se eliminará de tu lista. Puedes crear uno nuevo en cualquier momento.';
+  String get deleteCustomPracticeExerciseWarning =>
+      'Este ejercicio se eliminará de tu lista. Puedes crear uno nuevo en cualquier momento.';
 
   @override
-  String get deleteCustomSetQuestion => '¿Eliminar conjunto personalizado?';
+  String get deleteCustomExerciseQuestion =>
+      '¿Eliminar ejercicio personalizado?';
 
   @override
   String get deleteData => 'Eliminar datos';
@@ -501,7 +502,7 @@ class SEs extends S {
       'Este mensaje y todos los mensajes posteriores se eliminarán. ¿Estás seguro?';
 
   @override
-  String get deleteSet => 'Eliminar conjunto';
+  String get deleteExercise => 'Eliminar ejercicio';
 
   @override
   String get developerSection => 'Desarrollador';
@@ -588,6 +589,9 @@ class SEs extends S {
 
   @override
   String get exercisesDone => 'Ejercicios terminados';
+
+  @override
+  String get questionsTitle => 'Preguntas';
 
   @override
   String get exercisesTitle => 'Ejercicios';
@@ -834,8 +838,8 @@ class SEs extends S {
   String get noCoursesAvailableIcon => 'Icono de sin cursos';
 
   @override
-  String get noCustomPracticeSetsYet =>
-      'Aún no hay conjuntos de práctica personalizados. Crea uno para repasar lo que has aprendido.';
+  String get noCustomExercisesYet =>
+      'Aún no hay ejercicios personalizados. Crea uno para repasar lo que has aprendido.';
 
   @override
   String get noExercisesYet => 'Aún no hay ejercicios';
@@ -1578,7 +1582,7 @@ class SEs extends S {
   String get creatingStatus => 'Creando...';
 
   @override
-  String get createExercisesButton => 'Crear ejercicios';
+  String get createQuestionsButton => 'Crear ejercicios';
 
   @override
   String get feedbackTitle => 'Comentarios';
@@ -1598,7 +1602,7 @@ class SEs extends S {
 
   @override
   String freshAiQuestionsWarningParam(Object title) {
-    return 'Esto creará un nuevo conjunto reemplazando \"$title\" con preguntas nuevas generadas por IA.';
+    return 'Esto creará un nuevo ejercicio reemplazando «$title» con preguntas nuevas generadas por IA.';
   }
 
   @override
@@ -1695,7 +1699,7 @@ class SEs extends S {
   }
 
   @override
-  String get exerciseTypesLabel => 'Tipos de ejercicios';
+  String get questionTypesLabel => 'Tipos de ejercicios';
 
   @override
   String get focusLabel => 'Enfoque';

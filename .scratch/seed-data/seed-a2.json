@@ -16,14 +16,14 @@
               "__uuid": "lesson-a2-001-001",
               "description": "Học các từ vựng phổ biến khi đi chợ và mua sắm: chợ, siêu thị, mua, bán, giá, rẻ, đắt, tiền, hóa đơn, trả giá, hàng, cân, rau, thịt, cá.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "đắt",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Đắt' nghĩa là expensive. 'Rẻ' nghĩa là cheap.",
                   "options": {
                     "choices": [
@@ -46,7 +46,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Trả giá' là cụm từ cố định nghĩa là bargain.",
                   "options": {
                     "acceptedAnswers": [
@@ -85,7 +85,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các từ vựng cơ bản về mua sắm.",
                   "options": {
                     "pairs": [
@@ -118,7 +118,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "Câu hỏi giá cả phổ biến nhất.",
                   "options": {
                     "acceptedTranslations": [
@@ -534,7 +534,7 @@
               "__uuid": "lesson-a2-001-002",
               "description": "Học cách so sánh hơn và nhất trong tiếng Việt: dùng 'hơn' (more) và 'nhất' (most) với tính từ. Thực hành so sánh giá cả, chất lượng hàng hóa.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -543,7 +543,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "So sánh hơn thêm 'hơn' sau tính từ: rẻ + hơn = cheaper.",
                   "options": {
                     "acceptedAnswers": [
@@ -565,7 +565,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "So sánh nhất dùng 'nhất': rẻ + nhất = cheapest.",
                   "options": {
                     "choices": [
@@ -592,7 +592,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc so sánh hơn: A + tính từ + hơn + B. Chợ này rẻ hơn siêu thị.",
                   "options": {
                     "items": [
@@ -614,7 +614,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'một ít' = a little, 'thịt bò' = beef.",
                   "options": {
                     "acceptedTranslations": [
@@ -637,7 +637,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Các' dùng cho số nhiều xác định (the), thường đứng trước classifier.",
                   "options": {
                     "choices": [
@@ -932,14 +932,14 @@
               "__uuid": "lesson-a2-001-003",
               "description": "Thực hành hội thoại mua bán thực tế ở chợ Việt Nam. Học cách hỏi giá, trả giá và các mẫu câu giao tiếp phổ biến với người bán hàng.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "chị / em / cô / chú",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Ở chợ, người bán và mua thường xưng hô theo quan hệ gia đình.",
                   "options": {
                     "choices": [
@@ -960,7 +960,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Cho tôi' = give me, 'một cân' = one kilo, 'cà chua' = tomato.",
                   "options": {
                     "acceptedTranslations": [
@@ -984,7 +984,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Tổng cộng' = in total. Đây là cụm từ quen thuộc khi mua sắm.",
                   "options": {
                     "acceptedAnswers": [
@@ -1163,7 +1163,7 @@
               "__uuid": "lesson-a2-001-004",
               "description": "Bài tổng hợp rèn luyện cả từ vựng, ngữ pháp so sánh và hội thoại mua bán qua bài viết ngắn và bài tập đa dạng.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -1177,7 +1177,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc so sánh hơn: A + tính từ + hơn + B.",
                   "options": {
                     "items": [
@@ -1202,7 +1202,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "So sánh hơn: sạch + hơn = cleaner.",
                   "options": {
                     "acceptedAnswers": [
@@ -1224,7 +1224,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Tiêu' = spend, 'khoảng' = about, 'mỗi lần' = each time.",
                   "options": {
                     "acceptedTranslations": [
@@ -1373,7 +1373,7 @@
               "__uuid": "lesson-a2-002-001",
               "description": "Học từ vựng về sức khỏe, bệnh tật, bệnh viện, bác sĩ, thuốc, và các triệu chứng phổ biến: đau, sốt, ho, cảm, khám, sức khỏe.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -1397,7 +1397,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Từ vựng cơ bản về sức khỏe.",
                   "options": {
                     "pairs": [
@@ -1430,7 +1430,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Đau đầu' = headache. 'Đau' = pain/hurt, 'đầu' = head.",
                   "options": {
                     "choices": [
@@ -1453,7 +1453,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Uống thuốc' = take medicine. Tiếng Việt dùng 'uống' (drink) cho thuốc viên.",
                   "options": {
                     "acceptedAnswers": [
@@ -1478,7 +1478,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Phải' = have to, 'đi bệnh viện' = go to the hospital.",
                   "options": {
                     "acceptedTranslations": [
@@ -1838,7 +1838,7 @@
               "__uuid": "lesson-a2-002-002",
               "description": "Học cách dùng 'bị' trước động từ để diễn tả bị động (adversative passive) và dùng 'phải' để diễn tả nghĩa vụ. Kết hợp với từ vựng sức khỏe.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -1847,7 +1847,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Bị' + tên bệnh = bị cảm, bị sốt, bị ho.",
                   "options": {
                     "acceptedAnswers": [
@@ -1869,7 +1869,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Phải' chỉ nghĩa vụ bắt buộc (must/have to).",
                   "options": {
                     "choices": [
@@ -1890,7 +1890,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Có thể' = can, 'nhà thuốc' = pharmacy.",
                   "options": {
                     "acceptedTranslations": [
@@ -1919,7 +1919,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc: Chủ ngữ + bị + tình trạng + từ + thời điểm.",
                   "options": {
                     "items": [
@@ -2196,14 +2196,14 @@
               "__uuid": "lesson-a2-002-003",
               "description": "Đọc đoạn văn ngắn về chăm sóc sức khỏe hàng ngày và trả lời câu hỏi. Rèn luyện kỹ năng đọc hiểu kết hợp từ vựng và ngữ pháp đã học.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Tự mua thuốc ở nhà thuốc",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Đoạn văn nói: 'Khi bị ốm, người Việt thường tự mua thuốc ở nhà thuốc trước khi đi khám bác sĩ.'",
                   "options": {
                     "choices": [
@@ -2224,7 +2224,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Khỏe hơn giàu' = health is better than wealth.",
                   "options": {
                     "choices": [
@@ -2247,7 +2247,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "Đoạn văn nói phòng khám tư nhân sạch hơn và nhanh hơn bệnh viện công.",
                   "options": {
                     "acceptedAnswers": [
@@ -2419,7 +2419,7 @@
               "__uuid": "lesson-a2-003-001",
               "description": "Học từ vựng về thời tiết: trời, nóng, lạnh, mưa, nắng, gió, và các mùa: xuân, hạ, thu, đông. Cùng các từ liên quan: nhiệt độ, ẩm, khô.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -2443,7 +2443,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Bốn mùa theo thứ tự: xuân, hạ, thu, đông.",
                   "options": {
                     "pairs": [
@@ -2476,7 +2476,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Miền Nam chỉ có hai mùa: mùa mưa và mùa khô.",
                   "options": {
                     "choices": [
@@ -2499,7 +2499,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Đang' chỉ thì tiến hành: đang mưa = is raining.",
                   "options": {
                     "acceptedAnswers": [
@@ -2521,7 +2521,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Mùa đông' = winter, 'lạnh' = cold, 'rất' = very.",
                   "options": {
                     "acceptedTranslations": [
@@ -2900,7 +2900,7 @@
               "__uuid": "lesson-a2-003-002",
               "description": "Học cách dùng 'đang' trước động từ để nói về thời tiết hiện tại và hành động đang diễn ra.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -2909,7 +2909,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Đang' chỉ thì tiến hành: đang mưa = is raining.",
                   "options": {
                     "acceptedAnswers": [
@@ -2931,7 +2931,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Đang lạnh dần' = getting colder.",
                   "options": {
                     "choices": [
@@ -2957,7 +2957,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Cấu trúc: Trời + đang + động từ + bổ ngữ.",
                   "options": {
                     "items": [
@@ -2978,7 +2978,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Hôm nay' = today, 'trời nắng' = it's sunny.",
                   "options": {
                     "acceptedTranslations": [
@@ -3192,14 +3192,14 @@
               "__uuid": "lesson-a2-003-003",
               "description": "Rèn luyện kỹ năng nghe hiểu qua mô tả dự báo thời tiết. Thực hành từ vựng thời tiết và cấu trúc 'đang' qua bài tập nghe (mô phỏng).",
               "estimated_duration": 20,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "transcript": "lạnh",
                     "type": "listening"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "listening",
+                  "question_type": "listening",
                   "explanation": "Dự báo nói 'trời đang lạnh dần' ở miền Bắc.",
                   "options": {
                     "audioUrl": "/audio/a2/weather-north.mp3",
@@ -3221,7 +3221,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Miền Nam đang là mùa mưa, trời đang ẩm và có mưa chiều.",
                   "options": {
                     "choices": [
@@ -3244,7 +3244,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Ô' = umbrella. Có thể nói 'dù' ở miền Bắc nhưng 'ô' phổ biến hơn.",
                   "options": {
                     "acceptedAnswers": [
@@ -3411,7 +3411,7 @@
               "__uuid": "lesson-a2-004-001",
               "description": "Học từ vựng về nhà và sinh hoạt: nhà, phòng, bếp, vệ sinh, cửa, cửa sổ, thuê, ở, tầng, sân.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -3435,7 +3435,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Từ vựng cơ bản về nhà ở.",
                   "options": {
                     "pairs": [
@@ -3468,7 +3468,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Miền Nam hay dùng 'lầu' thay cho 'tầng'.",
                   "options": {
                     "choices": [
@@ -3489,7 +3489,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Thuê' = rent, 'căn hộ' = apartment.",
                   "options": {
                     "acceptedTranslations": [
@@ -3514,7 +3514,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Phòng ngủ' = bedroom.",
                   "options": {
                     "acceptedAnswers": [
@@ -3898,7 +3898,7 @@
               "__uuid": "lesson-a2-004-002",
               "description": "Học cách dùng 'ở' + nơi chốn để nói về vị trí. Thực hành mô tả nhà và vị trí đồ vật. Rèn luyện kỹ năng nói.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -3907,7 +3907,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Ở' là giới từ chỉ vị trí: ở + nơi chốn.",
                   "options": {
                     "acceptedAnswers": [
@@ -3935,7 +3935,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Nhà tôi có ba phòng ngủ.",
                   "options": {
                     "items": [
@@ -3957,7 +3957,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Ở tầng một' = is on the first floor.",
                   "options": {
                     "choices": [
@@ -3978,7 +3978,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Sau nhà' = behind the house.",
                   "options": {
                     "acceptedTranslations": [
@@ -4192,7 +4192,7 @@
               "__uuid": "lesson-a2-005-001",
               "description": "Học từ vựng về các hoạt động giải trí: xem, phim, nghe, nhạc, đọc, chơi, thể thao, bóng đá, bơi, du lịch.",
               "estimated_duration": 25,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -4216,7 +4216,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": "Các hoạt động giải trí phổ biến.",
                   "options": {
                     "pairs": [
@@ -4249,7 +4249,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "Bóng đá là môn thể thao phổ biến nhất ở Việt Nam.",
                   "options": {
                     "choices": [
@@ -4270,7 +4270,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Nghe nhạc' = listen to music, 'đọc sách' = read books.",
                   "options": {
                     "acceptedTranslations": [
@@ -4294,7 +4294,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Chơi' vừa là play vừa là hang out. 'Đi chơi' = go out/hang out.",
                   "options": {
                     "acceptedAnswers": [
@@ -4663,7 +4663,7 @@
               "__uuid": "lesson-a2-005-002",
               "description": "Học cách nối hai câu đơn thành câu ghép dùng 'và' (and), 'nhưng' (but), 'mà' (but/that). Thực hành viết câu ghép về sở thích và giải trí.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -4672,7 +4672,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Và' = and, thêm thông tin không đối lập.",
                   "options": {
                     "acceptedAnswers": [
@@ -4694,7 +4694,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Nhưng' chỉ sự đối lập: giỏi nhưng lười = smart but lazy.",
                   "options": {
                     "choices": [
@@ -4722,7 +4722,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Tôi thích bóng đá nhưng không có thời gian.",
                   "options": {
                     "items": [
@@ -4745,7 +4745,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Mà' hoặc 'nhưng' đều đúng. 'Mà' phổ biến hơn trong văn nói.",
                   "options": {
                     "acceptedTranslations": [
@@ -4770,7 +4770,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Mà' dùng như 'that/which' dẫn mệnh đề quan hệ.",
                   "options": {
                     "acceptedAnswers": [
@@ -5017,7 +5017,7 @@
               "__uuid": "lesson-a2-005-003",
               "description": "Thực hành kỹ năng viết bằng cách viết đoạn văn về sở thích cá nhân. Kết hợp câu ghép với và/nhưng/mà và so sánh hơn/nhất.",
               "estimated_duration": 30,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -5031,7 +5031,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": "Tôi thích nhạc Việt Nam hơn nhạc nước ngoài.",
                   "options": {
                     "items": [
@@ -5056,7 +5056,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": "'Mà' dẫn mệnh đề quan hệ: môn thể thao mà tôi thích nhất.",
                   "options": {
                     "acceptedAnswers": [
@@ -5078,7 +5078,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": "'Đi bơi' = go swimming, 'chơi bóng đá' = play football, 'với bạn bè' = with friends.",
                   "options": {
                     "acceptedTranslations": [
@@ -5100,7 +5100,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 2,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": "'Mát' = cool. Đà Lạt mát hơn Sài Gòn.",
                   "options": {
                     "choices": [

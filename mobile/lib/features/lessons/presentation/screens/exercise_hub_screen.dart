@@ -13,7 +13,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../data/lesson_providers.dart';
 import '../../data/lesson_repository.dart';
 import '../../data/lesson_time_tracker.dart';
-import '../../domain/exercise_set_models.dart';
+import '../../domain/exercise_models.dart';
 import '../widgets/custom_practice_bottom_sheet.dart';
 import '../../../assistant/data/exercise_hub_view_state_provider.dart';
 
@@ -37,7 +37,7 @@ String? _busyActionName(_BusyAction action) => switch (action) {
 
 class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     with WidgetsBindingObserver {
-  String? _busySetId;
+  String? _busyExerciseId;
   _BusyAction _busyAction = _BusyAction.none;
   String? _error;
   bool _isCreatingCustom = false;
@@ -45,14 +45,14 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   void _publishHubViewState() {
     final next = ExerciseHubViewState(
       isCreatingCustom: _isCreatingCustom,
-      busySetId: _busySetId,
+      busyExerciseId: _busyExerciseId,
       busyAction: _busyActionName(_busyAction),
       actionError: _error,
     );
     ref.read(exerciseHubViewStateProvider.notifier).set(next);
   }
-  String? _creatingSetId;
-  String? _regeneratingNewSetId;
+  String? _creatingExerciseId;
+  String? _regeneratingNewExerciseId;
   CancelToken? _aiCancelToken;
   LessonTimeTracker? _lessonTimeTracker;
   // Cached so cleanup paths that run during/after dispose don't touch `ref`.
@@ -94,7 +94,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   @override
   void deactivate() {
     _aiCancelToken?.cancel();
-    _cleanupIncompleteSet();
+    _cleanupIncompleteExercise();
     super.deactivate();
   }
 
@@ -102,7 +102,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _aiCancelToken?.cancel();
-    _cleanupIncompleteSet();
+    _cleanupIncompleteExercise();
     unawaited(_lessonTimeTracker?.stop());
     try {
       ref.read(exerciseHubViewStateProvider.notifier).clear();
@@ -110,16 +110,16 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     super.dispose();
   }
 
-  void _cleanupIncompleteSet() {
-    if (_creatingSetId != null) {
-      final id = _creatingSetId!;
-      _creatingSetId = null;
-      _lessonRepo.deleteCustomExerciseSet(id).catchError((_) {});
+  void _cleanupIncompleteExercise() {
+    if (_creatingExerciseId != null) {
+      final id = _creatingExerciseId!;
+      _creatingExerciseId = null;
+      _lessonRepo.deleteCustomExercise(id).catchError((_) {});
     }
-    if (_regeneratingNewSetId != null) {
-      final id = _regeneratingNewSetId!;
-      _regeneratingNewSetId = null;
-      _lessonRepo.deleteCustomExerciseSet(id).catchError((_) {});
+    if (_regeneratingNewExerciseId != null) {
+      final id = _regeneratingNewExerciseId!;
+      _regeneratingNewExerciseId = null;
+      _lessonRepo.deleteCustomExercise(id).catchError((_) {});
     }
   }
 
@@ -130,135 +130,135 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
       case AppLifecycleState.inactive:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        _cleanupIncompleteSet();
+        _cleanupIncompleteExercise();
         unawaited(_lessonTimeTracker?.pauseAndFlush());
       case AppLifecycleState.resumed:
         _lessonTimeTracker?.resume();
     }
   }
 
-  Future<void> _pushExercisePlay(String setId) async {
+  Future<void> _pushExercisePlay(String exerciseId) async {
     await _lessonTimeTracker?.pauseAndFlush();
     if (!mounted) return;
-    await context.push('/lessons/${widget.lessonId}/exercises/play/$setId');
+    await context.push('/lessons/${widget.lessonId}/exercises/play/$exerciseId');
     if (!mounted) return;
     _lessonTimeTracker?.start();
-    await ref.read(exerciseSetsProvider(widget.lessonId).notifier).refresh();
+    await ref.read(exercisesProvider(widget.lessonId).notifier).refresh();
   }
 
-  Future<void> _handleRegenerate(String setId, {String? userPrompt}) async {
+  Future<void> _handleRegenerate(String exerciseId, {String? userPrompt}) async {
     setState(() {
-      _busySetId = setId;
+      _busyExerciseId = exerciseId;
       _busyAction = _BusyAction.regenerate;
       _error = null;
-      _regeneratingNewSetId = null;
+      _regeneratingNewExerciseId = null;
     });
-    String? newSetId;
+    String? newExerciseId;
     try {
-      final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      newSetId = await notifier.regenerateSet(setId, userPrompt: userPrompt);
-      _regeneratingNewSetId = newSetId;
+      final notifier = ref.read(exercisesProvider(widget.lessonId).notifier);
+      newExerciseId = await notifier.regenerateExercise(exerciseId, userPrompt: userPrompt);
+      _regeneratingNewExerciseId = newExerciseId;
 
       final token = _newAiCancelToken();
-      await notifier.generateSet(newSetId, userPrompt: userPrompt, cancelToken: token);
-      _regeneratingNewSetId = null;
+      await notifier.generateExercise(newExerciseId, userPrompt: userPrompt, cancelToken: token);
+      _regeneratingNewExerciseId = null;
       if (mounted) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
       }
     } catch (e) {
       if (!mounted) return;
 
-      if (newSetId != null) {
+      if (newExerciseId != null) {
         final repo = ref.read(lessonRepositoryProvider);
-        await repo.deleteCustomExerciseSet(newSetId).catchError((_) {});
+        await repo.deleteCustomExercise(newExerciseId).catchError((_) {});
       }
-      _regeneratingNewSetId = null;
+      _regeneratingNewExerciseId = null;
 
       if (e is RequestCancelledException) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
         return;
       }
       setState(() {
-        _busySetId = null;
+        _busyExerciseId = null;
         _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
   }
 
-  Future<void> _handleDelete(String setId) async {
+  Future<void> _handleDelete(String exerciseId) async {
     setState(() {
-      _busySetId = setId;
+      _busyExerciseId = exerciseId;
       _busyAction = _BusyAction.delete;
       _error = null;
     });
     try {
-      final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      await notifier.deleteSet(setId);
+      final notifier = ref.read(exercisesProvider(widget.lessonId).notifier);
+      await notifier.deleteExercise(exerciseId);
       if (mounted) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _busySetId = null;
+        _busyExerciseId = null;
         _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
   }
 
-  Future<void> _handleReset(String setId) async {
+  Future<void> _handleReset(String exerciseId) async {
     setState(() {
-      _busySetId = setId;
+      _busyExerciseId = exerciseId;
       _busyAction = _BusyAction.reset;
       _error = null;
     });
     try {
-      final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      await notifier.resetSetProgress(setId);
-      await ref.read(exerciseSessionServiceProvider).delete(setId);
+      final notifier = ref.read(exercisesProvider(widget.lessonId).notifier);
+      await notifier.resetExerciseProgress(exerciseId);
+      await ref.read(questionSessionServiceProvider).delete(exerciseId);
       if (mounted) {
         setState(() {
-          _busySetId = null;
+          _busyExerciseId = null;
           _busyAction = _BusyAction.none;
         });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _busySetId = null;
+        _busyExerciseId = null;
         _busyAction = _BusyAction.none;
         _error = e.toString();
       });
     }
   }
 
-  Future<void> _handleCreateCustom(CustomSetConfig config) async {
+  Future<void> _handleCreateCustom(CustomExerciseConfig config) async {
     setState(() {
       _isCreatingCustom = true;
       _busyAction = _BusyAction.create;
       _error = null;
     });
-    String? setId;
+    String? exerciseId;
     try {
-      final notifier = ref.read(exerciseSetsProvider(widget.lessonId).notifier);
-      final set = await notifier.createCustomSet(config);
-      setId = set.id;
-      _creatingSetId = setId;
+      final notifier = ref.read(exercisesProvider(widget.lessonId).notifier);
+      final exercise = await notifier.createCustomExercise(config);
+      exerciseId = exercise.id;
+      _creatingExerciseId = exerciseId;
 
       final token = _newAiCancelToken();
-      await notifier.generateSet(setId, userPrompt: config.userPrompt, cancelToken: token);
-      _creatingSetId = null;
+      await notifier.generateExercise(exerciseId, userPrompt: config.userPrompt, cancelToken: token);
+      _creatingExerciseId = null;
       if (mounted) {
         setState(() {
           _isCreatingCustom = false;
@@ -269,11 +269,11 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
       if (!mounted) return;
 
       if (e is RequestCancelledException) {
-        if (setId != null) {
+        if (exerciseId != null) {
           final repo = ref.read(lessonRepositoryProvider);
-          await repo.deleteCustomExerciseSet(setId).catchError((_) {});
+          await repo.deleteCustomExercise(exerciseId).catchError((_) {});
         }
-        _creatingSetId = null;
+        _creatingExerciseId = null;
         setState(() {
           _isCreatingCustom = false;
           _busyAction = _BusyAction.none;
@@ -281,11 +281,11 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
         return;
       }
 
-      if (setId != null) {
+      if (exerciseId != null) {
         final repo = ref.read(lessonRepositoryProvider);
-        await repo.deleteCustomExerciseSet(setId).catchError((_) {});
+        await repo.deleteCustomExercise(exerciseId).catchError((_) {});
       }
-      _creatingSetId = null;
+      _creatingExerciseId = null;
       setState(() {
         _isCreatingCustom = false;
         _busyAction = _BusyAction.none;
@@ -308,43 +308,43 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     );
   }
 
-  void _showInfoSheet(SetProgress set) {
-    final isRegenerating = _busySetId == set.setId &&
+  void _showInfoSheet(ExerciseProgress exercise) {
+    final isRegenerating = _busyExerciseId == exercise.exerciseId &&
         _busyAction == _BusyAction.regenerate;
 
     AppBottomSheet.show(
       context,
       isScrollControlled: true,
       builder: (ctx) => CustomPracticeBottomSheet.info(
-        progress: set,
+        progress: exercise,
         onPlay: () {
           Navigator.of(ctx).pop();
-          _pushExercisePlay(set.setId);
+          _pushExercisePlay(exercise.exerciseId);
         },
         onRegenerate: () {
           Navigator.of(ctx).pop();
-          _confirmRegenerate(set.setId, set.title, set.userPrompt);
+          _confirmRegenerate(exercise.exerciseId, exercise.title, exercise.userPrompt);
         },
         onReset: () {
           Navigator.of(ctx).pop();
-          _confirmReset(set.setId, set.title);
+          _confirmReset(exercise.exerciseId, exercise.title);
         },
         onDelete: () {
           Navigator.of(ctx).pop();
-          _confirmDelete(set.setId);
+          _confirmDelete(exercise.exerciseId);
         },
         onCancel: isRegenerating ? () => _aiCancelToken?.cancel() : null,
       ),
     );
   }
 
-  void _confirmDelete(String setId) {
+  void _confirmDelete(String exerciseId) {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
-        title: S.of(context).deleteCustomSetQuestion,
+        title: S.of(context).deleteCustomExerciseQuestion,
         content:
-            S.of(context).deleteCustomPracticeSetWarning,
+            S.of(context).deleteCustomPracticeExerciseWarning,
         actions: [
           AppDialogAction(
             label: S.of(context).cancelButton2,
@@ -355,7 +355,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
-              _handleDelete(setId);
+              _handleDelete(exerciseId);
             },
           ),
         ],
@@ -363,7 +363,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     );
   }
 
-  void _confirmReset(String setId, String title) {
+  void _confirmReset(String exerciseId, String title) {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
@@ -379,7 +379,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
-              _handleReset(setId);
+              _handleReset(exerciseId);
             },
           ),
         ],
@@ -387,7 +387,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     );
   }
 
-  void _confirmRegenerate(String setId, String title, String? userPrompt) {
+  void _confirmRegenerate(String exerciseId, String title, String? userPrompt) {
     AppDialog.show(
       context,
       builder: (dialogCtx) => AppDialog(
@@ -403,7 +403,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
             isPrimary: true,
             onPressed: () {
               Navigator.pop(dialogCtx);
-              _handleRegenerate(setId, userPrompt: userPrompt);
+              _handleRegenerate(exerciseId, userPrompt: userPrompt);
             },
           ),
         ],
@@ -414,7 +414,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
   @override
   Widget build(BuildContext context) {
     final c = AppTheme.colors(context);
-    final summaryAsync = ref.watch(exerciseSetsProvider(widget.lessonId));
+    final summaryAsync = ref.watch(exercisesProvider(widget.lessonId));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -422,7 +422,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
     });
 
     return Scaffold(
-      appBar: AppAppBar(title: Text(S.of(context).exercisesTitle)),
+      appBar: AppAppBar(title: Text(S.of(context).questionsTitle)),
       body: summaryAsync.when(
         loading: () => const _ExerciseHubLoading(),
         error: (e, _) => Center(
@@ -464,15 +464,15 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                   label: S.of(context).retryButton,
                   variant: AppButtonVariant.primary,
                   icon: const Icon(Icons.refresh),
-                  onPressed: () => ref.read(exerciseSetsProvider(widget.lessonId).notifier).refresh(),
+                  onPressed: () => ref.read(exercisesProvider(widget.lessonId).notifier).refresh(),
                 ),
               ],
             ),
           ),
         ),
         data: (summary) {
-          final defaultSets = summary.defaultSets;
-          final customSets = summary.customSets;
+          final defaultExercises = summary.defaultExercises;
+          final customExercises = summary.customExercises;
 
           return ListView(
             padding: AppNavBar.scrollPadding(
@@ -480,17 +480,17 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
               base: const EdgeInsets.all(AppSpacing.lg),
             ),
             children: [
-              if (defaultSets.isNotEmpty) ...[
+              if (defaultExercises.isNotEmpty) ...[
                 _HubSectionHeader(
                   title: S.of(context).lessonExercisesTitle,
                   subtitle: S.of(context).practiceWithLessonDesc,
                 ),
                 const SizedBox(height: AppSpacing.md),
-                ...defaultSets.map((set) => _SetCard(
-                  progress: set,
-                  isBusy: _busySetId == set.setId,
-                  onPlay: () => _pushExercisePlay(set.setId),
-                  onReset: () => _confirmReset(set.setId, set.title),
+                ...defaultExercises.map((exercise) => _ExerciseCard(
+                  progress: exercise,
+                  isBusy: _busyExerciseId == exercise.exerciseId,
+                  onPlay: () => _pushExercisePlay(exercise.exerciseId),
+                  onReset: () => _confirmReset(exercise.exerciseId, exercise.title),
                 )),
                 const SizedBox(height: AppSpacing.xl),
               ],
@@ -527,7 +527,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 SizedBox(
                   width: double.infinity,
                   child: AppButton(
-                    label: S.of(context).createCustomSet,
+                    label: S.of(context).createCustomExercise,
                     variant: AppButtonVariant.primary,
                     onPressed: _showCreationForm,
                     icon: const Icon(Icons.add),
@@ -544,21 +544,21 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                 ),
               ],
               const SizedBox(height: AppSpacing.md),
-              ...customSets.map((set) => _SetCard(
-                progress: set,
-                isBusy: _busySetId == set.setId,
-                onPlay: () => _pushExercisePlay(set.setId),
-                onReset: () => _confirmReset(set.setId, set.title),
-                onRegenerate: () => _confirmRegenerate(set.setId, set.title, set.userPrompt),
-                onDelete: () => _confirmDelete(set.setId),
-                onCancel: (_busySetId == set.setId &&
+              ...customExercises.map((exercise) => _ExerciseCard(
+                progress: exercise,
+                isBusy: _busyExerciseId == exercise.exerciseId,
+                onPlay: () => _pushExercisePlay(exercise.exerciseId),
+                onReset: () => _confirmReset(exercise.exerciseId, exercise.title),
+                onRegenerate: () => _confirmRegenerate(exercise.exerciseId, exercise.title, exercise.userPrompt),
+                onDelete: () => _confirmDelete(exercise.exerciseId),
+                onCancel: (_busyExerciseId == exercise.exerciseId &&
                         _busyAction == _BusyAction.regenerate)
                     ? () => _aiCancelToken?.cancel()
                     : null,
-                onInfo: () => _showInfoSheet(set),
+                onInfo: () => _showInfoSheet(exercise),
                 isCustom: true,
               )),
-              if (customSets.isEmpty && defaultSets.isEmpty)
+              if (customExercises.isEmpty && defaultExercises.isEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 48),
                   child: Center(
@@ -589,7 +589,7 @@ class _ExerciseHubScreenState extends ConsumerState<ExerciseHubScreen>
                         ),
                         const SizedBox(height: AppSpacing.xs),
                         Text(
-                          S.of(context).createCustomSetPrompt,
+                          S.of(context).createCustomExercisePrompt,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.inter(
                             fontSize: AppTypography.bodyMedium,
@@ -857,8 +857,8 @@ class _ExerciseHubLoading extends StatelessWidget {
   }
 }
 
-class _SetCard extends StatelessWidget {
-  const _SetCard({
+class _ExerciseCard extends StatelessWidget {
+  const _ExerciseCard({
     required this.progress,
     required this.isBusy,
     this.onPlay,
@@ -870,7 +870,7 @@ class _SetCard extends StatelessWidget {
     this.isCustom = false,
   });
 
-  final SetProgress progress;
+  final ExerciseProgress progress;
   final bool isBusy;
   final VoidCallback? onPlay;
   final VoidCallback? onReset;
@@ -953,7 +953,7 @@ class _SetCard extends StatelessWidget {
               if (isCustom && onDelete != null)
                 AppListItem(
                   leading: Icon(Icons.delete_outline, color: c.error, size: 22),
-                  title: S.of(context).deleteSet,
+                  title: S.of(context).deleteExercise,
                   subtitle: S.of(context).removeFromCustomPracticeList,
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.lg,
@@ -1044,7 +1044,7 @@ class _SetCard extends StatelessWidget {
                                     ? '${progress.percentCorrect.round()}%'
                                     : progress.isInProgress
                                         ? '${progress.percentComplete.round()}%'
-                                        : '${progress.totalExercises} questions',
+                                        : '${progress.totalQuestions} questions',
                                 style: GoogleFonts.inter(
                                   fontSize: AppTypography.caption,
                                   color: c.mutedForeground,

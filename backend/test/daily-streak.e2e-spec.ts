@@ -89,7 +89,7 @@ describe('Daily Streak (e2e)', () => {
       await request(app.getHttpServer())
         .post('/api/v1/daily-goals')
         .set('Authorization', `Bearer ${authToken}`)
-        .send({ goalType: 'EXERCISES', targetValue: 5 })
+        .send({ goalType: 'QUESTIONS', targetValue: 5 })
         .expect(201);
 
       const res = await request(app.getHttpServer())

@@ -182,7 +182,7 @@ erDiagram
     uuid lesson_id FK
   }
 
-  exercise_sets {
+  exercises {
     uuid id PK
     timestamp created_at
     timestamp updated_at
@@ -200,15 +200,15 @@ erDiagram
     text prompt_used
     int order_index
     varchar generation_status
-    varchar replaces_set_id
+    varchar replaces_exercise_id
   }
 
-  exercises {
+  questions {
     uuid id PK
     timestamp created_at
     timestamp updated_at
     timestamp deleted_at
-    enum exercise_type
+    enum question_type
     text question
     varchar question_audio_url
     jsonb options
@@ -216,11 +216,10 @@ erDiagram
     text explanation
     int order_index
     int difficulty_level
-    uuid lesson_id FK
-    uuid set_id FK
+    uuid exercise_id FK
   }
 
-  exercise_attempts {
+  question_attempts {
     uuid id PK
     timestamp created_at
     timestamp updated_at
@@ -231,10 +230,10 @@ erDiagram
     timestamp attempted_at
     int time_taken
     uuid user_id FK
-    uuid exercise_id FK
+    uuid question_id FK
   }
 
-  user_exercise_results {
+  user_question_results {
     uuid id PK
     timestamp created_at
     timestamp updated_at
@@ -248,7 +247,7 @@ erDiagram
     int best_score
     varchar last_attempt_id
     uuid user_id FK
-    uuid exercise_id FK
+    uuid question_id FK
   }
 
   learning_progress {
@@ -423,33 +422,33 @@ erDiagram
   users ||--o{ daily_goal_progress : "user_id CASCADE"
   users ||--o{ daily_streaks : "user_id CASCADE"
   users ||--o{ conversations : "user_id CASCADE"
-  users ||--o{ exercise_attempts : "user_id CASCADE"
-  users ||--o{ user_exercise_results : "user_id CASCADE"
+  users ||--o{ question_attempts : "user_id CASCADE"
+  users ||--o{ user_question_results : "user_id CASCADE"
   users ||--o{ simulation_sessions : "user_id CASCADE"
 
   courses ||--o{ modules : "course_id CASCADE"
   courses ||--o{ conversations : "course_id SET_NULL"
-  courses ||--o{ exercise_sets : "course_id SET_NULL"
+  courses ||--o{ exercises : "course_id SET_NULL"
   courses ||--o{ learning_progress : "course_id CASCADE"
 
   modules ||--o{ lessons : "module_id CASCADE"
-  modules ||--o{ exercise_sets : "module_id SET_NULL"
+  modules ||--o{ exercises : "module_id SET_NULL"
   modules ||--o{ learning_progress : "module_id CASCADE"
 
   lessons ||--o{ lesson_contents : "lesson_id CASCADE"
   lessons ||--o{ vocabularies : "lesson_id CASCADE"
   lessons ||--o{ grammar_rules : "lesson_id CASCADE"
   lessons ||--o{ exercises : "lesson_id CASCADE"
-  lessons ||--o{ exercise_sets : "lesson_id CASCADE"
+  lessons ||--o{ exercises : "lesson_id CASCADE"
   lessons ||--o{ conversations : "lesson_id SET_NULL"
   lessons ||--o{ learning_progress : "lesson_id CASCADE"
 
   vocabularies ||--o{ bookmarks : "vocabulary_id CASCADE"
   personal_vocabularies ||--o{ bookmarks : "personal_vocabulary_id CASCADE"
 
-  exercise_sets ||--o{ exercises : "set_id SET_NULL"
-  exercises ||--o{ exercise_attempts : "exercise_id CASCADE"
-  exercises ||--o{ user_exercise_results : "exercise_id CASCADE"
+  exercises ||--o{ exercises : "exercise_id SET_NULL"
+  exercises ||--o{ question_attempts : "question_id CASCADE"
+  exercises ||--o{ user_question_results : "question_id CASCADE"
 
   conversations ||--o{ conversation_messages : "conversation_id CASCADE"
 
@@ -471,8 +470,8 @@ erDiagram
 6. `daily_goal_progress`
 7. `daily_goals`
 8. `daily_streaks`
-9. `exercise_attempts`
-10. `exercise_sets`
+9. `question_attempts`
+10. `exercises`
 11. `exercises`
 12. `grammar_rules`
 13. `learning_progress`
@@ -486,6 +485,6 @@ erDiagram
 21. `scenarios`
 22. `simulation_messages`
 23. `simulation_sessions`
-24. `user_exercise_results`
+24. `user_question_results`
 25. `users`
 26. `vocabularies`

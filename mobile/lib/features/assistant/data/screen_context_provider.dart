@@ -3,7 +3,7 @@ import '../domain/screen_context.dart';
 import 'builders/bookmarks_screen_context_builder.dart';
 import 'builders/course_detail_screen_context_builder.dart';
 import 'builders/exercise_hub_screen_context_builder.dart';
-import 'builders/exercise_play_screen_context_builder.dart';
+import 'builders/question_play_screen_context_builder.dart';
 import 'builders/saved_words_screen_context_builder.dart';
 import 'builders/lesson_screen_context_builder.dart';
 import 'builders/module_detail_screen_context_builder.dart';
@@ -40,15 +40,15 @@ final screenContextRegistryProvider = Provider<ScreenContextRegistry>((ref) {
     ..register('/modules/:id', moduleDetailScreenContextBuilder)
     ..register('/lessons/:id', lessonScreenContextBuilder)
     ..register(
-      '/courses/:id/exercises/play/:setId',
+      '/courses/:id/exercises/play/:exerciseId',
       exercisePlayScreenContextBuilder,
     )
     ..register(
-      '/modules/:id/exercises/play/:setId',
+      '/modules/:id/exercises/play/:exerciseId',
       exercisePlayScreenContextBuilder,
     )
     ..register(
-      '/lessons/:id/exercises/play/:setId',
+      '/lessons/:id/exercises/play/:exerciseId',
       exercisePlayScreenContextBuilder,
     )
     ..register('/bookmarks', bookmarksScreenContextBuilder)

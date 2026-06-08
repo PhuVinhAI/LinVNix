@@ -11,9 +11,9 @@ import { ModuleDetailPage } from '../pages/learning/ModuleDetailPage'
 import { ModuleFormPage } from '../pages/learning/ModuleFormPage'
 import { LessonDetailPage } from '../pages/learning/LessonDetailPage'
 import { LessonFormPage } from '../pages/learning/LessonFormPage'
-import { ExerciseSetFormPage } from '../pages/learning/ExerciseSetFormPage'
-import { ExerciseSetDetailPage } from '../pages/learning/ExerciseSetDetailPage'
 import { ExerciseFormPage } from '../pages/learning/ExerciseFormPage'
+import { ExerciseDetailPage } from '../pages/learning/ExerciseDetailPage'
+import { QuestionFormPage } from '../pages/learning/QuestionFormPage'
 import { ScenarioCategoriesPage } from '../pages/simulations/ScenarioCategoriesPage'
 import { ScenarioCategoryFormPage } from '../pages/simulations/ScenarioCategoryFormPage'
 import { ScenarioCategoryDetailPage } from '../pages/simulations/ScenarioCategoryDetailPage'
@@ -92,24 +92,24 @@ export const router = createBrowserRouter([
         element: <LessonDetailPage />,
       },
       {
-        path: ROUTES.EXERCISE_SET_NEW,
-        element: <ExerciseSetFormPage mode="create" />,
-      },
-      {
-        path: ROUTES.EXERCISE_SET_EDIT,
-        element: <ExerciseSetFormPage mode="edit" />,
-      },
-      {
-        path: ROUTES.EXERCISE_SET_DETAIL,
-        element: <ExerciseSetDetailPage />,
-      },
-      {
         path: ROUTES.EXERCISE_NEW,
         element: <ExerciseFormPage mode="create" />,
       },
       {
         path: ROUTES.EXERCISE_EDIT,
         element: <ExerciseFormPage mode="edit" />,
+      },
+      {
+        path: ROUTES.EXERCISE_DETAIL,
+        element: <ExerciseDetailPage />,
+      },
+      {
+        path: ROUTES.QUESTION_NEW,
+        element: <QuestionFormPage mode="create" />,
+      },
+      {
+        path: ROUTES.QUESTION_EDIT,
+        element: <QuestionFormPage mode="edit" />,
       },
       // Hội thoại mô phỏng
       {

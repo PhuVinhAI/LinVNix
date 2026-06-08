@@ -24,7 +24,6 @@ void main() {
         description: 'Say hello politely',
         orderIndex: 0,
         courseId: 'course-a1',
-        topic: 'Daily life',
         estimatedHours: 2,
         course: Course(
           id: 'course-a1',

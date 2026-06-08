@@ -113,7 +113,7 @@ Kiến trúc thực thi:
 - **Yêu sách** = Bookmark (không gọi "Flashcard"/"Favorite")
 - **Học viên** = User vai trò USER (vs **Quản trị viên** vai trò ADMIN)
 - **Hội thoại** = phiên hỏi đáp ngắn 1-ngữ-cảnh với Trợ lý AI (KHÁC **Hội thoại mô phỏng** ở tab riêng)
-- **Bộ bài tập do AI sinh** = Custom Exercise Set, cá nhân học viên
+- **Bài tập do AI sinh** = Custom Exercise Set, cá nhân học viên
 - **Khám phá ảnh** = ephemeral, KHÁC Trợ lý AI
 
 ## AI Provider Configuration

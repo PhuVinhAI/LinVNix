@@ -2,7 +2,7 @@ import type {
   CheckerAdapter,
   AssessmentResult,
 } from '../../domain/assessment.types';
-import type { MultipleChoiceAnswer } from '../../domain/exercise-options.types';
+import type { MultipleChoiceAnswer } from '../../domain/question-options.types';
 
 export class MultipleChoiceChecker implements CheckerAdapter {
   check(

@@ -45,7 +45,7 @@ import { DragHandle } from '../../components/admin/shared/DragHandle'
 import { SortableRow } from '../../components/admin/shared/SortableRow'
 import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
-import type { ExerciseSet, Lesson } from '../../features/learning/types'
+import type { Exercise, Lesson } from '../../features/learning/types'
 import { learningPath } from './route-utils'
 
 const lessonTypeColors: Record<string, string> = {
@@ -77,7 +77,7 @@ type DeleteTarget = {
   resource: string
 }
 
-const LESSON_TABS = ['contents', 'vocabularies', 'grammar', 'sets'] as const
+const LESSON_TABS = ['contents', 'vocabularies', 'grammar', 'exercises'] as const
 
 export function LessonDetailPage() {
   const { lessonId } = useParams()
@@ -89,17 +89,17 @@ export function LessonDetailPage() {
   const [pendingDelete, setPendingDelete] = useState<DeleteTarget | null>(null)
 
   const lessonKey = ['admin-learning', 'lesson', lessonId] as const
-  const setsReorder = useAdminListReorder<ExerciseSet>({
-    getItems: () => qc.getQueryData<Lesson>(lessonKey)?.exerciseSets ?? [],
+  const exercisesReorder = useAdminListReorder<Exercise>({
+    getItems: () => qc.getQueryData<Lesson>(lessonKey)?.exercises ?? [],
     setItems: (next) =>
       qc.setQueryData<Lesson>(lessonKey, (prev) =>
-        prev ? { ...prev, exerciseSets: next } : prev,
+        prev ? { ...prev, exercises: next } : prev,
       ),
-    reorder: (items) => mutations.reorderExerciseSets.mutateAsync(items),
-    onError: () => toast.error('Không thể sắp xếp lại bộ bài tập'),
+    reorder: (items) => mutations.reorderExercises.mutateAsync(items),
+    onError: () => toast.error('Không thể sắp xếp lại bài tập'),
   })
 
-  const sortedSets = [...(lesson?.exerciseSets ?? [])].sort(
+  const sortedExercises = [...(lesson?.exercises ?? [])].sort(
     (a, b) => a.orderIndex - b.orderIndex,
   )
 
@@ -197,7 +197,7 @@ export function LessonDetailPage() {
             <AdminTabTrigger value="contents" icon={FileText} label="Nội dung" count={lesson.contents?.length ?? 0} />
             <AdminTabTrigger value="vocabularies" icon={BookMarked} label="Từ vựng" count={lesson.vocabularies?.length ?? 0} />
             <AdminTabTrigger value="grammar" icon={Lightbulb} label="Ngữ pháp" count={lesson.grammarRules?.length ?? 0} />
-            <AdminTabTrigger value="sets" icon={ClipboardList} label="Bộ bài tập" count={lesson.exerciseSets?.length ?? 0} />
+            <AdminTabTrigger value="exercises" icon={ClipboardList} label="Bài tập" count={lesson.exercises?.length ?? 0} />
           </AdminTabsList>
 
           {/* CONTENTS — inline visual editor */}
@@ -215,57 +215,57 @@ export function LessonDetailPage() {
             <GrammarEditor lessonId={lessonId} />
           </TabsContent>
 
-          {/* SETS — clickable stat tiles (unchanged) */}
-          <TabsContent value="sets" className="mt-4 space-y-4">
+          {/* EXERCISES — clickable stat tiles */}
+          <TabsContent value="exercises" className="mt-4 space-y-4">
             <div className="flex items-end justify-between gap-4 flex-wrap">
               <div>
                 <div className="flex items-baseline gap-2">
-                  <h2 className="text-lg font-bold tracking-tight">Bộ bài tập</h2>
+                  <h2 className="text-lg font-bold tracking-tight">Bài tập</h2>
                   <span className="text-sm font-bold tabular-nums text-muted-foreground">
-                    {lesson.exerciseSets?.length ?? 0}
+                    {lesson.exercises?.length ?? 0}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-0.5">Mỗi bộ chứa nhiều bài tập cùng chủ đề.</p>
+                <p className="text-sm text-muted-foreground mt-0.5">Mỗi bài tập chứa nhiều câu hỏi cùng chủ đề.</p>
               </div>
               <Button asChild>
-                <Link to={learningPath.exerciseSetNew(lessonId)}>
+                <Link to={learningPath.exerciseNew(lessonId)}>
                   <Plus className="h-4 w-4" />
-                  Thêm bộ bài tập
+                  Thêm bài tập
                 </Link>
               </Button>
             </div>
-            {(lesson.exerciseSets?.length ?? 0) === 0 ? (
+            {(lesson.exercises?.length ?? 0) === 0 ? (
               <div className="rounded-xl border-2 border-dashed border-border bg-muted/30 p-12 text-center">
                 <ClipboardList className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
-                <h3 className="text-lg font-bold mb-1">Chưa có bộ bài tập</h3>
-                <p className="text-sm text-muted-foreground mb-4">Tạo bộ bài tập đầu tiên cho bài học này</p>
+                <h3 className="text-lg font-bold mb-1">Chưa có bài tập</h3>
+                <p className="text-sm text-muted-foreground mb-4">Tạo bài tập đầu tiên cho bài học này</p>
                 <Button asChild>
-                  <Link to={learningPath.exerciseSetNew(lessonId)}>
+                  <Link to={learningPath.exerciseNew(lessonId)}>
                     <Plus className="h-4 w-4" />
-                    Tạo bộ bài tập đầu tiên
+                    Tạo bài tập đầu tiên
                   </Link>
                 </Button>
               </div>
             ) : (
               <DndContext
-                sensors={setsReorder.sensors}
+                sensors={exercisesReorder.sensors}
                 collisionDetection={closestCenter}
-                onDragEnd={setsReorder.handleDragEnd}
+                onDragEnd={exercisesReorder.handleDragEnd}
               >
-                <SortableContext items={sortedSets.map((s) => s.id)} strategy={rectSortingStrategy}>
+                <SortableContext items={sortedExercises.map((s) => s.id)} strategy={rectSortingStrategy}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {sortedSets.map((row) => (
-                      <ExerciseSetTile
+                    {sortedExercises.map((row) => (
+                      <ExerciseTile
                         key={row.id}
                         row={row}
-                        onOpen={() => navigate(learningPath.exerciseSet(row.id))}
-                        onEdit={() => navigate(learningPath.exerciseSetEdit(lessonId, row.id))}
+                        onOpen={() => navigate(learningPath.exercise(row.id))}
+                        onEdit={() => navigate(learningPath.exerciseEdit(lessonId, row.id))}
                         onDelete={() =>
                           setPendingDelete({
-                            kind: 'exercise-sets',
+                            kind: 'exercises',
                             id: row.id,
                             label: row.title,
-                            resource: 'bộ bài tập',
+                            resource: 'bài tập',
                           })
                         }
                         stop={stop}
@@ -355,22 +355,22 @@ const EXERCISE_TYPE_META: Record<string, { label: string; dot: string; text: str
   speaking: { label: 'Nói', dot: 'bg-cyan-500', text: 'text-cyan-700 dark:text-cyan-300' },
 }
 
-function ExerciseSetTile({
+function ExerciseTile({
   row,
   onOpen,
   onEdit,
   onDelete,
   stop,
 }: {
-  row: ExerciseSet
+  row: Exercise
   onOpen: () => void
   onEdit: () => void
   onDelete: () => void
   stop: (e: MouseEvent | KeyboardEvent) => void
 }) {
-  const exerciseCount = row.exercises?.length ?? 0
-  const typeCounts = (row.exercises ?? []).reduce<Record<string, number>>((acc, ex) => {
-    const key = ex.exerciseType?.toLowerCase() ?? ''
+  const exerciseCount = row.questions?.length ?? 0
+  const typeCounts = (row.questions ?? []).reduce<Record<string, number>>((acc, ex) => {
+    const key = ex.questionType?.toLowerCase() ?? ''
     acc[key] = (acc[key] ?? 0) + 1
     return acc
   }, {})
@@ -423,7 +423,7 @@ function ExerciseSetTile({
               <span className="text-xl font-bold tabular-nums text-foreground">
                 {exerciseCount}
               </span>
-              <span className="text-xs text-muted-foreground font-medium">bài tập</span>
+              <span className="text-xs text-muted-foreground font-medium">câu hỏi</span>
             </div>
             {Object.keys(typeCounts).length > 0 ? (
               <div className="flex flex-wrap items-center gap-1 justify-end">
@@ -444,7 +444,7 @@ function ExerciseSetTile({
                 })}
               </div>
             ) : (
-              <span className="text-xs text-muted-foreground italic">Chưa có bài tập</span>
+              <span className="text-xs text-muted-foreground italic">Chưa có câu hỏi</span>
             )}
           </div>
         </div>

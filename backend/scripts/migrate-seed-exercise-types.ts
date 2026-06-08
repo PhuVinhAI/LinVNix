@@ -15,7 +15,7 @@ import { join } from 'path';
 const SEED_DIR = join(__dirname, '..', '..', '.scratch', 'seed-data');
 
 interface ExerciseSeed {
-  exercise_type: string;
+  question_type: string;
   question?: string | null;
   options?: Record<string, unknown> | null;
   correct_answer?: unknown;
@@ -23,15 +23,15 @@ interface ExerciseSeed {
 }
 
 interface LessonSeed {
-  exercises?: ExerciseSeed[];
+  questions?: QuestionSeed[];
   [key: string]: unknown;
 }
 
-function migrateExercise(ex: ExerciseSeed): { changed: boolean; ex: ExerciseSeed } {
+function migrateExercise(ex: QuestionSeed): { changed: boolean; ex: QuestionSeed } {
   let changed = false;
   const opts = (ex.options ?? {}) as Record<string, unknown>;
 
-  switch (ex.exercise_type) {
+  switch (ex.question_type) {
     case 'fill_blank': {
       // If sentence missing, take it from question
       if (typeof opts.sentence !== 'string' || !opts.sentence) {
@@ -79,12 +79,12 @@ function walk(node: unknown, counters: Record<string, number>): unknown {
   }
   if (node && typeof node === 'object') {
     const obj = node as Record<string, unknown>;
-    if (Array.isArray(obj.exercises)) {
-      obj.exercises = (obj.exercises as ExerciseSeed[]).map((ex) => {
+    if (Array.isArray(obj.questions)) {
+      obj.questions = (obj.questions as ExerciseSeed[]).map((ex) => {
         const { changed, ex: migrated } = migrateExercise(ex);
         if (changed) {
-          counters[migrated.exercise_type] =
-            (counters[migrated.exercise_type] ?? 0) + 1;
+          counters[migrated.question_type] =
+            (counters[migrated.question_type] ?? 0) + 1;
         }
         return migrated;
       });

@@ -16,7 +16,7 @@ import '../../../../l10n/app_localizations.dart';
 String _goalTypeLabel(BuildContext context, GoalType type) {
   final s = S.of(context);
   return switch (type) {
-    GoalType.exercises => s.exercisesTitle,
+    GoalType.questions => s.questionsTitle,
     GoalType.simulations => s.scenariosTried,
     GoalType.lessons => s.lessonsTitle,
   };
@@ -39,12 +39,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   bool _completeLowerCourses = false;
 
   final _goalEnabled = <GoalType, bool>{
-    GoalType.exercises: true,
+    GoalType.questions: true,
     GoalType.simulations: true,
     GoalType.lessons: false,
   };
   final _goalTargets = <GoalType, int>{
-    GoalType.exercises: 10,
+    GoalType.questions: 10,
     GoalType.simulations: 3,
     GoalType.lessons: 2,
   };

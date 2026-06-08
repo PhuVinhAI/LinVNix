@@ -5,7 +5,7 @@ class _TtsPlayingIdNotifier extends Notifier<String?> {
   @override
   String? build() => null;
 
-  void setId(String? id) => state = id;
+  void exerciseId(String? id) => state = id;
 }
 
 /// ID of the message currently being spoken aloud. Null when silent.
@@ -40,13 +40,13 @@ class SimulationTtsService {
   }
 
   void _clearPlaying() {
-    _ref.read(ttsPlayingMessageIdProvider.notifier).setId(null);
+    _ref.read(ttsPlayingMessageIdProvider.notifier).exerciseId(null);
   }
 
   Future<void> speak(String messageId, String text) async {
     await _ensureInitialized();
     await _tts.stop();
-    _ref.read(ttsPlayingMessageIdProvider.notifier).setId(messageId);
+    _ref.read(ttsPlayingMessageIdProvider.notifier).exerciseId(messageId);
     await _tts.speak(text);
   }
 

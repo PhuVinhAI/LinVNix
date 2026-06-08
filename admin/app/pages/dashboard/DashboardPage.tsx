@@ -42,7 +42,7 @@ import { Skeleton } from '../../components/ui/skeleton'
 import { AppError } from '../../../lib/shared/errors/AppError'
 import type {
   DashboardOverview,
-  HighErrorExercise,
+  HighErrorQuestion,
   OverviewActivityPoint,
   RecentUserRow,
   TopCourse,
@@ -153,7 +153,7 @@ function hashColor(id: string): string {
   return palette[Math.abs(hash) % palette.length]
 }
 
-function exerciseTypeLabel(type: string): string {
+function questionTypeLabel(type: string): string {
   return EXERCISE_TYPE_LABEL[type] ?? type
 }
 
@@ -283,13 +283,13 @@ function DashboardBody({
         />
         <KpiCard
           label="Bài tập"
-          value={kpis?.totalExercises}
+          value={kpis?.totalQuestions}
           icon={ListChecks}
           tint={INDIGO}
           loading={loading}
           hint={
             kpis
-              ? `${formatNumber(kpis.totalExerciseAttempts)} lượt làm`
+              ? `${formatNumber(kpis.totalQuestionAttempts)} lượt làm`
               : undefined
           }
         />
@@ -358,7 +358,7 @@ function DashboardBody({
           loading={loading}
         />
         <ExercisesByTypeCard
-          types={data?.distributions.exercisesByType}
+          types={data?.distributions.questionsByType}
           loading={loading}
         />
       </div>
@@ -378,7 +378,7 @@ function DashboardBody({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <TopCoursesCard courses={data?.topCourses} loading={loading} />
         <HighErrorExercisesCard
-          exercises={data?.exercisesWithHighestErrors}
+          exercises={data?.questionsWithHighestErrors}
           loading={loading}
         />
       </div>
@@ -476,10 +476,10 @@ function ActivityChartCard({
     return points.reduce(
       (acc, p) => ({
         registrations: acc.registrations + p.registrations,
-        exerciseAttempts: acc.exerciseAttempts + p.exerciseAttempts,
+        questionAttempts: acc.questionAttempts + p.questionAttempts,
         simulationsCompleted: acc.simulationsCompleted + p.simulationsCompleted,
       }),
-      { registrations: 0, exerciseAttempts: 0, simulationsCompleted: 0 },
+      { registrations: 0, questionAttempts: 0, simulationsCompleted: 0 },
     )
   }, [points])
 
@@ -502,8 +502,8 @@ function ActivityChartCard({
               tint={INDIGO}
             />
             <ActivityTotal
-              label="Lượt làm bài tập"
-              value={totals?.exerciseAttempts ?? 0}
+              label="Lượt làm câu hỏi"
+              value={totals?.questionAttempts ?? 0}
               tint={CYAN}
             />
             <ActivityTotal
@@ -554,7 +554,7 @@ function ActivityChartCard({
                 />
                 <Area
                   type="monotone"
-                  dataKey="exerciseAttempts"
+                  dataKey="questionAttempts"
                   stroke={CYAN}
                   strokeWidth={2}
                   fill="url(#exerciseArea)"
@@ -586,7 +586,7 @@ function ActivityChartCard({
 
 const ACTIVITY_NAMES: Record<string, string> = {
   registrations: 'Người đăng ký',
-  exerciseAttempts: 'Lượt làm bài tập',
+  questionAttempts: 'Lượt làm câu hỏi',
   simulationsCompleted: 'Mô phỏng hoàn thành',
 }
 
@@ -722,7 +722,7 @@ function ExercisesByTypeCard({
     () =>
       (types ?? []).map((t, i) => ({
         type: t.type,
-        label: exerciseTypeLabel(t.type),
+        label: questionTypeLabel(t.type),
         count: t.count,
         color: EXERCISE_TYPE_COLORS[i % EXERCISE_TYPE_COLORS.length],
       })),
@@ -1008,7 +1008,7 @@ function HighErrorExercisesCard({
   exercises,
   loading,
 }: {
-  exercises?: HighErrorExercise[]
+  questions?: HighErrorQuestion[]
   loading: boolean
 }) {
   return (
@@ -1025,7 +1025,7 @@ function HighErrorExercisesCard({
         <ul className="space-y-2">
           {exercises.map((exercise) => (
             <li
-              key={exercise.exerciseId}
+              key={exercise.questionId}
               className="flex items-start gap-3 rounded-lg border-2 border-border bg-card px-3 py-2.5"
             >
               <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-destructive/10 text-destructive">
@@ -1036,7 +1036,7 @@ function HighErrorExercisesCard({
                   {exercise.question}
                 </p>
                 <p className="mt-0.5 text-[11px] text-muted-foreground">
-                  {exerciseTypeLabel(exercise.type)} ·{' '}
+                  {questionTypeLabel(exercise.type)} ·{' '}
                   {formatNumber(exercise.incorrectCount)}/
                   {formatNumber(exercise.totalAttempts)} sai
                 </p>

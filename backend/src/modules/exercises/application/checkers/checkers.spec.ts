@@ -7,7 +7,7 @@ import type {
   TranslationAnswer,
   ListeningAnswer,
   SpeakingAnswer,
-} from '../../domain/exercise-options.types';
+} from '../../domain/question-options.types';
 import { MultipleChoiceChecker } from './multiple-choice.checker';
 import { FillBlankChecker } from './fill-blank.checker';
 import { MatchingChecker } from './matching.checker';

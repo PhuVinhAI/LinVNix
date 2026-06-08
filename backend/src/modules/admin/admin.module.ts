@@ -13,7 +13,7 @@ import { CoursesModule } from '../courses/courses.module';
 import { ExercisesModule } from '../exercises/exercises.module';
 import { UsersService } from '../users/application/users.service';
 import { CourseContentService } from '../courses/application/course-content.service';
-import { ExercisesService } from '../exercises/application/exercises.service';
+import { QuestionsService } from '../exercises/application/questions.service';
 import {
   USER_STATS_PORT,
   COURSE_STATS_PORT,
@@ -29,13 +29,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/domain/user.entity';
 import { Course } from '../courses/domain/course.entity';
 import { Lesson } from '../courses/domain/lesson.entity';
-import { Exercise } from '../exercises/domain/exercise.entity';
+import { Question } from '../exercises/domain/question.entity';
 import { LearningProgress } from '../progress/domain/learning-progress.entity';
 import { DailyGoal } from '../daily-goals/domain/daily-goal.entity';
 import { DailyGoalProgress } from '../daily-goals/domain/daily-goal-progress.entity';
 import { DailyStreak } from '../daily-goals/domain/daily-streak.entity';
-import { UserExerciseResult } from '../exercises/domain/user-exercise-result.entity';
-import { ExerciseAttempt } from '../exercises/domain/exercise-attempt.entity';
+import { UserQuestionResult } from '../exercises/domain/user-question-result.entity';
+import { QuestionAttempt } from '../exercises/domain/question-attempt.entity';
 import { PersonalVocabulary } from '../personal-vocabularies/domain/personal-vocabulary.entity';
 import { Bookmark } from '../vocabularies/domain/bookmark.entity';
 import { SimulationSession } from '../simulations/domain/simulation-session.entity';
@@ -58,13 +58,13 @@ import { ConversationMessage } from '../conversations/domain/conversation-messag
       User,
       Course,
       Lesson,
-      Exercise,
+      Question,
       LearningProgress,
       DailyGoal,
       DailyGoalProgress,
       DailyStreak,
-      UserExerciseResult,
-      ExerciseAttempt,
+      UserQuestionResult,
+      QuestionAttempt,
       PersonalVocabulary,
       Bookmark,
       SimulationSession,
@@ -95,7 +95,7 @@ import { ConversationMessage } from '../conversations/domain/conversation-messag
     },
     {
       provide: EXERCISE_STATS_PORT,
-      useExisting: ExercisesService,
+      useExisting: QuestionsService,
     },
   ],
   exports: [

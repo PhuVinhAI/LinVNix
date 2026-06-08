@@ -16,14 +16,14 @@
               "__uuid": "les-c1-01-01",
               "description": "Học thuật ngữ triết học — từ bản thể luận đến hiện sinh",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "nhân sinh quan",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -44,7 +44,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -67,7 +67,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -89,7 +89,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -130,7 +130,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -167,7 +167,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -529,14 +529,14 @@
               "__uuid": "les-c1-01-02",
               "description": "Câu bị động hình thức, phi nhân xưng, rút gọn mệnh đề",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Vấn đề này được nghiên cứu sâu trong các thập kỷ gần đây.",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -559,7 +559,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -579,7 +579,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -608,7 +608,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -851,14 +851,14 @@
               "__uuid": "les-c1-01-03",
               "description": "Đọc hiểu văn bản triết học — Nguyễn Trãi, tư tưởng Hồ Chí Minh",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Yêu thương con người và hành động đúng đắn vì dân",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -881,7 +881,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -901,7 +901,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -922,7 +922,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1084,7 +1084,7 @@
               "__uuid": "les-c1-01-04",
               "description": "Viết luận học thuật — cấu trúc và văn phong",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "orderedItems": [
@@ -1096,7 +1096,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -1119,7 +1119,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -1139,7 +1139,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -1160,7 +1160,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1292,7 +1292,7 @@
               "__uuid": "les-c1-02-01",
               "description": "Học thuật ngữ luật pháp và hành chính",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -1320,7 +1320,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -1359,7 +1359,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -1379,7 +1379,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1400,7 +1400,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -1762,7 +1762,7 @@
               "__uuid": "les-c1-02-02",
               "description": "Cách hành văn hành chính — theo quy định, không những...mà còn, tuy...nhưng",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -1771,7 +1771,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -1792,7 +1792,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -1813,7 +1813,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -1837,7 +1837,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -2072,14 +2072,14 @@
               "__uuid": "les-c1-02-03",
               "description": "Đọc hiểu văn bản pháp lý — nghị định, quyết định",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Bị xử phạt nặng hơn",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2102,7 +2102,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -2122,7 +2122,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -2254,7 +2254,7 @@
               "__uuid": "les-c1-03-01",
               "description": "Thuật ngữ y khoa — chẩn đoán đến sức khỏe cộng đồng",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -2282,7 +2282,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -2321,7 +2321,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -2341,7 +2341,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2362,7 +2362,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -2724,7 +2724,7 @@
               "__uuid": "les-c1-03-02",
               "description": "Từ Hán Việt y khoa và cấu trúc định nghĩa",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "answers": [
@@ -2733,7 +2733,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -2753,7 +2753,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -2780,7 +2780,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -2802,7 +2802,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -2973,14 +2973,14 @@
               "__uuid": "les-c1-03-03",
               "description": "Đọc hiểu báo cáo y khoa",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "2,5",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3003,7 +3003,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -3023,7 +3023,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3155,7 +3155,7 @@
               "__uuid": "les-c1-04-01",
               "description": "Từ vựng lịch sử và địa lý Việt Nam",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -3183,7 +3183,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -3222,7 +3222,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -3242,7 +3242,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3263,7 +3263,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -3625,14 +3625,14 @@
               "__uuid": "les-c1-04-02",
               "description": "Ngữ pháp điển cố và câu bị động trong văn sử",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Vượt khó khăn đạt thành công",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3655,7 +3655,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -3675,7 +3675,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -3696,7 +3696,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3912,14 +3912,14 @@
               "__uuid": "les-c1-04-03",
               "description": "Truyền thống, bản sắc và di sản thế giới",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Xuyên suốt lịch sử từ Hai Bà Trưng đến cách mạng tháng Tám",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -3957,7 +3957,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -3992,7 +3992,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4113,14 +4113,14 @@
               "__uuid": "les-c1-04-04",
               "description": "Đọc hiểu sử ký Việt Nam",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Ngô Sĩ Liên",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4143,7 +4143,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4163,7 +4163,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -4295,7 +4295,7 @@
               "__uuid": "les-c1-05-01",
               "description": "Thuật ngữ văn chương — lãng mạn đến hậu hiện đại",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "matches": [
@@ -4323,7 +4323,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -4362,7 +4362,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4382,7 +4382,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4403,7 +4403,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -4765,14 +4765,14 @@
               "__uuid": "les-c1-05-02",
               "description": "Ẩn dụ, hoán dụ, nhân hóa, ngoại dụ, nói giảm",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Hoán dụ",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4793,7 +4793,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -4816,7 +4816,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -4855,7 +4855,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -4888,7 +4888,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -5123,14 +5123,14 @@
               "__uuid": "les-c1-05-03",
               "description": "Sử dụng tu từ trong viết văn chương",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Mùa thu gõ cửa thành phố",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -5153,7 +5153,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -5180,7 +5180,7 @@
                     "type": "ordering"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "ordering",
+                  "question_type": "ordering",
                   "explanation": null,
                   "options": {
                     "items": [
@@ -5201,7 +5201,7 @@
                     "type": "translation"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "translation",
+                  "question_type": "translation",
                   "explanation": null,
                   "options": {
                     "acceptedTranslations": [
@@ -5323,14 +5323,14 @@
               "__uuid": "les-c1-05-04",
               "description": "Thể thơ, Truyện Kiều, văn học hiện đại",
               "estimated_duration": null,
-              "exercises": [
+              "questions": [
                 {
                   "correct_answer": {
                     "selectedChoice": "Lục bát",
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [
@@ -5353,7 +5353,7 @@
                     "type": "fill_blank"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "fill_blank",
+                  "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
                     "acceptedAnswers": [
@@ -5394,7 +5394,7 @@
                     "type": "matching"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "matching",
+                  "question_type": "matching",
                   "explanation": null,
                   "options": {
                     "pairs": [
@@ -5431,7 +5431,7 @@
                     "type": "multiple_choice"
                   },
                   "difficulty_level": 4,
-                  "exercise_type": "multiple_choice",
+                  "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
                     "choices": [

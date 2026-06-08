@@ -8,7 +8,7 @@ import { DailyGoal } from '../domain/daily-goal.entity';
 import { GoalType } from '../../../common/enums';
 
 const GOAL_RANGES: Record<GoalType, { min: number; max: number }> = {
-  [GoalType.EXERCISES]: { min: 1, max: 50 },
+  [GoalType.QUESTIONS]: { min: 1, max: 50 },
   [GoalType.SIMULATIONS]: { min: 1, max: 10 },
   [GoalType.LESSONS]: { min: 1, max: 10 },
 };

@@ -14,7 +14,7 @@ import 'core/providers/locale_provider.dart';
 import 'core/storage/preferences_service.dart';
 import 'features/assistant/presentation/global_assistant_shell.dart';
 import 'features/daily_goals/data/notification_service.dart';
-import 'features/lessons/data/exercise_session_service.dart';
+import 'features/lessons/data/question_session_service.dart';
 import 'features/lessons/data/lesson_providers.dart';
 import 'l10n/app_localizations.dart';
 
@@ -27,9 +27,9 @@ Future<void> main() async {
   }
 
   await Hive.initFlutter();
-  // Exercise sessions store JSON-serialized maps (no TypeAdapter for MatchPair, etc.)
-  final exerciseSessionBox =
-      await Hive.openBox<Map<dynamic, dynamic>>('exercise_sessions');
+  // Question sessions store JSON-serialized maps (no TypeAdapter for MatchPair, etc.)
+  final questionSessionBox =
+      await Hive.openBox<Map<dynamic, dynamic>>('question_sessions');
 
   // GOOGLE_CLIENT_ID: --dart-define wins, .env fallback
   const dartDefineClientId = String.fromEnvironment('GOOGLE_CLIENT_ID');
@@ -47,8 +47,8 @@ Future<void> main() async {
   runApp(ProviderScope(
     overrides: [
       preferencesProvider.overrideWith(() => PreloadedPreferencesNotifier(preferencesService)),
-      exerciseSessionServiceProvider.overrideWithValue(
-        ExerciseSessionService(exerciseSessionBox),
+      questionSessionServiceProvider.overrideWithValue(
+        QuestionSessionService(questionSessionBox),
       ),
     ],
     child: const LinVNixApp(),
