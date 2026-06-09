@@ -11,11 +11,6 @@ export class CreatePersonalVocabularyDto {
   @IsString()
   translation: string;
 
-  @ApiProperty({ example: 'bahn', required: false })
-  @IsString()
-  @IsOptional()
-  phonetic?: string;
-
   @ApiProperty({ example: 'noun', required: false })
   @IsString()
   @IsOptional()

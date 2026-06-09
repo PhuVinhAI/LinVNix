@@ -63,7 +63,6 @@ class LessonContent {
     required this.vietnameseText,
     required this.orderIndex,
     this.translation,
-    this.phonetic,
     this.audioUrl,
     this.imageUrl,
     this.videoUrl,
@@ -79,7 +78,6 @@ class LessonContent {
       vietnameseText: json['vietnameseText'] as String,
       orderIndex: (json['orderIndex'] as num).toInt(),
       translation: json['translation'] as String?,
-      phonetic: json['phonetic'] as String?,
       audioUrl: json['audioUrl'] as String?,
       imageUrl: json['imageUrl'] as String?,
       videoUrl: json['videoUrl'] as String?,
@@ -95,7 +93,6 @@ class LessonContent {
   final String vietnameseText;
   final int orderIndex;
   final String? translation;
-  final String? phonetic;
   final String? audioUrl;
   final String? imageUrl;
   final String? videoUrl;
@@ -179,7 +176,6 @@ class LessonVocabulary {
     required this.id,
     required this.word,
     required this.translation,
-    this.phonetic,
     this.partOfSpeech,
     this.exampleSentence,
     this.exampleTranslation,
@@ -197,7 +193,6 @@ class LessonVocabulary {
       id: json['id'] as String,
       word: json['word'] as String,
       translation: json['translation'] as String,
-      phonetic: json['phonetic'] as String?,
       partOfSpeech: json['partOfSpeech'] as String?,
       exampleSentence: json['exampleSentence'] as String?,
       exampleTranslation: json['exampleTranslation'] as String?,
@@ -216,7 +211,6 @@ class LessonVocabulary {
   final String id;
   final String word;
   final String translation;
-  final String? phonetic;
   final String? partOfSpeech;
   final String? exampleSentence;
   final String? exampleTranslation;

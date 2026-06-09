@@ -52,7 +52,6 @@ describe('PersonalVocabularies CRUD (real DB)', () => {
     const pv = await personalVocabulariesService.create(testUser.id, {
       word: `bàn-int-${suffix}`,
       translation: 'table',
-      phonetic: 'bahn',
       source: PersonalVocabularySource.IMAGE_DISCOVERY,
     });
 

@@ -18,7 +18,6 @@ type ParsedItem = {
   word: string
   translation: string
   partOfSpeech?: string
-  phonetic?: string
   exampleSentence?: string
 }
 
@@ -62,9 +61,6 @@ const HEADER_ALIASES: Record<keyof ParsedItem, string[]> = {
     'loại từ', 'loai tu', 'loại', 'loai', 'từ loại', 'tu loai',
     'partofspeech', 'part of speech', 'pos',
   ],
-  phonetic: [
-    'phiên âm', 'phien am', 'ipa', 'phonetic', 'pronunciation',
-  ],
   exampleSentence: [
     'câu ví dụ', 'cau vi du', 'ví dụ', 'vi du',
     'example', 'examplesentence', 'example sentence',
@@ -94,12 +90,11 @@ function parseTSV(input: string): ParsedItem[] {
     .filter(Boolean)
   return lines.map((line) => {
     const cols = line.split(/\t|\s{2,}|\s\|\s|;/).map((c) => c.trim())
-    const [word, translation, maybePos, phonetic, example] = cols
+    const [word, translation, maybePos, example] = cols
     return {
       word: word ?? '',
       translation: translation ?? '',
       partOfSpeech: maybePos ? normalizePos(maybePos) : undefined,
-      phonetic: phonetic || undefined,
       exampleSentence: example || undefined,
     }
   })
@@ -130,45 +125,44 @@ function parseSheet(rows: unknown[][]): ParsedItem[] {
 
   return rows.map((row) => {
     const cells = row.map((c) => String(c ?? '').trim())
-    const [word, translation, maybePos, phonetic, example] = cells
+    const [word, translation, maybePos, example] = cells
     return {
       word: word ?? '',
       translation: translation ?? '',
       partOfSpeech: maybePos ? normalizePos(maybePos) : undefined,
-      phonetic: phonetic || undefined,
       exampleSentence: example || undefined,
     }
   })
 }
 
-const TEMPLATE_EXAMPLES: Array<[string, string, string, string, string]> = [
-  ['xin chào', 'hello', 'Cụm từ', '/sin˧˧ tʃaːw˨˩/', 'Tôi xin chào bạn.'],
-  ['tạm biệt', 'goodbye', 'Cụm từ', '/taːm˨˩ biət˨˩/', 'Tạm biệt, hẹn gặp lại.'],
-  ['cảm ơn', 'thank you', 'Cụm từ', '/kaːm˧˩˧ ʔən˧˧/', 'Cảm ơn bạn rất nhiều.'],
-  ['xin lỗi', 'sorry', 'Cụm từ', '', 'Xin lỗi vì đến muộn.'],
-  ['quyển sách', 'book', 'Danh từ', '', 'Tôi đọc quyển sách mới.'],
-  ['nhà', 'house', 'Danh từ', '/ɲaː˨˩/', 'Nhà tôi ở Hà Nội.'],
-  ['người', 'person', 'Danh từ', '', 'Anh ấy là người tốt.'],
-  ['ăn', 'to eat', 'Động từ', '/an˧˧/', 'Tôi ăn cơm trưa.'],
-  ['đi', 'to go', 'Động từ', '', 'Chúng tôi đi học.'],
-  ['học', 'to study', 'Động từ', '', 'Em học tiếng Anh.'],
-  ['đẹp', 'beautiful', 'Tính từ', '/ɗɛp˨˩/', 'Cô ấy rất đẹp.'],
-  ['lớn', 'big', 'Tính từ', '', 'Ngôi nhà này lớn.'],
-  ['nhanh', 'quickly', 'Trạng từ', '', 'Anh ấy chạy nhanh.'],
-  ['tôi', 'I, me', 'Đại từ', '/toj˧˧/', 'Tôi là sinh viên.'],
-  ['trong', 'in', 'Giới từ', '', 'Sách ở trong cặp.'],
-  ['và', 'and', 'Liên từ', '', 'Tôi và bạn.'],
-  ['ôi', 'oh', 'Thán từ', '', 'Ôi, đẹp quá!'],
+const TEMPLATE_EXAMPLES: Array<[string, string, string, string]> = [
+  ['xin chào', 'hello', 'Cụm từ', 'Tôi xin chào bạn.'],
+  ['tạm biệt', 'goodbye', 'Cụm từ', 'Tạm biệt, hẹn gặp lại.'],
+  ['cảm ơn', 'thank you', 'Cụm từ', 'Cảm ơn bạn rất nhiều.'],
+  ['xin lỗi', 'sorry', 'Cụm từ', 'Xin lỗi vì đến muộn.'],
+  ['quyển sách', 'book', 'Danh từ', 'Tôi đọc quyển sách mới.'],
+  ['nhà', 'house', 'Danh từ', 'Nhà tôi ở Hà Nội.'],
+  ['người', 'person', 'Danh từ', 'Anh ấy là người tốt.'],
+  ['ăn', 'to eat', 'Động từ', 'Tôi ăn cơm trưa.'],
+  ['đi', 'to go', 'Động từ', 'Chúng tôi đi học.'],
+  ['học', 'to study', 'Động từ', 'Em học tiếng Anh.'],
+  ['đẹp', 'beautiful', 'Tính từ', 'Cô ấy rất đẹp.'],
+  ['lớn', 'big', 'Tính từ', 'Ngôi nhà này lớn.'],
+  ['nhanh', 'quickly', 'Trạng từ', 'Anh ấy chạy nhanh.'],
+  ['tôi', 'I, me', 'Đại từ', 'Tôi là sinh viên.'],
+  ['trong', 'in', 'Giới từ', 'Sách ở trong cặp.'],
+  ['và', 'and', 'Liên từ', 'Tôi và bạn.'],
+  ['ôi', 'oh', 'Thán từ', 'Ôi, đẹp quá!'],
 ]
 
 function downloadTemplate() {
   const wb = utils.book_new()
 
   // Sheet 1 — Từ vựng (data)
-  const headers = ['Từ tiếng Việt', 'Bản dịch', 'Loại từ', 'Phiên âm', 'Câu ví dụ']
+  const headers = ['Từ tiếng Việt', 'Bản dịch', 'Loại từ', 'Câu ví dụ']
   const data: unknown[][] = [headers, ...TEMPLATE_EXAMPLES]
   const ws = utils.aoa_to_sheet(data)
-  ws['!cols'] = [{ wch: 18 }, { wch: 20 }, { wch: 14 }, { wch: 22 }, { wch: 32 }]
+  ws['!cols'] = [{ wch: 18 }, { wch: 20 }, { wch: 14 }, { wch: 32 }]
   // Freeze header row
   ws['!freeze'] = { xSplit: 0, ySplit: 1 }
   utils.book_append_sheet(wb, ws, 'Từ vựng')

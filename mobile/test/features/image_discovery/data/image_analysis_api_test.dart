@@ -85,7 +85,6 @@ void main() {
       const ImageAnalysisVocabulary(
         word: 'cấm đỗ xe',
         translation: 'no parking',
-        phonetic: 'kam doh seh',
         partOfSpeech: 'phrase',
         exampleSentence: 'Ở đây cấm đỗ xe.',
         exampleTranslation: 'Parking is forbidden here.',
@@ -105,7 +104,6 @@ void main() {
     expect(captured, {
       'word': 'cấm đỗ xe',
       'translation': 'no parking',
-      'phonetic': 'kam doh seh',
       'partOfSpeech': 'phrase',
       'exampleSentence': 'Ở đây cấm đỗ xe.',
       'exampleTranslation': 'Parking is forbidden here.',

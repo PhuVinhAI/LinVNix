@@ -82,11 +82,6 @@ export class CreateContentDto {
   @IsOptional()
   translation?: string;
 
-  @ApiProperty({ example: 'sin chao! toy la min', required: false })
-  @IsString()
-  @IsOptional()
-  phonetic?: string;
-
   @ApiProperty({ example: 'https://example.com/audio.mp3', required: false })
   @IsMediaUrl()
   @IsOptional()

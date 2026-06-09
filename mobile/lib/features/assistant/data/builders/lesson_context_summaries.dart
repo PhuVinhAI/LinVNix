@@ -18,7 +18,6 @@ Map<String, dynamic> vocabularyContextSummary(LessonVocabulary vocabulary, {Stri
     'id': vocabulary.id,
     'word': displayedWord,
     'translation': vocabulary.translation,
-    if (vocabulary.phonetic != null) 'phonetic': vocabulary.phonetic,
     if (vocabulary.partOfSpeech != null) 'partOfSpeech': vocabulary.partOfSpeech,
     if (vocabulary.classifier != null) 'classifier': vocabulary.classifier,
     if (vocabulary.exampleSentence != null)

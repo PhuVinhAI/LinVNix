@@ -10,11 +10,6 @@ export class CreatePersonalVocabularyFromAnalysisDto {
   @IsString()
   translation: string;
 
-  @ApiProperty({ example: 'kam doh seh', required: false })
-  @IsOptional()
-  @IsString()
-  phonetic?: string;
-
   @ApiProperty({ example: 'phrase', required: false })
   @IsOptional()
   @IsString()

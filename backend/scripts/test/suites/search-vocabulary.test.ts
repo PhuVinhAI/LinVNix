@@ -9,7 +9,7 @@
  * Covers the canonical "catalog read" acceptance criterion of
  * `.scratch/troly-ai/issues/06-tools-catalog.md`:
  *
- * 1. **Plain query** — text matches by `word` / `translation` / `phonetic`.
+ * 1. **Plain query** — text matches by `word` / `translation`.
  * 2. **Dialect fallback from ctx.user.preferredDialect** — when the tool is
  *    called with no `dialect` param, the conversation owner's preferred
  *    dialect propagates into the SQL filter (the headline regression test

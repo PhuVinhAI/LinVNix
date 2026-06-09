@@ -25,9 +25,6 @@ export class LessonContent extends BaseEntity {
   @Column({ name: 'dialogue_data', type: 'jsonb', nullable: true })
   dialogueData?: DialogueData | null;
 
-  @Column({ nullable: true })
-  phonetic?: string;
-
   @Column({ name: 'audio_url', nullable: true })
   audioUrl?: string;
 

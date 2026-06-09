@@ -36,17 +36,6 @@ class TextContentWidget extends StatelessWidget {
               height: 1.5,
             ),
           ),
-          if (content.phonetic != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              content.phonetic!,
-              style: GoogleFonts.inter(
-                fontSize: AppTypography.bodyMedium,
-                color: c.mutedForeground,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
           if (content.notes != null) ...[
             const SizedBox(height: 16),
             Text(
@@ -95,17 +84,6 @@ class _AudioContentWidgetState extends State<AudioContentWidget> {
               height: 1.5,
             ),
           ),
-          if (widget.content.phonetic != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              widget.content.phonetic!,
-              style: GoogleFonts.inter(
-                fontSize: AppTypography.bodyMedium,
-                color: c.mutedForeground,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
           const SizedBox(height: 24),
           if (widget.content.audioUrl != null) ...[
             AppCard(

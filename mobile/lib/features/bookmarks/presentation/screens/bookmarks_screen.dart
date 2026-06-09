@@ -753,17 +753,7 @@ class _BookmarkDetailSheet extends StatelessWidget {
                       ],
                     ],
                   ),
-                  if (item.phonetic != null) ...[
-                    const SizedBox(height: AppSpacing.xs),
-                    Text(
-                      '/${item.phonetic}/',
-                      style: GoogleFonts.inter(
-                        fontSize: AppTypography.bodyLarge,
-                        color: c.mutedForeground,
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: AppSpacing.sm),
                   if (item.partOfSpeech != null) ...[
                     Align(
                       alignment: Alignment.centerLeft,

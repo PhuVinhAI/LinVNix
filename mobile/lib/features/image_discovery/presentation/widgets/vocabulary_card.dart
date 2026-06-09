@@ -102,17 +102,6 @@ class _VocabularyCardState extends State<VocabularyCard> {
                   ],
                 ),
               ),
-              if (v.phonetic != null) ...[
-                const SizedBox(width: AppSpacing.sm),
-                Text(
-                  '/${v.phonetic}/',
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.bodySmall,
-                    color: c.mutedForeground,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ],
             ],
           ),
           if (pos != null || v.classifier != null) ...[

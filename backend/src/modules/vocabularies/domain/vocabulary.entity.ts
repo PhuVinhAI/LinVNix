@@ -18,9 +18,6 @@ export class Vocabulary extends BaseEntity {
   @Column()
   translation: string;
 
-  @Column({ nullable: true })
-  phonetic?: string;
-
   @Column({
     type: 'enum',
     enum: PartOfSpeech,

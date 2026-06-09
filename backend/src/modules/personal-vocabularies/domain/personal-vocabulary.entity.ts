@@ -11,9 +11,6 @@ export class PersonalVocabulary extends BaseEntity {
   @Column()
   translation: string;
 
-  @Column({ nullable: true })
-  phonetic?: string;
-
   @Column({ name: 'part_of_speech', nullable: true })
   partOfSpeech?: string;
 

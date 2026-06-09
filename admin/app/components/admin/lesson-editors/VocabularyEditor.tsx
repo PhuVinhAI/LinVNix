@@ -259,14 +259,6 @@ function VocabExpandedPanel({
 }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <FieldBox label="Phiên âm" help="IPA hoặc Romanization">
-        <InlineTextField
-          value={row.phonetic ?? ''}
-          onCommit={(v) => onPatch({ phonetic: v || null })}
-          placeholder="/sin˧˧ tʃaːw˨˩/"
-          monospace
-        />
-      </FieldBox>
       <FieldBox label="Loại từ phân loại" help="con, cái, chiếc...">
         <InlineTextField
           value={row.classifier ?? ''}

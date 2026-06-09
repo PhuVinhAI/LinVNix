@@ -46,8 +46,8 @@ export class VocabulariesRepository {
   }
 
   /**
-   * Full-text-ish search over `word`, `translation`, and `phonetic` using
-   * ILIKE. Optional filters:
+   * Full-text-ish search over `word` and `translation` using ILIKE.
+   * Optional filters:
    *
    * - `lessonId` — narrows the result to one lesson; useful when the
    *   learner is already inside a specific lesson context.
@@ -68,7 +68,7 @@ export class VocabulariesRepository {
     const qb = this.repository
       .createQueryBuilder('vocabulary')
       .where(
-        '(vocabulary.word ILIKE :query OR vocabulary.translation ILIKE :query OR vocabulary.phonetic ILIKE :query)',
+        '(vocabulary.word ILIKE :query OR vocabulary.translation ILIKE :query)',
         { query: `%${options.query}%` },
       );
 

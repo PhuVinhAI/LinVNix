@@ -287,7 +287,6 @@ function TextBody({
   onPatch: (p: Partial<LessonContent>) => void
   autoFocus: boolean
 }) {
-  const [showPhonetic, setShowPhonetic] = useState(!!row.phonetic)
   const [showNotes, setShowNotes] = useState(!!row.notes)
 
   return (
@@ -315,28 +314,6 @@ function TextBody({
           className="hover:bg-transparent focus:bg-transparent focus:ring-0"
         />
       </InlineFieldShell>
-
-      {showPhonetic ? (
-        <>
-          <FieldLabel icon={<Volume2 className="h-3.5 w-3.5" />}>Phiên âm</FieldLabel>
-          <InlineFieldShell>
-            <InlineTextField
-              value={row.phonetic ?? ''}
-              onCommit={(v) => {
-                onPatch({ phonetic: v || null })
-                if (!v) setShowPhonetic(false)
-              }}
-              placeholder="/jiŋ˧˧ tʃaːw˨˩/"
-              monospace
-              className="hover:bg-transparent focus:bg-transparent focus:ring-0"
-            />
-          </InlineFieldShell>
-        </>
-      ) : (
-        <InlineAddButton variant="inline" onClick={() => setShowPhonetic(true)}>
-          Thêm phiên âm
-        </InlineAddButton>
-      )}
 
       {showNotes ? (
         <>

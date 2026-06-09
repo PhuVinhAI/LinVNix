@@ -19,11 +19,6 @@ export class CreateVocabularyDto {
   @IsString()
   translation: string;
 
-  @ApiProperty({ example: 'sin chao', required: false })
-  @IsString()
-  @IsOptional()
-  phonetic?: string;
-
   @ApiProperty({ enum: PartOfSpeech, example: PartOfSpeech.PHRASE })
   @IsEnum(PartOfSpeech)
   partOfSpeech: PartOfSpeech;

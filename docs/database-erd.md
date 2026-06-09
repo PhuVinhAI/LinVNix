@@ -111,7 +111,6 @@ erDiagram
     enum content_type
     text vietnamese_text
     text translation
-    varchar phonetic
     varchar audio_url
     varchar image_url
     varchar video_url
@@ -127,7 +126,6 @@ erDiagram
     timestamp deleted_at
     varchar word
     varchar translation
-    varchar phonetic
     enum part_of_speech
     text example_sentence
     text example_translation
@@ -148,7 +146,6 @@ erDiagram
     timestamp deleted_at
     varchar word
     varchar translation
-    varchar phonetic
     varchar part_of_speech
     text example_sentence
     text example_translation

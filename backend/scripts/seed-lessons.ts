@@ -112,13 +112,12 @@ async function main() {
 
         for (const contentData of lessonData.lesson_contents) {
           await client.query(
-            `INSERT INTO lesson_contents (content_type, vietnamese_text, translation, phonetic, audio_url, image_url, video_url, order_index, notes, lesson_id, dialogue_data)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+            `INSERT INTO lesson_contents (content_type, vietnamese_text, translation, audio_url, image_url, video_url, order_index, notes, lesson_id, dialogue_data)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
             [
               contentData.content_type,
               contentData.vietnamese_text,
               contentData.translation || null,
-              contentData.phonetic || null,
               contentData.audio_url || null,
               contentData.image_url || null,
               contentData.video_url || null,
@@ -135,12 +134,11 @@ async function main() {
 
         for (const vocabData of lessonData.vocabularies) {
           await client.query(
-            `INSERT INTO vocabularies (word, translation, phonetic, part_of_speech, example_sentence, example_translation, audio_url, image_url, classifier, dialect_variants, audio_urls, region, difficulty_level, lesson_id)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+            `INSERT INTO vocabularies (word, translation, part_of_speech, example_sentence, example_translation, audio_url, image_url, classifier, dialect_variants, audio_urls, region, difficulty_level, lesson_id)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
             [
               vocabData.word,
               vocabData.translation,
-              vocabData.phonetic || null,
               vocabData.part_of_speech,
               vocabData.example_sentence || null,
               vocabData.example_translation || null,

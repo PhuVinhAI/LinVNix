@@ -44,7 +44,6 @@ export interface LessonContent {
   contentType: string
   vietnameseText: string
   translation?: string | null
-  phonetic?: string | null
   audioUrl?: string | null
   imageUrl?: string | null
   videoUrl?: string | null
@@ -78,7 +77,6 @@ export interface Vocabulary {
   id: string
   word: string
   translation: string
-  phonetic?: string | null
   partOfSpeech: string
   exampleSentence?: string | null
   exampleTranslation?: string | null

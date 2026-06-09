@@ -58,7 +58,6 @@ describe('ImageAnalysisService', () => {
           {
             word: 'cấm đỗ xe',
             translation: 'no parking',
-            phonetic: 'kam doh seh',
             partOfSpeech: 'phrase',
             exampleSentence: 'Ở đây cấm đỗ xe.',
             exampleTranslation: 'Parking is forbidden here.',
@@ -120,7 +119,6 @@ describe('ImageAnalysisService', () => {
         {
           word: 'cấm đỗ xe',
           translation: 'no parking',
-          phonetic: 'kam doh seh',
           partOfSpeech: 'phrase',
           exampleSentence: 'Ở đây cấm đỗ xe.',
           exampleTranslation: 'Parking is forbidden here.',

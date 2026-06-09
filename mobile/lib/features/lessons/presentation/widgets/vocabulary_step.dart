@@ -119,117 +119,105 @@ class _VocabularyCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: c.border, width: 1),
       ),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      displayedWord,
-                      style: GoogleFonts.inter(
-                        fontSize: AppTypography.titleMedium,
-                        fontWeight: FontWeight.w700,
-                        color: c.foreground,
-                        height: 1.2,
-                      ),
-                    ),
-                    if (vocab.phonetic != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        vocab.phonetic!,
-                        style: GoogleFonts.inter(
-                          fontSize: AppTypography.bodyMedium,
-                          color: c.mutedForeground,
-                          fontStyle: FontStyle.italic,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  displayedWord,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.titleMedium,
+                    fontWeight: FontWeight.w700,
+                    color: c.foreground,
+                    height: 1.2,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  vocab.translation,
+                  style: GoogleFonts.inter(
+                    fontSize: AppTypography.bodyLarge,
+                    color: c.foreground,
+                    height: 1.4,
+                  ),
+                ),
+                if (vocab.partOfSpeech != null || vocab.classifier != null) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.xs,
+                    children: [
+                      if (vocab.partOfSpeech != null)
+                        AppChip(
+                          label: vocab.partOfSpeech!,
+                          fontSize: AppTypography.caption,
                         ),
-                      ),
+                      if (vocab.classifier != null)
+                        AppChip(
+                          label: S
+                              .of(context)
+                              .classifierLabelParam(vocab.classifier!),
+                          fontSize: AppTypography.caption,
+                        ),
                     ],
-                  ],
-                ),
-              ),
-              isPending
-                  ? const SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: Center(
-                        child: AppSpinner(size: 24, strokeWidth: 2),
-                      ),
-                    )
-                  : BookmarkIconButton(
-                      vocabularyId: vocab.id,
-                      isBookmarked: isBookmarked,
-                      onToggle: onToggle,
+                  ),
+                ],
+                if (vocab.exampleSentence != null) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    decoration: BoxDecoration(
+                      color: c.muted,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      border: Border.all(color: c.border, width: 1),
                     ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            vocab.translation,
-            style: GoogleFonts.inter(
-              fontSize: AppTypography.bodyLarge,
-              color: c.foreground,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.xs,
-            children: [
-              if (vocab.partOfSpeech != null)
-                AppChip(
-                  label: vocab.partOfSpeech!,
-                  fontSize: AppTypography.caption,
-                ),
-              if (vocab.classifier != null)
-                AppChip(
-                  label: S.of(context).classifierLabelParam(vocab.classifier!),
-                  fontSize: AppTypography.caption,
-                ),
-            ],
-          ),
-          if (vocab.exampleSentence != null) ...[
-            const SizedBox(height: AppSpacing.md),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: c.muted,
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                border: Border.all(color: c.border, width: 1),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    vocab.exampleSentence!,
-                    style: GoogleFonts.inter(
-                      fontSize: AppTypography.bodyMedium,
-                      fontWeight: FontWeight.w500,
-                      color: c.foreground,
-                      height: 1.45,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          vocab.exampleSentence!,
+                          style: GoogleFonts.inter(
+                            fontSize: AppTypography.bodyMedium,
+                            fontWeight: FontWeight.w500,
+                            color: c.foreground,
+                            height: 1.45,
+                          ),
+                        ),
+                        if (vocab.exampleTranslation != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            vocab.exampleTranslation!,
+                            style: GoogleFonts.inter(
+                              fontSize: AppTypography.bodySmall,
+                              color: c.mutedForeground,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
-                  if (vocab.exampleTranslation != null) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      vocab.exampleTranslation!,
-                      style: GoogleFonts.inter(
-                        fontSize: AppTypography.bodySmall,
-                        color: c.mutedForeground,
-                        height: 1.4,
-                      ),
-                    ),
-                  ],
                 ],
-              ),
+              ],
             ),
-          ],
+          ),
+          isPending
+              ? const SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Center(
+                    child: AppSpinner(size: 24, strokeWidth: 2),
+                  ),
+                )
+              : BookmarkIconButton(
+                  vocabularyId: vocab.id,
+                  isBookmarked: isBookmarked,
+                  onToggle: onToggle,
+                ),
         ],
       ),
     );

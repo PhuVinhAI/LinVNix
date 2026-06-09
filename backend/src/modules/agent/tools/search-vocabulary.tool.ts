@@ -44,8 +44,8 @@ export class SearchVocabularyTool extends BaseTool<
   readonly name = 'search_vocabulary';
   readonly displayName = 'Looking up vocabulary...';
   readonly description =
-    'Searches the vocabulary catalog by Vietnamese word, English ' +
-    'translation, or phonetic spelling. Returns up to 50 entries. The ' +
+    'Searches the vocabulary catalog by Vietnamese word or English ' +
+    'translation. Returns up to 50 entries. The ' +
     "learner's preferred dialect is applied automatically — do NOT pass " +
     '`dialect` unless the learner specifically asks for a different ' +
     'region. Optional `lessonId` narrows results to one lesson when the ' +

@@ -40,7 +40,6 @@ export class ImageAnalysisController {
           {
             word: 'cấm đỗ xe',
             translation: 'no parking',
-            phonetic: 'kam doh seh',
             partOfSpeech: 'phrase',
           },
         ],

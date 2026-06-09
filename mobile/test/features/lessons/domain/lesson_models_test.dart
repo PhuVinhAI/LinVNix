@@ -19,7 +19,6 @@ void main() {
             'vietnameseText': 'Xin chào',
             'orderIndex': 0,
             'translation': 'Hello',
-            'phonetic': 'sin chow',
           },
         ],
         'vocabularies': [
@@ -27,7 +26,6 @@ void main() {
             'id': 'vocab-1',
             'word': 'xin chào',
             'translation': 'hello',
-            'phonetic': 'sin chow',
             'partOfSpeech': 'phrase',
           },
         ],
@@ -92,7 +90,6 @@ void main() {
         'vietnameseText': 'Xin chào thế giới',
         'orderIndex': 0,
         'translation': 'Hello world',
-        'phonetic': 'sin chow tay gwoy',
       };
 
       final content = LessonContent.fromJson(json);
@@ -101,7 +98,6 @@ void main() {
       expect(content.contentType, 'text');
       expect(content.vietnameseText, 'Xin chào thế giới');
       expect(content.translation, 'Hello world');
-      expect(content.phonetic, 'sin chow tay gwoy');
     });
 
     test('creates audio content from JSON', () {
@@ -143,7 +139,6 @@ void main() {
         'id': 'v1',
         'word': 'con mèo',
         'translation': 'cat',
-        'phonetic': 'kon meow',
         'partOfSpeech': 'noun',
         'classifier': 'con',
         'dialectVariants': {
@@ -173,7 +168,6 @@ void main() {
       final vocab = LessonVocabulary.fromJson(json);
 
       expect(vocab.word, 'chào');
-      expect(vocab.phonetic, isNull);
       expect(vocab.classifier, isNull);
       expect(vocab.dialectVariants, isNull);
     });

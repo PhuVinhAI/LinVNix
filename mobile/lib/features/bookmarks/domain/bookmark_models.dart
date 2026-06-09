@@ -69,7 +69,6 @@ class BookmarkWithVocabulary {
     this.type = BookmarkType.system,
     required this.word,
     required this.translation,
-    this.phonetic,
     this.partOfSpeech,
     this.exampleSentence,
     this.exampleTranslation,
@@ -88,7 +87,6 @@ class BookmarkWithVocabulary {
   final BookmarkType type;
   final String word;
   final String translation;
-  final String? phonetic;
   final String? partOfSpeech;
   final String? exampleSentence;
   final String? exampleTranslation;
@@ -122,7 +120,6 @@ class BookmarkWithVocabulary {
       type: inferredType,
       word: vocab['word'] as String,
       translation: vocab['translation'] as String,
-      phonetic: vocab['phonetic'] as String?,
       partOfSpeech: vocab['partOfSpeech'] as String?,
       exampleSentence: vocab['exampleSentence'] as String?,
       exampleTranslation: vocab['exampleTranslation'] as String?,

@@ -22,7 +22,6 @@ export interface ImageAnalysisLearner {
 const ImageAnalysisVocabularySchema = z.object({
   word: z.string().min(1),
   translation: z.string().min(1),
-  phonetic: z.string().nullable().optional(),
   partOfSpeech: z.string().nullable().optional(),
   exampleSentence: z.string().nullable().optional(),
   exampleTranslation: z.string().nullable().optional(),
@@ -61,11 +60,6 @@ const IMAGE_ANALYSIS_RESPONSE_SCHEMA = {
             type: Type.STRING,
             description: "Translation in the learner's native language.",
             nullable: false,
-          },
-          phonetic: {
-            type: Type.STRING,
-            description: 'Optional pronunciation guide.',
-            nullable: true,
           },
           partOfSpeech: {
             type: Type.STRING,

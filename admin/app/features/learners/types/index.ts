@@ -197,7 +197,6 @@ export interface PersonalVocabulary {
   translation: string
   source: string
   partOfSpeech?: string | null
-  phonetic?: string | null
   exampleSentence?: string | null
 }
 
@@ -206,7 +205,6 @@ export interface BookmarkVocabularyRef {
   word: string
   translation: string
   partOfSpeech?: string | null
-  phonetic?: string | null
   exampleSentence?: string | null
   region?: string | null
 }
@@ -217,7 +215,6 @@ export interface BookmarkPersonalVocabularyRef {
   translation: string
   source: string
   partOfSpeech?: string | null
-  phonetic?: string | null
   exampleSentence?: string | null
 }
 

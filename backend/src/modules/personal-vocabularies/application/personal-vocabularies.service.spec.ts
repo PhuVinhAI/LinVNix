@@ -83,7 +83,6 @@ describe('PersonalVocabulariesService', () => {
       const data = {
         word: 'bàn',
         translation: 'table',
-        phonetic: 'bahn',
         partOfSpeech: 'noun',
         classifier: 'cái',
         source: PersonalVocabularySource.IMAGE_DISCOVERY,
@@ -124,14 +123,12 @@ describe('PersonalVocabulariesService', () => {
       const result = await service.createFromAnalysis('user-1', {
         word: 'cấm đỗ xe',
         translation: 'no parking',
-        phonetic: 'kam doh seh',
         partOfSpeech: 'phrase',
       });
 
       expect(manager.create).toHaveBeenNthCalledWith(1, PersonalVocabulary, {
         word: 'cấm đỗ xe',
         translation: 'no parking',
-        phonetic: 'kam doh seh',
         partOfSpeech: 'phrase',
         userId: 'user-1',
         source: PersonalVocabularySource.IMAGE_DISCOVERY,

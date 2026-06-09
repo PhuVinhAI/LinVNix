@@ -274,17 +274,6 @@ class _Flashcard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          if (item.phonetic != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              '/${item.phonetic}/',
-              style: GoogleFonts.inter(
-                fontSize: AppTypography.bodyLarge,
-                color: c.mutedForeground,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
           if (onPlayAudio != null) ...[
             const SizedBox(height: AppSpacing.xl),
             _CircleAudioButton(onTap: onPlayAudio!),

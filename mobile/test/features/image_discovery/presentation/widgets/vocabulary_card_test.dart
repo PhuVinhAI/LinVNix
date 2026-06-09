@@ -19,7 +19,6 @@ void main() {
             vocabulary: const ImageAnalysisVocabulary(
               word: 'cấm đỗ xe',
               translation: 'no parking',
-              phonetic: 'kam doh seh',
               partOfSpeech: 'phrase',
               exampleSentence: 'Ở đây cấm đỗ xe.',
               exampleTranslation: 'Parking is forbidden here.',
@@ -36,7 +35,6 @@ void main() {
 
     expect(find.text('cấm đỗ xe'), findsOneWidget);
     expect(find.text('no parking'), findsOneWidget);
-    expect(find.text('/kam doh seh/'), findsOneWidget);
     expect(find.text('phrase'), findsOneWidget);
     expect(find.text('Thêm'), findsOneWidget);
 

@@ -876,9 +876,6 @@ function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
         )}
       </div>
       <p className="text-xl font-bold text-foreground leading-tight">{ref.word}</p>
-      {ref.phonetic && (
-        <p className="text-xs font-mono text-muted-foreground mt-0.5">/{ref.phonetic}/</p>
-      )}
       <p className="text-sm text-foreground/80 mt-1.5 line-clamp-2">{ref.translation}</p>
       {ref.exampleSentence && (
         <p className="text-xs italic text-muted-foreground mt-2 line-clamp-2 border-t-2 border-border pt-2">

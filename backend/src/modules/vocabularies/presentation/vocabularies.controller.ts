@@ -83,7 +83,6 @@ export class VocabulariesController {
               id: 'uuid-string',
               word: 'xin chào',
               translation: 'hello',
-              phonetic: 'sin chao',
               partOfSpeech: 'PHRASE',
             },
           },
@@ -136,7 +135,7 @@ export class VocabulariesController {
   @ApiOperation({
     summary: 'Tìm kiếm từ vựng',
     description:
-      'Tìm kiếm từ vựng theo word, translation hoặc phonetic. Trả về tối đa 50 kết quả. Nếu user đã đăng nhập, mỗi kết quả bao gồm isBookmarked.',
+      'Tìm kiếm từ vựng theo word hoặc translation. Trả về tối đa 50 kết quả. Nếu user đã đăng nhập, mỗi kết quả bao gồm isBookmarked.',
   })
   @ApiResponse({
     status: 200,
@@ -147,7 +146,6 @@ export class VocabulariesController {
           id: 'uuid-string',
           word: 'xin chào',
           translation: 'hello',
-          phonetic: 'sin chao',
           partOfSpeech: 'PHRASE',
           isBookmarked: false,
         },
@@ -177,7 +175,6 @@ export class VocabulariesController {
           id: 'uuid-string',
           word: 'xin chào',
           translation: 'hello',
-          phonetic: 'sin chao',
           partOfSpeech: 'PHRASE',
           exampleSentence: 'Xin chào, bạn khỏe không?',
           exampleTranslation: 'Hello, how are you?',

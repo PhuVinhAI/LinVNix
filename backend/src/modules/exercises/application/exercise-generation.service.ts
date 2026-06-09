@@ -771,7 +771,7 @@ export class ExerciseGenerationService {
       parts.push('### Vocabulary (from all completed lessons)');
       for (const v of context.vocabularies) {
         parts.push(
-          `- ${v.word} (${v.partOfSpeech}) = ${v.translation}${v.phonetic ? ` [${v.phonetic}]` : ''}${v.exampleSentence ? ` — "${v.exampleSentence}"` : ''}`,
+          `- ${v.word} (${v.partOfSpeech}) = ${v.translation}${v.exampleSentence ? ` — "${v.exampleSentence}"` : ''}`,
         );
       }
     }
@@ -798,7 +798,7 @@ export class ExerciseGenerationService {
       parts.push('### Lesson Content');
       for (const c of context.contents) {
         parts.push(
-          `- [${c.contentType}] ${c.vietnameseText}${c.translation ? ` = ${c.translation}` : ''}${c.phonetic ? ` (${c.phonetic})` : ''}`,
+          `- [${c.contentType}] ${c.vietnameseText}${c.translation ? ` = ${c.translation}` : ''}`,
         );
       }
     }
@@ -807,7 +807,7 @@ export class ExerciseGenerationService {
       parts.push('\n### Vocabulary');
       for (const v of context.vocabularies) {
         parts.push(
-          `- ${v.word} (${v.partOfSpeech}) = ${v.translation}${v.phonetic ? ` [${v.phonetic}]` : ''}${v.exampleSentence ? ` — "${v.exampleSentence}"` : ''}`,
+          `- ${v.word} (${v.partOfSpeech}) = ${v.translation}${v.exampleSentence ? ` — "${v.exampleSentence}"` : ''}`,
         );
       }
     }

@@ -191,7 +191,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Philosophy demands linguistic precision. Many terms from Sino-Vietnamese carry deep meanings used in academic writing.",
                   "video_url": null,
                   "vietnamese_text": "Triết học đòi hỏi chính xác ngôn từ. Nhiều thuật ngữ từ Hán Việt, mang ý nghĩa sâu xa, dùng trong văn viết học thuật."
@@ -202,7 +201,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Terms grouped: ontology, epistemology, ethics, movements. Mastering Sino-Vietnamese morphemes helps infer meanings.",
                   "video_url": null,
                   "vietnamese_text": "Thuật ngữ phân thành: bản thể luận, nhận thức luận, đạo đức học, trào lưu tư tưởng. Nắm vững cấu trúc Hán Việt giúp suy luận nghĩa."
@@ -213,7 +211,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Sino-Vietnamese in opposing pairs. Each syllable has meaning; combining creates specialized terminology.",
                   "video_url": null,
                   "vietnamese_text": "Từ Hán Việt theo cặp đối lập: duy vật—duy tâm, biện chứng—siêu hình, tự do—tất yếu. Mỗi âm tiết mang nghĩa riêng; kết hợp tạo thuật ngữ."
@@ -238,7 +235,6 @@
                   "example_translation": "Philosophy is the foundation of all humanities.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tyet hok",
                   "region": "STANDARD",
                   "translation": "philosophy",
                   "word": "triết học"
@@ -258,7 +254,6 @@
                   "example_translation": "Ho Chi Minh's ideology is a system of viewpoints on the Vietnamese revolution.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tu tuong",
                   "region": "STANDARD",
                   "translation": "ideology; thought",
                   "word": "tư tưởng"
@@ -278,7 +273,6 @@
                   "example_translation": "One's worldview is shaped through life experiences.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhân sinh quan",
                   "region": "STANDARD",
                   "translation": "worldview; philosophy of life",
                   "word": "nhân sinh quan"
@@ -298,7 +292,6 @@
                   "example_translation": "The ontological problem is a core question of Western philosophy.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bản thể",
                   "region": "STANDARD",
                   "translation": "ontology; being",
                   "word": "bản thể"
@@ -318,7 +311,6 @@
                   "example_translation": "Cognition proceeds from the sensory to the rational.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhận thức",
                   "region": "STANDARD",
                   "translation": "cognition; perception",
                   "word": "nhận thức"
@@ -338,7 +330,6 @@
                   "example_translation": "Dialectics explains movement through contradictions.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "biện chứng",
                   "region": "STANDARD",
                   "translation": "dialectic",
                   "word": "biện chứng"
@@ -358,7 +349,6 @@
                   "example_translation": "Materialism holds that matter determines consciousness.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "duy vật",
                   "region": "STANDARD",
                   "translation": "materialism",
                   "word": "duy vật"
@@ -378,7 +368,6 @@
                   "example_translation": "Professional ethics is an indispensable quality.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "đao đức",
                   "region": "STANDARD",
                   "translation": "ethics; morality",
                   "word": "đạo đức"
@@ -398,7 +387,6 @@
                   "example_translation": "Freedom of thought is a prerequisite for scientific creativity.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tự do",
                   "region": "STANDARD",
                   "translation": "freedom; liberty",
                   "word": "tự do"
@@ -418,7 +406,6 @@
                   "example_translation": "Existentialism emphasizes individual existence and freedom of choice.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hiện sinh",
                   "region": "STANDARD",
                   "translation": "existentialism",
                   "word": "hiện sinh"
@@ -438,7 +425,6 @@
                   "example_translation": "Idealism holds that consciousness is primary.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "duy tâm",
                   "region": "STANDARD",
                   "translation": "idealism",
                   "word": "duy tâm"
@@ -458,7 +444,6 @@
                   "example_translation": "The metaphysical method examines things in isolation and stasis.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "siêu hình",
                   "region": "STANDARD",
                   "translation": "metaphysics",
                   "word": "siêu hình"
@@ -478,7 +463,6 @@
                   "example_translation": "Formal logic studies laws of correct thinking.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lô-gíc",
                   "region": "STANDARD",
                   "translation": "logic",
                   "word": "logic"
@@ -498,7 +482,6 @@
                   "example_translation": "Moral principles are core in traditional education.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "đao lý",
                   "region": "STANDARD",
                   "translation": "moral principle",
                   "word": "đạo lý"
@@ -518,7 +501,6 @@
                   "example_translation": "Knowledge is power, but does not come naturally.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tri thức",
                   "region": "STANDARD",
                   "translation": "knowledge (formal)",
                   "word": "tri thức"
@@ -713,7 +695,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Formal passive emphasizes the affected object. Structure: được/bị + [agent optional] + verb. Agentless 'được + verb' is common in scientific texts.",
                   "video_url": null,
                   "vietnamese_text": "Trong văn viết học thuật, bị động hình thức nhấn mạnh đối tượng chịu tác động. Cấu trúc: được/bị + [chủ thể tùy chọn] + động từ. Không chủ thể: 'được + động từ' phổ biến trong văn bản khoa học."
@@ -724,7 +705,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Impersonal constructions avoid naming the subject, creating objectivity. Patterns: người ta + verb, có thể + verb. Hedging: có thể nói là, theo như, dường như.",
                   "video_url": null,
                   "vietnamese_text": "Câu phi nhân xưng không chỉ đích danh chủ thể, tạo khách quan. Mẫu: 'người ta + động từ', 'có thể + động từ', 'cần phải + động từ'. Dự phòng học thuật: 'có thể nói là', 'theo như', 'dường như' giảm tính tuyệt đối."
@@ -735,7 +715,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "In formal writing, subordinate clauses are reduced: (1) Drop 'mà' in relative clauses; (2) Drop subject in adverbial clauses; (3) Use reduced conjunctions.",
                   "video_url": null,
                   "vietnamese_text": "Trong văn viết trang trọng, mệnh đề phụ được rút gọn: (1) Bỏ 'mà' trong mệnh đề quan hệ; (2) Bỏ chủ ngữ mệnh đề trạng ngữ: 'khi nghiên cứu vấn đề này'; (3) Dùng liên từ rút gọn: 'mặc dù', 'trong khi', 'bằng cách'."
@@ -760,7 +739,6 @@
                   "example_translation": "Scientific research demands an objective attitude.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "khách quan",
                   "region": "STANDARD",
                   "translation": "objective",
                   "word": "khách quan"
@@ -780,7 +758,6 @@
                   "example_translation": "Subjective assessments often lack accuracy.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "chủ quan",
                   "region": "STANDARD",
                   "translation": "subjective",
                   "word": "chủ quan"
@@ -800,7 +777,6 @@
                   "example_translation": "The implications of this decision need careful consideration.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hệ quả",
                   "region": "STANDARD",
                   "translation": "consequence; implication",
                   "word": "hệ quả"
@@ -820,7 +796,6 @@
                   "example_translation": "This is a prerequisite for development.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "tiên quyết",
                   "region": "STANDARD",
                   "translation": "prerequisite",
                   "word": "tiên quyết"
@@ -840,7 +815,6 @@
                   "example_translation": "Contradiction is the source of movement and development.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mâu thuẫn",
                   "region": "STANDARD",
                   "translation": "contradiction",
                   "word": "mâu thuẫn"
@@ -946,7 +920,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Nguyen Trai proposed nhân nghĩa as political foundation. Nhân = loving people, Nghĩa = acting rightly. Both Confucian and national character.",
                   "video_url": null,
                   "vietnamese_text": "Nguyễn Trãi (1380–1442) đề ra triết lý nhân nghĩa: 'Việc nhân nghĩa cốt ở yên dân, quân đoàn luật phép trước phải trừ bạo'. Nhân = yêu thương con người, Nghĩa = hành động đúng đắn vì dân. Vừa Nho giáo, vừa bản sắc dân tộc."
@@ -957,7 +930,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Ho Chi Minh's thought combines Marxism-Leninism with national reality. The principal contradiction was between the nation and imperialism.",
                   "video_url": null,
                   "vietnamese_text": "Tư tưởng Hồ Chí Minh kết hợp Mác-Lênin với thực tiễn. Phương pháp luận biện chứng vận dụng sáng tạo: mâu thuẫn chủ yếu ở Việt Nam không phải giữa tư sản và vô sản, mà giữa toàn thể dân tộc và chủ nghĩa đế quốc."
@@ -968,7 +940,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "When reading: (1) Identify main argument; (2) Recognize Sino-Vietnamese keywords; (3) Analyze argument structure; (4) Note hedging expressions.",
                   "video_url": null,
                   "vietnamese_text": "Khi đọc: (1) Xác định luận điểm chính; (2) Nhận diện từ khóa Hán Việt; (3) Phân tích cấu trúc lập luận; (4) Chú ý biểu thức dự phòng — 'có thể nói', 'dường như'."
@@ -993,7 +964,6 @@
                   "example_translation": "The essence of nhân nghĩa is to bring peace to the people.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhân nghĩa",
                   "region": "STANDARD",
                   "translation": "humaneness and righteousness",
                   "word": "nhân nghĩa"
@@ -1013,7 +983,6 @@
                   "example_translation": "Dialectical methodology is an important cognitive tool.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phương pháp luận",
                   "region": "STANDARD",
                   "translation": "methodology",
                   "word": "phương pháp luận"
@@ -1033,7 +1002,6 @@
                   "example_translation": "His intellectual legacy still retains its value.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "di sản",
                   "region": "STANDARD",
                   "translation": "heritage; legacy",
                   "word": "di sản"
@@ -1053,7 +1021,6 @@
                   "example_translation": "The author's argumentation is very rigorous.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lập luận",
                   "region": "STANDARD",
                   "translation": "argumentation",
                   "word": "lập luận"
@@ -1073,7 +1040,6 @@
                   "example_translation": "The policy of bringing peace to the people was the top priority.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "yên dân",
                   "region": "STANDARD",
                   "translation": "to bring peace to the people",
                   "word": "yên dân"
@@ -1184,7 +1150,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Essay structure: Introduction, Body with evidence, Conclusion. Avoid 'tôi'; use impersonal: 'bài viết này', 'có thể thấy rằng'.",
                   "video_url": null,
                   "vietnamese_text": "Bài luận gồm: Mở bài (đặt vấn đề), Thân bài (giải quyết bằng chứng cứ), Kết bài (kết luận). Tránh 'tôi' quá nhiều; dùng phi nhân xưng: 'bài viết này', 'có thể thấy rằng'."
@@ -1195,7 +1160,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Adding: hơn nữa, bên cạnh đó. Contrasting: tuy nhiên, mặt khác. Cause-effect: do đó, vì vậy. Summarizing: tóm lại, nhìn chung.",
                   "video_url": null,
                   "vietnamese_text": "Thêm ý: hơn nữa, bên cạnh đó, đồng thời. Đối lập: tuy nhiên, mặt khác. Nguyên nhân—kết quả: do đó, vì vậy. Tóm tắt: tóm lại, nhìn chung, tựu trung lại."
@@ -1206,7 +1170,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Sample paragraph with discourse markers and hedging in Vietnamese philosophical writing.",
                   "video_url": null,
                   "vietnamese_text": "Theo quan điểm duy vật biện chứng, vật chất có trước, ý thức có sau. Tuy nhiên, ý thức không hoàn toàn thụ động. Hơn nữa, qua thực tiễn, con người không chỉ nhận thức mà còn cải tạo thế giới. Do đó, mối quan hệ là biện chứng. Tóm lại, hiểu đúng quan hệ này là điều kiện tiên quyết."
@@ -1231,7 +1194,6 @@
                   "example_translation": "The main thesis is clearly stated in the introduction.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "luận điểm",
                   "region": "STANDARD",
                   "translation": "thesis; argument point",
                   "word": "luận điểm"
@@ -1251,7 +1213,6 @@
                   "example_translation": "Each argument needs convincing evidence.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chứng cứ",
                   "region": "STANDARD",
                   "translation": "evidence; proof",
                   "word": "chứng cứ"
@@ -1271,7 +1232,6 @@
                   "example_translation": "All in all, the issue needs multiple perspectives.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "tựu trung lại",
                   "region": "STANDARD",
                   "translation": "in summary; all in all",
                   "word": "tựu trung lại"
@@ -1424,7 +1384,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Legal language uses Sino-Vietnamese terms, creating a formal and precise register. Terms like constitution, judiciary carry strict specialized meanings.",
                   "video_url": null,
                   "vietnamese_text": "Ngôn ngữ luật pháp chủ yếu dùng từ Hán Việt, tạo sắc thái trang trọng và chính xác. Thuật ngữ như hiến pháp, tư pháp, lập pháp mang nghĩa chuyên ngành chặt chẽ."
@@ -1435,7 +1394,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Classified: (1) Legal instruments; (2) Judicial process; (3) State organs; (4) Rights and obligations.",
                   "video_url": null,
                   "vietnamese_text": "Phân thành: (1) Thể chế pháp lý: hiến pháp, luật, nghị định; (2) Quy trình tư pháp: nguyên đơn, bị đơn, kháng cáo; (3) Cơ quan: tòa án, viện kiểm sát; (4) Quyền và nghĩa vụ: dân quyền, công quyền."
@@ -1446,7 +1404,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Practice using these terms in context. Create sentences and review with peers.",
                   "video_url": null,
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
@@ -1471,7 +1428,6 @@
                   "example_translation": "This act was passed by the National Assembly.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "luật",
                   "region": "STANDARD",
                   "translation": "law; act",
                   "word": "luật"
@@ -1491,7 +1447,6 @@
                   "example_translation": "Under the new regulation, workers get 14 days annual leave.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "quy định",
                   "region": "STANDARD",
                   "translation": "regulation; provision",
                   "word": "quy định"
@@ -1511,7 +1466,6 @@
                   "example_translation": "Clause 3 contains provisions on unilateral termination.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "điều khoản",
                   "region": "STANDARD",
                   "translation": "clause; article",
                   "word": "điều khoản"
@@ -1531,7 +1485,6 @@
                   "example_translation": "The first-instance judgment was appealed.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bản án",
                   "region": "STANDARD",
                   "translation": "judgment; verdict",
                   "word": "bản án"
@@ -1551,7 +1504,6 @@
                   "example_translation": "The Supreme People's Court is the highest judicial organ.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tòa án",
                   "region": "STANDARD",
                   "translation": "court; tribunal",
                   "word": "tòa án"
@@ -1571,7 +1523,6 @@
                   "example_translation": "The plaintiff filed a lawsuit at the district court.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nguyên đơn",
                   "region": "STANDARD",
                   "translation": "plaintiff",
                   "word": "nguyên đơn"
@@ -1591,7 +1542,6 @@
                   "example_translation": "The defendant has the right to hire a defense attorney.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bị đơn",
                   "region": "STANDARD",
                   "translation": "defendant",
                   "word": "bị đơn"
@@ -1611,7 +1561,6 @@
                   "example_translation": "The appeal must be filed within 15 days from the verdict.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kháng cáo",
                   "region": "STANDARD",
                   "translation": "appeal",
                   "word": "kháng cáo"
@@ -1631,7 +1580,6 @@
                   "example_translation": "The 2013 Constitution stipulates human rights as the highest value.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hiến pháp",
                   "region": "STANDARD",
                   "translation": "constitution",
                   "word": "hiến pháp"
@@ -1651,7 +1599,6 @@
                   "example_translation": "The judiciary plays an important role in protecting justice.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tư pháp",
                   "region": "STANDARD",
                   "translation": "judiciary",
                   "word": "tư pháp"
@@ -1671,7 +1618,6 @@
                   "example_translation": "A rule-of-law state respects law absolutely.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "pháp luật",
                   "region": "STANDARD",
                   "translation": "law; legal system",
                   "word": "pháp luật"
@@ -1691,7 +1637,6 @@
                   "example_translation": "Justice must be carried out fully and promptly.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "công lý",
                   "region": "STANDARD",
                   "translation": "justice",
                   "word": "công lý"
@@ -1711,7 +1656,6 @@
                   "example_translation": "Civil rights are the rights citizens enjoy under the constitution.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dân quyền",
                   "region": "STANDARD",
                   "translation": "civil rights",
                   "word": "dân quyền"
@@ -1731,7 +1675,6 @@
                   "example_translation": "The National Assembly exercises legislative power.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lập pháp",
                   "region": "STANDARD",
                   "translation": "legislature",
                   "word": "lập pháp"
@@ -1751,7 +1694,6 @@
                   "example_translation": "The Government exercises executive power.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hành pháp",
                   "region": "STANDARD",
                   "translation": "executive",
                   "word": "hành pháp"
@@ -1934,7 +1876,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Features: formal, precise, objective, no emotion. Key phrases: theo quy định tại, căn cứ vào. Use titles/organizations, not personal pronouns.",
                   "video_url": null,
                   "vietnamese_text": "Đặc điểm: trang trọng, chính xác, khách quan, không cảm tính. Cụm từ đặc trưng: theo quy định tại..., căn cứ vào điều..., dựa trên cơ sở..., đề nghị, yêu cầu, buộc phải. Dùng chức vụ/tổ chức, không đại từ cảm tính."
@@ -1945,7 +1886,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "(1) Not only...but also: additive-progressive. (2) Although...but: concessive then contrasting. Distinguish 'tuy nhiên' (discourse marker) from 'tuy...nhưng' (paired conjunction).",
                   "video_url": null,
                   "vietnamese_text": "(1) Không những...mà còn (not only...but also): bổ sung tăng tiến. (2) Tuy...nhưng (although...but): nhường bước rồi đối lập. Phân biệt 'tuy nhiên' (từ chuyển ý) với 'tuy...nhưng' (cặp liên từ)."
@@ -1956,7 +1896,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Common mistakes when using these grammar patterns in academic writing. Pay attention to register and formality.",
                   "video_url": null,
                   "vietnamese_text": "Lỗi thường gặp khi dùng các mẫu ngữ pháp này trong văn viết học thuật. Chú ý phong cách và tính trang trọng."
@@ -1981,7 +1920,6 @@
                   "example_translation": "Based on Article 15 of the Civil Code.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "căn cứ",
                   "region": "STANDARD",
                   "translation": "basis; legal basis",
                   "word": "căn cứ"
@@ -2001,7 +1939,6 @@
                   "example_translation": "We propose your agency consider resolving.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "đề nghị",
                   "region": "STANDARD",
                   "translation": "to propose; request",
                   "word": "đề nghị"
@@ -2021,7 +1958,6 @@
                   "example_translation": "Administrative procedures must be simplified.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thủ tục",
                   "region": "STANDARD",
                   "translation": "procedure; formality",
                   "word": "thủ tục"
@@ -2041,7 +1977,6 @@
                   "example_translation": "The consequence of breaching contract is paying damages.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hậu quả",
                   "region": "STANDARD",
                   "translation": "consequence",
                   "word": "hậu quả"
@@ -2061,7 +1996,6 @@
                   "example_translation": "Violations will be strictly handled.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "vi phạm",
                   "region": "STANDARD",
                   "translation": "to violate; violation",
                   "word": "vi phạm"
@@ -2146,7 +2080,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Article 3, Decree 81/2013: Each violation is penalized once by a competent authority. Repeat offenses receive heavier penalties.",
                   "video_url": null,
                   "vietnamese_text": "Theo Điều 3, ND 81/2013: 'Mỗi hành vi vi phạm chỉ bị xử phạt một lần bởi cơ quan có thẩm quyền. Tái phạm sẽ bị xử phạt nặng hơn.' (1) Một hành vi chỉ phạt một lần; (2) Tái phạm phạt nặng hơn; (3) Chỉ cơ quan có thẩm quyền mới xử phạt."
@@ -2157,7 +2090,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "When reading legal documents: identify type, read general provisions, note strict phrases, recognize hierarchical structures, check amendments.",
                   "video_url": null,
                   "vietnamese_text": "Khi đọc: (1) Xác định loại văn bản; (2) Đọc 'quy định chung' trước; (3) Chú ý 'chỉ được', 'buộc phải', 'nghiêm cấm'; (4) Nhận diện phân cấp: theo quy định tại điều X; (5) Kiểm tra văn bản sửa đổi."
@@ -2168,7 +2100,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Discuss the reading passage. Express your analysis using vocabulary and grammar from this module.",
                   "video_url": null,
                   "vietnamese_text": "Thảo luận đoạn đọc. Diễn đạt phân tích bằng từ vựng và ngữ pháp của bài này."
@@ -2193,7 +2124,6 @@
                   "example_translation": "Only competent authorities may issue penalty decisions.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thẩm quyền",
                   "region": "STANDARD",
                   "translation": "authority; jurisdiction",
                   "word": "thẩm quyền"
@@ -2213,7 +2143,6 @@
                   "example_translation": "All smuggling is strictly prohibited.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "nghiêm cấm",
                   "region": "STANDARD",
                   "translation": "to strictly prohibit",
                   "word": "nghiêm cấm"
@@ -2233,7 +2162,6 @@
                   "example_translation": "Repeat offenses receive heavier penalties.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tái phạm",
                   "region": "STANDARD",
                   "translation": "to reoffend",
                   "word": "tái phạm"
@@ -2386,7 +2314,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Medical language uses many Sino-Vietnamese terms. Each syllable has meaning; mastering roots helps decode new terms.",
                   "video_url": null,
                   "vietnamese_text": "Ngôn ngữ y khoa dùng nhiều Hán Việt: chẩn đoán, điều trị, phẫu thuật, lâm sàng. Mỗi âm tiết mang nghĩa riêng. Nắm vững gốc Hán giúp giải mã thuật ngữ mới."
@@ -2397,7 +2324,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Classified: procedures, pathology, facilities, pharmaceuticals, fields.",
                   "video_url": null,
                   "vietnamese_text": "Phân thành: (1) Quy trình: chẩn đoán, điều trị, phẫu thuật; (2) Bệnh lý: triệu chứng, bệnh lý, nhiễm trùng; (3) Cơ sở: bệnh viện, phòng khám; (4) Dược phẩm: dược phẩm, thuốc kháng sinh; (5) Lĩnh vực: sức khỏe cộng đồng."
@@ -2408,7 +2334,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Practice using these terms in context. Create sentences and review with peers.",
                   "video_url": null,
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
@@ -2433,7 +2358,6 @@
                   "example_translation": "Modern medicine has made tremendous advances.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "y học",
                   "region": "STANDARD",
                   "translation": "medicine",
                   "word": "y học"
@@ -2453,7 +2377,6 @@
                   "example_translation": "Early diagnosis improves treatment effectiveness.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chẩn đoán",
                   "region": "STANDARD",
                   "translation": "diagnosis",
                   "word": "chẩn đoán"
@@ -2473,7 +2396,6 @@
                   "example_translation": "Treatment protocols are personalized.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "điều trị",
                   "region": "STANDARD",
                   "translation": "treatment",
                   "word": "điều trị"
@@ -2493,7 +2415,6 @@
                   "example_translation": "The surgery was performed by experienced doctors.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phẫu thuật",
                   "region": "STANDARD",
                   "translation": "surgery",
                   "word": "phẫu thuật"
@@ -2513,7 +2434,6 @@
                   "example_translation": "Symptoms include high fever and difficulty breathing.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "triệu chứng",
                   "region": "STANDARD",
                   "translation": "symptom",
                   "word": "triệu chứng"
@@ -2533,7 +2453,6 @@
                   "example_translation": "The pathological mechanism of liver cancer is being researched.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bệnh lý",
                   "region": "STANDARD",
                   "translation": "pathology",
                   "word": "bệnh lý"
@@ -2553,7 +2472,6 @@
                   "example_translation": "Diabetes pharmaceuticals are continuously improved.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dược phẩm",
                   "region": "STANDARD",
                   "translation": "pharmaceutical",
                   "word": "dược phẩm"
@@ -2573,7 +2491,6 @@
                   "example_translation": "Clinical research shows the new drug is highly effective.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "lâm sàng",
                   "region": "STANDARD",
                   "translation": "clinical",
                   "word": "lâm sàng"
@@ -2593,7 +2510,6 @@
                   "example_translation": "The general clinic opens at 7 AM.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phòng khám",
                   "region": "STANDARD",
                   "translation": "clinic",
                   "word": "phòng khám"
@@ -2613,7 +2529,6 @@
                   "example_translation": "Public health is important in national health policy.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sức khỏe cộng đồng",
                   "region": "STANDARD",
                   "translation": "public health",
                   "word": "sức khỏe cộng đồng"
@@ -2633,7 +2548,6 @@
                   "example_translation": "Anatomy is fundamental for medical students.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "giải phẫu",
                   "region": "STANDARD",
                   "translation": "anatomy",
                   "word": "giải phẫu"
@@ -2653,7 +2567,6 @@
                   "example_translation": "Blood infection is a dangerous post-surgery complication.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhiễm trùng",
                   "region": "STANDARD",
                   "translation": "infection",
                   "word": "nhiễm trùng"
@@ -2673,7 +2586,6 @@
                   "example_translation": "Antibiotic abuse leads to drug resistance.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thuốc kháng sinh",
                   "region": "STANDARD",
                   "translation": "antibiotic",
                   "word": "thuốc kháng sinh"
@@ -2693,7 +2605,6 @@
                   "example_translation": "General hospitals are equipped with modern machinery.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bệnh viện",
                   "region": "STANDARD",
                   "translation": "hospital",
                   "word": "bệnh viện"
@@ -2713,7 +2624,6 @@
                   "example_translation": "Specialist physicians recommend regular checkups.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bác sĩ",
                   "region": "STANDARD",
                   "translation": "physician; doctor",
                   "word": "bác sĩ"
@@ -2875,7 +2785,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Medical Sino-Vietnamese: each syllable has meaning. Combining creates terms. Preceding syllable modifies following one.",
                   "video_url": null,
                   "vietnamese_text": "Thuật ngữ y khoa dùng Hán Việt: mỗi âm tiết mang nghĩa — bệnh(disease), lý(mechanism), truyền(transmit), nhiễm(infect). Khi kết hợp: bệnh lý=disease mechanism, truyền nhiễm=infection. Âm tiết trước bổ nghĩa cho âm tiết sau."
@@ -2886,7 +2795,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Medical definitions: X là Y, X được định nghĩa là Y, X được gọi là Y khi Z, X bao gồm các loại.",
                   "video_url": null,
                   "vietnamese_text": "Trong văn y khoa, định nghĩa dùng: 'X là Y', 'X được định nghĩa là Y', 'X được gọi là Y khi Z', 'X bao gồm các loại: A, B, C'."
@@ -2897,7 +2805,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Common mistakes when using these grammar patterns in academic writing. Pay attention to register and formality.",
                   "video_url": null,
                   "vietnamese_text": "Lỗi thường gặp khi dùng các mẫu ngữ pháp này trong văn viết học thuật. Chú ý phong cách và tính trang trọng."
@@ -2922,7 +2829,6 @@
                   "example_translation": "Pneumonia is a leading cause of death in the elderly.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "viêm",
                   "region": "STANDARD",
                   "translation": "inflammation",
                   "word": "viêm"
@@ -2942,7 +2848,6 @@
                   "example_translation": "Limb necrosis requires timely surgical intervention.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hoại tử",
                   "region": "STANDARD",
                   "translation": "necrosis",
                   "word": "hoại tử"
@@ -2962,7 +2867,6 @@
                   "example_translation": "Uncontrolled cell proliferation is a sign of cancer.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tăng sinh",
                   "region": "STANDARD",
                   "translation": "proliferation",
                   "word": "tăng sinh"
@@ -3047,7 +2951,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Ministry of Health report: 150,000 cases, 3,000 deaths, R0 estimated at 2.5. Prevention measures and vaccine clinical trials in phase 3.",
                   "video_url": null,
                   "vietnamese_text": "Theo Bộ Y tế: 'Tổng ca nhiễm lên 150.000, tử vong 3.000. R0 ước tính 2,5. Biện pháp ngăn ngừa: giãn cách xã hội, đeo khẩu trang, tiêm chủng. Nghiên cứu lâm sàng vắc-xin đang ở giai đoạn 3.'"
@@ -3058,7 +2961,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Medical reports: specific data, precise terminology, passive constructions, hedging, structured format.",
                   "video_url": null,
                   "vietnamese_text": "Báo cáo y khoa: (1) Dùng số liệu cụ thể; (2) Thuật ngữ chính xác; (3) Bị động: được tiến hành, được theo dõi; (4) Hedging: ước tính, có thể; (5) Cấu trúc: phương pháp—kết quả—thảo luận—kết luận."
@@ -3069,7 +2971,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Discuss the reading passage. Express your analysis using vocabulary and grammar from this module.",
                   "video_url": null,
                   "vietnamese_text": "Thảo luận đoạn đọc. Diễn đạt phân tích bằng từ vựng và ngữ pháp của bài này."
@@ -3094,7 +2995,6 @@
                   "example_translation": "Post-surgical complications require close monitoring.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "biến chứng",
                   "region": "STANDARD",
                   "translation": "complication",
                   "word": "biến chứng"
@@ -3114,7 +3014,6 @@
                   "example_translation": "Rehabilitation requires patience.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phục hồi",
                   "region": "STANDARD",
                   "translation": "recovery; rehabilitation",
                   "word": "phục hồi"
@@ -3134,7 +3033,6 @@
                   "example_translation": "Prevention is more important than treatment.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "ngăn ngừa",
                   "region": "STANDARD",
                   "translation": "to prevent",
                   "word": "ngăn ngừa"
@@ -3287,7 +3185,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Historical vocabulary uses Sino-Vietnamese, reflecting nation-building. Core concepts: dynasty, independence, resistance, nation, civilization, heritage, revolution.",
                   "video_url": null,
                   "vietnamese_text": "Từ vựng lịch sử chủ yếu dùng Hán Việt, phản ánh dựng nước và giữ nước. Khái niệm cốt lõi: triều đại, độc lập, kháng chiến, dân tộc, văn minh, di sản, cách mạng."
@@ -3298,7 +3195,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Three regions: North, Central, South. Red River Delta (cradle), Central (Champa), Mekong Delta (southward expansion).",
                   "video_url": null,
                   "vietnamese_text": "Ba miền: Bắc, Trung, Nam. Đồng bằng sông Hồng (cái nôi), miền Trung (Chăm Pa), sông Cửu Long (Nam Tiến). Thuật ngữ: địa hình, khí hậu, biên giới, thềm lục địa."
@@ -3309,7 +3205,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Practice using these terms in context. Create sentences and review with peers.",
                   "video_url": null,
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
@@ -3334,7 +3229,6 @@
                   "example_translation": "Vietnamese history spans thousands of years of nation-building.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lịch sử",
                   "region": "STANDARD",
                   "translation": "history",
                   "word": "lịch sử"
@@ -3354,7 +3248,6 @@
                   "example_translation": "The Ly dynasty marked a brilliant period.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "triều đại",
                   "region": "STANDARD",
                   "translation": "dynasty",
                   "word": "triều đại"
@@ -3374,7 +3267,6 @@
                   "example_translation": "On September 2, 1945, Vietnam declared independence.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "độc lập",
                   "region": "STANDARD",
                   "translation": "independence",
                   "word": "độc lập"
@@ -3394,7 +3286,6 @@
                   "example_translation": "The resistance against France lasted 9 years.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kháng chiến",
                   "region": "STANDARD",
                   "translation": "resistance war",
                   "word": "kháng chiến"
@@ -3414,7 +3305,6 @@
                   "example_translation": "Vietnam has 54 ethnic groups.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dân tộc",
                   "region": "STANDARD",
                   "translation": "nation; ethnic group",
                   "word": "dân tộc"
@@ -3434,7 +3324,6 @@
                   "example_translation": "Red River civilization is the cradle of the nation.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "văn minh",
                   "region": "STANDARD",
                   "translation": "civilization",
                   "word": "văn minh"
@@ -3454,7 +3343,6 @@
                   "example_translation": "Vietnam's cultural heritage is recognized by UNESCO.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "di sản",
                   "region": "STANDARD",
                   "translation": "heritage",
                   "word": "di sản"
@@ -3474,7 +3362,6 @@
                   "example_translation": "The Thang Long Citadel is a witness to history.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "di tích",
                   "region": "STANDARD",
                   "translation": "relic; historical site",
                   "word": "di tích"
@@ -3494,7 +3381,6 @@
                   "example_translation": "War left deep scars in the national consciousness.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chiến tranh",
                   "region": "STANDARD",
                   "translation": "war",
                   "word": "chiến tranh"
@@ -3514,7 +3400,6 @@
                   "example_translation": "Peace is the eternal aspiration of the nation.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hòa bình",
                   "region": "STANDARD",
                   "translation": "peace",
                   "word": "hòa bình"
@@ -3534,7 +3419,6 @@
                   "example_translation": "Vietnam was a French colony for nearly a century.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thuộc địa",
                   "region": "STANDARD",
                   "translation": "colony; colonial",
                   "word": "thuộc địa"
@@ -3554,7 +3438,6 @@
                   "example_translation": "The 1975 liberation marked national reunification.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "giải phóng",
                   "region": "STANDARD",
                   "translation": "liberation",
                   "word": "giải phóng"
@@ -3574,7 +3457,6 @@
                   "example_translation": "Feudalism lasted from the 10th to the 19th century.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phong kiến",
                   "region": "STANDARD",
                   "translation": "feudalism",
                   "word": "phong kiến"
@@ -3594,7 +3476,6 @@
                   "example_translation": "The great figure Ho Chi Minh is a national symbol.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "vĩ nhân",
                   "region": "STANDARD",
                   "translation": "great person",
                   "word": "vĩ nhân"
@@ -3614,7 +3495,6 @@
                   "example_translation": "The August Revolution of 1945 overthrew colonial rule.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cách mạng",
                   "region": "STANDARD",
                   "translation": "revolution",
                   "word": "cách mạng"
@@ -3774,7 +3654,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Allusions use historical events for deep meaning: Qua Vu Mon (overcoming hardship), Binh Ngo (victorious resistance), Nam quoc son ha (territorial sovereignty). Allusions enrich language.",
                   "video_url": null,
                   "vietnamese_text": "Điển cố dùng sự kiện lịch sử để ám chỉ ý nghĩa sâu xa: 'Quá Vũ Môn' (vượt khó đạt thành công — cá chép hóa rồng), 'Bình Ngô' (kháng chiến thắng — từ Bình Ngô đại cáo), 'Nam quốc sơn hà' (chủ quyền lãnh thổ). Điển cố làm ngôn ngữ phong phú, hàm súc."
@@ -3785,7 +3664,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "In formal writing, allusions are used to: (1) Honor; (2) Imply; (3) Compare. Structures: như câu + allusion, ám chỉ + content.",
                   "video_url": null,
                   "vietnamese_text": "Trong văn viết trang trọng, điển cố dùng để: (1) Tôn vinh: 'Hào khí Đông A' (tinh thần thời Trần); (2) Ám chỉ: 'Trăm năm trong cõi người ta' (nhắc Truyện Kiều); (3) So sánh. Cấu trúc: 'như câu + điển cố', 'ám chỉ + nội dung'."
@@ -3796,7 +3674,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Common mistakes when using these grammar patterns in academic writing. Pay attention to register and formality.",
                   "video_url": null,
                   "vietnamese_text": "Lỗi thường gặp khi dùng các mẫu ngữ pháp này trong văn viết học thuật. Chú ý phong cách và tính trang trọng."
@@ -3821,7 +3698,6 @@
                   "example_translation": "The allusion 'Qua Vu Mon' refers to overcoming hardship to achieve success.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "điển cố",
                   "region": "STANDARD",
                   "translation": "allusion; classical reference",
                   "word": "điển cố"
@@ -3841,7 +3717,6 @@
                   "example_translation": "The author alludes to historical tragedy through a lost bird.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "ám chỉ",
                   "region": "STANDARD",
                   "translation": "to allude to",
                   "word": "ám chỉ"
@@ -3861,7 +3736,6 @@
                   "example_translation": "The heroic spirit of Nam quoc son ha still resonates.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hào khí",
                   "region": "STANDARD",
                   "translation": "heroic spirit",
                   "word": "hào khí"
@@ -3881,7 +3755,6 @@
                   "example_translation": "Legend has it Tran Hung Dao defeated the Mongols three times.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "tương truyền",
                   "region": "STANDARD",
                   "translation": "according to legend",
                   "word": "tương truyền"
@@ -3901,7 +3774,6 @@
                   "example_translation": "The verse carries deep poetic quality tied to historical allusion.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "thi vị",
                   "region": "STANDARD",
                   "translation": "poetic quality",
                   "word": "thi vị"
@@ -4015,7 +3887,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Patriotic tradition throughout history: Trung Sisters, Bach Dang, resistance against Ming, August Revolution. Manifestations: resistance poetry, monuments, festivals, solidarity.",
                   "video_url": null,
                   "vietnamese_text": "Truyền thống yêu nước xuyên suốt lịch sử: Hai Bà Trưng (40 SCN), Bạch Đằng 938, kháng chiến chống Minh (Lê Lợi), cách mạng tháng Tám 1945. Biểu hiện: thơ ca kháng chiến, đền đài, lễ hội, đoàn kết dân tộc."
@@ -4026,7 +3897,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Cultural identity: communal consciousness, family ethics, religious harmony, folk arts, cuisine. Traditional yet open — absorbing without losing roots.",
                   "video_url": null,
                   "vietnamese_text": "Bản sắc thể hiện qua: (1) Ý thức cộng đồng; (2) Đạo lý gia đình; (3) Tam giáo đồng nguyên (Nho-Phật-Đạo); (4) Nghệ thuật dân gian; (5) Ẩm thực cân bằng âm dương. Vừa truyền thống vừa mở, tiếp biến mà không mất gốc."
@@ -4037,7 +3907,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "UNESCO sites: Ha Long Bay, Thang Long Citadel, Ho Dynasty Citadel, Hue, Hoi An, My Son, Trang An. Each reflects a historical period.",
                   "video_url": null,
                   "vietnamese_text": "UNESCO công nhận: Vịnh Hạ Long, Hoàng Thành Thăng Long, Thành Nhà Hồ, Cố đô Huế, Phố cổ Hội An, Thánh địa Mỹ Sơn, Tràng An. Mỗi di sản phản ánh thời kỳ và văn minh riêng."
@@ -4062,7 +3931,6 @@
                   "example_translation": "Patriotic tradition is a beauty of the nation.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "truyền thống",
                   "region": "STANDARD",
                   "translation": "tradition",
                   "word": "truyền thống"
@@ -4082,7 +3950,6 @@
                   "example_translation": "Cultural identity must be preserved and promoted.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bản sắc",
                   "region": "STANDARD",
                   "translation": "identity; character",
                   "word": "bản sắc"
@@ -4102,7 +3969,6 @@
                   "example_translation": "The national soul cannot be blurred by time.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hồn cốt",
                   "region": "STANDARD",
                   "translation": "soul; spirit",
                   "word": "hồn cốt"
@@ -4187,7 +4053,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Complete Annals compiled by Ngo Si Lien in 1479. Excerpt describes a peaceful, prosperous year.",
                   "video_url": null,
                   "vietnamese_text": "Đại Việt sử ký toàn thư do Ngô Sĩ Liên biên soạn 1479, ghi từ Hồng Bàng đến Lê sơ. Trích: 'Năm Canh Tý, niên hiệu Thiệu Phong thứ 20. Trong nước yên ổn, nhân dân vui vẻ, thương mại thịnh vượng, học hành được đề cao.'"
@@ -4198,7 +4063,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "When reading annals: understand reign eras, recognize time notation, note objective style, distinguish events from records, master Sino-Vietnamese terms.",
                   "video_url": null,
                   "vietnamese_text": "Khi đọc sử ký: (1) Hiểu hệ thống niên hiệu; (2) Nhận diện cách ghi thời gian; (3) Chú ý văn phong biên niên — khách quan, ngắn gọn; (4) Phân biệt sự kiện và ghi chép; (5) Nắm từ Hán Việt: ngự (vua đi), thăng hòa (vua mất)."
@@ -4209,7 +4073,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Discuss the reading passage. Express your analysis using vocabulary and grammar from this module.",
                   "video_url": null,
                   "vietnamese_text": "Thảo luận đoạn đọc. Diễn đạt phân tích bằng từ vựng và ngữ pháp của bài này."
@@ -4234,7 +4097,6 @@
                   "example_translation": "The Complete Annals of Dai Viet is the most important chronicle.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sử ký",
                   "region": "STANDARD",
                   "translation": "annals; chronicle",
                   "word": "sử ký"
@@ -4254,7 +4116,6 @@
                   "example_translation": "Chronological annals record events in time order.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "biên niên",
                   "region": "STANDARD",
                   "translation": "chronological",
                   "word": "biên niên"
@@ -4274,7 +4135,6 @@
                   "example_translation": "The Trung Sisters' uprising was the first liberation struggle.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "khởi nghĩa",
                   "region": "STANDARD",
                   "translation": "uprising",
                   "word": "khởi nghĩa"
@@ -4427,7 +4287,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vocabulary reflects movements and art: romanticism, realism, surrealism, postmodernism. Analysis terms: implication, allusion, symbolism.",
                   "video_url": null,
                   "vietnamese_text": "Từ vựng phản ánh trào lưu và nghệ thuật: lãng mạn, hiện thực, huyền bí, hậu hiện đại. Mỗi trào lưu có hệ thống thi pháp. Thuật ngữ phân tích: hàm ý, điển cố, tượng trưng."
@@ -4438,7 +4297,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Movements: Medieval, New Poetry, Self-Reliant Literary Association, Critical Realism, Revolutionary literature, Postmodern.",
                   "video_url": null,
                   "vietnamese_text": "Các trào lưu: (1) Trung đại — chữ Hán, Nôm, luật thơ; (2) Đầu TK20 — Thơ Mới, Tự Lực Văn Đoàn; (3) 1930-45 — hiện thực phê phán; (4) 1945-75 — văn học cách mạng; (5) Đổi Mới — hậu hiện đại, giải thi."
@@ -4449,7 +4307,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Practice using these terms in context. Create sentences and review with peers.",
                   "video_url": null,
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
@@ -4474,7 +4331,6 @@
                   "example_translation": "Vietnamese literature spans many periods.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "văn chương",
                   "region": "STANDARD",
                   "translation": "literature",
                   "word": "văn chương"
@@ -4494,7 +4350,6 @@
                   "example_translation": "Vietnamese poetry has a thousand-year tradition.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thơ ca",
                   "region": "STANDARD",
                   "translation": "poetry",
                   "word": "thơ ca"
@@ -4514,7 +4369,6 @@
                   "example_translation": "Modern novels reflect contemporary society.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tiểu thuyết",
                   "region": "STANDARD",
                   "translation": "novel",
                   "word": "tiểu thuyết"
@@ -4534,7 +4388,6 @@
                   "example_translation": "Nam Cao's short stories carry deep realism.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "truyện ngắn",
                   "region": "STANDARD",
                   "translation": "short story",
                   "word": "truyện ngắn"
@@ -4554,7 +4407,6 @@
                   "example_translation": "Author Nguyen Du is the national great poet.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tác giả",
                   "region": "STANDARD",
                   "translation": "author",
                   "word": "tác giả"
@@ -4574,7 +4426,6 @@
                   "example_translation": "The New Poetry Movement marked innovation.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phong trào",
                   "region": "STANDARD",
                   "translation": "movement (literary)",
                   "word": "phong trào"
@@ -4594,7 +4445,6 @@
                   "example_translation": "Vietnamese romanticism was influenced by France.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "lãng mạn",
                   "region": "STANDARD",
                   "translation": "romantic; romanticism",
                   "word": "lãng mạn"
@@ -4614,7 +4464,6 @@
                   "example_translation": "Critical realist literature exposed colonial society.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "hiện thực",
                   "region": "STANDARD",
                   "translation": "realist; realism",
                   "word": "hiện thực"
@@ -4634,7 +4483,6 @@
                   "example_translation": "Mystical tales carry a strong surreal atmosphere.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "huyền bí",
                   "region": "STANDARD",
                   "translation": "mystical; surreal",
                   "word": "huyền bí"
@@ -4654,7 +4502,6 @@
                   "example_translation": "Postmodern literature challenges traditional conventions.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "hậu hiện đại",
                   "region": "STANDARD",
                   "translation": "postmodern",
                   "word": "hậu hiện đại"
@@ -4674,7 +4521,6 @@
                   "example_translation": "Medieval poetics strictly followed poetic rules.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thi ca",
                   "region": "STANDARD",
                   "translation": "poetics",
                   "word": "thi ca"
@@ -4694,7 +4540,6 @@
                   "example_translation": "The poem's implication must be decoded through context.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hàm ý",
                   "region": "STANDARD",
                   "translation": "implication; connotation",
                   "word": "hàm ý"
@@ -4714,7 +4559,6 @@
                   "example_translation": "Nguyen Du used many allusions in Truyen Kieu.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "điển cố",
                   "region": "STANDARD",
                   "translation": "allusion (literary)",
                   "word": "điển cố"
@@ -4734,7 +4578,6 @@
                   "example_translation": "Lyric poetics is characteristic of medieval literature.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thi pháp",
                   "region": "STANDARD",
                   "translation": "poetics; literary method",
                   "word": "thi pháp"
@@ -4754,7 +4597,6 @@
                   "example_translation": "Symbolism creates depth in literary works.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": " tượng trưng",
                   "region": "STANDARD",
                   "translation": "symbolism",
                   "word": "tượng trưng"
@@ -4985,7 +4827,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Rhetorical devices: (1) Metaphor — name by similarity; (2) Metonymy — substitute by association; (3) Personification — assign human traits; (4) Hyperbole — exaggerate; (5) Euphemism — soften.",
                   "video_url": null,
                   "vietnamese_text": "Hệ thống tu từ: (1) Ẩn dụ — gọi tên A bằng B dựa tương đồng; (2) Hoán dụ — lấy cái gần gũi thay cái xa; (3) Nhân hóa — gán đặc điểm người cho vật; (4) Ngoại dụ — phóng đại; (5) Nói giảm — giảm nhẹ."
@@ -4996,7 +4837,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Nguyen Du is a rhetoric master: metaphor, metonymy, personification, euphemism throughout Truyen Kieu.",
                   "video_url": null,
                   "vietnamese_text": "Nguyễn Du là bậc thầy tu từ: ẩn dụ (nghịch cảnh), hoán dụ (Sắc = Kiều), nhân hóa (Cảnh nào cảnh chẳng đền sầu), nói giảm (Hương hồn đã ngự về sao = chết)."
@@ -5007,7 +4847,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "To identify: (1) Find literal-figurative discrepancy; (2) Identify mechanism; (3) Decode implication; (4) Connect to context.",
                   "video_url": null,
                   "vietnamese_text": "Để nhận diện: (1) Tìm bất đồng nghĩa đen—nghĩa bóng; (2) Xác định cơ chế: so sánh, thay thế, gán ghép, phóng đại, giảm nhẹ; (3) Giải mã hàm ý; (4) Liên hệ bối cảnh."
@@ -5032,7 +4871,6 @@
                   "example_translation": "The metaphor 'sea of life' compares life to the sea.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ẩn dụ",
                   "region": "STANDARD",
                   "translation": "metaphor",
                   "word": "ẩn dụ"
@@ -5052,7 +4890,6 @@
                   "example_translation": "The metonymy 'indigo shirt' represents the farmer.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hoán dụ",
                   "region": "STANDARD",
                   "translation": "metonymy",
                   "word": "hoán dụ"
@@ -5072,7 +4909,6 @@
                   "example_translation": "Personification 'the tree cried' assigns human traits to a tree.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhân hóa",
                   "region": "STANDARD",
                   "translation": "personification",
                   "word": "nhân hóa"
@@ -5092,7 +4928,6 @@
                   "example_translation": "Hyperbole 'crying fills the To River' exaggerates sadness.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ngoại dụ",
                   "region": "STANDARD",
                   "translation": "hyperbole",
                   "word": "ngoại dụ"
@@ -5112,7 +4947,6 @@
                   "example_translation": "Euphemism 'gone far' replaces 'died' to soften the impact.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nói giảm",
                   "region": "STANDARD",
                   "translation": "euphemism; litotes",
                   "word": "nói giảm"
@@ -5225,7 +5059,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In creative writing: metaphor creates imagery, metonymy condenses, personification enlivens, hyperbole emphasizes, euphemism refines. Principle: serve content, don't overuse.",
                   "video_url": null,
                   "vietnamese_text": "Khi viết văn chương, tu từ giúp: ẩn dụ tạo hình ảnh (Mùa thu gõ cửa), hoán dụ cô đọng (Áo nâu = nông dân), nhân hóa sống động (Biển vẫy tay), ngoại dụ nhấn mạnh (Nghìn dặm nhớ thương), nói giảm tinh tế (Người đã khuất). Nguyên tắc: phục vụ nội dung, không lạm dụng."
@@ -5236,7 +5069,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Sample combining metaphor, metonymy, personification, hyperbole, euphemism.",
                   "video_url": null,
                   "vietnamese_text": "Mùa thu gõ cửa thành phố bằng lá vàng rơi — ẩn dụ. Áo nâu cất cao tiếng hát — hoán dụ người lao động. Sông Hương thì thầm — nhân hóa. Nghìn dặm nhớ thương dâng tràn — nói quá. Người đã khuất nhưng hương hồn còn mãi — nói giảm."
@@ -5247,7 +5079,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Write 5-7 sentences using at least 3 rhetorical devices. Topics: autumn Hanoi, homeland, a teacher. Requirements: 1 metaphor, 1 metonymy/personification, 1 euphemism/hyperbole.",
                   "video_url": null,
                   "vietnamese_text": "Viết đoạn văn 5-7 câu, dùng ít nhất 3 loại tu từ. Chủ đề: mùa thu Hà Nội, quê hương, người thầy. Yêu cầu: 1 ẩn dụ, 1 hoán dụ/nhân hóa, 1 nói giảm/nói quá. Tu từ phải tự nhiên."
@@ -5272,7 +5103,6 @@
                   "example_translation": "Lyric literature is characteristic of Vietnamese poetry.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "trữ tình",
                   "region": "STANDARD",
                   "translation": "lyric; lyrical",
                   "word": "trữ tình"
@@ -5292,7 +5122,6 @@
                   "example_translation": "Literary material from life creates vitality.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thi liệu",
                   "region": "STANDARD",
                   "translation": "poetic material",
                   "word": "thi liệu"
@@ -5312,7 +5141,6 @@
                   "example_translation": "Descriptive realism depicts things authentically.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "tả thực",
                   "region": "STANDARD",
                   "translation": "descriptive realism",
                   "word": "tả thực"
@@ -5455,7 +5283,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese poetic forms: (1) Luc bat — 6-8 syllable couplets, most popular; (2) Song that luc bat — 7-7-6-8; (3) Seven-syllable eight-line; (4) Free verse.",
                   "video_url": null,
                   "vietnamese_text": "Thơ Việt Nam: (1) Lục bát — 6-8 âm tiết, phổ biến nhất, quốc hồn quốc túy; (2) Song thất lục bát — 7-7-6-8; (3) Thất ngôn bát cú — 8 câu 7 chữ, thơ Đường; (4) Tự do — từ Thơ Mới."
@@ -5466,7 +5293,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Truyen Kieu by Nguyen Du, UNESCO recognized. 3254 luc bat verses. Encyclopedia of feudal society. Masterpiece of language with extensive rhetoric.",
                   "video_url": null,
                   "vietnamese_text": "Truyện Kiều của Nguyễn Du (1765-1820), UNESCO công nhận. 3254 câu lục bát, kể chuyện Thúy Kiều. Bách khoa toàn thư xã hội phong kiến. Kiệt tác ngôn ngữ với hệ thống tu từ đồ sộ. Câu mở đầu thành điển cố: 'Trăm năm trong cõi người ta'."
@@ -5477,7 +5303,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "From 1930: New Poetry, Self-Reliant Literary Association, Critical Realism, Resistance literature, Doi Moi literature.",
                   "video_url": null,
                   "vietnamese_text": "Từ 1930: Thơ Mới (Xuân Diệu, Hàn Mặc Tử), Tự Lực Văn Đoàn (Nhất Linh), hiện thực phê phán (Vũ Trọng Phụng, Nam Cao), văn học kháng chiến (Tố Hữu), Đổi Mới (Nguyễn Huy Thiệp, Bảo Ninh)."
@@ -5502,7 +5327,6 @@
                   "example_translation": "The luc bat form is distinctive to Vietnamese poetry.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lục bát",
                   "region": "STANDARD",
                   "translation": "luc bat (6-8 poetic form)",
                   "word": "lục bát"
@@ -5522,7 +5346,6 @@
                   "example_translation": "Nom script was created by Vietnamese based on Chinese characters.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chữ Nôm",
                   "region": "STANDARD",
                   "translation": "Nom script",
                   "word": "chữ Nôm"
@@ -5542,7 +5365,6 @@
                   "example_translation": "Song that luc bat is commonly used in medieval poetry.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "song thất lục bát",
                   "region": "STANDARD",
                   "translation": "7-7-6-8 poetic form",
                   "word": "song thất lục bát"

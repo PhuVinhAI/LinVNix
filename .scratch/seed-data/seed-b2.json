@@ -169,7 +169,6 @@
                   "image_url": null,
                   "notes": "Giới thiệu bài học",
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "This lesson introduces economic and business terminology commonly found in newspapers, financial news, and professional discussions.",
                   "video_url": null,
                   "vietnamese_text": "Bài học này giới thiệu các thuật ngữ kinh tế và kinh doanh thường gặp trong báo chí, bản tin tài chính và các buổi thảo luận chuyên môn. Nắm vững các từ này giúp bạn đọc hiểu bài viết kinh tế và tham gia tranh luận về chính sách tài chính."
@@ -180,7 +179,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Kinh te Viet Nam nhung nam gan day tang truong on dinh, nhung van doi mat voi nhieu thach thuc nhu lam phat, tham hut thuong mai va no cong.",
                   "translation": "Vietnam's economy has grown steadily in recent years, but still faces challenges such as inflation, trade deficit, and public debt. Small and medium enterprises make up most of the economy, but their competitiveness in the international market remains limited.",
                   "video_url": null,
                   "vietnamese_text": "Kinh tế Việt Nam những năm gần đây tăng trưởng ổn định, nhưng vẫn đối mặt với nhiều thách thức như lạm phát, thâm hụt thương mại và nợ công. Doanh nghiệp nhỏ và vừa chiếm phần lớn nền kinh tế, tuy nhiên sức cạnh tranh trên thị trường quốc tế còn hạn chế."
@@ -191,7 +189,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Minh: What do you think of the stock market this week?\nHung: Overall it's fairly stable. The VN-Index rose slightly, but trading volume hasn't been high.\nMinh: In your opinion, which sector should we invest in right now?\nHung: I think the technology and renewable energy sectors have great potential. However, we have to consider inflation risk before making a decision.\nMinh: That's right, inflation directly affects investment returns.",
                   "video_url": null,
                   "vietnamese_text": "Minh: Anh thấy thị trường chứng khoán tuần này thế nào?\nHùng: Nhìn chung khá ổn. Chỉ số VN-Index tăng nhẹ, nhưng khối lượng giao dịch chưa cao.\nMinh: Theo anh, nên đầu tư vào ngành nào lúc này?\nHùng: Tôi nghĩ ngành công nghệ và năng lượng tái tạo đang có tiềm năng lớn. Tuy nhiên, phải cân nhắc rủi ro lạm phát trước khi ra quyết định.\nMinh: Đúng vậy, lạm phát ảnh hưởng trực tiếp đến lợi nhuận đầu tư.",
@@ -243,7 +240,6 @@
                   "image_url": null,
                   "notes": "Ghi chú Hán Việt",
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Note: Many economic terms in Vietnamese are Sino-Vietnamese words. These are typically used in formal writing and journalism. In everyday conversation, native Vietnamese equivalents may be used.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý: Nhiều thuật ngữ kinh tế trong tiếng Việt là từ Hán Việt (ví dụ: kinh tế 經濟, doanh nghiệp 企業, cạnh tranh 競爭, lợi nhuận 利潤). Những từ này thường dùng trong văn phong trang trọng và báo chí. Trong giao tiếp hàng ngày, người ta có thể dùng từ thuần Việt tương đương ('chạy đua' thay cho 'cạnh tranh', 'lãi' thay cho 'lợi nhuận')."
@@ -268,7 +264,6 @@
                   "example_translation": "Vietnam's economy grew 6.5% this year.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kinh te",
                   "region": "STANDARD",
                   "translation": "economy",
                   "word": "kinh tế"
@@ -288,7 +283,6 @@
                   "example_translation": "The company invested 50 million dollars in the new project.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "dau tu",
                   "region": "STANDARD",
                   "translation": "to invest; investment",
                   "word": "đầu tư"
@@ -308,7 +302,6 @@
                   "example_translation": "The company's profit increased 20% compared to last year.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "loi nhuan",
                   "region": "STANDARD",
                   "translation": "profit",
                   "word": "lợi nhuận"
@@ -328,7 +321,6 @@
                   "example_translation": "The real estate market is recovering.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thi truong",
                   "region": "STANDARD",
                   "translation": "market",
                   "word": "thị trường"
@@ -348,7 +340,6 @@
                   "example_translation": "The stock market fluctuated sharply today.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chung khoan",
                   "region": "STANDARD",
                   "translation": "securities; stock",
                   "word": "chứng khoán"
@@ -368,7 +359,6 @@
                   "example_translation": "The State Bank implements monetary policy.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ngan hang",
                   "region": "STANDARD",
                   "translation": "bank",
                   "word": "ngân hàng"
@@ -388,7 +378,6 @@
                   "example_translation": "The inflation rate reached 4.1% in the first quarter.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lam phat",
                   "region": "STANDARD",
                   "translation": "inflation",
                   "word": "lạm phát"
@@ -408,7 +397,6 @@
                   "example_translation": "Import and export play an important role in the economy.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "xuat nhap khau",
                   "region": "STANDARD",
                   "translation": "import and export",
                   "word": "xuất nhập khẩu"
@@ -428,7 +416,6 @@
                   "example_translation": "Small and medium enterprises need government support.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "doanh nghiep",
                   "region": "STANDARD",
                   "translation": "enterprise; business",
                   "word": "doanh nghiệp"
@@ -448,7 +435,6 @@
                   "example_translation": "Companies must compete to gain market share.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "canh tranh",
                   "region": "STANDARD",
                   "translation": "competition; to compete",
                   "word": "cạnh tranh"
@@ -468,7 +454,6 @@
                   "example_translation": "Budget deficit is a difficult problem to solve.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tham hut",
                   "region": "STANDARD",
                   "translation": "deficit",
                   "word": "thâm hụt"
@@ -488,7 +473,6 @@
                   "example_translation": "The enterprise needs to increase capital to expand production.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "von",
                   "region": "STANDARD",
                   "translation": "capital; funds",
                   "word": "vốn"
@@ -508,7 +492,6 @@
                   "example_translation": "This brand's market share continues to grow.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thi phan",
                   "region": "STANDARD",
                   "translation": "market share",
                   "word": "thị phần"
@@ -528,7 +511,6 @@
                   "example_translation": "The economy grew steadily last year.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tang truong",
                   "region": "STANDARD",
                   "translation": "growth; to grow",
                   "word": "tăng trưởng"
@@ -548,7 +530,6 @@
                   "example_translation": "Every investment carries risk.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "rui ro",
                   "region": "STANDARD",
                   "translation": "risk",
                   "word": "rủi ro"
@@ -742,7 +723,6 @@
                   "image_url": null,
                   "notes": "Giới thiệu ngữ pháp",
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "At the B2 level, you need to master complex conditional sentences to express hypothetical situations, nested conditions, and consequences.",
                   "video_url": null,
                   "vietnamese_text": "Ở trình độ B2, bạn cần nắm vững câu điều kiện phức tạp để diễn đạt các tình huống giả định, điều kiện lồng và hệ quả. Khác với B1 chỉ dùng 'nếu...thì' đơn giản, B2 yêu cầu bạn kết hợp thêm các thì, trạng ngữ và liên từ phức tạp."
@@ -753,7 +733,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Counterfactual conditional expresses a condition contrary to past or present reality. Structure: 'Nếu + S + đã + V, thì + S + đã + (không) + V'.",
                   "video_url": null,
                   "vietnamese_text": "Câu điều kiện giả định (counterfactual) diễn đạt điều kiện trái với thực tế ở quá khứ hoặc hiện tại. Cấu trúc: 'Nếu + S + đã + V, thì + S + đã + (không) + V'. Ví dụ: 'Nếu chính phủ đã tăng lãi suất sớm hơn, thì lạm phát đã không tăng cao như vậy.' — Tức là chính phủ đã không tăng lãi suất sớm, và lạm phát đã tăng cao."
@@ -764,7 +743,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Nested conditional uses 'mà' to link conditions: 'Nếu A mà B thì C'. 'Mà' functions like 'and if', creating a double condition.",
                   "video_url": null,
                   "vietnamese_text": "Câu điều kiện lồng (nested conditional) có một điều kiện bên trong điều kiện khác. Trong tiếng Việt thực tế người ta dùng 'mà' để liên kết: 'Nếu đầu tư thêm vào công nghệ mà năng suất tăng thì lợi nhuận sẽ cải thiện.' 'Mà' ở đây có chức năng như 'and if', tạo điều kiện kép."
@@ -775,7 +753,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Lan: What if we expand business into the European market?\nMinh: If we expand into Europe, shipping costs will increase significantly. But if the euro strengthens against the dollar, profits could offset that.\nLan: So we have to wait and see how the exchange rate develops before deciding?\nMinh: That's right. If the exchange rate is favorable, we'll proceed; otherwise, we'll consider other markets.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Nếu mình mở rộng kinh doanh sang thị trường châu Âu thì sao?\nMinh: Nếu mở rộng sang châu Âu, thì chi phí vận chuyển sẽ tăng đáng kể. Nhưng nếu đồng euro mạnh lên so với đồng đô la, thì lợi nhuận có thể bù đắp được.\nLan: Vậy tức là mình phải chờ xem tỷ giá hối đoái diễn biến thế nào rồi mới quyết định?\nMinh: Đúng vậy. Nếu tỷ giá có lợi cho mình thì mình sẽ tiến hành, còn không thì mình sẽ xem xét thị trường khác.",
@@ -822,7 +799,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 5,
-                  "phonetic": null,
                   "translation": "Expressing conditions without 'nếu': 'Có...mới' (necessary condition), 'Chỉ khi...mới' (sufficient condition), 'Trừ khi' (unless), 'Trong trường hợp' (in case), 'Giả sử' (suppose).",
                   "video_url": null,
                   "vietnamese_text": "Diễn đạt điều kiện không dùng 'nếu': Tiếng Việt có nhiều cách: 'Có...mới' (chỉ điều kiện cần), 'Chỉ khi...mới' (chỉ điều kiện đủ), 'Trừ khi' (unless), 'Trong trường hợp' (in case), 'Giả sử' (suppose). Ví dụ: 'Có vốn mạnh mới dám đầu tư vào thị trường này.'"
@@ -847,7 +823,6 @@
                   "example_translation": "We assume that inflation will decrease in the next quarter.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "gia dinh",
                   "region": "STANDARD",
                   "translation": "hypothesis; to assume",
                   "word": "giả định"
@@ -867,7 +842,6 @@
                   "example_translation": "The central bank cut interest rates to stimulate demand.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lai suat",
                   "region": "STANDARD",
                   "translation": "interest rate",
                   "word": "lãi suất"
@@ -887,7 +861,6 @@
                   "example_translation": "The exchange rate directly affects imports and exports.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ty gia hoi doai",
                   "region": "STANDARD",
                   "translation": "exchange rate",
                   "word": "tỷ giá hối đoái"
@@ -907,7 +880,6 @@
                   "example_translation": "Production costs rose due to higher raw material prices.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chi phi",
                   "region": "STANDARD",
                   "translation": "cost; expense",
                   "word": "chi phí"
@@ -927,7 +899,6 @@
                   "example_translation": "Labor productivity needs to be improved to compete.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nang suat",
                   "region": "STANDARD",
                   "translation": "productivity",
                   "word": "năng suất"
@@ -1015,7 +986,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "2024 Economic Report:\n\nVietnam's economy grew 6.2% in 2024, exceeding the target. However, experts warn that if inflation is not controlled, growth will slow down next year. Exports rose 8%, but imports grew faster, leading to a trade deficit of 3.2 billion dollars.\n\nSmall and medium enterprises make up 97% of all enterprises, contributing 40% of GDP. If the government doesn't provide timely support, many enterprises will go bankrupt. In case inflation exceeds the 5% threshold, the central bank will be forced to raise interest rates.\n\nOnly when institutional reform is seriously implemented will the business environment be truly competitive internationally. Suppose foreign investment continues to increase, the stock market will react positively in the medium and long term.",
                   "video_url": null,
                   "vietnamese_text": "Báo cáo kinh tế năm 2024:\n\nNền kinh tế Việt Nam năm 2024 tăng trưởng 6,2%, vượt mục tiêu đề ra. Tuy nhiên, các chuyên gia cảnh báo rằng nếu không kiểm soát được lạm phát, thì tăng trưởng sẽ chững lại trong năm tới. Xuất khẩu tăng 8%, nhưng nhập khẩu tăng nhanh hơn, dẫn đến thâm hụt thương mại 3,2 tỷ đô la.\n\nDoanh nghiệp nhỏ và vừa chiếm 97% tổng số doanh nghiệp, đóng góp 40% GDP. Nếu chính phủ không có chính sách hỗ trợ kịp thời, thì nhiều doanh nghiệp sẽ phá sản. Trong trường hợp lạm phát vượt ngưỡng 5%, ngân hàng trung ương sẽ buộc phải tăng lãi suất.\n\nChỉ khi cải cách thể chế được thực hiện nghiêm túc, môi trường kinh doanh mới thực sự cạnh tranh trên bình diện quốc tế. Giả sử đầu tư nước ngoài tiếp tục tăng, thì thị trường chứng khoán sẽ phản ứng tích cực trong trung và dài hạn."
@@ -1026,7 +996,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Reading comprehension questions:\n1. What was the economic growth rate in 2024?\n2. What will happen if inflation is not controlled?\n3. What percentage do SMEs make up?\n4. In what case will the central bank raise interest rates?\n5. What is the necessary condition for the business environment to be internationally competitive?",
                   "video_url": null,
                   "vietnamese_text": "Câu hỏi đọc hiểu:\n1. Mức tăng trưởng kinh tế năm 2024 là bao nhiêu?\n2. Điều gì sẽ xảy ra nếu lạm phát không được kiểm soát?\n3. Tỷ lệ doanh nghiệp nhỏ và vừa chiếm bao nhiêu phần trăm?\n4. Trong trường hợp nào ngân hàng trung ương sẽ tăng lãi suất?\n5. Điều kiện cần để môi trường kinh doanh cạnh tranh quốc tế là gì?"
@@ -1037,7 +1006,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Answer key and analysis note about conditional structures in economic reports.",
                   "video_url": null,
                   "vietnamese_text": "Gợi ý trả lời:\n1. 6,2%\n2. Tăng trưởng sẽ chững lại\n3. 97%\n4. Khi lạm phát vượt ngưỡng 5%\n5. Cải cách thể chế được thực hiện nghiêm túc\n\nLưu ý phân tích: Bài báo cáo dùng nhiều câu điều kiện phức tạp — 'nếu không', 'trong trường hợp', 'chỉ khi', 'giả sử' — để diễn đạt các kịch bản kinh tế khác nhau. Đây là đặc trưng của văn phong báo cáo kinh tế."
@@ -1062,7 +1030,6 @@
                   "example_translation": "Many small enterprises face the risk of bankruptcy.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "pha san",
                   "region": "STANDARD",
                   "translation": "to go bankrupt; bankruptcy",
                   "word": "phá sản"
@@ -1082,7 +1049,6 @@
                   "example_translation": "Inflation exceeded the warning threshold.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nguong",
                   "region": "STANDARD",
                   "translation": "threshold",
                   "word": "ngưỡng"
@@ -1102,7 +1068,6 @@
                   "example_translation": "Institutional reform is a prerequisite for development.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "the che",
                   "region": "STANDARD",
                   "translation": "institution; system",
                   "word": "thể chế"
@@ -1122,7 +1087,6 @@
                   "example_translation": "At the international level, competitiveness is still limited.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "binh dien",
                   "region": "STANDARD",
                   "translation": "level; dimension",
                   "word": "bình diện"
@@ -1217,7 +1181,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Writing business reports in Vietnamese requires a formal, concise style with many Sino-Vietnamese words. Basic structure: (1) Summary of the situation, (2) Analysis of causes, (3) Forecast and recommendations.",
                   "video_url": null,
                   "vietnamese_text": "Viết báo cáo kinh doanh bằng tiếng Việt yêu cầu văn phong trang trọng, súc tích và dùng nhiều từ Hán Việt. Cấu trúc cơ bản: (1) Tóm tắt tình hình, (2) Phân tích nguyên nhân, (3) Dự báo và kiến nghị. Mỗi phần nên dùng câu điều kiện để diễn đạt giả định và dự báo."
@@ -1228,7 +1191,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Sample short business report with three sections: Summary, Analysis, and Recommendations.",
                   "video_url": null,
                   "vietnamese_text": "Mẫu báo cáo ngắn:\n\nBÁO CÁO KINH DOANH QUÝ III/2024\n\nI. Tóm tắt:\nDoanh thu quý III đạt 120 tỷ đồng, tăng 15% so với cùng kỳ năm trước. Lợi nhuận sau thuế đạt 18 tỷ đồng. Tuy nhiên, chi phí vận chuyển tăng 22% do giá nhiên liệu tăng.\n\nII. Phân tích:\nNếu giá nhiên liệu tiếp tục tăng, thì biên lợi nhuận sẽ bị thu hẹp. Trong trường hợp đối tác cung ứng không giảm giá nguyên liệu, công ty cần tìm nguồn thay thế. Có chiến lược quản lý chi phí hiệu quả mới duy trì được sức cạnh tranh.\n\nIII. Kiến nghị:\nChỉ khi tối ưu hóa chuỗi cung ứng, công ty mới có thể giảm chi phí mà vẫn đảm bảo chất lượng. Giả sử áp dụng công nghệ mới vào sản xuất, năng suất có thể tăng 10-15%."
@@ -1239,7 +1201,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Writing exercise: Based on the following data, write a short business report (about 150-200 words).",
                   "video_url": null,
                   "vietnamese_text": "Bài tập viết: Dựa vào số liệu sau, hãy viết một báo cáo kinh doanh ngắn (khoảng 150-200 chữ):\n- Doanh thu: 85 tỷ đồng (giảm 5% so với quý trước)\n- Lợi nhuận: 8 tỷ đồng (giảm 20%)\n- Nguyên nhân: cạnh tranh gay gắt, chi phí marketing tăng 30%\n- Dự báo: nếu tiếp tục xu hướng này, lợi nhuận sẽ giảm thêm 10% quý tới"
@@ -1264,7 +1225,6 @@
                   "example_translation": "This quarter's revenue exceeded expectations.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "doanh thu",
                   "region": "STANDARD",
                   "translation": "revenue",
                   "word": "doanh thu"
@@ -1284,7 +1244,6 @@
                   "example_translation": "Profit margins declined due to rising costs.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bien loi nhuan",
                   "region": "STANDARD",
                   "translation": "profit margin",
                   "word": "biên lợi nhuận"
@@ -1304,7 +1263,6 @@
                   "example_translation": "Optimizing the supply chain helps reduce costs.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chuoi cung ung",
                   "region": "STANDARD",
                   "translation": "supply chain",
                   "word": "chuỗi cung ứng"
@@ -1452,7 +1410,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "This lesson introduces political and social terminology common in public discussions, journalism, and legal documents.",
                   "video_url": null,
                   "vietnamese_text": "Bài học này giới thiệu các thuật ngữ chính trị và xã hội phổ biến trong thảo luận công cộng, báo chí và văn bản pháp lý. Những từ này phần lớn là từ Hán Việt, dùng chủ yếu trong văn phong trang trọng."
@@ -1463,7 +1420,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Hien phap Viet Nam quy dinh rang nuoc Cong hoa Xa hoi Chu nghia Viet Nam do nhan dan lam chu.",
                   "translation": "Vietnam's Constitution stipulates that the Socialist Republic of Vietnam is governed by the people. The National Assembly is the highest state authority, elected by citizens under universal, equal, and direct suffrage.",
                   "video_url": null,
                   "vietnamese_text": "Hiến pháp Việt Nam quy định rằng nước Cộng hòa Xã hội Chủ nghĩa Việt Nam do nhân dân làm chủ. Quốc hội là cơ quan quyền lực nhà nước cao nhất, do công dân bầu cử theo nguyên tắc phổ thông, bình đẳng và trực tiếp. Chính phủ do Quốc hội thành lập, chịu trách nhiệm quản lý nhà nước. Mỗi công dân có quyền bầu cử và ứng cử theo luật định."
@@ -1474,7 +1430,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Hoa: Do you think this year's administrative reform policy has been effective?\nTuan: In my view, it's precisely the government's determination that creates change.\nHoa: The problem truly lies in implementation. But don't you think citizens also need to participate more?\nTuấn: It is the people themselves who are the driving force of all reform. Without citizen participation, all policies remain only on paper.",
                   "video_url": null,
                   "vietnamese_text": "Hoa: Em thấy chính sách cải cách hành chính năm nay có hiệu quả không?\nTuấn: Theo tôi, chính là quyết tâm của chính phủ mới tạo ra sự thay đổi. Trước đây, nhiều chính sách ban hành nhưng không được thực thi.\nHoa: Đúng là vấn đề nằm ở khâu thực thi. Nhưng anh không nghĩ rằng người dân cũng cần tham gia nhiều hơn vào quá trình cải cách?\nTuấn: Chính người dân mới là động lực của mọi cải cách. Nếu không có sự tham gia của công dân, thì mọi chính sách đều chỉ nằm trên giấy.",
@@ -1521,7 +1476,6 @@
                   "image_url": null,
                   "notes": "Ghi chú về văn phong tranh luận",
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Note: In Vietnamese political discussions, emphatic structures and rhetorical questions are commonly used.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý: Trong thảo luận chính trị tiếng Việt, người ta thường dùng cấu trúc nhấn mạnh như 'chính là', 'mới là', 'đúng là' để nhấn mạnh quan điểm. Câu hỏi tu từ cũng phổ biến: 'Sao chúng ta không...?', 'Phải chăng...?', 'Lẽ nào...?'. Đây là những cách diễn đạt đặc trưng của tranh luận xã hội."
@@ -1546,7 +1500,6 @@
                   "example_translation": "Politics is a complex and sensitive field.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chinh tri",
                   "region": "STANDARD",
                   "translation": "politics",
                   "word": "chính trị"
@@ -1566,7 +1519,6 @@
                   "example_translation": "The government issued a decree on administrative reform.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chinh phu",
                   "region": "STANDARD",
                   "translation": "government",
                   "word": "chính phủ"
@@ -1586,7 +1538,6 @@
                   "example_translation": "The National Assembly passed a new law on environmental protection.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "quoc hoi",
                   "region": "STANDARD",
                   "translation": "National Assembly; parliament",
                   "word": "quốc hội"
@@ -1606,7 +1557,6 @@
                   "example_translation": "The new law takes effect on January 1st.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "luat",
                   "region": "STANDARD",
                   "translation": "law",
                   "word": "luật"
@@ -1626,7 +1576,6 @@
                   "example_translation": "Citizens have the right to freedom of speech.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "quyen",
                   "region": "STANDARD",
                   "translation": "right; power",
                   "word": "quyền"
@@ -1646,7 +1595,6 @@
                   "example_translation": "Democracy is a core value of modern society.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dan chu",
                   "region": "STANDARD",
                   "translation": "democracy",
                   "word": "dân chủ"
@@ -1666,7 +1614,6 @@
                   "example_translation": "Citizens vote for National Assembly representatives.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "bau cu",
                   "region": "STANDARD",
                   "translation": "to elect; election",
                   "word": "bầu cử"
@@ -1686,7 +1633,6 @@
                   "example_translation": "The party sets the direction for national development.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dang",
                   "region": "STANDARD",
                   "translation": "party (political)",
                   "word": "đảng"
@@ -1706,7 +1652,6 @@
                   "example_translation": "The Constitution stipulates citizens' rights and obligations.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hien phap",
                   "region": "STANDARD",
                   "translation": "constitution",
                   "word": "hiến pháp"
@@ -1726,7 +1671,6 @@
                   "example_translation": "Society increasingly demands transparency from authorities.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "xa hoi",
                   "region": "STANDARD",
                   "translation": "society",
                   "word": "xã hội"
@@ -1746,7 +1690,6 @@
                   "example_translation": "Institutional reform is the top priority.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cai cach",
                   "region": "STANDARD",
                   "translation": "reform",
                   "word": "cải cách"
@@ -1766,7 +1709,6 @@
                   "example_translation": "The new policy aims to encourage foreign investment.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chinh sach",
                   "region": "STANDARD",
                   "translation": "policy",
                   "word": "chính sách"
@@ -1786,7 +1728,6 @@
                   "example_translation": "Every citizen has rights and obligations under the constitution.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cong dan",
                   "region": "STANDARD",
                   "translation": "citizen",
                   "word": "công dân"
@@ -1956,7 +1897,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Emphatic structures are important tools in social debates. Vietnamese has three common emphatic structures: (1) 'chính là', (2) 'mới là', (3) 'đúng là'.",
                   "video_url": null,
                   "vietnamese_text": "Cấu trúc nhấn mạnh là công cụ quan trọng trong tranh luận xã hội. Tiếng Việt có ba cấu trúc nhấn mạnh phổ biến: (1) 'chính là' — nhấn mạnh chính xác cái gì, (2) 'mới là' — nhấn mạnh tính duy nhất/chân chính, (3) 'đúng là' — nhấn mạnh sự xác nhận kèm cảm xúc."
@@ -1967,7 +1907,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Detailed explanation of 'chính là', 'mới là', and 'đúng là' with equivalents and examples.",
                   "video_url": null,
                   "vietnamese_text": "'Chính là' đặt trọng âm vào danh từ hoặc cụm từ theo sau, tương đương 'it is precisely...that'. 'Mới là' nhấn mạnh tính chân chính, duy nhất, tương đương 'is the one that truly...'. 'Đúng là' thể hiện sự xác nhận kèm cảm xúc, tương đương 'it really is...'. Ví dụ: 'Đúng là một chính sách phi lý!' — Thể hiện sự phẫn nộ."
@@ -1978,7 +1917,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Rhetorical questions are used to affirm or deny without expecting an answer. Five common patterns in Vietnamese.",
                   "video_url": null,
                   "vietnamese_text": "Câu hỏi tu từ dùng để khẳng định hoặc phủ định mà không cần trả lời:\n1. 'Sao...được?' — phủ định mạnh\n2. 'Phải chăng...?' — đặt nghi vấn gián tiếp\n3. 'Lẽ nào...?' — phủ định theo lẽ phải\n4. 'Ai lại...?' — phủ định theo lẽ thường\n5. 'Có phải...không?' — xác nhận phủ định"
@@ -1989,7 +1927,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Mai: What do you think of the new regulation on land management?\nPhong: It really is an irrational regulation! It is precisely the lack of consultation with the people that led to opposition.\nMai: Could it be that the authorities didn't anticipate the consequences?\nPhong: How could they not know that the people are directly affected? Who would issue a law without asking those concerned?\nMai: That is precisely the core issue — lack of democracy in policy-making.",
                   "video_url": null,
                   "vietnamese_text": "Mai: Anh thấy quy định mới về quản lý đất đai thế nào?\nPhong: Đúng là một quy định phi lý! Chính là sự thiếu tham vấn người dân mới dẫn đến phản đối.\nMai: Phải chăng chính quyền không lường trước được hậu quả?\nPhong: Lẽ nào họ không biết rằng người dân là bên chịu ảnh hưởng trực tiếp? Ai lại ban hành luật mà không hỏi ý kiến những người liên quan?\nMai: Chính là vấn đề cốt lõi — thiếu dân chủ trong quy hoạch chính sách.",
@@ -2055,7 +1992,6 @@
                   "example_translation": "The government must consult the people before enacting laws.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tham van",
                   "region": "STANDARD",
                   "translation": "to consult",
                   "word": "tham vấn"
@@ -2075,7 +2011,6 @@
                   "example_translation": "This regulation is completely irrational.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "phi ly",
                   "region": "STANDARD",
                   "translation": "irrational; unreasonable",
                   "word": "phi lý"
@@ -2095,7 +2030,6 @@
                   "example_translation": "The people cannot accept injustice.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "bat cong",
                   "region": "STANDARD",
                   "translation": "injustice; unfair",
                   "word": "bất công"
@@ -2185,7 +2119,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In social policy discussions, use emphatic structures, rhetorical questions, and concessive 'dù...cũng'.",
                   "video_url": null,
                   "vietnamese_text": "Trong thảo luận chính sách xã hội, bạn cần: (1) Nêu rõ quan điểm bằng cấu trúc nhấn mạnh, (2) Đặt câu hỏi tu từ để phản biện, (3) Dùng 'dù...cũng' để nhượng bộ trước khi phản biện. Cấu trúc bài nói: Nêu vấn đề → Trình bày quan điểm → Phản biện → Kết luận."
@@ -2196,7 +2129,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Discussion: Should personal income tax be increased? Uses emphatic structures and rhetorical questions.",
                   "video_url": null,
                   "vietnamese_text": "Thảo luận: Có nên tăng thuế thu nhập cá nhân?\n\nHùng: Theo tôi, chính là việc tăng thuế mới đảm bảo công bằng xã hội. Những người thu nhập cao phải đóng góp nhiều hơn.\n\nLan: Dù tôi đồng ý rằng công bằng xã hội quan trọng, nhưng tăng thuế cũng không phải là cách duy nhất. Phải chăng chúng ta không thể cải thiện hiệu quả chi tiêu ngân sách trước?\n\nHùng: Lẽ nào người giàu lại không đóng góp công bằng? Chính sự chênh lệch thu nhập mới là vấn đề cốt lõi.\n\nLan: Đúng là sự chênh lệch đáng lo ngại. Tuy nhiên, chỉ khi cải cách hệ thống thuế toàn diện, chúng ta mới giải quyết được vấn đề từ gốc.",
@@ -2253,7 +2185,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Speaking exercise: Choose a topic and prepare a 2-3 minute speech using at least 2 emphatic structures and 1 rhetorical question.",
                   "video_url": null,
                   "vietnamese_text": "Bài tập nói: Chọn một trong các chủ đề sau và chuẩn bị bài phát biểu 2-3 phút, sử dụng ít nhất 2 cấu trúc nhấn mạnh và 1 câu hỏi tu từ:\n1. Có nên giảm tuổi bầu cử từ 18 xuống 16?\n2. Chính sách nhà ở xã hội: ai được hưởng lợi?\n3. Có nên áp dụng thuế môi trường cho tất cả doanh nghiệp?"
@@ -2278,7 +2209,6 @@
                   "example_translation": "Personal income tax needs to be adjusted.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thue",
                   "region": "STANDARD",
                   "translation": "tax",
                   "word": "thuế"
@@ -2298,7 +2228,6 @@
                   "example_translation": "Social justice is the goal of every policy.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "cong bang",
                   "region": "STANDARD",
                   "translation": "justice; fair",
                   "word": "công bằng"
@@ -2318,7 +2247,6 @@
                   "example_translation": "The income disparity is growing larger.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chenh lech",
                   "region": "STANDARD",
                   "translation": "gap; disparity",
                   "word": "chênh lệch"
@@ -2426,7 +2354,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnam's political system operates on centralized democracy. The debate culture tends toward harmony over confrontation, though social media participation is growing.",
                   "video_url": null,
                   "vietnamese_text": "Hệ thống chính trị Việt Nam hoạt động theo nguyên tắc tập trung dân chủ. Đảng Cộng sản Việt Nam đóng vai trò lãnh đạo, trong khi Quốc hội là cơ quan lập pháp cao nhất. Khác với phương Tây, văn hóa tranh luận xã hội ở Việt Nam thường thiên về sự hài hòa hơn là đối đầu. Tuy nhiên, những năm gần đây, người dân ngày càng tham gia tích cực vào các cuộc thảo luận công cộng trên mạng xã hội và các diễn đàn."
@@ -2437,7 +2364,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "'Grassroots democracy' is key. The principle: 'People know, discuss, implement, inspect, supervise, and enjoy.'",
                   "video_url": null,
                   "vietnamese_text": "Khái niệm 'dân chủ' trong bối cảnh Việt Nam có đặc điểm riêng. 'Dân chủ cơ sở' là thuật ngữ quan trọng, chỉ sự tham gia của người dân ở cấp xã phường. 'Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng' là nguyên tắc được nhấn mạnh."
@@ -2448,7 +2374,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Cultural notes for discussing politics in Vietnam: focus on policies not people, use respectful language, concede before rebutting, listen actively.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý văn hóa: Khi thảo luận chính trị xã hội trong môi trường Việt Nam, cần lưu ý: (1) Tránh chỉ trích cá nhân trực tiếp — ưu tiên bàn về chính sách hơn người, (2) Dùng ngôn ngữ tôn trọng dù không đồng ý, (3) Nhượng bộ một phần trước khi phản biện ('Dù...cũng/Nhưng...'), (4) Biết lắng nghe và thừa nhận điểm hợp lý của đối phương."
@@ -2473,7 +2398,6 @@
                   "example_translation": "The principle of centralized democracy is the foundation of the political system.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tap trung dan chu",
                   "region": "STANDARD",
                   "translation": "centralized democracy",
                   "word": "tập trung dân chủ"
@@ -2493,7 +2417,6 @@
                   "example_translation": "Citizens have the right to supervise state agency activities.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "giam sat",
                   "region": "STANDARD",
                   "translation": "to supervise; to monitor",
                   "word": "giám sát"
@@ -2513,7 +2436,6 @@
                   "example_translation": "The National Assembly is the highest legislative body.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "lap phap",
                   "region": "STANDARD",
                   "translation": "legislative",
                   "word": "lập pháp"
@@ -2669,7 +2591,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "This lesson introduces scientific and technological terminology common in journalism and professional discussions.",
                   "video_url": null,
                   "vietnamese_text": "Bài học này giới thiệu các thuật ngữ khoa học và công nghệ phổ biến. Nhiều từ trong số này là từ Hán Việt hoặc mượn từ tiếng Anh, phản ánh sự phát triển nhanh chóng của lĩnh vực công nghệ tại Việt Nam."
@@ -2680,7 +2601,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Tri tue nhan tao (AI) dang thay doi moi nganh cong nghiep tai Viet Nam.",
                   "translation": "AI is changing every industry in Vietnam. Machine learning algorithms help optimize processes. However, big data collection raises privacy and cybersecurity issues.",
                   "video_url": null,
                   "vietnamese_text": "Trí tuệ nhân tạo (AI) đang thay đổi mọi ngành công nghiệp tại Việt Nam. Từ y tế đến nông nghiệp, thuật toán máy học giúp tối ưu hóa quy trình và đưa ra quyết định chính xác hơn. Tuy nhiên, việc thu thập dữ liệu lớn cũng đặt ra vấn đề về quyền riêng tư và an ninh mạng."
@@ -2691,7 +2611,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Dialogue about satellite technology and its impact on daily life and research.",
                   "video_url": null,
                   "vietnamese_text": "Thảo: Anh nghe về vệ tinh Vinasat-2 chưa?\nKhoa: Rồi, đây là vệ tinh viễn thông thứ hai của Việt Nam. Nó giúp nâng cao chất lượng truyền thông và phủ sóng rộng hơn.\nThảo: Theo anh, công nghệ vệ tinh có tác động thế nào đến đời sống?\nKhoa: Thu nhỏ khoảng cách địa lý, tạo cơ hội cho các vùng sâu vùng xa tiếp cận thông tin. Ngoài ra, dữ liệu từ vệ tinh cũng hỗ trợ nghiên cứu biến đổi khí hậu.\nThảo: Vậy là vừa phát triển công nghệ vừa bảo vệ môi trường — đúng là đầu tư đáng giá.",
@@ -2757,7 +2676,6 @@
                   "example_translation": "Science plays an important role in national development.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "khoa hoc",
                   "region": "STANDARD",
                   "translation": "science",
                   "word": "khoa học"
@@ -2777,7 +2695,6 @@
                   "example_translation": "The research team published new experimental results.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "nghien cuu",
                   "region": "STANDARD",
                   "translation": "to research; research",
                   "word": "nghiên cứu"
@@ -2797,7 +2714,6 @@
                   "example_translation": "The experiment proved the hypothesis correct.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thi nghiem",
                   "region": "STANDARD",
                   "translation": "experiment",
                   "word": "thí nghiệm"
@@ -2817,7 +2733,6 @@
                   "example_translation": "This invention changed the way we communicate.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phat minh",
                   "region": "STANDARD",
                   "translation": "invention",
                   "word": "phát minh"
@@ -2837,7 +2752,6 @@
                   "example_translation": "Information technology is developing rapidly.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cong nghe",
                   "region": "STANDARD",
                   "translation": "technology",
                   "word": "công nghệ"
@@ -2857,7 +2771,6 @@
                   "example_translation": "AI is applied in many fields.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tri tue nhan tao",
                   "region": "STANDARD",
                   "translation": "artificial intelligence",
                   "word": "trí tuệ nhân tạo"
@@ -2877,7 +2790,6 @@
                   "example_translation": "Big data requires efficient processing methods.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "du lieu",
                   "region": "STANDARD",
                   "translation": "data",
                   "word": "dữ liệu"
@@ -2897,7 +2809,6 @@
                   "example_translation": "The new algorithm helps increase processing speed.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thuat toan",
                   "region": "STANDARD",
                   "translation": "algorithm",
                   "word": "thuật toán"
@@ -2917,7 +2828,6 @@
                   "example_translation": "Vietnam launched its second telecommunications satellite.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ve tinh",
                   "region": "STANDARD",
                   "translation": "satellite",
                   "word": "vệ tinh"
@@ -2937,7 +2847,6 @@
                   "example_translation": "Renewable energy is an inevitable trend.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nang luong",
                   "region": "STANDARD",
                   "translation": "energy",
                   "word": "năng lượng"
@@ -2957,7 +2866,6 @@
                   "example_translation": "Cybersecurity is an urgent issue in the digital age.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "an ninh mang",
                   "region": "STANDARD",
                   "translation": "cybersecurity",
                   "word": "an ninh mạng"
@@ -2977,7 +2885,6 @@
                   "example_translation": "Data collection must respect privacy.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "quyen rieng tu",
                   "region": "STANDARD",
                   "translation": "privacy",
                   "word": "quyền riêng tư"
@@ -2997,7 +2904,6 @@
                   "example_translation": "Machine learning helps analyze big data efficiently.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "may hoc",
                   "region": "STANDARD",
                   "translation": "machine learning",
                   "word": "máy học"
@@ -3162,7 +3068,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Reduced clauses make scientific writing concise and formal by removing subjects or converting clauses into phrases.",
                   "video_url": null,
                   "vietnamese_text": "Câu rút gọn mệnh đề (reduced clause) là cách viết súc tích bằng cách loại bỏ chủ ngữ hoặc chuyển mệnh đề thành cụm từ. Trong văn phong khoa học, câu rút gọn giúp bài viết ngắn gọn, trang trọng và dễ theo dõi."
@@ -3173,7 +3078,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Reducing relative clauses: Remove passive marker 'được', use noun phrases after head noun, use 'có' + noun.",
                   "video_url": null,
                   "vietnamese_text": "Rút gọn mệnh đề quan hệ: Trong tiếng Việt, khi rút gọn, ta có thể:\n1. Bỏ 'được' trong câu bị động bổ nghĩa: 'Thuật toán được phát triển bởi nhóm A' → 'Thuật toán phát triển bởi nhóm A'\n2. Dùng cụm danh từ đứng sau danh từ chính: 'Dữ liệu thu thập từ vệ tinh'\n3. Dùng 'có' + danh từ thay mệnh đề miêu tả: 'Vệ tinh có khả năng phủ sóng rộng'"
@@ -3184,7 +3088,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Reducing adverbial clauses when two clauses share the same subject.",
                   "video_url": null,
                   "vietnamese_text": "Rút gọn mệnh đề trạng ngữ: Khi hai mệnh đề có cùng chủ ngữ:\n1. Giữ lại giới từ/trạng từ + V: 'Khi tiến hành thí nghiệm, nhóm nghiên cứu đã phát hiện...'\n2. Dùng 'khi/trong khi/sau khi + V': 'Sau khi phân tích dữ liệu, các nhà khoa học kết luận...'\n3. Dùng cụm danh từ chỉ thời gian: 'Thí nghiệm năm 2023 cho thấy...'\n4. Dùng V + danh từ thay mệnh đề mục đích: 'để tối ưu hóa quy trình'"
@@ -3195,7 +3098,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Sample scientific text using reduced clauses. Note the absence of 'được' before verbs — a characteristic of scientific Vietnamese.",
                   "video_url": null,
                   "vietnamese_text": "Mẫu văn phong khoa học rút gọn:\n\n'Thí nghiệm tiến hành tại phòng thí nghiệm quốc gia cho thấy thuật toán mới tăng tốc độ xử lý 40%. Kết quả công bố trên tạp chí Khoa học Việt Nam xác nhận dữ liệu thu thập từ 500 mẫu đều phù hợp với giả thuyết ban đầu. Sau khi phân tích, nhóm nghiên cứu kết luận rằng mô hình đề xuất hiệu quả hơn 35% so với phương pháp truyền thống.'\n\nChú ý: Không có 'được' trước 'tiến hành', 'công bố', 'thu thập' — đây là cách rút gọn đặc trưng văn phong khoa học."
@@ -3220,7 +3122,6 @@
                   "example_translation": "The hypothesis must be verified through experiments.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "gia thuyet",
                   "region": "STANDARD",
                   "translation": "hypothesis",
                   "word": "giả thuyết"
@@ -3240,7 +3141,6 @@
                   "example_translation": "Research results must be independently verified.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "kiem chung",
                   "region": "STANDARD",
                   "translation": "to verify",
                   "word": "kiểm chứng"
@@ -3260,7 +3160,6 @@
                   "example_translation": "The proposed model is more effective than the old method.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mo hinh",
                   "region": "STANDARD",
                   "translation": "model",
                   "word": "mô hình"
@@ -3348,7 +3247,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Scientific article about AI in Vietnamese healthcare, using reduced clause style throughout.",
                   "video_url": null,
                   "vietnamese_text": "Bài báo khoa học: Ứng dụng trí tuệ nhân tạo trong y tế Việt Nam\n\nNghiên cứu tiến hành tại Bệnh viện Chợ Rẫy trong giai đoạn 2022-2024 cho thấy thuật toán máy học có thể phát hiện ung thư gan sớm hơn 30% so với phương pháp truyền thống. Dữ liệu thu thập từ hơn 10.000 bệnh nhân được phân tích bằng mô hình học sâu, cho thấy độ chính xác đạt 94,7%.\n\nKhi tiến hành thí nghiệm so sánh, nhóm nghiên cứu phát hiện rằng hệ thống AI giảm thời gian chẩn đoán từ 45 phút xuống còn 12 phút. Sau khi kiểm chứng độc lập tại ba bệnh viện khác, kết quả xác nhận tính khả thi của phương pháp mới.\n\nTuy nhiên, dữ liệu thu thập chủ yếu từ khu vực phía Nam, do đó cần mở rộng nghiên cứu ra toàn quốc. Để tối ưu hóa mô hình, đội ngũ dự định tích hợp thêm dữ liệu hình ảnh y tế từ các tỉnh phía Bắc và Trung."
@@ -3359,7 +3257,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Reading comprehension questions about the scientific article.",
                   "video_url": null,
                   "vietnamese_text": "Câu hỏi đọc hiểu:\n1. Thuật toán máy học phát hiện ung thư gan sớm hơn bao nhiêu phần trăm?\n2. Độ chính xác của mô hình học sâu là bao nhiêu?\n3. Thời gian chẩn đoán giảm từ bao nhiêu xuống bao nhiêu?\n4. Tại sao cần mở rộng nghiên cứu ra toàn quốc?\n5. Đội ngũ dự định làm gì để tối ưu hóa mô hình?"
@@ -3370,7 +3267,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Answer key and analysis note about reduced clause style in scientific writing.",
                   "video_url": null,
                   "vietnamese_text": "Gợi ý trả lời:\n1. 30%\n2. 94,7%\n3. Từ 45 phút xuống 12 phút\n4. Dữ liệu chủ yếu từ phía Nam, cần đại diện toàn quốc\n5. Tích hợp thêm dữ liệu hình ảnh y tế từ các tỉnh phía Bắc và Trung\n\nLưu ý văn phong: Bài báo khoa học này dùng rút gọn mệnh đề đặc trưng — bỏ 'được' trước 'tiến hành', 'công bố', 'thu thập'. Cách viết này trang trọng hơn và phổ biến trong văn phong học thuật."
@@ -3395,7 +3291,6 @@
                   "example_translation": "The AI system significantly reduced diagnosis time.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "chan doan",
                   "region": "STANDARD",
                   "translation": "diagnosis; to diagnose",
                   "word": "chẩn đoán"
@@ -3415,7 +3310,6 @@
                   "example_translation": "The deep learning model achieved high accuracy.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hoc sau",
                   "region": "STANDARD",
                   "translation": "deep learning",
                   "word": "học sâu"
@@ -3571,7 +3465,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "This lesson introduces artistic and literary terminology common in cultural discussions, art criticism, and academic writing about literature.",
                   "video_url": null,
                   "vietnamese_text": "Bài học này giới thiệu các thuật ngữ nghệ thuật và văn học phổ biến trong thảo luận văn hóa, phê bình nghệ thuật và bài viết học thuật về văn chương. Nhiều từ trong lĩnh vực này là từ Hán Việt, phản ánh truyền thống văn hóa lâu đời."
@@ -3582,7 +3475,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Vietnamese literature spans thousands of years. Vietnamese painting is known for silk paintings and folk art. Traditional music features đàn tranh and đàn bầu alongside modern music. Cải lương theater is distinctive to the South.",
                   "video_url": null,
                   "vietnamese_text": "Văn học Việt Nam có truyền thống hàng ngàn năm, từ thơ ca dân gian đến văn học hiện đại. Hội họa Việt Nam nổi bật với tranh lụa và tranh dân gian. Âm nhạc truyền thống với đàn tranh, đàn bầu song hành cùng âm nhạc hiện đại. Sân khấu cải lương là hình thức diễn xuất đặc sắc của miền Nam."
@@ -3593,7 +3485,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Dialogue about an art exhibition, discussing how Vietnamese art uses idioms and classical allusions.",
                   "video_url": null,
                   "vietnamese_text": "Hương: Em vừa xem triển lãm hội họa của họa sĩ Nguyễn Tư Nghiêm, ấn tượng thật sự!\nĐức: Tôi cũng đã xem. Tác phẩm của ông kết hợp giữa nét vẽ dân gian và nghệ thuật đương đại rất tài tình.\nHương: Anh thích sáng tác nào nhất?\nĐức: Tôi ấn tượng với bức tranh lấy cảm hứng từ thành ngữ 'mưa dầm thấm lâu' — vừa sâu sắc về ý nghĩa vừa tinh tế về hình thức.\nHương: Đúng vậy, nghệ thuật Việt Nam thường mượn điển cố và thành ngữ để tạo chiều sâu cho tác phẩm.",
@@ -3645,7 +3536,6 @@
                   "image_url": null,
                   "notes": "Ghi chú về phê bình nghệ thuật",
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Note: In Vietnamese art and literary criticism, idioms and classical allusions are commonly used to evaluate works.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý: Trong phê bình nghệ thuật và văn học tiếng Việt, người ta hay dùng thành ngữ và điển cố để đánh giá tác phẩm. Ví dụ: 'viết như rồng bay phượng múa' (văn phong bay bổng), 'nét bút như thần' (tài năng xuất chúng), 'thơ hay như đào tiên' (thơ tuyệt đẹp). Những cách diễn đạt này rất phổ biến trong văn phong phê bình."
@@ -3670,7 +3560,6 @@
                   "example_translation": "Art reflects life and the human soul.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nghe thuat",
                   "region": "STANDARD",
                   "translation": "art",
                   "word": "nghệ thuật"
@@ -3690,7 +3579,6 @@
                   "example_translation": "Vietnamese painting has its own identity.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hoi hoa",
                   "region": "STANDARD",
                   "translation": "painting",
                   "word": "hội họa"
@@ -3710,7 +3598,6 @@
                   "example_translation": "Traditional Vietnamese music is rich and diverse.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "am nhac",
                   "region": "STANDARD",
                   "translation": "music",
                   "word": "âm nhạc"
@@ -3730,7 +3617,6 @@
                   "example_translation": "The sculptures of But Thap Pagoda are a precious artistic heritage.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dieu khac",
                   "region": "STANDARD",
                   "translation": "sculpture",
                   "word": "điêu khắc"
@@ -3750,7 +3636,6 @@
                   "example_translation": "Cải lương theater is a distinctive cultural feature of the South.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "san khau",
                   "region": "STANDARD",
                   "translation": "stage; theater",
                   "word": "sân khấu"
@@ -3770,7 +3655,6 @@
                   "example_translation": "Vietnamese literature has a tradition spanning thousands of years.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "van hoc",
                   "region": "STANDARD",
                   "translation": "literature",
                   "word": "văn học"
@@ -3790,7 +3674,6 @@
                   "example_translation": "This work is considered a masterpiece of modern literature.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tac pham",
                   "region": "STANDARD",
                   "translation": "work (of art/literature)",
                   "word": "tác phẩm"
@@ -3810,7 +3693,6 @@
                   "example_translation": "The poet composed a poem inspired by folk idioms.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "sang tac",
                   "region": "STANDARD",
                   "translation": "to compose; creation",
                   "word": "sáng tác"
@@ -3830,7 +3712,6 @@
                   "example_translation": "The artist performed excellently on stage.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "bieu dien",
                   "region": "STANDARD",
                   "translation": "to perform; performance",
                   "word": "biểu diễn"
@@ -3850,7 +3731,6 @@
                   "example_translation": "The art exhibition attracted a large audience.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "trien lam",
                   "region": "STANDARD",
                   "translation": "exhibition",
                   "word": "triển lãm"
@@ -3870,7 +3750,6 @@
                   "example_translation": "Literary criticism requires deep and broad knowledge.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phe binh",
                   "region": "STANDARD",
                   "translation": "criticism; to critique",
                   "word": "phê bình"
@@ -3890,7 +3769,6 @@
                   "example_translation": "Classical allusions are widely used in classical poetry and prose.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dien co",
                   "region": "STANDARD",
                   "translation": "classical allusion",
                   "word": "điển cố"
@@ -3910,7 +3788,6 @@
                   "example_translation": "The Tale of Kieu is Nguyen Du's masterpiece.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kiet tac",
                   "region": "STANDARD",
                   "translation": "masterpiece",
                   "word": "kiệt tác"
@@ -3930,7 +3807,6 @@
                   "example_translation": "Vietnam's cultural identity needs to be preserved.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ban sac",
                   "region": "STANDARD",
                   "translation": "identity; characteristic",
                   "word": "bản sắc"
@@ -3950,7 +3826,6 @@
                   "example_translation": "Contemporary Vietnamese art is developing strongly.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "duong dai",
                   "region": "STANDARD",
                   "translation": "contemporary",
                   "word": "đương đại"
@@ -4139,7 +4014,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Idioms and classical allusions are important tools in formal Vietnamese. Idioms are fixed phrases with figurative meanings. Allusions borrow classical events, characters, or phrases for deeper meaning.",
                   "video_url": null,
                   "vietnamese_text": "Thành ngữ (idiom) và điển cố (classical allusion) là hai công cụ quan trọng trong tiếng Việt trang trọng. Thành ngữ là cụm từ cố định mang nghĩa bóng, không thể dịch từng từ. Điển cố là mượn sự kiện, nhân vật hoặc câu văn cổ để ám chỉ ý nghĩa sâu xa. Cả hai đều phổ biến trong phê bình văn học, diễn văn và văn phong học thuật."
@@ -4150,7 +4024,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Common idioms in formal register with their figurative meanings and usage patterns.",
                   "video_url": null,
                   "vietnamese_text": "Thành ngữ phổ biến trong văn phong trang trọng:\n\n1. 'Mưa dầm thấm lâu' — ảnh hưởng từ từ nhưng sâu sắc\n2. 'Nước đổ lá khoai' — vô tác dụng, phí công\n3. 'Chín mười thì cữu' — sắp xong thì hỏng\n4. 'Rồng nhà tôm' — người tài năng trong môi trường hạn chế\n5. 'Thẹn với đất bẽ với trời' — xấu hổ vô cùng\n6. 'Vừa sâu vừa rộng' — vừa sâu sắc vừa bao quát\n\nCách dùng: Thành ngữ có thể làm chủ ngữ, bổ ngữ hoặc vị ngữ. Ví dụ: 'Tác phẩm mang âm hưởng mưa dầm thấm lâu.'"
@@ -4161,7 +4034,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Common classical allusions in Vietnamese literature with their origins and meanings.",
                   "video_url": null,
                   "vietnamese_text": "Điển cố phổ biến trong văn thơ Việt Nam:\n\n1. 'Trầu cau' — mượn truyện cổ Tản Viên, chỉ tình anh em, tình nghĩa\n2. 'Chém l freshwater Phù Đổng' — mượn truyện Thánh Gióng, chỉ hành động oai hùng\n3. 'Trả nghĩa chim nguyên' — mượn thơ Nguyễn Du, chỉ sự báo đáp\n4. 'Chuyện Trương Chi' — chỉ tình yêu đơn phương, bi kịch\n5. 'Bến cũ bờ xa' — mượn ca dao, chỉ sự chia ly\n\nCách dùng điển cố: Điển cố thường đi với 'như', 'giống như', 'khiến người ta nghĩ đến'. Ví dụ: 'Câu thơ này khiến người ta nghĩ đến điển cố Trương Chi.'"
@@ -4172,7 +4044,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "The 'vừa...vừa' structure (both...and) is common in art criticism. It expresses two coexisting qualities.",
                   "video_url": null,
                   "vietnamese_text": "Cấu trúc 'vừa...vừa' cũng phổ biến trong phê bình nghệ thuật: 'vừa...vừa' diễn đạt hai đặc tính cùng tồn tại. Ví dụ: 'Tác phẩm vừa sâu sắc vừa tinh tế.' Đây là cấu trúc tương đương 'both...and' trong tiếng Anh, nhưng phải đứng trước hai tính từ hoặc cụm từ tương đương nhau."
@@ -4197,7 +4068,6 @@
                   "example_translation": "The work carries a strong folk resonance.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "am huong",
                   "region": "STANDARD",
                   "translation": "tone; resonance; influence",
                   "word": "âm hưởng"
@@ -4217,7 +4087,6 @@
                   "example_translation": "The work has astonishing philosophical depth.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chieu sau",
                   "region": "STANDARD",
                   "translation": "depth",
                   "word": "chiều sâu"
@@ -4237,7 +4106,6 @@
                   "example_translation": "The expression is both subtle and profound.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "tinh te",
                   "region": "STANDARD",
                   "translation": "subtle; delicate",
                   "word": "tinh tế"
@@ -4332,7 +4200,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Writing literary criticism in Vietnamese requires: formal Sino-Vietnamese terms, idioms, classical allusions, and 'vừa...vừa' structures.",
                   "video_url": null,
                   "vietnamese_text": "Viết phê bình văn học bằng tiếng Việt đòi hỏi: (1) Dùng từ Hán Việt trang trọng (tác phẩm, kiệt tác, âm hưởng, chiều sâu), (2) Mượn thành ngữ để diễn đạt đánh giá súc tích, (3) Dùng điển cố để tạo chiều sâu văn hóa, (4) Dùng 'vừa...vừa' để đánh giá nhiều khía cạnh cùng lúc."
@@ -4343,7 +4210,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Sample literary criticism of Truyen Kieu using idioms, allusions, and emphatic structures.",
                   "video_url": null,
                   "vietnamese_text": "Mẫu phê bình ngắn:\n\nTruyện Kiều của Nguyễn Du là kiệt tác mang âm hưởng mưa dầm thấm lâu — ảnh hưởng từ từ nhưng sâu sắc đến tâm hồn người đọc. Tác phẩm vừa phản ánh hiện thực xã hội vừa thể hiện khát vọng tự do, vừa mang nét cổ điển vừa đậm chất dân gian.\n\nĐặc biệt, Nguyễn Du mượn điển cố 'cánh chim bằng' để diễn đạt khát vọng bay cao, và 'bến cũ bờ xa' để gợi nỗi chia ly. Cách dùng thành ngữ và điển cố khiến tác phẩm vừa sâu sắc vừa tinh tế, đúng là nét bút như thần."
@@ -4354,7 +4220,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Writing exercise: Write a short literary criticism (150-200 words) using at least 2 idioms and 1 'vừa...vừa' structure.",
                   "video_url": null,
                   "vietnamese_text": "Bài tập viết: Viết bài phê bình ngắn (150-200 chữ) về một tác phẩm nghệ thuật hoặc văn học mà bạn yêu thích, sử dụng ít nhất 2 thành ngữ và 1 cấu trúc 'vừa...vừa'."
@@ -4379,7 +4244,6 @@
                   "example_translation": "The writer's brushstroke is very skillful.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "net but",
                   "region": "STANDARD",
                   "translation": "brushstroke; writing style",
                   "word": "nét bút"
@@ -4399,7 +4263,6 @@
                   "example_translation": "The work expresses the aspiration for freedom.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "khat vong",
                   "region": "STANDARD",
                   "translation": "aspiration; desire",
                   "word": "khát vọng"
@@ -4511,7 +4374,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Idioms, folk songs, and proverbs are three important forms of Vietnamese folk literature, reflecting Vietnamese thinking and values.",
                   "video_url": null,
                   "vietnamese_text": "Thành ngữ, ca dao và tục ngữ là ba hình thức văn học dân gian quan trọng của Việt Nam. Thành ngữ là cụm từ cố định mang nghĩa bóng. Ca dao là bài thơ dân gian ngắn, thường 4-6 câu. Tục ngữ là câu hoàn chỉnh mang bài học kinh nghiệm. Cả ba đều phản ánh tư duy, giá trị và cách nhìn nhận thế giới của người Việt."
@@ -4522,7 +4384,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Common idioms reflecting Vietnamese cultural values: gratitude, collectivism, patriotism, solidarity, environmental influence, pragmatism.",
                   "video_url": null,
                   "vietnamese_text": "Thành ngữ phổ biến phản ánh văn hóa:\n1. 'Ăn quả nhớ kẻ trồng cây' — lòng biết ơn\n2. 'Một con ngựa đau cả tàu bỏ cỏ' — tinh thần tập thể\n3. 'Giặc đến nhà đàn bà cũng đánh' — tinh thần yêu nước\n4. 'Lá lành đùm lá rách' — tương thân tương ái\n5. 'Ở bầu thì tròn, ở ống thì dài' — ảnh hưởng môi trường\n6. 'Chữ thầy thợ xẻ' — trọng thực hành hơn lý thuyết"
@@ -4533,7 +4394,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Cultural note: Idioms and proverbs are used in all contexts. Proper use shows cultural knowledge, but overuse in academic writing can be redundant.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý văn hóa: Thành ngữ và tục ngữ được dùng trong mọi ngữ cảnh — từ giao tiếp hàng ngày đến diễn văn chính trị. Việc dùng đúng thành ngữ thể hiện sự hiểu biết văn hóa sâu sắc. Tuy nhiên, cần tránh lạm dụng — dùng quá nhiều thành ngữ trong văn phong học thuật có thể làm bài viết rườm rà. Dùng điển cố chỉ khi chắc chắn người đọc hiểu nguồn gốc."
@@ -4558,7 +4418,6 @@
                   "example_translation": "Vietnamese proverbs reflect folk wisdom.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tuc ngu",
                   "region": "STANDARD",
                   "translation": "proverb",
                   "word": "tục ngữ"
@@ -4578,7 +4437,6 @@
                   "example_translation": "Folk poetry is a treasure of folk literature.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ca dao",
                   "region": "STANDARD",
                   "translation": "folk song; folk poetry",
                   "word": "ca dao"
@@ -4598,7 +4456,6 @@
                   "example_translation": "Folk literature has invaluable worth.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "dan gian",
                   "region": "STANDARD",
                   "translation": "folk; popular",
                   "word": "dân gian"
@@ -4754,7 +4611,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "This lesson introduces environmental and sustainable development terminology. Vietnam is among the countries most affected by climate change.",
                   "video_url": null,
                   "vietnamese_text": "Bài học này giới thiệu các thuật ngữ môi trường và phát triển bền vững, phổ biến trong thảo luận công cộng, báo chí và văn bản chính sách. Việt Nam là một trong những nước bị ảnh hưởng nặng nề nhất bởi biến đổi khí hậu, do đó các thuật ngữ này đặc biệt quan trọng."
@@ -4765,7 +4621,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Vietnam faces serious environmental issues: air pollution, water pollution, deforestation, and biodiversity loss. However, the government has promoted sustainable development: renewable energy, forest expansion, and wildlife conservation.",
                   "video_url": null,
                   "vietnamese_text": "Việt Nam đối mặt với nhiều vấn đề môi trường nghiêm trọng: ô nhiễm không khí ở các thành phố lớn, ô nhiễm nguồn nước do rác thải công nghiệp, suy giảm rừng và mất đa dạng sinh học. Tuy nhiên, những năm gần đây, chính phủ đã đẩy mạnh phát triển bền vững: khuyến khích năng lượng tái tạo, mở rộng diện tích rừng, và tăng cường bảo tồn động vật hoang dã."
@@ -4776,7 +4631,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Dialogue about renewable energy in Vietnam, using complex conjunctions like 'tuy nhiên', 'mặt khác', 'do đó', 'ngoài ra', 'thay vì'.",
                   "video_url": null,
                   "vietnamese_text": "Hạnh: Em nghe Việc Nam đang xây nhiều nhà máy điện mặt trời?\nThành: Đúng vậy. Năng lượng tái tạo đang được ưu tiên phát triển. Mặt khác, than đá vẫn chiếm tỷ trọng lớn trong cơ cấu điện lực.\nHạnh: Vậy vẫn còn phụ thuộc vào nhiên liệu hóa thạch. Tuy nhiên, ít nhất hướng đi đã thay đổi.\nThành: Đúng. Do đó, mục tiêu trung hòa carbon vào năm 2050 là khả thi, ngoài ra cần thêm nỗ lực từ cộng đồng. Thay vì chỉ trông chờ chính phủ, mỗi người cũng cần thay đổi thói quen sinh hoạt.",
@@ -4837,7 +4691,6 @@
                   "example_translation": "Environmental protection is everyone's responsibility.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "moi truong",
                   "region": "STANDARD",
                   "translation": "environment",
                   "word": "môi trường"
@@ -4857,7 +4710,6 @@
                   "example_translation": "Air pollution in Hanoi exceeded warning levels.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "o nhhiem",
                   "region": "STANDARD",
                   "translation": "pollution",
                   "word": "ô nhiễm"
@@ -4877,7 +4729,6 @@
                   "example_translation": "Climate change affects people's lives.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "khi hau",
                   "region": "STANDARD",
                   "translation": "climate",
                   "word": "khí hậu"
@@ -4897,7 +4748,6 @@
                   "example_translation": "Sustainable development is the goal of the 21st century.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phat trien ben vung",
                   "region": "STANDARD",
                   "translation": "sustainable development",
                   "word": "phát triển bền vững"
@@ -4917,7 +4767,6 @@
                   "example_translation": "Recycling waste helps reduce environmental pollution.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tai che",
                   "region": "STANDARD",
                   "translation": "recycling; to recycle",
                   "word": "tái chế"
@@ -4937,7 +4786,6 @@
                   "example_translation": "Renewable energy is gradually replacing fossil fuels.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nang luong tai tao",
                   "region": "STANDARD",
                   "translation": "renewable energy",
                   "word": "năng lượng tái tạo"
@@ -4957,7 +4805,6 @@
                   "example_translation": "The Can Gio mangrove forest ecosystem needs protection.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sinh thai",
                   "region": "STANDARD",
                   "translation": "ecology; ecological",
                   "word": "sinh thái"
@@ -4977,7 +4824,6 @@
                   "example_translation": "Biodiversity conservation is a top priority.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "bao ton",
                   "region": "STANDARD",
                   "translation": "conservation; to conserve",
                   "word": "bảo tồn"
@@ -4997,7 +4843,6 @@
                   "example_translation": "Forest area increased thanks to tree-planting programs.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "rung",
                   "region": "STANDARD",
                   "translation": "forest",
                   "word": "rừng"
@@ -5017,7 +4862,6 @@
                   "example_translation": "Many wildlife species face the risk of extinction.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dong vat hoang da",
                   "region": "STANDARD",
                   "translation": "wildlife",
                   "word": "động vật hoang dã"
@@ -5037,7 +4881,6 @@
                   "example_translation": "Climate change causes increasingly frequent natural disasters.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bien doi khi hau",
                   "region": "STANDARD",
                   "translation": "climate change",
                   "word": "biến đổi khí hậu"
@@ -5057,7 +4900,6 @@
                   "example_translation": "The carbon neutrality target by 2050.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "carbon",
                   "region": "STANDARD",
                   "translation": "carbon",
                   "word": "carbon"
@@ -5077,7 +4919,6 @@
                   "example_translation": "Reduce dependence on fossil fuels.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhien lieu hoa thach",
                   "region": "STANDARD",
                   "translation": "fossil fuel",
                   "word": "nh nhiên liệu hóa thạch"
@@ -5097,7 +4938,6 @@
                   "example_translation": "Vietnam's biodiversity is very rich.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "da dang sinh hoc",
                   "region": "STANDARD",
                   "translation": "biodiversity",
                   "word": "đa dạng sinh học"
@@ -5117,7 +4957,6 @@
                   "example_translation": "The Tonkin snub-nosed monkey faces extinction risk.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tuyet chung",
                   "region": "STANDARD",
                   "translation": "extinction; to go extinct",
                   "word": "tuyệt chủng"
@@ -5302,7 +5141,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "At B2, you need complex conjunctions for rigorous argumentation. Unlike simple conjunctions, they create complex logical relationships: contrast, addition, cause-effect, replacement.",
                   "video_url": null,
                   "vietnamese_text": "Ở B2, bạn cần nắm vững các liên từ phức tạp để tạo lập luận chặt chẽ. Khác với liên từ đơn giản (và, nhưng, hoặc), liên từ phức tạo quan hệ logic phức tạp hơn giữa các mệnh đề: tương phản, bổ sung, nguyên nhân-kết quả, thay thế."
@@ -5313,7 +5151,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Six complex conjunctions with examples: tuy nhiên, mặt khác, do đó/vì vậy, ngoài ra, thay vì, không những...mà còn.",
                   "video_url": null,
                   "vietnamese_text": "Các liên từ phức tạp phổ biến:\n\n1. 'Tuy nhiên' — tương phản trang trọng (however): 'Việt Nam phát triển nhanh. Tuy nhiên, vẫn còn nhiều thách thức.'\n2. 'Mặt khác' — góc nhìn khác (on the other hand): 'Năng lượng tái tạo thân thiện môi trường. Mặt khác, chi phí đầu tư còn cao.'\n3. 'Do đó' / 'Vì vậy' — nguyên nhân-kết quả (therefore): 'Ô nhiễm tăng. Do đó, cần biện pháp khẩn cấp.'\n4. 'Ngoài ra' — bổ sung thông tin (besides/furthermore): 'Cần giảm phát thải. Ngoài ra, cần tăng cường bảo tồn.'\n5. 'Thay vì' — thay thế (instead of): 'Thay vì dùng túi nilon, hãy dùng túi vải.'\n6. 'Không những...mà còn' — bổ sung tăng tiến (not only...but also): 'Không những giảm ô nhiễm mà còn tiết kiệm chi phí.'"
@@ -5324,7 +5161,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Position of conjunctions in sentences: most start new clauses; 'thay vì' precedes replaced phrase; 'không những...mà còn' wraps two elements.",
                   "video_url": null,
                   "vietnamese_text": "Vị trí liên từ trong câu:\n- 'Tuy nhiên', 'Mặt khác', 'Do đó', 'Vì vậy', 'Ngoài ra' thường đứng đầu câu hoặc sau dấu chấm/phẩy, tạo mệnh đề mới.\n- 'Thay vì' đứng trước cụm từ bị thay thế: 'Thay vì [A], [B]'\n- 'Không những...mà còn' bao quanh hai thành phần: 'Không những [A] mà còn [B]'\n- 'Cũng như' nối hai danh từ tương đương: 'A cũng như B'"
@@ -5335,7 +5171,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Dialogue using all six complex conjunctions in a discussion about energy transition.",
                   "video_url": null,
                   "vietnamese_text": "Hạnh: Theo em, có nên đóng cửa các nhà máy than?\nThành: Vấn đề này phức tạp. Tuy nhiên, về lâu dài, năng lượng sạch là tất yếu. Mặt khác, hàng ngàn công nhân sẽ mất việc làm nếu đóng ngay lập tức.\nHạnh: Do đó, cần lộ trình chuyển đổi từng bước. Ngoài ra, chính phủ phải hỗ trợ chuyển đổi nghề cho công nhân.\nThành: Đúng vậy. Thay vì đóng ngay, có thể giảm dần công suất. Không những bảo vệ môi trường mà còn đảm bảo sinh kế cho người lao động.",
@@ -5396,7 +5231,6 @@
                   "example_translation": "Reducing carbon emissions is a global goal.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phat thai",
                   "region": "STANDARD",
                   "translation": "emission",
                   "word": "phát thải"
@@ -5416,7 +5250,6 @@
                   "example_translation": "A clear energy transition roadmap is needed.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lo trinh",
                   "region": "STANDARD",
                   "translation": "roadmap; timeline",
                   "word": "lộ trình"
@@ -5436,7 +5269,6 @@
                   "example_translation": "Ensure livelihoods for workers.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sinh ke",
                   "region": "STANDARD",
                   "translation": "livelihood",
                   "word": "sinh kế"
@@ -5524,7 +5356,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Article about sustainable development in Vietnam, using all complex conjunctions: do đó, tuy nhiên, mặt khác, vì vậy, ngoài ra, thay vì, không những...mà còn.",
                   "video_url": null,
                   "vietnamese_text": "Phát triển bền vững tại Việt Nam: Thách thức và cơ hội\n\nViệt Nam là một trong những quốc gia bị ảnh hưởng nặng nề nhất bởi biến đổi khí hậu. Cực Nam Đồng bằng sông Cửu Long đang bị ngập mặn, trong khi miền Trung hứng chịu bão lũ ngày càng khắc nghiệt. Do đó, phát triển bền vững không chỉ là lựa chọn mà là yêu cầu bắt buộc.\n\nTuy nhiên, tốc độ tăng trưởng kinh tế vẫn là ưu tiên hàng đầu. Mặt khác, chính phủ nhận thức rõ rằng không thể đánh đổi môi trường lấy tăng trưởng. Vì vậy, chiến lược tăng trưởng xanh đã được đề ra: khuyến khích năng lượng tái tạo, giảm phát thải carbon, và bảo tồn đa dạng sinh học.\n\nNgoài ra, cộng đồng doanh nghiệp cũng đóng vai trò quan trọng. Thay vì theo đuổi lợi nhuận ngắn hạn, doanh nghiệp cần tích hợp trách nhiệm xã hội vào chiến lược kinh doanh. Không những bảo vệ môi trường mà còn tạo lợi thế cạnh tranh dài hạn trên thị trường quốc tế."
@@ -5535,7 +5366,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Reading comprehension questions about the sustainable development article.",
                   "video_url": null,
                   "vietnamese_text": "Câu hỏi đọc hiểu:\n1. Tại sao phát triển bền vững là yêu cầu bắt buộc đối với Việt Nam?\n2. Chiến lược tăng trưởng xanh gồm những gì?\n3. Doanh nghiệp cần thay đổi điều gì theo bài đọc?\n4. Liên từ 'mặt khác' trong bài dùng để diễn đạt quan hệ gì?\n5. Theo bài đọc, bảo vệ môi trường mang lại lợi thế gì cho doanh nghiệp?"
@@ -5546,7 +5376,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Answer key and analysis note about complex conjunctions in the sustainable development article.",
                   "video_url": null,
                   "vietnamese_text": "Gợi ý trả lời:\n1. Vì Việt Nam bị ảnh hưởng nặng nề nhất bởi biến đổi khí hậu\n2. Khuyến khích năng lượng tái tạo, giảm phát thải carbon, bảo tồn đa dạng sinh học\n3. Thay vì theo đuổi lợi nhuận ngắn hạn, cần tích hợp trách nhiệm xã hội\n4. Đưa góc nhìn khác (không hẳn mâu thuẫn)\n5. Lợi thế cạnh tranh dài hạn trên thị trường quốc tế\n\nPhân tích liên từ: Bài đọc dùng đầy đủ 7 liên từ phức tạp — 'do đó', 'tuy nhiên', 'mặt khác', 'vì vậy', 'ngoài ra', 'thay vì', 'không những...mà còn' — tạo lập luận chặt chẽ về phát triển bền vững."
@@ -5571,7 +5400,6 @@
                   "example_translation": "The Mekong Delta is severely affected by saltwater intrusion.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ngap man",
                   "region": "STANDARD",
                   "translation": "saltwater intrusion",
                   "word": "ngập mặn"
@@ -5591,7 +5419,6 @@
                   "example_translation": "Central Vietnam suffers from severe storms and floods.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bao lu",
                   "region": "STANDARD",
                   "translation": "storm and flood",
                   "word": "bão lũ"
@@ -5611,7 +5438,6 @@
                   "example_translation": "A green growth strategy has been established.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tang truong xanh",
                   "region": "STANDARD",
                   "translation": "green growth",
                   "word": "tăng trưởng xanh"
@@ -5631,7 +5457,6 @@
                   "example_translation": "Enterprises need to integrate social responsibility into their strategy.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "trach nhiem xa hoi",
                   "region": "STANDARD",
                   "translation": "social responsibility",
                   "word": "trách nhiệm xã hội"
@@ -5724,7 +5549,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Listening exercise: Discussion about climate change in Vietnam. (Read as if listening, since no audio yet.)",
                   "video_url": null,
                   "vietnamese_text": "Bài nghe: Thảo luận về biến đổi khí hậu tại Việt Nam\n\n(Nghe đoạn hội thoại và trả lời câu hỏi. Do chưa có audio thật, hãy đọc văn bản dưới đây như thể đang nghe.)\n\nBiên bản thảo luận:\nNăm nay, Việt Nam xếp thứ 6 trong bảng xếp hạng các quốc gia bị ảnh hưởng nặng nhất bởi thiên tai. Cực Nam Đồng bằng sông Cửu Long đối mặt với ngập mặn và sụt lún. Miền Trung chịu bão lũ khắc nghiệt. Do đó, chính phủ cần hành động khẩn trương.\n\nTuy nhiên, không phải lúc nào nguồn lực cũng đủ. Mặt khác, sự hợp tác quốc tế đóng vai trò quan trọng. Ngoài ra, mỗi cá nhân cũng cần thay đổi thói quen: thay vì dùng xe cá nhân, hãy đi xe buýt; thay vì dùng túi nilon, hãy dùng túi tái chế. Không những giúp bảo vệ môi trường mà còn tiết kiệm chi phí."
@@ -5735,7 +5559,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Listening comprehension questions about the climate change discussion.",
                   "video_url": null,
                   "vietnamese_text": "Câu hỏi nghe hiểu:\n1. Việt Nam xếp thứ mấy trong bảng xếp hạng bị ảnh hưởng bởi thiên tai?\n2. Đồng bằng sông Cửu Long đối mặt với vấn đề gì?\n3. Theo bài nghe, cá nhân nên làm gì thay vì dùng xe cá nhân?\n4. Liên từ 'mặt khác' trong bài dùng để gì?\n5. Việc bảo vệ môi trường còn mang lại lợi ích gì cho cá nhân?"
@@ -5746,7 +5569,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Answer key and analysis note about identifying conjunctions while listening.",
                   "video_url": null,
                   "vietnamese_text": "Gợi ý trả lời:\n1. Thứ 6\n2. Ngập mặn và sụt lún\n3. Đi xe buýt\n4. Đưa góc nhìn khác về nguồn lực và hợp tác quốc tế\n5. Tiết kiệm chi phí\n\nLưu ý: Bài nghe mô phỏng cuộc thảo luận thực tế, dùng các liên từ phức tạp để chuyển ý mượt mà: 'do đó' (nguyên nhân→kết quả), 'tuy nhiên' (tương phản), 'mặt khác' (góc nhìn khác), 'ngoài ra' (bổ sung), 'thay vì' (thay thế), 'không những...mà còn' (tăng tiến). Việc nhận diện liên từ khi nghe giúp hiểu cấu trúc lập luận nhanh hơn."
@@ -5771,7 +5593,6 @@
                   "example_translation": "Natural disasters are increasingly severe due to climate change.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thien tai",
                   "region": "STANDARD",
                   "translation": "natural disaster",
                   "word": "thiên tai"
@@ -5791,7 +5612,6 @@
                   "example_translation": "Land subsidence in the Mekong Delta is very serious.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sut lun",
                   "region": "STANDARD",
                   "translation": "land subsidence",
                   "word": "sụt lún"
@@ -5811,7 +5631,6 @@
                   "example_translation": "International cooperation is necessary to cope with climate change.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hop tac quoc te",
                   "region": "STANDARD",
                   "translation": "international cooperation",
                   "word": "hợp tác quốc tế"

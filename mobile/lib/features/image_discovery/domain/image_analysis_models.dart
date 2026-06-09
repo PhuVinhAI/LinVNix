@@ -34,7 +34,6 @@ class ImageAnalysisVocabulary {
   const ImageAnalysisVocabulary({
     required this.word,
     required this.translation,
-    this.phonetic,
     this.partOfSpeech,
     this.exampleSentence,
     this.exampleTranslation,
@@ -43,7 +42,6 @@ class ImageAnalysisVocabulary {
 
   final String word;
   final String translation;
-  final String? phonetic;
   final String? partOfSpeech;
   final String? exampleSentence;
   final String? exampleTranslation;
@@ -53,7 +51,6 @@ class ImageAnalysisVocabulary {
     return ImageAnalysisVocabulary(
       word: json['word'] as String,
       translation: json['translation'] as String,
-      phonetic: json['phonetic'] as String?,
       partOfSpeech: json['partOfSpeech'] as String?,
       exampleSentence: json['exampleSentence'] as String?,
       exampleTranslation: json['exampleTranslation'] as String?,
@@ -64,7 +61,6 @@ class ImageAnalysisVocabulary {
   Map<String, dynamic> toJson() => {
     'word': word,
     'translation': translation,
-    if (phonetic != null) 'phonetic': phonetic,
     if (partOfSpeech != null) 'partOfSpeech': partOfSpeech,
     if (exampleSentence != null) 'exampleSentence': exampleSentence,
     if (exampleTranslation != null) 'exampleTranslation': exampleTranslation,

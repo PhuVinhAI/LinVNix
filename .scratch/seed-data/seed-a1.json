@@ -186,7 +186,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese people greet each other depending on the time of day and the level of intimacy. 'Xin chào' is the most common greeting, usable in all situations. When greeting older people, they usually add appropriate personal pronouns like 'cháu chào ông' (grandchild greets grandfather), 'em chào anh' (younger sibling greets older brother).",
                   "video_url": null,
                   "vietnamese_text": "Người Việt chào nhau tuỳ theo thời gian trong ngày và mức độ thân thiết. 'Xin chào' là cách chào phổ biến nhất, dùng được trong mọi tình huống. Khi chào người lớn tuổi hơn, thường thêm đại từ nhân xưng phù hợp như 'cháu chào ông', 'em chào anh'."
@@ -197,7 +196,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Like English, Vietnamese also has greetings by time of day: 'Chào buổi sáng' (morning), 'Chào buổi chiều' (afternoon), 'Chào buổi tối' (evening). However, in daily communication, Vietnamese people usually just say a simple 'Chào anh/chị' or 'Xin chào'.",
                   "video_url": null,
                   "vietnamese_text": "Giống như tiếng Anh, tiếng Việt cũng có chào theo buổi: 'Chào buổi sáng' (sáng), 'Chào buổi chiều' (chiều), 'Chào buổi tối' (tối). Tuy nhiên trong giao tiếp hàng ngày, người Việt thường chỉ nói 'Chào anh/chị' hoặc 'Xin chào' đơn giản."
@@ -208,7 +206,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "'Cảm ơn' is used to express gratitude. 'Xin lỗi' is used when you want to apologize, ask to pass by, or ask a question. 'Xin mời' is used when inviting someone to go ahead or inviting someone to eat/drink.",
                   "video_url": null,
                   "vietnamese_text": "'Cảm ơn' dùng để bày tỏ lòng biết ơn. 'Xin lỗi' dùng khi muốn xin lỗi hoặc muốn xin phép đi qua, xin phép hỏi gì đó. 'Xin mời' dùng khi mời ai đó đi trước hoặc mời ai dùng cơm nước."
@@ -219,7 +216,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Nam: Hello! I am Nam.\nLan: Hello! I am Lan. Very nice to meet you.\nNam: Thank you! Me too.",
                   "video_url": null,
                   "vietnamese_text": "Nam: Xin chào! Tôi là Nam.\nLan: Chào bạn! Tôi là Lan. Rất vui được gặp bạn.\nNam: Cảm ơn! Tôi cũng rất vui.",
@@ -275,7 +271,6 @@
                   "example_translation": "Hello, I am Nam.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "sin chow",
                   "region": "STANDARD",
                   "translation": "hello",
                   "word": "xin chào"
@@ -295,7 +290,6 @@
                   "example_translation": "Thank you very much!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "gam uhn",
                   "region": "STANDARD",
                   "translation": "thank you",
                   "word": "cảm ơn"
@@ -315,7 +309,6 @@
                   "example_translation": "Goodbye!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "tam bee-et",
                   "region": "STANDARD",
                   "translation": "goodbye",
                   "word": "tạm biệt"
@@ -335,7 +328,6 @@
                   "example_translation": "Excuse me, let me ask for directions.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "sin loy",
                   "region": "STANDARD",
                   "translation": "sorry / excuse me",
                   "word": "xin lỗi"
@@ -355,7 +347,6 @@
                   "example_translation": "Please come in.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "sin muh-ee",
                   "region": "STANDARD",
                   "translation": "please (inviting)",
                   "word": "xin mời"
@@ -375,7 +366,6 @@
                   "example_translation": "Good morning, ma'am!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "chow bwooy sang",
                   "region": "STANDARD",
                   "translation": "good morning",
                   "word": "chào buổi sáng"
@@ -395,7 +385,6 @@
                   "example_translation": "Good afternoon!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "chow bwooy chee-uh",
                   "region": "STANDARD",
                   "translation": "good afternoon",
                   "word": "chào buổi chiều"
@@ -415,7 +404,6 @@
                   "example_translation": "Good evening, sir!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "chow bwooy toy",
                   "region": "STANDARD",
                   "translation": "good evening",
                   "word": "chào buổi tối"
@@ -440,7 +428,6 @@
                   "example_translation": "Yes, I understand.",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "vuhng",
                   "region": "STANDARD",
                   "translation": "yes (polite)",
                   "word": "vâng"
@@ -460,7 +447,6 @@
                   "example_translation": "No, thank you.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "khohm",
                   "region": "STANDARD",
                   "translation": "no / not",
                   "word": "không"
@@ -480,7 +466,6 @@
                   "example_translation": "Very nice to meet you!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "ret vooy",
                   "region": "STANDARD",
                   "translation": "very happy / pleased",
                   "word": "rất vui"
@@ -500,7 +485,6 @@
                   "example_translation": "See you again!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "hen gap lie",
                   "region": "STANDARD",
                   "translation": "see you again",
                   "word": "hẹn gặp lại"
@@ -520,7 +504,6 @@
                   "example_translation": "Okay, I agree.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "duh-uhk",
                   "region": "STANDARD",
                   "translation": "can / okay",
                   "word": "được"
@@ -607,7 +590,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In this lesson you will listen to a short greeting dialogue between Nam and Lan. Focus on hello phrases, introductions, and polite responses from lesson 1.",
                   "video_url": null,
                   "vietnamese_text": "Trong bài này, bạn sẽ nghe một hội thoại chào hỏi ngắn giữa Nam và Lan. Hãy chú ý các cụm chào hỏi, giới thiệu và đáp lịch sự từ bài từ vựng trước."
@@ -618,7 +600,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Nam: Hello! I am Nam.\nLan: Hello! I am Lan. Very nice to meet you.\nNam: Thank you! Me too.",
                   "video_url": null,
                   "vietnamese_text": "Nam: Xin chào! Tôi là Nam.\nLan: Chào bạn! Tôi là Lan. Rất vui được gặp bạn.\nNam: Cảm ơn! Tôi cũng rất vui.",
@@ -674,7 +655,6 @@
                   "example_translation": "Hello, I am Nam.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "sin chow",
                   "region": "STANDARD",
                   "translation": "hello",
                   "word": "xin chào"
@@ -694,7 +674,6 @@
                   "example_translation": "Thank you very much!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "gam uhn",
                   "region": "STANDARD",
                   "translation": "thank you",
                   "word": "cảm ơn"
@@ -714,7 +693,6 @@
                   "example_translation": "Very nice to meet you!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "ret vooy",
                   "region": "STANDARD",
                   "translation": "very happy / pleased",
                   "word": "rất vui"
@@ -968,7 +946,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese follows the Subject (S) - Verb (V) - Object (O) structure, similar to English. For example: 'Tôi ăn cơm' (I eat rice). The word order is fixed: Subject + Verb + Object.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt theo cấu trúc Chủ ngữ (S) - Động từ (V) - Tân ngữ (O), giống tiếng Anh. Ví dụ: 'Tôi ăn cơm' (I eat rice). Thứ tự từ cố định: Chủ + Động từ + Tân ngữ."
@@ -979,7 +956,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Vietnamese does not have a single 'I/you' pronoun. The choice of pronoun depends on age, gender, and social relationships. 'Tôi' is a neutral, polite pronoun. 'Bạn' is used for friends or peers. 'Anh' is for a slightly older male, 'Chị' for a slightly older female, and 'Em' for a younger person.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt không có đại từ 'I/you' duy nhất. Lựa chọn đại từ phụ thuộc vào tuổi tác, giới tính và quan hệ xã hội. 'Tôi' là đại từ trung lập, lịch sự. 'Bạn' dùng cho bạn bè hoặc người cùng tuổi. 'Anh' cho nam lớn tuổi hơn một chút, 'Chị' cho nữ lớn tuổi hơn một chút, 'Em' cho người nhỏ tuổi hơn."
@@ -990,7 +966,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "To introduce your name: 'Tôi là + name' or 'Tôi tên là + name'. For example: 'Tôi là Nam', 'Tôi tên là Lan'. To talk about origin: 'Tôi từ + location' or 'Tôi ở + location'.",
                   "video_url": null,
                   "vietnamese_text": "Để giới thiệu tên: 'Tôi là + tên' hoặc 'Tôi tên là + tên'. Ví dụ: 'Tôi là Nam', 'Tôi tên là Lan'. Để nói quê quán: 'Tôi từ + địa điểm' hoặc 'Tôi ở + địa điểm'."
@@ -1001,7 +976,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Nam: Hello! My name is Nam. I am from Hanoi.\nLan: Hello Nam! I am Lan. I live in Ho Chi Minh City.\nNam: Very nice to meet you, Lan!\nLan: Me too. See you again!",
                   "video_url": null,
                   "vietnamese_text": "Nam: Xin chào! Tôi tên là Nam. Tôi từ Hà Nội.\nLan: Chào Nam! Tôi là Lan. Tôi ở TP. Hồ Chí Minh.\nNam: Rất vui được gặp bạn, Lan!\nLan: Tôi cũng vậy. Hẹn gặp lại nhé!",
@@ -1062,7 +1036,6 @@
                   "example_translation": "I am a student.",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "toy",
                   "region": "STANDARD",
                   "translation": "I / me (polite neutral)",
                   "word": "tôi"
@@ -1082,7 +1055,6 @@
                   "example_translation": "What is your name?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "bahn",
                   "region": "STANDARD",
                   "translation": "you / friend",
                   "word": "bạn"
@@ -1102,7 +1074,6 @@
                   "example_translation": "What is your name? (to older male)",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "ainh",
                   "region": "STANDARD",
                   "translation": "older brother / you (to older male)",
                   "word": "anh"
@@ -1122,7 +1093,6 @@
                   "example_translation": "Where do you come from? (to older female)",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "chee",
                   "region": "STANDARD",
                   "translation": "older sister / you (to older female)",
                   "word": "chị"
@@ -1142,7 +1112,6 @@
                   "example_translation": "How old are you? (to younger person)",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "em",
                   "region": "STANDARD",
                   "translation": "younger sibling / you (to younger person)",
                   "word": "em"
@@ -1162,7 +1131,6 @@
                   "example_translation": "I am a teacher.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "lah",
                   "region": "STANDARD",
                   "translation": "to be (copula)",
                   "word": "là"
@@ -1182,7 +1150,6 @@
                   "example_translation": "What is your name?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ten",
                   "region": "STANDARD",
                   "translation": "name",
                   "word": "tên"
@@ -1202,7 +1169,6 @@
                   "example_translation": "What is this?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "gee",
                   "region": "STANDARD",
                   "translation": "what",
                   "word": "gì"
@@ -1339,7 +1305,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese has 6 tones, indicated by marks on vowels:\n1. Flat tone (no mark): ba (three)\n2. Falling tone (grave mark): bà (grandma)\n3. Rising tone (acute mark): bá (hug)\n4. Asking tone (hook mark): bả (bait)\n5. Tumbling tone (tilde mark): bã (residue)\n6. Heavy tone (dot below): bạ (to strengthen)\n\nWords with the same spelling but different tones have completely different meanings!",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt có 6 thanh điệu, ký hiệu bằng dấu trên nguyên âm:\n1. Thanh ngang (không dấu): ba (three)\n2. Thanh huyền (dấu huyền): bà (grandma)\n3. Thanh sắc (dấu sắc): bá (hug)\n4. Thanh hỏi (dấu hỏi): bả (bait)\n5. Thanh ngã (dấu ngã): bã (residue)\n6. Thanh nặng (dấu nặng): bạ (to strengthen)\n\nTừ cùng âm nhưng khác thanh thì nghĩa khác hoàn toàn!"
@@ -1350,7 +1315,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Some initial Vietnamese consonants are difficult to pronounce:\n- đ (/ɗ/): an implosive stop, like d but with air drawn in. Try saying 'dawn' while sucking air inward.\n- ng (/ŋ/): like ng in 'singer' (no g sound following). Example: ngủ (sleep).\n- ngh (/ŋ/): same sound as ng but spelled before i/y/ê. Example: nghỉ (rest).\n- kh (/x/): like ch in German 'Bach'. Example: không (no).\n- th (/tʰ/): like t in 'top' but strongly aspirated. NOT like th in 'think'. Example: thì (then).\n- ph (/f/): like f in 'fun'. Example: phở (pho).",
                   "video_url": null,
                   "vietnamese_text": "Một số phụ âm đầu tiếng Việt khó phát âm:\n- đ (/ɗ/): âm tắc bật hơi, như d nhưng bật hơi vào. Thử nói dawn với hơi hút vào trong.\n- ng (/ŋ/): như ng trong singer (không có g theo sau). Ví dụ: ngủ (sleep).\n- ngh (/ŋ/): cùng âm ng nhưng đứng trước i/y/ê. Ví dụ: nghỉ (rest).\n- kh (/x/): như ch trong tiếng Đức Bach. Ví dụ: không (no).\n- th (/tʰ/): như t trong top nhưng bật hơi mạnh. KHÔNG giống th trong think. Ví dụ: thì (then).\n- ph (/f/): như f trong fun. Ví dụ: phở (pho)."
@@ -1361,7 +1325,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Vietnamese has vowels not found in English:\n- ư (/ɯ/): a central unrounded vowel. Try saying 'oo' in 'boot' but pull your lips flat.\n- ơ (/ɤ/): similar to ư but with a more open mouth. Try saying 'uh' in 'fur' without the r sound.\n- ă (/ă/): a short vowel, like a in 'hat' but very short.\n- â (/ə̆/): like a in 'about', very short.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt có nguyên âm không có trong tiếng Anh:\n- ư (/ɯ/): âm giữa lưỡi, môi không tròn. Thử nói oo trong boot nhưng môi kéo dẹp ra.\n- ơ (/ɤ/): giống ư nhưng miệng mở hơn. Thử nói uh trong fur nhưng không có âm r.\n- ă (/ă/): nguyên âm ngắn, như a trong hat nhưng rất ngắn.\n- â (/ə̆/): như a trong about, rất ngắn."
@@ -1372,7 +1335,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Some major regional differences:\n- Northern dialect: ch and tr are pronounced the same (/c/). s and x are pronounced the same (/s/). d, gi, r are all read as /z/.\n- Southern dialect: ch and tr are distinguished more clearly. d and gi are read as /j/ (like y). r is read as /r/ or /ʐ/.\n- Southern dialect: v is often read as /j/ in colloquial speech, same as d.",
                   "video_url": null,
                   "vietnamese_text": "Một số khác biệt lớn:\n- Miền Bắc: ch và tr phát âm giống nhau (/c/). s và x phát âm giống nhau (/s/). d, gi, r đều đọc là /z/.\n- Miền Nam: ch và tr phân biệt rõ hơn. d và gi đọc là /j/ (như y). r đọc là /r/ hoặc /ʐ/.\n- Miền Nam: v thường đọc là /j/ trong khẩu ngữ, giống d."
@@ -1397,7 +1359,6 @@
                   "example_translation": "Three people.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bah",
                   "region": "STANDARD",
                   "translation": "three / dad (Southern)",
                   "word": "ba"
@@ -1417,7 +1378,6 @@
                   "example_translation": "Grandmother is very kind.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bah (falling tone)",
                   "region": "STANDARD",
                   "translation": "grandmother / lady",
                   "word": "bà"
@@ -1437,7 +1397,6 @@
                   "example_translation": "I'm well, thank you.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "khweh",
                   "region": "STANDARD",
                   "translation": "healthy / well",
                   "word": "khỏe"
@@ -1457,7 +1416,6 @@
                   "example_translation": "This year I am twenty years old.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nuhm",
                   "region": "STANDARD",
                   "translation": "year / five",
                   "word": "năm"
@@ -1543,7 +1501,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese people highly value addressing others based on age. When meeting strangers, Vietnamese people often ask for age to address them correctly. Using the wrong pronoun can be considered impolite. Basic rules:\n- Much older people: call them 'ông' (male) or 'bà' (female), refer to yourself as 'cháu'\n- Slightly older people: call them 'anh' (male) or 'chị' (female), refer to yourself as 'em'\n- Younger people: call them 'em', refer to yourself as 'anh/chị'\n- Peers/friends: call them 'bạn', refer to yourself as 'tôi'",
                   "video_url": null,
                   "vietnamese_text": "Người Việt rất coi trọng xưng hô theo tuổi tác. Khi gặp người lạ, người Việt thường hỏi tuổi để xưng hô cho đúng. Gọi sai đại từ có thể bị coi là bất lịch sự. Quy tắc cơ bản:\n- Người lớn tuổi hơn nhiều: gọi là ông (nam) hoặc bà (nữ), xưng là cháu\n- Người lớn tuổi hơn một chút: gọi là anh (nam) hoặc chị (nữ), xưng là em\n- Người nhỏ tuổi hơn: gọi là em, xưng là anh/chị\n- Người cùng tuổi: gọi là bạn, xưng là tôi"
@@ -1554,7 +1511,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Vietnamese people use 'dạ' or 'vâng' to respond to older people, showing respect. 'ạ' is added to the end of sentences to express politeness. For example: 'Cháu chào ông ạ' (I greet you, grandfather), 'Dạ, cháu hiểu rồi ạ' (Yes, I understand). The Southern dialect uses 'dạ' very often, even when not explicitly answering 'yes'. This is a characteristic of Southern communication culture.",
                   "video_url": null,
                   "vietnamese_text": "Người Việt dùng dạ hoặc vâng để đáp lại người lớn tuổi, thể hiện sự tôn trọng. ạ thêm cuối câu để thể hiện sự kính trọng. Ví dụ: 'Cháu chào ông ạ', 'Dạ, cháu hiểu rồi ạ'. Miền Nam dùng dạ rất nhiều, cả khi không cần trả lời yes. Đây là đặc trưng văn hóa giao tiếp miền Nam."
@@ -1565,7 +1521,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Vietnamese people often bow slightly when greeting, especially to older people. Handshakes are common in office environments, but between men and women, it is customary to wait for the woman to extend her hand first. In families, younger members fold their arms when greeting elders — a custom called 'chào lạy' or 'thưa'.",
                   "video_url": null,
                   "vietnamese_text": "Người Việt thường cúi nhẹ đầu khi chào, đặc biệt với người lớn tuổi. Bắt tay phổ biến trong môi trường công sở, nhưng giữa nam và nữ, thường đợi nữ đưa tay ra trước. Trong gia đình, người nhỏ tuổi khoanh tay chào người lớn tuổi — phong tục gọi là 'chào lạy' hoặc 'thưa'."
@@ -1590,7 +1545,6 @@
                   "example_translation": "Hello, grandfather.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ohng",
                   "region": "STANDARD",
                   "translation": "grandfather / Mr. (elderly man)",
                   "word": "ông"
@@ -1610,7 +1564,6 @@
                   "example_translation": "Yes, I hear you.",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "yah",
                   "region": "STANDARD",
                   "translation": "yes (respectful Southern/Central)",
                   "word": "dạ"
@@ -1630,7 +1583,6 @@
                   "example_translation": "Hello, aunt! (respectful)",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "uh",
                   "region": "STANDARD",
                   "translation": "respectful sentence-final particle",
                   "word": "ạ"
@@ -1799,7 +1751,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese counts numbers in the decimal system. 1 to 10 are the foundation:\n1 - một\n2 - hai\n3 - ba\n4 - bốn\n5 - năm\n6 - sáu\n7 - bảy\n8 - tám\n9 - chín\n10 - mười\n\nFrom 11-19: mười + unit number. For example: mười một (11), mười hai (12).",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt đếm số theo hệ thập phân. Từ 1 đến 10 là nền tảng:\n1 - một\n2 - hai\n3 - ba\n4 - bốn\n5 - năm\n6 - sáu\n7 - bảy\n8 - tám\n9 - chín\n10 - mười\n\nTừ 11-19: mười + số đơn vị. Ví dụ: mười một (11), mười hai (12)."
@@ -1810,7 +1761,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "20 = hai mươi (not hai mười)\n21 = hai mươi mốt (note: 'mốt' replaces 'một' after tens)\n30 = ba mươi\n100 = một trăm\n1,000 = một nghìn (Northern) / một ngàn (Southern)\n\nNote: 'năm' (5) when combined with tens sometimes changes to 'lăm': hai mươi lăm (25).",
                   "video_url": null,
                   "vietnamese_text": "20 = hai mươi (không phải hai mười)\n21 = hai mươi mốt (lưu ý: mốt thay cho một sau hàng chục)\n30 = ba mươi\n100 = một trăm\n1.000 = một nghìn (miền Bắc) / một ngàn (miền Nam)\n\nLưu ý: năm (5) khi ghép số đôi khi đổi thành lăm: hai mươi lăm (25)."
@@ -1821,7 +1771,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Lan: How much is one banh mi?\nSeller: Five thousand dong each, ma'am.\nLan: Give me two, please.\nSeller: That is ten thousand dong.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Bánh mì bao nhiêu tiền một cái?\nHàng: Năm nghìn đồng một cái ạ.\nLan: Cho tôi hai cái.\nHàng: Mười nghìn đồng ạ.",
@@ -1882,7 +1831,6 @@
                   "example_translation": "One person.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "moht",
                   "region": "STANDARD",
                   "translation": "one",
                   "word": "một"
@@ -1902,7 +1850,6 @@
                   "example_translation": "Two books.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "hai",
                   "region": "STANDARD",
                   "translation": "two",
                   "word": "hai"
@@ -1922,7 +1869,6 @@
                   "example_translation": "Three oranges.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "bah",
                   "region": "STANDARD",
                   "translation": "three",
                   "word": "ba"
@@ -1942,7 +1888,6 @@
                   "example_translation": "Four friends.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "bohn",
                   "region": "STANDARD",
                   "translation": "four",
                   "word": "bốn"
@@ -1962,7 +1907,6 @@
                   "example_translation": "Five books.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "nuhm",
                   "region": "STANDARD",
                   "translation": "five",
                   "word": "năm"
@@ -1982,7 +1926,6 @@
                   "example_translation": "Six tables.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "sow",
                   "region": "STANDARD",
                   "translation": "six",
                   "word": "sáu"
@@ -2002,7 +1945,6 @@
                   "example_translation": "Seven days.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "bay",
                   "region": "STANDARD",
                   "translation": "seven",
                   "word": "bảy"
@@ -2022,7 +1964,6 @@
                   "example_translation": "Eight in the morning.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "tahm",
                   "region": "STANDARD",
                   "translation": "eight",
                   "word": "tám"
@@ -2042,7 +1983,6 @@
                   "example_translation": "Nine people.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "cheen",
                   "region": "STANDARD",
                   "translation": "nine",
                   "word": "chín"
@@ -2062,7 +2002,6 @@
                   "example_translation": "Ten students.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "muh-ee",
                   "region": "STANDARD",
                   "translation": "ten",
                   "word": "mười"
@@ -2082,7 +2021,6 @@
                   "example_translation": "One hundred people.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "chahm",
                   "region": "STANDARD",
                   "translation": "hundred",
                   "word": "trăm"
@@ -2102,7 +2040,6 @@
                   "example_translation": "Five thousand dong.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "ngeen",
                   "region": "STANDARD",
                   "translation": "thousand",
                   "word": "nghìn"
@@ -2122,7 +2059,6 @@
                   "example_translation": "Twenty-five.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "muh-ee",
                   "region": "STANDARD",
                   "translation": "tens (compound numeral suffix)",
                   "word": "mươi"
@@ -2142,7 +2078,6 @@
                   "example_translation": "Many people are here.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "nhieu",
                   "region": "STANDARD",
                   "translation": "many / much",
                   "word": "nhiều"
@@ -2162,7 +2097,6 @@
                   "example_translation": "Just a little water.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "eet",
                   "region": "STANDARD",
                   "translation": "few / little",
                   "word": "ít"
@@ -2368,7 +2302,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "When counting countable nouns, Vietnamese requires a classifier between the number and the noun: number + classifier + noun. For example: 'hai con mèo' (two cats), 'ba quyển sách' (three books). Do not omit the classifier when there is a number!",
                   "video_url": null,
                   "vietnamese_text": "Khi đếm danh từ đếm được, tiếng Việt cần phân loại từ (classifier) giữa số và danh từ: số + classifier + danh từ. Ví dụ: 'hai con mèo' (two cats), 'ba quyển sách' (three books). Không bỏ classifier khi có số!"
@@ -2379,7 +2312,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "- cái: inanimate objects (table, chair, house)\n- con: animals, children (cat, dog, fish)\n- người: people (friend, student)\n- quyển/cuốn: books, notebooks\n- quả/trái: fruits, round objects (orange, lemon, ball)\n- chiếc: vehicles, clothes, small objects\n- cây: plants, long objects (pen, gun)\n- bài: songs, poems\n- bữa: meals (breakfast, lunch)",
                   "video_url": null,
                   "vietnamese_text": "- cái: vật vô tri (bàn, ghế, nhà)\n- con: động vật, trẻ em (mèo, chó, cá)\n- người: người (bạn, học sinh)\n- quyển/cuốn: sách, vở\n- quả/trái: quả, cầu (cam, chanh, bóng)\n- chiếc: xe, quần áo, đồ vật nhỏ\n- cây: cây, vật dài (bút, súng)\n- bài: bài hát, bài thơ\n- bữa: bữa ăn (bữa sáng, bữa trưa)"
@@ -2390,7 +2322,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "'Bao nhiêu?' = how much/how many (neutral). 'Mấy?' = how many (few, informal). Structure: [noun] + bao nhiêu? or mấy + classifier + [noun]?\nExample: 'Cái bàn này bao nhiêu tiền?' (How much is this table?)\n'Em có mấy anh chị em?' (How many siblings do you have?)",
                   "video_url": null,
                   "vietnamese_text": "'Bao nhiêu?' = how much/how many (trung lập). 'Mấy?' = how many (ít, thân mật). Cấu trúc: [danh từ] + bao nhiêu? hoặc mấy + classifier + [danh từ]?\nVí dụ: 'Cái bàn này bao nhiêu tiền?' (How much is this table?)\n'Em có mấy anh chị em?' (How many siblings do you have?)"
@@ -2415,7 +2346,6 @@
                   "example_translation": "Two tables.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "kai",
                   "region": "STANDARD",
                   "translation": "classifier for inanimate objects",
                   "word": "cái"
@@ -2435,7 +2365,6 @@
                   "example_translation": "Three cats.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "kohn",
                   "region": "STANDARD",
                   "translation": "classifier for animals/children",
                   "word": "con"
@@ -2455,7 +2384,6 @@
                   "example_translation": "Five friends.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "ngu-oy",
                   "region": "STANDARD",
                   "translation": "classifier for people / person",
                   "word": "người"
@@ -2475,7 +2403,6 @@
                   "example_translation": "Two books.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "kwyeen",
                   "region": "STANDARD",
                   "translation": "classifier for books",
                   "word": "quyển"
@@ -2495,7 +2422,6 @@
                   "example_translation": "Three oranges.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "kwah",
                   "region": "STANDARD",
                   "translation": "classifier for round objects/fruits",
                   "word": "quả"
@@ -2515,7 +2441,6 @@
                   "example_translation": "One vehicle.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "chee-uk",
                   "region": "STANDARD",
                   "translation": "classifier for vehicles/clothes/small objects",
                   "word": "chiếc"
@@ -2535,7 +2460,6 @@
                   "example_translation": "Two pens.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "kay",
                   "region": "STANDARD",
                   "translation": "classifier for trees/stick-like objects",
                   "word": "cây"
@@ -2555,7 +2479,6 @@
                   "example_translation": "One song.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "bai",
                   "region": "STANDARD",
                   "translation": "classifier for songs/poems/lessons",
                   "word": "bài"
@@ -2575,7 +2498,6 @@
                   "example_translation": "Three meals a day.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "buh-uh",
                   "region": "STANDARD",
                   "translation": "classifier for meals",
                   "word": "bữa"
@@ -2595,7 +2517,6 @@
                   "example_translation": "How much money?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "bow nhieu",
                   "region": "STANDARD",
                   "translation": "how much / how many",
                   "word": "bao nhiêu"
@@ -2615,7 +2536,6 @@
                   "example_translation": "How many older brothers do you have?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "may",
                   "region": "STANDARD",
                   "translation": "how many (small number, informal)",
                   "word": "mấy"
@@ -2731,7 +2651,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "With the same syllable, different tones lead to completely different meanings:\n- ba (flat): ba (three)\n- bà (grave): bà (grandmother)\n- bá (acute): bá (to hug)\n- bả (hook): bả (bait)\n- bã (tilde): bã (residue)\n- bạ (dot below): bạ (to strengthen)",
                   "video_url": null,
                   "vietnamese_text": "Cùng một âm tiết, khác thanh điệu thì nghĩa khác hoàn toàn:\n- ba (ngang): ba (three)\n- bà (huyền): bà (grandmother)\n- bá (sắc): bá (to hug)\n- bả (hỏi): bả (bait)\n- bã (ngã): bã (residue)\n- bạ (nặng): bạ (to strengthen)"
@@ -2742,7 +2661,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Many numbers have rising (acute) or falling (grave) tones:\n- Rising tone: bốn (4), sáu (6), chín (9)\n- Falling tone: hai (2), mười (10), nghìn (thousand)\n- Flat tone: ba (3), năm (5)\n- Heavy tone: tám (8)",
                   "video_url": null,
                   "vietnamese_text": "Nhiều số có thanh sắc hoặc thanh huyền:\n- Thanh sắc: bốn (4), sáu (6), chín (9)\n- Thanh huyền: hai (2), mười (10), nghìn (thousand)\n- Thanh ngang: ba (3), năm (5)\n- Thanh nặng: tám (8)"
@@ -2753,7 +2671,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "The asking tone (̉) and the tumbling tone (~) are very easily confused:\n- Asking tone: voice goes down then up (like asking 'really?'): bảy (7), mấy (how many)\n- Tumbling tone: voice goes up but with a glottal stop: bã (residue)\n\nTip: The asking tone sounds like asking a question, the tumbling tone sounds like a slight catch in the throat. Southerners usually do not distinguish these two tones.",
                   "video_url": null,
                   "vietnamese_text": "Thanh hỏi (̉) và thanh ngã (~) rất dễ nhầm lẫn:\n- Thanh hỏi: giọng đi xuống rồi lên (như hỏi really?): bảy (7), mấy (how many)\n- Thanh ngã: giọng đi lên nhưng có bật hơi: bã (residue)\n\nMẹo: Thanh hỏi nghe như đang hỏi, thanh ngã nghe như bị nghẹn. Người miền Nam thường không phân biệt hai thanh này."
@@ -2778,7 +2695,6 @@
                   "example_translation": "What time is it now?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "yoh",
                   "region": "STANDARD",
                   "translation": "hour / o'clock",
                   "word": "giờ"
@@ -2798,7 +2714,6 @@
                   "example_translation": "In ten minutes.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "foot",
                   "region": "STANDARD",
                   "translation": "minute",
                   "word": "phút"
@@ -2818,7 +2733,6 @@
                   "example_translation": "What day is today?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ngai",
                   "region": "STANDARD",
                   "translation": "day",
                   "word": "ngày"
@@ -2838,7 +2752,6 @@
                   "example_translation": "A week has seven days.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "twan",
                   "region": "STANDARD",
                   "translation": "week",
                   "word": "tuần"
@@ -2858,7 +2771,6 @@
                   "example_translation": "January.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thang",
                   "region": "STANDARD",
                   "translation": "month",
                   "word": "tháng"
@@ -3027,7 +2939,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "A nuclear family consists of: bố/ba/cha (father), mẹ/má (mother), anh trai (older brother), chị gái (older sister), em trai (younger brother), em gái (younger sister). Note: 'anh' and 'chị' are older by default, 'em' is younger by default. Add 'trai' (male) or 'gái' (female) to specify gender.",
                   "video_url": null,
                   "vietnamese_text": "Gia đình nhỏ (hạt nhân) gồm: bố/ba/cha (father), mẹ/má (mother), anh trai (older brother), chị gái (older sister), em trai (younger brother), em gái (younger sister). Chú ý: anh và chị mặc định là lớn tuổi hơn, em mặc định nhỏ tuổi hơn. Thêm trai hay gái để chỉ giới tính."
@@ -3038,7 +2949,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Ông (grandfather), bà (grandmother), chú (father's younger brother), cô (father's sister), cậu (mother's brother), dì (mother's sister), bác (parent's older sibling). Vietnamese people clearly distinguish paternal (bên nội) and maternal (bên ngoại) sides: ông nội vs ông ngoại, bà nội vs bà ngoại.",
                   "video_url": null,
                   "vietnamese_text": "Ông (grandfather), bà (grandmother), chú (father's younger brother), cô (father's sister), cậu (mother's brother), dì (mother's sister), bác (parent's older sibling). Người Việt phân biệt rất rõ bên nội (paternal) và bên ngoại (maternal): ông nội vs ông ngoại, bà nội vs bà ngoại."
@@ -3049,7 +2959,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "The same person is called differently depending on the region:\n- Bố (North) = Cha (Central) = Ba (South)\n- Mẹ (North) = Mẹ (Central) = Má (South)\n- Cô (North) = O (Central, father's sister)\nThis is important to note when communicating with people from other regions!",
                   "video_url": null,
                   "vietnamese_text": "Cùng một người nhưng gọi khác nhau theo miền:\n- Bố (Bắc) = Cha (Trung) = Ba (Nam)\n- Mẹ (Bắc) = Mẹ (Trung) = Má (Nam)\n- Cô (Bắc) = O (Trung, cha em gái)\nĐây là điều cần lưu ý khi giao tiếp với người vùng khác!"
@@ -3060,7 +2969,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Lan: How many siblings do you have?\nNam: I have one older brother and two younger sisters. And you?\nLan: I am an only child, I don't have siblings.\nNam: Oh! How many people are there in your family?\nLan: Three people: dad, mom, and me.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Bạn có mấy người anh chị em?\nNam: Tôi có một người anh trai và hai người em gái. Còn bạn?\nLan: Tôi là con một, không có anh chị em.\nNam: Vậy à! Gia đình bạn có mấy người?\nLan: Ba người: bố, mẹ và tôi.",
@@ -3126,7 +3034,6 @@
                   "example_translation": "My father is a teacher.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "boh",
                   "region": "STANDARD",
                   "translation": "father (Northern)",
                   "word": "bố"
@@ -3146,7 +3053,6 @@
                   "example_translation": "My mother is a doctor.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "me",
                   "region": "STANDARD",
                   "translation": "mother",
                   "word": "mẹ"
@@ -3166,7 +3072,6 @@
                   "example_translation": "My older brother is twenty years old.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ainh",
                   "region": "STANDARD",
                   "translation": "older brother",
                   "word": "anh"
@@ -3186,7 +3091,6 @@
                   "example_translation": "My older sister is married.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chee",
                   "region": "STANDARD",
                   "translation": "older sister",
                   "word": "chị"
@@ -3206,7 +3110,6 @@
                   "example_translation": "My younger sister is in 5th grade.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "em",
                   "region": "STANDARD",
                   "translation": "younger sibling",
                   "word": "em"
@@ -3226,7 +3129,6 @@
                   "example_translation": "My paternal grandfather is seventy years old.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ohng",
                   "region": "STANDARD",
                   "translation": "grandfather",
                   "word": "ông"
@@ -3246,7 +3148,6 @@
                   "example_translation": "My maternal grandmother cooks very well.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bah (falling)",
                   "region": "STANDARD",
                   "translation": "grandmother",
                   "word": "bà"
@@ -3266,7 +3167,6 @@
                   "example_translation": "My uncle (father's younger brother) lives in Hanoi.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "choo",
                   "region": "STANDARD",
                   "translation": "father's younger brother / uncle",
                   "word": "chú"
@@ -3286,7 +3186,6 @@
                   "example_translation": "My aunt (father's sister) is a nurse.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "koh",
                   "region": "STANDARD",
                   "translation": "father's sister / aunt",
                   "word": "cô"
@@ -3306,7 +3205,6 @@
                   "example_translation": "My aunt (mother's sister) lives in Da Nang.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dee",
                   "region": "STANDARD",
                   "translation": "mother's sister / aunt",
                   "word": "dì"
@@ -3326,7 +3224,6 @@
                   "example_translation": "My uncle (mother's brother) is an engineer.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kuh",
                   "region": "STANDARD",
                   "translation": "mother's brother / uncle",
                   "word": "cậu"
@@ -3346,7 +3243,6 @@
                   "example_translation": "My uncle (parent's older brother) lives in Saigon.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bahk",
                   "region": "STANDARD",
                   "translation": "parent's older sibling",
                   "word": "bác"
@@ -3366,7 +3262,6 @@
                   "example_translation": "I have two children.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "kohn",
                   "region": "STANDARD",
                   "translation": "child",
                   "word": "con"
@@ -3386,7 +3281,6 @@
                   "example_translation": "My nephew is ten years old this year.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chow",
                   "region": "STANDARD",
                   "translation": "grandchild / niece / nephew",
                   "word": "cháu"
@@ -3406,7 +3300,6 @@
                   "example_translation": "My wife's name is Lan.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "vuh",
                   "region": "STANDARD",
                   "translation": "wife",
                   "word": "vợ"
@@ -3618,7 +3511,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In the family, terms for family members are also used as personal pronouns. For example:\n- Con chào mẹ. → Con = I (child), mẹ = you (mother)\n- Cháu chào ông. → Cháu = I (grandchild), ông = you (grandfather)\n- Em chào anh. → Em = I (younger), anh = you (older)\nRule: address and refer to yourself according to family hierarchy.",
                   "video_url": null,
                   "vietnamese_text": "Trong gia đình, từ gọi người nhà đồng thời là đại từ nhân xưng. Ví dụ:\n- Con chào mẹ. → Con = I (child), mẹ = you (mother)\n- Cháu chào ông. → Cháu = I (grandchild), ông = you (grandfather)\n- Em chào anh. → Em = I (younger), anh = you (older)\nQuy tắc: xưng theo bậc, hô theo bậc."
@@ -3629,7 +3521,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "When referring to yourself as 'con', you must address the other as 'mẹ/bố'. When referring to yourself as 'cháu', you must address the other as 'ông/bà/bác/chú/cô'. When referring to yourself as 'em', you must address the other as 'anh/chị'. NEVER use 'tôi' with elders in the family — it is considered impolite!",
                   "video_url": null,
                   "vietnamese_text": "Khi xưng con thì phải hô mẹ/bố. Khi xưng cháu thì phải hô ông/bà/bác/chú/cô. Khi xưng em thì phải hô anh/chị. KHÔNG được xưng tôi với người lớn trong gia đình — điều đó bị coi là bất lịch sự!"
@@ -3640,7 +3531,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "To indicate possession, use 'của' + owner: nhà của mẹ (mother's house), sách của anh (your book). In spoken language, 'của' is often omitted: nhà mẹ, sách anh.",
                   "video_url": null,
                   "vietnamese_text": "Để chỉ sở hữu, dùng của + người sở hữu: nhà của mẹ (mother's house), sách của anh (your book). Trong khẩu ngữ, thường bỏ của: nhà mẹ, sách anh."
@@ -3665,7 +3555,6 @@
                   "example_translation": "This is my book.",
                   "image_url": null,
                   "part_of_speech": "preposition",
-                  "phonetic": "kuh-uh",
                   "region": "STANDARD",
                   "translation": "of (possessive)",
                   "word": "của"
@@ -3685,7 +3574,6 @@
                   "example_translation": "My home is in Hanoi.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhah",
                   "region": "STANDARD",
                   "translation": "house / home",
                   "word": "nhà"
@@ -3705,7 +3593,6 @@
                   "example_translation": "My family has four people.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "yah deen",
                   "region": "STANDARD",
                   "translation": "family",
                   "word": "gia đình"
@@ -3819,7 +3706,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Traditional Vietnamese families are extended families, with multiple generations living together. Grandparents usually live with their children and grandchildren. Children have the responsibility to care for their parents in old age. This differs from Western culture, where the elderly often live alone or in nursing homes.",
                   "video_url": null,
                   "vietnamese_text": "Gia đình truyền thống Việt Nam là gia đình mở rộng, nhiều thế hệ sống chung. Ông bà thường sống cùng con cháu. Con cái có trách nhiệm phụng dưỡng cha mẹ khi về già. Đây khác với văn hoá phương Tây, nơi người già thường sống riêng hoặc ở viện dưỡng lão."
@@ -3830,7 +3716,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Vietnamese people clearly distinguish paternal (bên nội) and maternal (bên ngoại) sides:\n- Ông nội = father's father (paternal grandfather)\n- Ông ngoại = mother's father (maternal grandfather)\n- Bà nội = father's mother (paternal grandmother)\n- Bà ngoại = mother's mother (maternal grandmother)\n\n'Nội' means inside (husband's side), and 'ngoại' means outside (wife's side). This is a legacy of Confucian culture.",
                   "video_url": null,
                   "vietnamese_text": "Người Việt phân biệt rõ bên nội (paternal, cha) và bên ngoại (maternal, mẹ):\n- Ông nội = cha của bố (paternal grandfather)\n- Ông ngoại = cha của mẹ (maternal grandfather)\n- Bà nội = mẹ của bố (paternal grandmother)\n- Bà ngoại = mẹ của mẹ (maternal grandmother)\n\nNội có nghĩa là bên trong (bên chồng), ngoại có nghĩa là bên ngoài (bên vợ). Đây là di sản từ văn hóa Nho giáo."
@@ -3841,7 +3726,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Vietnamese people use family terms to address strangers based on age: calling older strangers 'ông/bà', calling younger ones 'cháu', and peers 'anh/chị/em'. This creates a sense of closeness, but also puts pressure on addressing others correctly!",
                   "video_url": null,
                   "vietnamese_text": "Người Việt dùng từ gia đình gọi người ngoài gia đình theo tuổi tác: gọi người lạ lớn tuổi là ông/bà, gọi người nhỏ tuổi là cháu, gọi người cùng trang lứa là anh/chị/em. Điều này tạo cảm giác gần gũi, nhưng cũng tạo áp lực phải xưng hô đúng!"
@@ -3866,7 +3750,6 @@
                   "example_translation": "My paternal grandfather is seventy years old.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "noy",
                   "region": "STANDARD",
                   "translation": "paternal side (inside)",
                   "word": "nội"
@@ -3886,7 +3769,6 @@
                   "example_translation": "My maternal grandmother cooks very well.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "ngoi",
                   "region": "STANDARD",
                   "translation": "maternal side (outside)",
                   "word": "ngoại"
@@ -3906,7 +3788,6 @@
                   "example_translation": "Traditional Vietnamese family.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "chuyeen tohng",
                   "region": "STANDARD",
                   "translation": "traditional",
                   "word": "truyền thống"
@@ -4075,7 +3956,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Cơm (steamed rice) is the main dish of every Vietnamese meal. Phở (rice noodle soup) is the most famous breakfast dish. Bún (thin rice noodles) is also popular. Bánh mì (baguette sandwich) is a common fast food. Thịt (meat), cá (fish), and rau (vegetables) are the basic foods.",
                   "video_url": null,
                   "vietnamese_text": "Cơm (steamed rice) là món chính của mọi bữa ăn Việt Nam. Phở (rice noodle soup) là món ăn sáng nổi tiếng nhất. Bún (thin rice noodles) cũng phổ biến. Bánh mì (baguette sandwich) là thức ăn nhanh phổ biến. Thịt (meat), cá (fish), rau (vegetables) là các loại thực phẩm cơ bản."
@@ -4086,7 +3966,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Nước (water) is the general term for drinks. Nước lọc = plain water. Trà (tea) and cà phê (coffee) are the two most popular drinks. Vietnamese coffee is very strong, usually consumed with condensed milk (sữa đặc) or ice (đá).",
                   "video_url": null,
                   "vietnamese_text": "Nước (water) là từ chung cho đồ uống. Nước lọc = plain water. Trà (tea) và cà phê (coffee) là hai thức uống phổ biến nhất. Cà phê Việt Nam rất đậm đặc, thường uống với sữa đặc (condensed milk) hoặc đá (ice)."
@@ -4097,7 +3976,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Lan: What would you like to eat?\nNam: I want to eat pho. And you?\nLan: I want to eat rice. Anything to drink?\nNam: Give me a glass of iced milk coffee, please.\nLan: And I will have iced tea.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Anh muốn ăn gì?\nNam: Tôi muốn ăn phở. Còn chị?\nLan: Tôi muốn ăn cơm. Uống gì không?\nNam: Cho tôi một ly cà phê sữa đá.\nLan: Còn tôi uống trà đá.",
@@ -4149,7 +4027,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Some dishes are called differently depending on the region:\n- Bún bò (South) = Bún bò Huế (general)\n- Cơm tấm (South) = Cơm (general in the South)\n- Bánh cuốn (North) = Bánh ướt (South, sometimes)\n- Chè (sweet dessert) is called the same in all three regions.",
                   "video_url": null,
                   "vietnamese_text": "Một số món ăn gọi khác nhau:\n- Bún bò (Nam) = Bún bò Huế (nói chung)\n- Cơm tấm (Nam) = Cơm (nói chung ở Nam)\n- Bánh cuốn (Bắc) = Bánh ướt (Nam, đôi khi)\n- Chè (tráng miệng ngọt) gọi giống nhau ba miền"
@@ -4174,7 +4051,6 @@
                   "example_translation": "I eat lunch.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "guhm",
                   "region": "STANDARD",
                   "translation": "rice (cooked) / meal",
                   "word": "cơm"
@@ -4194,7 +4070,6 @@
                   "example_translation": "I like eating beef pho.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "fuh",
                   "region": "STANDARD",
                   "translation": "pho (rice noodle soup)",
                   "word": "phở"
@@ -4214,7 +4089,6 @@
                   "example_translation": "Hanoi bun cha is very delicious.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "boon",
                   "region": "STANDARD",
                   "translation": "thin rice noodles",
                   "word": "bún"
@@ -4234,7 +4108,6 @@
                   "example_translation": "Give me a glass of water.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nuh-uhk",
                   "region": "STANDARD",
                   "translation": "water / drink / country",
                   "word": "nước"
@@ -4254,7 +4127,6 @@
                   "example_translation": "I drink iced tea.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chah",
                   "region": "STANDARD",
                   "translation": "tea",
                   "word": "trà"
@@ -4274,7 +4146,6 @@
                   "example_translation": "Give me an iced coffee with milk.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kah feh",
                   "region": "STANDARD",
                   "translation": "coffee",
                   "word": "cà phê"
@@ -4294,7 +4165,6 @@
                   "example_translation": "I eat bread for breakfast.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bahng mee",
                   "region": "STANDARD",
                   "translation": "bread / baguette sandwich",
                   "word": "bánh mì"
@@ -4314,7 +4184,6 @@
                   "example_translation": "I don't eat meat.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "theet",
                   "region": "STANDARD",
                   "translation": "meat",
                   "word": "thịt"
@@ -4334,7 +4203,6 @@
                   "example_translation": "Braised fish is very delicious.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kah",
                   "region": "STANDARD",
                   "translation": "fish",
                   "word": "cá"
@@ -4354,7 +4222,6 @@
                   "example_translation": "I like eating vegetables.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "rah-oo",
                   "region": "STANDARD",
                   "translation": "vegetables / greens",
                   "word": "rau"
@@ -4374,7 +4241,6 @@
                   "example_translation": "This pho is so delicious!",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "ngon",
                   "region": "STANDARD",
                   "translation": "delicious",
                   "word": "ngon"
@@ -4394,7 +4260,6 @@
                   "example_translation": "I eat rice.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "ahn",
                   "region": "STANDARD",
                   "translation": "to eat",
                   "word": "ăn"
@@ -4414,7 +4279,6 @@
                   "example_translation": "I drink water.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "uohm",
                   "region": "STANDARD",
                   "translation": "to drink",
                   "word": "uống"
@@ -4434,7 +4298,6 @@
                   "example_translation": "I want to eat pho.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "muh-un",
                   "region": "STANDARD",
                   "translation": "to want",
                   "word": "muốn"
@@ -4454,7 +4317,6 @@
                   "example_translation": "I like coffee.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "theek",
                   "region": "STANDARD",
                   "translation": "to like",
                   "word": "thích"
@@ -4713,7 +4575,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "To say like: S + thích + [noun/verb]. To say dislike: S + không thích + [noun/verb]. For example: 'Tôi thích phở' (I like pho), 'Tôi không thích cá' (I don't like fish). You can add 'rất' before 'thích/không thích' to emphasize.",
                   "video_url": null,
                   "vietnamese_text": "Để nói thích: S + thích + [danh từ/động từ]. Để nói không thích: S + không thích + [danh từ/động từ]. Ví dụ: 'Tôi thích phở' (I like pho), 'Tôi không thích cá' (I don't like fish). Có thể thêm rất trước thích/không thích để nhấn mạnh."
@@ -4724,7 +4585,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Vietnamese does not conjugate verbs to show tense. Add 'đã' before the verb to indicate the past tense: 'Tôi đã ăn cơm' (I ate rice / I have eaten rice). 'Đã' always stands before the verb, never after.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt không biến đổi động từ để thì thì. Thêm đã trước động từ để chỉ quá khứ: 'Tôi đã ăn cơm' (I ate rice / I have eaten rice). Đã luôn đứng trước động từ, không đứng sau."
@@ -4735,7 +4595,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Add 'sẽ' before the verb to indicate the future tense: 'Tôi sẽ ăn phở' (I will eat pho). 'Sẽ' always stands before the verb. You can add 'luôn' or 'nhé' at the end of the sentence for emphasis: 'Tôi sẽ ăn phở nhé!'",
                   "video_url": null,
                   "vietnamese_text": "Thêm sẽ trước động từ để chỉ tương lai: 'Tôi sẽ ăn phở' (I will eat pho). Sẽ luôn đứng trước động từ. Có thể thêm luôn hoặc nhé cuối câu để nhấn mạnh: 'Tôi sẽ ăn phở nhé!'"
@@ -4746,7 +4605,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Add 'đang' before the verb to indicate an ongoing action: 'Tôi đang ăn cơm' (I am eating rice). 'Đang' stands before the verb, similar to 'đã' and 'sẽ'. You can combine: 'Tôi đã đang ăn' (I was eating — less common).",
                   "video_url": null,
                   "vietnamese_text": "Thêm đang trước động từ để chỉ hành động đang xảy ra: 'Tôi đang ăn cơm' (I am eating rice). Đang đứng trước động từ, giống đã và sẽ. Có thể kết hợp: 'Tôi đã đang ăn' (I was eating — ít phổ biến)."
@@ -4757,7 +4615,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 5,
-                  "phonetic": null,
                   "translation": "Nam: What do you like to eat?\nLan: I like to eat pho. I don't like fish.\nNam: Yesterday I ate beef pho. Very delicious!\nLan: Tomorrow I will try bun cha.\nNam: Now I am drinking coffee. Would you like something to drink?",
                   "video_url": null,
                   "vietnamese_text": "Nam: Chị thích ăn gì?\nLan: Tôi thích ăn phở. Tôi không thích cá.\nNam: Hôm qua tôi đã ăn phở bò. Rất ngon!\nLan: Ngày mai tôi sẽ thử bún chả.\nNam: Bây giờ tôi đang uống cà phê. Chị uống gì không?",
@@ -4823,7 +4680,6 @@
                   "example_translation": "I ate rice.",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "dah",
                   "region": "STANDARD",
                   "translation": "past tense marker",
                   "word": "đã"
@@ -4843,7 +4699,6 @@
                   "example_translation": "I will go to the market.",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "seh",
                   "region": "STANDARD",
                   "translation": "future tense marker",
                   "word": "sẽ"
@@ -4863,7 +4718,6 @@
                   "example_translation": "I am eating.",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "dang",
                   "region": "STANDARD",
                   "translation": "progressive marker",
                   "word": "đang"
@@ -4883,7 +4737,6 @@
                   "example_translation": "Pho is very delicious.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "ret",
                   "region": "STANDARD",
                   "translation": "very",
                   "word": "rất"
@@ -4903,7 +4756,6 @@
                   "example_translation": "Yesterday I ate pho.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hohm kwah",
                   "region": "STANDARD",
                   "translation": "yesterday",
                   "word": "hôm qua"
@@ -5015,7 +4867,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Staff: Hello! What would you like to eat?\nNam: Give me a bowl of beef pho, please.\nLan: And I want chicken rice.\nStaff: Anything to drink?\nNam: Give me a glass of iced milk coffee, please.\nLan: I will drink hot tea.\nStaff: Yes, please wait a moment.",
                   "video_url": null,
                   "vietnamese_text": "Nhân viên: Chào anh chị! Anh chị muốn ăn gì?\nNam: Cho tôi một bát phở bò.\nLan: Còn tôi muốn cơm gà.\nNhân viên: Uống gì không ạ?\nNam: Cho tôi một ly cà phê sữa đá.\nLan: Tôi uống trà nóng.\nNhân viên: Dạ, xin chờ một lát ạ.",
@@ -5082,7 +4933,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Nam: Waiter/Waitress, check please!\nStaff: Yes, for two people it is one hundred and fifty thousand dong in total.\nNam: Here it is. Thank you!\nStaff: Thank you. See you again!",
                   "video_url": null,
                   "vietnamese_text": "Nam: Anh chị ơi, tính tiền!\nNhân viên: Dạ, hai người dùng hết một trăm năm mươi nghìn đồng ạ.\nNam: Đây ạ. Cảm ơn!\nNhân viên: Cảm ơn anh chị. Hẹn gặp lại!",
@@ -5129,7 +4979,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "- Cho tôi + dish: Cho tôi một bát phở (Give me a bowl of pho)\n- Anh chị muốn ăn gì?: What would you like to eat?\n- Uống gì không?: Would you like something to drink?\n- Tính tiền!: Check please!\n- Bao nhiêu tiền?: How much?\n- Đây ạ: Here you are (when giving money)",
                   "video_url": null,
                   "vietnamese_text": "- Cho tôi + món: Cho tôi một bát phở (Give me a bowl of pho)\n- Anh chị muốn ăn gì?: What would you like to eat?\n- Uống gì không?: Would you like something to drink?\n- Tính tiền!: Check please!\n- Bao nhiêu tiền?: How much?\n- Đây ạ: Here you are (kèm đưa tiền)"
@@ -5154,7 +5003,6 @@
                   "example_translation": "Give me a bowl of pho.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "choh",
                   "region": "STANDARD",
                   "translation": "to give / give me",
                   "word": "cho"
@@ -5174,7 +5022,6 @@
                   "example_translation": "Check please!",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "theeng tyen",
                   "region": "STANDARD",
                   "translation": "to calculate / check please",
                   "word": "tính tiền"
@@ -5194,7 +5041,6 @@
                   "example_translation": "One bowl of pho.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "baht",
                   "region": "STANDARD",
                   "translation": "bowl",
                   "word": "bát"
@@ -5214,7 +5060,6 @@
                   "example_translation": "One glass of water.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lee",
                   "region": "STANDARD",
                   "translation": "glass / cup",
                   "word": "ly"
@@ -5234,7 +5079,6 @@
                   "example_translation": "Here you are.",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "day",
                   "region": "STANDARD",
                   "translation": "here / here you are",
                   "word": "đây"
@@ -5406,7 +5250,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Common vehicles: xe máy (motorbike — the most popular in Vietnam!), ô tô (car), xe buýt (bus), taxi (taxi), xe đạp (bicycle). Motorbikes are the main means of transport for Vietnamese people — over 60 million motorbikes nationwide!",
                   "video_url": null,
                   "vietnamese_text": "Các phương tiện phổ biến: xe máy (motorbike — phổ biến nhất ở Việt Nam!), ô tô (car), xe buýt (bus), taxi (taxi), xe đạp (bicycle). Xe máy là phương tiện chính của người Việt — hơn 60 triệu xe máy trên cả nước!"
@@ -5417,7 +5260,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Đi (go), đến (arrive/to), từ (from), ở (at/in), đây (here), đó/kia (there/over there). Bên trái (left), bên phải (right), thẳng (straight). Nhà ga (train station), sân bay (airport), bến xe (bus station), chợ (market), bệnh viện (hospital).",
                   "video_url": null,
                   "vietnamese_text": "Đi (go), đến (arrive/to), từ (from), ở (at/in), đây (here), đó/kia (there/over there). Bên trái (left), bên phải (right), thẳng (straight). Nhà ga (train station), sân bay (airport), bến xe (bus station), chợ (market), bệnh viện (hospital)."
@@ -5428,7 +5270,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Lan: Excuse me, let me ask for directions.\nNam: Yes, where do you want to go?\nLan: I want to go to the bus station. Which way should I go?\nNam: You go straight, then turn left. The bus station is over there.\nLan: Thank you very much!\nNam: You're welcome!",
                   "video_url": null,
                   "vietnamese_text": "Lan: Xin lỗi anh, cho em hỏi đường.\nNam: Vâng, chị muốn đi đâu?\nLan: Em muốn đến bến xe. Đi đường nào ạ?\nNam: Chị đi thẳng, rồi rẽ bên trái. Bến xe ở kia.\nLan: Cảm ơn anh nhiều!\nNam: Không có gì!",
@@ -5485,7 +5326,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "- đi + location: đi Hà Nội (go to Hanoi)\n- đến + location: đến nhà (arrive at home)\n- từ + location: từ Sài Gòn (from Saigon)\n- đi + từ + A + đến + B: đi từ Hà Nội đến Sài Gòn (go from Hanoi to Saigon)",
                   "video_url": null,
                   "vietnamese_text": "- đi + địa điểm: đi Hà Nội (go to Hanoi)\n- đến + địa điểm: đến nhà (arrive at home)\n- từ + địa điểm: từ Sài Gòn (from Saigon)\n- đi + từ + A + đến + B: đi từ Hà Nội đến Sài Gòn (go from Hanoi to Saigon)"
@@ -5510,7 +5350,6 @@
                   "example_translation": "I go to the market.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "dee",
                   "region": "STANDARD",
                   "translation": "to go",
                   "word": "đi"
@@ -5530,7 +5369,6 @@
                   "example_translation": "I arrive in Hanoi.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "guhn",
                   "region": "STANDARD",
                   "translation": "to arrive / to",
                   "word": "đến"
@@ -5550,7 +5388,6 @@
                   "example_translation": "I am from Saigon.",
                   "image_url": null,
                   "part_of_speech": "preposition",
-                  "phonetic": "tuh",
                   "region": "STANDARD",
                   "translation": "from",
                   "word": "từ"
@@ -5570,7 +5407,6 @@
                   "example_translation": "I live in Hanoi.",
                   "image_url": null,
                   "part_of_speech": "preposition",
-                  "phonetic": "uh",
                   "region": "STANDARD",
                   "translation": "at / in / to live",
                   "word": "ở"
@@ -5590,7 +5426,6 @@
                   "example_translation": "This is my house.",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "day",
                   "region": "STANDARD",
                   "translation": "here",
                   "word": "đây"
@@ -5610,7 +5445,6 @@
                   "example_translation": "The bus station is there.",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "doh",
                   "region": "STANDARD",
                   "translation": "there",
                   "word": "đó"
@@ -5630,7 +5464,6 @@
                   "example_translation": "The train station is over there.",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "kee-uh",
                   "region": "STANDARD",
                   "translation": "over there",
                   "word": "kia"
@@ -5650,7 +5483,6 @@
                   "example_translation": "Turn left.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "ben chai",
                   "region": "STANDARD",
                   "translation": "left side",
                   "word": "bên trái"
@@ -5670,7 +5502,6 @@
                   "example_translation": "Turn right.",
                   "image_url": null,
                   "part_of_speech": "phrase",
-                  "phonetic": "ben fai",
                   "region": "STANDARD",
                   "translation": "right side",
                   "word": "bên phải"
@@ -5690,7 +5521,6 @@
                   "example_translation": "Go straight.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "thahng",
                   "region": "STANDARD",
                   "translation": "straight",
                   "word": "thẳng"
@@ -5710,7 +5540,6 @@
                   "example_translation": "I ride a motorbike.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "seh mai",
                   "region": "STANDARD",
                   "translation": "motorbike",
                   "word": "xe máy"
@@ -5730,7 +5559,6 @@
                   "example_translation": "He drives a car.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "oh toh",
                   "region": "STANDARD",
                   "translation": "car",
                   "word": "ô tô"
@@ -5750,7 +5578,6 @@
                   "example_translation": "Where is the bus station?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ben seh",
                   "region": "STANDARD",
                   "translation": "bus station",
                   "word": "bến xe"
@@ -5770,7 +5597,6 @@
                   "example_translation": "I go to the market.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "choh",
                   "region": "STANDARD",
                   "translation": "market",
                   "word": "chợ"
@@ -5790,7 +5616,6 @@
                   "example_translation": "Turn left.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "reh",
                   "region": "STANDARD",
                   "translation": "to turn",
                   "word": "rẽ"
@@ -6025,7 +5850,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Basic structure:\n- đi + location: đi Hà Nội (go to Hanoi)\n- đến + location: đến nhà (arrive at home)\n- từ + location: từ Sài Gòn (from Saigon)\n- đi + từ + A + đến + B: đi từ Hà Nội đến Sài Gòn (go from Hanoi to Saigon)\n\nNote: 'đi' can stand alone: 'Tôi đi' (I'm going/leaving).",
                   "video_url": null,
                   "vietnamese_text": "Cấu trúc cơ bản:\n- đi + địa điểm: đi Hà Nội (go to Hanoi)\n- đến + địa điểm: đến nhà (arrive at home)\n- từ + địa điểm: từ Sài Gòn (from Saigon)\n- đi + từ + A + đến + B: đi từ Hà Nội đến Sài Gòn (go from Hanoi to Saigon)\n\nLưu ý: đi có thể đứng một mình: 'Tôi đi' (I'm going/leaving)."
@@ -6036,7 +5860,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Common directional questions:\n- ...ở đâu? = Where is...? Example: Bến xe ở đâu? (Where is the bus station?)\n- Đi đường nào? = Which way?\n- Đi bao xa? = How far?\n- Mất bao lâu? = How long does it take?\n\nResponses: đi thẳng (go straight), rẽ trái (turn left), rẽ phải (turn right).",
                   "video_url": null,
                   "vietnamese_text": "Câu hỏi đường phổ biến:\n- ...ở đâu? = Where is...? Ví dụ: Bến xe ở đâu?\n- Đi đường nào? = Which way?\n- Đi bao xa? = How far?\n- Mất bao lâu? = How long does it take?\n\nTrả lời: đi thẳng (go straight), rẽ trái (turn left), rẽ phải (turn right)."
@@ -6047,7 +5870,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "'ở' has two functions:\n1. Preposition of place: ở Hà Nội (in Hanoi), ở nhà (at home)\n2. Verb of living/staying: Tôi ở Hà Nội (I live in Hanoi)\n\nQuestion: Bạn ở đâu? (Where do you live?)",
                   "video_url": null,
                   "vietnamese_text": "ở có hai chức năng:\n1. Giới từ chỉ vị trí: ở Hà Nội (in Hanoi), ở nhà (at home)\n2. Động từ chỉ sống: Tôi ở Hà Nội (I live in Hanoi)\n\nCâu hỏi: Bạn ở đâu? (Where do you live?)"
@@ -6058,7 +5880,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Nam: Excuse me, where is the bus station?\nPasserby: You go straight for two hundred meters, then turn right.\nNam: Thank you! Walking or riding?\nPasserby: Ten minutes walking. Five minutes by motorbike.\nNam: Thank you very much!\nPasserby: You're welcome!",
                   "video_url": null,
                   "vietnamese_text": "Nam: Xin lỗi, bến xe ở đâu?\nNgười qua đường: Bạn đi thẳng hai trăm mét, rồi rẽ bên phải.\nNam: Cảm ơn! Đi bộ hay đi xe?\nNgười qua đường: Đi bộ mười phút. Đi xe máy năm phút.\nNam: Cảm ơn chị nhiều!\nNgười qua đường: Không có gì!",
@@ -6129,7 +5950,6 @@
                   "example_translation": "Where do you live?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "doh",
                   "region": "STANDARD",
                   "translation": "where",
                   "word": "đâu"
@@ -6149,7 +5969,6 @@
                   "example_translation": "Which way?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "zuhrng",
                   "region": "STANDARD",
                   "translation": "road / way / street",
                   "word": "đường"
@@ -6169,7 +5988,6 @@
                   "example_translation": "I walk.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "dee booh",
                   "region": "STANDARD",
                   "translation": "to walk",
                   "word": "đi bộ"
@@ -6189,7 +6007,6 @@
                   "example_translation": "My house is very far.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "sah",
                   "region": "STANDARD",
                   "translation": "far",
                   "word": "xa"
@@ -6209,7 +6026,6 @@
                   "example_translation": "The market is near.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "guhn",
                   "region": "STANDARD",
                   "translation": "near",
                   "word": "gần"
@@ -6339,7 +6155,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Lan: Excuse me, where is the hospital?\nNam: The hospital is on Nguyen Hue Street. You go straight, then turn left.\nLan: Is it far?\nNam: Not far. A ten-minute walk.\nLan: Thank you!",
                   "video_url": null,
                   "vietnamese_text": "Lan: Xin lỗi anh, bệnh viện ở đâu?\nNam: Bệnh viện ở đường Nguyễn Huệ. Chị đi thẳng, rồi rẽ bên trái.\nLan: Xa không anh?\nNam: Không xa đâu. Đi bộ mười phút.\nLan: Cảm ơn anh!",
@@ -6391,7 +6206,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Nam: Hello! Where is the nearest bus stop?\nPasserby: Go straight for three hundred meters, the bus stop is on the right.\nNam: Thank you! Does the bus go to the market?\nPasserby: Yes, bus number five goes to the market.",
                   "video_url": null,
                   "vietnamese_text": "Nam: Chào chị! Bến xe buýt gần nhất ở đâu?\nNgười qua đường: Đi thẳng ba trăm mét, bến xe ở bên phải.\nNam: Cảm ơn chị! Xe buýt đi chợ không?\nNgười qua đường: Có, xe số năm đi chợ.",
@@ -6438,7 +6252,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "- gần nhất = nearest\n- số (xe) = bus number: xe số năm = bus number 5\n- đường + tên = street name: đường Nguyễn Huệ = Nguyen Hue Street\n- đâu = where (placed at the end of the sentence)\n- không xa đâu = not far (reassuring response)",
                   "video_url": null,
                   "vietnamese_text": "- gần nhất = nearest\n- số (xe) = bus number: xe số năm = bus number 5\n- đường + tên = street name: đường Nguyễn Huệ = Nguyen Hue Street\n- đâu = where (đứng cuối câu)\n- không xa đâu = not far (đáp reassure)"
@@ -6463,7 +6276,6 @@
                   "example_translation": "Where is the hospital?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "beeng vee-et",
                   "region": "STANDARD",
                   "translation": "hospital",
                   "word": "bệnh viện"
@@ -6483,7 +6295,6 @@
                   "example_translation": "The nearest bus station.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "guhn neest",
                   "region": "STANDARD",
                   "translation": "nearest",
                   "word": "gần nhất"
@@ -6503,7 +6314,6 @@
                   "example_translation": "It takes ten minutes.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "maht",
                   "region": "STANDARD",
                   "translation": "to take (time)",
                   "word": "mất"

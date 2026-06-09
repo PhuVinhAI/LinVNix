@@ -23,7 +23,6 @@ describe('ExerciseContextLoader', () => {
   const makeVocabulary = (word: string, overrides: any = {}) => ({
     word,
     translation: `translation of ${word}`,
-    phonetic: `phonetic of ${word}`,
     partOfSpeech: 'noun',
     exampleSentence: `example with ${word}`,
     exampleTranslation: `translation of example with ${word}`,
@@ -153,7 +152,6 @@ describe('ExerciseContextLoader', () => {
         vocabularies: [
           makeVocabulary('Xin chào', {
             translation: 'Hello (formal)',
-            phonetic: 'sin chow',
           }),
         ],
         grammarRules: [],
@@ -163,7 +161,6 @@ describe('ExerciseContextLoader', () => {
         vocabularies: [
           makeVocabulary('Xin chào', {
             translation: 'Hi (informal)',
-            phonetic: 'sin chow informal',
           }),
         ],
         grammarRules: [],

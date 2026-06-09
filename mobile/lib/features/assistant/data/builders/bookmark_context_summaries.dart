@@ -24,7 +24,6 @@ Map<String, dynamic> bookmarkContextSummary(
       'personalVocabularyId': bookmark.personalVocabularyId,
     'word': displayedWord,
     'translation': bookmark.translation,
-    if (bookmark.phonetic != null) 'phonetic': bookmark.phonetic,
     if (bookmark.partOfSpeech != null) 'partOfSpeech': bookmark.partOfSpeech,
     if (bookmark.difficultyLevel != null)
       'difficultyLevel': bookmark.difficultyLevel,

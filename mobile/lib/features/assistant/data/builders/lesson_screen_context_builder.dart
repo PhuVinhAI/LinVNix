@@ -117,8 +117,6 @@ Map<String, dynamic> _contentPieceSummary(LessonContent content) {
       'vietnameseText': content.vietnameseText,
     if (content.translation != null && content.translation!.isNotEmpty)
       'translation': content.translation,
-    if (content.phonetic != null && content.phonetic!.isNotEmpty)
-      'phonetic': content.phonetic,
     if (content.notes != null && content.notes!.isNotEmpty) 'notes': content.notes,
     if (content.audioUrl != null && content.audioUrl!.isNotEmpty)
       'audioUrl': content.audioUrl,

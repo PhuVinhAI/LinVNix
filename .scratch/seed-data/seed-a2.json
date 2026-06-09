@@ -144,7 +144,6 @@
                   "image_url": null,
                   "notes": "Giới thiệu bài học",
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In this lesson you will learn essential vocabulary for going to the market and shopping in Vietnam. Markets are where Vietnamese people usually buy fresh food daily, while supermarkets are for dry goods and household items.",
                   "video_url": null,
                   "vietnamese_text": "Trong bài này bạn sẽ học các từ vựng cần thiết khi đi chợ và mua sắm ở Việt Nam. Chợ là nơi người Việt thường mua thực phẩm tươi sống mỗi ngày, còn siêu thị thì mua đồ khô và đồ gia dụng."
@@ -155,7 +154,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Lan: Chow chi, cai nay bao nhieu tien mot can? Ba ban hang: Hai muoi nghin mot can em oi. Lan: Dat qua! Muoi lam nghin duoc khong chi? Ba ban hang: Duoc, muoi lam nghin cho em ne, lay them khong? Lan: Lay them nua can nua. Cam on chi nhe!",
                   "translation": "Lan: Hello, how much is this per kilogram?\nSeller: Twenty thousand per kilo, dear.\nLan: Too expensive! Fifteen thousand, can you do it?\nSeller: Sure, fifteen thousand for you here, want more?\nLan: Give me another half kilo. Thanks!",
                   "video_url": null,
                   "vietnamese_text": "Lan: Chào chị, cái này bao nhiêu tiền một cân?\nBà bán hàng: Hai mươi nghìn một cân em ơi.\nLan: Đắt quá! Mười lăm nghìn được không chị?\nBà bán hàng: Được, mười lăm nghìn cho em nè, lấy thêm không?\nLan: Lấy thêm nửa cân nữa. Cảm ơn chị nhé!",
@@ -207,7 +205,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "In Vietnam, people often bargain when buying things at the market. Bargaining is a normal habit, especially at traditional markets. But you can't bargain at supermarkets.",
                   "video_url": null,
                   "vietnamese_text": "Ở Việt Nam, người ta hay trả giá khi mua hàng ở chợ. Trả giá là thói quen bình thường, nhất là ở chợ truyền thống. Nhưng ở siêu thị thì không trả giá được."
@@ -218,7 +215,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Vietnamese currency uses the unit 'dong'. People usually say 'nghìn' instead of 'nghìn đồng'. For example: 20,000 dong is called 'hai mươi nghìn'.",
                   "video_url": null,
                   "vietnamese_text": "Tiền Việt Nam dùng đơn vị 'đồng'. Người ta thường nói 'nghìn' thay vì 'nghìn đồng'. Ví dụ: 20.000 đồng gọi là 'hai mươi nghìn'."
@@ -243,7 +239,6 @@
                   "example_translation": "This morning I went to the market to buy vegetables.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cho",
                   "region": "STANDARD",
                   "translation": "market",
                   "word": "chợ"
@@ -263,7 +258,6 @@
                   "example_translation": "On weekends I usually go to the supermarket.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sieu thi",
                   "region": "STANDARD",
                   "translation": "supermarket",
                   "word": "siêu thị"
@@ -283,7 +277,6 @@
                   "example_translation": "I want to buy this shirt.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "mua",
                   "region": "STANDARD",
                   "translation": "to buy",
                   "word": "mua"
@@ -303,7 +296,6 @@
                   "example_translation": "She sells fruit at the market.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "ban",
                   "region": "STANDARD",
                   "translation": "to sell",
                   "word": "bán"
@@ -323,7 +315,6 @@
                   "example_translation": "How much is the price of this?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "zia",
                   "region": "STANDARD",
                   "translation": "price",
                   "word": "giá"
@@ -343,7 +334,6 @@
                   "example_translation": "Vegetables are very cheap at this market.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "re",
                   "region": "STANDARD",
                   "translation": "cheap",
                   "word": "rẻ"
@@ -363,7 +353,6 @@
                   "example_translation": "This shirt is too expensive!",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "dat",
                   "region": "STANDARD",
                   "translation": "expensive",
                   "word": "đắt"
@@ -383,7 +372,6 @@
                   "example_translation": "Do you have money? I forgot my wallet at home.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tien",
                   "region": "STANDARD",
                   "translation": "money",
                   "word": "tiền"
@@ -403,7 +391,6 @@
                   "example_translation": "Can I have the receipt please?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hoa don",
                   "region": "STANDARD",
                   "translation": "receipt / bill",
                   "word": "hóa đơn"
@@ -423,7 +410,6 @@
                   "example_translation": "At the market you have to bargain to get a good price.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tra zia",
                   "region": "STANDARD",
                   "translation": "to bargain",
                   "word": "trả giá"
@@ -443,7 +429,6 @@
                   "example_translation": "Give me two kilos of beef.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "can",
                   "region": "STANDARD",
                   "translation": "kilogram",
                   "word": "cân"
@@ -463,7 +448,6 @@
                   "example_translation": "Goods at the market are fresher than at the supermarket.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hang",
                   "region": "STANDARD",
                   "translation": "goods / merchandise",
                   "word": "hàng"
@@ -483,7 +467,6 @@
                   "example_translation": "Today mustard greens are very cheap.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "rau",
                   "region": "STANDARD",
                   "translation": "vegetables",
                   "word": "rau"
@@ -503,7 +486,6 @@
                   "example_translation": "Give me half a kilo of pork.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thit",
                   "region": "STANDARD",
                   "translation": "meat",
                   "word": "thịt"
@@ -523,7 +505,6 @@
                   "example_translation": "The fish is very fresh today!",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ca",
                   "region": "STANDARD",
                   "translation": "fish",
                   "word": "cá"
@@ -758,7 +739,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In Vietnamese, the comparative adds 'hơn' after the adjective, and the superlative adds 'nhất' after the adjective. Unlike English, Vietnamese does not change the adjective form.",
                   "video_url": null,
                   "vietnamese_text": "Trong tiếng Việt, so sánh hơn dùng thêm 'hơn' sau tính từ, so sánh nhất dùng thêm 'nhất' sau tính từ. Khác với tiếng Anh, tiếng Việt không thay đổi hình thức tính từ."
@@ -769,7 +749,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Comparative formula: A + adjective + hơn + B. Superlative formula: noun + adjective + nhất.",
                   "video_url": null,
                   "vietnamese_text": "Công thức so sánh hơn: A + tính từ + hơn + B. Ví dụ: 'Chợ này rẻ hơn chợ kia.' Công thức so sánh nhất: danh từ + tính từ + nhất. Ví dụ: 'Chợ này rẻ nhất thành phố.'"
@@ -780,7 +759,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Nam: Sieu thi nay dat hon cho phai khong anh? Anh Nam: Dung roi, nhung hang o sieu thi sach hon. Nam: Vay cho nao re nhat o day? Anh Nam: Cho Dau Moi re nhat, nhung xa lam.",
                   "translation": "Nam: Is this supermarket more expensive than the market?\nOlder brother Nam: That's right, but goods at the supermarket are cleaner.\nNam: So which market is the cheapest here?\nOlder brother Nam: The wholesale market is the cheapest, but it's very far.",
                   "video_url": null,
                   "vietnamese_text": "Nam: Siêu thị này đắt hơn chợ phải không anh?\nAnh Nam: Đúng rồi, nhưng hàng ở siêu thị sạch hơn.\nNam: Vậy chợ nào rẻ nhất ở đây?\nAnh Nam: Chợ Đầu Mối rẻ nhất, nhưng xa lắm.",
@@ -841,7 +819,6 @@
                   "example_translation": "This one is cheaper than that one.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "hon",
                   "region": "STANDARD",
                   "translation": "more / -er (comparative)",
                   "word": "hơn"
@@ -861,7 +838,6 @@
                   "example_translation": "This one is the cheapest.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "nhat",
                   "region": "STANDARD",
                   "translation": "most / -est (superlative)",
                   "word": "nhất"
@@ -881,7 +857,6 @@
                   "example_translation": "This market has more goods than that market.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "nhieu",
                   "region": "STANDARD",
                   "translation": "many / much",
                   "word": "nhiều"
@@ -901,7 +876,6 @@
                   "example_translation": "Few people went to the market today.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "it",
                   "region": "STANDARD",
                   "translation": "few / little",
                   "word": "ít"
@@ -921,7 +895,6 @@
                   "example_translation": "The supermarket is cleaner than the market.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "sach",
                   "region": "STANDARD",
                   "translation": "clean",
                   "word": "sạch"
@@ -1009,7 +982,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese market culture is very special. Markets are not only places for buying and selling but also places for social interaction. Sellers usually address customers by kinship terms: 'chị', 'em', 'cô', 'chú'.",
                   "video_url": null,
                   "vietnamese_text": "Văn hóa chợ Việt Nam rất đặc biệt. Chợ không chỉ là nơi mua bán mà còn là nơi giao tiếp xã hội. Người bán hàng thường xưng hô theo quan hệ: 'chị', 'em', 'cô', 'chú'. Khách hàng cũng xưng hô tương ứng."
@@ -1020,7 +992,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Khach: Chow co, cho toi mot can ca chua. Ba ban: Ca chua nay chin lam nha con, muoi nghin mot can. Khach: Cho co xem cai can nhe. Ua, thieu roi co oi! Ba ban: Troi oi, toi can lai cho. Xong roi ne, them hai qua cho con nha! Khach: Da cam on co. Co co ban rau muong khong? Ba ban: Co, nam nghin mot mo. Lay khong con? Khach: Cho toi mot mo. Tong cong bao nhieu co? Ba ban: Muoi lam nghin thoi con oi.",
                   "translation": "Customer: Hello, give me a kilo of tomatoes.\nSeller: These tomatoes are very ripe dear, ten thousand a kilo.\nCustomer: Let me check the scale. Oh, it's short!\nSeller: Oh my, let me weigh again. Done, I'll add two more for you!\nCustomer: Thank you. Do you sell water spinach?\nSeller: Yes, five thousand a bunch. Do you want some?\nCustomer: Give me one bunch. How much in total?\nSeller: Just fifteen thousand dear.",
                   "video_url": null,
                   "vietnamese_text": "Khách: Chào cô, cho tôi một cân cà chua.\nBà bán: Cà chua nay chín lắm nha con, mười nghìn một cân.\nKhách: Cho cô xem cái cân nhé. Ủa, thiếu rồi cô ơi!\nBà bán: Trời ơi, tôi cân lại cho. Xong rồi nè, thêm hai quả cho con nha!\nKhách: Dạ cảm ơn cô. Cô có bán rau muống không?\nBà bán: Có, năm nghìn một mớ. Lấy không con?\nKhách: Cho tôi một mớ. Tổng cộng bao nhiêu cô?\nBà bán: Mười lăm nghìn thôi con ơi.",
@@ -1087,7 +1058,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Note: At Vietnamese markets, people often use manual scales instead of digital ones. Many places have inaccurate scales, so customers often check. Nowadays markets are gradually using digital scales more.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý: Ở chợ Việt Nam, người ta hay dùng cân tay thay vì cân điện tử. Nhiều nơi cân không chuẩn, nên khách hàng hay kiểm tra lại. Ngày nay các chợ đã dần dùng cân điện tử nhiều hơn."
@@ -1112,7 +1082,6 @@
                   "example_translation": "Give me a kilo of tomatoes.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ca chua",
                   "region": "STANDARD",
                   "translation": "tomato",
                   "word": "cà chua"
@@ -1132,7 +1101,6 @@
                   "example_translation": "Water spinach is a popular dish in Vietnam.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "rau muong",
                   "region": "STANDARD",
                   "translation": "water spinach",
                   "word": "rau muống"
@@ -1152,7 +1120,6 @@
                   "example_translation": "Give me a bunch of vegetables.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mo",
                   "region": "STANDARD",
                   "translation": "bunch (of vegetables)",
                   "word": "mớ"
@@ -1249,7 +1216,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Sample paragraph: On Sunday mornings, I usually go to the market early. Vegetables at the market are cheaper and fresher than at the supermarket. But the supermarket is cleaner. I often bargain at the market. Each time I spend about fifty thousand to one hundred thousand dong.",
                   "video_url": null,
                   "vietnamese_text": "Đoạn văn mẫu: Sáng chủ nhật, tôi thường đi chợ sớm. Chợ gần nhà tôi bán nhiều loại rau, thịt, cá tươi. Rau ở chợ rẻ hơn và tươi hơn rau ở siêu thị. Nhưng siêu thị sạch hơn và có hóa đơn rõ ràng hơn. Tôi hay trả giá ở chợ vì giá ban đầu thường đắt hơn giá thực. Mỗi lần đi chợ tôi tiêu khoảng năm mươi nghìn đến một trăm nghìn đồng."
@@ -1260,7 +1226,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Now write a short paragraph of about 5-7 sentences about your most recent trip to the market. Use at least 2 comparative sentences and 1 superlative sentence.",
                   "video_url": null,
                   "vietnamese_text": "Bây giờ bạn hãy viết một đoạn văn ngắn khoảng 5-7 câu kể về lần đi chợ gần đây nhất của bạn. Dùng ít nhất 2 câu so sánh hơn và 1 câu so sánh nhất."
@@ -1271,7 +1236,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Minh: Chi oi, sang nay di cho mua gi vay? Chi Minh: Toi mua rau, thit va ca. O cho nay re hon sieu thi nhieu. Minh: Em cung muon di cho. Nge noi cho Dau Moi re nhat ma xa lam. Chi Minh: Dung roi, xa nhat nhung re nhat. Em muon di thi thu bay minh cung di nhe!",
                   "translation": "Minh: Sister, what did you buy at the market this morning?\nSister Minh: I bought vegetables, meat and fish. At this market it is much cheaper than the supermarket.\nMinh: I want to go to the market too. I heard the wholesale market is the cheapest but very far.\nSister Minh: That is right, the farthest but the cheapest. If you want to go, let us go together on Saturday!",
                   "video_url": null,
                   "vietnamese_text": "Minh: Chị ơi, sáng nay đi chợ mua gì vậy?\nChị Minh: Tôi mua rau, thịt và cá. Ở chợ này rẻ hơn siêu thị nhiều.\nMinh: Em cũng muốn đi chợ. Nghe nói chợ Đầu Mối rẻ nhất mà xa lắm.\nChị Minh: Đúng rồi, xa nhất nhưng rẻ nhất. Em muốn đi thì thứ bảy mình cùng đi nhé!",
@@ -1332,7 +1296,6 @@
                   "example_translation": "I spend about fifty thousand each time I go to the market.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tieu",
                   "region": "STANDARD",
                   "translation": "to spend (money)",
                   "word": "tiêu"
@@ -1352,7 +1315,6 @@
                   "example_translation": "Going to the market early means fresher vegetables.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "som",
                   "region": "STANDARD",
                   "translation": "early",
                   "word": "sớm"
@@ -1504,7 +1466,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In this lesson you will learn important vocabulary for talking about health and going to the doctor in Vietnam.",
                   "video_url": null,
                   "vietnamese_text": "Trong bài này bạn sẽ học các từ vựng quan trọng khi nói về sức khỏe và khi đi khám bệnh ở Việt Nam. Biết các từ này giúp bạn tự tin hơn khi giao tiếp với bác sĩ và dược sĩ."
@@ -1515,7 +1476,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Benh nhan: Chow bac si, toi bi dau dau va ho hai ngay nay roi. Bac si: Co bi sot khong anh? De toi kham xem nao. Benh nhan: Da co, hom qua toi bi sot 38 do. Bac si: Anh bi cam roi. Toi ke cho anh don thuoc nay. Uong thuoc ba lan mot ngay nhe. Neu ba ngay sau chua khoe thi phai quay lai kham.",
                   "translation": "Patient: Hello doctor, I have a headache and have been coughing for two days.\nDoctor: Do you have a fever? Let me examine you.\nPatient: Yes, yesterday I had a 38-degree fever.\nDoctor: You have a cold. I'll prescribe this for you. Take the medicine three times a day. If you're not better after three days, you must come back.",
                   "video_url": null,
                   "vietnamese_text": "Bệnh nhân: Chào bác sĩ, tôi bị đau đầu và ho hai ngày nay rồi.\nBác sĩ: Có bị sốt không anh? Để tôi khám xem nào.\nBệnh nhân: Dạ có, hôm qua tôi bị sốt 38 độ.\nBác sĩ: Anh bị cảm rồi. Tôi kê cho anh đơn thuốc này. Uống thuốc ba lần một ngày nhé. Nếu ba ngày sau chưa khỏe thì phải quay lại khám.",
@@ -1562,7 +1522,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "In Vietnam, people distinguish between 'phòng khám' (clinic) and 'bệnh viện' (hospital). 'Nhà thuốc' is a pharmacy, where you can buy many types of medicine without a prescription.",
                   "video_url": null,
                   "vietnamese_text": "Ở Việt Nam, người ta phân biệt 'phòng khám' (clinic) và 'bệnh viện' (hospital). Phòng khám nhỏ hơn, thường khám ngoại trú. Bệnh viện lớn hơn, có nội trú. 'Nhà thuốc' là pharmacy, không cần đơn bác sĩ vẫn mua được nhiều loại thuốc."
@@ -1587,7 +1546,6 @@
                   "example_translation": "He has a cold.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "benh",
                   "region": "STANDARD",
                   "translation": "illness / disease",
                   "word": "bệnh"
@@ -1607,7 +1565,6 @@
                   "example_translation": "I have to take medicine three times a day.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thuoc",
                   "region": "STANDARD",
                   "translation": "medicine / drug",
                   "word": "thuốc"
@@ -1627,7 +1584,6 @@
                   "example_translation": "The doctor told me to rest.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bac si",
                   "region": "STANDARD",
                   "translation": "doctor",
                   "word": "bác sĩ"
@@ -1647,7 +1603,6 @@
                   "example_translation": "I have to take my child to the hospital.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "benh vien",
                   "region": "STANDARD",
                   "translation": "hospital",
                   "word": "bệnh viện"
@@ -1667,7 +1622,6 @@
                   "example_translation": "I have a headache.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "dau",
                   "region": "STANDARD",
                   "translation": "to hurt / pain",
                   "word": "đau"
@@ -1687,7 +1641,6 @@
                   "example_translation": "The child has a 39-degree fever.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sot",
                   "region": "STANDARD",
                   "translation": "fever",
                   "word": "sốt"
@@ -1707,7 +1660,6 @@
                   "example_translation": "I coughed all night last night.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "ho",
                   "region": "STANDARD",
                   "translation": "to cough / cough",
                   "word": "ho"
@@ -1727,7 +1679,6 @@
                   "example_translation": "I caught a cold, I've been sneezing all day.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cam",
                   "region": "STANDARD",
                   "translation": "cold / flu",
                   "word": "cảm"
@@ -1747,7 +1698,6 @@
                   "example_translation": "I have to go for a medical checkup.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "kham",
                   "region": "STANDARD",
                   "translation": "to examine / checkup",
                   "word": "khám"
@@ -1767,7 +1717,6 @@
                   "example_translation": "Wish you good health!",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "suc khoe",
                   "region": "STANDARD",
                   "translation": "health",
                   "word": "sức khỏe"
@@ -1787,7 +1736,6 @@
                   "example_translation": "I've had a headache since this morning.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dau dau",
                   "region": "STANDARD",
                   "translation": "headache",
                   "word": "đau đầu"
@@ -1807,7 +1755,6 @@
                   "example_translation": "The doctor prescribed medicine for me.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "don thuoc",
                   "region": "STANDARD",
                   "translation": "prescription",
                   "word": "đơn thuốc"
@@ -1827,7 +1774,6 @@
                   "example_translation": "I go to the pharmacy to buy cold medicine.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nha thuoc",
                   "region": "STANDARD",
                   "translation": "pharmacy / drugstore",
                   "word": "nhà thuốc"
@@ -2017,7 +1963,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "'Bị' is a passive marker with a negative meaning. Unlike 'được' (positive), 'bị' is used when the subject undergoes an unwanted action.",
                   "video_url": null,
                   "vietnamese_text": "'Bị' là từ chỉ bị động mang nghĩa tiêu cực. Khác với 'được' (tích cực), 'bị' dùng khi chủ ngữ chịu tác động không mong muốn. Công thức: chủ ngữ + bị + (tác nhân) + động từ."
@@ -2028,7 +1973,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "'Phải' indicates obligation, similar to 'must' or 'have to' in English. 'Phải' stands before the main verb.",
                   "video_url": null,
                   "vietnamese_text": "'Phải' là từ chỉ nghĩa vụ, tương tự 'must' hay 'have to' trong tiếng Anh. 'Phải' đứng trước động từ chính. Ví dụ: 'Tôi phải đi khám bệnh.' = I have to go to the doctor."
@@ -2039,7 +1983,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Minh: Sao anh khong di lam hom nay? Hung: Toi bi om roi, bi cam ba ngay nay. Minh: Anh da di kham chua? Hung: Chua, nhung toi phai di kham chieu nay. Bac si bao toi phai uong thuoc dung gio. Minh: Anh phai nghi ngoi nhieu nhe. Co gi goi toi.",
                   "translation": "Minh: Why aren't you going to work today?\nHùng: I'm sick, I've had a cold for three days.\nMinh: Have you been to the doctor yet?\nHùng: Not yet, but I have to go this afternoon. The doctor told me I have to take medicine on time.\nMinh: You have to rest a lot. Call me if you need anything.",
                   "video_url": null,
                   "vietnamese_text": "Minh: Sao anh không đi làm hôm nay?\nHùng: Tôi bị ốm rồi, bị cảm ba ngày nay.\nMinh: Anh đã đi khám chưa?\nHùng: Chưa, nhưng tôi phải đi khám chiều nay. Bác sĩ bảo tôi phải uống thuốc đúng giờ.\nMinh: Anh phải nghỉ ngơi nhiều nhé. Có gì gọi tôi.",
@@ -2105,7 +2048,6 @@
                   "example_translation": "I caught a cold.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "bi",
                   "region": "STANDARD",
                   "translation": "to suffer from / passive marker (negative)",
                   "word": "bị"
@@ -2125,7 +2067,6 @@
                   "example_translation": "I have to go to the doctor.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "phai",
                   "region": "STANDARD",
                   "translation": "must / have to",
                   "word": "phải"
@@ -2145,7 +2086,6 @@
                   "example_translation": "The child is sick.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "om",
                   "region": "STANDARD",
                   "translation": "sick / ill",
                   "word": "ốm"
@@ -2165,7 +2105,6 @@
                   "example_translation": "I was examined by the doctor for free.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "duoc",
                   "region": "STANDARD",
                   "translation": "to receive / passive marker (positive) / can",
                   "word": "được"
@@ -2185,7 +2124,6 @@
                   "example_translation": "After taking medicine I feel better.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "khoe",
                   "region": "STANDARD",
                   "translation": "healthy / well",
                   "word": "khỏe"
@@ -2275,7 +2213,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Read the passage and answer the questions:\n\nIn Vietnam, people often say 'health is better than wealth'. When sick, Vietnamese people usually buy medicine at the pharmacy first. Private clinics are cleaner and faster, but more expensive than public hospitals.",
                   "video_url": null,
                   "vietnamese_text": "Đọc đoạn văn sau và trả lời câu hỏi:\n\nỞ Việt Nam, người ta hay nói 'khỏe hơn giàu'. Nghĩa là sức khỏe quan trọng hơn tiền bạc. Khi bị ốm, người Việt thường tự mua thuốc ở nhà thuốc trước khi đi khám bác sĩ. Nếu uống thuốc hai ba ngày mà chưa khỏe thì mới phải đi bệnh viện. Ở thành phố lớn, bệnh viện thường đông người, phải xếp hàng lâu. Vì vậy nhiều người thích đi phòng khám tư nhân hơn. Phòng khám tư nhân sạch hơn và nhanh hơn, nhưng đắt hơn bệnh viện công."
@@ -2286,7 +2223,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Comprehension questions:\n1. What does the proverb 'khỏe hơn giàu' mean?\n2. What do Vietnamese people usually do first when they're sick?\n3. Why do many people prefer private clinics over public hospitals?",
                   "video_url": null,
                   "vietnamese_text": "Câu hỏi hiểu:\n1. Thành ngữ 'khỏe hơn giàu' nghĩa là gì?\n2. Khi bị ốm, người Việt thường làm gì trước tiên?\n3. Tại sao nhiều người thích phòng khám tư nhân hơn bệnh viện công?"
@@ -2297,7 +2233,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Lan: Anh oi, em bi om hai ngay roi. Phai di kham khong anh? Anh: Em phai di kham ngay di. Dung tu mua thuoc mai, khong khoe thi phai di benh vien. Lan: Nhung em so benh vien dong lam. Phong kham tu nhan duoc khong? Anh: Duoc, phong kham tu nhan sach hon va nhanh hon. Nhung dat hon. Em phai di thoi, khong thi benh nang hon.",
                   "translation": "Lan: Brother, I have been sick for two days. Do I have to go to the doctor?\nBrother: You have to go right away. Do not keep buying medicine yourself, if you are not better you must go to the hospital.\nLan: But I am afraid the hospital is very crowded. Can I go to a private clinic?\nBrother: Yes, private clinics are cleaner and faster. But more expensive. You have to go, otherwise the illness gets worse.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Anh ơi, em bị ốm hai ngày rồi. Phải đi khám không anh?\nAnh: Em phải đi khám ngay đi. Đừng tự mua thuốc mãi, không khỏe thì phải đi bệnh viện.\nLan: Nhưng em sợ bệnh viện đông lắm. Phòng khám tư nhân được không?\nAnh: Được, phòng khám tư nhân sạch hơn và nhanh hơn. Nhưng đắt hơn. Em phải đi thôi, không thì bệnh nặng hơn.",
@@ -2358,7 +2293,6 @@
                   "example_translation": "Private clinics are more expensive than public hospitals.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phong kham",
                   "region": "STANDARD",
                   "translation": "clinic",
                   "word": "phòng khám"
@@ -2378,7 +2312,6 @@
                   "example_translation": "The private clinic is cleaner.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "tu nhan",
                   "region": "STANDARD",
                   "translation": "private",
                   "word": "tư nhân"
@@ -2398,7 +2331,6 @@
                   "example_translation": "Public hospitals are cheaper than private clinics.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "cong",
                   "region": "STANDARD",
                   "translation": "public / state-run",
                   "word": "công"
@@ -2546,7 +2478,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnam has a tropical climate. The North has four distinct seasons. The South only has two seasons: rainy season and dry season.",
                   "video_url": null,
                   "vietnamese_text": "Việt Nam có khí hậu nhiệt đới, nên nóng ẩm là đặc trưng. Miền Bắc có bốn mùa rõ rệt: xuân, hạ, thu, đông. Miền Nam chỉ có hai mùa: mùa mưa và mùa khô."
@@ -2557,7 +2488,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Lan: Troi dang mua to qua, minh khong di choi duoc roi. Mai: Vay o nha xem phim di. Nge noi tuan sau troi nang lai. Lan: U, mua mua o Sai Gon keo dai lam. Mai: O Ha Noi thi dang la mua thu, troi lanh va hanh kho.",
                   "translation": "Lan: It's raining heavily, we can't go out anymore.\nMai: Then let's stay home and watch a movie.\nLan: Yeah, the rainy season in Saigon lasts a long time.\nMai: In Hanoi it's autumn now, it's cold and dry.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Trời đang mưa to quá, mình không đi chơi được rồi.\nMai: Vậy ở nhà xem phim đi. Nghe nói tuần sau trời nắng lại.\nLan: Ừ, mùa mưa ở Sài Gòn kéo dài lắm. Đến tháng mười một mới hết mưa.\nMai: Ở Hà Nội thì đang là mùa thu, trời lạnh và hanh khô.",
@@ -2604,7 +2534,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "How to talk about weather in Vietnamese is different from English. Instead of 'It is raining', Vietnamese say 'Trời đang mưa' or shorter 'Đang mưa'.",
                   "video_url": null,
                   "vietnamese_text": "Cách nói thời tiết trong tiếng Việt khác tiếng Anh. Thay vì 'It is raining', người Việt nói 'Trời đang mưa' hoặc ngắn hơn 'Đang mưa'. 'Trời' có nghĩa là sky/weather."
@@ -2629,7 +2558,6 @@
                   "example_translation": "It's raining.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "troi",
                   "region": "STANDARD",
                   "translation": "sky / weather",
                   "word": "trời"
@@ -2649,7 +2577,6 @@
                   "example_translation": "It's so hot today!",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "nong",
                   "region": "STANDARD",
                   "translation": "hot",
                   "word": "nóng"
@@ -2669,7 +2596,6 @@
                   "example_translation": "Winter in Hanoi is very cold.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "lanh",
                   "region": "STANDARD",
                   "translation": "cold",
                   "word": "lạnh"
@@ -2689,7 +2615,6 @@
                   "example_translation": "It's raining heavily.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua",
                   "region": "STANDARD",
                   "translation": "rain / to rain",
                   "word": "mưa"
@@ -2709,7 +2634,6 @@
                   "example_translation": "The weather is so beautiful and sunny!",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nang",
                   "region": "STANDARD",
                   "translation": "sunny / sunshine",
                   "word": "nắng"
@@ -2729,7 +2653,6 @@
                   "example_translation": "It's very windy today.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "zio",
                   "region": "STANDARD",
                   "translation": "wind",
                   "word": "gió"
@@ -2749,7 +2672,6 @@
                   "example_translation": "Which season do you like the most?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua",
                   "region": "STANDARD",
                   "translation": "season",
                   "word": "mùa"
@@ -2769,7 +2691,6 @@
                   "example_translation": "Spring in Hanoi is very beautiful.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua xuan",
                   "region": "STANDARD",
                   "translation": "spring",
                   "word": "mùa xuân"
@@ -2789,7 +2710,6 @@
                   "example_translation": "Summer is very hot in Vietnam.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua ha",
                   "region": "STANDARD",
                   "translation": "summer",
                   "word": "mùa hạ"
@@ -2809,7 +2729,6 @@
                   "example_translation": "Autumn in Hanoi is very romantic.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua thu",
                   "region": "STANDARD",
                   "translation": "autumn / fall",
                   "word": "mùa thu"
@@ -2829,7 +2748,6 @@
                   "example_translation": "Winter in the North can be as cold as 10 degrees.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua dong",
                   "region": "STANDARD",
                   "translation": "winter",
                   "word": "mùa đông"
@@ -2849,7 +2767,6 @@
                   "example_translation": "March in Hanoi is very humid.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "am",
                   "region": "STANDARD",
                   "translation": "humid / damp",
                   "word": "ẩm"
@@ -2869,7 +2786,6 @@
                   "example_translation": "The rainy season in the South is from May to November.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua mua",
                   "region": "STANDARD",
                   "translation": "rainy season",
                   "word": "mùa mưa"
@@ -2889,7 +2805,6 @@
                   "example_translation": "The dry season in the South has very little rain.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua kho",
                   "region": "STANDARD",
                   "translation": "dry season",
                   "word": "mùa khô"
@@ -3053,7 +2968,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "'Đang' is a present progressive marker. When talking about weather, Vietnamese say 'Trời đang + verb/adjective'.",
                   "video_url": null,
                   "vietnamese_text": "'Đang' là từ chỉ thì hiện tại tiến hành, tương tự 'is/am/are + V-ing' trong tiếng Anh. Khi nói về thời tiết, người Việt hay nói 'Trời đang + động từ/tính từ'. Ví dụ: 'Trời đang mưa', 'Trời đang nóng'."
@@ -3064,7 +2978,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Note: many weather words are both nouns and verbs. 'Mưa' is both 'rain' and 'to rain'. 'Nắng' is both 'sunshine' and 'to be sunny'.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý: trong tiếng Việt, nhiều từ chỉ thời tiết vừa là danh từ vừa là động từ. 'Mưa' vừa là 'rain' (danh từ) vừa là 'to rain' (động từ). 'Nắng' vừa là 'sunshine' vừa là 'to be sunny'."
@@ -3075,7 +2988,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Hung: Troi dang lam gi ngoai do em? Lan: Dang mua rao, sam chop luon anh oi! Hung: Vay thi o nha di. Dang mua ma ra ngoai thi bi uot day. Lan: Nhung ma minh dang muon di sieu thi mua do. Mua tanh chua nhi? Hung: Chua tanh dau, dang mua to lam. Doi mot luc nua di.",
                   "translation": "Hùng: What's the weather doing outside?\nLan: It's raining heavily, with thunder and lightning!\nHùng: Then stay home. Going out while it's raining, you'll get wet.\nLan: But I want to go to the supermarket. Has the rain stopped?\nHùng: Not yet, it's raining really hard. Wait a bit.",
                   "video_url": null,
                   "vietnamese_text": "Hùng: Trời đang làm gì ngoài đó em?\nLan: Đang mưa rào, sấm chớp luôn anh ơi!\nHùng: Vậy thì ở nhà đi. Đang mưa mà ra ngoài thì bị ướt đấy.\nLan: Nhưng mà mình đang muốn đi siêu thị mua đồ. Mưa tạnh chưa nhỉ?\nHùng: Chưa tạnh đâu, đang mưa to lắm. Đợi một lúc nữa đi.",
@@ -3141,7 +3053,6 @@
                   "example_translation": "It's raining right now.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "dang",
                   "region": "STANDARD",
                   "translation": "currently / progressive marker",
                   "word": "đang"
@@ -3161,7 +3072,6 @@
                   "example_translation": "It's pouring rain heavily.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "mua rao",
                   "region": "STANDARD",
                   "translation": "heavy rain / downpour",
                   "word": "mưa rào"
@@ -3181,7 +3091,6 @@
                   "example_translation": "The rain stopped, let's go!",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "tanh",
                   "region": "STANDARD",
                   "translation": "to stop (rain) / clear up",
                   "word": "tạnh"
@@ -3272,7 +3181,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Listening exercise: You will hear a short weather forecast. Pay attention to weather keywords and the progressive marker 'đang'.",
                   "video_url": null,
                   "vietnamese_text": "Bài tập nghe: Bạn sẽ nghe đoạn dự báo thời tiết ngắn. Hãy chú ý các từ khóa về thời tiết và thì tiến hành 'đang'. Sau đó trả lời câu hỏi hiểu."
@@ -3283,7 +3191,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Xin chao cac ban, day la du bao thoi tiet hom nay. O mien Bac, troi dang lanh dan, nhiet do khoang muoi lam den hai muoi do. Chieu nay co the co mua nho. O mien Trung, troi dang nang va hanh kho, nhiet do hai muoi lam den ba muoi do. O mien Nam, dang la mua mua, troi dang am va co mua chieu. Nhiet do hai muoi bay den ba muoi hai do. Cac ban o mien Nam nho mang o khi ra ngoai nhe!",
                   "translation": "Listening content: 'Hello everyone, this is today's weather forecast. In the North, it's getting colder, temperature about 15 to 20 degrees. This afternoon there may be light rain. In the Central region, it's sunny and dry. In the South, it's the rainy season, it's humid and there will be afternoon rain. Those in the South, remember to bring an umbrella when going out!'",
                   "video_url": null,
                   "vietnamese_text": "Nội dung bài nghe (dự báo thời tiết):\n\n'Xin chào các bạn, đây là dự báo thời tiết hôm nay. Ở miền Bắc, trời đang lạnh dần, nhiệt độ khoảng mười lăm đến hai mươi độ. Chiều nay có thể có mưa nhỏ. Ở miền Trung, trời đang nắng và hanh khô, nhiệt độ hai mươi lăm đến ba mươi độ. Ở miền Nam, đang là mùa mưa, trời đang ẩm và có mưa chiều. Nhiệt độ hai mươi bảy đến ba mươi hai độ. Các bạn ở miền Nam nhớ mang ô khi ra ngoài nhé!'"
@@ -3294,7 +3201,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Bac si thoi tiet: Xin chao cac ban, day la du bao thoi tiet ngay mai. O mien Bac, troi dang lanh dan, co the co mua nho buoi sang. O mien Trung, troi nang va hanh kho. O mien Nam, dang la mua mua, nho mang o khi ra ngoai nhe! Nguoi hoi: Bac si oi, tuan sau troi co nang khong a? Bac si thoi tiet: Tuan sau mien Bac nang lai, nhung mien Nam van dang mua. Nhiet do mien Bac khoang muoi tam den hai muoi ba do.",
                   "translation": "Weather presenter: Hello everyone, this is tomorrow's weather forecast. In the North, it is getting colder, there may be light rain in the morning. In the Central region, it is sunny and dry. In the South, it is the rainy season, remember to bring an umbrella when going out!\nCaller: Doctor, will it be sunny next week?\nWeather presenter: Next week the North will be sunny again, but the South will still have rain. Temperature in the North about 18 to 23 degrees.",
                   "video_url": null,
                   "vietnamese_text": "Bác sĩ thời tiết: Xin chào các bạn, đây là dự báo thời tiết ngày mai. Ở miền Bắc, trời đang lạnh dần, có thể có mưa nhỏ buổi sáng. Ở miền Trung, trời nắng và hanh khô. Ở miền Nam, đang là mùa mưa, nhớ mang ô khi ra ngoài nhé!\nNgười hỏi: Bác sĩ ơi, tuần sau trời có nắng không ạ?\nBác sĩ thời tiết: Tuần sau miền Bắc nắng lại, nhưng miền Nam vẫn đang mưa. Nhiệt độ miền Bắc khoảng mười tám đến hai mươi ba độ.",
@@ -3350,7 +3256,6 @@
                   "example_translation": "What's the weather forecast today?",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "du bao",
                   "region": "STANDARD",
                   "translation": "forecast / prediction",
                   "word": "dự báo"
@@ -3370,7 +3275,6 @@
                   "example_translation": "Today's temperature is 30 degrees.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhiet do",
                   "region": "STANDARD",
                   "translation": "temperature",
                   "word": "nhiệt độ"
@@ -3390,7 +3294,6 @@
                   "example_translation": "Remember to bring an umbrella when going out.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "o",
                   "region": "STANDARD",
                   "translation": "umbrella",
                   "word": "ô"
@@ -3539,7 +3442,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In this lesson you will learn vocabulary about housing and daily life in Vietnam. Houses in Vietnam have many types: townhouse, apartment, rented room.",
                   "video_url": null,
                   "vietnamese_text": "Trong bài này bạn sẽ học từ vựng về nhà cửa và sinh hoạt hàng ngày ở Việt Nam. Nhà ở Việt Nam có nhiều kiểu: nhà riêng (townhouse), căn hộ chung cư (apartment), nhà trọ (rented room)."
@@ -3550,7 +3452,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Lan: Nha em o dau the? Hoa: Em o thue can ho gan truong dai hoc. Can ho co hai phong ngu, mot bep va mot ve sinh. Lan: Zia thue bao nhieu mot thang? Hoa: Nam trieu dong mot thang. Dat hon nha tro nhung sach hon va yen tinh hon. Lan: Nha toi o ngoai o, co san rong va vuon cay. Nhung xa trung tam thanh pho.",
                   "translation": "Lan: Where do you live?\nHoa: I rent an apartment near the university. The apartment has two bedrooms, a kitchen, and a bathroom.\nLan: How much is the rent per month?\nHoa: Five million dong per month. More expensive but cleaner and quieter.\nLan: My house is in the suburbs, with a big yard and garden. But far from the city center.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Nhà em ở đâu thế?\nHoa: Em ở thuê căn hộ gần trường đại học. Căn hộ có hai phòng ngủ, một bếp và một vệ sinh.\nLan: Giá thuê bao nhiêu một tháng?\nHoa: Năm triệu đồng một tháng. Đắt hơn nhà trọ nhưng sạch hơn và yên tĩnh hơn.\nLan: Nhà tôi ở ngoại ô, có sân rộng và vườn cây. Nhưng xa trung tâm thành phố.",
@@ -3602,7 +3503,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "In Vietnam, townhouses are usually narrow but long, called tube houses. Apartments are more convenient because they have elevators and parking. Rented rooms are the cheapest but small and noisy. Many students rent rooms or apartments near the university.",
                   "video_url": null,
                   "vietnamese_text": "Ở Việt Nam, nhà riêng thường hẹp nhưng dài, gọi là nhà ống. Chung cư thì tiện hơn vì có thang máy và chỗ để xe. Nhà trọ rẻ nhất nhưng nhỏ và ồn ào. Nhiều sinh viên ở thuê nhà trọ hoặc chung cư gần trường đại học."
@@ -3627,7 +3527,6 @@
                   "example_translation": "My house is near the center.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nha",
                   "region": "STANDARD",
                   "translation": "house / home",
                   "word": "nhà"
@@ -3647,7 +3546,6 @@
                   "example_translation": "The apartment has three rooms.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phong",
                   "region": "STANDARD",
                   "translation": "room",
                   "word": "phòng"
@@ -3667,7 +3565,6 @@
                   "example_translation": "My kitchen is small but fully equipped.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bep",
                   "region": "STANDARD",
                   "translation": "kitchen",
                   "word": "bếp"
@@ -3687,7 +3584,6 @@
                   "example_translation": "The house has two bathrooms.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ve sinh",
                   "region": "STANDARD",
                   "translation": "bathroom / toilet",
                   "word": "vệ sinh"
@@ -3707,7 +3603,6 @@
                   "example_translation": "Don't forget to lock the door when going out.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cua",
                   "region": "STANDARD",
                   "translation": "door",
                   "word": "cửa"
@@ -3727,7 +3622,6 @@
                   "example_translation": "Open the window for ventilation.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cua so",
                   "region": "STANDARD",
                   "translation": "window",
                   "word": "cửa sổ"
@@ -3747,7 +3641,6 @@
                   "example_translation": "I rent a small apartment.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "thue",
                   "region": "STANDARD",
                   "translation": "to rent / to hire",
                   "word": "thuê"
@@ -3767,7 +3660,6 @@
                   "example_translation": "I've lived in Hanoi for three years.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "o",
                   "region": "STANDARD",
                   "translation": "to live / to stay",
                   "word": "ở"
@@ -3787,7 +3679,6 @@
                   "example_translation": "I live on the third floor.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tang",
                   "region": "STANDARD",
                   "translation": "floor / story",
                   "word": "tầng"
@@ -3807,7 +3698,6 @@
                   "example_translation": "My house has a big yard.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "san",
                   "region": "STANDARD",
                   "translation": "yard / court",
                   "word": "sân"
@@ -3827,7 +3717,6 @@
                   "example_translation": "I live in an apartment building near work.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chung cu",
                   "region": "STANDARD",
                   "translation": "apartment building",
                   "word": "chung cư"
@@ -3847,7 +3736,6 @@
                   "example_translation": "The apartment has two bedrooms.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phong ngu",
                   "region": "STANDARD",
                   "translation": "bedroom",
                   "word": "phòng ngủ"
@@ -3867,7 +3755,6 @@
                   "example_translation": "We stayed at the hotel for three days.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "khach san",
                   "region": "STANDARD",
                   "translation": "hotel",
                   "word": "khách sạn"
@@ -3887,7 +3774,6 @@
                   "example_translation": "My house is in the suburbs.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ngoai o",
                   "region": "STANDARD",
                   "translation": "suburbs",
                   "word": "ngoại ô"
@@ -4053,7 +3939,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "'Ở' is the most common preposition of location in Vietnamese. But Vietnamese only needs 'ở' for most cases.",
                   "video_url": null,
                   "vietnamese_text": "'Ở' là giới từ chỉ vị trí phổ biến nhất trong tiếng Việt, tương tự 'at/in/on' trong tiếng Anh. Nhưng tiếng Việt chỉ cần 'ở' cho hầu hết trường hợp. Công thức: ở + nơi chốn."
@@ -4064,7 +3949,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "When describing a house: 'My house is at + location'. A more detailed structure: 'The house has + number + rooms/areas'.",
                   "video_url": null,
                   "vietnamese_text": "Khi mô tả nhà, người Việt hay nói: 'Nhà tôi ở + địa điểm'. Cấu trúc chi tiết hơn: 'Nhà có + số lượng + phòng/khu vực'. Ví dụ: 'Nhà tôi ở quận Một, có ba phòng ngủ và một bếp lớn.'"
@@ -4075,7 +3959,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Nam: Mo ta nha em di, nghe thu nao! Hoa: Nha em o ngoai o, la nha rieng hai tang. Tang mot co phong khach va bep. Tang hai co ba phong ngu va hai ve sinh. Vuon o phia sau nha, co nhieu cay an trai. Nam: Nghe hay qua! Nha anh o chung cu, chi co mot phong ngu thoi. Nhung o gan cho lam nen tien.",
                   "translation": "Nam: Describe your house!\nHoa: My house is in the suburbs, it's a two-story townhouse. The first floor has a living room and kitchen. The second floor has three bedrooms and two bathrooms. The garden is behind the house.\nNam: Sounds nice! My place is an apartment, with only one bedroom. But it's close to work so it's convenient.",
                   "video_url": null,
                   "vietnamese_text": "Nam: Mô tả nhà em đi, nghe thử nào!\nHoa: Nhà em ở ngoại ô, là nhà riêng hai tầng. Tầng một có phòng khách và bếp. Tầng hai có ba phòng ngủ và hai vệ sinh. Vườn ở phía sau nhà, có nhiều cây ăn trái.\nNam: Nghe hay quá! Nhà anh ở chung cư, chỉ có một phòng ngủ thôi. Nhưng ở gần chỗ làm nên tiện.",
@@ -4131,7 +4014,6 @@
                   "example_translation": "The living room is bigger than the bedroom.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phong khach",
                   "region": "STANDARD",
                   "translation": "living room",
                   "word": "phòng khách"
@@ -4151,7 +4033,6 @@
                   "example_translation": "There's a small garden behind the house.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "vuon",
                   "region": "STANDARD",
                   "translation": "garden",
                   "word": "vườn"
@@ -4171,7 +4052,6 @@
                   "example_translation": "This is my own house.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "rieng",
                   "region": "STANDARD",
                   "translation": "private / own / separate",
                   "word": "riêng"
@@ -4319,7 +4199,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "In this lesson you will learn vocabulary about entertainment and hobbies. Especially football is the most popular sport in Vietnam.",
                   "video_url": null,
                   "vietnamese_text": "Trong bài này bạn sẽ học từ vựng về giải trí và sở thích. Người Việt Nam thích nhiều hoạt động giải trí: xem phim, nghe nhạc, đọc sách, chơi thể thao, đi du lịch. Đặc biệt bóng đá là môn thể thao phổ biến nhất ở Việt Nam."
@@ -4330,7 +4209,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Minh: Em thich lam gi luc ranh? Hoa: Em thich nghe nhac va doc sach. Con anh? Minh: Anh thich xem phim va choi bong da. Cuoi tuan anh hay di boi. Hoa: Em cung thich boi nhung em boi khong gioi lam. Minh: Khong sao, tap nhieu la gioi. Mua he nay minh di du lich Da Lat nhe? Hoa: Duoc qua! Da Lat mat hon Sai Gon nhieu.",
                   "translation": "Minh: What do you like to do in your free time?\nHoa: I like listening to music and reading books.\nMinh: I like watching movies and playing football. On weekends I usually go swimming.\nHoa: I also like swimming but I'm not very good at it.\nMinh: That's okay, practice makes perfect. Let's travel to Da Lat this summer?\nHoa: Great! Da Lat is much cooler than Saigon.",
                   "video_url": null,
                   "vietnamese_text": "Minh: Em thích làm gì lúc rảnh?\nHoa: Em thích nghe nhạc và đọc sách. Còn anh?\nMinh: Anh thích xem phim và chơi bóng đá. Cuối tuần anh hay đi bơi.\nHoa: Em cũng thích bơi nhưng em bơi không giỏi lắm.\nMinh: Không sao, tập nhiều là giỏi. Mùa hè này mình đi du lịch Đà Lạt nhé?\nHoa: Được quá! Đà Lạt mát hơn Sài Gòn nhiều.",
@@ -4387,7 +4265,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Note: 'chơi' has a broader meaning than 'play'. 'Chơi' means both play (game/sport) and hang out/socialize.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý: trong tiếng Việt, 'chơi' có nghĩa rộng hơn 'play' trong tiếng Anh. 'Chơi' vừa là play (game/sport) vừa là hang out/socialize. Ví dụ: 'Cuối tuần mình đi chơi nhé' = Let's hang out this weekend."
@@ -4412,7 +4289,6 @@
                   "example_translation": "I like watching action movies.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "xem",
                   "region": "STANDARD",
                   "translation": "to watch / to look",
                   "word": "xem"
@@ -4432,7 +4308,6 @@
                   "example_translation": "This movie is really good!",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phim",
                   "region": "STANDARD",
                   "translation": "movie / film",
                   "word": "phim"
@@ -4452,7 +4327,6 @@
                   "example_translation": "I like listening to music.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "nghe",
                   "region": "STANDARD",
                   "translation": "to listen / to hear",
                   "word": "nghe"
@@ -4472,7 +4346,6 @@
                   "example_translation": "Vietnamese music is really good.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nhac",
                   "region": "STANDARD",
                   "translation": "music",
                   "word": "nhạc"
@@ -4492,7 +4365,6 @@
                   "example_translation": "I usually read books in the evening.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "doc",
                   "region": "STANDARD",
                   "translation": "to read",
                   "word": "đọc"
@@ -4512,7 +4384,6 @@
                   "example_translation": "Let's hang out this weekend!",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "choi",
                   "region": "STANDARD",
                   "translation": "to play / to hang out",
                   "word": "chơi"
@@ -4532,7 +4403,6 @@
                   "example_translation": "I like playing sports.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "the thao",
                   "region": "STANDARD",
                   "translation": "sport",
                   "word": "thể thao"
@@ -4552,7 +4422,6 @@
                   "example_translation": "Football is the most popular sport in Vietnam.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bong da",
                   "region": "STANDARD",
                   "translation": "football / soccer",
                   "word": "bóng đá"
@@ -4572,7 +4441,6 @@
                   "example_translation": "On weekends I usually go swimming.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "boi",
                   "region": "STANDARD",
                   "translation": "to swim",
                   "word": "bơi"
@@ -4592,7 +4460,6 @@
                   "example_translation": "This summer I'm traveling to Da Lat.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "du lich",
                   "region": "STANDARD",
                   "translation": "to travel / tourism",
                   "word": "du lịch"
@@ -4612,7 +4479,6 @@
                   "example_translation": "I'm reading a good book.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sach",
                   "region": "STANDARD",
                   "translation": "book",
                   "word": "sách"
@@ -4632,7 +4498,6 @@
                   "example_translation": "What do you like to do in your free time?",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "ranh",
                   "region": "STANDARD",
                   "translation": "free / available",
                   "word": "rảnh"
@@ -4652,7 +4517,6 @@
                   "example_translation": "He plays football very well.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "gioi",
                   "region": "STANDARD",
                   "translation": "good at / skilled",
                   "word": "giỏi"
@@ -4868,7 +4732,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Compound sentences use conjunctions to connect two clauses. Three most common at A2: 'và' (and), 'nhưng' (but), 'mà' (but/that/which).",
                   "video_url": null,
                   "vietnamese_text": "Câu ghép trong tiếng Việt dùng liên từ để nối hai vế câu. Ba liên từ phổ biến nhất ở mức A2: 'và' (and), 'nhưng' (but), 'mà' (but/that/which). 'Và' thêm thông tin, 'nhưng' đối lập, 'mà' đối lập nhẹ hoặc dẫn mệnh đề."
@@ -4879,7 +4742,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Note: 'nhưng' is for clear contrast. 'Mà' is for lighter contrast or emphasis. 'Mà' is also used as a relative clause marker.",
                   "video_url": null,
                   "vietnamese_text": "Lưu ý phân biệt 'nhưng' và 'mà': 'nhưng' dùng giữa hai vế đối lập rõ ràng. 'Mà' dùng giữa hai vế đối lập nhẹ hơn, hoặc khi muốn nhấn mạnh. 'Mà' cũng dùng để dẫn mệnh đề quan hệ (tương tự 'that/which' trong tiếng Anh)."
@@ -4890,7 +4752,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Lan: Em thich nghe nhac va doc sach, nhung anh thich xem phim va choi the thao. Minh: Anh thich bong da ma khong co thoi gian choi. Thay nguoi khac choi ma them qua! Lan: Cuoi tuan ranh thi di choi ma! Ca nha cung di boi va an ngoai nhe.",
                   "translation": "Lan: I like listening to music and reading books, but you like watching movies and playing sports.\nMinh: I like football but don't have time to play. Seeing others play makes me jealous!\nLan: When you're free on weekends, go play! Let's all go swimming and eat out.",
                   "video_url": null,
                   "vietnamese_text": "Lan: Em thích nghe nhạc và đọc sách, nhưng anh thích xem phim và chơi thể thao.\nMinh: Anh thích bóng đá mà không có thời gian chơi. Thấy người khác chơi mà thèm quá!\nLan: Cuối tuần rảnh thì đi chơi mà! Cả nhà cùng đi bơi và ăn ngoài nhé.",
@@ -4946,7 +4807,6 @@
                   "example_translation": "I like listening to music and reading books.",
                   "image_url": null,
                   "part_of_speech": "conjunction",
-                  "phonetic": "va",
                   "region": "STANDARD",
                   "translation": "and",
                   "word": "và"
@@ -4966,7 +4826,6 @@
                   "example_translation": "I like football but don't have time.",
                   "image_url": null,
                   "part_of_speech": "conjunction",
-                  "phonetic": "nhung",
                   "region": "STANDARD",
                   "translation": "but",
                   "word": "nhưng"
@@ -4986,7 +4845,6 @@
                   "example_translation": "You like it but don't have time.",
                   "image_url": null,
                   "part_of_speech": "conjunction",
-                  "phonetic": "ma",
                   "region": "STANDARD",
                   "translation": "but / that / which",
                   "word": "mà"
@@ -5006,7 +4864,6 @@
                   "example_translation": "Seeing them eat makes me so jealous!",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "them",
                   "region": "STANDARD",
                   "translation": "to crave / to be jealous of",
                   "word": "thèm"
@@ -5124,7 +4981,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Sample paragraph: My hobbies are listening to music and reading books. I like Vietnamese music more than foreign music because it's easier to understand. But I also like watching American movies because they're more interesting. The sport I like the most is football. In summer I usually travel, and the place I like the most is Da Lat because it's much cooler than Saigon.",
                   "video_url": null,
                   "vietnamese_text": "Đoạn văn mẫu: Sở thích của tôi là nghe nhạc và đọc sách. Tôi thích nhạc Việt Nam hơn nhạc nước ngoài vì nghe dễ hiểu hơn. Nhưng tôi cũng thích xem phim Mỹ vì phim Mỹ hay và hấp dẫn hơn. Cuối tuần tôi hay đi bơi và chơi bóng đá với bạn bè. Môn thể thao mà tôi thích nhất là bóng đá. Mùa hè tôi thường đi du lịch, và nơi mà tôi thích nhất là Đà Lạt vì ở đó mát hơn Sài Gòn nhiều."
@@ -5135,7 +4991,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Now write a paragraph of about 6-8 sentences about your hobbies. Use at least: 1 sentence with 'và', 1 with 'nhưng', 1 with 'mà', 1 comparative, 1 superlative.",
                   "video_url": null,
                   "vietnamese_text": "Bây giờ bạn hãy viết một đoạn văn khoảng 6-8 câu về sở thích của mình. Dùng ít nhất: 1 câu với 'và', 1 câu với 'nhưng', 1 câu với 'mà', 1 câu so sánh hơn, 1 câu so sánh nhất."
@@ -5146,7 +5001,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": "Lan: Em thich lam gi luc ranh? Minh: Toi thich doc sach va nghe nhac. Sach Viet Nam hay hon sach dich, va nhac Viet Nam de nghe hon. Nhung toi cung thich xem phim My vi hap dan hon. Con em? Lan: Em thich di du lich nhat! Noi ma em thich nhat la Da Lat vi mat hon Sai Gon nhieu. Mua he di Da Lat la tuyet nhat!",
                   "translation": "Lan: What do you like to do in your free time?\nMinh: I like reading books and listening to music. Vietnamese books are better than translated ones, and Vietnamese music is easier to listen to. But I also like watching American movies because they are more exciting. What about you?\nLan: I like traveling the most! The place that I like the most is Da Lat because it is much cooler than Saigon. Going to Da Lat in summer is the best!",
                   "video_url": null,
                   "vietnamese_text": "Lan: Em thích làm gì lúc rảnh?\nMinh: Tôi thích đọc sách và nghe nhạc. Sách Việt Nam hay hơn sách dịch, và nhạc Việt Nam dễ nghe hơn. Nhưng tôi cũng thích xem phim Mỹ vì hấp dẫn hơn. Còn em?\nLan: Em thích đi du lịch nhất! Nơi mà em thích nhất là Đà Lạt vì mát hơn Sài Gòn nhiều. Mùa hè đi Đà Lạt là tuyệt nhất!",
@@ -5202,7 +5056,6 @@
                   "example_translation": "This movie is very fascinating.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "hap dan",
                   "region": "STANDARD",
                   "translation": "attractive / fascinating",
                   "word": "hấp dẫn"
@@ -5222,7 +5075,6 @@
                   "example_translation": "I usually play football with friends.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ban be",
                   "region": "STANDARD",
                   "translation": "friends",
                   "word": "bạn bè"

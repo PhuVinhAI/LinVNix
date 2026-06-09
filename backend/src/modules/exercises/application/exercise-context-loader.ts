@@ -9,12 +9,10 @@ export interface LessonContext {
     contentType: string;
     vietnameseText: string;
     translation?: string;
-    phonetic?: string;
   }>;
   vocabularies: Array<{
     word: string;
     translation: string;
-    phonetic?: string;
     partOfSpeech: string;
     exampleSentence?: string;
     exampleTranslation?: string;
@@ -86,12 +84,10 @@ export class ExerciseContextLoader {
         contentType: c.contentType,
         vietnameseText: c.vietnameseText,
         translation: c.translation,
-        phonetic: c.phonetic,
       })),
       vocabularies: (lesson.vocabularies || []).map((v: any) => ({
         word: v.word,
         translation: v.translation,
-        phonetic: v.phonetic,
         partOfSpeech: v.partOfSpeech,
         exampleSentence: v.exampleSentence,
         exampleTranslation: v.exampleTranslation,

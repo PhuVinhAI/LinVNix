@@ -152,7 +152,6 @@
                   "image_url": null,
                   "notes": "Giới thiệu phương ngữ",
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese is not uniform across the country — the three main dialects differ significantly. Understanding dialects is the key to natural communication.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt không đồng nhất trên cả nước — ba phương ngữ chính Bắc, Trung, Nam có khác biệt đáng kể về từ vựng, ngữ pháp và phát âm. Hiểu phương ngữ là chìa khóa để giao tiếp tự nhiên với bất kỳ người Việt nào."
@@ -163,7 +162,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": "Hwe: Rang ma tro nay nong qua rura? Minh: Ua, Hwe noi giong Trung ghe! Nguoi Nam minh noi: Sao ma hom nay nong qua vay? Hwe: Hihi, tui quen noi rura roi. Con nguoi Bac noi the nao? Minh: Nguoi Bac noi: Sao hom nay nong the?",
                   "translation": "Huệ: Why is it so hot today? Minh: You speak with a Central accent! Southerners say it differently. Huệ: I am used to it. And Northerners? Minh: They say: Sao hôm nay nóng thế?",
                   "video_url": null,
                   "vietnamese_text": "Huệ: Răng mà trờ này nóng quá rứa?\nMinh: Ủa, Huệ nói giọng Trung ghê! Người Nam mình nói: Sao mà hôm nay nóng quá vậy?\nHuệ: Hihi, tui quen nói rứa rồi. Còn người Bắc nói thế nào?\nMinh: Người Bắc nói: Sao hôm nay nóng thế? Hoặc: Thế mà hôm nay nóng nhỉ?",
@@ -210,7 +208,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Some typical vocabulary differences across dialects.",
                   "video_url": null,
                   "vietnamese_text": "Một số khác biệt từ vựng tiêu biểu:\n- bây giờ (Bắc) ↔ bây chừ (Trung) ↔ bây giờ (Nam)\n- thế nào (Bắc) ↔ răng (Trung) ↔ sao (Nam)\n- đây (Bắc) ↔ ni (Trung) ↔ nầy (Nam)\n- kia (Bắc) ↔ tê (Trung) ↔ kia (Nam)\n- bố (Bắc) ↔ ba (Nam) — cha\n- mẹ (Bắc) ↔ má (Nam) — mẹ"
@@ -221,7 +218,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "C2-level learners need to recognize regional accents and flexibly switch between variants.",
                   "video_url": null,
                   "vietnamese_text": "Người học bậc C2 cần nhận diện được khẩu âm vùng miền và linh hoạt chuyển đổi giữa các biến thể. Đây là kỹ năng chỉ người rất thành thạo mới có."
@@ -246,7 +242,6 @@
                   "example_translation": "Northern and Southern dialects differ greatly in vocabulary.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phương ngự",
                   "region": "STANDARD",
                   "translation": "dialect",
                   "word": "phương ngữ"
@@ -266,7 +261,6 @@
                   "example_translation": "Each region has its own vocabulary variant.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "biến thể",
                   "region": "STANDARD",
                   "translation": "variant",
                   "word": "biến thể"
@@ -286,7 +280,6 @@
                   "example_translation": "She speaks with a very clear Central accent.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "khẩu âm",
                   "region": "STANDARD",
                   "translation": "accent",
                   "word": "khẩu âm"
@@ -306,7 +299,6 @@
                   "example_translation": "He speaks with a Northern accent, probably from Hanoi.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "giọng Bắc",
                   "region": "STANDARD",
                   "translation": "Northern accent",
                   "word": "giọng Bắc"
@@ -326,7 +318,6 @@
                   "example_translation": "People from Hue speak with a Central accent, sounds very sweet.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "giọng Trung",
                   "region": "STANDARD",
                   "translation": "Central accent",
                   "word": "giọng Trung"
@@ -346,7 +337,6 @@
                   "example_translation": "Southern accent sounds fun and cute.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "giọng Nam",
                   "region": "STANDARD",
                   "translation": "Southern accent",
                   "word": "giọng Nam"
@@ -366,7 +356,6 @@
                   "example_translation": "\"Răng\" is a regional word of Central Vietnam.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "từ địa phương",
                   "region": "STANDARD",
                   "translation": "regional word / localism",
                   "word": "từ địa phương"
@@ -386,7 +375,6 @@
                   "example_translation": "Northern dialect clearly distinguishes hỏi and ngã tones.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thanh điệu",
                   "region": "STANDARD",
                   "translation": "tone (linguistic)",
                   "word": "thanh điệu"
@@ -406,7 +394,6 @@
                   "example_translation": "Southerners often mix the hỏi and ngã tones together.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hỏi ngã",
                   "region": "STANDARD",
                   "translation": "hỏi and ngã tones (merged in South)",
                   "word": "hỏi ngã"
@@ -426,7 +413,6 @@
                   "example_translation": "How come you say that?",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "rang",
                   "region": "CENTRAL",
                   "translation": "how (Central dialect)",
                   "word": "răng"
@@ -446,7 +432,6 @@
                   "example_translation": "Now I have to go.",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "bây chừ",
                   "region": "CENTRAL",
                   "translation": "now (Central dialect)",
                   "word": "bây chừ"
@@ -466,7 +451,6 @@
                   "example_translation": "How much is this one?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "nầy",
                   "region": "SOUTHERN",
                   "translation": "this (Southern/Colloquial)",
                   "word": "nầy"
@@ -486,7 +470,6 @@
                   "example_translation": "Whose is that one?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "tê",
                   "region": "CENTRAL",
                   "translation": "that (Central dialect, distal)",
                   "word": "tê"
@@ -506,7 +489,6 @@
                   "example_translation": "Where are you going?",
                   "image_url": null,
                   "part_of_speech": "pronoun",
-                  "phonetic": "móc",
                   "region": "CENTRAL",
                   "translation": "where (Central dialect)",
                   "word": "móc"
@@ -526,7 +508,6 @@
                   "example_translation": "The pronunciation of \"tr\" differs between North and South.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phát âm",
                   "region": "STANDARD",
                   "translation": "pronunciation",
                   "word": "phát âm"
@@ -713,7 +694,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Basic grammar is the same nationwide, but each region has subtle differences.",
                   "video_url": null,
                   "vietnamese_text": "Ngữ pháp tiếng Việt cơ bản giống nhau trên cả nước, nhưng mỗi vùng miền có nét riêng: trợ từ cuối câu, cách hỏi, đại từ nhân xưng, và cấu trúc nhấn mạnh đều khác biệt tinh tế."
@@ -724,7 +704,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Characteristic sentence-final particles by region.",
                   "video_url": null,
                   "vietnamese_text": "Trợ từ cuối câu đặc trưng:\n- Bắc: ạ (kính ngữ), nhỉ (phỏng đoán), đấy (nhấn mạnh), cơ (nhấn mạnh sự thật)\n- Trung: rứa (vậy), ni (này), tê (kia), mô (đâu)\n- Nam: nghe (nhé), nè (này), hèn (thế cơ mà)"
@@ -735,7 +714,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Same conversation in three dialects.",
                   "video_url": null,
                   "vietnamese_text": "Bà Huế: Bây chừ mình đi mô rứa?\nÔng Sài Gòn: Dạ, bây giờ mình đi đâu đó ạ?\nBà Hà Nội: Thế bây giờ bà đi đâu đấy ạ?\nBà Huế: Tui đi chợ ni, mua cá ni nấu canh rứa!",
@@ -787,7 +765,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Regional personal pronouns.",
                   "video_url": null,
                   "vietnamese_text": "Đại từ nhân xưng vùng miền:\n- Bắc: tôi, anh, chị, cụ, bác, cậu, mày → tao (thân mật)\n- Trung: tui (tôi), tau (tao), mi (mày), bển (bên ấy)\n- Nam: tui, mình, bây, nghen, cha nội, má bầm"
@@ -812,7 +789,6 @@
                   "example_translation": "Why do you speak like that?",
                   "image_url": null,
                   "part_of_speech": "adverb",
-                  "phonetic": "rứa",
                   "region": "CENTRAL",
                   "translation": "thus / like that (Central)",
                   "word": "rứa"
@@ -832,7 +808,6 @@
                   "example_translation": "Yes, I understand!",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "ạ",
                   "region": "NORTHERN",
                   "translation": "polite sentence-final particle (Northern)",
                   "word": "ạ"
@@ -852,7 +827,6 @@
                   "example_translation": "Let's eat, ok?",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "nghe",
                   "region": "SOUTHERN",
                   "translation": "ok? / right? (Southern particle)",
                   "word": "nghe"
@@ -872,7 +846,6 @@
                   "example_translation": "This one is mine!",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "nè",
                   "region": "SOUTHERN",
                   "translation": "here / this is (Southern particle)",
                   "word": "nè"
@@ -892,7 +865,6 @@
                   "example_translation": "I told you it is true!",
                   "image_url": null,
                   "part_of_speech": "interjection",
-                  "phonetic": "cơ",
                   "region": "NORTHERN",
                   "translation": "emphasis particle (Northern)",
                   "word": "cơ"
@@ -1006,7 +978,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Dialect listening is the hardest C2 skill.",
                   "video_url": null,
                   "vietnamese_text": "Nghe hiểu phương ngữ là kỹ năng khó nhất bậc C2. Người Trung nói nhanh trộn từ địa phương; người Bắc dùng thanh điệu rõ; người Nam nói trầm và ngắn."
@@ -1017,7 +988,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Same question in three dialects.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Bắc: \"Thưa cụ, cháu xin phép hỏi cụ đi đâu đấy ạ?\"\nTiếng Trung: \"Tề ni, tau hỏi mi đi mô rứa?\"\nTiếng Nam: \"Xi ông, tui hỏi ông đi đâu data?\"",
@@ -1064,7 +1034,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Listening characteristics by region.",
                   "video_url": null,
                   "vietnamese_text": "Đặc điểm nghe:\n- Bắc: thanh điệu rõ, phân biệt hỏi-ngã, tr và ch khác nhau\n- Trung: nói nhanh, gộp âm, r như gi, trộn từ rứa/mô/răng\n- Nam: thanh trầm, gộp hỏi-ngã, v và r như gi, nói ngắn"
@@ -1089,7 +1058,6 @@
                   "example_translation": "Northern intonation sounds more melodic.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ngữ điệu",
                   "region": "STANDARD",
                   "translation": "intonation",
                   "word": "ngữ điệu"
@@ -1109,7 +1077,6 @@
                   "example_translation": "You need to recognize the accent to understand correctly.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "nhận diện",
                   "region": "STANDARD",
                   "translation": "to recognize / identify",
                   "word": "nhận diện"
@@ -1201,7 +1168,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Three biggest pronunciation differences across dialects.",
                   "video_url": null,
                   "vietnamese_text": "Ba khác biệt phát âm lớn nhất: (1) phụ âm đầu — Bắc phân biệt tr và ch, Nam trộn; (2) thanh điệu — Bắc giữ đủ 6 thanh, Nam gộp hỏi-ngã; (3) âm cuối — Bắc giữ rõ r, Nam đọc r thành gi."
@@ -1212,7 +1178,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Pronunciation comparison.",
                   "video_url": null,
                   "vietnamese_text": "So sánh phát âm:\n| Âm | Bắc | Nam |\n| tr | tʂ rõ | c giống ch |\n| ch | c rõ | c giống tr |\n| r | z rung | j như gi |\n| d/gi | z | j |\n| v | v môi răng | j như gi |\n| hỏi/ngã | phân biệt | gộp chung |"
@@ -1223,7 +1188,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Pronunciation practice dialogue.",
                   "video_url": null,
                   "vietnamese_text": "Giáo viên: Hãy đọc \"trời\" theo giọng Bắc.\nHọc viên: Trời!\nGiáo viên: Giờ đọc theo giọng Nam.\nHọc viên: Giời!\nGiáo viên: Đúng rồi! Người Nam đọc tr thành gi.",
@@ -1289,7 +1253,6 @@
                   "example_translation": "Initial consonants tr and ch are the same in the Southern dialect.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phụ âm đầu",
                   "region": "STANDARD",
                   "translation": "initial consonant",
                   "word": "phụ âm đầu"
@@ -1309,7 +1272,6 @@
                   "example_translation": "Final consonants -c and -t are hard to distinguish in Central dialect.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "âm cuối",
                   "region": "STANDARD",
                   "translation": "final consonant / coda",
                   "word": "âm cuối"
@@ -1456,7 +1418,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Sino-Vietnamese words make up 40-60% of the Vietnamese dictionary. Understanding their structure helps guess meanings of new words.",
                   "video_url": null,
                   "vietnamese_text": "Từ Hán Việt chiếm khoảng 40-60% từ điển tiếng Việt, đặc biệt nhiều trong văn bản khoa học, hành chính, pháp lý. Hiểu cấu trúc Hán Việt giúp đoán nghĩa từ mới."
@@ -1467,7 +1428,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Important Sino-Vietnamese prefixes.",
                   "video_url": null,
                   "vietnamese_text": "Tiền tố Hán Việt quan trọng:\n- bất- (不): phủ định — bất bình, bất công, bất hợp pháp\n- vô- (無): không có — vô hình, vô duyên, vô giá\n- phản- (反): chống lại — phản đối, phản chiến, phản ứng\n- siêu- (超): vượt — siêu âm, siêu thị, siêu nhiên\n- bán- (半): nửa — bán đảo, bán thân"
@@ -1478,7 +1438,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Important Sino-Vietnamese suffixes.",
                   "video_url": null,
                   "vietnamese_text": "Hậu tố Hán Việt quan trọng:\n- -hóa (化): biến đổi — hiện đại hóa, công nghiệp hóa\n- -học (學): ngành học — ngôn ngữ học, tâm lý học\n- -sĩ (士): người — nghệ sĩ, y sĩ, nghị sĩ\n- -gia (家): chuyên gia — âm nhạc gia, văn học gia\n- -viên (員): người — công chức viên, phi công viên"
@@ -1489,7 +1448,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 4,
-                  "phonetic": null,
                   "translation": "Some Sino-Vietnamese words differ from modern Chinese meanings.",
                   "video_url": null,
                   "vietnamese_text": "Một số từ Hán Việt có nghĩa khác tiếng Trung hiện đại:\n- bác sĩ (博士): Việt = bác sĩ y khoa, Trung = tiến sĩ\n- giáo sư (教師): Việt = giáo sư đại học, Trung = giáo viên\n- thư viện (書院): Việt = thư viện, Trung = trường học cổ"
@@ -1514,7 +1472,6 @@
                   "example_translation": "Sino-Vietnamese words make up most academic vocabulary.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "Hán Việt",
                   "region": "STANDARD",
                   "translation": "Sino-Vietnamese",
                   "word": "Hán Việt"
@@ -1534,7 +1491,6 @@
                   "example_translation": "\"Sơ mi\" is a loanword from French \"chemise\".",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "từ mượn",
                   "region": "STANDARD",
                   "translation": "loanword / borrowed word",
                   "word": "từ mượn"
@@ -1554,7 +1510,6 @@
                   "example_translation": "\"Đại học\" is a Chinese-origin word, literally \"great learning\".",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "từ gốc Hán",
                   "region": "STANDARD",
                   "translation": "Chinese-origin word",
                   "word": "từ gốc Hán"
@@ -1574,7 +1529,6 @@
                   "example_translation": "The character 明 is read as \"minh\" in Sino-Vietnamese.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "âm Hán Việt",
                   "region": "STANDARD",
                   "translation": "Sino-Vietnamese reading",
                   "word": "âm Hán Việt"
@@ -1594,7 +1548,6 @@
                   "example_translation": "\"Xà phòng\" was Vietnamized from French \"savon\".",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "Việt hóa",
                   "region": "STANDARD",
                   "translation": "Vietnamization (of foreign words)",
                   "word": "Việt hóa"
@@ -1614,7 +1567,6 @@
                   "example_translation": "\"Ga\" is a foreign-origin word from French.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "ngoại lai",
                   "region": "STANDARD",
                   "translation": "foreign-origin (word)",
                   "word": "ngoại lai"
@@ -1634,7 +1586,6 @@
                   "example_translation": "\"Vợ\" is a native word, not Sino-Vietnamese.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "bản địa",
                   "region": "STANDARD",
                   "translation": "native / indigenous",
                   "word": "bản địa"
@@ -1654,7 +1605,6 @@
                   "example_translation": "\"Xe cộ\" and \"phương tiện\" are a Sino-Vietnamese synonym pair.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "đồng nghĩa Hán Việt",
                   "region": "STANDARD",
                   "translation": "Sino-Vietnamese synonym pair",
                   "word": "đồng nghĩa Hán Việt"
@@ -1674,7 +1624,6 @@
                   "example_translation": "\"Bồ Đào Nha\" is a phonetic translation from Portugal.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dịch âm",
                   "region": "STANDARD",
                   "translation": "phonetic translation / transliteration",
                   "word": "dịch âm"
@@ -1694,7 +1643,6 @@
                   "example_translation": "Each Chinese morpheme corresponds to one Chinese character.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tiết Hán",
                   "region": "STANDARD",
                   "translation": "Chinese syllable/morpheme",
                   "word": "tiết Hán"
@@ -1714,7 +1662,6 @@
                   "example_translation": "The people rose up due to social injustice.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bất bình",
                   "region": "STANDARD",
                   "translation": "injustice / indignation",
                   "word": "bất bình"
@@ -1734,7 +1681,6 @@
                   "example_translation": "Cultural power is invisible but invaluable.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "vô hình",
                   "region": "STANDARD",
                   "translation": "invisible / intangible",
                   "word": "vô hình"
@@ -1754,7 +1700,6 @@
                   "example_translation": "Students protested opposing the new policy.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "phản đối",
                   "region": "STANDARD",
                   "translation": "to oppose / to object",
                   "word": "phản đối"
@@ -1774,7 +1719,6 @@
                   "example_translation": "The modernization process happened rapidly.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hiện đại hóa",
                   "region": "STANDARD",
                   "translation": "modernization",
                   "word": "hiện đại hóa"
@@ -1794,7 +1738,6 @@
                   "example_translation": "Linguistics studies language structure.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ngôn ngữ học",
                   "region": "STANDARD",
                   "translation": "linguistics",
                   "word": "ngôn ngữ học"
@@ -2005,7 +1948,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Sino-Vietnamese compounds have regular structures.",
                   "video_url": null,
                   "vietnamese_text": "Từ ghép Hán Việt có cấu trúc quy luật. 4 loại chính: (1) tiền tố + gốc, (2) gốc + hậu tố, (3) ghép đồng nghĩa, (4) ghép phản nghĩa."
@@ -2016,7 +1958,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Synonym compounds.",
                   "video_url": null,
                   "vietnamese_text": "Ghép đồng nghĩa: hai tiết Hán cùng nghĩa bổ sung:\n- quốc gia (國家): quốc = nước, gia = nhà → nước nhà\n- sơn hà (山河): sơn = núi, hà = sông → non nước\n- phụ mẫu (父母): phụ = cha, mẫu = mẹ → cha mẹ\n- phu thê (夫妻): phu = chồng, thê = vợ → vợ chồng"
@@ -2027,7 +1968,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Antonym compounds.",
                   "video_url": null,
                   "vietnamese_text": "Ghép phản nghĩa: hai tiết trái nghĩa tạo nghĩa mới:\n- thiên địa (天地): trời đất → vũ trụ\n- âm dương (陰陽): tối sáng → triết lý\n- hưng vong (興亡): thịnh suy → vận mệnh\n- tự tha (自他): mình người → mối quan hệ"
@@ -2052,7 +1992,6 @@
                   "example_translation": "National interests must be placed above all.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "quốc gia",
                   "region": "STANDARD",
                   "translation": "nation / state",
                   "word": "quốc gia"
@@ -2072,7 +2011,6 @@
                   "example_translation": "The Southern country mountains and rivers, the Southern emperor resides.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sơn hà",
                   "region": "STANDARD",
                   "translation": "mountains and rivers / homeland",
                   "word": "sơn hà"
@@ -2187,7 +2125,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Administrative and scientific texts use 70-80% Sino-Vietnamese. C2 learners need to read them fluently.",
                   "video_url": null,
                   "vietnamese_text": "Văn bản hành chính và khoa học dùng tỷ lệ từ Hán Việt rất cao — có thể 70-80%. Người C2 cần đọc hiểu trôi chảy, nhận diện cấu trúc Hán Việt và chuyển nghĩa sang Việt thông thường."
@@ -2198,7 +2135,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Administrative text with Sino-Vietnamese analysis.",
                   "video_url": null,
                   "vietnamese_text": "Đoạn văn bản hành chính:\n\"Căn cứ Hiến pháp nước Cộng hòa Xã hội Chủ nghĩa Việt Nam; căn cứ Luật Tổ chức Chính phủ; Nay ban hành Nghị định quy định thi hành Luật Đất đai.\"\n\nPhân tích:\n- Hiến pháp (憲法): luật tối cao\n- Cộng hòa (共和): chế độ chung hòa\n- Xã hội (社會): tổ chức cộng đồng\n- Chủ nghĩa (主義): hệ tư tưởng"
@@ -2209,7 +2145,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Sino-Vietnamese vs native Vietnamese comparison.",
                   "video_url": null,
                   "vietnamese_text": "Bảng đối chiếu Hán Việt — Việt thuần:\n| Hán Việt | Việt thuần | Nghĩa |\n| đại hội | hội lớn | congress |\n| thông qua | bỏ phiếu chấp thuận | to pass |\n| ban hành | phát ra, công bố | to promulgate |\n| quy định | đặt ra quy tắc | to stipulate |\n| thi hành | làm theo, thực hiện | to implement |"
@@ -2234,7 +2169,6 @@
                   "example_translation": "The constitution is the supreme law of the nation.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "Hiến pháp",
                   "region": "STANDARD",
                   "translation": "constitution",
                   "word": "Hiến pháp"
@@ -2254,7 +2188,6 @@
                   "example_translation": "The government issued a new decree on land.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nghị định",
                   "region": "STANDARD",
                   "translation": "decree",
                   "word": "nghị định"
@@ -2274,7 +2207,6 @@
                   "example_translation": "The authority executes the court ruling.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "thi hành",
                   "region": "STANDARD",
                   "translation": "to implement / to execute",
                   "word": "thi hành"
@@ -2393,7 +2325,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Sino-Vietnamese cultural influence is profound. Vietnamese also borrowed from French and English.",
                   "video_url": null,
                   "vietnamese_text": "Ảnh hưởng Hán Việt sâu rộng: tên người (Nguyễn, Trần, Lê), tên nước (Trung Quốc, Hàn Quốc), kinh Phật (Nam mô A Di Đà Phật), danh từ chuyên ngành. Ngoài ra, tiếng Việt cũng mượn từ Pháp (ga, xà phòng, sơ mi, búp bê) và Anh (in-tơ-nét, vi tính)."
@@ -2404,7 +2335,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Common French loanwords.",
                   "video_url": null,
                   "vietnamese_text": "Từ mượn tiếng Pháp phổ biến:\n- ga (gare): nhà ga\n- xà phòng (savon): xà phòng\n- sơ mi (chemise): áo sơ mi\n- búp bê (poupée): búp bê\n- cà phê (café): cà phê\n- đầm (madame): bà đầm\n- ghi đông (guidon): ghi đông xe đạp"
@@ -2415,7 +2345,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Country names via Sino-Vietnamese transliteration.",
                   "video_url": null,
                   "vietnamese_text": "Dịch âm tên nước qua Hán Việt:\n- Anh Cát Lợi → Anh (英): nước Anh\n- Pháp (法): nước Pháp\n- Mỹ Lợi Gia → Mỹ (美): nước Mỹ\n- Hà Lan (荷蘭): nước Hà Lan\n- Bồ Đào Nha (葡萄牙): nước Bồ Đào Nha"
@@ -2440,7 +2369,6 @@
                   "example_translation": "Wash your hands with antibacterial soap.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "xà phòng",
                   "region": "STANDARD",
                   "translation": "soap (from French savon)",
                   "word": "xà phòng"
@@ -2460,7 +2388,6 @@
                   "example_translation": "He wears a white shirt, looks very elegant.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "sơ mi",
                   "region": "STANDARD",
                   "translation": "shirt (from French chemise)",
                   "word": "sơ mi"
@@ -2480,7 +2407,6 @@
                   "example_translation": "Portugal is famous for wine and football.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "Bồ Đào Nha",
                   "region": "STANDARD",
                   "translation": "Portugal (Sino-Vietnamese transliteration)",
                   "word": "Bồ Đào Nha"
@@ -2606,7 +2532,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Classical Vietnamese literature has two streams and various forms.",
                   "video_url": null,
                   "vietnamese_text": "Văn học cổ Việt Nam chia hai luồng: Hán văn (viết bằng chữ Hán) và Nôm văn (viết bằng chữ Nôm). Các thể thơ chính: thơ Đường luật, lục bát, song thất lục bát. Các thể văn xuôi: tấu, chiếu, hịch, truyền kỳ."
@@ -2617,7 +2542,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "The Tale of Kiều opening lines.",
                   "video_url": null,
                   "vietnamese_text": "Truyện Kiều của Nguyễn Du — 3.254 câu lục bát, kiệt tác văn học Việt Nam. Mở đầu:\n\"Trăm năm trong cõi người ta,\nChữ tài chữ mệnh khéo là ghét nhau.\nTrải qua một cuộc bể dâu,\nNhững điều trông thấy mà đau đớn lòng.\""
@@ -2628,7 +2552,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Classical administrative writing forms.",
                   "video_url": null,
                   "vietnamese_text": "Các thể văn hành chính cổ:\n- Tấu (奏): bề tôi dâng lên vua\n- Chiếu (詔): vua ban xuống thần dân\n- Hịch (檄): lời kêu gọi chiến đấu\n- Sớ (疏): lời can gián vua\n- Cáo (誥): lời tuyên bố chính thức"
@@ -2653,7 +2576,6 @@
                   "example_translation": "Vietnamese classical literature leaves a rich heritage.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cổ văn",
                   "region": "STANDARD",
                   "translation": "classical literature",
                   "word": "cổ văn"
@@ -2673,7 +2595,6 @@
                   "example_translation": "Studying Hán Nôm helps understand ancient texts.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "Hán Nôm",
                   "region": "STANDARD",
                   "translation": "Sino-Vietnamese and Nôm script",
                   "word": "Hán Nôm"
@@ -2693,7 +2614,6 @@
                   "example_translation": "Đường luật poetry requires strict tonal rules and rhyming.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thơ Đường luật",
                   "region": "STANDARD",
                   "translation": "Tang-regulated poetry",
                   "word": "thơ Đường luật"
@@ -2713,7 +2633,6 @@
                   "example_translation": "Lục bát is the most popular Vietnamese verse form.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lục bát",
                   "region": "STANDARD",
                   "translation": "six-eight syllable verse form",
                   "word": "lục bát"
@@ -2733,7 +2652,6 @@
                   "example_translation": "The old lady often recites Kiều poetry every evening.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "ngâm",
                   "region": "STANDARD",
                   "translation": "to chant / recite poetry",
                   "word": "ngâm"
@@ -2753,7 +2671,6 @@
                   "example_translation": "Nguyễn Du eulogized the beauty of nature in The Tale of Kiều.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "vịnh",
                   "region": "STANDARD",
                   "translation": "to compose poetry about / eulogize",
                   "word": "vịnh"
@@ -2773,7 +2690,6 @@
                   "example_translation": "The minister submitted a memorial asking to reduce taxes.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tấu",
                   "region": "STANDARD",
                   "translation": "memorial (to the emperor)",
                   "word": "tấu"
@@ -2793,7 +2709,6 @@
                   "example_translation": "Emperor Lý issued the edict on moving the capital in 1010.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chiếu",
                   "region": "STANDARD",
                   "translation": "imperial edict",
                   "word": "chiếu"
@@ -2813,7 +2728,6 @@
                   "example_translation": "Trần Hưng Đạo Call to Arms is a masterpiece of political prose.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hịch",
                   "region": "STANDARD",
                   "translation": "call to arms / manifesto",
                   "word": "hịch"
@@ -2833,7 +2747,6 @@
                   "example_translation": "Nguyễn Dữ Truyền kỳ mạn lục is a famous fantasy tale collection.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "truyền kỳ",
                   "region": "STANDARD",
                   "translation": "strange tale / fantasy story",
                   "word": "truyền kỳ"
@@ -2975,7 +2888,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Classical grammar was influenced by Chinese: modifier-head word order, extensive Sino-Vietnamese, omitted subjects.",
                   "video_url": null,
                   "vietnamese_text": "Ngữ pháp cổ chịu ảnh hưởng chữ Hán: trật tự bổ ngữ-trung tâm (trái với Việt thuần), dùng nhiều từ Hán Việt, câu rút gọn lược chủ ngữ. Hiểu ngữ pháp cổ giúp đọc văn bản hành chính và văn chương cổ."
@@ -2986,7 +2898,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Word order differences.",
                   "video_url": null,
                   "vietnamese_text": "Khác biệt trật tự từ Hán vs Việt thuần:\n| Hán Việt (bổ ngữ trước) | Việt thuần (trung tâm trước) |\n| bạch mã (trắng ngựa) | ngựa trắng |\n| đại học (lớn học) | trường lớn |\n| quốc hội (nước hội) | hội đồng quốc gia |"
@@ -2997,7 +2908,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Classical sentences often omit subjects and use parallelism.",
                   "video_url": null,
                   "vietnamese_text": "Câu văn cổ thường lược chủ ngữ, dùng đối ngẫu, vần điệu trong văn xuôi. Ví dụ Bình Ngô đại cáo:\n\"Dời non lấp biển / Nghiệp nhóm nên / Nắm cốt phay da / Oai thêm lớn.\"\n→ Câu đối ngẫu: động từ 2+2 / cụm 3 / động từ 2+2 / cụm 3."
@@ -3022,7 +2932,6 @@
                   "example_translation": "Parallelism is the most important device in parallel prose.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "đối ngẫu",
                   "region": "STANDARD",
                   "translation": "parallelism (literary device)",
                   "word": "đối ngẫu"
@@ -3042,7 +2951,6 @@
                   "example_translation": "Parallel prose flourished in the early Lê period.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "biền ngẫu",
                   "region": "STANDARD",
                   "translation": "parallel prose style",
                   "word": "biền ngẫu"
@@ -3130,7 +3038,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Lục bát: alternating 6 and 8 syllable lines with strict tonal and rhyme rules.",
                   "video_url": null,
                   "vietnamese_text": "Lục bát: câu lục (6 âm tiết) xen câu bát (8 âm tiết). Luật: chữ 2-4-6-8 phải đúng thanh bằng/trắc; vần chân: chữ 6 câu lục vần với chữ 6 câu bát, chữ 8 câu bát vần với chữ 6 câu lục sau."
@@ -3141,7 +3048,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Lục bát tonal and rhyme pattern.",
                   "video_url": null,
                   "vietnamese_text": "Luật bằng trắc lục bát:\nCâu lục: B B T T B B\nCâu bát: B B T T B B T B\n(B = bằng: ngang/huyền; T = trắc: sắc/hỏi/ngã/nặng)\n\nVần chân:\nCâu lục: • • • • • A (vần bằng)\nCâu bát: • • • • • A • B (vần bằng)\nCâu lục sau: • • • • • B (vần nối)"
@@ -3152,7 +3058,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Song thất lục bát structure.",
                   "video_url": null,
                   "vietnamese_text": "Song thất lục bát: thêm hai câu thất (7 âm tiết) trước mỗi cặp lục bát.\nCấu trúc: Thất (7) + Thất (7) + Lục (6) + Bát (8)\n\nVí dụ Chinh phụ ngâm khúc mở đầu:\n\"Sao đành lòng thấy kẻ chinh phu\nThà đừng thà vắng biết chừng phu\nLệ rơi trên áo cờ đào\nĐêm ngày luống thẹn nhiệm nhặt nhối ao\""
@@ -3177,7 +3082,6 @@
                   "example_translation": "The bằng-trắc rule in lục bát is very strict.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bằng trắc",
                   "region": "STANDARD",
                   "translation": "flat and sharp tones (poetic)",
                   "word": "bằng trắc"
@@ -3197,7 +3101,6 @@
                   "example_translation": "End rhyme in lục bát connects lục and bát lines.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "vần chân",
                   "region": "STANDARD",
                   "translation": "end rhyme (poetry)",
                   "word": "vần chân"
@@ -3285,7 +3188,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Writing lục bát: tonal rules and rhyme scheme.",
                   "video_url": null,
                   "vietnamese_text": "Viết lục bát: bắt đầu câu lục 6 âm tiết (B B T T B B), rồi câu bát 8 âm tiết (B B T T B B T B). Chữ 6 lục vần chữ 6 bát; chữ 8 bát vần chữ 6 lục sau."
@@ -3296,7 +3198,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Lục bát writing tips.",
                   "video_url": null,
                   "vietnamese_text": "Mẹo viết lục bát:\n- Bắt đầu bằng cảm xúc thật, rồi sửa luật sau\n- Chọn từ vần bằng giàu (cùng vần + cùng thanh bằng)\n- Dùng từ tượng hình mộc mạc: bầu sữa, ao làng, khói chiều\n- Cứ tự nhiên — thơ dân gian hay nhất khi giản dị"
@@ -3307,7 +3208,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Rich vs poor rhymes in Vietnamese poetry.",
                   "video_url": null,
                   "vietnamese_text": "Vần giàu vs vần nghèo:\n- Vần giàu: cùng vần + cùng loại thanh (bằng hoặc trắc)\n  Ví dụ: \"xanh\" và \"cành\" — vần bằng giàu\n- Vần nghèo: gần giống vần + cùng loại thanh\n  Ví dụ: \"thêu\" và \"trèo\" — vần bằng nghèo\n\nLục bát yêu cầu chữ 6 và 8 phải là vần bằng (thanh ngang hoặc huyền)."
@@ -3332,7 +3232,6 @@
                   "example_translation": "Rich rhymes sound smoother than poor rhymes.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "vần giàu",
                   "region": "STANDARD",
                   "translation": "rich rhyme",
                   "word": "vần giàu"
@@ -3352,7 +3251,6 @@
                   "example_translation": "Poor rhymes are still acceptable in folk poetry.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "vần nghèo",
                   "region": "STANDARD",
                   "translation": "poor rhyme",
                   "word": "vần nghèo"
@@ -3506,7 +3404,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese has a rich humorous vocabulary layer.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng Việt có tầng từ vựng hài hước rất phong phú: lóng (slang), chế (mock), châm biếm (satire), nói lái (spoonerism), chơi chữ (wordplay). Hiểu tầng này giúp giao tiếp tự nhiên như người bản xứ."
@@ -3517,7 +3414,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Common Vietnamese slang.",
                   "video_url": null,
                   "vietnamese_text": "Tiếng lóng phổ biến:\n- xịn = tốt, đẹp, hợp thời\n- đỉnh = xuất sắc nhất\n- cháy = hot, thịnh hành\n- hén = hả, thế à (Nam)\n- tau - mi = tôi - cậu (Trung thân)\n- quái = lạ, kỳ quặc\n- khùng = hơi điên, ngốc\n- chảnh = kiêu, làm增加值\n- nhẵn = không còn gì (nhẵn túi = hết tiền)"
@@ -3528,7 +3424,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Humorous idioms.",
                   "video_url": null,
                   "vietnamese_text": "Thành ngữ hài hước:\n- \"Đánh trống bỏ dùi\": nói một đằng làm một nẻo\n- \"Mười voi không được bát cơm\": nhiều mà không có giá\n- \"Chưa đỗ ông nghè đã đe hàng tổng\": chưa thành công đã kiêu ngạo\n- \"Ăn cơm nhà vác tù và hàng tổng\": làm việc không công\n- \"Bà trzy bán lợn\": lộn xộn, không ngăn nắp"
@@ -3553,7 +3448,6 @@
                   "example_translation": "She speaks very humorously.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "hài hước",
                   "region": "STANDARD",
                   "translation": "humorous / funny",
                   "word": "hài hước"
@@ -3573,7 +3467,6 @@
                   "example_translation": "Hồ Xuân Hương is the foremost wordplay poetess.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "chơi chữ",
                   "region": "STANDARD",
                   "translation": "wordplay / punning",
                   "word": "chơi chữ"
@@ -3593,7 +3486,6 @@
                   "example_translation": "Spoonerism is a popular wordplay in the South.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "nói lái",
                   "region": "STANDARD",
                   "translation": "spoonerism (swapping initial consonants)",
                   "word": "nói lái"
@@ -3613,7 +3505,6 @@
                   "example_translation": "Vietnamese idioms are very rich and vivid.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thành ngữ",
                   "region": "STANDARD",
                   "translation": "idiom / set phrase",
                   "word": "thành ngữ"
@@ -3633,7 +3524,6 @@
                   "example_translation": "Slang changes quickly across generations.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "lóng",
                   "region": "STANDARD",
                   "translation": "slang",
                   "word": "lóng"
@@ -3653,7 +3543,6 @@
                   "example_translation": "Proverbs are folk wisdom distilled over thousands of years.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tục ngữ",
                   "region": "STANDARD",
                   "translation": "proverb",
                   "word": "tục ngữ"
@@ -3673,7 +3562,6 @@
                   "example_translation": "Vũ Trọng Phụng wrote biting colonial satire.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "châm biếm",
                   "region": "STANDARD",
                   "translation": "satire / sarcastic",
                   "word": "châm biếm"
@@ -3693,7 +3581,6 @@
                   "example_translation": "Young people often parody memes online.",
                   "image_url": null,
                   "part_of_speech": "verb",
-                  "phonetic": "chế",
                   "region": "STANDARD",
                   "translation": "to mock / parody",
                   "word": "chế"
@@ -3713,7 +3600,6 @@
                   "example_translation": "He tells stories very wittily.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "dí dỏm",
                   "region": "STANDARD",
                   "translation": "witty / droll",
                   "word": "dí dỏm"
@@ -3733,7 +3619,6 @@
                   "example_translation": "Speaking tactfully avoids making the other party lose face.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "uyển chuyển",
                   "region": "STANDARD",
                   "translation": "euphemistic / tactful",
                   "word": "uyển chuyển"
@@ -3893,7 +3778,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Spoonerism swaps initial consonants of two words for humorous effect.",
                   "video_url": null,
                   "vietnamese_text": "Nói lái là trò chơi chữ đặc trưng Việt Nam: đổi phụ âm đầu của hai chữ cho nhau, tạo từ mới có nghĩa khác hoặc vô nghĩa nhưng hài hước. Ví dụ: \"bình mới rượu cũ\" → nói lái thành \"rình bới cượu cới\" — nghe rất buồn cười."
@@ -3904,7 +3788,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Spoonerism examples.",
                   "video_url": null,
                   "vietnamese_text": "Ví dụ nói lái:\n- \"bản bão\" → \"bão bản\" (từ \"bản báo\")\n- \"bàn chải\" → \"chải bàn\" (từ \"bàn chải\")\n- \"bê tha\" → \"tha bê\" (từ \"bê tha\")\n- \"thòng lèo\" → \"lèo thòng\" (từ \"thòng lèo\")\n\nNói lái miền Nam rất phổ biến: \"chè bưởi\" → \"bưởi chè\""
@@ -3915,7 +3798,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Advanced metaphor in poetry: Hồ Xuân Hương double meanings.",
                   "video_url": null,
                   "vietnamese_text": "Ẩn dụ nâng cao trong thơ:\nHồ Xuân Hương dùng ẩn dụ hai nghĩa — bề ngoài tả đồ vật, bề trong ám chỉ thân phận phụ nữ:\n\"Bánh trôi nước\"\nThân em vừa trắng lại vừa tròn\nBảy nổi ba chìm với nước non\nRắn nát mặc dầu tay kẻ nặn\nEm vẫn giữ nguyên hương thói đời."
@@ -3940,7 +3822,6 @@
                   "example_translation": "Metaphor is an important rhetorical device in Vietnamese poetry.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ẩn dụ",
                   "region": "STANDARD",
                   "translation": "metaphor",
                   "word": "ẩn dụ"
@@ -3960,7 +3841,6 @@
                   "example_translation": "Metonymy uses a related object name for the concept.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hoán dụ",
                   "region": "STANDARD",
                   "translation": "metonymy",
                   "word": "hoán dụ"
@@ -4048,7 +3928,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Humor listening is hard: fast speech, unfamiliar slang, spoonerisms, indirect satire.",
                   "video_url": null,
                   "vietnamese_text": "Nghe hiểu hài hước khó vì: (1) nói nhanh, (2) dùng lóng không quen, (3) nói lái khiến từ nghe khác hoàn toàn, (4) châm biếm gián tiếp cần hiểu ngữ cảnh. C2 cần nắm được tầng hài hước này."
@@ -4059,7 +3938,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Humorous dialogue with spoonerism and slang.",
                   "video_url": null,
                   "vietnamese_text": "Tùng: Ê, hôm qua tui đi ăn \"chè bưởi\" với bà xã, hén!\nLan: Ủa, \"bưởi chè\" hả? Nói lái hoài!\nTùng: Haha, tui nói rứa cho vui thôi mà! Bà xã tui nấu chè bưởi xịn lắm, đỉnh!\nLan: Chè bưởi à, tui cũng thích lắm. Nhưng nói lái nghe buồn cười quá chừng!",
@@ -4106,7 +3984,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Tips for understanding humor in speech: watch for ironic intonation, recognize spoonerisms, understand context, ask if unsure.",
                   "video_url": null,
                   "vietnamese_text": "Mẹo nghe hiểu hài hước:\n- Chú ý ngữ điệu: câu châm biếm thường có ngữ điệu ngược (nói ngược ý)\n- Nhận diện nói lái: nếu từ nghe lạ hoặc vô nghĩa, thử hoán đổi phụ âm đầu\n- Hiểu ngữ cảnh: nhiều câu hài chỉ buồn cười khi biết hoàn cảnh nói\n- Hỏi lại nếu không hiểu: Ê, nói lái hả? — người Việt không phiền khi được hỏi"
@@ -4131,7 +4008,6 @@
                   "example_translation": "My wife cooks very well.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "bà xã",
                   "region": "SOUTHERN",
                   "translation": "wife (Southern colloquial)",
                   "word": "bà xã"
@@ -4246,7 +4122,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Humor plays a crucial role in Vietnamese communication: easing tension, saving face, social satire, and building rapport.",
                   "video_url": null,
                   "vietnamese_text": "Hài hước đóng vai trò quan trọng trong giao tiếp Việt Nam: giảm căng thẳng, giữ thể diện, châm biếm xã hội, và tạo gần gũi. Vũ Trọng Phụng dùng hài hước để châm biếm thực dân; Hồ Xuân Hương dùng chơi chữ để thách thức lễ giáo phong kiến."
@@ -4257,7 +4132,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Euphemisms in Vietnamese.",
                   "video_url": null,
                   "vietnamese_text": "Nói uyển chuyển (euphemism) — tránh nói thẳng để giữ thể diện:\n- \"đi\" thay \"chết\" (pass away)\n- \"khuất\" thay \"chết\" (departed)\n- \"có bầu\" thay \"có mang\" (pregnant)\n- \"ngủ say\" thay \"chết\" (asleep)\n- \"về nơi chín suối\" thay \"chết\" (returned to the afterlife)\n- \"có chuyện\" thay \"có rắc rối\" (there is an issue)"
@@ -4268,7 +4142,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Social satire through folk poetry.",
                   "video_url": null,
                   "vietnamese_text": "Châm biếm xã hội qua ca dao:\n\"Quan trường phản lại dân thương\nLàm quan mà ăn của dân\nThì còn gì là quan?\"\n→ Châm biếm quan tham nhũng.\n\n\"Trèo lên cây bưởi hái hoa\nBao giờ dân giàu mới vừa lòng nhà?\"\n→ Châm biếm bất công xã hội."
@@ -4293,7 +4166,6 @@
                   "example_translation": "He passed away last year.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "khuất",
                   "region": "STANDARD",
                   "translation": "deceased / departed (euphemism)",
                   "word": "khuất"
@@ -4313,7 +4185,6 @@
                   "example_translation": "She is three months pregnant.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "có bầu",
                   "region": "STANDARD",
                   "translation": "pregnant (euphemism)",
                   "word": "có bầu"
@@ -4461,7 +4332,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Proverbs and folk poetry are Vietnam's millennia-old oral heritage. Proverbs distill life experience; folk poetry expresses emotions and aspirations.",
                   "video_url": null,
                   "vietnamese_text": "Tục ngữ (proverbs) và ca dao (folk poetry) là di sản truyền khẩu hàng ngàn năm của dân tộc Việt Nam. Tục ngữ đúc kết kinh nghiệm sống; ca dao bộc lộ cảm xúc, ước mơ, và than thân. Cả hai thường viết theo thể lục bát hoặc lục bát biến thể."
@@ -4472,7 +4342,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Distinguishing proverb types.",
                   "video_url": null,
                   "vietnamese_text": "Phân biệt:\n- Tục ngữ: câu khẳng định kinh nghiệm (ví dụ: \"Có công mài sắt có ngày nên kim\")\n- Ca dao: câu bộc lộ cảm xúc, than thân, tình yêu (ví dụ: \"Quê hương tôi chốn nào / Trời xanh mây trắng ruồng rao dặm dài\")\n- Thành ngữ: cụm từ cố định mang nghĩa bóng (ví dụ: \"nước đổ lá khoai\")\n- Vè: thể thơ kể chuyện dân gian\n- Đồng dao: bài hát trẻ con"
@@ -4483,7 +4352,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Common proverbs.",
                   "video_url": null,
                   "vietnamese_text": "Một số tục ngữ phổ biến:\n- \"Ăn quả nhớ kẻ trồng cây\": biết ơn\n- \"Một con ngựa đau cả tàu bỏ cỏ\": đoàn kết\n- \"Lá lành đùm lá rách\": tương thân tương ái\n- \"Tiền bạc là phù du\": tài sản không bền\n- \"Chữ đồng đục chua lẹm thì chua\": tài năng không thể che giấu"
@@ -4508,7 +4376,6 @@
                   "example_translation": "Proverbs are folk wisdom distilled over millennia.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "tục ngữ",
                   "region": "STANDARD",
                   "translation": "proverb",
                   "word": "tục ngữ"
@@ -4528,7 +4395,6 @@
                   "example_translation": "Vietnamese folk poetry is very rich, written in lục bát form.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "ca dao",
                   "region": "STANDARD",
                   "translation": "folk poetry / folk song",
                   "word": "ca dao"
@@ -4548,7 +4414,6 @@
                   "example_translation": "Vè is a humorous folk narrative poem form.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "vè",
                   "region": "STANDARD",
                   "translation": "folk narrative poem",
                   "word": "vè"
@@ -4568,7 +4433,6 @@
                   "example_translation": "Quan họ folk songs from Bac Ninh are world cultural heritage.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "dân ca",
                   "region": "STANDARD",
                   "translation": "folk song",
                   "word": "dân ca"
@@ -4588,7 +4452,6 @@
                   "example_translation": "The children folk rhyme \"Dung dăng dung dẻ\" is very familiar to children.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "đồng dao",
                   "region": "STANDARD",
                   "translation": "children folk rhyme",
                   "word": "đồng dao"
@@ -4608,7 +4471,6 @@
                   "example_translation": "The idiom \"water poured on khoai leaves\" means futile.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "thành ngữ",
                   "region": "STANDARD",
                   "translation": "idiom / set phrase",
                   "word": "thành ngữ"
@@ -4628,7 +4490,6 @@
                   "example_translation": "Proverbs are passed down by word of mouth.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "cửa miệng",
                   "region": "STANDARD",
                   "translation": "oral tradition / by word of mouth",
                   "word": "cửa miệng"
@@ -4648,7 +4509,6 @@
                   "example_translation": "Proverbs distill folk life experience.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "kinh nghiệm",
                   "region": "STANDARD",
                   "translation": "experience",
                   "word": "kinh nghiệm"
@@ -4668,7 +4528,6 @@
                   "example_translation": "Folk poetry is transmitted orally across generations.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "truyền khẩu",
                   "region": "STANDARD",
                   "translation": "oral transmission",
                   "word": "truyền khẩu"
@@ -4688,7 +4547,6 @@
                   "example_translation": "Vietnamese customs vary by region.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "phong tục",
                   "region": "STANDARD",
                   "translation": "custom / tradition",
                   "word": "phong tục"
@@ -4899,7 +4757,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Folk poetry has unique grammar: omitted subjects, parallelism, lục bát rhyme, reduplication.",
                   "video_url": null,
                   "vietnamese_text": "Ca dao và tục ngữ có cấu trúc ngữ pháp đặc thù: (1) câu rút gọn lược chủ ngữ, (2) đối ngẫu hai vế, (3) vần điệu lục bát, (4) dùng từ láy tượng hình tượng thanh. Cấu trúc này khác văn viết hiện đại — cô đọng, nhịp nhàng, dễ nhớ."
@@ -4910,7 +4767,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Omitted subjects in folk poetry.",
                   "video_url": null,
                   "vietnamese_text": "Câu rút gọn trong ca dao — lược chủ ngữ:\n\"Công cha như núi Thái Sơn\nNghĩa mẹ như nước trong nguồn chảy ra\"\n→ Chủ ngữ \"tình\" hoặc \"công/nghĩa\" ẩn — chỉ còn V + O + so sánh\n\n\"Muốn sang thì bắc cầu kiều\nMuốn con hay chữ thì yêu lấy thầy\"\n→ Câu điều kiện rút gọn: muốn + V thì + V"
@@ -4921,7 +4777,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Parallelism in folk poetry.",
                   "video_url": null,
                   "vietnamese_text": "Đối ngẫu trong ca dao:\n\"Công cha\" ↔ \"Nghĩa mẹ\"\n\"núi Thái Sơn\" ↔ \"nước trong nguồn\"\n\"Muốn sang\" ↔ \"Muốn con hay chữ\"\n\"bắc cầu kiều\" ↔ \"yêu lấy thầy\"\n→ Mỗi vế đối xứng: từ loại, số âm tiết, thanh điệu"
@@ -4946,7 +4801,6 @@
                   "example_translation": "Reduplicative words in folk poetry create great rhythm.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "từ láy",
                   "region": "STANDARD",
                   "translation": "reduplicative word",
                   "word": "từ láy"
@@ -5034,7 +4888,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Using proverbs in speech makes it vivid and culturally authentic, but must fit the context.",
                   "video_url": null,
                   "vietnamese_text": "Dùng tục ngữ và ca dao trong giao tiếp giúp lời nói sống động, thâm thúy, và mang đậm bản sắc Việt Nam. Tuy nhiên, phải dùng đúng ngữ cảnh — nói tục ngữ trong hoàn cảnh không phù hợp sẽ nghe gượng ép."
@@ -5045,7 +4898,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Contexts for proverb use.",
                   "video_url": null,
                   "vietnamese_text": "Ngữ cảnh dùng tục ngữ:\n- Khuyên bảo: \"Có công mài sắt có ngày nên kim\" (khi ai nản chí)\n- Nhắc nhở: \"Ăn quả nhớ kẻ trồng cây\" (khi ai vô ơn)\n- An ủi: \"Thương người như thể thương thân\" (khi ai khó khăn)\n- Cảnh báo: \"Giậu mủng rào nhà\" (khi ai dựa dẫm quá mức)"
@@ -5056,7 +4908,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Tips for natural proverb usage.",
                   "video_url": null,
                   "vietnamese_text": "Cách nói tục ngữ tự nhiên:\n1. Không nói nguyên câu tục ngữ khô khan — lồng vào câu chuyện\n2. Dùng như câu kết thúc, tóm tắt ý chính\n3. Thêm \"như ông bà ta thường nói:\" trước tục ngữ\n4. Không dùng quá nhiều — chỉ dùng khi thật phù hợp"
@@ -5081,7 +4932,6 @@
                   "example_translation": "Proverbs are profound, distilling millennia of experience.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "thâm thúy",
                   "region": "STANDARD",
                   "translation": "profound / insightful",
                   "word": "thâm thúy"
@@ -5101,7 +4951,6 @@
                   "example_translation": "Using proverbs at the wrong time sounds very forced.",
                   "image_url": null,
                   "part_of_speech": "adjective",
-                  "phonetic": "gượng ép",
                   "region": "STANDARD",
                   "translation": "forced / unnatural",
                   "word": "gượng ép"
@@ -5215,7 +5064,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 1,
-                  "phonetic": null,
                   "translation": "Vietnamese folk culture lives strongly through oral tradition: proverbs, folk poetry, narrative poems, children rhymes, folk songs.",
                   "video_url": null,
                   "vietnamese_text": "Văn hóa dân gian Việt Nam sống mạnh mẽ qua truyền khẩu: tục ngữ, ca dao, vè, đồng dao, dân ca. Dù xã hội hiện đại, người Việt vẫn dùng tục ngữ hàng ngày — chứng tỏ di sản truyền khẩu không mất đi mà chuyển hóa."
@@ -5226,7 +5074,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 2,
-                  "phonetic": null,
                   "translation": "Proverbs in modern life.",
                   "video_url": null,
                   "vietnamese_text": "Tục ngữ trong đời sống hiện đại:\n- Báo chí: \"Có công mài sắt có ngày nên kim — câu chuyện khởi nghiệp\"\n- Giáo dục: \"Muốn con hay chữ thì yêu lấy thầy\"\n- Chính trị: \"Dĩ hòa vi quý\" (Hán Việt tục ngữ)\n- Mạng xã hội: \"Một con ngựa đau cả tàu bỏ cỏ\" #đoànkết"
@@ -5237,7 +5084,6 @@
                   "image_url": null,
                   "notes": null,
                   "order_index": 3,
-                  "phonetic": null,
                   "translation": "Folk music and world heritage.",
                   "video_url": null,
                   "vietnamese_text": "Dân ca và di sản thế giới:\n- Quan họ Bắc Ninh: UNESCO di sản văn hóa phi vật thể\n- Hò Nam Bộ: hát ru, hò chèo ghe trên sông nước\n- Ví dặm Nghệ Tĩnh: hát đối đáp nông thôn\n- Then Tày: hát nghi lễ dân tộc Tày\n- Nhã nhạc cung đình Huế: UNESCO di sản"
@@ -5262,7 +5108,6 @@
                   "example_translation": "Quan họ Bac Ninh is UNESCO world cultural heritage.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "Quan họ",
                   "region": "STANDARD",
                   "translation": "Quan họ folk singing (Bac Ninh)",
                   "word": "Quan họ"
@@ -5282,7 +5127,6 @@
                   "example_translation": "Southern hò sung on rivers is melancholic yet beautiful.",
                   "image_url": null,
                   "part_of_speech": "noun",
-                  "phonetic": "hò",
                   "region": "STANDARD",
                   "translation": "work song / chant (Southern)",
                   "word": "hò"

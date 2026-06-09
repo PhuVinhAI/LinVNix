@@ -54,7 +54,6 @@ describe('PersonalVocabulariesController', () => {
       const dto = {
         word: 'cấm đỗ xe',
         translation: 'no parking',
-        phonetic: 'kam doh seh',
         partOfSpeech: 'phrase',
       };
       const created = {
