@@ -183,7 +183,7 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
               <typeMeta.Icon className={`h-4 w-4 ${typeMeta.tone}`} />
               <span className="text-sm font-bold">{typeMeta.label}</span>
               <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Loại đã chọn ở Bước 2.2
+                Loại đã chọn
               </span>
             </span>
           ) : (

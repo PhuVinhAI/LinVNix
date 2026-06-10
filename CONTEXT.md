@@ -62,12 +62,12 @@ _Avoid_: UserQuestionResult, Exercise result
 ### Soạn học liệu
 
 **Giai đoạn soạn bài**:
-Trình tự sư phạm khi **Quản trị viên** soạn một **Bài học** trên **Trang quản trị**, gồm 2 giai đoạn: Giai đoạn 1 — Nội dung bài học (**Nội dung bài**, **Từ vựng**, **Quy tắc ngữ pháp**); Giai đoạn 2 — **Bài tập** (các **Câu hỏi** theo loại). Mỗi giai đoạn chia thành các bước con tuần tự: Giai đoạn 1 — Bước 1.1 Nội dung bài → 1.2 Từ vựng → 1.3 Quy tắc ngữ pháp; Giai đoạn 2 — Bước 2.1 Bài tập → 2.2 Chọn loại câu hỏi → 2.3 Soạn câu hỏi. Trang quản trị tổ chức theo giai đoạn thay vì danh sách phẳng. Nên hoàn thành Giai đoạn 1 trước khi sang Giai đoạn 2 — hệ thống nhắc nhở nhưng không khóa cứng; riêng Bước 2.3 khóa cứng cho tới khi chọn loại câu hỏi ở Bước 2.2.
-_Avoid_: Wizard, Stepper, Flow
+Trình tự sư phạm khi **Quản trị viên** soạn một **Bài học** trên **Trang quản trị**: soạn Nội dung bài học trước (**Nội dung bài** — chọn loại văn bản/hội thoại/âm thanh/hình ảnh/video, **Từ vựng**, **Quy tắc ngữ pháp**), tạo **Bài tập** sau (chọn bài tập → chọn loại **Câu hỏi** → soạn). Nguyên tắc cốt lõi: **mỗi màn hình chỉ làm đúng một việc** — chọn phần, chọn loại, chọn mục, hoặc soạn một mục; không có danh sách phẳng đa loại, không sửa inline trong danh sách. Trình tự thể hiện qua bố cục, điều hướng và breadcrumb — UI **không** dán nhãn "Giai đoạn/Bước". Nên soạn nội dung trước bài tập — hệ thống nhắc nhở nhưng không khóa cứng; riêng việc soạn bị khóa cứng cho tới khi chọn loại.
+_Avoid_: Wizard, Stepper, Flow, Giai đoạn 1/Bước 1.1 (trên UI)
 
 **Khu soạn**:
-Màn hình quản lý tập trung cho đúng một loại mục trong **Giai đoạn soạn bài** (vd: khu Từ vựng, khu Quy tắc ngữ pháp, khu câu hỏi Trắc nghiệm). **Quản trị viên** phải chọn khu soạn và đi vào trong rồi mới được tạo/sửa/xóa mục của loại đó. Loại được chọn ở cổng vào — không đổi loại giữa chừng trong form.
-_Avoid_: Tab, Section, Gate
+Màn hình chọn mục của đúng một loại trong **Giai đoạn soạn bài** (vd: khu Từ vựng, khu Văn bản, khu câu hỏi Trắc nghiệm). Danh sách trong khu chỉ để **chọn mục** (mở ra soạn) hoặc xóa — không sửa tại chỗ. Việc soạn diễn ra trên **form riêng cho từng mục**, giao diện thiết kế riêng theo loại, loại đã khóa từ cổng vào, lưu tường minh bằng nút.
+_Avoid_: Tab, Section, Gate, List editor
 
 ### Mục tiêu
 

@@ -12,6 +12,12 @@ import { ModuleFormPage } from '../pages/learning/ModuleFormPage'
 import { LessonDetailPage } from '../pages/learning/LessonDetailPage'
 import { LessonFormPage } from '../pages/learning/LessonFormPage'
 import { LessonSectionPage } from '../pages/learning/LessonSectionPage'
+import { LessonStageContentPage } from '../pages/learning/LessonStageContentPage'
+import { LessonStageExercisesPage } from '../pages/learning/LessonStageExercisesPage'
+import { MaterialTypePage } from '../pages/learning/MaterialTypePage'
+import { MaterialFormPage } from '../pages/learning/MaterialFormPage'
+import { VocabularyFormPage } from '../pages/learning/VocabularyFormPage'
+import { GrammarFormPage } from '../pages/learning/GrammarFormPage'
 import { ExerciseFormPage } from '../pages/learning/ExerciseFormPage'
 import { ExerciseDetailPage } from '../pages/learning/ExerciseDetailPage'
 import { ExerciseTypePage } from '../pages/learning/ExerciseTypePage'
@@ -94,8 +100,44 @@ export const router = createBrowserRouter([
         element: <LessonDetailPage />,
       },
       {
+        path: ROUTES.LESSON_STAGE_CONTENT,
+        element: <LessonStageContentPage />,
+      },
+      {
+        path: ROUTES.LESSON_STAGE_EXERCISES,
+        element: <LessonStageExercisesPage />,
+      },
+      {
         path: ROUTES.LESSON_SECTION,
         element: <LessonSectionPage />,
+      },
+      {
+        path: ROUTES.LESSON_MATERIAL_TYPE,
+        element: <MaterialTypePage />,
+      },
+      {
+        path: ROUTES.LESSON_MATERIAL_NEW,
+        element: <MaterialFormPage mode="create" />,
+      },
+      {
+        path: ROUTES.LESSON_MATERIAL_EDIT,
+        element: <MaterialFormPage mode="edit" />,
+      },
+      {
+        path: ROUTES.LESSON_VOCAB_NEW,
+        element: <VocabularyFormPage mode="create" />,
+      },
+      {
+        path: ROUTES.LESSON_VOCAB_EDIT,
+        element: <VocabularyFormPage mode="edit" />,
+      },
+      {
+        path: ROUTES.LESSON_GRAMMAR_NEW,
+        element: <GrammarFormPage mode="create" />,
+      },
+      {
+        path: ROUTES.LESSON_GRAMMAR_EDIT,
+        element: <GrammarFormPage mode="edit" />,
       },
       {
         path: ROUTES.EXERCISE_NEW,

@@ -38,13 +38,13 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
           return
         }
       }
-      if (lessonId) navigate(learningPath.lesson(lessonId))
+      if (lessonId) navigate(learningPath.lessonStageExercises(lessonId))
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Không thể lưu')
     }
   }
 
-  const backPath = lessonId ? learningPath.lesson(lessonId) : learningPath.courses()
+  const backPath = lessonId ? learningPath.lessonStageExercises(lessonId) : learningPath.courses()
   const titleAction = mode === 'edit' ? 'Sửa' : 'Tạo mới'
 
   const handleSubmit = (values: unknown) => submit(values as Record<string, unknown>)
@@ -56,6 +56,7 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
           { label: lesson?.module?.course?.title ?? 'Khóa học', href: lesson?.module?.courseId ? learningPath.course(lesson.module.courseId) : learningPath.courses() },
           { label: lesson?.module?.title ?? 'Chủ đề', href: lesson?.moduleId ? learningPath.module(lesson.moduleId) : undefined },
           { label: lesson?.title ?? 'Bài học', href: lessonId ? learningPath.lesson(lessonId) : undefined },
+          { label: 'Giai đoạn 2', href: lessonId ? learningPath.lessonStageExercises(lessonId) : undefined },
           { label: `${titleAction} bài tập` },
         ]}
       />

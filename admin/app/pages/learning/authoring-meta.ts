@@ -5,10 +5,15 @@ import {
   Edit3,
   FileText,
   Headphones,
+  Image as ImageIcon,
   Languages,
   Lightbulb,
   Link2,
+  MessagesSquare,
   Mic,
+  Type,
+  Video as VideoIcon,
+  Volume2,
   type LucideIcon,
 } from 'lucide-react'
 import type { Lesson, Question } from '../../features/learning/types'
@@ -143,6 +148,59 @@ export const LESSON_SECTIONS: LessonSectionMeta[] = [
 
 export function lessonSectionMeta(value: string | null | undefined): LessonSectionMeta | undefined {
   return LESSON_SECTIONS.find((s) => s.value === value)
+}
+
+export interface MaterialTypeMeta {
+  value: string
+  label: string
+  description: string
+  Icon: LucideIcon
+  /** nền icon đậm (bg-*) */
+  bg: string
+}
+
+/** 5 loại Nội dung bài — mỗi loại có form soạn riêng (một mục một màn). */
+export const MATERIAL_TYPES: MaterialTypeMeta[] = [
+  {
+    value: 'text',
+    label: 'Văn bản',
+    description: 'Đoạn văn tiếng Việt kèm bản dịch và ghi chú.',
+    Icon: Type,
+    bg: 'bg-slate-600',
+  },
+  {
+    value: 'dialogue',
+    label: 'Hội thoại',
+    description: 'Đoạn hội thoại nhiều nhân vật, từng lời thoại song ngữ.',
+    Icon: MessagesSquare,
+    bg: 'bg-violet-500',
+  },
+  {
+    value: 'audio',
+    label: 'Âm thanh',
+    description: 'File âm thanh kèm lời thoại (transcript) và bản dịch.',
+    Icon: Volume2,
+    bg: 'bg-rose-500',
+  },
+  {
+    value: 'image',
+    label: 'Hình ảnh',
+    description: 'Hình minh họa kèm chú thích tiếng Việt và bản dịch.',
+    Icon: ImageIcon,
+    bg: 'bg-emerald-500',
+  },
+  {
+    value: 'video',
+    label: 'Video',
+    description: 'Video bài giảng kèm lời thoại (transcript) và bản dịch.',
+    Icon: VideoIcon,
+    bg: 'bg-blue-500',
+  },
+]
+
+export function materialTypeMeta(value: string | null | undefined): MaterialTypeMeta | undefined {
+  const key = (value ?? '').toLowerCase()
+  return MATERIAL_TYPES.find((t) => t.value === key)
 }
 
 /** Tổng số mục Giai đoạn 1 — dùng cho trạng thái hoàn thành và gating mềm sang Giai đoạn 2. */

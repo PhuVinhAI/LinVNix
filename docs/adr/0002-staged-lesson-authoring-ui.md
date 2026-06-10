@@ -18,19 +18,23 @@ Một biến thể của hướng 2 là wizard one-shot (stepper tuyến tính c
 
 ## Decision
 
-**Chọn: Tổ chức theo Giai đoạn soạn bài, drill-down thường trực** (xem `CONTEXT.md` — **Giai đoạn soạn bài**, **Khu soạn**):
+**Chọn: Tổ chức theo Giai đoạn soạn bài, mỗi màn hình đúng một việc** (xem `CONTEXT.md` — **Giai đoạn soạn bài**, **Khu soạn**):
 
-- Trang Bài học là hub hiển thị **Giai đoạn 1 · Nội dung bài học** (3 cổng: Nội dung bài / Từ vựng / Quy tắc ngữ pháp) và **Giai đoạn 2 · Bài tập**, kèm trạng thái hoàn thành từng phần.
-- Mỗi cổng dẫn vào một Khu soạn riêng (route riêng) — chỉ trong đó mới có nút tạo/sửa/xóa. Các editor inline hiện có (spreadsheet từ vựng, import Excel, kéo thả) giữ nguyên bên trong Khu soạn.
-- Trong từng giai đoạn có **bước con tuần tự** hiển thị bằng thanh trình tự (WizardSteps) trên mọi trang con: Giai đoạn 1 — Bước 1.1 Nội dung bài → 1.2 Từ vựng → 1.3 Quy tắc ngữ pháp (kèm nút Bước trước/Bước tiếp theo); Giai đoạn 2 — Bước 2.1 Bài tập → 2.2 Chọn loại câu hỏi → 2.3 Soạn câu hỏi. Bước con điều hướng tự do (trừ 2.3 — khóa cho tới khi chọn loại ở 2.2), trạng thái done/current/upcoming tính theo dữ liệu thực.
-- Trang Bài tập thành hub cổng theo **loại câu hỏi** (7 loại, kèm số lượng). Chọn loại → vào Khu soạn của loại đó → mới được tạo câu hỏi. Form câu hỏi **khóa loại** (loại quyết định ở cổng, không còn dropdown đổi loại trong form).
-- Gating giữa 2 giai đoạn là **gating mềm**: Giai đoạn 2 hiện cảnh báo khi Giai đoạn 1 trống, nhưng không khóa cứng (admin có thể cần soạn nháp bài tập trước).
-- Thứ tự câu hỏi toàn bài tập (orderIndex xuyên loại) quản lý bằng một khu "Thứ tự câu hỏi" thu gọn trên hub bài tập — vì các Khu soạn theo loại không thể hiện thứ tự toàn cục.
+- Chuỗi màn hình drill-down, mỗi màn chỉ render một việc:
+  `Bài học (chọn giai đoạn)` → `Giai đoạn 1 (chọn 1 trong 3 khu)` → `khu Nội dung bài (chọn loại: văn bản/hội thoại/âm thanh/hình ảnh/video)` → `khu của loại (chọn mục)` → `form soạn 1 mục`; tương tự `Giai đoạn 2 (chọn bài tập)` → `chọn loại câu hỏi` → `khu của loại (chọn câu hỏi)` → `form soạn 1 câu hỏi`.
+- Danh sách trong khu là **danh sách chọn** thuần: bấm để mở form, menu chỉ có Mở/Xóa. **Không sửa inline, không autosave** — soạn trên form riêng từng loại, lưu tường minh.
+- Form **khóa loại** (loại quyết định ở cổng). Đổi loại = xóa và tạo lại trong khu khác.
+- Gating giữa 2 giai đoạn là **gating mềm** (cảnh báo khi nội dung bài học còn trống); bước soạn khóa cứng cho tới khi chọn loại.
+- **Trình bày thân thiện, không dán nhãn quy trình**: UI không hiển thị chữ "Giai đoạn 1/2" hay "Bước 1.1/2.3" (bị đánh giá là gò bó). Trình tự thể hiện qua thứ tự bố cục, breadcrumb và điều hướng. Thanh bước (WizardSteps) đã thử và bị gỡ bỏ vì lý do này. "Giai đoạn/Bước" chỉ là ngôn ngữ nội bộ trong tài liệu.
+- Các form soạn (từ vựng, ngữ pháp, nội dung bài) dùng **cùng ngôn ngữ thiết kế với form câu hỏi**: thanh pill công cụ (từ loại/độ khó/media/ghi chú dạng popover), thẻ tài liệu trung tâm bo lớn, chữ lớn bấm-để-sửa (InlineEditable), thanh lưu dính đáy. Hội thoại soạn dưới dạng bong bóng chat trái/phải đúng như học viên thấy.
 
-**Trade-off chấp nhận**: nhiều click hơn cho power-user, không còn nhìn toàn bộ nội dung một màn hình. Đây là trade-off có ý thức theo yêu cầu chuyên gia sư phạm: cấu trúc soạn bài phản ánh phương pháp thiết kế giảng dạy (kiến thức trước → luyện tập sau, chọn loại trước → soạn sau). Không "tối ưu" ngược về tab phẳng khi chưa có quyết định sư phạm mới.
+**UI cũ bị xóa hẳn** (không giữ song song): 3 editor inline (`ContentEditor`, `VocabularyEditor`, `GrammarEditor`), hook autosave `use-lesson-child-inline`, dialog nhập Excel hàng loạt, card xem trước câu hỏi, và toàn bộ kéo-thả sắp xếp của học liệu con. `orderIndex` gán theo thứ tự tạo (nối đuôi). Hệ quả chấp nhận: mất nhập Excel hàng loạt và mất sắp xếp lại thứ tự mục — nếu nghiệp vụ cần lại, sẽ thêm như một màn/bước riêng (vd: màn "Sắp xếp" chuyên trách), không nhét lại vào danh sách chọn.
+
+**Trade-off chấp nhận**: nhiều click hơn cho power-user, không nhìn được mọi thứ một màn hình. Đây là trade-off có ý thức theo yêu cầu chuyên gia sư phạm: người soạn đi theo trình tự, mỗi bước tập trung đúng một việc. Không "tối ưu" ngược về tab phẳng/list editor khi chưa có quyết định sư phạm mới.
 
 ## Consequences
 
-- Mọi UI quản lý học liệu mới trên Trang quản trị phải theo mô hình cổng/Khu soạn, không thêm danh sách phẳng đa loại.
-- Đổi loại một Câu hỏi = xóa và tạo lại trong Khu soạn khác (loại bị khóa sau khi tạo).
-- Luồng tạo nối mạch wizard: tạo Bài học → đáp xuống hub Giai đoạn 1; tạo Bài tập → đáp thẳng vào hub chọn loại câu hỏi.
+- Mọi UI quản lý học liệu mới trên Trang quản trị phải theo mô hình "mỗi màn hình một việc": màn chọn (giai đoạn/khu/loại/mục) tách khỏi màn soạn (form riêng từng loại). Không thêm danh sách phẳng đa loại, không sửa inline.
+- Đổi loại một Câu hỏi/Nội dung bài = xóa và tạo lại trong Khu soạn khác (loại bị khóa sau khi tạo).
+- Luồng tạo nối mạch wizard: tạo Bài học → màn chọn giai đoạn; tạo Bài tập → đáp thẳng vào màn chọn loại câu hỏi; lưu một mục → quay về danh sách chọn của khu.
+- Nhập Excel hàng loạt và kéo-thả sắp xếp đã bị gỡ; nếu cần lại, thiết kế thành màn chuyên trách riêng theo đúng nguyên tắc một-màn-một-việc.
