@@ -59,6 +59,16 @@ _Avoid_: Assessment, Grading
 Bản ghi **Câu trả lời** và **Kết quả đánh giá** của một **Học viên** cho một **Câu hỏi** cụ thể.
 _Avoid_: UserQuestionResult, Exercise result
 
+### Soạn học liệu
+
+**Giai đoạn soạn bài**:
+Trình tự sư phạm khi **Quản trị viên** soạn một **Bài học** trên **Trang quản trị**, gồm 2 giai đoạn: Giai đoạn 1 — Nội dung bài học (**Nội dung bài**, **Từ vựng**, **Quy tắc ngữ pháp**); Giai đoạn 2 — **Bài tập** (các **Câu hỏi** theo loại). Mỗi giai đoạn chia thành các bước con tuần tự: Giai đoạn 1 — Bước 1.1 Nội dung bài → 1.2 Từ vựng → 1.3 Quy tắc ngữ pháp; Giai đoạn 2 — Bước 2.1 Bài tập → 2.2 Chọn loại câu hỏi → 2.3 Soạn câu hỏi. Trang quản trị tổ chức theo giai đoạn thay vì danh sách phẳng. Nên hoàn thành Giai đoạn 1 trước khi sang Giai đoạn 2 — hệ thống nhắc nhở nhưng không khóa cứng; riêng Bước 2.3 khóa cứng cho tới khi chọn loại câu hỏi ở Bước 2.2.
+_Avoid_: Wizard, Stepper, Flow
+
+**Khu soạn**:
+Màn hình quản lý tập trung cho đúng một loại mục trong **Giai đoạn soạn bài** (vd: khu Từ vựng, khu Quy tắc ngữ pháp, khu câu hỏi Trắc nghiệm). **Quản trị viên** phải chọn khu soạn và đi vào trong rồi mới được tạo/sửa/xóa mục của loại đó. Loại được chọn ở cổng vào — không đổi loại giữa chừng trong form.
+_Avoid_: Tab, Section, Gate
+
 ### Mục tiêu
 
 **Mục tiêu ngày**:
@@ -208,6 +218,7 @@ _Avoid_: Simulation result, Session result, Score
 - Một **Chủ đề** chứa nhiều **Bài học** theo thứ tự
 
 - Một **Bài học** chứa **Nội dung bài**, **Từ vựng**, **Quy tắc ngữ pháp**, và **Bài tập**
+- Một **Bài học** được soạn theo **Giai đoạn soạn bài**: Giai đoạn 1 (Nội dung bài, Từ vựng, Quy tắc ngữ pháp) trước, Giai đoạn 2 (**Bài tập**) sau; mỗi loại mục có một **Khu soạn** riêng
 - Một **Bài tập** chứa nhiều **Câu hỏi**
 - Một **Học viên** có **Tiến trình bài học** cho mỗi **Bài học**, **Tiến trình chủ đề** cho mỗi **Chủ đề**, và **Tiến trình khóa học** cho mỗi **Khóa học**
 - Một **Học viên** có **Kết quả câu hỏi** cho mỗi **Câu hỏi** đã làm

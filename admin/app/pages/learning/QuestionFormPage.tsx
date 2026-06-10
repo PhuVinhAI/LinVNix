@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
 import {
   Save, X, Volume2, Lightbulb, Sparkles,
@@ -60,14 +60,27 @@ function deriveCommon(initial: Record<string, unknown> | undefined | null): Comm
 export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const { exerciseId, id } = useParams()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { data: exercise } = useAdminExercise(exerciseId)
   const question = exercise?.questions?.find((item) => item.id === id) ?? null
   const mutations = useLearningAdminMutation()
   const [submitting, setSubmitting] = useState(false)
 
-  const [common, setCommon] = useState<CommonState>(() =>
-    deriveCommon(question as unknown as Record<string, unknown> | null),
-  )
+  // Loại câu hỏi quyết định ở cổng Khu soạn (Bước 2.2) — form khóa loại (ADR 0002).
+  // Create: lấy từ ?type=...; Edit: loại của chính câu hỏi. Không có ngữ cảnh → fallback dropdown.
+  const typeParam = (searchParams.get('type') ?? '').toLowerCase()
+  const lockedType =
+    mode === 'edit'
+      ? (question?.questionType?.toLowerCase() ?? null)
+      : TYPES.some((t) => t.value === typeParam)
+        ? typeParam
+        : null
+  const typeIsLocked = mode === 'edit' || lockedType !== null
+
+  const [common, setCommon] = useState<CommonState>(() => {
+    const derived = deriveCommon(question as unknown as Record<string, unknown> | null)
+    return mode === 'create' && lockedType ? { ...derived, questionType: lockedType } : derived
+  })
   const handleRef = useRef<QuestionFormHandle | null>(null)
 
   useEffect(() => {
@@ -87,7 +100,11 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
     handleRef.current = handle
   }, [])
 
-  const backPath = exerciseId ? learningPath.exercise(exerciseId) : learningPath.courses()
+  const backPath = exerciseId
+    ? typeIsLocked && common.questionType
+      ? learningPath.exerciseType(exerciseId, common.questionType)
+      : learningPath.exercise(exerciseId)
+    : learningPath.courses()
 
   const initialForForm = question as unknown as Record<string, unknown> | null
   const formKey = `${question?.id ?? 'new'}-${common.questionType}`
@@ -138,7 +155,7 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
         })
         toast.success('Đã tạo câu hỏi')
       }
-      if (exerciseId) navigate(learningPath.exercise(exerciseId))
+      if (exerciseId) navigate(backPath)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Không thể lưu')
     } finally {
@@ -151,14 +168,27 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
       <div className="space-y-6 flex-1">
         <Breadcrumbs
           items={[
-            { label: exercise?.lesson?.title ?? 'Bài học', href: exercise?.lessonId ? learningPath.lesson(exercise.lessonId, 'exercises') : undefined },
+            { label: exercise?.lesson?.title ?? 'Bài học', href: exercise?.lessonId ? learningPath.lesson(exercise.lessonId) : undefined },
             { label: exercise?.title ?? 'Bài tập', href: exerciseId ? learningPath.exercise(exerciseId) : undefined },
+            ...(typeIsLocked && exerciseId
+              ? [{ label: typeMeta.label, href: learningPath.exerciseType(exerciseId, typeMeta.value) }]
+              : []),
             { label: mode === 'edit' ? 'Sửa câu hỏi' : 'Thêm câu hỏi' },
           ]}
         />
 
         <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-border bg-card px-2 py-2">
-          <TypePicker value={common.questionType} onChange={(v) => updateCommon('questionType', v)} />
+          {typeIsLocked ? (
+            <span className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 cursor-default">
+              <typeMeta.Icon className={`h-4 w-4 ${typeMeta.tone}`} />
+              <span className="text-sm font-bold">{typeMeta.label}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                Loại đã chọn ở Bước 2.2
+              </span>
+            </span>
+          ) : (
+            <TypePicker value={common.questionType} onChange={(v) => updateCommon('questionType', v)} />
+          )}
           <Divider />
           <DifficultyPicker value={common.difficultyLevel} onChange={(v) => updateCommon('difficultyLevel', v)} />
           <Divider />

@@ -26,20 +26,25 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
             (max, s) => Math.max(max, s.orderIndex ?? -1),
             -1,
           ) + 1
-        await mutations.createLessonChild.mutateAsync({
+        const created = (await mutations.createLessonChild.mutateAsync({
           kind: 'exercises',
           lessonId,
           payload: { ...payload, orderIndex: nextOrderIndex },
-        })
+        })) as { id?: string } | undefined
         toast.success('Đã tạo mới')
+        // Bước 2.1 xong → vào thẳng Bước 2.2 (chọn loại câu hỏi)
+        if (created?.id) {
+          navigate(learningPath.exercise(created.id))
+          return
+        }
       }
-      if (lessonId) navigate(learningPath.lesson(lessonId, 'exercises'))
+      if (lessonId) navigate(learningPath.lesson(lessonId))
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Không thể lưu')
     }
   }
 
-  const backPath = lessonId ? learningPath.lesson(lessonId, 'exercises') : learningPath.courses()
+  const backPath = lessonId ? learningPath.lesson(lessonId) : learningPath.courses()
   const titleAction = mode === 'edit' ? 'Sửa' : 'Tạo mới'
 
   const handleSubmit = (values: unknown) => submit(values as Record<string, unknown>)
@@ -50,7 +55,7 @@ export function ExerciseFormPage({ mode }: { mode: 'create' | 'edit' }) {
         items={[
           { label: lesson?.module?.course?.title ?? 'Khóa học', href: lesson?.module?.courseId ? learningPath.course(lesson.module.courseId) : learningPath.courses() },
           { label: lesson?.module?.title ?? 'Chủ đề', href: lesson?.moduleId ? learningPath.module(lesson.moduleId) : undefined },
-          { label: lesson?.title ?? 'Bài học', href: lessonId ? learningPath.lesson(lessonId, 'exercises') : undefined },
+          { label: lesson?.title ?? 'Bài học', href: lessonId ? learningPath.lesson(lessonId) : undefined },
           { label: `${titleAction} bài tập` },
         ]}
       />

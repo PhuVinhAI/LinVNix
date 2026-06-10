@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { DndContext, closestCenter } from '@dnd-kit/core'
@@ -8,17 +8,15 @@ import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import {
   Plus,
   Pencil,
-  FileText,
-  BookMarked,
-  Lightbulb,
+  Check,
+  ChevronRight,
   ClipboardList,
   Clock,
   MoreVertical,
   Trash2,
+  TriangleAlert,
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Tabs, TabsContent } from '../../components/ui/tabs'
-import { AdminTabsList, AdminTabTrigger } from '../../components/admin/AdminTabs'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { LessonContentSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
@@ -38,14 +36,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
-import { VocabularyEditor } from '../../components/admin/lesson-editors/VocabularyEditor'
-import { ContentEditor } from '../../components/admin/lesson-editors/ContentEditor'
-import { GrammarEditor } from '../../components/admin/lesson-editors/GrammarEditor'
 import { DragHandle } from '../../components/admin/shared/DragHandle'
 import { SortableRow } from '../../components/admin/shared/SortableRow'
 import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { Exercise, Lesson } from '../../features/learning/types'
+import { LESSON_SECTIONS, questionTypeMeta, stageOneTotal } from './authoring-meta'
 import { learningPath } from './route-utils'
 
 const lessonTypeColors: Record<string, string> = {
@@ -70,23 +66,13 @@ const lessonTypeLabels: Record<string, string> = {
   culture: 'Văn hóa',
 }
 
-type DeleteTarget = {
-  kind: string
-  id: string
-  label: string
-  resource: string
-}
-
-const LESSON_TABS = ['contents', 'vocabularies', 'grammar', 'exercises'] as const
-
 export function LessonDetailPage() {
   const { lessonId } = useParams()
   const navigate = useNavigate()
   const qc = useQueryClient()
-  const [searchParams, setSearchParams] = useSearchParams()
   const { data: lesson, isLoading, error, refetch, isFetching } = useAdminLesson(lessonId)
   const mutations = useLearningAdminMutation()
-  const [pendingDelete, setPendingDelete] = useState<DeleteTarget | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<Exercise | null>(null)
 
   const lessonKey = ['admin-learning', 'lesson', lessonId] as const
   const exercisesReorder = useAdminListReorder<Exercise>({
@@ -102,29 +88,17 @@ export function LessonDetailPage() {
   const sortedExercises = [...(lesson?.exercises ?? [])].sort(
     (a, b) => a.orderIndex - b.orderIndex,
   )
-
-  const tabParam = searchParams.get('tab') ?? ''
-  const activeTab = (LESSON_TABS as readonly string[]).includes(tabParam) ? tabParam : 'contents'
-  const handleTabChange = (next: string) => {
-    setSearchParams(
-      (prev) => {
-        const params = new URLSearchParams(prev)
-        if (next === 'contents') params.delete('tab')
-        else params.set('tab', next)
-        return params
-      },
-      { replace: true },
-    )
-  }
+  const contentTotal = stageOneTotal(lesson)
+  const questionTotal = sortedExercises.reduce((sum, e) => sum + (e.questions?.length ?? 0), 0)
 
   const confirmDelete = async () => {
     if (!pendingDelete) return
     try {
       await mutations.deleteLessonChild.mutateAsync({
-        kind: pendingDelete.kind,
+        kind: 'exercises',
         id: pendingDelete.id,
       })
-      toast.success(`Đã xóa ${pendingDelete.resource}`)
+      toast.success('Đã xóa bài tập')
       setPendingDelete(null)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Không thể xóa')
@@ -192,53 +166,86 @@ export function LessonDetailPage() {
           retrying={isFetching}
         />
       ) : lesson && lessonId ? (
-        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
-          <AdminTabsList>
-            <AdminTabTrigger value="contents" icon={FileText} label="Nội dung" count={lesson.contents?.length ?? 0} />
-            <AdminTabTrigger value="vocabularies" icon={BookMarked} label="Từ vựng" count={lesson.vocabularies?.length ?? 0} />
-            <AdminTabTrigger value="grammar" icon={Lightbulb} label="Ngữ pháp" count={lesson.grammarRules?.length ?? 0} />
-            <AdminTabTrigger value="exercises" icon={ClipboardList} label="Bài tập" count={lesson.exercises?.length ?? 0} />
-          </AdminTabsList>
-
-          {/* CONTENTS — inline visual editor */}
-          <TabsContent value="contents" className="mt-4">
-            <ContentEditor lessonId={lessonId} />
-          </TabsContent>
-
-          {/* VOCABULARIES — spreadsheet editor */}
-          <TabsContent value="vocabularies" className="mt-4">
-            <VocabularyEditor lessonId={lessonId} />
-          </TabsContent>
-
-          {/* GRAMMAR — expandable inline editor */}
-          <TabsContent value="grammar" className="mt-4">
-            <GrammarEditor lessonId={lessonId} />
-          </TabsContent>
-
-          {/* EXERCISES — clickable stat tiles */}
-          <TabsContent value="exercises" className="mt-4 space-y-4">
-            <div className="flex items-end justify-between gap-4 flex-wrap">
-              <div>
-                <div className="flex items-baseline gap-2">
-                  <h2 className="text-lg font-bold tracking-tight">Bài tập</h2>
-                  <span className="text-sm font-bold tabular-nums text-muted-foreground">
-                    {lesson.exercises?.length ?? 0}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-0.5">Mỗi bài tập chứa nhiều câu hỏi cùng chủ đề.</p>
-              </div>
-              <Button asChild>
-                <Link to={learningPath.exerciseNew(lessonId)}>
-                  <Plus className="h-4 w-4" />
-                  Thêm bài tập
-                </Link>
-              </Button>
+        <>
+          {/* ── GIAI ĐOẠN 1 · Nội dung bài học ───────────────────────────── */}
+          <section className="space-y-4">
+            <StageHeader
+              number={1}
+              title="Nội dung bài học"
+              subtitle="Soạn phần kiến thức học viên tiếp thu trước khi luyện tập. Chọn một khu vực để vào soạn."
+              right={
+                contentTotal > 0 ? (
+                  <StagePill tone="done">
+                    <Check className="h-3.5 w-3.5" />
+                    {contentTotal} mục
+                  </StagePill>
+                ) : (
+                  <StagePill tone="todo">Chưa soạn</StagePill>
+                )
+              }
+            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {LESSON_SECTIONS.map((section, idx) => (
+                <SectionGateCard
+                  key={section.value}
+                  to={learningPath.lessonSection(lessonId, section.value)}
+                  step={`1.${idx + 1}`}
+                  Icon={section.Icon}
+                  label={section.label}
+                  hint={section.hint}
+                  count={section.count(lesson)}
+                />
+              ))}
             </div>
-            {(lesson.exercises?.length ?? 0) === 0 ? (
+          </section>
+
+          {/* ── GIAI ĐOẠN 2 · Bài tập ────────────────────────────────────── */}
+          <section className="space-y-4 pt-2">
+            <StageHeader
+              number={2}
+              title="Bài tập"
+              subtitle="Trình tự: Bước 2.1 tạo bài tập → Bước 2.2 chọn loại câu hỏi → Bước 2.3 soạn câu hỏi. Bấm vào một bài tập để đi tiếp."
+              right={
+                <>
+                  {sortedExercises.length > 0 ? (
+                    <StagePill tone="done">
+                      <Check className="h-3.5 w-3.5" />
+                      {sortedExercises.length} bài tập · {questionTotal} câu hỏi
+                    </StagePill>
+                  ) : (
+                    <StagePill tone="todo">Chưa có bài tập</StagePill>
+                  )}
+                  <Button asChild>
+                    <Link to={learningPath.exerciseNew(lessonId)}>
+                      <Plus className="h-4 w-4" />
+                      Thêm bài tập
+                    </Link>
+                  </Button>
+                </>
+              }
+            />
+
+            {contentTotal === 0 && (
+              <div className="flex items-start gap-3 rounded-lg border-2 border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 px-4 py-3">
+                <TriangleAlert className="h-5 w-5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+                <div>
+                  <p className="text-sm font-bold text-amber-900 dark:text-amber-100">
+                    Giai đoạn 1 chưa có nội dung
+                  </p>
+                  <p className="text-sm text-amber-800 dark:text-amber-200 mt-0.5">
+                    Theo trình tự sư phạm, nên soạn nội dung bài học trước rồi mới tạo bài tập luyện tập.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {sortedExercises.length === 0 ? (
               <div className="rounded-xl border-2 border-dashed border-border bg-muted/30 p-12 text-center">
                 <ClipboardList className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
                 <h3 className="text-lg font-bold mb-1">Chưa có bài tập</h3>
-                <p className="text-sm text-muted-foreground mb-4">Tạo bài tập đầu tiên cho bài học này</p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Tạo bài tập, sau đó chọn loại câu hỏi để soạn bên trong
+                </p>
                 <Button asChild>
                   <Link to={learningPath.exerciseNew(lessonId)}>
                     <Plus className="h-4 w-4" />
@@ -260,14 +267,7 @@ export function LessonDetailPage() {
                         row={row}
                         onOpen={() => navigate(learningPath.exercise(row.id))}
                         onEdit={() => navigate(learningPath.exerciseEdit(lessonId, row.id))}
-                        onDelete={() =>
-                          setPendingDelete({
-                            kind: 'exercises',
-                            id: row.id,
-                            label: row.title,
-                            resource: 'bài tập',
-                          })
-                        }
+                        onDelete={() => setPendingDelete(row)}
                         stop={stop}
                       />
                     ))}
@@ -275,8 +275,8 @@ export function LessonDetailPage() {
                 </SortableContext>
               </DndContext>
             )}
-          </TabsContent>
-        </Tabs>
+          </section>
+        </>
       ) : null}
 
       <AlertDialog
@@ -289,18 +289,14 @@ export function LessonDetailPage() {
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10">
                 <Trash2 className="h-5 w-5 text-destructive" />
               </div>
-              <AlertDialogTitle>Xóa {pendingDelete?.resource}?</AlertDialogTitle>
+              <AlertDialogTitle>Xóa bài tập?</AlertDialogTitle>
             </div>
             <AlertDialogDescription>
-              {pendingDelete?.resource && (
-                <>
-                  {pendingDelete.resource.charAt(0).toUpperCase() + pendingDelete.resource.slice(1)}{' '}
-                  <span className="font-semibold text-foreground">
-                    &quot;{pendingDelete?.label}&quot;
-                  </span>{' '}
-                  sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
-                </>
-              )}
+              Bài tập{' '}
+              <span className="font-semibold text-foreground">
+                &quot;{pendingDelete?.title}&quot;
+              </span>{' '}
+              cùng toàn bộ câu hỏi bên trong sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -316,6 +312,101 @@ export function LessonDetailPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  )
+}
+
+function StageHeader({
+  number,
+  title,
+  subtitle,
+  right,
+}: {
+  number: number
+  title: string
+  subtitle: string
+  right?: React.ReactNode
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 flex-wrap">
+      <div className="flex items-start gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground text-lg font-bold tabular-nums">
+          {number}
+        </div>
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            Giai đoạn {number}
+          </p>
+          <h2 className="text-lg font-bold tracking-tight leading-tight">{title}</h2>
+          <p className="text-sm text-muted-foreground mt-0.5 max-w-2xl">{subtitle}</p>
+        </div>
+      </div>
+      {right && <div className="flex items-center gap-2 shrink-0 flex-wrap">{right}</div>}
+    </div>
+  )
+}
+
+function StagePill({ tone, children }: { tone: 'done' | 'todo'; children: React.ReactNode }) {
+  const cls =
+    tone === 'done'
+      ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300'
+      : 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300'
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold ${cls}`}>
+      {children}
+    </span>
+  )
+}
+
+function SectionGateCard({
+  to,
+  step,
+  Icon,
+  label,
+  hint,
+  count,
+}: {
+  to: string
+  step: string
+  Icon: React.ComponentType<{ className?: string }>
+  label: string
+  hint: string
+  count: number
+}) {
+  return (
+    <Link
+      to={to}
+      className="group flex flex-col gap-3 rounded-xl border-2 border-border bg-card p-5 transition-colors hover:border-primary focus:outline-none focus-visible:border-primary"
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <Icon className="h-5 w-5" />
+        </div>
+        <ChevronRight className="h-5 w-5 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+      </div>
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          Bước <span className="tabular-nums">{step}</span>
+        </p>
+        <h3 className="text-base font-bold leading-tight mt-0.5">{label}</h3>
+        <p className="text-xs text-muted-foreground mt-1">{hint}</p>
+      </div>
+      <div className="flex items-center justify-between pt-3 border-t-2 border-border">
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-xl font-bold tabular-nums">{count}</span>
+          <span className="text-xs font-medium text-muted-foreground">mục</span>
+        </div>
+        {count > 0 ? (
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+            <Check className="h-3.5 w-3.5" />
+            Đã soạn
+          </span>
+        ) : (
+          <span className="inline-flex items-center rounded-md bg-amber-100 dark:bg-amber-950/40 px-2 py-0.5 text-xs font-bold text-amber-700 dark:text-amber-300">
+            Chưa soạn
+          </span>
+        )}
+      </div>
+    </Link>
   )
 }
 
@@ -343,16 +434,6 @@ function RowMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => voi
       </DropdownMenuContent>
     </DropdownMenu>
   )
-}
-
-const EXERCISE_TYPE_META: Record<string, { label: string; dot: string; text: string }> = {
-  multiple_choice: { label: 'Trắc nghiệm', dot: 'bg-blue-500', text: 'text-blue-700 dark:text-blue-300' },
-  fill_blank: { label: 'Điền', dot: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-300' },
-  matching: { label: 'Ghép', dot: 'bg-purple-500', text: 'text-purple-700 dark:text-purple-300' },
-  ordering: { label: 'Sắp xếp', dot: 'bg-indigo-500', text: 'text-indigo-700 dark:text-indigo-300' },
-  translation: { label: 'Dịch', dot: 'bg-amber-500', text: 'text-amber-700 dark:text-amber-300' },
-  listening: { label: 'Nghe', dot: 'bg-rose-500', text: 'text-rose-700 dark:text-rose-300' },
-  speaking: { label: 'Nói', dot: 'bg-cyan-500', text: 'text-cyan-700 dark:text-cyan-300' },
 }
 
 function ExerciseTile({
@@ -428,14 +509,14 @@ function ExerciseTile({
             {Object.keys(typeCounts).length > 0 ? (
               <div className="flex flex-wrap items-center gap-1 justify-end">
                 {Object.entries(typeCounts).map(([type, count]) => {
-                  const meta = EXERCISE_TYPE_META[type]
+                  const meta = questionTypeMeta(type)
                   return (
                     <span
                       key={type}
                       className="inline-flex items-center gap-1 rounded-md border-2 border-border bg-muted/40 px-1.5 py-0.5 text-[11px] font-semibold"
                     >
                       <span className={`h-1.5 w-1.5 rounded-full ${meta?.dot ?? 'bg-muted-foreground'}`} />
-                      <span className={meta?.text ?? 'text-muted-foreground'}>
+                      <span className={meta?.tone ?? 'text-muted-foreground'}>
                         {meta?.label ?? type}
                       </span>
                       <span className="font-bold tabular-nums text-foreground">{count}</span>

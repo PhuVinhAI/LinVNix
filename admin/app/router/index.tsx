@@ -11,8 +11,10 @@ import { ModuleDetailPage } from '../pages/learning/ModuleDetailPage'
 import { ModuleFormPage } from '../pages/learning/ModuleFormPage'
 import { LessonDetailPage } from '../pages/learning/LessonDetailPage'
 import { LessonFormPage } from '../pages/learning/LessonFormPage'
+import { LessonSectionPage } from '../pages/learning/LessonSectionPage'
 import { ExerciseFormPage } from '../pages/learning/ExerciseFormPage'
 import { ExerciseDetailPage } from '../pages/learning/ExerciseDetailPage'
+import { ExerciseTypePage } from '../pages/learning/ExerciseTypePage'
 import { QuestionFormPage } from '../pages/learning/QuestionFormPage'
 import { ScenarioCategoriesPage } from '../pages/simulations/ScenarioCategoriesPage'
 import { ScenarioCategoryFormPage } from '../pages/simulations/ScenarioCategoryFormPage'
@@ -92,6 +94,10 @@ export const router = createBrowserRouter([
         element: <LessonDetailPage />,
       },
       {
+        path: ROUTES.LESSON_SECTION,
+        element: <LessonSectionPage />,
+      },
+      {
         path: ROUTES.EXERCISE_NEW,
         element: <ExerciseFormPage mode="create" />,
       },
@@ -102,6 +108,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.EXERCISE_DETAIL,
         element: <ExerciseDetailPage />,
+      },
+      {
+        path: ROUTES.EXERCISE_TYPE,
+        element: <ExerciseTypePage />,
       },
       {
         path: ROUTES.QUESTION_NEW,

@@ -28,9 +28,11 @@ export const ROUTES = {
   LESSON_NEW: '/modules/:moduleId/lessons/new',
   LESSON_EDIT: '/modules/:moduleId/lessons/:id/edit',
   LESSON_DETAIL: '/lessons/:lessonId',
+  LESSON_SECTION: '/lessons/:lessonId/sections/:section',
   EXERCISE_NEW: '/lessons/:lessonId/exercises/new',
   EXERCISE_EDIT: '/lessons/:lessonId/exercises/:id/edit',
   EXERCISE_DETAIL: '/exercises/:exerciseId',
+  EXERCISE_TYPE: '/exercises/:exerciseId/types/:questionType',
   QUESTION_NEW: '/exercises/:exerciseId/questions/new',
   QUESTION_EDIT: '/exercises/:exerciseId/questions/:id/edit',
   // Hội thoại mô phỏng
