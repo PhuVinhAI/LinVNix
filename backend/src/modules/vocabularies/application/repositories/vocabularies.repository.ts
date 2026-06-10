@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Vocabulary } from '../../domain/vocabulary.entity';
 import { Dialect } from '../../../../common/enums';
+import { bulkReorder, ReorderItem } from '../../../../common/utils/bulk-reorder';
 
 export interface VocabularySearchOptions {
   query: string;
@@ -20,6 +21,10 @@ export class VocabulariesRepository {
   async create(data: Partial<Vocabulary>): Promise<Vocabulary> {
     const vocabulary = this.repository.create(data);
     return this.repository.save(vocabulary);
+  }
+
+  async reorder(items: ReorderItem[]): Promise<void> {
+    await bulkReorder(this.repository, items);
   }
 
   async findByLessonId(lessonId: string): Promise<Vocabulary[]> {

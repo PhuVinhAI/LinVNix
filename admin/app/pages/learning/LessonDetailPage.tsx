@@ -1,11 +1,12 @@
 import { Link, useParams } from 'react-router'
-import { BookOpen, Check, ChevronRight, ClipboardList, Clock, Pencil } from 'lucide-react'
+import { BookOpen, ChevronRight, ClipboardList, Clock, Pencil } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { LessonContentSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { useAdminLesson } from '../../features/learning/api/use-learning-admin'
 import { stageOneTotal } from './authoring-meta'
+import { StatusPill } from './authoring-ui'
 import { learningPath } from './route-utils'
 
 const lessonTypeColors: Record<string, string> = {
@@ -117,17 +118,21 @@ export function LessonDetailPage() {
               Icon={BookOpen}
               title="Nội dung bài học"
               description="Phần kiến thức học viên tiếp thu: nội dung bài, từ vựng, quy tắc ngữ pháp."
-              done={contentTotal > 0}
-              stat={`${contentTotal} mục`}
+              count={contentTotal}
+              countLabel="mục đã soạn"
+              status={contentTotal >= 3 ? 'done' : contentTotal > 0 ? 'partial' : 'empty'}
+              hint={contentTotal === 0 ? 'Bắt đầu từ đây' : undefined}
             />
             <StageGate
               to={learningPath.lessonStageExercises(lessonId)}
               Icon={ClipboardList}
               title="Bài tập"
               description="Câu hỏi luyện tập trên nền kiến thức đã soạn."
-              done={exerciseTotal > 0}
-              stat={`${exerciseTotal} bài tập · ${questionTotal} câu hỏi`}
-              warn={contentTotal === 0 ? 'Nên soạn nội dung trước' : undefined}
+              count={exerciseTotal}
+              countLabel={`bài tập · ${questionTotal} câu hỏi`}
+              status={exerciseTotal > 0 ? 'done' : 'empty'}
+              hint={contentTotal === 0 ? 'Nên soạn nội dung trước' : undefined}
+              warn={contentTotal === 0}
             />
           </div>
         </div>
@@ -141,46 +146,57 @@ function StageGate({
   Icon,
   title,
   description,
-  done,
-  stat,
+  count,
+  countLabel,
+  status,
+  hint,
   warn,
 }: {
   to: string
   Icon: React.ComponentType<{ className?: string }>
   title: string
   description: string
-  done: boolean
-  stat: string
-  warn?: string
+  count: number
+  countLabel: string
+  status: 'done' | 'partial' | 'empty'
+  hint?: string
+  warn?: boolean
 }) {
   return (
     <Link
       to={to}
-      className="group flex flex-col gap-4 rounded-xl border-2 border-border bg-card p-6 transition-colors hover:border-primary focus:outline-none focus-visible:border-primary"
+      className={`group flex flex-col gap-4 rounded-xl border-2 bg-card p-6 transition-colors hover:border-primary focus:outline-none focus-visible:border-primary ${
+        warn ? 'border-amber-300 dark:border-amber-800' : 'border-border'
+      }`}
     >
       <div className="flex items-center justify-between">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-          <Icon className="h-6 w-6" />
+        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <Icon className="h-7 w-7" />
         </div>
-        <ChevronRight className="h-6 w-6 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+        <ChevronRight className="h-6 w-6 text-muted-foreground/40 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
       </div>
-      <div>
+      <div className="flex-1">
         <h3 className="text-xl font-bold leading-tight">{title}</h3>
         <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{description}</p>
       </div>
       <div className="flex items-center justify-between pt-4 border-t-2 border-border">
-        <span className="text-sm font-bold tabular-nums">{stat}</span>
-        {done ? (
-          <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-            <Check className="h-3.5 w-3.5" />
-            Đã soạn
-          </span>
-        ) : (
-          <span className="inline-flex items-center rounded-md bg-amber-100 dark:bg-amber-950/40 px-2 py-0.5 text-xs font-bold text-amber-700 dark:text-amber-300">
-            {warn ?? 'Chưa soạn'}
-          </span>
-        )}
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-2xl font-bold tabular-nums">{count}</span>
+          <span className="text-xs font-medium text-muted-foreground">{countLabel}</span>
+        </div>
+        <StatusPill status={status} />
       </div>
+      {hint && (
+        <p
+          className={`text-xs font-semibold ${
+            warn
+              ? 'text-amber-700 dark:text-amber-300'
+              : 'text-primary'
+          }`}
+        >
+          {hint}
+        </p>
+      )}
     </Link>
   )
 }

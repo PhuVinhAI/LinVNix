@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { Lightbulb, Plus, Sparkles, Trash2 } from 'lucide-react'
+import { Lightbulb, Plus, Trash2 } from 'lucide-react'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { InlineEditable } from '../../components/admin/InlineEditable'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
@@ -10,10 +10,8 @@ import {
   ComposerCard,
   DIFFICULTY_DOT,
   DIFFICULTY_LABELS,
-  DifficultyPill,
-  NotesPill,
-  PillBar,
-  PillDivider,
+  DifficultyRow,
+  NotesField,
   SectionLabel,
   StickySaveBar,
 } from './authoring-ui'
@@ -126,19 +124,6 @@ export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
           ]}
         />
 
-        <PillBar
-          hint={
-            <>
-              <Sparkles className="h-3.5 w-3.5" />
-              Bấm vào bất kỳ chữ nào để sửa
-            </>
-          }
-        >
-          <DifficultyPill value={form.difficultyLevel} onChange={(v) => set('difficultyLevel', v)} />
-          <PillDivider />
-          <NotesPill value={form.notes} onChange={(v) => set('notes', v)} label="Ghi chú giảng dạy" />
-        </PillBar>
-
         <ComposerCard
           Icon={Lightbulb}
           iconClass="bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300"
@@ -242,16 +227,15 @@ export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
             </button>
           </div>
 
-          {form.notes && (
-            <div className="rounded-2xl border-2 border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 mb-0.5">
-                Ghi chú giảng dạy
-              </p>
-              <p className="text-sm leading-relaxed text-amber-900 dark:text-amber-100 whitespace-pre-wrap">
-                {form.notes}
-              </p>
-            </div>
-          )}
+          <div>
+            <SectionLabel>Độ khó</SectionLabel>
+            <DifficultyRow value={form.difficultyLevel} onChange={(v) => set('difficultyLevel', v)} />
+          </div>
+
+          <div>
+            <SectionLabel right="không hiện cho học viên">Ghi chú giảng dạy</SectionLabel>
+            <NotesField value={form.notes} onChange={(v) => set('notes', v)} />
+          </div>
         </ComposerCard>
       </div>
 

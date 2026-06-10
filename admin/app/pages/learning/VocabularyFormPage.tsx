@@ -1,26 +1,22 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { BookMarked, Image as ImageIcon, Sparkles, Volume2 } from 'lucide-react'
+import { BookMarked } from 'lucide-react'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { InlineEditable } from '../../components/admin/InlineEditable'
-import { PartOfSpeechPicker, POS_OPTIONS } from '../../components/admin/lesson-editors/shared/PartOfSpeechPicker'
+import { MediaUpload } from '../../components/admin/editors/MediaUpload'
+import { PartOfSpeechPicker } from '../../components/admin/lesson-editors/shared/PartOfSpeechPicker'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { Vocabulary } from '../../features/learning/types'
 import {
   ComposerCard,
   DIFFICULTY_DOT,
   DIFFICULTY_LABELS,
-  DifficultyPill,
-  MediaPill,
-  PillBar,
-  PillDivider,
+  DifficultyRow,
   SectionLabel,
   StickySaveBar,
 } from './authoring-ui'
 import { learningPath } from './route-utils'
-
-const POS_LABEL = Object.fromEntries(POS_OPTIONS.map((o) => [o.value, o.label]))
 
 interface FormState {
   word: string
@@ -60,7 +56,7 @@ function fromVocabulary(v: Vocabulary): FormState {
   }
 }
 
-/** Soạn một Từ vựng — cùng ngôn ngữ thiết kế với form câu hỏi. */
+/** Soạn một Từ vựng — mọi thuộc tính là field trong cùng khung form, không thanh ngoài. */
 export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const { lessonId, id } = useParams()
   const navigate = useNavigate()
@@ -136,35 +132,6 @@ export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
           ]}
         />
 
-        <PillBar
-          hint={
-            <>
-              <Sparkles className="h-3.5 w-3.5" />
-              Bấm vào bất kỳ chữ nào để sửa
-            </>
-          }
-        >
-          <PartOfSpeechPicker value={form.partOfSpeech} onChange={(v) => set('partOfSpeech', v)} />
-          <PillDivider />
-          <DifficultyPill value={form.difficultyLevel} onChange={(v) => set('difficultyLevel', v)} />
-          <PillDivider />
-          <MediaPill
-            kind="audio"
-            label="Phát âm"
-            filledLabel="Có phát âm"
-            value={form.audioUrl}
-            onChange={(v) => set('audioUrl', v)}
-          />
-          <PillDivider />
-          <MediaPill
-            kind="image"
-            label="Hình ảnh"
-            filledLabel="Có hình ảnh"
-            value={form.imageUrl}
-            onChange={(v) => set('imageUrl', v)}
-          />
-        </PillBar>
-
         <ComposerCard
           Icon={BookMarked}
           iconClass="bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300"
@@ -201,6 +168,14 @@ export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
+              <SectionLabel>Từ loại</SectionLabel>
+              <PartOfSpeechPicker
+                value={form.partOfSpeech}
+                onChange={(v) => set('partOfSpeech', v)}
+                variant="grid"
+              />
+            </div>
+            <div>
               <SectionLabel>Danh từ phân loại</SectionLabel>
               <InlineEditable
                 value={form.classifier}
@@ -210,13 +185,6 @@ export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
                 ariaLabel="Danh từ phân loại"
                 multiline={false}
               />
-            </div>
-            <div>
-              <SectionLabel>Từ loại</SectionLabel>
-              <p className="px-2.5 py-1.5 text-base font-semibold text-foreground">
-                {POS_LABEL[form.partOfSpeech] ?? form.partOfSpeech}
-                <span className="text-xs text-muted-foreground font-normal ml-2">đổi trên thanh công cụ</span>
-              </p>
             </div>
           </div>
 
@@ -240,32 +208,20 @@ export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
             </div>
           </div>
 
-          {form.audioUrl && (
-            <div className="flex items-center gap-3 rounded-2xl border-2 border-border bg-muted/30 px-4 py-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Volume2 className="h-5 w-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">File phát âm</p>
-                <p className="text-sm truncate text-foreground">{form.audioUrl}</p>
-              </div>
-            </div>
-          )}
+          <div>
+            <SectionLabel right="bản ghi tiếng Việt của từ">Phát âm</SectionLabel>
+            <MediaUpload kind="audio" value={form.audioUrl || null} onChange={(url) => set('audioUrl', url ?? '')} />
+          </div>
 
-          {form.imageUrl && (
-            <div className="flex items-center gap-3 rounded-2xl border-2 border-border bg-muted/30 px-4 py-3">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-border bg-card">
-                <img src={form.imageUrl} alt="Hình minh họa" className="h-full w-full object-cover" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1">
-                  <ImageIcon className="h-3 w-3" />
-                  Hình minh họa
-                </p>
-                <p className="text-sm truncate text-foreground">{form.imageUrl}</p>
-              </div>
-            </div>
-          )}
+          <div>
+            <SectionLabel right="ảnh minh hoạ nghĩa của từ">Hình ảnh</SectionLabel>
+            <MediaUpload kind="image" value={form.imageUrl || null} onChange={(url) => set('imageUrl', url ?? '')} />
+          </div>
+
+          <div>
+            <SectionLabel>Độ khó</SectionLabel>
+            <DifficultyRow value={form.difficultyLevel} onChange={(v) => set('difficultyLevel', v)} />
+          </div>
         </ComposerCard>
       </div>
 

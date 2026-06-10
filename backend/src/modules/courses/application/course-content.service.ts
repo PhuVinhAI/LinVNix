@@ -206,6 +206,14 @@ export class CourseContentService implements CourseStatsPort {
     await this.lessonsRepository.reorder(items);
   }
 
+  async reorderContents(items: ReorderItem[]): Promise<void> {
+    await this.contentsRepository.reorder(items);
+  }
+
+  async reorderGrammarRules(items: ReorderItem[]): Promise<void> {
+    await this.grammarRepository.reorder(items);
+  }
+
   async createContent(data: Partial<LessonContent>): Promise<LessonContent> {
     return this.contentsRepository.create(this.prepareContentPayload(data));
   }

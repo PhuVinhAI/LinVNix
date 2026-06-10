@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { ArrowLeft, BookMarked, Lightbulb, Plus, Volume2 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { GrammarRule, Lesson, Vocabulary } from '../../features/learning/types'
 import { MATERIAL_TYPES, lessonSectionMeta } from './authoring-meta'
-import { ConfirmDeleteDialog, GateCard, ItemRow } from './authoring-ui'
+import { ConfirmDeleteDialog, GateCard, PageHero, SectionHeader, SortableItemRow } from './authoring-ui'
 import { POS_OPTIONS } from '../../components/admin/lesson-editors/shared/PartOfSpeechPicker'
 import { learningPath } from './route-utils'
 
@@ -38,45 +42,23 @@ export function LessonSectionPage() {
         ]}
       />
 
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div className="flex items-start gap-4 min-w-0">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <meta.Icon className="h-6 w-6" />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-2xl font-bold tracking-tight">{meta.label}</h1>
-            <p className="text-sm text-muted-foreground mt-1 leading-relaxed max-w-3xl">
-              {meta.value === 'materials'
-                ? 'Chọn loại nội dung để vào không gian soạn riêng của loại đó.'
-                : meta.description}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
+      <PageHero
+        Icon={meta.Icon}
+        title={meta.label}
+        description={
+          meta.value === 'materials'
+            ? 'Chọn loại nội dung để vào không gian soạn riêng của loại đó.'
+            : meta.description
+        }
+        actions={
           <Button asChild variant="outline">
             <Link to={learningPath.lessonStageContent(lessonId)}>
               <ArrowLeft className="h-4 w-4" />
               Quay lại
             </Link>
           </Button>
-          {meta.value === 'vocabulary' && (
-            <Button asChild>
-              <Link to={learningPath.vocabNew(lessonId)}>
-                <Plus className="h-4 w-4" />
-                Thêm từ vựng
-              </Link>
-            </Button>
-          )}
-          {meta.value === 'grammar' && (
-            <Button asChild>
-              <Link to={learningPath.grammarNew(lessonId)}>
-                <Plus className="h-4 w-4" />
-                Thêm quy tắc
-              </Link>
-            </Button>
-          )}
-        </div>
-      </div>
+        }
+      />
 
       {meta.value === 'materials' && <MaterialTypeGates lessonId={lessonId} lesson={lesson} />}
       {meta.value === 'vocabulary' && <VocabularyList lessonId={lessonId} lesson={lesson} />}
@@ -115,8 +97,18 @@ function MaterialTypeGates({ lessonId, lesson }: { lessonId: string; lesson: Les
 
 function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson | undefined }) {
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Vocabulary | null>(null)
+
+  const lessonKey = ['admin-learning', 'lesson', lessonId] as const
+  const { sensors, handleDragEnd } = useAdminListReorder<Vocabulary>({
+    getItems: () => qc.getQueryData<Lesson>(lessonKey)?.vocabularies ?? [],
+    setItems: (next) =>
+      qc.setQueryData<Lesson>(lessonKey, (prev) => (prev ? { ...prev, vocabularies: next } : prev)),
+    reorder: (items) => mutations.reorderVocabularies.mutateAsync(items),
+    onError: () => toast.error('Không thể sắp xếp lại từ vựng'),
+  })
 
   const rows = [...(lesson?.vocabularies ?? [])].sort((a, b) => a.orderIndex - b.orderIndex)
 
@@ -131,47 +123,76 @@ function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson
     }
   }
 
-  if (rows.length === 0) {
-    return (
-      <EmptySection
-        Icon={BookMarked}
-        title="Chưa có từ vựng"
-        hint="Thêm từ đầu tiên cho bài học này"
-        cta={
-          <Button asChild>
-            <Link to={learningPath.vocabNew(lessonId)}>
-              <Plus className="h-4 w-4" />
-              Thêm từ vựng
-            </Link>
-          </Button>
-        }
-      />
-    )
-  }
+  const addButton = (
+    <Button asChild>
+      <Link to={learningPath.vocabNew(lessonId)}>
+        <Plus className="h-4 w-4" />
+        Thêm từ vựng
+      </Link>
+    </Button>
+  )
 
   return (
-    <>
-      <div className="rounded-xl border-2 border-border bg-card divide-y-2 divide-border overflow-hidden">
-        {rows.map((row) => (
-          <ItemRow
-            key={row.id}
-            onOpen={() => navigate(learningPath.vocabEdit(lessonId, row.id))}
-            onDelete={() => setPendingDelete(row)}
-            leading={
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300">
-                {row.audioUrl ? <Volume2 className="h-5 w-5" /> : <BookMarked className="h-5 w-5" />}
-              </div>
-            }
-            title={
-              <span>
-                {row.word || <span className="italic text-muted-foreground">Chưa có từ</span>}
-                <span className="text-muted-foreground font-normal"> — {row.translation || '…'}</span>
-              </span>
-            }
-            meta={POS_LABEL[row.partOfSpeech] ?? row.partOfSpeech}
-          />
-        ))}
-      </div>
+    <div className="space-y-4">
+      <SectionHeader
+        title="Danh sách từ vựng"
+        description="Kéo để sắp xếp lại thứ tự giới thiệu từ cho học viên."
+        actions={addButton}
+      />
+
+      {rows.length === 0 ? (
+        <EmptySection
+          Icon={BookMarked}
+          title="Chưa có từ vựng"
+          hint="Thêm từ đầu tiên cho bài học này"
+          cta={addButton}
+        />
+      ) : (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
+            <div className="space-y-2">
+              {rows.map((row) => (
+                <SortableItemRow
+                  key={row.id}
+                  id={row.id}
+                  onOpen={() => navigate(learningPath.vocabEdit(lessonId, row.id))}
+                  onDelete={() => setPendingDelete(row)}
+                  leading={
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300">
+                      {row.audioUrl ? <Volume2 className="h-5 w-5" /> : <BookMarked className="h-5 w-5" />}
+                    </div>
+                  }
+                  title={
+                    <span>
+                      {row.word || <span className="italic text-muted-foreground">Chưa có từ</span>}
+                      <span className="text-muted-foreground font-normal"> — {row.translation || '…'}</span>
+                    </span>
+                  }
+                  meta={
+                    <>
+                      <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-bold uppercase tracking-wider">
+                        {POS_LABEL[row.partOfSpeech] ?? row.partOfSpeech}
+                      </span>
+                      {row.audioUrl && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 text-xs font-bold">
+                          <Volume2 className="h-3 w-3" />
+                          audio
+                        </span>
+                      )}
+                      {row.imageUrl && (
+                        <span className="inline-flex items-center rounded-md bg-primary/10 text-primary px-2 py-0.5 text-xs font-bold">
+                          hình
+                        </span>
+                      )}
+                    </>
+                  }
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
+
       <ConfirmDeleteDialog
         open={!!pendingDelete}
         onOpenChange={(open) => !open && setPendingDelete(null)}
@@ -179,7 +200,7 @@ function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson
         label={pendingDelete?.word ?? ''}
         onConfirm={confirmDelete}
       />
-    </>
+    </div>
   )
 }
 
@@ -187,8 +208,18 @@ function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson
 
 function GrammarList({ lessonId, lesson }: { lessonId: string; lesson: Lesson | undefined }) {
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<GrammarRule | null>(null)
+
+  const lessonKey = ['admin-learning', 'lesson', lessonId] as const
+  const { sensors, handleDragEnd } = useAdminListReorder<GrammarRule>({
+    getItems: () => qc.getQueryData<Lesson>(lessonKey)?.grammarRules ?? [],
+    setItems: (next) =>
+      qc.setQueryData<Lesson>(lessonKey, (prev) => (prev ? { ...prev, grammarRules: next } : prev)),
+    reorder: (items) => mutations.reorderGrammar.mutateAsync(items),
+    onError: () => toast.error('Không thể sắp xếp lại quy tắc'),
+  })
 
   const rows = [...(lesson?.grammarRules ?? [])].sort((a, b) => a.orderIndex - b.orderIndex)
 
@@ -203,52 +234,68 @@ function GrammarList({ lessonId, lesson }: { lessonId: string; lesson: Lesson | 
     }
   }
 
-  if (rows.length === 0) {
-    return (
-      <EmptySection
-        Icon={Lightbulb}
-        title="Chưa có quy tắc ngữ pháp"
-        hint="Thêm quy tắc đầu tiên cho bài học này"
-        cta={
-          <Button asChild>
-            <Link to={learningPath.grammarNew(lessonId)}>
-              <Plus className="h-4 w-4" />
-              Thêm quy tắc
-            </Link>
-          </Button>
-        }
-      />
-    )
-  }
+  const addButton = (
+    <Button asChild>
+      <Link to={learningPath.grammarNew(lessonId)}>
+        <Plus className="h-4 w-4" />
+        Thêm quy tắc
+      </Link>
+    </Button>
+  )
 
   return (
-    <>
-      <div className="rounded-xl border-2 border-border bg-card divide-y-2 divide-border overflow-hidden">
-        {rows.map((row) => {
-          const examples = Array.isArray(row.examples) ? row.examples : []
-          return (
-            <ItemRow
-              key={row.id}
-              onOpen={() => navigate(learningPath.grammarEdit(lessonId, row.id))}
-              onDelete={() => setPendingDelete(row)}
-              leading={
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300">
-                  <Lightbulb className="h-5 w-5" />
-                </div>
-              }
-              title={row.title || <span className="italic text-muted-foreground">Chưa có tiêu đề</span>}
-              meta={
-                <span className="inline-flex items-center gap-2">
-                  {row.structure && (
-                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">{row.structure}</code>
-                  )}
-                  <span>{examples.length} ví dụ</span>
-                </span>
-              }
-            />
-          )
-        })}
-      </div>
+    <div className="space-y-4">
+      <SectionHeader
+        title="Danh sách quy tắc ngữ pháp"
+        description="Kéo để sắp xếp lại thứ tự dạy quy tắc cho học viên."
+        actions={addButton}
+      />
+
+      {rows.length === 0 ? (
+        <EmptySection
+          Icon={Lightbulb}
+          title="Chưa có quy tắc ngữ pháp"
+          hint="Thêm quy tắc đầu tiên cho bài học này"
+          cta={addButton}
+        />
+      ) : (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
+            <div className="space-y-2">
+              {rows.map((row) => {
+                const examples = Array.isArray(row.examples) ? row.examples : []
+                return (
+                  <SortableItemRow
+                    key={row.id}
+                    id={row.id}
+                    onOpen={() => navigate(learningPath.grammarEdit(lessonId, row.id))}
+                    onDelete={() => setPendingDelete(row)}
+                    leading={
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300">
+                        <Lightbulb className="h-5 w-5" />
+                      </div>
+                    }
+                    title={row.title || <span className="italic text-muted-foreground">Chưa có tiêu đề</span>}
+                    meta={
+                      <>
+                        {row.structure && (
+                          <code className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs font-bold">
+                            {row.structure}
+                          </code>
+                        )}
+                        <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 text-primary px-2 py-0.5 text-xs font-bold">
+                          {examples.length} ví dụ
+                        </span>
+                      </>
+                    }
+                  />
+                )
+              })}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
+
       <ConfirmDeleteDialog
         open={!!pendingDelete}
         onOpenChange={(open) => !open && setPendingDelete(null)}
@@ -256,7 +303,7 @@ function GrammarList({ lessonId, lesson }: { lessonId: string; lesson: Lesson | 
         label={pendingDelete?.title ?? ''}
         onConfirm={confirmDelete}
       />
-    </>
+    </div>
   )
 }
 

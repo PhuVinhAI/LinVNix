@@ -134,6 +134,18 @@ export class LearningAdminRepository {
   async reorderQuestions(items: { id: string; orderIndex: number }[]) {
     await apiClient.post('/admin/learning/questions/reorder', { items })
   }
+
+  async reorderContents(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/contents/reorder', { items })
+  }
+
+  async reorderVocabularies(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/vocabularies/reorder', { items })
+  }
+
+  async reorderGrammar(items: { id: string; orderIndex: number }[]) {
+    await apiClient.post('/admin/learning/grammar/reorder', { items })
+  }
 }
 
 export const learningAdminRepository = new LearningAdminRepository()

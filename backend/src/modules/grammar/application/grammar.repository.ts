@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GrammarRule } from '../domain/grammar-rule.entity';
 import { UserLevel } from '../../../common/enums';
+import { bulkReorder, ReorderItem } from '../../../common/utils/bulk-reorder';
 
 export interface GrammarSearchOptions {
   lessonId?: string;
@@ -19,6 +20,10 @@ export class GrammarRepository {
   async create(data: Partial<GrammarRule>): Promise<GrammarRule> {
     const grammar = this.repository.create(data);
     return this.repository.save(grammar);
+  }
+
+  async reorder(items: ReorderItem[]): Promise<void> {
+    await bulkReorder(this.repository, items);
   }
 
   async findByLessonId(lessonId: string): Promise<GrammarRule[]> {

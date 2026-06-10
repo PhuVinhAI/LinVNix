@@ -1,10 +1,10 @@
 import { Link, Navigate, useParams } from 'react-router'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { useAdminLesson } from '../../features/learning/api/use-learning-admin'
-import { LESSON_SECTIONS } from './authoring-meta'
-import { GateCard } from './authoring-ui'
+import { LESSON_SECTIONS, stageOneTotal } from './authoring-meta'
+import { GateCard, PageHero } from './authoring-ui'
 import { learningPath } from './route-utils'
 
 /**
@@ -17,6 +17,8 @@ export function LessonStageContentPage() {
 
   if (!lessonId) return <Navigate to={learningPath.courses()} replace />
 
+  const total = stageOneTotal(lesson)
+
   return (
     <div className="space-y-6">
       <Breadcrumbs
@@ -28,20 +30,20 @@ export function LessonStageContentPage() {
         ]}
       />
 
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Nội dung bài học</h1>
-          <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
-            Chọn phần muốn soạn — mỗi phần có không gian soạn riêng.
-          </p>
-        </div>
-        <Button asChild variant="outline">
-          <Link to={learningPath.lesson(lessonId)}>
-            <ArrowLeft className="h-4 w-4" />
-            Về bài học
-          </Link>
-        </Button>
-      </div>
+      <PageHero
+        Icon={BookOpen}
+        title="Nội dung bài học"
+        count={{ value: total, label: 'mục' }}
+        description="Theo thứ tự sư phạm: soạn nội dung bài trước, giới thiệu từ vựng, rồi chốt bằng quy tắc ngữ pháp."
+        actions={
+          <Button asChild variant="outline">
+            <Link to={learningPath.lesson(lessonId)}>
+              <ArrowLeft className="h-4 w-4" />
+              Về bài học
+            </Link>
+          </Button>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {LESSON_SECTIONS.map((section) => (

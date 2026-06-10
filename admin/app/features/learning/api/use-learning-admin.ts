@@ -153,5 +153,20 @@ export function useLearningAdminMutation() {
         learningAdminRepository.reorderQuestions(items),
       onSuccess: invalidate,
     }),
+    reorderContents: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderContents(items),
+      onSuccess: invalidate,
+    }),
+    reorderVocabularies: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderVocabularies(items),
+      onSuccess: invalidate,
+    }),
+    reorderGrammar: useMutation({
+      mutationFn: (items: { id: string; orderIndex: number }[]) =>
+        learningAdminRepository.reorderGrammar(items),
+      onSuccess: invalidate,
+    }),
   }
 }

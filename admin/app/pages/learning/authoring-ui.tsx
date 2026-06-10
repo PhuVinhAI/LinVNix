@@ -1,21 +1,16 @@
 import { Link } from 'react-router'
 import {
   Check,
-  ChevronDown,
   ChevronRight,
-  FileAudio,
-  Image as ImageIcon,
   MoreVertical,
   Pencil,
   Save,
-  StickyNote,
   Trash2,
-  Video as VideoIcon,
   X,
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/popover'
-import { MediaUpload } from '../../components/admin/editors/MediaUpload'
+import { SortableRow } from '../../components/admin/shared/SortableRow'
+import { DragHandle } from '../../components/admin/shared/DragHandle'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,6 +33,98 @@ import {
 export const DIFFICULTY_LABELS = ['', 'Rất dễ', 'Dễ', 'Trung bình', 'Khó', 'Rất khó']
 export const DIFFICULTY_DOT = ['', 'bg-emerald-500', 'bg-teal-500', 'bg-amber-500', 'bg-rose-500', 'bg-red-600']
 
+/**
+ * Header của 1 section trong trang (vd "Bài học theo lộ trình" + nút Thêm).
+ * Đứng giữa hero và list/grid bên dưới. Pattern y hệt ModuleDetailPage /
+ * CourseDetailPage — nút "Thêm" thuộc về SectionHeader, KHÔNG thuộc PageHero.
+ */
+export function SectionHeader({
+  title,
+  description,
+  actions,
+}: {
+  title: string
+  description?: React.ReactNode
+  actions?: React.ReactNode
+}) {
+  return (
+    <div className="flex items-end justify-between gap-4">
+      <div>
+        <h2 className="text-xl font-bold tracking-tight">{title}</h2>
+        {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
+      </div>
+      {actions}
+    </div>
+  )
+}
+
+/**
+ * Header chuẩn cho mọi trang bên trong khu soạn bài (step/list/type/detail).
+ *
+ * Khung `rounded-xl border-2 border-border bg-card p-5` — đồng style với hero
+ * card của ModuleDetailPage / LessonDetailPage.
+ *
+ * Layout: [icon] [eyebrow + title + count badge + description] · · · [actions]
+ *         [footer slot — meta row / stats / pills phụ]
+ */
+export function PageHero({
+  Icon,
+  iconClass = 'bg-primary/10 text-primary',
+  eyebrow,
+  title,
+  count,
+  description,
+  actions,
+  footer,
+}: {
+  Icon?: React.ComponentType<{ className?: string }>
+  iconClass?: string
+  /** Nhãn nhỏ uppercase trên đầu title — ngữ cảnh (VD tên bài tập cha). */
+  eyebrow?: React.ReactNode
+  title: string
+  /** Hiện badge số phía sau title. */
+  count?: { value: number; label: string }
+  description?: React.ReactNode
+  /** Nút bên phải (Back / Edit / Add ...). */
+  actions?: React.ReactNode
+  /** Slot dưới đáy card, ngăn cách bằng border — chứa meta row, stats, hoặc lesson type distribution. */
+  footer?: React.ReactNode
+}) {
+  return (
+    <div className="rounded-xl border-2 border-border bg-card p-5">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-start gap-4 min-w-0">
+          {Icon && (
+            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconClass}`}>
+              <Icon className="h-6 w-6" />
+            </div>
+          )}
+          <div className="min-w-0">
+            {eyebrow && (
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                {eyebrow}
+              </p>
+            )}
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+              {count && (
+                <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-bold tabular-nums">
+                  {count.value} {count.label}
+                </span>
+              )}
+            </div>
+            {description && (
+              <p className="text-sm text-muted-foreground mt-2 max-w-3xl leading-relaxed">{description}</p>
+            )}
+          </div>
+        </div>
+        {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+      </div>
+      {footer && <div className="mt-4 pt-4 border-t-2 border-border">{footer}</div>}
+    </div>
+  )
+}
+
 /** Cổng chọn (khu / loại) — luôn dẫn sâu vào trong, không soạn tại chỗ. */
 export function GateCard({
   to,
@@ -47,6 +134,7 @@ export function GateCard({
   description,
   count,
   countLabel = 'mục',
+  recommended = 0,
 }: {
   to: string
   Icon: React.ComponentType<{ className?: string }>
@@ -55,39 +143,79 @@ export function GateCard({
   description?: string
   count: number
   countLabel?: string
+  /** Số lượng "khuyến nghị" — nếu > 0, hiện progress bar count/recommended và pill "Cần thêm". */
+  recommended?: number
 }) {
+  const target = Math.max(0, recommended)
+  const progress = target > 0 ? Math.min(100, Math.round((count / target) * 100)) : count > 0 ? 100 : 0
+  let status: 'done' | 'partial' | 'empty'
+  if (target > 0) status = count >= target ? 'done' : count > 0 ? 'partial' : 'empty'
+  else status = count > 0 ? 'done' : 'empty'
+
   return (
     <Link
       to={to}
-      className="group flex flex-col gap-3 rounded-xl border-2 border-border bg-card p-5 transition-colors hover:border-primary focus:outline-none focus-visible:border-primary"
+      className="group flex flex-col gap-4 rounded-xl border-2 border-border bg-card p-5 transition-colors hover:border-primary focus:outline-none focus-visible:border-primary"
     >
       <div className="flex items-center justify-between">
-        <div className={`flex h-11 w-11 items-center justify-center rounded-lg ${iconClass}`}>
-          <Icon className="h-5 w-5" />
+        <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${iconClass}`}>
+          <Icon className="h-6 w-6" />
         </div>
-        <ChevronRight className="h-5 w-5 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+        <ChevronRight className="h-5 w-5 text-muted-foreground/40 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
       </div>
-      <div>
+      <div className="flex-1">
         <h3 className="text-base font-bold leading-tight">{label}</h3>
-        {description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{description}</p>}
+        {description && (
+          <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed line-clamp-2">{description}</p>
+        )}
       </div>
-      <div className="flex items-center justify-between pt-3 border-t-2 border-border">
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-xl font-bold tabular-nums">{count}</span>
-          <span className="text-xs font-medium text-muted-foreground">{countLabel}</span>
+      <div className="space-y-2 pt-3 border-t-2 border-border">
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold tabular-nums">{count}</span>
+            {target > 0 && (
+              <span className="text-sm text-muted-foreground tabular-nums">/ {target}</span>
+            )}
+            <span className="text-xs font-medium text-muted-foreground">{countLabel}</span>
+          </div>
+          <StatusPill status={status} />
         </div>
-        {count > 0 ? (
-          <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-            <Check className="h-3.5 w-3.5" />
-            Đã soạn
-          </span>
-        ) : (
-          <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
-            Trống
-          </span>
+        {target > 0 && (
+          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+            <div
+              className={`h-full transition-all ${
+                status === 'done' ? 'bg-emerald-500' : 'bg-amber-500'
+              }`}
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         )}
       </div>
     </Link>
+  )
+}
+
+/** Pill trạng thái dùng cho GateCard, StageGate. */
+export function StatusPill({ status }: { status: 'done' | 'partial' | 'empty' }) {
+  if (status === 'done') {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+        <Check className="h-3.5 w-3.5" />
+        Đã soạn
+      </span>
+    )
+  }
+  if (status === 'partial') {
+    return (
+      <span className="inline-flex items-center rounded-md bg-amber-100 dark:bg-amber-950/40 px-2 py-0.5 text-xs font-bold text-amber-700 dark:text-amber-300">
+        Cần thêm
+      </span>
+    )
+  }
+  return (
+    <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+      Trống
+    </span>
   )
 }
 
@@ -98,12 +226,16 @@ export function ItemRow({
   leading,
   title,
   meta,
+  dragHandle,
+  className,
 }: {
   onOpen: () => void
   onDelete: () => void
   leading?: React.ReactNode
   title: React.ReactNode
   meta?: React.ReactNode
+  dragHandle?: React.ReactNode
+  className?: string
 }) {
   return (
     <div
@@ -113,14 +245,30 @@ export function ItemRow({
       onKeyDown={(e) => {
         if (e.key === 'Enter') onOpen()
       }}
-      className="group flex items-center gap-3 bg-card px-4 py-3 cursor-pointer transition-colors hover:bg-muted/40 focus:outline-none focus-visible:bg-muted/40"
+      className={
+        className ??
+        'group flex items-center gap-4 bg-card px-5 py-4 cursor-pointer transition-colors hover:bg-muted/40 focus:outline-none focus-visible:bg-muted/40'
+      }
     >
+      {dragHandle && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+          className="shrink-0 self-center"
+        >
+          {dragHandle}
+        </div>
+      )}
       {leading && <div className="shrink-0">{leading}</div>}
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-bold text-foreground leading-snug truncate">{title}</div>
-        {meta && <div className="text-xs text-muted-foreground mt-0.5 truncate">{meta}</div>}
+        <div className="text-base font-bold text-foreground leading-snug truncate">{title}</div>
+        {meta && (
+          <div className="mt-1 text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
+            {meta}
+          </div>
+        )}
       </div>
-      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/50 group-hover:text-primary" />
+      <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
       <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} className="shrink-0 -mr-1">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -142,6 +290,45 @@ export function ItemRow({
         </DropdownMenu>
       </div>
     </div>
+  )
+}
+
+/**
+ * ItemRow có drag handle để sắp xếp lại (dnd-kit). Khác ItemRow ở chỗ mỗi
+ * hàng là một card có viền riêng để khi kéo nhấc lên không vỡ đường divide.
+ * Dùng chung trong DndContext + SortableContext bao quanh `space-y-2` wrapper.
+ */
+export function SortableItemRow({
+  id,
+  onOpen,
+  onDelete,
+  leading,
+  title,
+  meta,
+  disabled,
+}: {
+  id: string
+  onOpen: () => void
+  onDelete: () => void
+  leading?: React.ReactNode
+  title: React.ReactNode
+  meta?: React.ReactNode
+  disabled?: boolean
+}) {
+  return (
+    <SortableRow id={id} disabled={disabled}>
+      {({ listeners, attributes }) => (
+        <ItemRow
+          onOpen={onOpen}
+          onDelete={onDelete}
+          leading={leading}
+          title={title}
+          meta={meta}
+          dragHandle={<DragHandle {...listeners} {...attributes} />}
+          className="group flex items-center gap-4 rounded-lg border-2 border-border bg-card pl-3 pr-3 py-4 cursor-pointer transition-colors hover:border-primary hover:bg-muted/20 focus:outline-none focus:border-primary"
+        />
+      )}
+    </SortableRow>
   )
 }
 
@@ -191,141 +378,60 @@ export function ConfirmDeleteDialog({
   )
 }
 
-/* ── Thanh công cụ pill + form một-mục (cùng ngôn ngữ với form câu hỏi) ──── */
+/* ── Field components (đặt trực tiếp trong body ComposerCard, không thanh nổi) ── */
 
-export function PillBar({ children, hint }: { children: React.ReactNode; hint?: React.ReactNode }) {
+/** Bộ chọn độ khó 5 mức — hiển thị inline trong form như một field thường. */
+export function DifficultyRow({
+  value,
+  onChange,
+}: {
+  value: number
+  onChange: (v: number) => void
+}) {
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-border bg-card px-2 py-2">
-      {children}
-      {hint && (
-        <span className="ml-auto inline-flex items-center gap-1.5 px-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          {hint}
-        </span>
-      )}
+    <div className="grid grid-cols-5 gap-2">
+      {[1, 2, 3, 4, 5].map((lvl) => {
+        const active = value === lvl
+        return (
+          <button
+            key={lvl}
+            type="button"
+            onClick={() => onChange(lvl)}
+            className={`flex flex-col items-center gap-1.5 rounded-xl border-2 px-3 py-3 transition-colors ${
+              active
+                ? 'border-primary bg-primary/10'
+                : 'border-border bg-card hover:border-foreground/30'
+            }`}
+          >
+            <span className={`h-2.5 w-2.5 rounded-full ${DIFFICULTY_DOT[lvl]}`} />
+            <span className={`text-xs font-bold ${active ? 'text-primary' : 'text-foreground'}`}>
+              {DIFFICULTY_LABELS[lvl]}
+            </span>
+          </button>
+        )
+      })}
     </div>
   )
 }
 
-export function PillDivider() {
-  return <span className="h-6 w-px bg-border" aria-hidden />
-}
-
-export function DifficultyPill({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 hover:bg-muted transition-colors"
-        >
-          <span className={`h-2 w-2 rounded-full ${DIFFICULTY_DOT[value]}`} />
-          <span className="text-sm font-semibold">{DIFFICULTY_LABELS[value]}</span>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-56 p-2">
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground px-2 py-1">
-          Độ khó
-        </p>
-        <div className="space-y-1">
-          {[1, 2, 3, 4, 5].map((lvl) => (
-            <button
-              key={lvl}
-              type="button"
-              onClick={() => onChange(lvl)}
-              className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${
-                value === lvl ? 'bg-primary text-primary-foreground font-bold' : 'hover:bg-muted'
-              }`}
-            >
-              <span className="inline-flex items-center gap-2">
-                <span className={`h-2 w-2 rounded-full ${DIFFICULTY_DOT[lvl]}`} />
-                {DIFFICULTY_LABELS[lvl]}
-              </span>
-              <span className="text-xs tabular-nums opacity-60">{lvl}/5</span>
-            </button>
-          ))}
-        </div>
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-const MEDIA_PILL_ICON = { audio: FileAudio, image: ImageIcon, video: VideoIcon } as const
-
-export function MediaPill({
-  kind,
-  label,
-  filledLabel,
+/** Khung textarea cho ghi chú giảng dạy — không hiển thị cho học viên. */
+export function NotesField({
   value,
   onChange,
-}: {
-  kind: 'audio' | 'image' | 'video'
-  label: string
-  filledLabel: string
-  value: string
-  onChange: (v: string) => void
-}) {
-  const Icon = MEDIA_PILL_ICON[kind]
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 transition-colors ${
-            value ? 'text-primary font-bold' : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          <Icon className="h-4 w-4" />
-          <span className="text-sm">{value ? filledLabel : label}</span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-96 p-3 space-y-2">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          {label}
-        </label>
-        <MediaUpload kind={kind} value={value || null} onChange={(url) => onChange(url ?? '')} />
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-export function NotesPill({
-  value,
-  onChange,
-  label = 'Ghi chú',
   placeholder = 'Ghi chú dành cho người soạn…',
 }: {
   value: string
   onChange: (v: string) => void
-  label?: string
   placeholder?: string
 }) {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 transition-colors ${
-            value ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          <StickyNote className="h-4 w-4" />
-          <span className="text-sm">{value ? `Có ${label.toLowerCase()}` : label}</span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-96 p-3 space-y-2">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          {label} <span className="normal-case font-normal tracking-normal">· không hiện cho học viên</span>
-        </label>
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          rows={5}
-          className="w-full rounded-lg border-2 border-input bg-card px-3 py-2 text-sm outline-none focus-visible:border-primary resize-y"
-        />
-      </PopoverContent>
-    </Popover>
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={4}
+      className="w-full rounded-2xl border-2 border-border bg-card px-4 py-3 text-sm leading-relaxed outline-none focus-visible:border-primary resize-y"
+    />
   )
 }
 

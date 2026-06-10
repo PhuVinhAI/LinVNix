@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { ArrowLeftRight, Plus, Sparkles, Trash2, UserPlus } from 'lucide-react'
+import { ArrowLeftRight, ChevronDown, Plus, Trash2, UserPlus } from 'lucide-react'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { InlineEditable } from '../../components/admin/InlineEditable'
 import { MediaUpload } from '../../components/admin/editors/MediaUpload'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../components/ui/dropdown-menu'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type {
   DialogueCharacter,
@@ -15,10 +21,7 @@ import type {
 import { materialTypeMeta } from './authoring-meta'
 import {
   ComposerCard,
-  MediaPill,
-  NotesPill,
-  PillBar,
-  PillDivider,
+  NotesField,
   SectionLabel,
   StickySaveBar,
 } from './authoring-ui'
@@ -89,6 +92,8 @@ export function MaterialFormPage({ mode }: { mode: 'create' | 'edit' }) {
       case 'dialogue': {
         if (form.dialogue.characters.length < 1) return 'Hội thoại cần ít nhất một nhân vật'
         if (form.dialogue.characters.some((c) => !c.name.trim())) return 'Có nhân vật chưa đặt tên'
+        if (form.dialogue.characters.filter((c) => c.side === 'right').length > 1)
+          return 'Chỉ một nhân vật được ở bên phải'
         if (form.dialogue.lines.length < 1) return 'Hội thoại cần ít nhất một lời thoại'
         if (form.dialogue.lines.some((l) => !l.vi.trim())) return 'Có lời thoại chưa nhập nội dung'
         return null
@@ -155,30 +160,11 @@ export function MaterialFormPage({ mode }: { mode: 'create' | 'edit' }) {
           ]}
         />
 
-        <PillBar
-          hint={
-            <>
-              <Sparkles className="h-3.5 w-3.5" />
-              Bấm vào bất kỳ chữ nào để sửa
-            </>
-          }
+        <ComposerCard
+          Icon={meta.Icon}
+          iconClass={`${meta.bg} text-white`}
+          typeLabel={meta.label}
         >
-          {meta.value === 'dialogue' && (
-            <>
-              <MediaPill
-                kind="audio"
-                label="Âm thanh hội thoại"
-                filledLabel="Có âm thanh"
-                value={form.audioUrl}
-                onChange={(v) => set('audioUrl', v)}
-              />
-              <PillDivider />
-            </>
-          )}
-          <NotesPill value={form.notes} onChange={(v) => set('notes', v)} />
-        </PillBar>
-
-        <ComposerCard Icon={meta.Icon} iconClass={`${meta.bg} text-white`} typeLabel={meta.label}>
           {meta.value === 'text' && <TextBody form={form} set={set} mode={mode} />}
           {meta.value === 'dialogue' && <DialogueBody form={form} set={set} />}
           {meta.value === 'audio' && (
@@ -190,6 +176,11 @@ export function MaterialFormPage({ mode }: { mode: 'create' | 'edit' }) {
           {meta.value === 'video' && (
             <MediaBody form={form} set={set} kind="video" urlKey="videoUrl" textLabel="Lời thoại (transcript)" />
           )}
+
+          <div>
+            <SectionLabel right="không hiện cho học viên">Ghi chú soạn bài</SectionLabel>
+            <NotesField value={form.notes} onChange={(v) => set('notes', v)} />
+          </div>
         </ComposerCard>
       </div>
 
@@ -306,6 +297,55 @@ function initialOf(name: string): string {
   return (name.trim()[0] ?? '?').toUpperCase()
 }
 
+/** Chọn người nói — tên hiện trên đầu bubble (như simulation mobile), bấm mở menu đổi. */
+function SpeakerPicker({
+  characters,
+  value,
+  onChange,
+}: {
+  characters: DialogueCharacter[]
+  value: string
+  onChange: (characterId: string) => void
+}) {
+  const current = characters.find((c) => c.id === value)
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label="Người nói"
+          className="group/speaker inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          {current?.name || 'Chưa đặt tên'}
+          <ChevronDown className="h-3 w-3 opacity-0 transition-opacity group-hover/speaker:opacity-100" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-48">
+        <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          Người nói
+        </p>
+        {characters.map((c) => (
+          <DropdownMenuItem
+            key={c.id}
+            onSelect={() => onChange(c.id)}
+            className={c.id === value ? 'bg-muted font-bold' : ''}
+          >
+            <span
+              className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold text-white ${charColor(characters, c.id)}`}
+            >
+              {initialOf(c.name)}
+            </span>
+            <span className="flex-1 truncate">{c.name || 'Chưa đặt tên'}</span>
+            <span className="text-[10px] font-bold uppercase text-muted-foreground">
+              {c.side === 'left' ? 'Trái' : 'Phải'}
+            </span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 function DialogueBody({ form, set }: { form: FormState; set: SetFn }) {
   const { characters, lines } = form.dialogue
   const setDialogue = (next: Partial<DialogueData>) =>
@@ -313,12 +353,21 @@ function DialogueBody({ form, set }: { form: FormState; set: SetFn }) {
 
   const addCharacter = () => {
     const cid = `c${Date.now().toString(36)}${characters.length}`
-    const side = characters.length % 2 === 0 ? 'left' : 'right'
+    // backend chỉ cho tối đa 1 nhân vật bên phải — người thứ 2 mặc định phải, còn lại trái
+    const hasRight = characters.some((c) => c.side === 'right')
+    const side = characters.length > 0 && !hasRight ? 'right' : 'left'
     setDialogue({ characters: [...characters, { id: cid, name: '', side }] })
   }
 
   const updateCharacter = (cid: string, patch: Partial<DialogueCharacter>) =>
-    setDialogue({ characters: characters.map((c) => (c.id === cid ? { ...c, ...patch } : c)) })
+    setDialogue({
+      characters: characters.map((c) => {
+        if (c.id === cid) return { ...c, ...patch }
+        // radio: một người sang phải thì người phải cũ tự về trái
+        if (patch.side === 'right' && c.side === 'right') return { ...c, side: 'left' }
+        return c
+      }),
+    })
 
   const removeCharacter = (cid: string) =>
     setDialogue({
@@ -339,9 +388,14 @@ function DialogueBody({ form, set }: { form: FormState; set: SetFn }) {
 
   return (
     <>
+      <div>
+        <SectionLabel right="audio đọc toàn bộ đoạn hội thoại (không bắt buộc)">Âm thanh hội thoại</SectionLabel>
+        <MediaUpload kind="audio" value={form.audioUrl || null} onChange={(url) => set('audioUrl', url ?? '')} />
+      </div>
+
       {/* Nhân vật */}
       <div>
-        <SectionLabel right="bấm mũi tên để đổi phía bubble">Nhân vật</SectionLabel>
+        <SectionLabel right="chỉ một nhân vật ở bên phải — như vai người học">Nhân vật</SectionLabel>
         <div className="flex flex-wrap gap-2">
           {characters.map((c) => (
             <div
@@ -401,60 +455,53 @@ function DialogueBody({ form, set }: { form: FormState; set: SetFn }) {
               : 'Chưa có lời thoại — bấm nút nhân vật bên dưới để thêm lượt nói.'}
           </p>
         ) : (
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-3">
             {lines.map((line, index) => {
               const speaker = charById[line.characterId]
               const right = speaker?.side === 'right'
               const color = speaker ? charColor(characters, speaker.id) : 'bg-muted-foreground'
               return (
-                <div key={index} className={`group flex items-end gap-2 ${right ? 'flex-row-reverse' : ''}`}>
+                <div key={index} className={`group flex items-start gap-2 ${right ? 'flex-row-reverse' : ''}`}>
                   <span
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${color}`}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${color}`}
                     title={speaker?.name || 'Nhân vật'}
                   >
                     {initialOf(speaker?.name ?? '')}
                   </span>
-                  <div
-                    className={`max-w-[78%] rounded-2xl border-2 px-4 py-2.5 ${
-                      right
-                        ? 'border-primary/30 bg-primary/5 rounded-br-md'
-                        : 'border-border bg-muted/30 rounded-bl-md'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <select
-                        value={line.characterId}
-                        onChange={(e) => updateLine(index, { characterId: e.target.value })}
-                        aria-label="Người nói"
-                        className="bg-transparent text-[11px] font-bold uppercase tracking-wider text-muted-foreground outline-none cursor-pointer hover:text-foreground"
-                      >
-                        {characters.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.name || 'Chưa đặt tên'}
-                          </option>
-                        ))}
-                      </select>
+                  <div className={`flex max-w-[78%] flex-col ${right ? 'items-end' : 'items-start'}`}>
+                    <SpeakerPicker
+                      characters={characters}
+                      value={line.characterId}
+                      onChange={(cid) => updateLine(index, { characterId: cid })}
+                    />
+                    <div
+                      className={`mt-0.5 rounded-2xl border-2 px-4 py-2.5 ${
+                        right
+                          ? 'border-primary/30 bg-primary/5 rounded-tr-md'
+                          : 'border-border bg-muted/30 rounded-tl-md'
+                      }`}
+                    >
+                      <InlineEditable
+                        value={line.vi}
+                        onChange={(v) => updateLine(index, { vi: v })}
+                        placeholder="Lời thoại tiếng Việt..."
+                        className="text-base font-semibold !px-1.5 !py-0.5"
+                        ariaLabel={`Lời thoại ${index + 1}`}
+                      />
+                      <InlineEditable
+                        value={line.en ?? ''}
+                        onChange={(v) => updateLine(index, { en: v })}
+                        placeholder="Bản dịch..."
+                        className="text-xs text-muted-foreground !px-1.5 !py-0.5"
+                        ariaLabel={`Bản dịch lời thoại ${index + 1}`}
+                      />
                     </div>
-                    <InlineEditable
-                      value={line.vi}
-                      onChange={(v) => updateLine(index, { vi: v })}
-                      placeholder="Lời thoại tiếng Việt..."
-                      className="text-base font-semibold !px-1.5 !py-0.5"
-                      ariaLabel={`Lời thoại ${index + 1}`}
-                    />
-                    <InlineEditable
-                      value={line.en ?? ''}
-                      onChange={(v) => updateLine(index, { en: v })}
-                      placeholder="Bản dịch..."
-                      className="text-xs text-muted-foreground !px-1.5 !py-0.5"
-                      ariaLabel={`Bản dịch lời thoại ${index + 1}`}
-                    />
                   </div>
                   <button
                     type="button"
                     onClick={() => removeLine(index)}
                     aria-label="Xóa lời thoại"
-                    className="h-8 w-8 shrink-0 rounded-full text-muted-foreground/40 hover:bg-destructive/10 hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    className="mt-6 h-8 w-8 shrink-0 rounded-full text-muted-foreground/40 hover:bg-destructive/10 hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
                   >
                     <Trash2 className="h-4 w-4 mx-auto" />
                   </button>

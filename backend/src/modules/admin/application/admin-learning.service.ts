@@ -214,4 +214,19 @@ export class AdminLearningService {
     await this.exerciseService.reorderQuestions(items);
     return { success: true };
   }
+
+  async reorderContents(items: ReorderItem[]) {
+    await this.courseContentService.reorderContents(items);
+    return { success: true };
+  }
+
+  async reorderVocabularies(items: ReorderItem[]) {
+    await this.vocabulariesService.reorder(items);
+    return { success: true };
+  }
+
+  async reorderGrammar(items: ReorderItem[]) {
+    await this.courseContentService.reorderGrammarRules(items);
+    return { success: true };
+  }
 }

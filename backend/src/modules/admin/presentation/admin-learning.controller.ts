@@ -62,6 +62,21 @@ export class AdminLearningController {
     return this.adminLearningService.reorderQuestions(dto.items);
   }
 
+  @Post('contents/reorder')
+  reorderContents(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderContents(dto.items);
+  }
+
+  @Post('vocabularies/reorder')
+  reorderVocabularies(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderVocabularies(dto.items);
+  }
+
+  @Post('grammar/reorder')
+  reorderGrammar(@Body() dto: ReorderDto) {
+    return this.adminLearningService.reorderGrammar(dto.items);
+  }
+
   @Post('courses')
   createCourse(@Body() dto: CreateCourseDto) {
     return this.adminLearningService.createCourse(dto);

@@ -6,6 +6,7 @@ import {
 import { BookmarksService } from './bookmarks.service';
 import { Vocabulary } from '../domain/vocabulary.entity';
 import { Dialect } from '../../../common/enums';
+import { ReorderItem } from '../../../common/utils/bulk-reorder';
 
 @Injectable()
 export class VocabulariesService {
@@ -16,6 +17,10 @@ export class VocabulariesService {
 
   async create(data: Partial<Vocabulary>): Promise<Vocabulary> {
     return this.vocabulariesRepository.create(data);
+  }
+
+  async reorder(items: ReorderItem[]): Promise<void> {
+    await this.vocabulariesRepository.reorder(items);
   }
 
   async findByLessonId(lessonId: string): Promise<Vocabulary[]> {

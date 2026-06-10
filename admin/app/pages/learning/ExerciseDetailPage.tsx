@@ -1,12 +1,12 @@
 import { Link, useParams } from 'react-router'
-import { ArrowLeft, Pencil } from 'lucide-react'
+import { ArrowLeft, ClipboardList, Pencil } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { VocabFlashcardSkeleton } from '../../components/admin/PageSkeletons'
 import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { useAdminExercise } from '../../features/learning/api/use-learning-admin'
 import { QUESTION_TYPES } from './authoring-meta'
-import { GateCard } from './authoring-ui'
+import { GateCard, PageHero } from './authoring-ui'
 import { learningPath } from './route-utils'
 
 /**
@@ -38,33 +38,31 @@ export function ExerciseDetailPage() {
         ]}
       />
 
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-            {exercise?.title ?? 'Bài tập'}
-          </p>
-          <h1 className="text-2xl font-bold tracking-tight">Chọn loại câu hỏi</h1>
-          <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
-            Mỗi loại có không gian soạn riêng — chọn loại để tạo và quản lý câu hỏi của loại đó.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <Button asChild variant="outline">
-            <Link to={backPath}>
-              <ArrowLeft className="h-4 w-4" />
-              Chọn bài tập khác
-            </Link>
-          </Button>
-          {exerciseId && exercise && (
+      <PageHero
+        Icon={ClipboardList}
+        eyebrow={exercise?.title ?? 'Bài tập'}
+        title="Chọn loại câu hỏi"
+        count={{ value: questions.length, label: 'câu hỏi' }}
+        description="Theo nguyên tắc sư phạm: ưu tiên Trắc nghiệm/Điền chỗ trống để củng cố ý nghĩa, rồi mở rộng sang Ghép cặp/Sắp xếp, cuối cùng là Dịch/Nghe/Nói cho tổng hợp kỹ năng."
+        actions={
+          <>
             <Button asChild variant="outline">
-              <Link to={learningPath.exerciseEdit(exercise.lessonId ?? '', exerciseId)}>
-                <Pencil className="h-4 w-4" />
-                Sửa thông tin
+              <Link to={backPath}>
+                <ArrowLeft className="h-4 w-4" />
+                Chọn bài tập khác
               </Link>
             </Button>
-          )}
-        </div>
-      </div>
+            {exerciseId && exercise && (
+              <Button asChild variant="outline">
+                <Link to={learningPath.exerciseEdit(exercise.lessonId ?? '', exerciseId)}>
+                  <Pencil className="h-4 w-4" />
+                  Sửa thông tin
+                </Link>
+              </Button>
+            )}
+          </>
+        }
+      />
 
       {isLoading ? (
         <VocabFlashcardSkeleton count={6} />
