@@ -694,22 +694,83 @@ describe('CourseContentService', () => {
   });
 
   describe('createContent', () => {
-    it('creates and returns content', async () => {
+    it('creates a TEXT content and derives preview from payload', async () => {
       const data = {
-        vietnameseText: 'Xin chào',
         lessonId: 'l1',
         contentType: ContentType.TEXT,
+        orderIndex: 1,
+        payload: { body: 'Xin chào', translation: 'Hello' },
       };
-      const created = { id: 'ct1', ...data };
-      contentsRepo.create.mockResolvedValue(created as any);
+      contentsRepo.create.mockImplementation(async (p: any) => ({
+        id: 'ct1',
+        ...p,
+      }));
 
-      const result = await service.createContent(data);
+      const result = await service.createContent(data as any);
 
       expect(result.id).toBe('ct1');
-      expect(contentsRepo.create).toHaveBeenCalledWith({
-        ...data,
-        dialogueData: null,
-      });
+      expect(contentsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          contentType: ContentType.TEXT,
+          payload: { body: 'Xin chào', translation: 'Hello' },
+          vietnameseText: 'Xin chào',
+          translation: 'Hello',
+          dialogueData: null,
+        }),
+      );
+    });
+
+    it('creates an IMAGE content and derives preview from caption', async () => {
+      const data = {
+        lessonId: 'l1',
+        contentType: ContentType.IMAGE,
+        orderIndex: 1,
+        payload: {
+          url: '/uploads/image/abc.jpg',
+          caption: 'Phố cổ Hà Nội',
+          captionEn: 'Hanoi old quarter',
+          aspectRatio: '16:9',
+        },
+      };
+      contentsRepo.create.mockImplementation(async (p: any) => ({
+        id: 'ct1',
+        ...p,
+      }));
+
+      await service.createContent(data as any);
+
+      expect(contentsRepo.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          contentType: ContentType.IMAGE,
+          vietnameseText: 'Phố cổ Hà Nội',
+          translation: 'Hanoi old quarter',
+        }),
+      );
+    });
+
+    it('rejects TEXT content missing payload', async () => {
+      await expect(
+        service.createContent({
+          lessonId: 'l1',
+          contentType: ContentType.TEXT,
+          orderIndex: 1,
+        } as any),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('rejects AUDIO content missing transcript', async () => {
+      await expect(
+        service.createContent({
+          lessonId: 'l1',
+          contentType: ContentType.AUDIO,
+          orderIndex: 1,
+          payload: {
+            url: '/uploads/audio/x.mp3',
+            title: 'Test',
+            transcript: '',
+          },
+        } as any),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('derives vietnameseText and translation from dialogue lines', async () => {
@@ -773,26 +834,54 @@ describe('CourseContentService', () => {
   });
 
   describe('updateContent', () => {
-    it('updates and returns content', async () => {
+    it('updates payload and derives a fresh preview', async () => {
       const existing = {
         id: 'ct1',
-        vietnameseText: 'Old',
         contentType: ContentType.TEXT,
+        payload: { body: 'Old' },
       };
-      const updated = { id: 'ct1', vietnameseText: 'New' };
       contentsRepo.findById.mockResolvedValue(existing as any);
-      contentsRepo.update.mockResolvedValue(updated as any);
+      contentsRepo.update.mockImplementation(async (_id, p: any) => ({
+        id: 'ct1',
+        ...p,
+      }));
 
       const result = await service.updateContent('ct1', {
-        vietnameseText: 'New',
+        payload: { body: 'New', translation: 'New EN' } as any,
       });
 
       expect(result.vietnameseText).toBe('New');
       expect(contentsRepo.update).toHaveBeenCalledWith(
         'ct1',
         expect.objectContaining({
+          payload: { body: 'New', translation: 'New EN' },
           vietnameseText: 'New',
+          translation: 'New EN',
           dialogueData: null,
+        }),
+      );
+    });
+
+    it('inherits the existing payload when only notes change', async () => {
+      const existing = {
+        id: 'ct1',
+        contentType: ContentType.TEXT,
+        payload: { body: 'Stays' },
+      };
+      contentsRepo.findById.mockResolvedValue(existing as any);
+      contentsRepo.update.mockImplementation(async (_id, p: any) => ({
+        id: 'ct1',
+        ...p,
+      }));
+
+      await service.updateContent('ct1', { notes: 'New note' } as any);
+
+      expect(contentsRepo.update).toHaveBeenCalledWith(
+        'ct1',
+        expect.objectContaining({
+          notes: 'New note',
+          payload: { body: 'Stays' },
+          vietnameseText: 'Stays',
         }),
       );
     });
@@ -801,7 +890,9 @@ describe('CourseContentService', () => {
       contentsRepo.findById.mockResolvedValue(null);
 
       await expect(
-        service.updateContent('missing', { vietnameseText: 'New' }),
+        service.updateContent('missing', {
+          payload: { body: 'New' } as any,
+        }),
       ).rejects.toThrow(NotFoundException);
     });
   });

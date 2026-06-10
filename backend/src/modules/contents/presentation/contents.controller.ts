@@ -31,7 +31,7 @@ export class ContentsController {
   @ApiOperation({
     summary: 'Lấy nội dung theo lesson',
     description:
-      'Lấy tất cả nội dung học thuộc một lesson (text, audio, video, image)',
+      'Trả về danh sách nội dung học theo orderIndex. Mỗi nội dung mang payload theo content_type — xem schema riêng cho text/image/audio/video.',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -41,14 +41,15 @@ export class ContentsController {
       example: [
         {
           id: 'uuid-string',
-          contentType: 'TEXT',
+          contentType: 'text',
           vietnameseText: 'Xin chào! Tôi là Minh.',
           translation: 'Hello! I am Minh.',
-          audioUrl: 'https://example.com/audio.mp3',
-          imageUrl: 'https://example.com/image.jpg',
-          videoUrl: null,
+          payload: {
+            body: 'Xin chào! Tôi là Minh.',
+            translation: 'Hello! I am Minh.',
+          },
           orderIndex: 1,
-          notes: 'Ghi chú thêm',
+          notes: null,
         },
       ],
     },
@@ -70,10 +71,15 @@ export class ContentsController {
     schema: {
       example: {
         id: 'uuid-string',
-        contentType: 'TEXT',
-        vietnameseText: 'Xin chào! Tôi là Minh.',
-        translation: 'Hello! I am Minh.',
-        audioUrl: 'https://example.com/audio.mp3',
+        contentType: 'image',
+        vietnameseText: 'Phố cổ Hà Nội buổi sáng.',
+        translation: 'Hanoi old quarter in the morning.',
+        payload: {
+          url: '/uploads/image/hanoi.jpg',
+          caption: 'Phố cổ Hà Nội buổi sáng.',
+          captionEn: 'Hanoi old quarter in the morning.',
+          aspectRatio: '16:9',
+        },
         orderIndex: 1,
       },
     },

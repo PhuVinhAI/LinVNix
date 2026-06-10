@@ -6,6 +6,8 @@ class AppSlider extends StatelessWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.onChangeStart,
+    this.onChangeEnd,
     this.min = 0,
     this.max = 100,
     this.divisions,
@@ -16,6 +18,8 @@ class AppSlider extends StatelessWidget {
 
   final double value;
   final ValueChanged<double>? onChanged;
+  final ValueChanged<double>? onChangeStart;
+  final ValueChanged<double>? onChangeEnd;
   final double min;
   final double max;
   final int? divisions;
@@ -39,6 +43,8 @@ class AppSlider extends StatelessWidget {
       child: Slider(
         value: value,
         onChanged: onChanged,
+        onChangeStart: onChangeStart,
+        onChangeEnd: onChangeEnd,
         min: min,
         max: max,
         divisions: divisions,

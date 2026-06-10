@@ -110,6 +110,11 @@ ScreenContext lessonScreenContextBuilder(Ref ref, RouteMatch match) {
 }
 
 Map<String, dynamic> _contentPieceSummary(LessonContent content) {
+  // Trích URL media để AI biết bài học có file đính kèm. Lấy từ payload mới
+  // theo từng loại — fallback null khi không có.
+  final audioUrl = content.audioPayload?.url;
+  final imageUrl = content.imagePayload?.url;
+  final videoUrl = content.videoPayload?.url;
   return <String, dynamic>{
     'id': content.id,
     'contentType': content.contentType,
@@ -118,12 +123,9 @@ Map<String, dynamic> _contentPieceSummary(LessonContent content) {
     if (content.translation != null && content.translation!.isNotEmpty)
       'translation': content.translation,
     if (content.notes != null && content.notes!.isNotEmpty) 'notes': content.notes,
-    if (content.audioUrl != null && content.audioUrl!.isNotEmpty)
-      'audioUrl': content.audioUrl,
-    if (content.imageUrl != null && content.imageUrl!.isNotEmpty)
-      'imageUrl': content.imageUrl,
-    if (content.videoUrl != null && content.videoUrl!.isNotEmpty)
-      'videoUrl': content.videoUrl,
+    if (audioUrl != null && audioUrl.isNotEmpty) 'audioUrl': audioUrl,
+    if (imageUrl != null && imageUrl.isNotEmpty) 'imageUrl': imageUrl,
+    if (videoUrl != null && videoUrl.isNotEmpty) 'videoUrl': videoUrl,
   };
 }
 
