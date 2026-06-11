@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
-export class DropSimulationOrderIndex20260602140000
-  implements MigrationInterface
-{
+export class DropSimulationOrderIndex20260602140000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // scenario_categories — drop the global unique index + non-negative check
     // before dropping the column they cover.

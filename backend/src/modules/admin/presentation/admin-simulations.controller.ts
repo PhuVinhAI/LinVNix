@@ -70,10 +70,7 @@ export class AdminSimulationsController {
   }
 
   @Patch('scenarios/:id/publish')
-  setScenarioPublished(
-    @Param('id') id: string,
-    @Body() dto: SetPublishedDto,
-  ) {
+  setScenarioPublished(@Param('id') id: string, @Body() dto: SetPublishedDto) {
     return this.adminSimulationsService.setScenarioPublished(
       id,
       dto.isPublished,

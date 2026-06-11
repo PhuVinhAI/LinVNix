@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Exercise } from '../../domain/exercise.entity';
-import { bulkReorder, ReorderItem } from '../../../../common/utils/bulk-reorder';
+import {
+  bulkReorder,
+  ReorderItem,
+} from '../../../../common/utils/bulk-reorder';
 
 @Injectable()
 export class ExercisesRepository {
@@ -76,10 +79,7 @@ export class ExercisesRepository {
     });
   }
 
-  async update(
-    id: string,
-    data: Partial<Exercise>,
-  ): Promise<Exercise | null> {
+  async update(id: string, data: Partial<Exercise>): Promise<Exercise | null> {
     await this.repository.update(id, data);
     return this.findById(id);
   }

@@ -8,9 +8,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
  *
  * Hội thoại (DIALOGUE) vẫn dùng cột dialogue_data, không đổi.
  */
-export class RestructureLessonContents20260610120000
-  implements MigrationInterface
-{
+export class RestructureLessonContents20260610120000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // 1. Thêm cột payload jsonb.
     await queryRunner.query(

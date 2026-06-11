@@ -94,7 +94,9 @@ export class TextKeyTermDto {
 }
 
 export class TextPayloadDto {
-  @ApiProperty({ example: 'Người Việt chào nhau tuỳ theo thời gian trong ngày...' })
+  @ApiProperty({
+    example: 'Người Việt chào nhau tuỳ theo thời gian trong ngày...',
+  })
   @IsString()
   body: string;
 

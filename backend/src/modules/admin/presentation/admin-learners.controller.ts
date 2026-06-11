@@ -45,5 +45,4 @@ export class AdminLearnersController {
   ) {
     return this.service.findSimulation(userId, sessionId);
   }
-
 }

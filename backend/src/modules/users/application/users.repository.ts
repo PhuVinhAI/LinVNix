@@ -64,13 +64,4 @@ export class UsersRepository {
   async count(): Promise<number> {
     return this.repository.count();
   }
-
-  async countDAU(): Promise<number> {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return this.repository
-      .createQueryBuilder('user')
-      .where('user.updatedAt >= :today', { today })
-      .getCount();
-  }
 }

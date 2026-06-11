@@ -51,11 +51,7 @@ export class UploadsController {
         `Kind không hợp lệ. Cần một trong: ${VALID_KINDS.join(', ')}`,
       );
     }
-    const asset = await this.uploads.upload(
-      kind as MediaKind,
-      file,
-      user?.id,
-    );
+    const asset = await this.uploads.upload(kind as MediaKind, file, user?.id);
     return {
       id: asset.id,
       kind: asset.kind,

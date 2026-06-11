@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Lesson } from '../../domain/lesson.entity';
 import { LessonType, UserLevel } from '../../../../common/enums';
-import { bulkReorder, ReorderItem } from '../../../../common/utils/bulk-reorder';
+import {
+  bulkReorder,
+  ReorderItem,
+} from '../../../../common/utils/bulk-reorder';
 
 export interface LessonFilterOptions {
   topic?: string;

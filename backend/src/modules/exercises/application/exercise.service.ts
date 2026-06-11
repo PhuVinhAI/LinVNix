@@ -7,10 +7,7 @@ import { ExercisesRepository } from './repositories/exercises.repository';
 import { QuestionsRepository } from './repositories/questions.repository';
 import { UserQuestionResultsRepository } from './repositories/user-question-results.repository';
 import { ExerciseGenerationService } from './exercise-generation.service';
-import {
-  Exercise,
-  type CustomExerciseConfig,
-} from '../domain/exercise.entity';
+import { Exercise, type CustomExerciseConfig } from '../domain/exercise.entity';
 import { Question } from '../domain/question.entity';
 import { ProgressRepository } from '../../progress/application/progress.repository';
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
@@ -100,7 +97,9 @@ export class ExerciseService {
     const progresses: ExerciseProgress[] = [];
 
     for (const exercise of exercises) {
-      const questions = await this.questionsRepository.findByExerciseId(exercise.id);
+      const questions = await this.questionsRepository.findByExerciseId(
+        exercise.id,
+      );
       const questionIds = questions.map((q) => q.id);
       const totalQuestions = questionIds.length;
 
@@ -167,14 +166,17 @@ export class ExerciseService {
     const completedLessonsCount = completedProgress.length;
     const eligible = completedLessonsCount > 0;
 
-    const exercises = await this.exercisesRepository.findActiveCustomExercisesByModule(
-      moduleId,
-      userId,
-    );
+    const exercises =
+      await this.exercisesRepository.findActiveCustomExercisesByModule(
+        moduleId,
+        userId,
+      );
     const moduleExercises: ExerciseProgress[] = [];
 
     for (const exercise of exercises) {
-      const questions = await this.questionsRepository.findByExerciseId(exercise.id);
+      const questions = await this.questionsRepository.findByExerciseId(
+        exercise.id,
+      );
       const questionIds = questions.map((q) => q.id);
       const totalQuestions = questionIds.length;
 
@@ -210,7 +212,12 @@ export class ExerciseService {
       });
     }
 
-    return { eligible, completedLessonsCount, totalLessonsCount, moduleExercises };
+    return {
+      eligible,
+      completedLessonsCount,
+      totalLessonsCount,
+      moduleExercises,
+    };
   }
 
   async getExerciseProgress(exerciseId: string, userId: string) {
@@ -220,7 +227,8 @@ export class ExerciseService {
     }
     this.assertExerciseReadable(exercise, userId);
 
-    const questions = await this.questionsRepository.findByExerciseId(exerciseId);
+    const questions =
+      await this.questionsRepository.findByExerciseId(exerciseId);
     const questionIds = questions.map((q) => q.id);
     const totalQuestions = questionIds.length;
 
@@ -263,9 +271,7 @@ export class ExerciseService {
     return this.exercisesRepository.findByIdWithQuestions(id);
   }
 
-  async create(
-    data: Partial<import('../domain/exercise.entity').Exercise>,
-  ) {
+  async create(data: Partial<import('../domain/exercise.entity').Exercise>) {
     return this.exercisesRepository.create(data);
   }
 
@@ -306,13 +312,19 @@ export class ExerciseService {
     );
     const exercise = await this.exercisesRepository.findById(exerciseId);
     if (exercise?.replacesExerciseId) {
-      await this.questionsRepository.softDeleteByExerciseId(exercise.replacesExerciseId);
+      await this.questionsRepository.softDeleteByExerciseId(
+        exercise.replacesExerciseId,
+      );
       await this.exercisesRepository.softDelete(exercise.replacesExerciseId);
     }
     return exercises;
   }
 
-  async regenerate(exerciseId: string, userId: string, userPromptOverride?: string) {
+  async regenerate(
+    exerciseId: string,
+    userId: string,
+    userPromptOverride?: string,
+  ) {
     return this.exerciseGenerationService.createRegeneratedExercise(
       exerciseId,
       userId,
@@ -415,14 +427,17 @@ export class ExerciseService {
     const completedModulesCount = completedModuleProgress.length;
     const eligible = completedModulesCount > 0;
 
-    const exercises = await this.exercisesRepository.findActiveCustomExercisesByCourse(
-      courseId,
-      userId,
-    );
+    const exercises =
+      await this.exercisesRepository.findActiveCustomExercisesByCourse(
+        courseId,
+        userId,
+      );
     const courseExercises: ExerciseProgress[] = [];
 
     for (const exercise of exercises) {
-      const questions = await this.questionsRepository.findByExerciseId(exercise.id);
+      const questions = await this.questionsRepository.findByExerciseId(
+        exercise.id,
+      );
       const questionIds = questions.map((q) => q.id);
       const totalQuestions = questionIds.length;
 
@@ -458,7 +473,12 @@ export class ExerciseService {
       });
     }
 
-    return { eligible, completedModulesCount, totalModulesCount, courseExercises };
+    return {
+      eligible,
+      completedModulesCount,
+      totalModulesCount,
+      courseExercises,
+    };
   }
 
   async deleteCustom(exerciseId: string, userId: string): Promise<void> {
@@ -489,7 +509,8 @@ export class ExerciseService {
     }
     this.assertExerciseReadable(exercise, userId);
 
-    const questions = await this.questionsRepository.findByExerciseId(exerciseId);
+    const questions =
+      await this.questionsRepository.findByExerciseId(exerciseId);
     const questionIds = questions.map((q) => q.id);
     const totalQuestions = questionIds.length;
 
@@ -515,7 +536,8 @@ export class ExerciseService {
     }
     this.assertExerciseReadable(exercise, userId);
 
-    const questions = await this.questionsRepository.findByExerciseId(exerciseId);
+    const questions =
+      await this.questionsRepository.findByExerciseId(exerciseId);
     const questionIds = questions.map((q) => q.id);
 
     await this.userQuestionResultsRepository.deleteByUserAndQuestionIds(
@@ -524,7 +546,10 @@ export class ExerciseService {
     );
   }
 
-  async getSummary(exerciseId: string, userId: string): Promise<ExerciseSummary> {
+  async getSummary(
+    exerciseId: string,
+    userId: string,
+  ): Promise<ExerciseSummary> {
     const exercise = await this.exercisesRepository.findById(exerciseId);
     if (!exercise) {
       throw new NotFoundException(`Exercise with ID ${exerciseId} not found`);
@@ -533,7 +558,8 @@ export class ExerciseService {
 
     const progress = await this.getExerciseProgress(exerciseId, userId);
 
-    const questions = await this.questionsRepository.findByExerciseId(exerciseId);
+    const questions =
+      await this.questionsRepository.findByExerciseId(exerciseId);
     const questionIds = questions.map((q) => q.id);
 
     const results =

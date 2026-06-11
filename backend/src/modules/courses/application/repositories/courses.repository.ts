@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Course } from '../../domain/course.entity';
-import { bulkReorder, ReorderItem } from '../../../../common/utils/bulk-reorder';
+import {
+  bulkReorder,
+  ReorderItem,
+} from '../../../../common/utils/bulk-reorder';
 
 @Injectable()
 export class CoursesRepository {

@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProgressStatus, Role, SimulationSessionStatus } from '../../../common/enums';
+import {
+  ProgressStatus,
+  Role,
+  SimulationSessionStatus,
+} from '../../../common/enums';
 import { User } from '../../users/domain/user.entity';
 import { LearningProgress } from '../../progress/domain/learning-progress.entity';
 import { DailyGoal } from '../../daily-goals/domain/daily-goal.entity';
@@ -197,7 +201,11 @@ export class AdminLearnersService {
           })
           .andWhere('m.deleted_at IS NULL')
           .groupBy('m.conversation_id')
-          .getRawMany<{ conversationId: string; count: string; tokens: string }>()
+          .getRawMany<{
+            conversationId: string;
+            count: string;
+            tokens: string;
+          }>()
       : [];
     const conversationStatsMap = new Map(
       conversationMessageStats.map((row) => [
@@ -223,7 +231,7 @@ export class AdminLearnersService {
       const totalTokens =
         conversation.totalTokens && conversation.totalTokens > 0
           ? conversation.totalTokens
-          : stats?.tokens ?? 0;
+          : (stats?.tokens ?? 0);
       return {
         ...conversation,
         messageCount: stats?.count ?? 0,

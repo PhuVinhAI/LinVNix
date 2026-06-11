@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Vocabulary } from '../../domain/vocabulary.entity';
 import { Dialect } from '../../../../common/enums';
-import { bulkReorder, ReorderItem } from '../../../../common/utils/bulk-reorder';
+import {
+  bulkReorder,
+  ReorderItem,
+} from '../../../../common/utils/bulk-reorder';
 
 export interface VocabularySearchOptions {
   query: string;

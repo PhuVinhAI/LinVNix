@@ -14,7 +14,6 @@ import {
   GrammarRepository,
   GrammarSearchOptions,
 } from '../../grammar/application/grammar.repository';
-import { ProgressRepository } from '../../progress/application/progress.repository';
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
 import { CourseProgressRepository } from '../../progress/application/course-progress.repository';
 import { ProgressStatus } from '../../../common/enums';
@@ -33,10 +32,6 @@ import type {
   VideoContentPayload,
 } from '../../contents/domain/lesson-content-payload.types';
 import { GrammarRule } from '../../grammar/domain/grammar-rule.entity';
-import {
-  CourseStatsPort,
-  CourseStatsResult,
-} from '../../admin/application/ports/dashboard-stats.ports';
 
 /**
  * Lightweight catalog-lookup summary returned by `findLessons`. Intentionally
@@ -70,21 +65,16 @@ export interface CreateContentInput {
 export type UpdateContentInput = Partial<CreateContentInput>;
 
 @Injectable()
-export class CourseContentService implements CourseStatsPort {
+export class CourseContentService {
   constructor(
     private readonly coursesRepository: CoursesRepository,
     private readonly modulesRepository: ModulesRepository,
     private readonly lessonsRepository: LessonsRepository,
     private readonly contentsRepository: ContentsRepository,
     private readonly grammarRepository: GrammarRepository,
-    private readonly progressRepository: ProgressRepository,
     private readonly moduleProgressRepository: ModuleProgressRepository,
     private readonly courseProgressRepository: CourseProgressRepository,
   ) {}
-
-  async getTopCoursesByEnrollment(limit: number): Promise<CourseStatsResult[]> {
-    return this.progressRepository.getTopCoursesByEnrollment(limit);
-  }
 
   async getCourseStructure(courseId: string): Promise<Course> {
     const course = await this.coursesRepository.findById(courseId);
@@ -248,7 +238,9 @@ export class CourseContentService implements CourseStatsPort {
     const existing = await this.findContentById(id);
     const effectiveType = data.contentType ?? existing.contentType;
     const effectiveDialogue =
-      data.dialogueData !== undefined ? data.dialogueData : existing.dialogueData;
+      data.dialogueData !== undefined
+        ? data.dialogueData
+        : existing.dialogueData;
     const effectivePayload =
       data.payload !== undefined
         ? data.payload
@@ -259,7 +251,10 @@ export class CourseContentService implements CourseStatsPort {
       dialogueData: effectiveDialogue,
       payload: effectivePayload,
     };
-    return this.contentsRepository.update(id, this.prepareContentPayload(merged));
+    return this.contentsRepository.update(
+      id,
+      this.prepareContentPayload(merged),
+    );
   }
 
   async deleteContent(id: string): Promise<void> {
@@ -297,7 +292,7 @@ export class CourseContentService implements CourseStatsPort {
     }
 
     // Các loại có payload — validate riêng và derive preview.
-    const payload = data.payload as Record<string, unknown> | null | undefined;
+    const payload = data.payload;
     if (!payload || typeof payload !== 'object') {
       throw new BadRequestException(
         `Nội dung loại ${String(data.contentType)} cần payload tương ứng.`,
@@ -415,8 +410,13 @@ export class CourseContentService implements CourseStatsPort {
                 };
               })
               .filter(
-                (s): s is { startSeconds: number; vi: string; en: string | null } =>
-                  s !== null,
+                (
+                  s,
+                ): s is {
+                  startSeconds: number;
+                  vi: string;
+                  en: string | null;
+                } => s !== null,
               )
           : undefined;
         const result: AudioContentPayload = {
@@ -444,8 +444,7 @@ export class CourseContentService implements CourseStatsPort {
           ['16:9', '9:16', '4:3', '1:1'].includes(raw.aspectRatio)
             ? (raw.aspectRatio as VideoContentPayload['aspectRatio'])
             : '16:9';
-        const provider =
-          raw.provider === 'youtube' ? 'youtube' : 'self_hosted';
+        const provider = raw.provider === 'youtube' ? 'youtube' : 'self_hosted';
         const chapters = Array.isArray(raw.chapters)
           ? raw.chapters
               .map((ch) => {

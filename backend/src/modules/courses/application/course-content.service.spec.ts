@@ -6,7 +6,6 @@ import { ModulesRepository } from './repositories/modules.repository';
 import { LessonsRepository } from './repositories/lessons.repository';
 import { ContentsRepository } from '../../contents/application/contents.repository';
 import { GrammarRepository } from '../../grammar/application/grammar.repository';
-import { ProgressRepository } from '../../progress/application/progress.repository';
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
 import { CourseProgressRepository } from '../../progress/application/course-progress.repository';
 import { ContentType, ProgressStatus } from '../../../common/enums';
@@ -56,9 +55,6 @@ describe('CourseContentService', () => {
       delete: jest.fn(),
       search: jest.fn(),
     };
-    const progressMock = {
-      getTopCoursesByEnrollment: jest.fn(),
-    };
     const moduleProgressMock = {
       findCompletedByModule: jest.fn().mockResolvedValue([]),
       update: jest.fn(),
@@ -76,7 +72,6 @@ describe('CourseContentService', () => {
         { provide: LessonsRepository, useValue: lessonsMock },
         { provide: ContentsRepository, useValue: contentsMock },
         { provide: GrammarRepository, useValue: grammarMock },
-        { provide: ProgressRepository, useValue: progressMock },
         { provide: ModuleProgressRepository, useValue: moduleProgressMock },
         { provide: CourseProgressRepository, useValue: courseProgressMock },
       ],

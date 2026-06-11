@@ -1,4 +1,8 @@
-﻿import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+﻿import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { QuestionsRepository } from './repositories/questions.repository';
 import { UserQuestionResultsRepository } from './repositories/user-question-results.repository';
@@ -10,10 +14,6 @@ import { QuestionAttempt } from '../domain/question-attempt.entity';
 import { UserQuestionResult } from '../domain/user-question-result.entity';
 import { QuestionType, UserLevel } from '../../../common/enums';
 import type { AssessmentContext } from '../domain/assessment.types';
-import {
-  QuestionStatsPort,
-  QuestionStatsResult,
-} from '../../admin/application/ports/dashboard-stats.ports';
 
 export interface SubmitAnswerResult {
   id: string;
@@ -25,7 +25,7 @@ export interface SubmitAnswerResult {
 }
 
 @Injectable()
-export class QuestionsService implements QuestionStatsPort {
+export class QuestionsService {
   constructor(
     private readonly dataSource: DataSource,
     private readonly questionsRepository: QuestionsRepository,
@@ -33,16 +33,6 @@ export class QuestionsService implements QuestionStatsPort {
     private readonly answerAssessment: AnswerAssessment,
     private readonly answerNormalizer: AnswerNormalizer,
   ) {}
-
-  async getQuestionsWithHighestErrorRate(
-    minAttempts: number,
-    limit: number,
-  ): Promise<QuestionStatsResult[]> {
-    return this.userQuestionResultsRepository.getQuestionsWithHighestErrorRate(
-      minAttempts,
-      limit,
-    );
-  }
 
   async create(data: Partial<Question>): Promise<Question> {
     if (data.questionType) {
@@ -55,8 +45,12 @@ export class QuestionsService implements QuestionStatsPort {
     return this.questionsRepository.findByLessonId(lessonId);
   }
 
-  async findByExerciseId(exerciseId: string, userId?: string): Promise<Question[]> {
-    const exercises = await this.questionsRepository.findByExerciseId(exerciseId);
+  async findByExerciseId(
+    exerciseId: string,
+    userId?: string,
+  ): Promise<Question[]> {
+    const exercises =
+      await this.questionsRepository.findByExerciseId(exerciseId);
     if (userId && exercises[0]) {
       this.assertQuestionReadable(exercises[0], userId);
     }
@@ -245,7 +239,9 @@ export class QuestionsService implements QuestionStatsPort {
     if (Object.values(QuestionType).includes(type as QuestionType)) {
       return type as QuestionType;
     }
-    const fromKey = (QuestionType as Record<string, QuestionType>)[String(type)];
+    const fromKey = (QuestionType as Record<string, QuestionType>)[
+      String(type)
+    ];
     if (fromKey) return fromKey;
     throw new BadRequestException(`Invalid questionType: ${type}`);
   }

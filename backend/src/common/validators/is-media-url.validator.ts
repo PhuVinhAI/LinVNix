@@ -20,7 +20,8 @@ export function IsMediaUrl(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: unknown) {
-          if (value === null || value === undefined || value === '') return true;
+          if (value === null || value === undefined || value === '')
+            return true;
           if (typeof value !== 'string') return false;
           if (/^https?:\/\/[^\s]+$/i.test(value)) return true;
           if (/^\/uploads\/[^\s]+$/.test(value)) return true;

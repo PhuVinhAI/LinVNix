@@ -69,7 +69,8 @@ const EXERCISE_TYPE_PROMPT_META: Record<
       '- multiple_choice: options={choices:["A","B","C","D"]}, correctAnswer={selectedChoice:"B"}',
   },
   [QuestionType.FILL_BLANK]: {
-    languageMix: '  - fill_blank: Vietnamese sentences with ___ blanks (no question field)',
+    languageMix:
+      '  - fill_blank: Vietnamese sentences with ___ blanks (no question field)',
     shape:
       '- fill_blank: question=null, options={sentence:"Xin ___ ! Tôi là Nam.",blanks:1,acceptedAnswers:[["chào"]]}, correctAnswer={answers:["chào"]}',
   },
@@ -124,7 +125,12 @@ const EXERCISE_TYPE_SCHEMA_FIELDS: Record<
     correctAnswer: ['orderedItems'],
   },
   [QuestionType.TRANSLATION]: {
-    options: ['sourceText', 'sourceLanguage', 'targetLanguage', 'acceptedTranslations'],
+    options: [
+      'sourceText',
+      'sourceLanguage',
+      'targetLanguage',
+      'acceptedTranslations',
+    ],
     correctAnswer: ['translation'],
   },
   [QuestionType.LISTENING]: {
@@ -142,8 +148,7 @@ const EXERCISE_RESPONSE_SCHEMA_BASE = {
   properties: {
     title: {
       type: Type.STRING,
-      description:
-        'A short descriptive title for this exercise (5-8 words)',
+      description: 'A short descriptive title for this exercise (5-8 words)',
       nullable: false,
     },
     description: {
@@ -437,7 +442,8 @@ export class ExerciseGenerationService {
     }
     this.assertOwnedCustomExercise(exercise, userId);
 
-    const existing = await this.questionsRepository.findByExerciseId(exerciseId);
+    const existing =
+      await this.questionsRepository.findByExerciseId(exerciseId);
     if (existing.length > 0) {
       throw new BadRequestException(
         'Exercise already has questions. Use regenerate instead.',
@@ -448,7 +454,11 @@ export class ExerciseGenerationService {
       generationStatus: 'generating' as any,
     });
     try {
-      const exercises = await this.doGenerate(exercise, userId, userPromptOverride);
+      const exercises = await this.doGenerate(
+        exercise,
+        userId,
+        userPromptOverride,
+      );
       await this.exercisesRepository.update(exerciseId, {
         generationStatus: 'ready' as any,
       });
@@ -474,7 +484,9 @@ export class ExerciseGenerationService {
     this.assertOwnedCustomExercise(exercise, userId);
 
     const effectiveUserPrompt =
-      userPromptOverride !== undefined ? userPromptOverride : exercise.userPrompt;
+      userPromptOverride !== undefined
+        ? userPromptOverride
+        : exercise.userPrompt;
 
     const newExerciseData: Partial<Exercise> = {
       lessonId: exercise.lessonId,
@@ -519,7 +531,8 @@ export class ExerciseGenerationService {
     }
     this.assertOwnedCustomExercise(exercise, userId);
 
-    const existing = await this.questionsRepository.findByExerciseId(exerciseId);
+    const existing =
+      await this.questionsRepository.findByExerciseId(exerciseId);
     if (existing.length > 0) {
       throw new BadRequestException(
         'Exercise already has questions. Use regenerate instead.',
@@ -530,7 +543,11 @@ export class ExerciseGenerationService {
       generationStatus: 'generating' as any,
     });
     try {
-      const exercises = await this.doGenerate(exercise, userId, userPromptOverride);
+      const exercises = await this.doGenerate(
+        exercise,
+        userId,
+        userPromptOverride,
+      );
       await this.exercisesRepository.update(exerciseId, {
         generationStatus: 'ready' as any,
       });
@@ -576,7 +593,9 @@ export class ExerciseGenerationService {
     }
 
     const effectiveUserPrompt =
-      userPromptOverride !== undefined ? userPromptOverride : exercise.userPrompt;
+      userPromptOverride !== undefined
+        ? userPromptOverride
+        : exercise.userPrompt;
 
     const userPromptSection = effectiveUserPrompt
       ? `\n### User Request\n${effectiveUserPrompt}\n`
@@ -882,7 +901,9 @@ export class ExerciseGenerationService {
       );
     }
     if (!Exercise.isValidCustomConfig(exercise.customConfig)) {
-      throw new BadRequestException('Custom practice exercise has invalid config');
+      throw new BadRequestException(
+        'Custom practice exercise has invalid config',
+      );
     }
   }
 }

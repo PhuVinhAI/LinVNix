@@ -120,9 +120,7 @@ describe('ExerciseService', () => {
 
       expect(result.id).toBe('set-1');
       expect(result.questions).toHaveLength(2);
-      expect(exercisesRepo.findByIdWithQuestions).toHaveBeenCalledWith(
-        'set-1',
-      );
+      expect(exercisesRepo.findByIdWithQuestions).toHaveBeenCalledWith('set-1');
     });
 
     it('throws NotFoundException when exercise not found', async () => {
@@ -141,10 +139,13 @@ describe('ExerciseService', () => {
         { id: 'set-2', title: 'Custom', isCustom: true, isAIGenerated: true },
       ] as any);
 
-      questionsRepo.findByExerciseId.mockImplementation(async (exerciseId: string) => {
-        if (exerciseId === 'set-1') return [{ id: 'ex-1' }, { id: 'ex-2' }] as any;
-        return [{ id: 'ex-3' }] as any;
-      });
+      questionsRepo.findByExerciseId.mockImplementation(
+        async (exerciseId: string) => {
+          if (exerciseId === 'set-1')
+            return [{ id: 'ex-1' }, { id: 'ex-2' }] as any;
+          return [{ id: 'ex-3' }] as any;
+        },
+      );
 
       resultsRepo.findByUserAndQuestionIds.mockImplementation(
         async (_userId: string, questionIds: string[]) => {
@@ -190,9 +191,9 @@ describe('ExerciseService', () => {
     it('throws NotFoundException when exercise not found', async () => {
       exercisesRepo.findById.mockResolvedValue(null);
 
-      await expect(service.getExerciseProgress('missing', 'user-1')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.getExerciseProgress('missing', 'user-1'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -245,7 +246,9 @@ describe('ExerciseService', () => {
   describe('regenerate', () => {
     it('creates a new regenerated set', async () => {
       const mockSet = { id: 'new-set-1', lessonId: 'lesson-1' };
-      generationService.createRegeneratedExercise.mockResolvedValue(mockSet as any);
+      generationService.createRegeneratedExercise.mockResolvedValue(
+        mockSet as any,
+      );
 
       const result = await service.regenerate('set-1', 'user-1');
 
@@ -259,7 +262,9 @@ describe('ExerciseService', () => {
 
     it('passes userPrompt override to createRegeneratedExercise', async () => {
       const mockSet = { id: 'new-set-1', lessonId: 'lesson-1' };
-      generationService.createRegeneratedExercise.mockResolvedValue(mockSet as any);
+      generationService.createRegeneratedExercise.mockResolvedValue(
+        mockSet as any,
+      );
 
       await service.regenerate('set-1', 'user-1', 'new prompt');
 
@@ -592,7 +597,9 @@ describe('ExerciseService', () => {
 
       await service.deleteCustom('set-1', 'user-1');
 
-      expect(questionsRepo.softDeleteByExerciseId).toHaveBeenCalledWith('set-1');
+      expect(questionsRepo.softDeleteByExerciseId).toHaveBeenCalledWith(
+        'set-1',
+      );
       expect(exercisesRepo.softDelete).toHaveBeenCalledWith('set-1');
     });
 
@@ -615,7 +622,9 @@ describe('ExerciseService', () => {
 
       await service.deleteCustom('set-1', 'user-1');
 
-      expect(questionsRepo.softDeleteByExerciseId).toHaveBeenCalledWith('set-1');
+      expect(questionsRepo.softDeleteByExerciseId).toHaveBeenCalledWith(
+        'set-1',
+      );
       expect(exercisesRepo.softDelete).toHaveBeenCalledWith('set-1');
     });
 

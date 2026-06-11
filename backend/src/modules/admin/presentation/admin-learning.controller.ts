@@ -88,10 +88,7 @@ export class AdminLearningController {
   }
 
   @Patch('courses/:id/publish')
-  setCoursePublished(
-    @Param('id') id: string,
-    @Body() dto: SetPublishedDto,
-  ) {
+  setCoursePublished(@Param('id') id: string, @Body() dto: SetPublishedDto) {
     return this.adminLearningService.setCoursePublished(id, dto.isPublished);
   }
 
@@ -223,10 +220,7 @@ export class AdminLearningController {
   }
 
   @Patch('exercises/:id')
-  updateExercise(
-    @Param('id') id: string,
-    @Body() dto: Partial<Exercise>,
-  ) {
+  updateExercise(@Param('id') id: string, @Body() dto: Partial<Exercise>) {
     return this.adminLearningService.updateExercise(id, dto);
   }
 

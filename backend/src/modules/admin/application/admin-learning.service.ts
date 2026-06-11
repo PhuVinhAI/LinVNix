@@ -83,13 +83,14 @@ export class AdminLearningService {
 
   async getLessonWorkspace(lessonId: string) {
     const lesson = await this.courseContentService.getLessonDetail(lessonId);
-    const [contents, vocabularies, grammarRules, exercises] =
-      await Promise.all([
+    const [contents, vocabularies, grammarRules, exercises] = await Promise.all(
+      [
         this.courseContentService.getContentsByLesson(lessonId),
         this.vocabulariesService.findByLessonId(lessonId),
         this.courseContentService.getGrammarByLesson(lessonId),
         this.exerciseService.findAllByLessonIdForAdmin(lessonId),
-      ]);
+      ],
+    );
 
     return {
       ...lesson,
@@ -177,7 +178,10 @@ export class AdminLearningService {
     return set;
   }
 
-  async createQuestion(exerciseId: string, dto: Omit<CreateQuestionDto, 'exerciseId'>) {
+  async createQuestion(
+    exerciseId: string,
+    dto: Omit<CreateQuestionDto, 'exerciseId'>,
+  ) {
     return this.questionsService.create({ ...dto, exerciseId });
   }
 

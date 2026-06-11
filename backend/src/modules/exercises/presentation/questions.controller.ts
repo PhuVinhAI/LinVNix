@@ -122,8 +122,14 @@ export class QuestionsController {
     status: 200,
     description: 'Danh sách bài tập của set',
   })
-  async findBySet(@Param('exerciseId') exerciseId: string, @CurrentUser() user: User) {
-    const exercises = await this.questionsService.findByExerciseId(exerciseId, user.id);
+  async findBySet(
+    @Param('exerciseId') exerciseId: string,
+    @CurrentUser() user: User,
+  ) {
+    const exercises = await this.questionsService.findByExerciseId(
+      exerciseId,
+      user.id,
+    );
     return this.questionsService.serializeQuestions(exercises);
   }
 
