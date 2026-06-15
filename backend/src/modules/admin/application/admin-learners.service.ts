@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProgressStatus, Role } from '../../../common/enums';
+import { Role } from '../../../common/enums';
 import { User } from '../../users/domain/user.entity';
 import { LearningProgress } from '../../progress/domain/learning-progress.entity';
 import { PersonalVocabulary } from '../../personal-vocabularies/domain/personal-vocabulary.entity';
@@ -10,12 +10,56 @@ import { SimulationSession } from '../../simulations/domain/simulation-session.e
 import { SimulationMessage } from '../../simulations/domain/simulation-message.entity';
 import { Conversation } from '../../conversations/domain/conversation.entity';
 import { ConversationMessage } from '../../conversations/domain/conversation-message.entity';
+import {
+  ListLearnersQueryDto,
+  LearnerSortField,
+} from '../dto/list-learners-query.dto';
 
-/**
- * Tra cứu cơ bản về học viên cho danh sách & các trang chi tiết hội thoại /
- * mô phỏng. Phần phân tích dashboard 360° đã được tách sang
- * AdminLearnerAnalyticsService.
- */
+interface LearnerRow {
+  id: string;
+  email: string;
+  fullName: string;
+  nativeLanguage: string;
+  currentLevel: string;
+  preferredDialect: string;
+  emailVerified: boolean;
+  onboardingCompleted: boolean;
+  role: string;
+  notificationEnabled: boolean;
+  notificationTime: string;
+  provider: string;
+  avatarUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  completedLessons: number;
+  questionResults: number;
+  personalVocabularyCount: number;
+  simulationCount: number;
+}
+
+export interface PagedLearners {
+  items: Array<
+    Omit<LearnerRow, 'completedLessons' | 'questionResults' | 'personalVocabularyCount' | 'simulationCount'> & {
+      summary: {
+        completedLessons: number;
+        questionResults: number;
+        personalVocabularyCount: number;
+        simulationCount: number;
+      };
+    }
+  >;
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+const SORT_COLUMN: Record<LearnerSortField, string> = {
+  updatedAt: 'u.updated_at',
+  createdAt: 'u.created_at',
+  fullName: 'u.full_name',
+  completedLessons: 'COALESCE(lp.n, 0)',
+};
+
 @Injectable()
 export class AdminLearnersService {
   constructor(
@@ -37,48 +81,147 @@ export class AdminLearnersService {
     private readonly conversationMessagesRepository: Repository<ConversationMessage>,
   ) {}
 
-  async findAll() {
-    const users = await this.usersRepository.find({
-      where: { role: Role.USER },
-      order: { updatedAt: 'DESC' },
-      take: 200,
+  async list(query: ListLearnersQueryDto): Promise<PagedLearners> {
+    const page = Math.max(1, parseInt(query.page ?? '1', 10) || 1);
+    const pageSize = Math.min(100, Math.max(1, parseInt(query.pageSize ?? '20', 10) || 20));
+    const sort: LearnerSortField = query.sort ?? 'updatedAt';
+    const order: 'ASC' | 'DESC' = query.order ?? 'DESC';
+    const status = query.status ?? 'all';
+
+    const params: unknown[] = [];
+    const push = (value: unknown) => {
+      params.push(value);
+      return `$${params.length}`;
+    };
+
+    const filters: string[] = [
+      `u.role = ${push(Role.USER)}`,
+      `u.deleted_at IS NULL`,
+    ];
+
+    if (query.search?.trim()) {
+      const pattern = `%${query.search.trim()}%`;
+      const p = push(pattern);
+      filters.push(`(u.full_name ILIKE ${p} OR u.email ILIKE ${p})`);
+    }
+    if (query.level) {
+      filters.push(`u.current_level = ${push(query.level)}`);
+    }
+    if (status === 'never_onboarded') {
+      filters.push(`u.onboarding_completed = false`);
+    } else if (status === 'inactive') {
+      filters.push(
+        `u.onboarding_completed = true AND COALESCE(lp.n, 0) + COALESCE(qr.n, 0) + COALESCE(pv.n, 0) + COALESCE(ss.n, 0) = 0`,
+      );
+    } else if (status === 'active') {
+      filters.push(
+        `COALESCE(lp.n, 0) + COALESCE(qr.n, 0) + COALESCE(pv.n, 0) + COALESCE(ss.n, 0) > 0`,
+      );
+    }
+
+    const aggJoins = `
+      LEFT JOIN (
+        SELECT user_id, COUNT(*)::int AS n
+        FROM learning_progress
+        WHERE unit_type = 'lesson' AND status = 'completed' AND deleted_at IS NULL
+        GROUP BY user_id
+      ) lp ON lp.user_id = u.id
+      LEFT JOIN (
+        SELECT user_id, COUNT(*)::int AS n
+        FROM user_question_results
+        WHERE deleted_at IS NULL
+        GROUP BY user_id
+      ) qr ON qr.user_id = u.id
+      LEFT JOIN (
+        SELECT user_id, COUNT(*)::int AS n
+        FROM personal_vocabularies
+        WHERE deleted_at IS NULL
+        GROUP BY user_id
+      ) pv ON pv.user_id = u.id
+      LEFT JOIN (
+        SELECT user_id, COUNT(*)::int AS n
+        FROM simulation_sessions
+        WHERE deleted_at IS NULL
+        GROUP BY user_id
+      ) ss ON ss.user_id = u.id
+    `;
+
+    const whereSql = `WHERE ${filters.join(' AND ')}`;
+
+    const countSql = `
+      SELECT COUNT(*)::int AS total
+      FROM users u
+      ${aggJoins}
+      ${whereSql}
+    `;
+
+    const orderColumn = SORT_COLUMN[sort];
+    const offset = (page - 1) * pageSize;
+    const limitParam = push(pageSize);
+    const offsetParam = push(offset);
+
+    const itemsSql = `
+      SELECT
+        u.id,
+        u.email,
+        u.full_name AS "fullName",
+        u.native_language AS "nativeLanguage",
+        u.current_level AS "currentLevel",
+        u.preferred_dialect AS "preferredDialect",
+        u.email_verified AS "emailVerified",
+        u.onboarding_completed AS "onboardingCompleted",
+        u.role,
+        u.notification_enabled AS "notificationEnabled",
+        u.notification_time AS "notificationTime",
+        u.provider,
+        u.avatar_url AS "avatarUrl",
+        u.created_at AS "createdAt",
+        u.updated_at AS "updatedAt",
+        COALESCE(lp.n, 0)::int AS "completedLessons",
+        COALESCE(qr.n, 0)::int AS "questionResults",
+        COALESCE(pv.n, 0)::int AS "personalVocabularyCount",
+        COALESCE(ss.n, 0)::int AS "simulationCount"
+      FROM users u
+      ${aggJoins}
+      ${whereSql}
+      ORDER BY ${orderColumn} ${order}, u.id ${order}
+      LIMIT ${limitParam} OFFSET ${offsetParam}
+    `;
+
+    const manager = this.usersRepository.manager;
+    const [countRows, rows] = await Promise.all([
+      manager.query(countSql, params.slice(0, params.length - 2)) as Promise<
+        { total: number }[]
+      >,
+      manager.query(itemsSql, params) as Promise<LearnerRow[]>,
+    ]);
+
+    const total = Number(countRows[0]?.total ?? 0);
+
+    const items = rows.map((row) => {
+      const {
+        completedLessons,
+        questionResults,
+        personalVocabularyCount,
+        simulationCount,
+        createdAt,
+        updatedAt,
+        ...rest
+      } = row;
+      return {
+        ...rest,
+        createdAt: new Date(createdAt).toISOString() as unknown as Date,
+        updatedAt: new Date(updatedAt).toISOString() as unknown as Date,
+        summary: {
+          completedLessons: Number(completedLessons),
+          questionResults: Number(questionResults),
+          personalVocabularyCount: Number(personalVocabularyCount),
+          simulationCount: Number(simulationCount),
+        },
+      };
     });
 
-    return Promise.all(
-      users.map(async (user) => {
-        const [
-          completedLessons,
-          questionResults,
-          personalVocabularyCount,
-          simulationCount,
-        ] = await Promise.all([
-          this.progressRepository.count({
-            where: {
-              userId: user.id,
-              unitType: 'lesson' as LearningProgress['unitType'],
-              status: ProgressStatus.COMPLETED,
-            },
-          }),
-          this.questionResultsRepository.count({ where: { userId: user.id } }),
-          this.personalVocabulariesRepository.count({
-            where: { userId: user.id },
-          }),
-          this.simulationSessionsRepository.count({
-            where: { userId: user.id },
-          }),
-        ]);
-
-        return {
-          ...user.toJSON(),
-          summary: {
-            completedLessons,
-            questionResults,
-            personalVocabularyCount,
-            simulationCount,
-          },
-        };
-      }),
-    );
+    return { items, total, page, pageSize };
   }
 
   async findConversation(userId: string, conversationId: string) {

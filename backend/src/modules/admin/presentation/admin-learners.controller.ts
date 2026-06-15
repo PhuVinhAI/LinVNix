@@ -1,10 +1,11 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RequirePermissions } from '../../../common/decorators';
 import { Permission } from '../../../common/enums';
 import { PermissionsGuard } from '../../../common/guards/permissions.guard';
 import { AdminLearnersService } from '../application/admin-learners.service';
 import { AdminLearnerAnalyticsService } from '../application/admin-learner-analytics.service';
+import { ListLearnersQueryDto } from '../dto/list-learners-query.dto';
 
 @ApiTags('Admin Learners')
 @ApiBearerAuth()
@@ -18,9 +19,9 @@ export class AdminLearnersController {
 
   @Get()
   @RequirePermissions(Permission.USER_LIST)
-  @ApiOperation({ summary: 'List learners for admin workspace' })
-  findAll() {
-    return this.service.findAll();
+  @ApiOperation({ summary: 'List learners with pagination, filter and sort' })
+  list(@Query() query: ListLearnersQueryDto) {
+    return this.service.list(query);
   }
 
   /**

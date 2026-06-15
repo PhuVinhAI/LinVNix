@@ -734,34 +734,34 @@ export class AdminLearnerAnalyticsService {
     const since = startOfVnDay(now, 29);
     const [bookmarksBySource, partOfSpeechRows, recent, last30] =
       await Promise.all([
-        this.bookmarksRepository
-          .createQueryBuilder('b')
-          .leftJoin('b.vocabulary', 'v')
-          .leftJoin('b.personalVocabulary', 'pv')
-          .select(
-            `CASE
+        (() => {
+          const sourceExpr = `CASE
                WHEN b.vocabulary_id IS NOT NULL THEN 'system'
                WHEN pv.source = 'IMAGE_DISCOVERY' THEN 'image'
                WHEN pv.source = 'MANUAL' THEN 'manual'
                ELSE 'other'
-             END`,
-            'source',
-          )
-          .addSelect('COUNT(*)', 'count')
-          .where('b.user_id = :userId', { userId })
-          .andWhere('b.deleted_at IS NULL')
-          .groupBy('source')
-          .getRawMany<{ source: string; count: string }>(),
+             END`;
+          return this.bookmarksRepository
+            .createQueryBuilder('b')
+            .leftJoin('b.vocabulary', 'v')
+            .leftJoin('b.personalVocabulary', 'pv')
+            .select(sourceExpr, 'source')
+            .addSelect('COUNT(*)', 'count')
+            .where('b.user_id = :userId', { userId })
+            .andWhere('b.deleted_at IS NULL')
+            .groupBy(sourceExpr)
+            .getRawMany<{ source: string; count: string }>();
+        })(),
         this.bookmarksRepository.query(
           `
           SELECT pos AS pos, COUNT(*)::int AS count
           FROM (
-            SELECT v.part_of_speech AS pos
+            SELECT v.part_of_speech::text AS pos
               FROM bookmarks b
               JOIN vocabularies v ON v.id = b.vocabulary_id
               WHERE b.user_id = $1 AND b.deleted_at IS NULL
             UNION ALL
-            SELECT pv.part_of_speech AS pos
+            SELECT pv.part_of_speech::text AS pos
               FROM bookmarks b
               JOIN personal_vocabularies pv ON pv.id = b.personal_vocabulary_id
               WHERE b.user_id = $1 AND b.deleted_at IS NULL

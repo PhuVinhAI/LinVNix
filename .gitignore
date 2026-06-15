@@ -45,3 +45,6 @@ backend/uploads/audio/*
 
 # Claude Code
 .claude/
+
+# Generated learner seed files (10k JSON — run: bun run generate:user-seeds)
+.scratch/seed-data/users/

@@ -1,8 +1,9 @@
 import { apiClient } from '../../../../lib/core/infrastructure/api/client'
 import type {
   ConversationDetail,
-  Learner,
   LearnerAnalytics,
+  ListLearnersParams,
+  PagedLearners,
   SimulationDetail,
 } from '../types'
 
@@ -11,8 +12,19 @@ function unwrap<T>(response: { data: T | { data: T } }): T {
 }
 
 export class LearnersAdminRepository {
-  async getLearners(): Promise<Learner[]> {
-    const response = await apiClient.get<{ data: Learner[] }>('/admin/learners')
+  async getLearners(params: ListLearnersParams = {}): Promise<PagedLearners> {
+    const query: Record<string, string> = {}
+    if (params.page != null) query.page = String(params.page)
+    if (params.pageSize != null) query.pageSize = String(params.pageSize)
+    if (params.search?.trim()) query.search = params.search.trim()
+    if (params.level) query.level = params.level
+    if (params.status && params.status !== 'all') query.status = params.status
+    if (params.sort) query.sort = params.sort
+    if (params.order) query.order = params.order
+    const response = await apiClient.get<{ data: PagedLearners }>(
+      '/admin/learners',
+      { params: query },
+    )
     return unwrap(response)
   }
 

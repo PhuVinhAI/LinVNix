@@ -1,10 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { learnersAdminRepository } from './learners-admin.repository'
+import type { ListLearnersParams } from '../types'
 
-export function useAdminLearners() {
+export function useAdminLearners(params: ListLearnersParams = {}) {
   return useQuery({
-    queryKey: ['admin-learners'],
-    queryFn: () => learnersAdminRepository.getLearners(),
+    queryKey: ['admin-learners', params],
+    queryFn: () => learnersAdminRepository.getLearners(params),
+    placeholderData: keepPreviousData,
   })
 }
 

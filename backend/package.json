@@ -44,6 +44,8 @@
     "seed:lessons": "bun run scripts/seed-lessons.ts",
     "seed:simulations": "bun run scripts/seed-simulations.ts",
     "seed:simulations:direct": "bun run scripts/seed-simulations-direct.ts",
+    "generate:user-seeds": "bun run scripts/generate-user-seeds.ts",
+    "seed:users": "bun run scripts/seed-users.ts",
     "generate:a1-lesson1-audio": "bun run scripts/generate-a1-lesson1-audio.ts"
   },
   "dependencies": {
@@ -90,6 +92,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
+    "@faker-js/faker": "9",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",

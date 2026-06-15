@@ -2,6 +2,27 @@
 // (hội thoại / mô phỏng). Toàn bộ phần phân tích dashboard 360° nằm trong
 // LearnerAnalytics — tách riêng để chart pieces dễ tái sử dụng.
 
+export interface PagedLearners {
+  items: Learner[]
+  total: number
+  page: number
+  pageSize: number
+}
+
+export type LearnerLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'
+export type LearnerStatus = 'all' | 'active' | 'inactive' | 'never_onboarded'
+export type LearnerSort = 'updatedAt' | 'createdAt' | 'fullName' | 'completedLessons'
+
+export interface ListLearnersParams {
+  page?: number
+  pageSize?: number
+  search?: string
+  level?: LearnerLevel
+  status?: LearnerStatus
+  sort?: LearnerSort
+  order?: 'ASC' | 'DESC'
+}
+
 export interface Learner {
   id: string
   email: string
