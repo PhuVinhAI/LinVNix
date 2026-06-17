@@ -4,21 +4,21 @@ Respond to the user in the same language they use in their prompt (if Vietnamese
 
 ## Monorepo Structure
 
-Three independent apps, each installed separately:
+Bun workspace monorepo. Root `package.json` `workspaces`: `admin`, `backend`, `landing`, `packages/*` — `bun install` at root installs all of them. Mobile is separate (Flutter, not bun).
 
-- **`backend/`** — NestJS v11 API (part of bun workspace)
-- **`admin/`** — Electron + React + Vite admin panel desktop/web (**not** in bun workspace; install separately from `admin/`)
-- **`mobile/`** — Flutter app (uses `flutter pub get`, not bun)
-
-Root `package.json` workspaces only include `backend` and `packages/*` (no `packages/` directory yet).
+- **`backend/`** — NestJS v11 API (package `backend`)
+- **`admin/`** — Electron + React + Vite admin panel, desktop (electron-vite) and web (vite); package `linvnix-admin`
+- **`landing/`** — Astro landing page (React + Tailwind islands); package `landing`
+- **`packages/shared/`** — `@linvnix/shared`, shared AI abstractions (zod schemas consumed by backend)
+- **`mobile/`** — Flutter app (uses `flutter pub get`, not bun; run from `mobile/`)
 
 ## Commands
 
-**All backend commands run from `backend/`, not root** (root scripts like `bun run backend:dev` just cd into backend).
+**All backend commands run from `backend/`** — root scripts like `bun run backend:dev` run `bun --filter backend start:dev` (workspace filter); equivalent commands also work directly from each app directory.
 
 ```
 # Infrastructure (from root)
-bun run db:up          # docker-compose up (postgres:16 + redis:7)
+bun run db:up          # docker-compose up (postgres:16 + redis:7 + backend)
 bun run db:down
 
 # Backend (from backend/)
@@ -34,9 +34,19 @@ bun run test:integration:search-vocabulary
 bun run test:integration:simulations-seed
 bun run admin:create   # create admin user
 
-# Admin (from admin/)
+# Admin (from admin/, or root: bun run admin:dev / admin:dev:web)
 bun run dev            # electron-vite dev (desktop)
 bun run dev:web        # vite dev (web only)
+bun run typecheck
+bun run lint
+
+# Landing (from landing/, or root: bun run landing:dev)
+bun run dev            # astro dev
+bun run build          # astro build
+bun run preview        # astro preview
+
+# Shared package (from packages/shared/, or root: bun run shared:build)
+bun run build          # tsc -> dist/
 bun run typecheck
 bun run lint
 ```
@@ -76,8 +86,10 @@ bun run lint
 
 ## Environment
 
-- Copy `backend/.env.example` → `backend/.env` (more complete than root `.env.example` — includes JWT, Redis, Mail, Google OAuth)
-- Admin: copy `admin/.env.example` → `admin/.env` (only has `VITE_API_BASE_URL`)
+- **Backend (required):** copy `backend/.env.example` → `backend/.env` — the canonical, complete template (Database, JWT, API, Redis, Storage, Mail, App branding, Google OAuth, all `GENAI_*` + per-feature `AI_*` overrides).
+- **Root (optional):** copy `.env.example` → `.env` only if you run `bun run db:up` from root — it holds just the `docker-compose.yml` variables (`DATABASE_*`, `PORT`, `NODE_ENV`). All keys default in `docker-compose.yml`, so the root `.env` is optional.
+- **Admin:** copy `admin/.env.example` → `admin/.env` (only `VITE_API_BASE_URL`).
+- **Landing / shared:** no `.env` required for local dev.
 
 ## Agent skills
 

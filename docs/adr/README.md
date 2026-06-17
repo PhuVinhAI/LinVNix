@@ -18,3 +18,4 @@ Mỗi ADR là một file `NNNN-slug.md` với các section:
 | # | Title | Status | Date |
 |---|-------|--------|------|
 | [0001](0001-multi-provider-ai-routing.md) | Multi-provider AI routing | Accepted | 2026-05-27 |
+| [0002](0002-staged-lesson-authoring-ui.md) | Staged lesson authoring UI | Accepted | 2026-06-10 |

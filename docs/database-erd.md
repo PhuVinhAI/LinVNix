@@ -2,7 +2,7 @@
 
 Generated from the local PostgreSQL `public` schema after the dev reset on 2026-05-31.
 
-Current application table count: **26**.
+Current application table count: **25**.
 
 Notes:
 
@@ -12,6 +12,7 @@ Notes:
 - Role/permission tables were removed; authorization is now represented by `users.role`.
 - Token storage is intentionally split by lifecycle: `auth_tokens` for short-lived verification/reset codes, `refresh_tokens` for login sessions.
 - `bookmarks` is a polymorphic bookmark table: exactly one of `vocabulary_id` or `personal_vocabulary_id` should be set by application logic.
+- `exercises` has a self-reference via `replaces_exercise_id` (a regenerated exercise points to the one it replaces; `SET NULL` on delete) and an `owner_user_id` (`CASCADE`) for custom exercises.
 
 ```mermaid
 erDiagram
@@ -193,11 +194,11 @@ erDiagram
     jsonb custom_config
     boolean is_ai_generated
     varchar title
-    varchar generated_by_id
+    uuid owner_user_id FK
     text prompt_used
     int order_index
     varchar generation_status
-    varchar replaces_exercise_id
+    uuid replaces_exercise_id FK
   }
 
   questions {
@@ -436,14 +437,14 @@ erDiagram
   lessons ||--o{ vocabularies : "lesson_id CASCADE"
   lessons ||--o{ grammar_rules : "lesson_id CASCADE"
   lessons ||--o{ exercises : "lesson_id CASCADE"
-  lessons ||--o{ exercises : "lesson_id CASCADE"
   lessons ||--o{ conversations : "lesson_id SET_NULL"
   lessons ||--o{ learning_progress : "lesson_id CASCADE"
 
   vocabularies ||--o{ bookmarks : "vocabulary_id CASCADE"
   personal_vocabularies ||--o{ bookmarks : "personal_vocabulary_id CASCADE"
 
-  exercises ||--o{ exercises : "exercise_id SET_NULL"
+  users ||--o{ exercises : "owner_user_id CASCADE"
+  exercises ||--o{ exercises : "replaces_exercise_id SET_NULL"
   exercises ||--o{ question_attempts : "question_id CASCADE"
   exercises ||--o{ user_question_results : "question_id CASCADE"
 
@@ -469,19 +470,18 @@ erDiagram
 8. `daily_streaks`
 9. `question_attempts`
 10. `exercises`
-11. `exercises`
-12. `grammar_rules`
-13. `learning_progress`
-14. `lesson_contents`
-15. `lessons`
-16. `modules`
-17. `personal_vocabularies`
-18. `refresh_tokens`
-19. `scenario_categories`
-20. `scenario_characters`
-21. `scenarios`
-22. `simulation_messages`
-23. `simulation_sessions`
-24. `user_question_results`
-25. `users`
-26. `vocabularies`
+11. `grammar_rules`
+12. `learning_progress`
+13. `lesson_contents`
+14. `lessons`
+15. `modules`
+16. `personal_vocabularies`
+17. `refresh_tokens`
+18. `scenario_categories`
+19. `scenario_characters`
+20. `scenarios`
+21. `simulation_messages`
+22. `simulation_sessions`
+23. `user_question_results`
+24. `users`
+25. `vocabularies`
