@@ -45,22 +45,22 @@ export function ExerciseDetailPage() {
         count={{ value: questions.length, label: 'câu hỏi' }}
         description="Theo nguyên tắc sư phạm: ưu tiên Trắc nghiệm/Điền chỗ trống để củng cố ý nghĩa, rồi mở rộng sang Ghép cặp/Sắp xếp, cuối cùng là Dịch/Nghe/Nói cho tổng hợp kỹ năng."
         actions={
-          <>
+          exerciseId && exercise ? (
             <Button asChild variant="outline">
-              <Link to={backPath}>
-                <ArrowLeft className="h-4 w-4" />
-                Chọn bài tập khác
+              <Link to={learningPath.exerciseEdit(exercise.lessonId ?? '', exerciseId)}>
+                <Pencil className="h-4 w-4" />
+                Sửa thông tin
               </Link>
             </Button>
-            {exerciseId && exercise && (
-              <Button asChild variant="outline">
-                <Link to={learningPath.exerciseEdit(exercise.lessonId ?? '', exerciseId)}>
-                  <Pencil className="h-4 w-4" />
-                  Sửa thông tin
-                </Link>
-              </Button>
-            )}
-          </>
+          ) : undefined
+        }
+        footer={
+          <Button asChild variant="ghost" size="sm" className="-ml-2 h-8 text-muted-foreground hover:text-foreground">
+            <Link to={backPath}>
+              <ArrowLeft className="h-4 w-4" />
+              Chọn bài tập khác
+            </Link>
+          </Button>
         }
       />
 

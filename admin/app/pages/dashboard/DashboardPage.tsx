@@ -8,7 +8,7 @@ import { AttentionSection } from './sections/AttentionSection'
 import { TrendsSection } from './sections/TrendsSection'
 
 /**
- * Bang dieu khien tra loi 3 cau hoi cua quan tri vien, theo thu tu:
+ * Bảng điều khiển trả lời 3 câu hỏi của quản trị viên, theo thứ tự:
  * 1. Hôm nay hệ thống thế nào?       → Nhịp đập (PulseSection)
  * 2. Tôi cần làm gì ngay?            → Cần xử lý (AttentionSection)
  * 3. Xu hướng ra sao?                → Xu hướng + giờ học cao điểm (TrendsSection)

@@ -24,8 +24,8 @@ export function PulseSection() {
   if (isError) {
     return (
       <ErrorState
-        title="Khong tai duoc nhip dap hom nay"
-        message={error instanceof Error ? error.message : 'Loi khong xac dinh'}
+        title="Không tải được nhịp đập hôm nay"
+        message={error instanceof Error ? error.message : 'Lỗi không xác định'}
         onRetry={() => refetch()}
         retrying={isFetching}
         size="sm"
@@ -35,10 +35,10 @@ export function PulseSection() {
 
   const accuracyHint = data
     ? data.questionAttempts.accuracyToday == null
-      ? 'Chua co luot lam hom nay'
+      ? 'Chưa có lượt làm hôm nay'
       : data.questionAttempts.accuracyYesterday == null
-        ? `Dung ${formatPercent(data.questionAttempts.accuracyToday)}`
-        : `Dung ${formatPercent(data.questionAttempts.accuracyToday)} - hom qua ${formatPercent(
+        ? `Đúng ${formatPercent(data.questionAttempts.accuracyToday)}`
+        : `Đúng ${formatPercent(data.questionAttempts.accuracyToday)} — hôm qua ${formatPercent(
             data.questionAttempts.accuracyYesterday,
           )}`
     : undefined
@@ -47,7 +47,7 @@ export function PulseSection() {
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
         <PulseTile
-          label="Luot tra loi cau hoi"
+          label="Lượt trả lời câu hỏi"
           metric={data?.questionAttempts}
           icon={ListChecks}
           tint={CYAN}
@@ -55,19 +55,19 @@ export function PulseSection() {
           loading={isLoading}
         />
         <PulseTile
-          label="Bai hoc hoan thanh"
+          label="Bài học hoàn thành"
           metric={data?.lessonsCompleted}
           icon={BookOpenCheck}
           tint={GREEN}
-          hint="So bai hoc duoc hoan thanh trong hom nay"
+          hint="Số bài học được hoàn thành trong hôm nay"
           loading={isLoading}
         />
         <PulseTile
-          label="Phien AI moi"
+          label="Phiên AI mới"
           metric={data?.aiSessions}
           icon={Bot}
           tint={TEAL}
-          hint="Mo phong bat dau + hoi thoai tao moi"
+          hint="Mô phỏng bắt đầu + hội thoại tạo mới"
           loading={isLoading}
         />
       </div>
@@ -128,7 +128,7 @@ function PulseTile({
           <div className="mt-3">
             <Sparkline points={metric.series} color={tint} />
             <p className="mt-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-              14 ngay gan nhat
+              14 ngày gần nhất
             </p>
           </div>
         </>
@@ -141,12 +141,12 @@ const TOTAL_ITEMS: {
   key: keyof SystemTotals
   label: string
 }[] = [
-  { key: 'courses', label: 'Khoa hoc' },
-  { key: 'lessons', label: 'Bai hoc' },
-  { key: 'questions', label: 'Cau hoi' },
-  { key: 'vocabularies', label: 'Tu vung' },
-  { key: 'simulations', label: 'Phien mo phong' },
-  { key: 'conversations', label: 'Hoi thoai AI' },
+  { key: 'courses', label: 'Khóa học' },
+  { key: 'lessons', label: 'Bài học' },
+  { key: 'questions', label: 'Câu hỏi' },
+  { key: 'vocabularies', label: 'Từ vựng' },
+  { key: 'simulations', label: 'Phiên mô phỏng' },
+  { key: 'conversations', label: 'Hội thoại AI' },
 ]
 
 function TotalsStrip({
@@ -173,7 +173,7 @@ function TotalsStrip({
             </p>
             {item.key === 'courses' && (
               <p className="text-[10px] text-muted-foreground whitespace-nowrap">
-                {formatNumber(totals.publishedCourses)} da xuat ban
+                {formatNumber(totals.publishedCourses)} đã xuất bản
               </p>
             )}
           </div>

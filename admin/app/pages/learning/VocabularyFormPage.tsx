@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { useEffect, useState, type FormEvent } from 'react'
+import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { BookMarked } from 'lucide-react'
+import { ArrowLeft, BookMarked, Gauge, MessageSquare, Save, Tag, Volume2 } from 'lucide-react'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { InlineEditable } from '../../components/admin/InlineEditable'
+import { FormField, FormSection } from '../../components/admin/FormSection'
 import { MediaUpload } from '../../components/admin/editors/MediaUpload'
 import { PartOfSpeechPicker } from '../../components/admin/lesson-editors/shared/PartOfSpeechPicker'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { Vocabulary } from '../../features/learning/types'
-import {
-  ComposerCard,
-  DIFFICULTY_DOT,
-  DIFFICULTY_LABELS,
-  DifficultyRow,
-  SectionLabel,
-  StickySaveBar,
-} from './authoring-ui'
+import { DIFFICULTY_LABELS } from './authoring-ui'
 import { learningPath } from './route-utils'
 
 interface FormState {
@@ -26,7 +21,6 @@ interface FormState {
   exampleSentence: string
   exampleTranslation: string
   audioUrl: string
-  imageUrl: string
   difficultyLevel: number
 }
 
@@ -38,7 +32,6 @@ const EMPTY: FormState = {
   exampleSentence: '',
   exampleTranslation: '',
   audioUrl: '',
-  imageUrl: '',
   difficultyLevel: 1,
 }
 
@@ -51,12 +44,11 @@ function fromVocabulary(v: Vocabulary): FormState {
     exampleSentence: v.exampleSentence ?? '',
     exampleTranslation: v.exampleTranslation ?? '',
     audioUrl: v.audioUrl ?? '',
-    imageUrl: v.imageUrl ?? '',
     difficultyLevel: Math.min(5, Math.max(1, v.difficultyLevel || 1)),
   }
 }
 
-/** Soạn một Từ vựng — mọi thuộc tính là field trong cùng khung form, không thanh ngoài. */
+/** Soạn một Từ vựng — form chuẩn với FormSection/FormField. */
 export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const { lessonId, id } = useParams()
   const navigate = useNavigate()
@@ -77,7 +69,8 @@ export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }))
 
-  const save = async () => {
+  const submit = async (e: FormEvent) => {
+    e.preventDefault()
     if (!form.word.trim()) {
       toast.error('Chưa nhập từ tiếng Việt')
       return
@@ -96,7 +89,6 @@ export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
         exampleSentence: form.exampleSentence.trim() || null,
         exampleTranslation: form.exampleTranslation.trim() || null,
         audioUrl: form.audioUrl || null,
-        imageUrl: form.imageUrl || null,
         difficultyLevel: form.difficultyLevel,
       }
       if (mode === 'edit' && id) {
@@ -121,122 +113,142 @@ export function VocabularyFormPage({ mode }: { mode: 'create' | 'edit' }) {
   }
 
   return (
-    <div className="flex min-h-full flex-col">
-      <div className="space-y-6 flex-1">
-        <Breadcrumbs
-          items={[
-            { label: lesson?.title ?? 'Bài học', href: learningPath.lesson(lessonId) },
-            { label: 'Nội dung bài học', href: learningPath.lessonStageContent(lessonId) },
-            { label: 'Từ vựng', href: backPath },
-            { label: mode === 'edit' ? 'Soạn từ' : 'Thêm từ mới' },
-          ]}
-        />
+    <div className="space-y-6">
+      <Breadcrumbs
+        items={[
+          { label: lesson?.title ?? 'Bài học', href: learningPath.lesson(lessonId) },
+          { label: 'Nội dung bài học', href: learningPath.lessonStageContent(lessonId) },
+          { label: 'Từ vựng', href: backPath },
+          { label: mode === 'edit' ? 'Sửa từ vựng' : 'Thêm từ vựng' },
+        ]}
+      />
 
-        <ComposerCard
-          Icon={BookMarked}
-          iconClass="bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300"
-          typeLabel="Từ vựng"
-          statusRight={
-            <span className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground">
-              <span className={`h-1.5 w-1.5 rounded-full ${DIFFICULTY_DOT[form.difficultyLevel]}`} />
-              {DIFFICULTY_LABELS[form.difficultyLevel]}
-            </span>
-          }
-        >
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
+            <Link to={backPath}>
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
           <div>
-            <SectionLabel>Từ tiếng Việt</SectionLabel>
-            <InlineEditable
-              value={form.word}
-              onChange={(v) => set('word', v)}
-              placeholder="Bấm để nhập từ..."
-              className="text-3xl sm:text-4xl font-bold leading-snug text-foreground py-1"
-              ariaLabel="Từ tiếng Việt"
-              autoFocus={mode === 'create'}
-            />
+            <h1 className="text-3xl font-bold tracking-tight">
+              {mode === 'edit' ? 'Sửa từ vựng' : 'Tạo từ vựng mới'}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              {mode === 'edit' ? 'Cập nhật thông tin từ vựng' : 'Điền thông tin để thêm từ vào bài học'}
+            </p>
           </div>
+        </div>
 
-          <div>
-            <SectionLabel>Bản dịch</SectionLabel>
-            <InlineEditable
-              value={form.translation}
-              onChange={(v) => set('translation', v)}
-              placeholder="Bấm để nhập nghĩa..."
-              className="text-xl font-semibold text-foreground"
-              ariaLabel="Bản dịch"
-            />
-          </div>
+        <form id="vocabulary-form" onSubmit={submit} className="space-y-8">
+          <FormSection icon={BookMarked} title="Từ và bản dịch" description="Từ tiếng Việt và nghĩa">
+            <FormField label="Từ tiếng Việt" required>
+              <Input
+                value={form.word}
+                onChange={(e) => set('word', e.target.value)}
+                placeholder="VD: xin chào"
+                autoFocus={mode === 'create'}
+                required
+              />
+            </FormField>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <SectionLabel>Từ loại</SectionLabel>
+            <FormField label="Bản dịch" required>
+              <Input
+                value={form.translation}
+                onChange={(e) => set('translation', e.target.value)}
+                placeholder="VD: hello"
+                required
+              />
+            </FormField>
+          </FormSection>
+
+          <FormSection icon={Tag} title="Phân loại" description="Từ loại và danh từ phân loại">
+            <FormField label="Từ loại" required>
               <PartOfSpeechPicker
                 value={form.partOfSpeech}
                 onChange={(v) => set('partOfSpeech', v)}
                 variant="grid"
               />
-            </div>
-            <div>
-              <SectionLabel>Danh từ phân loại</SectionLabel>
-              <InlineEditable
+            </FormField>
+
+            <FormField label="Danh từ phân loại" help="VD: con, cái, chiếc">
+              <Input
                 value={form.classifier}
-                onChange={(v) => set('classifier', v)}
+                onChange={(e) => set('classifier', e.target.value)}
                 placeholder="con, cái, chiếc…"
-                className="text-base font-semibold"
-                ariaLabel="Danh từ phân loại"
-                multiline={false}
               />
-            </div>
-          </div>
+            </FormField>
+          </FormSection>
 
-          <div>
-            <SectionLabel right="câu chứa từ + bản dịch">Câu ví dụ</SectionLabel>
-            <div className="rounded-2xl border-2 border-border bg-card px-4 py-3.5 space-y-1">
-              <InlineEditable
+          <FormSection icon={MessageSquare} title="Câu ví dụ" description="Câu chứa từ kèm bản dịch tham khảo">
+            <FormField label="Câu ví dụ tiếng Việt">
+              <Input
                 value={form.exampleSentence}
-                onChange={(v) => set('exampleSentence', v)}
+                onChange={(e) => set('exampleSentence', e.target.value)}
                 placeholder="VD: Tôi xin chào bạn."
-                className="text-lg font-semibold"
-                ariaLabel="Câu ví dụ tiếng Việt"
               />
-              <InlineEditable
+            </FormField>
+
+            <FormField label="Bản dịch câu ví dụ">
+              <Input
                 value={form.exampleTranslation}
-                onChange={(v) => set('exampleTranslation', v)}
+                onChange={(e) => set('exampleTranslation', e.target.value)}
                 placeholder="VD: I greet you."
-                className="text-sm text-muted-foreground"
-                ariaLabel="Bản dịch câu ví dụ"
               />
-            </div>
-          </div>
+            </FormField>
+          </FormSection>
 
-          <div>
-            <SectionLabel right="bản ghi tiếng Việt của từ">Phát âm</SectionLabel>
-            <MediaUpload kind="audio" value={form.audioUrl || null} onChange={(url) => set('audioUrl', url ?? '')} />
-          </div>
+          <FormSection icon={Volume2} title="Phát âm" description="Bản ghi tiếng Việt của từ">
+            <FormField label="Tệp âm thanh">
+              <MediaUpload
+                kind="audio"
+                value={form.audioUrl || null}
+                onChange={(url) => set('audioUrl', url ?? '')}
+              />
+            </FormField>
+          </FormSection>
 
-          <div>
-            <SectionLabel right="ảnh minh hoạ nghĩa của từ">Hình ảnh</SectionLabel>
-            <MediaUpload kind="image" value={form.imageUrl || null} onChange={(url) => set('imageUrl', url ?? '')} />
-          </div>
+          <FormSection icon={Gauge} title="Độ khó" description="Mức độ khó của từ vựng">
+            <FormField label="Mức độ">
+              <div className="grid grid-cols-5 gap-2">
+                {[1, 2, 3, 4, 5].map((lvl) => {
+                  const active = form.difficultyLevel === lvl
+                  return (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => set('difficultyLevel', lvl)}
+                      className={`flex items-center justify-center rounded-lg border-2 px-3 py-2.5 transition-colors ${
+                        active
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border bg-card hover:border-foreground/30'
+                      }`}
+                    >
+                      <span
+                        className={`text-xs font-bold ${
+                          active ? 'text-foreground' : 'text-muted-foreground'
+                        }`}
+                      >
+                        {DIFFICULTY_LABELS[lvl]}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </FormField>
+          </FormSection>
+        </form>
 
-          <div>
-            <SectionLabel>Độ khó</SectionLabel>
-            <DifficultyRow value={form.difficultyLevel} onChange={(v) => set('difficultyLevel', v)} />
-          </div>
-        </ComposerCard>
+        <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
+          <Button asChild variant="ghost">
+            <Link to={backPath}>Hủy</Link>
+          </Button>
+          <Button type="submit" form="vocabulary-form" disabled={submitting}>
+            <Save className="h-4 w-4" />
+            {submitting ? 'Đang lưu...' : mode === 'edit' ? 'Cập nhật' : 'Tạo từ vựng'}
+          </Button>
+        </div>
       </div>
-
-      <StickySaveBar
-        contextLabel={
-          <>
-            {mode === 'edit' ? 'Đang soạn từ vựng' : 'Đang thêm từ vựng mới'} ·{' '}
-            <span className="font-semibold text-foreground">{form.word || '…'}</span>
-          </>
-        }
-        backTo={backPath}
-        submitting={submitting}
-        submitLabel={mode === 'edit' ? 'Cập nhật' : 'Tạo từ vựng'}
-        onSave={save}
-      />
     </div>
   )
 }

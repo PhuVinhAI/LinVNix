@@ -77,7 +77,7 @@ export function TrendsSection() {
   return (
     <SectionCard
       title="Xu hướng hoạt động"
-      hint="Theo ngay lich Viet Nam - luot tra loi, bai hoc hoan thanh va phien AI"
+      hint="Theo ngày lịch Việt Nam — lượt trả lời, bài học hoàn thành và phiên AI"
       icon={TrendingUp}
       iconTint={INDIGO}
       actions={windowPicker}

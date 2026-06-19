@@ -1,20 +1,15 @@
-import { useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { useEffect, useState, type FormEvent } from 'react'
+import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { Lightbulb, Plus, Trash2 } from 'lucide-react'
+import { ArrowLeft, FileText, Gauge, Lightbulb, ListOrdered, Plus, Save, StickyNote, Trash2 } from 'lucide-react'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
+import { Textarea } from '../../components/ui/textarea'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
-import { InlineEditable } from '../../components/admin/InlineEditable'
+import { FormField, FormSection } from '../../components/admin/FormSection'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { GrammarRule } from '../../features/learning/types'
-import {
-  ComposerCard,
-  DIFFICULTY_DOT,
-  DIFFICULTY_LABELS,
-  DifficultyRow,
-  NotesField,
-  SectionLabel,
-  StickySaveBar,
-} from './authoring-ui'
+import { DIFFICULTY_LABELS } from './authoring-ui'
 import { learningPath } from './route-utils'
 
 type ExampleItem = { vi: string; en: string; note?: string }
@@ -48,7 +43,7 @@ function fromRule(r: GrammarRule): FormState {
   }
 }
 
-/** Soạn một Quy tắc ngữ pháp — cùng ngôn ngữ thiết kế với form câu hỏi. */
+/** Soạn một Quy tắc ngữ pháp — form chuẩn với FormSection/FormField. */
 export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const { lessonId, id } = useParams()
   const navigate = useNavigate()
@@ -72,7 +67,8 @@ export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const updateExample = (index: number, patch: Partial<ExampleItem>) =>
     set('examples', form.examples.map((ex, i) => (i === index ? { ...ex, ...patch } : ex)))
 
-  const save = async () => {
+  const submit = async (e: FormEvent) => {
+    e.preventDefault()
     if (!form.title.trim()) {
       toast.error('Chưa nhập tiêu đề quy tắc')
       return
@@ -113,144 +109,183 @@ export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
   }
 
   return (
-    <div className="flex min-h-full flex-col">
-      <div className="space-y-6 flex-1">
-        <Breadcrumbs
-          items={[
-            { label: lesson?.title ?? 'Bài học', href: learningPath.lesson(lessonId) },
-            { label: 'Nội dung bài học', href: learningPath.lessonStageContent(lessonId) },
-            { label: 'Quy tắc ngữ pháp', href: backPath },
-            { label: mode === 'edit' ? 'Soạn quy tắc' : 'Thêm quy tắc mới' },
-          ]}
-        />
+    <div className="space-y-6">
+      <Breadcrumbs
+        items={[
+          { label: lesson?.title ?? 'Bài học', href: learningPath.lesson(lessonId) },
+          { label: 'Nội dung bài học', href: learningPath.lessonStageContent(lessonId) },
+          { label: 'Quy tắc ngữ pháp', href: backPath },
+          { label: mode === 'edit' ? 'Sửa quy tắc' : 'Thêm quy tắc' },
+        ]}
+      />
 
-        <ComposerCard
-          Icon={Lightbulb}
-          iconClass="bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300"
-          typeLabel="Quy tắc ngữ pháp"
-          statusRight={
-            <span className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground">
-              <span className={`h-1.5 w-1.5 rounded-full ${DIFFICULTY_DOT[form.difficultyLevel]}`} />
-              {DIFFICULTY_LABELS[form.difficultyLevel]}
-            </span>
-          }
-        >
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
+            <Link to={backPath}>
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
           <div>
-            <SectionLabel>Tiêu đề quy tắc</SectionLabel>
-            <InlineEditable
-              value={form.title}
-              onChange={(v) => set('title', v)}
-              placeholder='Bấm để nhập, VD: Câu khẳng định với "là"'
-              className="text-2xl sm:text-3xl font-bold leading-snug text-foreground py-1"
-              ariaLabel="Tiêu đề quy tắc"
-              autoFocus={mode === 'create'}
-            />
+            <h1 className="text-3xl font-bold tracking-tight">
+              {mode === 'edit' ? 'Sửa quy tắc ngữ pháp' : 'Tạo quy tắc ngữ pháp'}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              {mode === 'edit'
+                ? 'Cập nhật cấu trúc, giải thích và ví dụ'
+                : 'Điền cấu trúc, giải thích và ví dụ song ngữ'}
+            </p>
           </div>
+        </div>
 
-          <div>
-            <SectionLabel right="công thức ngắn gọn">Cấu trúc</SectionLabel>
-            <div className="rounded-2xl border-2 border-border bg-muted/30 px-4 py-3">
-              <InlineEditable
-                value={form.structure}
-                onChange={(v) => set('structure', v)}
-                placeholder="VD: S + là + N"
-                className="font-mono text-lg font-semibold tracking-wide"
-                ariaLabel="Cấu trúc"
-                multiline={false}
+        <form id="grammar-form" onSubmit={submit} className="space-y-8">
+          <FormSection icon={Lightbulb} title="Thông tin quy tắc" description="Tiêu đề và công thức ngắn">
+            <FormField label="Tiêu đề quy tắc" required>
+              <Input
+                value={form.title}
+                onChange={(e) => set('title', e.target.value)}
+                placeholder='VD: Câu khẳng định với "là"'
+                autoFocus={mode === 'create'}
+                required
               />
-            </div>
-          </div>
+            </FormField>
 
-          <div>
-            <SectionLabel>Giải thích</SectionLabel>
-            <InlineEditable
-              value={form.explanation}
-              onChange={(v) => set('explanation', v)}
-              placeholder="Bấm để viết giải thích cách dùng, ngữ cảnh, lưu ý…"
-              className="text-base leading-relaxed"
-              ariaLabel="Giải thích"
-            />
-          </div>
+            <FormField label="Cấu trúc" help="Công thức ngắn gọn, VD: S + là + N">
+              <Input
+                value={form.structure}
+                onChange={(e) => set('structure', e.target.value)}
+                placeholder="VD: S + là + N"
+                className="font-mono"
+              />
+            </FormField>
+          </FormSection>
 
-          <div>
-            <SectionLabel right="câu tiếng Việt + bản dịch + ghi chú">Ví dụ song ngữ</SectionLabel>
-            <div className="space-y-2.5">
+          <FormSection icon={FileText} title="Giải thích" description="Cách dùng, ngữ cảnh, lưu ý">
+            <FormField label="Phần giải thích" required>
+              <Textarea
+                value={form.explanation}
+                onChange={(e) => set('explanation', e.target.value)}
+                placeholder="Viết giải thích cách dùng, ngữ cảnh, lưu ý…"
+                className="min-h-32"
+                required
+              />
+            </FormField>
+          </FormSection>
+
+          <FormSection icon={ListOrdered} title="Ví dụ song ngữ" description="Câu tiếng Việt + bản dịch + ghi chú">
+            <div className="space-y-3">
               {form.examples.map((ex, index) => (
                 <div
                   key={index}
-                  className="group flex items-start gap-3 rounded-2xl border-2 border-border bg-card px-4 py-3.5 transition-colors hover:border-foreground/30"
+                  className="rounded-lg border-2 border-border bg-card p-4 space-y-3"
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 text-sm font-bold tabular-nums text-blue-700 dark:text-blue-300 mt-0.5">
-                    {index + 1}
-                  </span>
-                  <div className="flex-1 min-w-0 space-y-0.5">
-                    <InlineEditable
-                      value={ex.vi}
-                      onChange={(v) => updateExample(index, { vi: v })}
-                      placeholder="Câu tiếng Việt, VD: Tôi là sinh viên."
-                      className="text-lg font-semibold"
-                      ariaLabel={`Ví dụ ${index + 1} tiếng Việt`}
-                    />
-                    <InlineEditable
-                      value={ex.en}
-                      onChange={(v) => updateExample(index, { en: v })}
-                      placeholder="Bản dịch, VD: I am a student."
-                      className="text-sm text-muted-foreground"
-                      ariaLabel={`Ví dụ ${index + 1} bản dịch`}
-                    />
-                    <InlineEditable
-                      value={ex.note ?? ''}
-                      onChange={(v) => updateExample(index, { note: v })}
-                      placeholder="Ghi chú (không bắt buộc)"
-                      className="text-xs text-muted-foreground/80 italic"
-                      ariaLabel={`Ví dụ ${index + 1} ghi chú`}
-                    />
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 text-xs font-bold tabular-nums text-blue-700 dark:text-blue-300">
+                      {index + 1}
+                    </span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                      onClick={() =>
+                        set('examples', form.examples.filter((_, i) => i !== index))
+                      }
+                      aria-label="Xóa ví dụ"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => set('examples', form.examples.filter((_, i) => i !== index))}
-                    aria-label="Xóa ví dụ"
-                    className="h-9 w-9 shrink-0 rounded-full text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                  >
-                    <Trash2 className="h-4 w-4 mx-auto" />
-                  </button>
+
+                  <FormField label="Câu tiếng Việt">
+                    <Input
+                      value={ex.vi}
+                      onChange={(e) => updateExample(index, { vi: e.target.value })}
+                      placeholder="VD: Tôi là sinh viên."
+                    />
+                  </FormField>
+
+                  <FormField label="Bản dịch">
+                    <Input
+                      value={ex.en}
+                      onChange={(e) => updateExample(index, { en: e.target.value })}
+                      placeholder="VD: I am a student."
+                    />
+                  </FormField>
+
+                  <FormField label="Ghi chú" help="Không bắt buộc">
+                    <Input
+                      value={ex.note ?? ''}
+                      onChange={(e) => updateExample(index, { note: e.target.value })}
+                      placeholder="Ghi chú cho ví dụ này"
+                    />
+                  </FormField>
                 </div>
               ))}
+
+              <button
+                type="button"
+                onClick={() => set('examples', [...form.examples, { vi: '', en: '' }])}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-transparent px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                Thêm ví dụ
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => set('examples', [...form.examples, { vi: '', en: '' }])}
-              className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-transparent px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              Thêm ví dụ
-            </button>
-          </div>
+          </FormSection>
 
-          <div>
-            <SectionLabel>Độ khó</SectionLabel>
-            <DifficultyRow value={form.difficultyLevel} onChange={(v) => set('difficultyLevel', v)} />
-          </div>
+          <FormSection icon={Gauge} title="Độ khó" description="Mức độ khó của quy tắc">
+            <FormField label="Mức độ">
+              <div className="grid grid-cols-5 gap-2">
+                {[1, 2, 3, 4, 5].map((lvl) => {
+                  const active = form.difficultyLevel === lvl
+                  return (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => set('difficultyLevel', lvl)}
+                      className={`flex items-center justify-center rounded-lg border-2 px-3 py-2.5 transition-colors ${
+                        active
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border bg-card hover:border-foreground/30'
+                      }`}
+                    >
+                      <span
+                        className={`text-xs font-bold ${
+                          active ? 'text-foreground' : 'text-muted-foreground'
+                        }`}
+                      >
+                        {DIFFICULTY_LABELS[lvl]}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </FormField>
+          </FormSection>
 
-          <div>
-            <SectionLabel right="không hiện cho học viên">Ghi chú giảng dạy</SectionLabel>
-            <NotesField value={form.notes} onChange={(v) => set('notes', v)} />
-          </div>
-        </ComposerCard>
+          <FormSection icon={StickyNote} title="Ghi chú giảng dạy" description="Không hiện cho học viên">
+            <FormField label="Ghi chú">
+              <Textarea
+                value={form.notes}
+                onChange={(e) => set('notes', e.target.value)}
+                placeholder="Ghi chú dành cho người soạn..."
+                className="min-h-24"
+              />
+            </FormField>
+          </FormSection>
+        </form>
+
+        <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
+          <Button asChild variant="ghost">
+            <Link to={backPath}>Hủy</Link>
+          </Button>
+          <Button type="submit" form="grammar-form" disabled={submitting}>
+            <Save className="h-4 w-4" />
+            {submitting ? 'Đang lưu...' : mode === 'edit' ? 'Cập nhật' : 'Tạo quy tắc'}
+          </Button>
+        </div>
       </div>
-
-      <StickySaveBar
-        contextLabel={
-          <>
-            {mode === 'edit' ? 'Đang soạn quy tắc' : 'Đang thêm quy tắc mới'} ·{' '}
-            <span className="font-semibold text-foreground">{form.title || '…'}</span>
-          </>
-        }
-        backTo={backPath}
-        submitting={submitting}
-        submitLabel={mode === 'edit' ? 'Cập nhật' : 'Tạo quy tắc'}
-        onSave={save}
-      />
     </div>
   )
 }
