@@ -132,7 +132,6 @@ erDiagram
     jsonb dialect_variants
     jsonb audio_urls
     enum region
-    int difficulty_level
     uuid lesson_id FK
   }
 
@@ -172,7 +171,6 @@ erDiagram
     varchar structure
     jsonb examples
     text notes
-    int difficulty_level
     uuid lesson_id FK
   }
 
@@ -209,7 +207,6 @@ erDiagram
     jsonb correct_answer
     text explanation
     int order_index
-    int difficulty_level
     uuid exercise_id FK
   }
 

@@ -22,7 +22,6 @@
                     "selectedChoice": "răng",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "\"Răng\" là cách nói \"thế nào\" đặc trưng của phương ngữ miền Trung.",
                   "options": {
@@ -64,7 +63,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 5,
                   "question_type": "matching",
                   "explanation": "Bắc: thế nào, Trung: răng, Nam: sao.",
                   "options": {
@@ -103,7 +101,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "\"Răng\" thay cho \"sao\" hay \"thế nào\" trong phương ngữ Trung.",
                   "options": {
@@ -125,7 +122,6 @@
                     "translation": "Cái nầy là cái gì?",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "Nam dùng \"nầy\" thay cho \"này\".",
                   "options": {
@@ -237,7 +233,6 @@
                     "SOUTHERN": "phương ngữ",
                     "STANDARD": "phương ngữ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phương ngữ Bắc và Nam khác nhau nhiều về từ vựng.",
                   "example_translation": "Northern and Southern dialects differ greatly in vocabulary.",
                   "image_url": null,
@@ -256,7 +251,6 @@
                     "SOUTHERN": "biến thể",
                     "STANDARD": "biến thể"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Mỗi vùng miền có biến thể từ vựng riêng.",
                   "example_translation": "Each region has its own vocabulary variant.",
                   "image_url": null,
@@ -275,7 +269,6 @@
                     "SOUTHERN": "khẩu âm",
                     "STANDARD": "khẩu âm"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Cô ấy nói khẩu âm miền Trung rất rõ.",
                   "example_translation": "She speaks with a very clear Central accent.",
                   "image_url": null,
@@ -294,7 +287,6 @@
                     "SOUTHERN": "giọng Bắc",
                     "STANDARD": "giọng Bắc"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Anh ấy nói giọng Bắc, chắc là người Hà Nội.",
                   "example_translation": "He speaks with a Northern accent, probably from Hanoi.",
                   "image_url": null,
@@ -313,7 +305,6 @@
                     "SOUTHERN": "giọng Trung",
                     "STANDARD": "giọng Trung"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Người Huế nói giọng Trung, nghe rất ngọt.",
                   "example_translation": "People from Hue speak with a Central accent, sounds very sweet.",
                   "image_url": null,
@@ -332,7 +323,6 @@
                     "SOUTHERN": "giọng Nam",
                     "STANDARD": "giọng Nam"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Giọng Nam nghe vui và dễ thương lắm.",
                   "example_translation": "Southern accent sounds fun and cute.",
                   "image_url": null,
@@ -351,7 +341,6 @@
                     "SOUTHERN": "từ địa phương",
                     "STANDARD": "từ địa phương"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "\"Răng\" là từ địa phương của miền Trung.",
                   "example_translation": "\"Răng\" is a regional word of Central Vietnam.",
                   "image_url": null,
@@ -370,7 +359,6 @@
                     "SOUTHERN": "thanh điệu",
                     "STANDARD": "thanh điệu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Phương ngữ Bắc phân biệt rõ thanh điệu hỏi và ngã.",
                   "example_translation": "Northern dialect clearly distinguishes hỏi and ngã tones.",
                   "image_url": null,
@@ -389,7 +377,6 @@
                     "SOUTHERN": "hỏi ngã",
                     "STANDARD": "hỏi ngã"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Người Nam hay trộn hai thanh hỏi ngã vào nhau.",
                   "example_translation": "Southerners often mix the hỏi and ngã tones together.",
                   "image_url": null,
@@ -408,7 +395,6 @@
                     "SOUTHERN": "sao",
                     "STANDARD": "thế nào"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Răng mà mầy nói rứa? — Sao mà cậu nói vậy?",
                   "example_translation": "How come you say that?",
                   "image_url": null,
@@ -427,7 +413,6 @@
                     "SOUTHERN": "bây giờ",
                     "STANDARD": "bây giờ"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Bây chừ tui phải đi rồi.",
                   "example_translation": "Now I have to go.",
                   "image_url": null,
@@ -446,7 +431,6 @@
                     "SOUTHERN": "nầy",
                     "STANDARD": "này"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Cái nầy bao nhiêu tiền?",
                   "example_translation": "How much is this one?",
                   "image_url": null,
@@ -465,7 +449,6 @@
                     "SOUTHERN": "kia",
                     "STANDARD": "kia"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Cái tê là của ai?",
                   "example_translation": "Whose is that one?",
                   "image_url": null,
@@ -484,7 +467,6 @@
                     "SOUTHERN": "đâu",
                     "STANDARD": "đâu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Móc mô đi rứa? — Đi đâu đấy?",
                   "example_translation": "Where are you going?",
                   "image_url": null,
@@ -503,7 +485,6 @@
                     "SOUTHERN": "phát âm",
                     "STANDARD": "phát âm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phát âm chữ \"tr\" khác nhau giữa Bắc và Nam.",
                   "example_translation": "The pronunciation of \"tr\" differs between North and South.",
                   "image_url": null,
@@ -524,7 +505,6 @@
                     "selectedChoice": "nghe",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "\"Nghe\" là trợ từ cuối câu đặc trưng của phương ngữ Nam.",
                   "options": {
@@ -545,7 +525,6 @@
                     "translation": "Răng mà trờ nay nóng rứa?",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "Trung: sao → răng, hôm nay → trờ nay, vậy → rứa.",
                   "options": {
@@ -569,7 +548,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Ạ là trợ từ kính ngữ đặc trưng của phương ngữ Bắc.",
                   "options": {
@@ -596,7 +574,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 5,
                   "question_type": "ordering",
                   "explanation": "Câu hỏi Trung: \"Mi đi mô rứa?\" (Cậu đi đâu vậy?)",
                   "options": {
@@ -615,7 +592,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Hello, auntie! (polite)",
@@ -639,7 +615,6 @@
                   "title": "Trợ từ cuối câu theo phương ngữ"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "I'm telling you! (Central)",
@@ -663,7 +638,6 @@
                   "title": "Đại từ nhân xưng vùng miền"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Where are you going? (Northern)",
@@ -784,7 +758,6 @@
                     "SOUTHERN": "vậy",
                     "STANDARD": "vậy"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Sao mà nói rứa? — Sao mà nói vậy?",
                   "example_translation": "Why do you speak like that?",
                   "image_url": null,
@@ -803,7 +776,6 @@
                     "SOUTHERN": "nghe",
                     "STANDARD": "ạ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Vâng ạ, cháu biết rồi ạ!",
                   "example_translation": "Yes, I understand!",
                   "image_url": null,
@@ -822,7 +794,6 @@
                     "SOUTHERN": "nghe",
                     "STANDARD": "nhé"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đi ăn cơm nghe!",
                   "example_translation": "Let's eat, ok?",
                   "image_url": null,
@@ -841,7 +812,6 @@
                     "SOUTHERN": "nè",
                     "STANDARD": "này"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Cái nè là của tui nè!",
                   "example_translation": "This one is mine!",
                   "image_url": null,
@@ -860,7 +830,6 @@
                     "SOUTHERN": "data",
                     "STANDARD": "cơ"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Tôi bảo là đúng cơ mà!",
                   "example_translation": "I told you it is true!",
                   "image_url": null,
@@ -881,7 +850,6 @@
                     "transcript": "Răng mà trờ nay nóng rứa? Mi đi mô rứa?",
                     "type": "listening"
                   },
-                  "difficulty_level": 5,
                   "question_type": "listening",
                   "explanation": "rứa (vậy), mô (đâu), răng (sao) là đặc trưng phương ngữ Trung.",
                   "options": {
@@ -903,7 +871,6 @@
                     "selectedChoice": "Nam",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "\"Nghe\" là trợ từ đặc trưng phương ngữ Nam.",
                   "options": {
@@ -941,7 +908,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Ạ và nhỉ = Bắc; rứa = Trung; nghe = Nam.",
                   "options": {
@@ -1053,7 +1019,6 @@
                     "SOUTHERN": "ngữ điệu",
                     "STANDARD": "ngữ điệu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ngữ điệu người Bắc nghe thanh thoát hơn.",
                   "example_translation": "Northern intonation sounds more melodic.",
                   "image_url": null,
@@ -1072,7 +1037,6 @@
                     "SOUTHERN": "nhận diện",
                     "STANDARD": "nhận diện"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bạn cần nhận diện khẩu âm để hiểu đúng.",
                   "example_translation": "You need to recognize the accent to understand correctly.",
                   "image_url": null,
@@ -1093,7 +1057,6 @@
                     "selectedChoice": "ch",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "Ở Nam, tr và ch phát âm giống nhau.",
                   "options": {
@@ -1117,7 +1080,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "Thanh hỏi và ngã gộp chung ở phương ngữ Nam.",
                   "options": {
@@ -1142,7 +1104,6 @@
                     "translation": "giời ơi",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "Người Nam phát âm tr như gi, nên trời nghe như giời.",
                   "options": {
@@ -1248,7 +1209,6 @@
                     "SOUTHERN": "phụ âm đầu",
                     "STANDARD": "phụ âm đầu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Phụ âm đầu tr và ch giống nhau ở phương ngữ Nam.",
                   "example_translation": "Initial consonants tr and ch are the same in the Southern dialect.",
                   "image_url": null,
@@ -1267,7 +1227,6 @@
                     "SOUTHERN": "âm cuối",
                     "STANDARD": "âm cuối"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Âm cuối -c và -t khó phân biệt khi nghe phương ngữ Trung.",
                   "example_translation": "Final consonants -c and -t are hard to distinguish in Central dialect.",
                   "image_url": null,
@@ -1298,7 +1257,6 @@
                     "selectedChoice": "bất-",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "bất- (不) mang nghĩa phủ định: bất bình (không bình đẳng), bất hợp pháp (không hợp pháp).",
                   "options": {
@@ -1336,7 +1294,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Hậu tố Hán Việt rất năng sản.",
                   "options": {
@@ -1371,7 +1328,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "vô- (無) nghĩa là \"không có\": vô hình = không hình, vô giá = không giá.",
                   "options": {
@@ -1393,7 +1349,6 @@
                     "translation": "hiện đại hóa",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "hiện đại hóa = hiện đại (modern) + hóa (-ize).",
                   "options": {
@@ -1467,7 +1422,6 @@
                     "SOUTHERN": "Hán Việt",
                     "STANDARD": "Hán Việt"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Từ Hán Việt chiếm phần lớn từ vựng học thuật.",
                   "example_translation": "Sino-Vietnamese words make up most academic vocabulary.",
                   "image_url": null,
@@ -1486,7 +1440,6 @@
                     "SOUTHERN": "từ mượn",
                     "STANDARD": "từ mượn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "\"Sơ mi\" là từ mượn từ tiếng Pháp \"chemise\".",
                   "example_translation": "\"Sơ mi\" is a loanword from French \"chemise\".",
                   "image_url": null,
@@ -1505,7 +1458,6 @@
                     "SOUTHERN": "từ gốc Hán",
                     "STANDARD": "từ gốc Hán"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "\"Đại học\" là từ gốc Hán, nghĩa đen là \"học lớn\".",
                   "example_translation": "\"Đại học\" is a Chinese-origin word, literally \"great learning\".",
                   "image_url": null,
@@ -1524,7 +1476,6 @@
                     "SOUTHERN": "âm Hán Việt",
                     "STANDARD": "âm Hán Việt"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Chữ 明 đọc theo âm Hán Việt là \"minh\".",
                   "example_translation": "The character 明 is read as \"minh\" in Sino-Vietnamese.",
                   "image_url": null,
@@ -1543,7 +1494,6 @@
                     "SOUTHERN": "Việt hóa",
                     "STANDARD": "Việt hóa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Từ \"xà phòng\" đã được Việt hóa từ tiếng Pháp \"savon\".",
                   "example_translation": "\"Xà phòng\" was Vietnamized from French \"savon\".",
                   "image_url": null,
@@ -1562,7 +1512,6 @@
                     "SOUTHERN": "ngoại lai",
                     "STANDARD": "ngoại lai"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "\"Ga\" là từ ngoại lai từ tiếng Pháp.",
                   "example_translation": "\"Ga\" is a foreign-origin word from French.",
                   "image_url": null,
@@ -1581,7 +1530,6 @@
                     "SOUTHERN": "bản địa",
                     "STANDARD": "bản địa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Từ \"vợ\" là từ bản địa, không phải Hán Việt.",
                   "example_translation": "\"Vợ\" is a native word, not Sino-Vietnamese.",
                   "image_url": null,
@@ -1600,7 +1548,6 @@
                     "SOUTHERN": "đồng nghĩa Hán Việt",
                     "STANDARD": "đồng nghĩa Hán Việt"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "\"Xe cộ\" và \"phương tiện\" là cặp đồng nghĩa Hán Việt.",
                   "example_translation": "\"Xe cộ\" and \"phương tiện\" are a Sino-Vietnamese synonym pair.",
                   "image_url": null,
@@ -1619,7 +1566,6 @@
                     "SOUTHERN": "dịch âm",
                     "STANDARD": "dịch âm"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "\"Bồ Đào Nha\" là dịch âm từ Portugal.",
                   "example_translation": "\"Bồ Đào Nha\" is a phonetic translation from Portugal.",
                   "image_url": null,
@@ -1638,7 +1584,6 @@
                     "SOUTHERN": "tiết Hán",
                     "STANDARD": "tiết Hán"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Mỗi tiết Hán tương ứng một chữ Hán.",
                   "example_translation": "Each Chinese morpheme corresponds to one Chinese character.",
                   "image_url": null,
@@ -1657,7 +1602,6 @@
                     "SOUTHERN": "bất bình",
                     "STANDARD": "bất bình"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Dân chúng nổi lên vì bất bình xã hội.",
                   "example_translation": "The people rose up due to social injustice.",
                   "image_url": null,
@@ -1676,7 +1620,6 @@
                     "SOUTHERN": "vô hình",
                     "STANDARD": "vô hình"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Sức mạnh văn hóa là vô hình nhưng vô giá.",
                   "example_translation": "Cultural power is invisible but invaluable.",
                   "image_url": null,
@@ -1695,7 +1638,6 @@
                     "SOUTHERN": "phản đối",
                     "STANDARD": "phản đối"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Sinh viên biểu tình phản đối chính sách mới.",
                   "example_translation": "Students protested opposing the new policy.",
                   "image_url": null,
@@ -1714,7 +1656,6 @@
                     "SOUTHERN": "hiện đại hóa",
                     "STANDARD": "hiện đại hóa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Quá trình hiện đại hóa diễn ra nhanh chóng.",
                   "example_translation": "The modernization process happened rapidly.",
                   "image_url": null,
@@ -1733,7 +1674,6 @@
                     "SOUTHERN": "ngôn ngữ học",
                     "STANDARD": "ngôn ngữ học"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Ngôn ngữ học nghiên cứu cấu trúc ngôn ngữ.",
                   "example_translation": "Linguistics studies language structure.",
                   "image_url": null,
@@ -1754,7 +1694,6 @@
                     "selectedChoice": "Ghép đồng nghĩa",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "\"Phụ\" = cha, \"mẫu\" = mẹ — hai tiết đồng nghĩa bổ sung.",
                   "options": {
@@ -1777,7 +1716,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Hậu tố -học tạo danh từ ngành khoa học.",
                   "options": {
@@ -1816,7 +1754,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 5,
                   "question_type": "matching",
                   "explanation": "Mỗi loại cấu trúc có đặc điểm nhận diện riêng.",
                   "options": {
@@ -1849,7 +1786,6 @@
                     "translation": "âm = tối, dương = sáng — ghép phản nghĩa, chỉ triết lý vũ trụ",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "âm dương là ghép phản nghĩa tạo khái niệm triết học.",
                   "options": {
@@ -1869,7 +1805,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Illegal = not legal",
@@ -1893,7 +1828,6 @@
                   "title": "Tiền tố Hán Việt tạo từ mới"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Industry + -ize = industrialize",
@@ -1917,7 +1851,6 @@
                   "title": "Hậu tố Hán Việt tạo từ loại mới"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Parents = father + mother",
@@ -1987,7 +1920,6 @@
                     "SOUTHERN": "quốc gia",
                     "STANDARD": "quốc gia"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Lợi ích quốc gia phải đặt lên trên hết.",
                   "example_translation": "National interests must be placed above all.",
                   "image_url": null,
@@ -2006,7 +1938,6 @@
                     "SOUTHERN": "sơn hà",
                     "STANDARD": "sơn hà"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Nam quốc sơn hà nam đế cư — Sông núi nước Nam, vua Nam ở.",
                   "example_translation": "The Southern country mountains and rivers, the Southern emperor resides.",
                   "image_url": null,
@@ -2027,7 +1958,6 @@
                     "translation": "Dựa theo Hiến pháp",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "\"Căn cứ\" là Hán Việt trang trọng, nghĩa thông thường là \"dựa theo\".",
                   "options": {
@@ -2067,7 +1997,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 5,
                   "question_type": "matching",
                   "explanation": "Biết chuyển Hán Việt sang Việt thuần giúp hiểu văn bản dễ hơn.",
                   "options": {
@@ -2100,7 +2029,6 @@
                     "selectedChoice": "Cộng hòa xã hội chủ nghĩa",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "Đây là tên chính thức của nước Việt Nam hiện tại.",
                   "options": {
@@ -2164,7 +2092,6 @@
                     "SOUTHERN": "Hiến pháp",
                     "STANDARD": "Hiến pháp"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Hiến pháp là đạo luật tối cao của quốc gia.",
                   "example_translation": "The constitution is the supreme law of the nation.",
                   "image_url": null,
@@ -2183,7 +2110,6 @@
                     "SOUTHERN": "nghị định",
                     "STANDARD": "nghị định"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Chính phủ ban hành nghị định mới về đất đai.",
                   "example_translation": "The government issued a new decree on land.",
                   "image_url": null,
@@ -2202,7 +2128,6 @@
                     "SOUTHERN": "thi hành",
                     "STANDARD": "thi hành"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Cơ quan thi hành phán quyết của tòa án.",
                   "example_translation": "The authority executes the court ruling.",
                   "image_url": null,
@@ -2223,7 +2148,6 @@
                     "selectedChoice": "Tiếng Pháp (poupée)",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "\"Búp bê\" mượn từ tiếng Pháp \"poupée\" (doll).",
                   "options": {
@@ -2261,7 +2185,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Tiếng Việt mượn từ nhiều nguồn: Pháp, Hán Việt, Anh.",
                   "options": {
@@ -2296,7 +2219,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "\"Mỹ\" (美) từ \"Mỹ Lợi Gia\" (America), rút gọn thành Mỹ.",
                   "options": {
@@ -2364,7 +2286,6 @@
                     "SOUTHERN": "xà phòng",
                     "STANDARD": "xà phòng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Rửa tay bằng xà phòng diệt khuẩn nhé.",
                   "example_translation": "Wash your hands with antibacterial soap.",
                   "image_url": null,
@@ -2383,7 +2304,6 @@
                     "SOUTHERN": "sơ mi",
                     "STANDARD": "sơ mi"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Anh mặc sơ mi trắng trông rất thanh lịch.",
                   "example_translation": "He wears a white shirt, looks very elegant.",
                   "image_url": null,
@@ -2402,7 +2322,6 @@
                     "SOUTHERN": "Bồ Đào Nha",
                     "STANDARD": "Bồ Đào Nha"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bồ Đào Nha nổi tiếng về rượu vang và bóng đá.",
                   "example_translation": "Portugal is famous for wine and football.",
                   "image_url": null,
@@ -2450,7 +2369,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 5,
                   "question_type": "matching",
                   "explanation": "Mỗi thể văn cổ có chức năng xã hội riêng.",
                   "options": {
@@ -2483,7 +2401,6 @@
                     "selectedChoice": "lục bát",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "Truyện Kiều gồm 3.254 câu lục bát — thể thơ 6-8 âm tiết xen kẽ.",
                   "options": {
@@ -2506,7 +2423,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "\"Trăm năm trong cõi người ta\" — câu lục đầu tiên Truyện Kiều.",
                   "options": {
@@ -2571,7 +2487,6 @@
                     "SOUTHERN": "cổ văn",
                     "STANDARD": "cổ văn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cổ văn Việt Nam để lại di sản phong phú.",
                   "example_translation": "Vietnamese classical literature leaves a rich heritage.",
                   "image_url": null,
@@ -2590,7 +2505,6 @@
                     "SOUTHERN": "Hán Nôm",
                     "STANDARD": "Hán Nôm"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Nghiên cứu Hán Nôm giúp hiểu văn bản cổ.",
                   "example_translation": "Studying Hán Nôm helps understand ancient texts.",
                   "image_url": null,
@@ -2609,7 +2523,6 @@
                     "SOUTHERN": "thơ Đường luật",
                     "STANDARD": "thơ Đường luật"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Thơ Đường luật yêu cầu đúng niêm luật, bằng trắc và vần điệu.",
                   "example_translation": "Đường luật poetry requires strict tonal rules and rhyming.",
                   "image_url": null,
@@ -2628,7 +2541,6 @@
                     "SOUTHERN": "lục bát",
                     "STANDARD": "lục bát"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Lục bát là thể thơ phổ biến nhất của dân gian Việt Nam.",
                   "example_translation": "Lục bát is the most popular Vietnamese verse form.",
                   "image_url": null,
@@ -2647,7 +2559,6 @@
                     "SOUTHERN": "ngâm",
                     "STANDARD": "ngâm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bà cụ hay ngâm thơ Kiều mỗi buổi chiều.",
                   "example_translation": "The old lady often recites Kiều poetry every evening.",
                   "image_url": null,
@@ -2666,7 +2577,6 @@
                     "SOUTHERN": "vịnh",
                     "STANDARD": "vịnh"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Nguyễn Du vịnh vẻ đẹp thiên nhiên trong Truyện Kiều.",
                   "example_translation": "Nguyễn Du eulogized the beauty of nature in The Tale of Kiều.",
                   "image_url": null,
@@ -2685,7 +2595,6 @@
                     "SOUTHERN": "tấu",
                     "STANDARD": "tấu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Quan đại thần dâng tấu xin vua giảm thuế.",
                   "example_translation": "The minister submitted a memorial asking to reduce taxes.",
                   "image_url": null,
@@ -2704,7 +2613,6 @@
                     "SOUTHERN": "chiếu",
                     "STANDARD": "chiếu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Vua Lý ban chiếu thiên đô năm 1010.",
                   "example_translation": "Emperor Lý issued the edict on moving the capital in 1010.",
                   "image_url": null,
@@ -2723,7 +2631,6 @@
                     "SOUTHERN": "hịch",
                     "STANDARD": "hịch"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Hịch tướng sĩ của Trần Hưng Đạo là kiệt tác văn chính luận.",
                   "example_translation": "Trần Hưng Đạo Call to Arms is a masterpiece of political prose.",
                   "image_url": null,
@@ -2742,7 +2649,6 @@
                     "SOUTHERN": "truyền kỳ",
                     "STANDARD": "truyền kỳ"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Truyền kỳ mạn lục của Nguyễn Dữ là tác phẩm nổi tiếng.",
                   "example_translation": "Nguyễn Dữ Truyền kỳ mạn lục is a famous fantasy tale collection.",
                   "image_url": null,
@@ -2763,7 +2669,6 @@
                     "selectedChoice": "Bổ ngữ trước, trung tâm sau",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "\"Đại\" (lớn = bổ ngữ) đứng trước \"học\" (trường = trung tâm).",
                   "options": {
@@ -2784,7 +2689,6 @@
                     "translation": "ngựa trắng",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "\"Bạch mã\" = bạch (trắng) + mã (ngựa) → Việt thuần: ngựa (trung tâm) + trắng (bổ ngữ).",
                   "options": {
@@ -2807,7 +2711,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "Câu cổ thường lược chủ ngữ khi đã rõ từ ngữ cảnh.",
                   "options": {
@@ -2833,7 +2736,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "White horse (Sino-VN) = horse white (native VN)",
@@ -2857,7 +2759,6 @@
                   "title": "Trật tự từ Hán Việt: bổ ngữ trước trung tâm"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Moving mountains filling seas, achievement built.",
@@ -2927,7 +2828,6 @@
                     "SOUTHERN": "đối ngẫu",
                     "STANDARD": "đối ngẫu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Đối ngẫu là thủ pháp quan trọng nhất trong văn biền ngẫu.",
                   "example_translation": "Parallelism is the most important device in parallel prose.",
                   "image_url": null,
@@ -2946,7 +2846,6 @@
                     "SOUTHERN": "biền ngẫu",
                     "STANDARD": "biền ngẫu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Văn biền ngẫu thịnh hành thời Lê sơ.",
                   "example_translation": "Parallel prose flourished in the early Lê period.",
                   "image_url": null,
@@ -2970,7 +2869,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 4,
                   "question_type": "ordering",
                   "explanation": "Lục bát luôn bắt đầu bằng câu lục (6 âm tiết) rồi câu bát (8).",
                   "options": {
@@ -2989,7 +2887,6 @@
                     "selectedChoice": "Chữ thứ 6",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "Chữ 6 câu lục vần với chữ 6 câu bát (vần chân chính).",
                   "options": {
@@ -3012,7 +2909,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "Vần: \"ta\" (chữ 6 lục) vần với \"là\" (chữ 6 bát). Chữ 8 \"nhau\" vần với chữ 6 lục tiếp: \"dâu\".",
                   "options": {
@@ -3077,7 +2973,6 @@
                     "SOUTHERN": "bằng trắc",
                     "STANDARD": "bằng trắc"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Luật bằng trắc trong thơ lục bát rất nghiêm ngặt.",
                   "example_translation": "The bằng-trắc rule in lục bát is very strict.",
                   "image_url": null,
@@ -3096,7 +2991,6 @@
                     "SOUTHERN": "vần chân",
                     "STANDARD": "vần chân"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Vần chân trong lục bát nối câu lục với câu bát.",
                   "example_translation": "End rhyme in lục bát connects lục and bát lines.",
                   "image_url": null,
@@ -3117,7 +3011,6 @@
                     "selectedChoice": "Trăm năm trong cõi người ta (B B T T B B)",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "\"Trăm(B) năm(B) trong(T) cõi(T) người(B) ta(B)\" đúng luật B B T T B B.",
                   "options": {
@@ -3140,7 +3033,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "Chữ 6 câu bát vần với chữ 6 câu lục (\"ta\"). \"Là\" vần bằng giàu với \"ta\".",
                   "options": {
@@ -3162,7 +3054,6 @@
                     "translation": "Chiều buông sông vắng mây / Sương giăng nếp lá thưa bay nhạt nhoà",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "Lục bát yêu cầu đúng luật bằng trắc và vần chân.",
                   "options": {
@@ -3227,7 +3118,6 @@
                     "SOUTHERN": "vần giàu",
                     "STANDARD": "vần giàu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Vần giàu nghe êm tai hơn vần nghèo.",
                   "example_translation": "Rich rhymes sound smoother than poor rhymes.",
                   "image_url": null,
@@ -3246,7 +3136,6 @@
                     "SOUTHERN": "vần nghèo",
                     "STANDARD": "vần nghèo"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Vần nghèo vẫn chấp nhận được trong thơ dân gian.",
                   "example_translation": "Poor rhymes are still acceptable in folk poetry.",
                   "image_url": null,
@@ -3277,7 +3166,6 @@
                     "selectedChoice": "Nói một đằng làm một nẻo",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "\"Đánh trống bỏ dùi\" = nói mà không làm, hứa mà không giữ.",
                   "options": {
@@ -3315,7 +3203,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Tiếng lóng thay đổi nhanh theo thế hệ.",
                   "options": {
@@ -3350,7 +3237,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "Hồ Xuân Hương dùng chơi chữ và nói lái tài tình trong thơ.",
                   "options": {
@@ -3378,7 +3264,6 @@
                     "translation": "Anh ấy kể chuyện dí dỏm lắm",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "\"Dí dỏm\" = witty, droll — cách nói hài hước thông minh.",
                   "options": {
@@ -3443,7 +3328,6 @@
                     "SOUTHERN": "hài hước",
                     "STANDARD": "hài hước"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cô ấy nói chuyện hài hước lắm.",
                   "example_translation": "She speaks very humorously.",
                   "image_url": null,
@@ -3462,7 +3346,6 @@
                     "SOUTHERN": "chơi chữ",
                     "STANDARD": "chơi chữ"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Hồ Xuân Hương là nữ thi sĩ chơi chữ bậc nhất.",
                   "example_translation": "Hồ Xuân Hương is the foremost wordplay poetess.",
                   "image_url": null,
@@ -3481,7 +3364,6 @@
                     "SOUTHERN": "nói lái",
                     "STANDARD": "nói lái"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Nói lái là trò chơi chữ phổ biến ở miền Nam.",
                   "example_translation": "Spoonerism is a popular wordplay in the South.",
                   "image_url": null,
@@ -3500,7 +3382,6 @@
                     "SOUTHERN": "thành ngữ",
                     "STANDARD": "thành ngữ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thành ngữ tiếng Việt rất phong phú và sinh động.",
                   "example_translation": "Vietnamese idioms are very rich and vivid.",
                   "image_url": null,
@@ -3519,7 +3400,6 @@
                     "SOUTHERN": "lóng",
                     "STANDARD": "lóng"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Tiếng lóng thay đổi nhanh theo từng thế hệ.",
                   "example_translation": "Slang changes quickly across generations.",
                   "image_url": null,
@@ -3538,7 +3418,6 @@
                     "SOUTHERN": "tục ngữ",
                     "STANDARD": "tục ngữ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tục ngữ là kinh nghiệm dân gian đúc kết qua hàng ngàn năm.",
                   "example_translation": "Proverbs are folk wisdom distilled over thousands of years.",
                   "image_url": null,
@@ -3557,7 +3436,6 @@
                     "SOUTHERN": "châm biếm",
                     "STANDARD": "châm biếm"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Vũ Trọng Phụng viết châm biếm xã hội thực dân rất sắc sảo.",
                   "example_translation": "Vũ Trọng Phụng wrote biting colonial satire.",
                   "image_url": null,
@@ -3576,7 +3454,6 @@
                     "SOUTHERN": "chế",
                     "STANDARD": "chế"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Giới trẻ hay chế meme trên mạng.",
                   "example_translation": "Young people often parody memes online.",
                   "image_url": null,
@@ -3595,7 +3472,6 @@
                     "SOUTHERN": "dí dỏm",
                     "STANDARD": "dí dỏm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Anh ấy kể chuyện dí dỏm lắm.",
                   "example_translation": "He tells stories very wittily.",
                   "image_url": null,
@@ -3614,7 +3490,6 @@
                     "SOUTHERN": "uyển chuyển",
                     "STANDARD": "uyển chuyển"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Nói uyển chuyển tránh được mất mặt đối phương.",
                   "example_translation": "Speaking tactfully avoids making the other party lose face.",
                   "image_url": null,
@@ -3635,7 +3510,6 @@
                     "selectedChoice": "Hoán đổi phụ âm đầu hai chữ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "Nói lái đổi phụ âm đầu của hai chữ cho nhau tạo từ mới hài hước.",
                   "options": {
@@ -3658,7 +3532,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "Hoán đổi phụ âm đầu: \"th\" và \"l\" đổi chỗ.",
                   "options": {
@@ -3680,7 +3553,6 @@
                     "selectedChoice": "Ẩn dụ hai nghĩa",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "\"Bánh trôi nước\" dùng ẩn dụ hai nghĩa: tả bánh trôi bề ngoài, ám chỉ thân phận phụ nữ bề trong.",
                   "options": {
@@ -3699,7 +3571,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "\"new jar old wine\" → spoonerism → humorous nonsense",
@@ -3723,7 +3594,6 @@
                   "title": "Nói lái: hoán đổi phụ âm đầu"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "\"Floating cake\" — describes the cake, implies women fate",
@@ -3747,7 +3617,6 @@
                   "title": "Ẩn dụ hai nghĩa trong thơ Việt Nam"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "\"minh\" = bright (明) or dark (冥) — same Sino-Vietnamese reading",
@@ -3817,7 +3686,6 @@
                     "SOUTHERN": "ẩn dụ",
                     "STANDARD": "ẩn dụ"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Ẩn dụ là biện pháp tu từ quan trọng trong thơ Việt Nam.",
                   "example_translation": "Metaphor is an important rhetorical device in Vietnamese poetry.",
                   "image_url": null,
@@ -3836,7 +3704,6 @@
                     "SOUTHERN": "hoán dụ",
                     "STANDARD": "hoán dụ"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Hoán dụ dùng tên vật liên quan thay cho khái niệm.",
                   "example_translation": "Metonymy uses a related object name for the concept.",
                   "image_url": null,
@@ -3857,7 +3724,6 @@
                     "transcript": "Hôm qua tui đi ăn chè bưởi — bưởi chè! Nói lái cho vui!",
                     "type": "listening"
                   },
-                  "difficulty_level": 5,
                   "question_type": "listening",
                   "explanation": "\"Chè bưởi\" → nói lái thành \"bưởi chè\" — trò chơi chữ phổ biến Nam Bộ.",
                   "options": {
@@ -3879,7 +3745,6 @@
                     "selectedChoice": "Vợ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "\"Bà xã\" là cách gọi vợ thân mật phổ biến ở miền Nam.",
                   "options": {
@@ -3902,7 +3767,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "\"Đánh trống bỏ dùi\" = hứa hẹn mà không làm.",
                   "options": {
@@ -4003,7 +3867,6 @@
                     "SOUTHERN": "bà xã",
                     "STANDARD": "vợ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bà xã tui nấu ăn ngon lắm.",
                   "example_translation": "My wife cooks very well.",
                   "image_url": null,
@@ -4024,7 +3887,6 @@
                     "selectedChoice": "Uyển chuyển (euphemism)",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "Uyển chuyển là cách nói tránh từ trực tiếp để giữ thể diện.",
                   "options": {
@@ -4062,7 +3924,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Uyển chuyển giúp tránh từ nhạy cảm trực tiếp.",
                   "options": {
@@ -4095,7 +3956,6 @@
                     "translation": "Chị ấy đã khuất từ năm ngoái",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "\"Khuất\" là uyển chuyển thay cho \"chết\".",
                   "options": {
@@ -4161,7 +4021,6 @@
                     "SOUTHERN": "khuất",
                     "STANDARD": "khuất"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ông ấy đã khuất từ năm ngoái.",
                   "example_translation": "He passed away last year.",
                   "image_url": null,
@@ -4180,7 +4039,6 @@
                     "SOUTHERN": "có bầu",
                     "STANDARD": "có bầu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chị ấy có bầu ba tháng rồi.",
                   "example_translation": "She is three months pregnant.",
                   "image_url": null,
@@ -4228,7 +4086,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 5,
                   "question_type": "matching",
                   "explanation": "Mỗi loại văn dân gian có chức năng riêng.",
                   "options": {
@@ -4261,7 +4118,6 @@
                     "selectedChoice": "Biết ơn người tạo ra",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "\"Ăn quả nhớ kẻ trồng cây\" = khi hưởng quả phải biết ơn người tạo ra.",
                   "options": {
@@ -4284,7 +4140,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "\"Có công mài sắt có ngày nên kim\" = kiên trì sẽ thành công.",
                   "options": {
@@ -4306,7 +4161,6 @@
                     "translation": "Intact leaves wrap torn leaves — mutual help",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "\"Lá lành đùm lá rách\" = người may mắn giúp người bất hạnh.",
                   "options": {
@@ -4371,7 +4225,6 @@
                     "SOUTHERN": "tục ngữ",
                     "STANDARD": "tục ngữ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tục ngữ là kinh nghiệm dân gian đúc kết hàng ngàn năm.",
                   "example_translation": "Proverbs are folk wisdom distilled over millennia.",
                   "image_url": null,
@@ -4390,7 +4243,6 @@
                     "SOUTHERN": "ca dao",
                     "STANDARD": "ca dao"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ca dao Việt Nam rất phong phú, viết theo thể lục bát.",
                   "example_translation": "Vietnamese folk poetry is very rich, written in lục bát form.",
                   "image_url": null,
@@ -4409,7 +4261,6 @@
                     "SOUTHERN": "vè",
                     "STANDARD": "vè"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Vè là thể thơ kể chuyện dân gian hài hước.",
                   "example_translation": "Vè is a humorous folk narrative poem form.",
                   "image_url": null,
@@ -4428,7 +4279,6 @@
                     "SOUTHERN": "dân ca",
                     "STANDARD": "dân ca"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Dân ca Quan họ Bắc Ninh là di sản văn hóa thế giới.",
                   "example_translation": "Quan họ folk songs from Bac Ninh are world cultural heritage.",
                   "image_url": null,
@@ -4447,7 +4297,6 @@
                     "SOUTHERN": "đồng dao",
                     "STANDARD": "đồng dao"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Đồng dao \"Dung dăng dung dẻ\" rất quen thuộc với trẻ em.",
                   "example_translation": "The children folk rhyme \"Dung dăng dung dẻ\" is very familiar to children.",
                   "image_url": null,
@@ -4466,7 +4315,6 @@
                     "SOUTHERN": "thành ngữ",
                     "STANDARD": "thành ngữ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thành ngữ \"nước đổ lá khoai\" nghĩa là vô ích.",
                   "example_translation": "The idiom \"water poured on khoai leaves\" means futile.",
                   "image_url": null,
@@ -4485,7 +4333,6 @@
                     "SOUTHERN": "cửa miệng",
                     "STANDARD": "cửa miệng"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Tục ngữ truyền qua cửa miệng từ đời này sang đời khác.",
                   "example_translation": "Proverbs are passed down by word of mouth.",
                   "image_url": null,
@@ -4504,7 +4351,6 @@
                     "SOUTHERN": "kinh nghiệm",
                     "STANDARD": "kinh nghiệm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tục ngữ đúc kết kinh nghiệm sống của dân gian.",
                   "example_translation": "Proverbs distill folk life experience.",
                   "image_url": null,
@@ -4523,7 +4369,6 @@
                     "SOUTHERN": "truyền khẩu",
                     "STANDARD": "truyền khẩu"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Ca dao truyền khẩu qua nhiều thế hệ.",
                   "example_translation": "Folk poetry is transmitted orally across generations.",
                   "image_url": null,
@@ -4542,7 +4387,6 @@
                     "SOUTHERN": "phong tục",
                     "STANDARD": "phong tục"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phong tục Việt Nam đa dạng theo từng vùng miền.",
                   "example_translation": "Vietnamese customs vary by region.",
                   "image_url": null,
@@ -4563,7 +4407,6 @@
                     "selectedChoice": "Ẩn / lược bỏ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 5,
                   "question_type": "multiple_choice",
                   "explanation": "Ca dao thường lược chủ ngữ — chỉ giữ V + O + so sánh.",
                   "options": {
@@ -4601,7 +4444,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 5,
                   "question_type": "matching",
                   "explanation": "Đối ngẫu tạo sự cân bằng và nhịp nhàng.",
                   "options": {
@@ -4636,7 +4478,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 5,
                   "question_type": "fill_blank",
                   "explanation": "\"nguồn\" vần bằng với \"Sơn\" — vần chân lục bát.",
                   "options": {
@@ -4658,7 +4499,6 @@
                     "translation": "If you want to cross, build a bridge",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "Câu điều kiện rút gọn: muốn + V thì + V — khuyên chuẩn bị trước khi hành động.",
                   "options": {
@@ -4678,7 +4518,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Father debt is like Thái Sơn mountain",
@@ -4702,7 +4541,6 @@
                   "title": "Câu rút gọn trong ca dao: lược chủ ngữ"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Father debt like Thái Sơn mountain ↔ Mother virtue like water from the source",
@@ -4726,7 +4564,6 @@
                   "title": "Đối ngẫu trong ca dao và tục ngữ"
                 },
                 {
-                  "difficulty_level": 5,
                   "examples": [
                     {
                       "en": "Father debt like Thái Sơn mountain",
@@ -4796,7 +4633,6 @@
                     "SOUTHERN": "từ láy",
                     "STANDARD": "từ láy"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Từ láy trong ca dao tạo nhạc điệu rất hay.",
                   "example_translation": "Reduplicative words in folk poetry create great rhythm.",
                   "image_url": null,
@@ -4817,7 +4653,6 @@
                     "selectedChoice": "Có công mài sắt có ngày nên kim",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "\"Có công mài sắt có ngày nên kim\" khuyên kiên trì sẽ thành công.",
                   "options": {
@@ -4838,7 +4673,6 @@
                     "translation": "Lá lành đùm lá rách",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "\"Lá lành đùm lá rách\" = người may mắn giúp người bất hạnh.",
                   "options": {
@@ -4862,7 +4696,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "\"Ăn quả nhớ kẻ trồng cây\" = khi hưởng quả phải biết ơn người tạo ra.",
                   "options": {
@@ -4927,7 +4760,6 @@
                     "SOUTHERN": "thâm thúy",
                     "STANDARD": "thâm thúy"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Câu tục ngữ rất thâm thúy, đúc kết kinh nghiệm ngàn năm.",
                   "example_translation": "Proverbs are profound, distilling millennia of experience.",
                   "image_url": null,
@@ -4946,7 +4778,6 @@
                     "SOUTHERN": "gượng ép",
                     "STANDARD": "gượng ép"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nói tục ngữ không đúng lúc nghe gượng ép lắm.",
                   "example_translation": "Using proverbs at the wrong time sounds very forced.",
                   "image_url": null,
@@ -4967,7 +4798,6 @@
                     "selectedChoice": "Di sản văn hóa phi vật thể",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "Quan họ Bắc Ninh là di sản văn hóa phi vật thể của UNESCO.",
                   "options": {
@@ -5005,7 +4835,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Mỗi vùng miền có loại dân ca đặc trưng.",
                   "options": {
@@ -5038,7 +4867,6 @@
                     "translation": "Tục ngữ vẫn dùng hàng ngày trong báo chí, giáo dục, mạng xã hội — di sản truyền khẩu không mất mà chuyển hóa",
                     "type": "translation"
                   },
-                  "difficulty_level": 5,
                   "question_type": "translation",
                   "explanation": "Tục ngữ không mất đi mà chuyển hóa vào đời sống hiện đại.",
                   "options": {
@@ -5103,7 +4931,6 @@
                     "SOUTHERN": "Quan họ",
                     "STANDARD": "Quan họ"
                   },
-                  "difficulty_level": 5,
                   "example_sentence": "Quan họ Bắc Ninh là di sản văn hóa thế giới UNESCO.",
                   "example_translation": "Quan họ Bac Ninh is UNESCO world cultural heritage.",
                   "image_url": null,
@@ -5122,7 +4949,6 @@
                     "SOUTHERN": "hò",
                     "STANDARD": "hò"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hò Nam Bộ hát trên sông nước rất buồn mà đẹp.",
                   "example_translation": "Southern hò sung on rivers is melancholic yet beautiful.",
                   "image_url": null,

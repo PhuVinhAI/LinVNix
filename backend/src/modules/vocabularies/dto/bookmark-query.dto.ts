@@ -7,7 +7,6 @@ export enum BookmarkSort {
   OLDEST = 'oldest',
   AZ = 'az',
   ZA = 'za',
-  DIFFICULTY = 'difficulty',
 }
 
 export class BookmarkQueryDto {

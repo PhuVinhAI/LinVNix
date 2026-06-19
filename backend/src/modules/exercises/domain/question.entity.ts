@@ -41,9 +41,6 @@ export class Question extends BaseEntity {
   @Column({ name: 'order_index' })
   orderIndex: number;
 
-  @Column({ name: 'difficulty_level', default: 1 })
-  difficultyLevel: number;
-
   @Column({ name: 'exercise_id' })
   exerciseId: string;
 

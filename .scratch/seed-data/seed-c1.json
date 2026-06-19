@@ -22,7 +22,6 @@
                     "selectedChoice": "nhân sinh quan",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -43,7 +42,6 @@
                     "selectedChoice": "duy vật — duy tâm",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -66,7 +64,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -88,7 +85,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -129,7 +125,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -166,7 +161,6 @@
                     "translation": "Tự do tư tưởng là điều kiện tiên quyết cho sáng tạo khoa học.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -230,7 +224,6 @@
                     "SOUTHERN": "triết học",
                     "STANDARD": "triết học"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Triết học là nền tảng của mọi khoa học nhân văn.",
                   "example_translation": "Philosophy is the foundation of all humanities.",
                   "image_url": null,
@@ -249,7 +242,6 @@
                     "SOUTHERN": "tư tưởng",
                     "STANDARD": "tư tưởng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tư tưởng Hồ Chí Minh là hệ thống quan điểm về cách mạng Việt Nam.",
                   "example_translation": "Ho Chi Minh's ideology is a system of viewpoints on the Vietnamese revolution.",
                   "image_url": null,
@@ -268,7 +260,6 @@
                     "SOUTHERN": "nhân sinh quan",
                     "STANDARD": "nhân sinh quan"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nhân sinh quan được hình thành qua trải nghiệm sống.",
                   "example_translation": "One's worldview is shaped through life experiences.",
                   "image_url": null,
@@ -287,7 +278,6 @@
                     "SOUTHERN": "bản thể",
                     "STANDARD": "bản thể"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Vấn đề bản thể là câu hỏi cốt lõi của triết học phương Tây.",
                   "example_translation": "The ontological problem is a core question of Western philosophy.",
                   "image_url": null,
@@ -306,7 +296,6 @@
                     "SOUTHERN": "nhận thức",
                     "STANDARD": "nhận thức"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Quá trình nhận thức đi từ cảm tính đến lý tính.",
                   "example_translation": "Cognition proceeds from the sensory to the rational.",
                   "image_url": null,
@@ -325,7 +314,6 @@
                     "SOUTHERN": "biện chứng",
                     "STANDARD": "biện chứng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phép biện chứng giải thích sự vận động thông qua mâu thuẫn.",
                   "example_translation": "Dialectics explains movement through contradictions.",
                   "image_url": null,
@@ -344,7 +332,6 @@
                     "SOUTHERN": "duy vật",
                     "STANDARD": "duy vật"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chủ nghĩa duy vật cho rằng vật chất quyết định ý thức.",
                   "example_translation": "Materialism holds that matter determines consciousness.",
                   "image_url": null,
@@ -363,7 +350,6 @@
                     "SOUTHERN": "đạo đức",
                     "STANDARD": "đạo đức"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đạo đức nghề nghiệp là phẩm chất không thể thiếu.",
                   "example_translation": "Professional ethics is an indispensable quality.",
                   "image_url": null,
@@ -382,7 +368,6 @@
                     "SOUTHERN": "tự do",
                     "STANDARD": "tự do"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tự do tư tưởng là điều kiện tiên quyết cho sáng tạo khoa học.",
                   "example_translation": "Freedom of thought is a prerequisite for scientific creativity.",
                   "image_url": null,
@@ -401,7 +386,6 @@
                     "SOUTHERN": "hiện sinh",
                     "STANDARD": "hiện sinh"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Triết học hiện sinh nhấn mạnh sự tồn tại cá nhân và tự do lựa chọn.",
                   "example_translation": "Existentialism emphasizes individual existence and freedom of choice.",
                   "image_url": null,
@@ -420,7 +404,6 @@
                     "SOUTHERN": "duy tâm",
                     "STANDARD": "duy tâm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chủ nghĩa duy tâm cho rằng ý thức là cái có trước.",
                   "example_translation": "Idealism holds that consciousness is primary.",
                   "image_url": null,
@@ -439,7 +422,6 @@
                     "SOUTHERN": "siêu hình",
                     "STANDARD": "siêu hình"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phương pháp siêu hình xem xét sự vật cô lập và tĩnh tại.",
                   "example_translation": "The metaphysical method examines things in isolation and stasis.",
                   "image_url": null,
@@ -458,7 +440,6 @@
                     "SOUTHERN": "logic",
                     "STANDARD": "logic"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Logic học hình thức nghiên cứu quy luật tư duy đúng đắn.",
                   "example_translation": "Formal logic studies laws of correct thinking.",
                   "image_url": null,
@@ -477,7 +458,6 @@
                     "SOUTHERN": "đạo lý",
                     "STANDARD": "đạo lý"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đạo lý làm người là vấn đề cốt lõi trong giáo dục truyền thống.",
                   "example_translation": "Moral principles are core in traditional education.",
                   "image_url": null,
@@ -496,7 +476,6 @@
                     "SOUTHERN": "tri thức",
                     "STANDARD": "tri thức"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tri thức là sức mạnh, nhưng không tự nhiên mà có.",
                   "example_translation": "Knowledge is power, but does not come naturally.",
                   "image_url": null,
@@ -517,7 +496,6 @@
                     "selectedChoice": "Vấn đề này được nghiên cứu sâu trong các thập kỷ gần đây.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -540,7 +518,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -560,7 +537,6 @@
                     "translation": "Người ta thường cho rằng nhận thức là quá trình phản ánh thế giới khách quan.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -589,7 +565,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 4,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -611,7 +586,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "This issue has been studied deeply in recent decades.",
@@ -640,7 +614,6 @@
                   "title": "Câu bị động hình thức"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "It is commonly held that cognition reflects the objective world.",
@@ -664,7 +637,6 @@
                   "title": "Câu phi nhân xưng và dự phòng học thuật"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "The theory proposed by Einstein in 1905 changed physics.",
@@ -734,7 +706,6 @@
                     "SOUTHERN": "khách quan",
                     "STANDARD": "khách quan"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nghiên cứu khoa học đòi hỏi thái độ khách quan.",
                   "example_translation": "Scientific research demands an objective attitude.",
                   "image_url": null,
@@ -753,7 +724,6 @@
                     "SOUTHERN": "chủ quan",
                     "STANDARD": "chủ quan"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đánh giá chủ quan thường thiếu chính xác.",
                   "example_translation": "Subjective assessments often lack accuracy.",
                   "image_url": null,
@@ -772,7 +742,6 @@
                     "SOUTHERN": "hệ quả",
                     "STANDARD": "hệ quả"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hệ quả của quyết định này cần xem xét kỹ.",
                   "example_translation": "The implications of this decision need careful consideration.",
                   "image_url": null,
@@ -791,7 +760,6 @@
                     "SOUTHERN": "tiên quyết",
                     "STANDARD": "tiên quyết"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đây là điều kiện tiên quyết cho phát triển.",
                   "example_translation": "This is a prerequisite for development.",
                   "image_url": null,
@@ -810,7 +778,6 @@
                     "SOUTHERN": "mâu thuẫn",
                     "STANDARD": "mâu thuẫn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Mâu thuẫn là nguồn gốc vận động và phát triển.",
                   "example_translation": "Contradiction is the source of movement and development.",
                   "image_url": null,
@@ -831,7 +798,6 @@
                     "selectedChoice": "Yêu thương con người và hành động đúng đắn vì dân",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -854,7 +820,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -874,7 +839,6 @@
                     "translation": "Việc nhân nghĩa cốt ở yên dân.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -895,7 +859,6 @@
                     "selectedChoice": "Tạo sắc thái dự phòng",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -959,7 +922,6 @@
                     "SOUTHERN": "nhân nghĩa",
                     "STANDARD": "nhân nghĩa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Việc nhân nghĩa cốt ở yên dân.",
                   "example_translation": "The essence of nhân nghĩa is to bring peace to the people.",
                   "image_url": null,
@@ -978,7 +940,6 @@
                     "SOUTHERN": "phương pháp luận",
                     "STANDARD": "phương pháp luận"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phương pháp luận biện chứng là công cụ nhận thức quan trọng.",
                   "example_translation": "Dialectical methodology is an important cognitive tool.",
                   "image_url": null,
@@ -997,7 +958,6 @@
                     "SOUTHERN": "di sản",
                     "STANDARD": "di sản"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Di sản tư tưởng của ông vẫn còn nguyên giá trị.",
                   "example_translation": "His intellectual legacy still retains its value.",
                   "image_url": null,
@@ -1016,7 +976,6 @@
                     "SOUTHERN": "lập luận",
                     "STANDARD": "lập luận"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cách lập luận của tác giả rất chặt chẽ.",
                   "example_translation": "The author's argumentation is very rigorous.",
                   "image_url": null,
@@ -1035,7 +994,6 @@
                     "SOUTHERN": "yên dân",
                     "STANDARD": "yên dân"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chính sách yên dân là ưu tiên hàng đầu.",
                   "example_translation": "The policy of bringing peace to the people was the top priority.",
                   "image_url": null,
@@ -1061,7 +1019,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 4,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -1084,7 +1041,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -1104,7 +1060,6 @@
                     "translation": "Hơn nữa, thông qua thực tiễn, con người không chỉ nhận thức thế giới mà còn cải tạo thế giới.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -1125,7 +1080,6 @@
                     "selectedChoice": "tóm lại",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1189,7 +1143,6 @@
                     "SOUTHERN": "luận điểm",
                     "STANDARD": "luận điểm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Luận điểm chính được nêu rõ ở phần mở đầu.",
                   "example_translation": "The main thesis is clearly stated in the introduction.",
                   "image_url": null,
@@ -1208,7 +1161,6 @@
                     "SOUTHERN": "chứng cứ",
                     "STANDARD": "chứng cứ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Mỗi luận điểm cần chứng cứ thuyết phục.",
                   "example_translation": "Each argument needs convincing evidence.",
                   "image_url": null,
@@ -1227,7 +1179,6 @@
                     "SOUTHERN": "tựu trung lại",
                     "STANDARD": "tựu trung lại"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tựu trung lại, vấn đề cần xem xét từ nhiều góc độ.",
                   "example_translation": "All in all, the issue needs multiple perspectives.",
                   "image_url": null,
@@ -1279,7 +1230,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -1318,7 +1268,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -1338,7 +1287,6 @@
                     "selectedChoice": "Chính phủ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1359,7 +1307,6 @@
                     "translation": "Bị đơn được quyền mời luật sư bào chữa.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -1423,7 +1370,6 @@
                     "SOUTHERN": "luật",
                     "STANDARD": "luật"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đạo luật này đã được Quốc hội thông qua.",
                   "example_translation": "This act was passed by the National Assembly.",
                   "image_url": null,
@@ -1442,7 +1388,6 @@
                     "SOUTHERN": "quy định",
                     "STANDARD": "quy định"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Theo quy định mới, người lao động được nghỉ 14 ngày phép.",
                   "example_translation": "Under the new regulation, workers get 14 days annual leave.",
                   "image_url": null,
@@ -1461,7 +1406,6 @@
                     "SOUTHERN": "điều khoản",
                     "STANDARD": "điều khoản"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tại điều khoản 3 có quy định về quyền đơn phương chấm dứt.",
                   "example_translation": "Clause 3 contains provisions on unilateral termination.",
                   "image_url": null,
@@ -1480,7 +1424,6 @@
                     "SOUTHERN": "bản án",
                     "STANDARD": "bản án"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bản án sơ thẩm bị kháng cáo lên tòa cấp trên.",
                   "example_translation": "The first-instance judgment was appealed.",
                   "image_url": null,
@@ -1499,7 +1442,6 @@
                     "SOUTHERN": "tòa án",
                     "STANDARD": "tòa án"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tòa án nhân dân tối cao là cơ quan xét xử cao nhất.",
                   "example_translation": "The Supreme People's Court is the highest judicial organ.",
                   "image_url": null,
@@ -1518,7 +1460,6 @@
                     "SOUTHERN": "nguyên đơn",
                     "STANDARD": "nguyên đơn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nguyên đơn nộp đơn khởi kiện lên tòa án quận.",
                   "example_translation": "The plaintiff filed a lawsuit at the district court.",
                   "image_url": null,
@@ -1537,7 +1478,6 @@
                     "SOUTHERN": "bị đơn",
                     "STANDARD": "bị đơn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bị đơn được quyền mời luật sư bào chữa.",
                   "example_translation": "The defendant has the right to hire a defense attorney.",
                   "image_url": null,
@@ -1556,7 +1496,6 @@
                     "SOUTHERN": "kháng cáo",
                     "STANDARD": "kháng cáo"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đơn kháng cáo phải nộp trong 15 ngày kể từ ngày tuyên án.",
                   "example_translation": "The appeal must be filed within 15 days from the verdict.",
                   "image_url": null,
@@ -1575,7 +1514,6 @@
                     "SOUTHERN": "hiến pháp",
                     "STANDARD": "hiến pháp"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bộ Hiến pháp 2013 quy định quyền con người là giá trị cao nhất.",
                   "example_translation": "The 2013 Constitution stipulates human rights as the highest value.",
                   "image_url": null,
@@ -1594,7 +1532,6 @@
                     "SOUTHERN": "tư pháp",
                     "STANDARD": "tư pháp"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ngành tư pháp đóng vai trò quan trọng trong bảo vệ công lý.",
                   "example_translation": "The judiciary plays an important role in protecting justice.",
                   "image_url": null,
@@ -1613,7 +1550,6 @@
                     "SOUTHERN": "pháp luật",
                     "STANDARD": "pháp luật"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nhà nước pháp quyền tôn trọng pháp luật tuyệt đối.",
                   "example_translation": "A rule-of-law state respects law absolutely.",
                   "image_url": null,
@@ -1632,7 +1568,6 @@
                     "SOUTHERN": "công lý",
                     "STANDARD": "công lý"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Công lý phải được thực hiện đầy đủ và kịp thời.",
                   "example_translation": "Justice must be carried out fully and promptly.",
                   "image_url": null,
@@ -1651,7 +1586,6 @@
                     "SOUTHERN": "dân quyền",
                     "STANDARD": "dân quyền"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Dân quyền là quyền lợi công dân được hưởng theo hiến pháp.",
                   "example_translation": "Civil rights are the rights citizens enjoy under the constitution.",
                   "image_url": null,
@@ -1670,7 +1604,6 @@
                     "SOUTHERN": "lập pháp",
                     "STANDARD": "lập pháp"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Quốc hội thực hiện quyền lập pháp.",
                   "example_translation": "The National Assembly exercises legislative power.",
                   "image_url": null,
@@ -1689,7 +1622,6 @@
                     "SOUTHERN": "hành pháp",
                     "STANDARD": "hành pháp"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chính phủ thực hiện quyền hành pháp.",
                   "example_translation": "The Government exercises executive power.",
                   "image_url": null,
@@ -1712,7 +1644,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -1733,7 +1664,6 @@
                     "selectedChoice": "Căn cứ vào quy định tại Điều 15, Ủy ban quyết định như sau.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1754,7 +1684,6 @@
                     "translation": "Tuy quy định đã rõ ràng, nhưng tình hình thực tế vẫn còn phức tạp.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -1778,7 +1707,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -1797,7 +1725,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Pursuant to Article 10 of the Land Law, land users may transfer.",
@@ -1821,7 +1748,6 @@
                   "title": "Theo quy định, căn cứ vào, tại điều khoản"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "This individual not only violated regulations but also resisted law enforcement.",
@@ -1845,7 +1771,6 @@
                   "title": "Không những...mà còn"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Although regulations are clear, the actual situation is still complex.",
@@ -1915,7 +1840,6 @@
                     "SOUTHERN": "căn cứ",
                     "STANDARD": "căn cứ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Căn cứ vào quy định tại Điều 15 Luật Dân sự.",
                   "example_translation": "Based on Article 15 of the Civil Code.",
                   "image_url": null,
@@ -1934,7 +1858,6 @@
                     "SOUTHERN": "đề nghị",
                     "STANDARD": "đề nghị"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chúng tôi đề nghị quý cơ quan xem xét giải quyết.",
                   "example_translation": "We propose your agency consider resolving.",
                   "image_url": null,
@@ -1953,7 +1876,6 @@
                     "SOUTHERN": "thủ tục",
                     "STANDARD": "thủ tục"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thủ tục hành chính phải được đơn giản hóa.",
                   "example_translation": "Administrative procedures must be simplified.",
                   "image_url": null,
@@ -1972,7 +1894,6 @@
                     "SOUTHERN": "hậu quả",
                     "STANDARD": "hậu quả"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hậu quả vi phạm hợp đồng là phải bồi thường.",
                   "example_translation": "The consequence of breaching contract is paying damages.",
                   "image_url": null,
@@ -1991,7 +1912,6 @@
                     "SOUTHERN": "vi phạm",
                     "STANDARD": "vi phạm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Vi phạm pháp luật sẽ bị xử lý nghiêm minh.",
                   "example_translation": "Violations will be strictly handled.",
                   "image_url": null,
@@ -2012,7 +1932,6 @@
                     "selectedChoice": "Bị xử phạt nặng hơn",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2035,7 +1954,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -2055,7 +1973,6 @@
                     "translation": "Căn cứ vào quy định tại Điều 15",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -2119,7 +2036,6 @@
                     "SOUTHERN": "thẩm quyền",
                     "STANDARD": "thẩm quyền"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chỉ cơ quan có thẩm quyền mới được ban hành quyết định xử phạt.",
                   "example_translation": "Only competent authorities may issue penalty decisions.",
                   "image_url": null,
@@ -2138,7 +2054,6 @@
                     "SOUTHERN": "nghiêm cấm",
                     "STANDARD": "nghiêm cấm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nghiêm cấm mọi hành vi buôn lậu.",
                   "example_translation": "All smuggling is strictly prohibited.",
                   "image_url": null,
@@ -2157,7 +2072,6 @@
                     "SOUTHERN": "tái phạm",
                     "STANDARD": "tái phạm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tái phạm sẽ bị xử phạt nặng hơn.",
                   "example_translation": "Repeat offenses receive heavier penalties.",
                   "image_url": null,
@@ -2209,7 +2123,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -2248,7 +2161,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -2268,7 +2180,6 @@
                     "selectedChoice": "lâm sàng",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2289,7 +2200,6 @@
                     "translation": "Lạm dụng thuốc kháng sinh dẫn đến kháng thuốc.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -2353,7 +2263,6 @@
                     "SOUTHERN": "y học",
                     "STANDARD": "y học"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Y học hiện đại đạt bước tiến vượt bậc.",
                   "example_translation": "Modern medicine has made tremendous advances.",
                   "image_url": null,
@@ -2372,7 +2281,6 @@
                     "SOUTHERN": "chẩn đoán",
                     "STANDARD": "chẩn đoán"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chẩn đoán sớm giúp nâng cao hiệu quả điều trị.",
                   "example_translation": "Early diagnosis improves treatment effectiveness.",
                   "image_url": null,
@@ -2391,7 +2299,6 @@
                     "SOUTHERN": "điều trị",
                     "STANDARD": "điều trị"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phác đồ điều trị được cá nhân hóa.",
                   "example_translation": "Treatment protocols are personalized.",
                   "image_url": null,
@@ -2410,7 +2317,6 @@
                     "SOUTHERN": "phẫu thuật",
                     "STANDARD": "phẫu thuật"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ca phẫu thuật được tiến hành bởi bác sĩ giàu kinh nghiệm.",
                   "example_translation": "The surgery was performed by experienced doctors.",
                   "image_url": null,
@@ -2429,7 +2335,6 @@
                     "SOUTHERN": "triệu chứng",
                     "STANDARD": "triệu chứng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Các triệu chứng bao gồm sốt cao và khó thở.",
                   "example_translation": "Symptoms include high fever and difficulty breathing.",
                   "image_url": null,
@@ -2448,7 +2353,6 @@
                     "SOUTHERN": "bệnh lý",
                     "STANDARD": "bệnh lý"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cơ chế bệnh lý ung thư gan đang được nghiên cứu.",
                   "example_translation": "The pathological mechanism of liver cancer is being researched.",
                   "image_url": null,
@@ -2467,7 +2371,6 @@
                     "SOUTHERN": "dược phẩm",
                     "STANDARD": "dược phẩm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Dược phẩm điều trị tiểu đường được cải tiến liên tục.",
                   "example_translation": "Diabetes pharmaceuticals are continuously improved.",
                   "image_url": null,
@@ -2486,7 +2389,6 @@
                     "SOUTHERN": "lâm sàng",
                     "STANDARD": "lâm sàng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nghiên cứu lâm sàng cho thấy thuốc mới hiệu quả cao.",
                   "example_translation": "Clinical research shows the new drug is highly effective.",
                   "image_url": null,
@@ -2505,7 +2407,6 @@
                     "SOUTHERN": "phòng khám",
                     "STANDARD": "phòng khám"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phòng khám đa khoa mở cửa từ 7 giờ sáng.",
                   "example_translation": "The general clinic opens at 7 AM.",
                   "image_url": null,
@@ -2524,7 +2425,6 @@
                     "SOUTHERN": "sức khỏe cộng đồng",
                     "STANDARD": "sức khỏe cộng đồng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Sức khỏe cộng đồng quan trọng trong chính sách y tế.",
                   "example_translation": "Public health is important in national health policy.",
                   "image_url": null,
@@ -2543,7 +2443,6 @@
                     "SOUTHERN": "giải phẫu",
                     "STANDARD": "giải phẫu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Giải phẫu học là môn cơ bản của sinh viên y khoa.",
                   "example_translation": "Anatomy is fundamental for medical students.",
                   "image_url": null,
@@ -2562,7 +2461,6 @@
                     "SOUTHERN": "nhiễm trùng",
                     "STANDARD": "nhiễm trùng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nhiễm trùng huyết là biến chứng nguy hiểm sau mổ.",
                   "example_translation": "Blood infection is a dangerous post-surgery complication.",
                   "image_url": null,
@@ -2581,7 +2479,6 @@
                     "SOUTHERN": "thuốc kháng sinh",
                     "STANDARD": "thuốc kháng sinh"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Lạm dụng thuốc kháng sinh dẫn đến kháng thuốc.",
                   "example_translation": "Antibiotic abuse leads to drug resistance.",
                   "image_url": null,
@@ -2600,7 +2497,6 @@
                     "SOUTHERN": "bệnh viện",
                     "STANDARD": "bệnh viện"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bệnh viện đa khoa được trang bị máy móc hiện đại.",
                   "example_translation": "General hospitals are equipped with modern machinery.",
                   "image_url": null,
@@ -2619,7 +2515,6 @@
                     "SOUTHERN": "bác sĩ",
                     "STANDARD": "bác sĩ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bác sĩ chuyên khoa khuyến cáo khám sức khỏe định kỳ.",
                   "example_translation": "Specialist physicians recommend regular checkups.",
                   "image_url": null,
@@ -2642,7 +2537,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -2662,7 +2556,6 @@
                     "selectedChoice": "có thể",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2689,7 +2582,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 4,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -2711,7 +2603,6 @@
                     "translation": "Thuốc này có thể gây tác dụng phụ ở một số bệnh nhân.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -2730,7 +2621,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Cancer is a pathology characterized by uncontrolled cell proliferation.",
@@ -2754,7 +2644,6 @@
                   "title": "Cấu trúc định nghĩa chuyên ngành"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "This medication may cause side effects in some patients.",
@@ -2824,7 +2713,6 @@
                     "SOUTHERN": "viêm",
                     "STANDARD": "viêm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Viêm phổi là nguyên nhân hàng đầu gây tử vong ở người già.",
                   "example_translation": "Pneumonia is a leading cause of death in the elderly.",
                   "image_url": null,
@@ -2843,7 +2731,6 @@
                     "SOUTHERN": "hoại tử",
                     "STANDARD": "hoại tử"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hoại tử chi cần can thiệp phẫu thuật kịp thời.",
                   "example_translation": "Limb necrosis requires timely surgical intervention.",
                   "image_url": null,
@@ -2862,7 +2749,6 @@
                     "SOUTHERN": "tăng sinh",
                     "STANDARD": "tăng sinh"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tăng sinh không kiểm soát của tế bào là dấu hiệu ung thư.",
                   "example_translation": "Uncontrolled cell proliferation is a sign of cancer.",
                   "image_url": null,
@@ -2883,7 +2769,6 @@
                     "selectedChoice": "2,5",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2906,7 +2791,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -2926,7 +2810,6 @@
                     "selectedChoice": "Dự phòng học thuật",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2990,7 +2873,6 @@
                     "SOUTHERN": "biến chứng",
                     "STANDARD": "biến chứng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Biến chứng sau mổ cần theo dõi sát sao.",
                   "example_translation": "Post-surgical complications require close monitoring.",
                   "image_url": null,
@@ -3009,7 +2891,6 @@
                     "SOUTHERN": "phục hồi",
                     "STANDARD": "phục hồi"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phục hồi chức năng đòi hỏi kiên nhẫn.",
                   "example_translation": "Rehabilitation requires patience.",
                   "image_url": null,
@@ -3028,7 +2909,6 @@
                     "SOUTHERN": "ngăn ngừa",
                     "STANDARD": "ngăn ngừa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ngăn ngừa bệnh tật quan trọng hơn điều trị.",
                   "example_translation": "Prevention is more important than treatment.",
                   "image_url": null,
@@ -3080,7 +2960,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -3119,7 +2998,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -3139,7 +3017,6 @@
                     "selectedChoice": "54",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3160,7 +3037,6 @@
                     "translation": "Hòa bình là khát vọng ngàn đời của dân tộc Việt Nam.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -3224,7 +3100,6 @@
                     "SOUTHERN": "lịch sử",
                     "STANDARD": "lịch sử"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Lịch sử Việt Nam trải qua hàng nghìn năm dựng nước và giữ nước.",
                   "example_translation": "Vietnamese history spans thousands of years of nation-building.",
                   "image_url": null,
@@ -3243,7 +3118,6 @@
                     "SOUTHERN": "triều đại",
                     "STANDARD": "triều đại"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Triều đại Lý đánh dấu thời kỳ phát triển rực rỡ.",
                   "example_translation": "The Ly dynasty marked a brilliant period.",
                   "image_url": null,
@@ -3262,7 +3136,6 @@
                     "SOUTHERN": "độc lập",
                     "STANDARD": "độc lập"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ngày 2 tháng 9 năm 1945, Việt Nam tuyên bố độc lập.",
                   "example_translation": "On September 2, 1945, Vietnam declared independence.",
                   "image_url": null,
@@ -3281,7 +3154,6 @@
                     "SOUTHERN": "kháng chiến",
                     "STANDARD": "kháng chiến"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cuộc kháng chiến chống Pháp kéo dài 9 năm.",
                   "example_translation": "The resistance against France lasted 9 years.",
                   "image_url": null,
@@ -3300,7 +3172,6 @@
                     "SOUTHERN": "dân tộc",
                     "STANDARD": "dân tộc"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Việt Nam có 54 dân tộc anh em.",
                   "example_translation": "Vietnam has 54 ethnic groups.",
                   "image_url": null,
@@ -3319,7 +3190,6 @@
                     "SOUTHERN": "văn minh",
                     "STANDARD": "văn minh"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Văn minh văn sông là cái nôi của dân tộc.",
                   "example_translation": "Red River civilization is the cradle of the nation.",
                   "image_url": null,
@@ -3338,7 +3208,6 @@
                     "SOUTHERN": "di sản",
                     "STANDARD": "di sản"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Di sản văn hóa Việt Nam được UNESCO công nhận.",
                   "example_translation": "Vietnam's cultural heritage is recognized by UNESCO.",
                   "image_url": null,
@@ -3357,7 +3226,6 @@
                     "SOUTHERN": "di tích",
                     "STANDARD": "di tích"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Di tích Hoàng Thành Thăng Long là chứng nhân thời đại.",
                   "example_translation": "The Thang Long Citadel is a witness to history.",
                   "image_url": null,
@@ -3376,7 +3244,6 @@
                     "SOUTHERN": "chiến tranh",
                     "STANDARD": "chiến tranh"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chiến tranh để lại vết thương sâu trong tâm thức dân tộc.",
                   "example_translation": "War left deep scars in the national consciousness.",
                   "image_url": null,
@@ -3395,7 +3262,6 @@
                     "SOUTHERN": "hòa bình",
                     "STANDARD": "hòa bình"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hòa bình là khát vọng ngàn đời của dân tộc.",
                   "example_translation": "Peace is the eternal aspiration of the nation.",
                   "image_url": null,
@@ -3414,7 +3280,6 @@
                     "SOUTHERN": "thuộc địa",
                     "STANDARD": "thuộc địa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Việt Nam từng là thuộc địa Pháp gần một thế kỷ.",
                   "example_translation": "Vietnam was a French colony for nearly a century.",
                   "image_url": null,
@@ -3433,7 +3298,6 @@
                     "SOUTHERN": "giải phóng",
                     "STANDARD": "giải phóng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Giải phóng miền Nam 1975 đánh dấu thống nhất đất nước.",
                   "example_translation": "The 1975 liberation marked national reunification.",
                   "image_url": null,
@@ -3452,7 +3316,6 @@
                     "SOUTHERN": "phong kiến",
                     "STANDARD": "phong kiến"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chế độ phong kiến kéo dài từ thế kỷ 10 đến 19.",
                   "example_translation": "Feudalism lasted from the 10th to the 19th century.",
                   "image_url": null,
@@ -3471,7 +3334,6 @@
                     "SOUTHERN": "vĩ nhân",
                     "STANDARD": "vĩ nhân"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Vĩ nhân Hồ Chí Minh là biểu tượng dân tộc.",
                   "example_translation": "The great figure Ho Chi Minh is a national symbol.",
                   "image_url": null,
@@ -3490,7 +3352,6 @@
                     "SOUTHERN": "cách mạng",
                     "STANDARD": "cách mạng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cách mạng tháng Tám 1945 lật đổ chế độ thực dân.",
                   "example_translation": "The August Revolution of 1945 overthrew colonial rule.",
                   "image_url": null,
@@ -3511,7 +3372,6 @@
                     "selectedChoice": "Vượt khó khăn đạt thành công",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3534,7 +3394,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -3554,7 +3413,6 @@
                     "translation": "Năm 938, quân Nam Hán bị đánh bại tại sông Bạch Đằng.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -3575,7 +3433,6 @@
                     "selectedChoice": "Gợi ý ý nghĩa sâu xa",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3594,7 +3451,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "This event is like Qua Vu Mon — overcoming hardship for glory.",
@@ -3623,7 +3479,6 @@
                   "title": "Sử dụng điển cố lịch sử"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "In 938, the Southern Han was defeated by Ngo Quyen at Bach Dang River.",
@@ -3693,7 +3548,6 @@
                     "SOUTHERN": "điển cố",
                     "STANDARD": "điển cố"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Điển cố 'Quá Vũ Môn' ám chỉ vượt khó khăn đạt thành công.",
                   "example_translation": "The allusion 'Qua Vu Mon' refers to overcoming hardship to achieve success.",
                   "image_url": null,
@@ -3712,7 +3566,6 @@
                     "SOUTHERN": "ám chỉ",
                     "STANDARD": "ám chỉ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tác giả ám chỉ bi kịch lịch sử qua hình ảnh cánh chim lạc.",
                   "example_translation": "The author alludes to historical tragedy through a lost bird.",
                   "image_url": null,
@@ -3731,7 +3584,6 @@
                     "SOUTHERN": "hào khí",
                     "STANDARD": "hào khí"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hào khí Nam quốc sơn hà vang vọng đến ngày nay.",
                   "example_translation": "The heroic spirit of Nam quoc son ha still resonates.",
                   "image_url": null,
@@ -3750,7 +3602,6 @@
                     "SOUTHERN": "tương truyền",
                     "STANDARD": "tương truyền"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tương truyền Trần Hưng Đạo ba lần đánh thắng quân Mông-Nguyên.",
                   "example_translation": "Legend has it Tran Hung Dao defeated the Mongols three times.",
                   "image_url": null,
@@ -3769,7 +3620,6 @@
                     "SOUTHERN": "thi vị",
                     "STANDARD": "thi vị"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Câu thơ mang thi vị sâu sắc gắn điển cố lịch sử.",
                   "example_translation": "The verse carries deep poetic quality tied to historical allusion.",
                   "image_url": null,
@@ -3790,7 +3640,6 @@
                     "selectedChoice": "Xuyên suốt lịch sử từ Hai Bà Trưng đến cách mạng tháng Tám",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3828,7 +3677,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -3863,7 +3711,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -3926,7 +3773,6 @@
                     "SOUTHERN": "truyền thống",
                     "STANDARD": "truyền thống"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Truyền thống yêu nước là nét đẹp dân tộc.",
                   "example_translation": "Patriotic tradition is a beauty of the nation.",
                   "image_url": null,
@@ -3945,7 +3791,6 @@
                     "SOUTHERN": "bản sắc",
                     "STANDARD": "bản sắc"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bản sắc văn hóa cần được bảo tồn và phát huy.",
                   "example_translation": "Cultural identity must be preserved and promoted.",
                   "image_url": null,
@@ -3964,7 +3809,6 @@
                     "SOUTHERN": "hồn cốt",
                     "STANDARD": "hồn cốt"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hồn cốt dân tộc không bị xóa nhòa bởi thời gian.",
                   "example_translation": "The national soul cannot be blurred by time.",
                   "image_url": null,
@@ -3985,7 +3829,6 @@
                     "selectedChoice": "Ngô Sĩ Liên",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4008,7 +3851,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -4028,7 +3870,6 @@
                     "translation": "Trong nước yên ổn, nhân dân vui vẻ, thương mại thịnh vượng",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -4092,7 +3933,6 @@
                     "SOUTHERN": "sử ký",
                     "STANDARD": "sử ký"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đại Việt sử ký toàn thư là bộ sử quan trọng nhất.",
                   "example_translation": "The Complete Annals of Dai Viet is the most important chronicle.",
                   "image_url": null,
@@ -4111,7 +3951,6 @@
                     "SOUTHERN": "biên niên",
                     "STANDARD": "biên niên"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Sử thi biên niên ghi chép theo thứ tự thời gian.",
                   "example_translation": "Chronological annals record events in time order.",
                   "image_url": null,
@@ -4130,7 +3969,6 @@
                     "SOUTHERN": "khởi nghĩa",
                     "STANDARD": "khởi nghĩa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Khởi nghĩa Hai Bà Trưng là đấu tranh giải phóng đầu tiên.",
                   "example_translation": "The Trung Sisters' uprising was the first liberation struggle.",
                   "image_url": null,
@@ -4182,7 +4020,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -4221,7 +4058,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -4241,7 +4077,6 @@
                     "selectedChoice": "Thơ Mới",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4262,7 +4097,6 @@
                     "translation": "Văn học hiện thực phê phán vạch trần xã hội thực dân.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -4326,7 +4160,6 @@
                     "SOUTHERN": "văn chương",
                     "STANDARD": "văn chương"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Văn chương Việt Nam trải qua nhiều giai đoạn.",
                   "example_translation": "Vietnamese literature spans many periods.",
                   "image_url": null,
@@ -4345,7 +4178,6 @@
                     "SOUTHERN": "thơ ca",
                     "STANDARD": "thơ ca"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thơ ca Việt Nam có truyền thống ngàn năm.",
                   "example_translation": "Vietnamese poetry has a thousand-year tradition.",
                   "image_url": null,
@@ -4364,7 +4196,6 @@
                     "SOUTHERN": "tiểu thuyết",
                     "STANDARD": "tiểu thuyết"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tiểu thuyết hiện đại phản ánh xã hội đương thời.",
                   "example_translation": "Modern novels reflect contemporary society.",
                   "image_url": null,
@@ -4383,7 +4214,6 @@
                     "SOUTHERN": "truyện ngắn",
                     "STANDARD": "truyện ngắn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Truyện ngắn Nam Cao mang tính hiện thực sâu sắc.",
                   "example_translation": "Nam Cao's short stories carry deep realism.",
                   "image_url": null,
@@ -4402,7 +4232,6 @@
                     "SOUTHERN": "tác giả",
                     "STANDARD": "tác giả"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tác giả Nguyễn Du là đại thi hào dân tộc.",
                   "example_translation": "Author Nguyen Du is the national great poet.",
                   "image_url": null,
@@ -4421,7 +4250,6 @@
                     "SOUTHERN": "phong trào",
                     "STANDARD": "phong trào"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phong trào Thơ Mới đánh dấu đổi mới thơ ca.",
                   "example_translation": "The New Poetry Movement marked innovation.",
                   "image_url": null,
@@ -4440,7 +4268,6 @@
                     "SOUTHERN": "lãng mạn",
                     "STANDARD": "lãng mạn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Trào lưu lãng mạn chịu ảnh hưởng từ Pháp.",
                   "example_translation": "Vietnamese romanticism was influenced by France.",
                   "image_url": null,
@@ -4459,7 +4286,6 @@
                     "SOUTHERN": "hiện thực",
                     "STANDARD": "hiện thực"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Văn học hiện thực phê phán vạch trần xã hội thực dân.",
                   "example_translation": "Critical realist literature exposed colonial society.",
                   "image_url": null,
@@ -4478,7 +4304,6 @@
                     "SOUTHERN": "huyền bí",
                     "STANDARD": "huyền bí"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Truyện kỳ ảo mang sắc thái huyền bí đậm đà.",
                   "example_translation": "Mystical tales carry a strong surreal atmosphere.",
                   "image_url": null,
@@ -4497,7 +4322,6 @@
                     "SOUTHERN": "hậu hiện đại",
                     "STANDARD": "hậu hiện đại"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Văn học hậu hiện đại thách thức khuôn mẫu truyền thống.",
                   "example_translation": "Postmodern literature challenges traditional conventions.",
                   "image_url": null,
@@ -4516,7 +4340,6 @@
                     "SOUTHERN": "thi ca",
                     "STANDARD": "thi ca"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thi ca trung đại tuân thủ luật thơ nghiêm ngặt.",
                   "example_translation": "Medieval poetics strictly followed poetic rules.",
                   "image_url": null,
@@ -4535,7 +4358,6 @@
                     "SOUTHERN": "hàm ý",
                     "STANDARD": "hàm ý"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hàm ý câu thơ cần giải mã qua bối cảnh.",
                   "example_translation": "The poem's implication must be decoded through context.",
                   "image_url": null,
@@ -4554,7 +4376,6 @@
                     "SOUTHERN": "điển cố",
                     "STANDARD": "điển cố"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nguyễn Du dùng nhiều điển cố trong Truyện Kiều.",
                   "example_translation": "Nguyen Du used many allusions in Truyen Kieu.",
                   "image_url": null,
@@ -4573,7 +4394,6 @@
                     "SOUTHERN": "thi pháp",
                     "STANDARD": "thi pháp"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thi pháp trữ tình đặc trưng văn học trung đại.",
                   "example_translation": "Lyric poetics is characteristic of medieval literature.",
                   "image_url": null,
@@ -4592,7 +4412,6 @@
                     "SOUTHERN": "tượng trưng",
                     "STANDARD": "tượng trưng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tượng trưng tạo chiều sâu cho tác phẩm.",
                   "example_translation": "Symbolism creates depth in literary works.",
                   "image_url": null,
@@ -4613,7 +4432,6 @@
                     "selectedChoice": "Hoán dụ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4634,7 +4452,6 @@
                     "selectedChoice": "Ngoại dụ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4657,7 +4474,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -4696,7 +4512,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -4729,7 +4544,6 @@
                     "translation": "Autumn wind whispers in the ear (personification)",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -4748,7 +4562,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Darkness descends on the city — metaphor for nightfall.",
@@ -4772,7 +4585,6 @@
                   "title": "Ẩn dụ và hoán dụ"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Autumn wind whispers — personification: wind can speak.",
@@ -4796,7 +4608,6 @@
                   "title": "Nhân hóa và ngoại dụ"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "He has gone far — euphemism for 'died'.",
@@ -4866,7 +4677,6 @@
                     "SOUTHERN": "ẩn dụ",
                     "STANDARD": "ẩn dụ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ẩn dụ 'biển đời' so sánh cuộc đời với biển cả.",
                   "example_translation": "The metaphor 'sea of life' compares life to the sea.",
                   "image_url": null,
@@ -4885,7 +4695,6 @@
                     "SOUTHERN": "hoán dụ",
                     "STANDARD": "hoán dụ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hoán dụ 'áo chàm' đại diện người nông dân.",
                   "example_translation": "The metonymy 'indigo shirt' represents the farmer.",
                   "image_url": null,
@@ -4904,7 +4713,6 @@
                     "SOUTHERN": "nhân hóa",
                     "STANDARD": "nhân hóa"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nhân hóa 'cây khóc' gán đặc điểm người cho cây.",
                   "example_translation": "Personification 'the tree cried' assigns human traits to a tree.",
                   "image_url": null,
@@ -4923,7 +4731,6 @@
                     "SOUTHERN": "ngoại dụ",
                     "STANDARD": "ngoại dụ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ngoại dụ 'khóc sông Tô' phóng đại mức độ buồn.",
                   "example_translation": "Hyperbole 'crying fills the To River' exaggerates sadness.",
                   "image_url": null,
@@ -4942,7 +4749,6 @@
                     "SOUTHERN": "nói giảm",
                     "STANDARD": "nói giảm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nói giảm 'đi xa' thay cho 'chết' giảm nhẹ thương tâm.",
                   "example_translation": "Euphemism 'gone far' replaces 'died' to soften the impact.",
                   "image_url": null,
@@ -4963,7 +4769,6 @@
                     "selectedChoice": "Mùa thu gõ cửa thành phố",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4986,7 +4791,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -5013,7 +4817,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 4,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -5034,7 +4837,6 @@
                     "translation": "The brown shirts raise their singing voices (metonymy for farmers)",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -5098,7 +4900,6 @@
                     "SOUTHERN": "trữ tình",
                     "STANDARD": "trữ tình"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Văn học trữ tình là đặc trưng thơ ca Việt Nam.",
                   "example_translation": "Lyric literature is characteristic of Vietnamese poetry.",
                   "image_url": null,
@@ -5117,7 +4918,6 @@
                     "SOUTHERN": "thi liệu",
                     "STANDARD": "thi liệu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thi liệu từ đời sống tạo sức sống tác phẩm.",
                   "example_translation": "Literary material from life creates vitality.",
                   "image_url": null,
@@ -5136,7 +4936,6 @@
                     "SOUTHERN": "tả thực",
                     "STANDARD": "tả thực"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bút pháp tả thực miêu tả chân thực sự vật.",
                   "example_translation": "Descriptive realism depicts things authentically.",
                   "image_url": null,
@@ -5157,7 +4956,6 @@
                     "selectedChoice": "Lục bát",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -5180,7 +4978,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -5221,7 +5018,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -5258,7 +5054,6 @@
                     "selectedChoice": "Hệ thống chữ viết do người Việt sáng tạo dựa trên chữ Hán",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -5322,7 +5117,6 @@
                     "SOUTHERN": "lục bát",
                     "STANDARD": "lục bát"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thể thơ lục bát là đặc trưng thơ Việt Nam.",
                   "example_translation": "The luc bat form is distinctive to Vietnamese poetry.",
                   "image_url": null,
@@ -5341,7 +5135,6 @@
                     "SOUTHERN": "chữ Nôm",
                     "STANDARD": "chữ Nôm"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chữ Nôm do người Việt sáng tạo dựa trên chữ Hán.",
                   "example_translation": "Nom script was created by Vietnamese based on Chinese characters.",
                   "image_url": null,
@@ -5360,7 +5153,6 @@
                     "SOUTHERN": "song thất lục bát",
                     "STANDARD": "song thất lục bát"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Song thất lục bát thường dùng trong thơ trung đại.",
                   "example_translation": "Song that luc bat is commonly used in medieval poetry.",
                   "image_url": null,

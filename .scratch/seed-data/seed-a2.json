@@ -22,7 +22,6 @@
                     "selectedChoice": "đắt",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Đắt' nghĩa là expensive. 'Rẻ' nghĩa là cheap.",
                   "options": {
@@ -45,7 +44,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Trả giá' là cụm từ cố định nghĩa là bargain.",
                   "options": {
@@ -84,7 +82,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Các từ vựng cơ bản về mua sắm.",
                   "options": {
@@ -117,7 +114,6 @@
                     "translation": "Cái này bao nhiêu tiền?",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "Câu hỏi giá cả phổ biến nhất.",
                   "options": {
@@ -234,7 +230,6 @@
                     "SOUTHERN": "chợ",
                     "STANDARD": "chợ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Sáng nay tôi đi chợ mua rau.",
                   "example_translation": "This morning I went to the market to buy vegetables.",
                   "image_url": null,
@@ -253,7 +248,6 @@
                     "SOUTHERN": "siêu thị",
                     "STANDARD": "siêu thị"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cuối tuần tôi hay đi siêu thị mua đồ.",
                   "example_translation": "On weekends I usually go to the supermarket.",
                   "image_url": null,
@@ -272,7 +266,6 @@
                     "SOUTHERN": "mua",
                     "STANDARD": "mua"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi muốn mua cái áo này.",
                   "example_translation": "I want to buy this shirt.",
                   "image_url": null,
@@ -291,7 +284,6 @@
                     "SOUTHERN": "bán",
                     "STANDARD": "bán"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cô ấy bán trái cây ở chợ.",
                   "example_translation": "She sells fruit at the market.",
                   "image_url": null,
@@ -310,7 +302,6 @@
                     "SOUTHERN": "giá",
                     "STANDARD": "giá"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cái này giá bao nhiêu?",
                   "example_translation": "How much is the price of this?",
                   "image_url": null,
@@ -329,7 +320,6 @@
                     "SOUTHERN": "rẻ",
                     "STANDARD": "rẻ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Ở chợ này rau rẻ lắm.",
                   "example_translation": "Vegetables are very cheap at this market.",
                   "image_url": null,
@@ -348,7 +338,6 @@
                     "SOUTHERN": "đắt",
                     "STANDARD": "đắt"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cái áo này đắt quá!",
                   "example_translation": "This shirt is too expensive!",
                   "image_url": null,
@@ -367,7 +356,6 @@
                     "SOUTHERN": "tiền",
                     "STANDARD": "tiền"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Anh có tiền không? Tôi quên ví ở nhà.",
                   "example_translation": "Do you have money? I forgot my wallet at home.",
                   "image_url": null,
@@ -386,7 +374,6 @@
                     "SOUTHERN": "hóa đơn",
                     "STANDARD": "hóa đơn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cho tôi xin cái hóa đơn nhé.",
                   "example_translation": "Can I have the receipt please?",
                   "image_url": null,
@@ -405,7 +392,6 @@
                     "SOUTHERN": "trả giá",
                     "STANDARD": "trả giá"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Ở chợ phải trả giá mới rẻ được.",
                   "example_translation": "At the market you have to bargain to get a good price.",
                   "image_url": null,
@@ -424,7 +410,6 @@
                     "SOUTHERN": "cân",
                     "STANDARD": "cân"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cho tôi hai cân thịt bò.",
                   "example_translation": "Give me two kilos of beef.",
                   "image_url": null,
@@ -443,7 +428,6 @@
                     "SOUTHERN": "hàng",
                     "STANDARD": "hàng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Hàng ở chợ tươi hơn hàng ở siêu thị.",
                   "example_translation": "Goods at the market are fresher than at the supermarket.",
                   "image_url": null,
@@ -462,7 +446,6 @@
                     "SOUTHERN": "rau",
                     "STANDARD": "rau"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hôm nay rau cải rất rẻ.",
                   "example_translation": "Today mustard greens are very cheap.",
                   "image_url": null,
@@ -481,7 +464,6 @@
                     "SOUTHERN": "thịt",
                     "STANDARD": "thịt"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cho tôi nửa cân thịt heo.",
                   "example_translation": "Give me half a kilo of pork.",
                   "image_url": null,
@@ -500,7 +482,6 @@
                     "SOUTHERN": "cá",
                     "STANDARD": "cá"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cá hôm nay tươi lắm!",
                   "example_translation": "The fish is very fresh today!",
                   "image_url": null,
@@ -523,7 +504,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "So sánh hơn thêm 'hơn' sau tính từ: rẻ + hơn = cheaper.",
                   "options": {
@@ -545,7 +525,6 @@
                     "selectedChoice": "Chợ này rẻ nhất thành phố.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "So sánh nhất dùng 'nhất': rẻ + nhất = cheapest.",
                   "options": {
@@ -572,7 +551,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc so sánh hơn: A + tính từ + hơn + B. Chợ này rẻ hơn siêu thị.",
                   "options": {
@@ -594,7 +572,6 @@
                     "translation": "Tôi muốn mua một ít thịt bò.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'một ít' = a little, 'thịt bò' = beef.",
                   "options": {
@@ -617,7 +594,6 @@
                     "selectedChoice": "các",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Các' dùng cho số nhiều xác định (the), thường đứng trước classifier.",
                   "options": {
@@ -636,7 +612,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "This market is cheaper than the supermarket.",
@@ -660,7 +635,6 @@
                   "title": "So sánh hơn với 'hơn'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "This market is the cheapest in the city.",
@@ -684,7 +658,6 @@
                   "title": "So sánh nhất với 'nhất'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I want to buy a lot of vegetables.",
@@ -708,7 +681,6 @@
                   "title": "Lượng từ 'nhiều', 'ít', 'một ít'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I want to buy a shirt.",
@@ -814,7 +786,6 @@
                     "SOUTHERN": "hơn",
                     "STANDARD": "hơn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cái này rẻ hơn cái kia.",
                   "example_translation": "This one is cheaper than that one.",
                   "image_url": null,
@@ -833,7 +804,6 @@
                     "SOUTHERN": "nhất",
                     "STANDARD": "nhất"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cái này rẻ nhất.",
                   "example_translation": "This one is the cheapest.",
                   "image_url": null,
@@ -852,7 +822,6 @@
                     "SOUTHERN": "nhiều",
                     "STANDARD": "nhiều"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Chợ này có nhiều hàng hơn chợ kia.",
                   "example_translation": "This market has more goods than that market.",
                   "image_url": null,
@@ -871,7 +840,6 @@
                     "SOUTHERN": "ít",
                     "STANDARD": "ít"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Hôm nay ít người đi chợ.",
                   "example_translation": "Few people went to the market today.",
                   "image_url": null,
@@ -890,7 +858,6 @@
                     "SOUTHERN": "sạch",
                     "STANDARD": "sạch"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Siêu thị sạch hơn chợ.",
                   "example_translation": "The supermarket is cleaner than the market.",
                   "image_url": null,
@@ -911,7 +878,6 @@
                     "selectedChoice": "chị / em / cô / chú",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Ở chợ, người bán và mua thường xưng hô theo quan hệ gia đình.",
                   "options": {
@@ -932,7 +898,6 @@
                     "translation": "Cho tôi một cân cà chua.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Cho tôi' = give me, 'một cân' = one kilo, 'cà chua' = tomato.",
                   "options": {
@@ -956,7 +921,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Tổng cộng' = in total. Đây là cụm từ quen thuộc khi mua sắm.",
                   "options": {
@@ -1077,7 +1041,6 @@
                     "SOUTHERN": "cà chua",
                     "STANDARD": "cà chua"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cho tôi một cân cà chua.",
                   "example_translation": "Give me a kilo of tomatoes.",
                   "image_url": null,
@@ -1096,7 +1059,6 @@
                     "SOUTHERN": "rau muống",
                     "STANDARD": "rau muống"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Rau muống là món ăn phổ biến ở Việt Nam.",
                   "example_translation": "Water spinach is a popular dish in Vietnam.",
                   "image_url": null,
@@ -1115,7 +1077,6 @@
                     "SOUTHERN": "mớ",
                     "STANDARD": "mớ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cho tôi một mớ rau.",
                   "example_translation": "Give me a bunch of vegetables.",
                   "image_url": null,
@@ -1143,7 +1104,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc so sánh hơn: A + tính từ + hơn + B.",
                   "options": {
@@ -1168,7 +1128,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "So sánh hơn: sạch + hơn = cleaner.",
                   "options": {
@@ -1190,7 +1149,6 @@
                     "translation": "Tôi tiêu khoảng một trăm nghìn đồng mỗi lần.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Tiêu' = spend, 'khoảng' = about, 'mỗi lần' = each time.",
                   "options": {
@@ -1291,7 +1249,6 @@
                     "SOUTHERN": "tiêu",
                     "STANDARD": "tiêu"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi tiêu khoảng năm mươi nghìn mỗi lần đi chợ.",
                   "example_translation": "I spend about fifty thousand each time I go to the market.",
                   "image_url": null,
@@ -1310,7 +1267,6 @@
                     "SOUTHERN": "sớm",
                     "STANDARD": "sớm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đi chợ sớm thì rau tươi hơn.",
                   "example_translation": "Going to the market early means fresher vegetables.",
                   "image_url": null,
@@ -1358,7 +1314,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Từ vựng cơ bản về sức khỏe.",
                   "options": {
@@ -1391,7 +1346,6 @@
                     "selectedChoice": "headache",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Đau đầu' = headache. 'Đau' = pain/hurt, 'đầu' = head.",
                   "options": {
@@ -1414,7 +1368,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Uống thuốc' = take medicine. Tiếng Việt dùng 'uống' (drink) cho thuốc viên.",
                   "options": {
@@ -1439,7 +1392,6 @@
                     "translation": "Tôi phải đi bệnh viện.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Phải' = have to, 'đi bệnh viện' = go to the hospital.",
                   "options": {
@@ -1541,7 +1493,6 @@
                     "SOUTHERN": "bệnh",
                     "STANDARD": "bệnh"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh ấy bị bệnh cảm.",
                   "example_translation": "He has a cold.",
                   "image_url": null,
@@ -1560,7 +1511,6 @@
                     "SOUTHERN": "thuốc",
                     "STANDARD": "thuốc"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi phải uống thuốc ba lần một ngày.",
                   "example_translation": "I have to take medicine three times a day.",
                   "image_url": null,
@@ -1579,7 +1529,6 @@
                     "SOUTHERN": "bác sĩ",
                     "STANDARD": "bác sĩ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bác sĩ bảo tôi phải nghỉ ngơi.",
                   "example_translation": "The doctor told me to rest.",
                   "image_url": null,
@@ -1598,7 +1547,6 @@
                     "SOUTHERN": "bệnh viện",
                     "STANDARD": "bệnh viện"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi phải đưa con đi bệnh viện.",
                   "example_translation": "I have to take my child to the hospital.",
                   "image_url": null,
@@ -1617,7 +1565,6 @@
                     "SOUTHERN": "đau",
                     "STANDARD": "đau"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi bị đau đầu.",
                   "example_translation": "I have a headache.",
                   "image_url": null,
@@ -1636,7 +1583,6 @@
                     "SOUTHERN": "sốt",
                     "STANDARD": "sốt"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cháu bé bị sốt 39 độ.",
                   "example_translation": "The child has a 39-degree fever.",
                   "image_url": null,
@@ -1655,7 +1601,6 @@
                     "SOUTHERN": "ho",
                     "STANDARD": "ho"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi ho suốt đêm qua.",
                   "example_translation": "I coughed all night last night.",
                   "image_url": null,
@@ -1674,7 +1619,6 @@
                     "SOUTHERN": "cảm",
                     "STANDARD": "cảm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi bị cảm rồi, hắt hơi suốt ngày.",
                   "example_translation": "I caught a cold, I've been sneezing all day.",
                   "image_url": null,
@@ -1693,7 +1637,6 @@
                     "SOUTHERN": "khám",
                     "STANDARD": "khám"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi phải đi khám bệnh.",
                   "example_translation": "I have to go for a medical checkup.",
                   "image_url": null,
@@ -1712,7 +1655,6 @@
                     "SOUTHERN": "sức khỏe",
                     "STANDARD": "sức khỏe"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Chúc anh sức khỏe!",
                   "example_translation": "Wish you good health!",
                   "image_url": null,
@@ -1731,7 +1673,6 @@
                     "SOUTHERN": "đau đầu",
                     "STANDARD": "đau đầu"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi bị đau đầu từ sáng nay.",
                   "example_translation": "I've had a headache since this morning.",
                   "image_url": null,
@@ -1750,7 +1691,6 @@
                     "SOUTHERN": "đơn thuốc",
                     "STANDARD": "đơn thuốc"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bác sĩ kê đơn thuốc cho tôi.",
                   "example_translation": "The doctor prescribed medicine for me.",
                   "image_url": null,
@@ -1769,7 +1709,6 @@
                     "SOUTHERN": "nhà thuốc",
                     "STANDARD": "nhà thuốc"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi ra nhà thuốc mua thuốc cảm.",
                   "example_translation": "I go to the pharmacy to buy cold medicine.",
                   "image_url": null,
@@ -1792,7 +1731,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Bị' + tên bệnh = bị cảm, bị sốt, bị ho.",
                   "options": {
@@ -1814,7 +1752,6 @@
                     "selectedChoice": "phải",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Phải' chỉ nghĩa vụ bắt buộc (must/have to).",
                   "options": {
@@ -1835,7 +1772,6 @@
                     "translation": "Tôi có thể đi nhà thuốc sau khi tan làm.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Có thể' = can, 'nhà thuốc' = pharmacy.",
                   "options": {
@@ -1864,7 +1800,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc: Chủ ngữ + bị + tình trạng + từ + thời điểm.",
                   "options": {
@@ -1884,7 +1819,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I caught a cold.",
@@ -1908,7 +1842,6 @@
                   "title": "Bị động với 'bị' (adversative passive)"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I have to go to the doctor.",
@@ -1932,7 +1865,6 @@
                   "title": "Nghĩa vụ với 'phải'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "You can go to the doctor this afternoon.",
@@ -2043,7 +1975,6 @@
                     "SOUTHERN": "bị",
                     "STANDARD": "bị"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi bị cảm rồi.",
                   "example_translation": "I caught a cold.",
                   "image_url": null,
@@ -2062,7 +1993,6 @@
                     "SOUTHERN": "phải",
                     "STANDARD": "phải"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi phải đi khám bệnh.",
                   "example_translation": "I have to go to the doctor.",
                   "image_url": null,
@@ -2081,7 +2011,6 @@
                     "SOUTHERN": "bệnh",
                     "STANDARD": "ốm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cháu bé bị ốm rồi.",
                   "example_translation": "The child is sick.",
                   "image_url": null,
@@ -2100,7 +2029,6 @@
                     "SOUTHERN": "được",
                     "STANDARD": "được"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi được bác sĩ khám miễn phí.",
                   "example_translation": "I was examined by the doctor for free.",
                   "image_url": null,
@@ -2119,7 +2047,6 @@
                     "SOUTHERN": "khỏe",
                     "STANDARD": "khỏe"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Sau khi uống thuốc tôi khỏe hơn rồi.",
                   "example_translation": "After taking medicine I feel better.",
                   "image_url": null,
@@ -2140,7 +2067,6 @@
                     "selectedChoice": "Tự mua thuốc ở nhà thuốc",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Đoạn văn nói: 'Khi bị ốm, người Việt thường tự mua thuốc ở nhà thuốc trước khi đi khám bác sĩ.'",
                   "options": {
@@ -2161,7 +2087,6 @@
                     "selectedChoice": "Sức khỏe quan trọng hơn tiền bạc",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Khỏe hơn giàu' = health is better than wealth.",
                   "options": {
@@ -2184,7 +2109,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Đoạn văn nói phòng khám tư nhân sạch hơn và nhanh hơn bệnh viện công.",
                   "options": {
@@ -2288,7 +2212,6 @@
                     "SOUTHERN": "phòng khám",
                     "STANDARD": "phòng khám"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Phòng khám tư nhân đắt hơn bệnh viện công.",
                   "example_translation": "Private clinics are more expensive than public hospitals.",
                   "image_url": null,
@@ -2307,7 +2230,6 @@
                     "SOUTHERN": "tư nhân",
                     "STANDARD": "tư nhân"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Phòng khám tư nhân sạch hơn.",
                   "example_translation": "The private clinic is cleaner.",
                   "image_url": null,
@@ -2326,7 +2248,6 @@
                     "SOUTHERN": "công",
                     "STANDARD": "công"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bệnh viện công rẻ hơn phòng khám tư nhân.",
                   "example_translation": "Public hospitals are cheaper than private clinics.",
                   "image_url": null,
@@ -2374,7 +2295,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Bốn mùa theo thứ tự: xuân, hạ, thu, đông.",
                   "options": {
@@ -2407,7 +2327,6 @@
                     "selectedChoice": "Hai mùa: mùa mưa và mùa khô",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Miền Nam chỉ có hai mùa: mùa mưa và mùa khô.",
                   "options": {
@@ -2430,7 +2349,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Đang' chỉ thì tiến hành: đang mưa = is raining.",
                   "options": {
@@ -2452,7 +2370,6 @@
                     "translation": "Mùa đông ở Hà Nội rất lạnh.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Mùa đông' = winter, 'lạnh' = cold, 'rất' = very.",
                   "options": {
@@ -2553,7 +2470,6 @@
                     "SOUTHERN": "trời",
                     "STANDARD": "trời"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Trời đang mưa.",
                   "example_translation": "It's raining.",
                   "image_url": null,
@@ -2572,7 +2488,6 @@
                     "SOUTHERN": "nóng",
                     "STANDARD": "nóng"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hôm nay trời nóng quá!",
                   "example_translation": "It's so hot today!",
                   "image_url": null,
@@ -2591,7 +2506,6 @@
                     "SOUTHERN": "lạnh",
                     "STANDARD": "lạnh"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Mùa đông ở Hà Nội rất lạnh.",
                   "example_translation": "Winter in Hanoi is very cold.",
                   "image_url": null,
@@ -2610,7 +2524,6 @@
                     "SOUTHERN": "mưa",
                     "STANDARD": "mưa"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Đang mưa to lắm.",
                   "example_translation": "It's raining heavily.",
                   "image_url": null,
@@ -2629,7 +2542,6 @@
                     "SOUTHERN": "nắng",
                     "STANDARD": "nắng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Trời nắng đẹp quá!",
                   "example_translation": "The weather is so beautiful and sunny!",
                   "image_url": null,
@@ -2648,7 +2560,6 @@
                     "SOUTHERN": "gió",
                     "STANDARD": "gió"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Hôm nay gió to lắm.",
                   "example_translation": "It's very windy today.",
                   "image_url": null,
@@ -2667,7 +2578,6 @@
                     "SOUTHERN": "mùa",
                     "STANDARD": "mùa"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa nào bạn thích nhất?",
                   "example_translation": "Which season do you like the most?",
                   "image_url": null,
@@ -2686,7 +2596,6 @@
                     "SOUTHERN": "mùa xuân",
                     "STANDARD": "mùa xuân"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa xuân ở Hà Nội rất đẹp.",
                   "example_translation": "Spring in Hanoi is very beautiful.",
                   "image_url": null,
@@ -2705,7 +2614,6 @@
                     "SOUTHERN": "mùa hạ",
                     "STANDARD": "mùa hạ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa hạ nóng lắm ở Việt Nam.",
                   "example_translation": "Summer is very hot in Vietnam.",
                   "image_url": null,
@@ -2724,7 +2632,6 @@
                     "SOUTHERN": "mùa thu",
                     "STANDARD": "mùa thu"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa thu Hà Nội rất lãng mạn.",
                   "example_translation": "Autumn in Hanoi is very romantic.",
                   "image_url": null,
@@ -2743,7 +2650,6 @@
                     "SOUTHERN": "mùa đông",
                     "STANDARD": "mùa đông"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa đông miền Bắc có khi lạnh 10 độ.",
                   "example_translation": "Winter in the North can be as cold as 10 degrees.",
                   "image_url": null,
@@ -2762,7 +2668,6 @@
                     "SOUTHERN": "ẩm",
                     "STANDARD": "ẩm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tháng ba ở Hà Nội rất ẩm.",
                   "example_translation": "March in Hanoi is very humid.",
                   "image_url": null,
@@ -2781,7 +2686,6 @@
                     "SOUTHERN": "mùa mưa",
                     "STANDARD": "mùa mưa"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa mưa ở miền Nam từ tháng năm đến tháng mười một.",
                   "example_translation": "The rainy season in the South is from May to November.",
                   "image_url": null,
@@ -2800,7 +2704,6 @@
                     "SOUTHERN": "mùa khô",
                     "STANDARD": "mùa khô"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa khô ở miền Nam ít mưa lắm.",
                   "example_translation": "The dry season in the South has very little rain.",
                   "image_url": null,
@@ -2823,7 +2726,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Đang' chỉ thì tiến hành: đang mưa = is raining.",
                   "options": {
@@ -2845,7 +2747,6 @@
                     "selectedChoice": "Trời đang lạnh dần.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Đang lạnh dần' = getting colder.",
                   "options": {
@@ -2871,7 +2772,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc: Trời + đang + động từ + bổ ngữ.",
                   "options": {
@@ -2892,7 +2792,6 @@
                     "translation": "Hôm nay trời nắng.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Hôm nay' = today, 'trời nắng' = it's sunny.",
                   "options": {
@@ -2913,7 +2812,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "It's raining.",
@@ -2937,7 +2835,6 @@
                   "title": "Thì tiến hành với 'đang'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "It's too hot!",
@@ -3048,7 +2945,6 @@
                     "SOUTHERN": "đang",
                     "STANDARD": "đang"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Trời đang mưa.",
                   "example_translation": "It's raining right now.",
                   "image_url": null,
@@ -3067,7 +2963,6 @@
                     "SOUTHERN": "mưa rào",
                     "STANDARD": "mưa rào"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đang mưa rào to lắm.",
                   "example_translation": "It's pouring rain heavily.",
                   "image_url": null,
@@ -3086,7 +2981,6 @@
                     "SOUTHERN": "tạnh",
                     "STANDARD": "tạnh"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mưa tạnh rồi, đi thôi!",
                   "example_translation": "The rain stopped, let's go!",
                   "image_url": null,
@@ -3107,7 +3001,6 @@
                     "transcript": "lạnh",
                     "type": "listening"
                   },
-                  "difficulty_level": 2,
                   "question_type": "listening",
                   "explanation": "Dự báo nói 'trời đang lạnh dần' ở miền Bắc.",
                   "options": {
@@ -3129,7 +3022,6 @@
                     "selectedChoice": "Ẩm và có mưa chiều",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Miền Nam đang là mùa mưa, trời đang ẩm và có mưa chiều.",
                   "options": {
@@ -3152,7 +3044,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Ô' = umbrella. Có thể nói 'dù' ở miền Bắc nhưng 'ô' phổ biến hơn.",
                   "options": {
@@ -3251,7 +3142,6 @@
                     "SOUTHERN": "dự báo",
                     "STANDARD": "dự báo"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Dự báo thời tiết hôm nay thế nào?",
                   "example_translation": "What's the weather forecast today?",
                   "image_url": null,
@@ -3270,7 +3160,6 @@
                     "SOUTHERN": "nhiệt độ",
                     "STANDARD": "nhiệt độ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nhiệt độ hôm nay ba mươi độ.",
                   "example_translation": "Today's temperature is 30 degrees.",
                   "image_url": null,
@@ -3289,7 +3178,6 @@
                     "SOUTHERN": "ô",
                     "STANDARD": "ô"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nhớ mang ô khi đi ra ngoài.",
                   "example_translation": "Remember to bring an umbrella when going out.",
                   "image_url": null,
@@ -3337,7 +3225,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Từ vựng cơ bản về nhà ở.",
                   "options": {
@@ -3370,7 +3257,6 @@
                     "selectedChoice": "lầu",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Miền Nam hay dùng 'lầu' thay cho 'tầng'.",
                   "options": {
@@ -3391,7 +3277,6 @@
                     "translation": "Tôi thuê căn hộ gần trường đại học.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Thuê' = rent, 'căn hộ' = apartment.",
                   "options": {
@@ -3416,7 +3301,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Phòng ngủ' = bedroom.",
                   "options": {
@@ -3522,7 +3406,6 @@
                     "SOUTHERN": "nhà",
                     "STANDARD": "nhà"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Nhà tôi ở gần trung tâm.",
                   "example_translation": "My house is near the center.",
                   "image_url": null,
@@ -3541,7 +3424,6 @@
                     "SOUTHERN": "phòng",
                     "STANDARD": "phòng"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Căn hộ có ba phòng.",
                   "example_translation": "The apartment has three rooms.",
                   "image_url": null,
@@ -3560,7 +3442,6 @@
                     "SOUTHERN": "bếp",
                     "STANDARD": "bếp"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bếp nhà tôi nhỏ nhưng đầy đủ.",
                   "example_translation": "My kitchen is small but fully equipped.",
                   "image_url": null,
@@ -3579,7 +3460,6 @@
                     "SOUTHERN": "vệ sinh",
                     "STANDARD": "vệ sinh"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nhà có hai vệ sinh.",
                   "example_translation": "The house has two bathrooms.",
                   "image_url": null,
@@ -3598,7 +3478,6 @@
                     "SOUTHERN": "cửa",
                     "STANDARD": "cửa"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đừng quên khóa cửa khi ra ngoài.",
                   "example_translation": "Don't forget to lock the door when going out.",
                   "image_url": null,
@@ -3617,7 +3496,6 @@
                     "SOUTHERN": "cửa sổ",
                     "STANDARD": "cửa sổ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mở cửa sổ cho thoáng đi.",
                   "example_translation": "Open the window for ventilation.",
                   "image_url": null,
@@ -3636,7 +3514,6 @@
                     "SOUTHERN": "thuê",
                     "STANDARD": "thuê"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi ở thuê căn hộ nhỏ.",
                   "example_translation": "I rent a small apartment.",
                   "image_url": null,
@@ -3655,7 +3532,6 @@
                     "SOUTHERN": "ở",
                     "STANDARD": "ở"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi ở Hà Nội ba năm rồi.",
                   "example_translation": "I've lived in Hanoi for three years.",
                   "image_url": null,
@@ -3674,7 +3550,6 @@
                     "SOUTHERN": "lầu",
                     "STANDARD": "tầng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi ở tầng ba.",
                   "example_translation": "I live on the third floor.",
                   "image_url": null,
@@ -3693,7 +3568,6 @@
                     "SOUTHERN": "sân",
                     "STANDARD": "sân"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nhà tôi có sân rộng.",
                   "example_translation": "My house has a big yard.",
                   "image_url": null,
@@ -3712,7 +3586,6 @@
                     "SOUTHERN": "chung cư",
                     "STANDARD": "chung cư"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi sống ở chung cư gần chỗ làm.",
                   "example_translation": "I live in an apartment building near work.",
                   "image_url": null,
@@ -3731,7 +3604,6 @@
                     "SOUTHERN": "phòng ngủ",
                     "STANDARD": "phòng ngủ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Căn hộ có hai phòng ngủ.",
                   "example_translation": "The apartment has two bedrooms.",
                   "image_url": null,
@@ -3750,7 +3622,6 @@
                     "SOUTHERN": "khách sạn",
                     "STANDARD": "khách sạn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Chúng tôi ở khách sạn ba ngày.",
                   "example_translation": "We stayed at the hotel for three days.",
                   "image_url": null,
@@ -3769,7 +3640,6 @@
                     "SOUTHERN": "ngoại ô",
                     "STANDARD": "ngoại ô"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nhà tôi ở ngoại ô thành phố.",
                   "example_translation": "My house is in the suburbs.",
                   "image_url": null,
@@ -3792,7 +3662,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Ở' là giới từ chỉ vị trí: ở + nơi chốn.",
                   "options": {
@@ -3820,7 +3689,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Nhà tôi có ba phòng ngủ.",
                   "options": {
@@ -3842,7 +3710,6 @@
                     "selectedChoice": "The kitchen is on the first floor",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Ở tầng một' = is on the first floor.",
                   "options": {
@@ -3863,7 +3730,6 @@
                     "translation": "Sau nhà có cái vườn.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Sau nhà' = behind the house.",
                   "options": {
@@ -3884,7 +3750,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I live in Hanoi.",
@@ -3908,7 +3773,6 @@
                   "title": "Trạng ngữ nơi chốn với 'ở'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "My house has three bedrooms.",
@@ -4009,7 +3873,6 @@
                     "SOUTHERN": "phòng khách",
                     "STANDARD": "phòng khách"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Phòng khách rộng hơn phòng ngủ.",
                   "example_translation": "The living room is bigger than the bedroom.",
                   "image_url": null,
@@ -4028,7 +3891,6 @@
                     "SOUTHERN": "vườn",
                     "STANDARD": "vườn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Sau nhà có cái vườn nhỏ.",
                   "example_translation": "There's a small garden behind the house.",
                   "image_url": null,
@@ -4047,7 +3909,6 @@
                     "SOUTHERN": "riêng",
                     "STANDARD": "riêng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đây là nhà riêng của tôi.",
                   "example_translation": "This is my own house.",
                   "image_url": null,
@@ -4095,7 +3956,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Các hoạt động giải trí phổ biến.",
                   "options": {
@@ -4128,7 +3988,6 @@
                     "selectedChoice": "bóng đá",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Bóng đá là môn thể thao phổ biến nhất ở Việt Nam.",
                   "options": {
@@ -4149,7 +4008,6 @@
                     "translation": "Tôi thích nghe nhạc và đọc sách.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Nghe nhạc' = listen to music, 'đọc sách' = read books.",
                   "options": {
@@ -4173,7 +4031,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Chơi' vừa là play vừa là hang out. 'Đi chơi' = go out/hang out.",
                   "options": {
@@ -4284,7 +4141,6 @@
                     "SOUTHERN": "xem",
                     "STANDARD": "xem"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi thích xem phim hành động.",
                   "example_translation": "I like watching action movies.",
                   "image_url": null,
@@ -4303,7 +4159,6 @@
                     "SOUTHERN": "phim",
                     "STANDARD": "phim"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bộ phim này hay lắm!",
                   "example_translation": "This movie is really good!",
                   "image_url": null,
@@ -4322,7 +4177,6 @@
                     "SOUTHERN": "nghe",
                     "STANDARD": "nghe"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi thích nghe nhạc.",
                   "example_translation": "I like listening to music.",
                   "image_url": null,
@@ -4341,7 +4195,6 @@
                     "SOUTHERN": "nhạc",
                     "STANDARD": "nhạc"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nhạc Việt Nam hay lắm.",
                   "example_translation": "Vietnamese music is really good.",
                   "image_url": null,
@@ -4360,7 +4213,6 @@
                     "SOUTHERN": "đọc",
                     "STANDARD": "đọc"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi hay đọc sách buổi tối.",
                   "example_translation": "I usually read books in the evening.",
                   "image_url": null,
@@ -4379,7 +4231,6 @@
                     "SOUTHERN": "chơi",
                     "STANDARD": "chơi"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cuối tuần mình đi chơi nhé!",
                   "example_translation": "Let's hang out this weekend!",
                   "image_url": null,
@@ -4398,7 +4249,6 @@
                     "SOUTHERN": "thể thao",
                     "STANDARD": "thể thao"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi thích chơi thể thao.",
                   "example_translation": "I like playing sports.",
                   "image_url": null,
@@ -4417,7 +4267,6 @@
                     "SOUTHERN": "bóng đá",
                     "STANDARD": "bóng đá"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bóng đá là môn thể thao phổ biến nhất Việt Nam.",
                   "example_translation": "Football is the most popular sport in Vietnam.",
                   "image_url": null,
@@ -4436,7 +4285,6 @@
                     "SOUTHERN": "bơi",
                     "STANDARD": "bơi"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cuối tuần tôi hay đi bơi.",
                   "example_translation": "On weekends I usually go swimming.",
                   "image_url": null,
@@ -4455,7 +4303,6 @@
                     "SOUTHERN": "du lịch",
                     "STANDARD": "du lịch"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mùa hè này tôi đi du lịch Đà Lạt.",
                   "example_translation": "This summer I'm traveling to Da Lat.",
                   "image_url": null,
@@ -4474,7 +4321,6 @@
                     "SOUTHERN": "sách",
                     "STANDARD": "sách"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi đang đọc cuốn sách hay.",
                   "example_translation": "I'm reading a good book.",
                   "image_url": null,
@@ -4493,7 +4339,6 @@
                     "SOUTHERN": "rảnh",
                     "STANDARD": "rảnh"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Lúc rảnh em thích làm gì?",
                   "example_translation": "What do you like to do in your free time?",
                   "image_url": null,
@@ -4512,7 +4357,6 @@
                     "SOUTHERN": "giỏi",
                     "STANDARD": "giỏi"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh ấy chơi bóng đá giỏi lắm.",
                   "example_translation": "He plays football very well.",
                   "image_url": null,
@@ -4535,7 +4379,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Và' = and, thêm thông tin không đối lập.",
                   "options": {
@@ -4557,7 +4400,6 @@
                     "selectedChoice": "nhưng",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Nhưng' chỉ sự đối lập: giỏi nhưng lười = smart but lazy.",
                   "options": {
@@ -4585,7 +4427,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Tôi thích bóng đá nhưng không có thời gian.",
                   "options": {
@@ -4608,7 +4449,6 @@
                     "translation": "Tôi thích mà không có thời gian.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Mà' hoặc 'nhưng' đều đúng. 'Mà' phổ biến hơn trong văn nói.",
                   "options": {
@@ -4633,7 +4473,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Mà' dùng như 'that/which' dẫn mệnh đề quan hệ.",
                   "options": {
@@ -4653,7 +4492,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I like listening to music and reading books.",
@@ -4677,7 +4515,6 @@
                   "title": "Câu ghép với 'và'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I like football but don't have time to play.",
@@ -4701,7 +4538,6 @@
                   "title": "Câu ghép với 'nhưng'"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I like it but don't have money to buy it.",
@@ -4802,7 +4638,6 @@
                     "SOUTHERN": "và",
                     "STANDARD": "và"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi thích nghe nhạc và đọc sách.",
                   "example_translation": "I like listening to music and reading books.",
                   "image_url": null,
@@ -4821,7 +4656,6 @@
                     "SOUTHERN": "nhưng",
                     "STANDARD": "nhưng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi thích bóng đá nhưng không có thời gian.",
                   "example_translation": "I like football but don't have time.",
                   "image_url": null,
@@ -4840,7 +4674,6 @@
                     "SOUTHERN": "mà",
                     "STANDARD": "mà"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh thích mà không có thời gian.",
                   "example_translation": "You like it but don't have time.",
                   "image_url": null,
@@ -4859,7 +4692,6 @@
                     "SOUTHERN": "thèm",
                     "STANDARD": "thèm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Thấy người ta ăn mà thèm quá!",
                   "example_translation": "Seeing them eat makes me so jealous!",
                   "image_url": null,
@@ -4887,7 +4719,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Tôi thích nhạc Việt Nam hơn nhạc nước ngoài.",
                   "options": {
@@ -4912,7 +4743,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "'Mà' dẫn mệnh đề quan hệ: môn thể thao mà tôi thích nhất.",
                   "options": {
@@ -4934,7 +4764,6 @@
                     "translation": "Tôi thích đi bơi và chơi bóng đá với bạn bè.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "'Đi bơi' = go swimming, 'chơi bóng đá' = play football, 'với bạn bè' = with friends.",
                   "options": {
@@ -4956,7 +4785,6 @@
                     "selectedChoice": "mát",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "'Mát' = cool. Đà Lạt mát hơn Sài Gòn.",
                   "options": {
@@ -5051,7 +4879,6 @@
                     "SOUTHERN": "hấp dẫn",
                     "STANDARD": "hấp dẫn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Phim này hấp dẫn lắm.",
                   "example_translation": "This movie is very fascinating.",
                   "image_url": null,
@@ -5070,7 +4897,6 @@
                     "SOUTHERN": "bạn bè",
                     "STANDARD": "bạn bè"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi hay chơi bóng đá với bạn bè.",
                   "example_translation": "I usually play football with friends.",
                   "image_url": null,

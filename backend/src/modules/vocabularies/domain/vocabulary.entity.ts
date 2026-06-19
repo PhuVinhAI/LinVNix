@@ -10,7 +10,7 @@ import { BaseEntity } from '../../../database/base/base.entity';
 import { PartOfSpeech, Dialect } from '../../../common/enums';
 
 @Entity('vocabularies')
-@Index(['lessonId', 'difficultyLevel'])
+@Index(['lessonId'])
 export class Vocabulary extends BaseEntity {
   @Column()
   word: string;
@@ -56,9 +56,6 @@ export class Vocabulary extends BaseEntity {
     nullable: true,
   })
   region?: Dialect;
-
-  @Column({ name: 'difficulty_level', default: 1 })
-  difficultyLevel: number;
 
   @Column({ name: 'lesson_id' })
   lessonId: string;

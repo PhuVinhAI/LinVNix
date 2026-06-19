@@ -132,8 +132,8 @@ async function main() {
 
         for (const vocabData of lessonData.vocabularies) {
           await client.query(
-            `INSERT INTO vocabularies (word, translation, part_of_speech, example_sentence, example_translation, audio_url, image_url, classifier, dialect_variants, audio_urls, region, difficulty_level, lesson_id)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+            `INSERT INTO vocabularies (word, translation, part_of_speech, example_sentence, example_translation, audio_url, image_url, classifier, dialect_variants, audio_urls, region, lesson_id)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
             [
               vocabData.word,
               vocabData.translation,
@@ -148,7 +148,6 @@ async function main() {
                 : null,
               vocabData.audio_urls ? JSON.stringify(vocabData.audio_urls) : null,
               vocabData.region || null,
-              vocabData.difficulty_level || 1,
               lessonId,
             ],
           );
@@ -157,15 +156,14 @@ async function main() {
 
         for (const grammarData of lessonData.grammar_rules) {
           await client.query(
-            `INSERT INTO grammar_rules (title, explanation, structure, examples, notes, difficulty_level, lesson_id)
-             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            `INSERT INTO grammar_rules (title, explanation, structure, examples, notes, lesson_id)
+             VALUES ($1, $2, $3, $4, $5, $6)`,
             [
               grammarData.title,
               grammarData.explanation,
               grammarData.structure || null,
               JSON.stringify(grammarData.examples),
               grammarData.notes || null,
-              grammarData.difficulty_level || 1,
               lessonId,
             ],
           );
@@ -184,8 +182,8 @@ async function main() {
           for (let i = 0; i < lessonQuestions.length; i++) {
             const questionData = lessonQuestions[i];
             await client.query(
-              `INSERT INTO questions (question_type, question, question_audio_url, options, correct_answer, explanation, order_index, difficulty_level, exercise_id)
-               VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+              `INSERT INTO questions (question_type, question, question_audio_url, options, correct_answer, explanation, order_index, exercise_id)
+               VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
               [
                 questionData.question_type,
                 questionData.question ?? null,
@@ -196,7 +194,6 @@ async function main() {
                 JSON.stringify(questionData.correct_answer),
                 questionData.explanation || null,
                 i + 1,
-                questionData.difficulty_level || 1,
                 exerciseId,
               ],
             );

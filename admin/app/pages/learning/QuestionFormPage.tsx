@@ -38,14 +38,10 @@ const TYPES: Array<{ value: string; label: string; Icon: LucideIcon; tone: strin
   { value: 'speaking', label: 'Nói', Icon: Mic, tone: 'text-cyan-600 dark:text-cyan-400' },
 ]
 
-const DIFFICULTY_LABELS = ['', 'Rất dễ', 'Dễ', 'Trung bình', 'Khó', 'Rất khó']
-const DIFFICULTY_DOT = ['', 'bg-emerald-500', 'bg-teal-500', 'bg-amber-500', 'bg-rose-500', 'bg-red-600']
-
 interface CommonState {
   questionType: string
   questionAudioUrl: string
   explanation: string
-  difficultyLevel: number
 }
 
 function deriveCommon(initial: Record<string, unknown> | undefined | null): CommonState {
@@ -53,7 +49,6 @@ function deriveCommon(initial: Record<string, unknown> | undefined | null): Comm
     questionType: String(initial?.questionType ?? 'multiple_choice').toLowerCase(),
     questionAudioUrl: String(initial?.questionAudioUrl ?? ''),
     explanation: String(initial?.explanation ?? ''),
-    difficultyLevel: Number(initial?.difficultyLevel ?? 1) || 1,
   }
 }
 
@@ -135,7 +130,6 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
         question: payload.question,
         questionAudioUrl: common.questionAudioUrl || null,
         explanation: common.explanation || null,
-        difficultyLevel: common.difficultyLevel,
         options: payload.options ? opts : null,
         correctAnswer: payload.correctAnswer,
       }
@@ -190,8 +184,6 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
             <TypePicker value={common.questionType} onChange={(v) => updateCommon('questionType', v)} />
           )}
           <Divider />
-          <DifficultyPicker value={common.difficultyLevel} onChange={(v) => updateCommon('difficultyLevel', v)} />
-          <Divider />
           <AudioPicker value={common.questionAudioUrl} onChange={(v) => updateCommon('questionAudioUrl', v)} />
           <Divider />
           <ExplanationPicker value={common.explanation} onChange={(v) => updateCommon('explanation', v)} />
@@ -209,11 +201,6 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
                   <typeMeta.Icon className="h-4 w-4" />
                 </div>
                 <span className={`text-xs font-bold uppercase tracking-wider ${typeMeta.tone}`}>{typeMeta.label}</span>
-                <span className="text-muted-foreground text-xs">·</span>
-                <span className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground">
-                  <span className={`h-1.5 w-1.5 rounded-full ${DIFFICULTY_DOT[common.difficultyLevel]}`} />
-                  {DIFFICULTY_LABELS[common.difficultyLevel]}
-                </span>
               </div>
             </div>
 
@@ -328,46 +315,6 @@ function TypePicker({ value, onChange }: { value: string; onChange: (v: string) 
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
-
-function DifficultyPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 hover:bg-muted transition-colors"
-        >
-          <span className={`h-2 w-2 rounded-full ${DIFFICULTY_DOT[value]}`} />
-          <span className="text-sm font-semibold">{DIFFICULTY_LABELS[value]}</span>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-56 p-2">
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground px-2 py-1">
-          Độ khó
-        </p>
-        <div className="space-y-1">
-          {[1, 2, 3, 4, 5].map((lvl) => (
-            <button
-              key={lvl}
-              type="button"
-              onClick={() => onChange(lvl)}
-              className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${
-                value === lvl ? 'bg-primary text-primary-foreground font-bold' : 'hover:bg-muted'
-              }`}
-            >
-              <span className="inline-flex items-center gap-2">
-                <span className={`h-2 w-2 rounded-full ${DIFFICULTY_DOT[lvl]}`} />
-                {DIFFICULTY_LABELS[lvl]}
-              </span>
-              <span className="text-xs tabular-nums opacity-60">{lvl}/5</span>
-            </button>
-          ))}
-        </div>
-      </PopoverContent>
-    </Popover>
   )
 }
 

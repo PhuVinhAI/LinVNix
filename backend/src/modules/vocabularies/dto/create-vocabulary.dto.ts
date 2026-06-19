@@ -1,7 +1,6 @@
 import {
   IsString,
   IsEnum,
-  IsNumber,
   IsUUID,
   IsOptional,
   IsObject,
@@ -83,11 +82,6 @@ export class CreateVocabularyDto {
   @IsEnum(Dialect)
   @IsOptional()
   region?: Dialect;
-
-  @ApiProperty({ example: 1, required: false })
-  @IsNumber()
-  @IsOptional()
-  difficultyLevel?: number;
 
   @ApiProperty({ example: 'uuid-of-lesson' })
   @IsUUID()

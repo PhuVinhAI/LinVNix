@@ -231,7 +231,6 @@ void main() {
         },
         'explanation': null,
         'orderIndex': 0,
-        'difficultyLevel': 1,
       };
       final session = QuestionSession(
         exerciseId: 'set-match',

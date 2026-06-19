@@ -1,6 +1,5 @@
 import {
   IsString,
-  IsNumber,
   IsUUID,
   IsOptional,
   IsArray,
@@ -34,11 +33,6 @@ export class CreateGrammarDto {
   @IsString()
   @IsOptional()
   notes?: string;
-
-  @ApiProperty({ example: 1, required: false })
-  @IsNumber()
-  @IsOptional()
-  difficultyLevel?: number;
 
   @ApiProperty({ example: 'uuid-of-lesson' })
   @IsUUID()

@@ -22,7 +22,6 @@
                     "selectedChoice": "lạm phát",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Lạm phát là hiện tượng mức giá chung tăng lên trong nền kinh tế.",
                   "options": {
@@ -45,7 +44,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 3,
                   "question_type": "fill_blank",
                   "explanation": "'Đầu tư' nghĩa là bỏ tiền vào một dự án với hy vọng sinh lời.",
                   "options": {
@@ -84,7 +82,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 3,
                   "question_type": "matching",
                   "explanation": "Đây là các thuật ngữ kinh tế cơ bản trong tiếng Việt.",
                   "options": {
@@ -117,7 +114,6 @@
                     "translation": "Công ty phải cạnh tranh để giành thị phần.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "'Cạnh tranh' tương đương 'compete', 'thị phần' tương đương 'market share'.",
                   "options": {
@@ -144,7 +140,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 3,
                   "question_type": "ordering",
                   "explanation": "Câu đúng: 'Kinh tế tăng trưởng ổn định năm nay.'",
                   "options": {
@@ -259,7 +254,6 @@
                     "SOUTHERN": "kinh tế",
                     "STANDARD": "kinh tế"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Kinh tế Việt Nam tăng trưởng 6,5% năm nay.",
                   "example_translation": "Vietnam's economy grew 6.5% this year.",
                   "image_url": null,
@@ -278,7 +272,6 @@
                     "SOUTHERN": "đầu tư",
                     "STANDARD": "đầu tư"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Công ty đầu tư 50 triệu đô la vào dự án mới.",
                   "example_translation": "The company invested 50 million dollars in the new project.",
                   "image_url": null,
@@ -297,7 +290,6 @@
                     "SOUTHERN": "lợi nhuận",
                     "STANDARD": "lợi nhuận"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Lợi nhuận của công ty tăng 20% so với năm trước.",
                   "example_translation": "The company's profit increased 20% compared to last year.",
                   "image_url": null,
@@ -316,7 +308,6 @@
                     "SOUTHERN": "thị trường",
                     "STANDARD": "thị trường"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Thị trường bất động sản đang phục hồi.",
                   "example_translation": "The real estate market is recovering.",
                   "image_url": null,
@@ -335,7 +326,6 @@
                     "SOUTHERN": "chứng khoán",
                     "STANDARD": "chứng khoán"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thị trường chứng khoán biến động mạnh hôm nay.",
                   "example_translation": "The stock market fluctuated sharply today.",
                   "image_url": null,
@@ -354,7 +344,6 @@
                     "SOUTHERN": "ngân hàng",
                     "STANDARD": "ngân hàng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Ngân hàng Nhà nước điều hành chính sách tiền tệ.",
                   "example_translation": "The State Bank implements monetary policy.",
                   "image_url": null,
@@ -373,7 +362,6 @@
                     "SOUTHERN": "lạm phát",
                     "STANDARD": "lạm phát"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tỷ lệ lạm phát đạt 4,1% trong quý đầu tiên.",
                   "example_translation": "The inflation rate reached 4.1% in the first quarter.",
                   "image_url": null,
@@ -392,7 +380,6 @@
                     "SOUTHERN": "xuất nhập khẩu",
                     "STANDARD": "xuất nhập khẩu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Xuất nhập khẩu đóng vai trò quan trọng trong nền kinh tế.",
                   "example_translation": "Import and export play an important role in the economy.",
                   "image_url": null,
@@ -411,7 +398,6 @@
                     "SOUTHERN": "doanh nghiệp",
                     "STANDARD": "doanh nghiệp"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Doanh nghiệp nhỏ và vừa cần hỗ trợ từ chính phủ.",
                   "example_translation": "Small and medium enterprises need government support.",
                   "image_url": null,
@@ -430,7 +416,6 @@
                     "SOUTHERN": "cạnh tranh",
                     "STANDARD": "cạnh tranh"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Các công ty phải cạnh tranh để giành thị phần.",
                   "example_translation": "Companies must compete to gain market share.",
                   "image_url": null,
@@ -449,7 +434,6 @@
                     "SOUTHERN": "thâm hụt",
                     "STANDARD": "thâm hụt"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thâm hụt ngân sách là vấn đề nan giải.",
                   "example_translation": "Budget deficit is a difficult problem to solve.",
                   "image_url": null,
@@ -468,7 +452,6 @@
                     "SOUTHERN": "vốn",
                     "STANDARD": "vốn"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Doanh nghiệp cần tăng vốn để mở rộng sản xuất.",
                   "example_translation": "The enterprise needs to increase capital to expand production.",
                   "image_url": null,
@@ -487,7 +470,6 @@
                     "SOUTHERN": "thị phần",
                     "STANDARD": "thị phần"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thị phần của thương hiệu này liên tục tăng trưởng.",
                   "example_translation": "This brand's market share continues to grow.",
                   "image_url": null,
@@ -506,7 +488,6 @@
                     "SOUTHERN": "tăng trưởng",
                     "STANDARD": "tăng trưởng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Nền kinh tế tăng trưởng đều đặn trong năm qua.",
                   "example_translation": "The economy grew steadily last year.",
                   "image_url": null,
@@ -525,7 +506,6 @@
                     "SOUTHERN": "rủi ro",
                     "STANDARD": "rủi ro"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Mọi khoản đầu tư đều có rủi ro.",
                   "example_translation": "Every investment carries risk.",
                   "image_url": null,
@@ -548,7 +528,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Câu điều kiện giả định quá khứ dùng 'đã' trong cả hai vế.",
                   "options": {
@@ -570,7 +549,6 @@
                     "selectedChoice": "Nếu tôi đã có vốn, tôi đã mở công ty rồi.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "Câu có 'đã...đã' trong cả hai vế là câu điều kiện giả định, trái thực tế.",
                   "options": {
@@ -591,7 +569,6 @@
                     "translation": "Chỉ khi ngân hàng giảm lãi suất, doanh nghiệp mới có thể vay vốn.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Dùng cấu trúc 'Chỉ khi...mới' để diễn đạt 'only when...can'.",
                   "options": {
@@ -616,7 +593,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Có...mới' diễn đạt điều kiện cần.",
                   "options": {
@@ -639,7 +615,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "If the government had raised interest rates earlier, inflation would not have risen so high.",
@@ -663,7 +638,6 @@
                   "title": "Câu điều kiện giả định (Counterfactual)"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "If we invest more in technology and productivity increases, then profits will improve.",
@@ -687,7 +661,6 @@
                   "title": "Điều kiện lồng và 'mà' bổ nghĩa"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "Only with strong capital would one dare invest in this market.",
@@ -818,7 +791,6 @@
                     "SOUTHERN": "giả định",
                     "STANDARD": "giả định"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chúng ta giả định rằng lạm phát sẽ giảm trong quý tới.",
                   "example_translation": "We assume that inflation will decrease in the next quarter.",
                   "image_url": null,
@@ -837,7 +809,6 @@
                     "SOUTHERN": "lãi suất",
                     "STANDARD": "lãi suất"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ngân hàng trung ương giảm lãi suất để kích cầu.",
                   "example_translation": "The central bank cut interest rates to stimulate demand.",
                   "image_url": null,
@@ -856,7 +827,6 @@
                     "SOUTHERN": "tỷ giá hối đoái",
                     "STANDARD": "tỷ giá hối đoái"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tỷ giá hối đoái ảnh hưởng trực tiếp đến xuất nhập khẩu.",
                   "example_translation": "The exchange rate directly affects imports and exports.",
                   "image_url": null,
@@ -875,7 +845,6 @@
                     "SOUTHERN": "chi phí",
                     "STANDARD": "chi phí"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Chi phí sản xuất tăng do giá nguyên liệu tăng.",
                   "example_translation": "Production costs rose due to higher raw material prices.",
                   "image_url": null,
@@ -894,7 +863,6 @@
                     "SOUTHERN": "năng suất",
                     "STANDARD": "năng suất"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Năng suất lao động cần được nâng cao để cạnh tranh.",
                   "example_translation": "Labor productivity needs to be improved to compete.",
                   "image_url": null,
@@ -915,7 +883,6 @@
                     "selectedChoice": "Tăng trưởng sẽ chững lại",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu rõ: 'nếu không kiểm soát được lạm phát, thì tăng trưởng sẽ chững lại'.",
                   "options": {
@@ -938,7 +905,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Vượt ngưỡng' nghĩa là vượt quá mức giới hạn.",
                   "options": {
@@ -960,7 +926,6 @@
                     "translation": "Nếu chính phủ đã hỗ trợ kịp thời, thì nhiều doanh nghiệp đã không phá sản.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Câu điều kiện giả định quá khứ: dùng 'đã' ở cả hai vế.",
                   "options": {
@@ -1025,7 +990,6 @@
                     "SOUTHERN": "phá sản",
                     "STANDARD": "phá sản"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nhiều doanh nghiệp nhỏ đối mặt nguy cơ phá sản.",
                   "example_translation": "Many small enterprises face the risk of bankruptcy.",
                   "image_url": null,
@@ -1044,7 +1008,6 @@
                     "SOUTHERN": "ngưỡng",
                     "STANDARD": "ngưỡng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Lạm phát vượt ngưỡng cảnh báo.",
                   "example_translation": "Inflation exceeded the warning threshold.",
                   "image_url": null,
@@ -1063,7 +1026,6 @@
                     "SOUTHERN": "thể chế",
                     "STANDARD": "thể chế"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cải cách thể chế là điều kiện tiên quyết cho phát triển.",
                   "example_translation": "Institutional reform is a prerequisite for development.",
                   "image_url": null,
@@ -1082,7 +1044,6 @@
                     "SOUTHERN": "bình diện",
                     "STANDARD": "bình diện"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Trên bình diện quốc tế, sức cạnh tranh còn hạn chế.",
                   "example_translation": "At the international level, competitiveness is still limited.",
                   "image_url": null,
@@ -1107,7 +1068,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 3,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc báo cáo: Tóm tắt → Phân tích → Kiến nghị.",
                   "options": {
@@ -1130,7 +1090,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Có...mới' diễn đạt điều kiện cần trong văn phong trang trọng.",
                   "options": {
@@ -1155,7 +1114,6 @@
                     "translation": "Nếu giá nhiên liệu tiếp tục tăng, thì biên lợi nhuận sẽ bị thu hẹp.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "'Biên lợi nhuận' = profit margin, 'thu hẹp' = shrink/narrow.",
                   "options": {
@@ -1220,7 +1178,6 @@
                     "SOUTHERN": "doanh thu",
                     "STANDARD": "doanh thu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Doanh thu quý này vượt kỳ vọng.",
                   "example_translation": "This quarter's revenue exceeded expectations.",
                   "image_url": null,
@@ -1239,7 +1196,6 @@
                     "SOUTHERN": "biên lợi nhuận",
                     "STANDARD": "biên lợi nhuận"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Biên lợi nhuận giảm do chi phí tăng.",
                   "example_translation": "Profit margins declined due to rising costs.",
                   "image_url": null,
@@ -1258,7 +1214,6 @@
                     "SOUTHERN": "chuỗi cung ứng",
                     "STANDARD": "chuỗi cung ứng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tối ưu hóa chuỗi cung ứng giúp giảm chi phí.",
                   "example_translation": "Optimizing the supply chain helps reduce costs.",
                   "image_url": null,
@@ -1306,7 +1261,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 3,
                   "question_type": "matching",
                   "explanation": "Đây là các thuật ngữ chính trị cơ bản.",
                   "options": {
@@ -1339,7 +1293,6 @@
                     "selectedChoice": "Quốc hội",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Theo hiến pháp, Quốc hội là cơ quan quyền lực nhà nước cao nhất.",
                   "options": {
@@ -1362,7 +1315,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 3,
                   "question_type": "fill_blank",
                   "explanation": "'Quyền' ở đây nghĩa là 'right' — quyền lợi hợp pháp.",
                   "options": {
@@ -1384,7 +1336,6 @@
                     "translation": "Chính phủ ban hành chính sách mới nhằm khuyến khích đầu tư nước ngoài.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "'Ban hành' = issue/enact, 'khuyến khích' = encourage.",
                   "options": {
@@ -1495,7 +1446,6 @@
                     "SOUTHERN": "chính trị",
                     "STANDARD": "chính trị"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Chính trị là lĩnh vực phức tạp và nhạy cảm.",
                   "example_translation": "Politics is a complex and sensitive field.",
                   "image_url": null,
@@ -1514,7 +1464,6 @@
                     "SOUTHERN": "chính phủ",
                     "STANDARD": "chính phủ"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Chính phủ ban hành nghị định về cải cách hành chính.",
                   "example_translation": "The government issued a decree on administrative reform.",
                   "image_url": null,
@@ -1533,7 +1482,6 @@
                     "SOUTHERN": "quốc hội",
                     "STANDARD": "quốc hội"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Quốc hội thông qua đạo luật mới về bảo vệ môi trường.",
                   "example_translation": "The National Assembly passed a new law on environmental protection.",
                   "image_url": null,
@@ -1552,7 +1500,6 @@
                     "SOUTHERN": "luật",
                     "STANDARD": "luật"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Luật mới có hiệu lực từ ngày 1 tháng 1.",
                   "example_translation": "The new law takes effect on January 1st.",
                   "image_url": null,
@@ -1571,7 +1518,6 @@
                     "SOUTHERN": "quyền",
                     "STANDARD": "quyền"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Công dân có quyền tự do ngôn luận.",
                   "example_translation": "Citizens have the right to freedom of speech.",
                   "image_url": null,
@@ -1590,7 +1536,6 @@
                     "SOUTHERN": "dân chủ",
                     "STANDARD": "dân chủ"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Dân chủ là giá trị cốt lõi của xã hội hiện đại.",
                   "example_translation": "Democracy is a core value of modern society.",
                   "image_url": null,
@@ -1609,7 +1554,6 @@
                     "SOUTHERN": "bầu cử",
                     "STANDARD": "bầu cử"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Công dân đi bầu cử đại biểu Quốc hội.",
                   "example_translation": "Citizens vote for National Assembly representatives.",
                   "image_url": null,
@@ -1628,7 +1572,6 @@
                     "SOUTHERN": "đảng",
                     "STANDARD": "đảng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Đảng đề ra đường lối phát triển đất nước.",
                   "example_translation": "The party sets the direction for national development.",
                   "image_url": null,
@@ -1647,7 +1590,6 @@
                     "SOUTHERN": "hiến pháp",
                     "STANDARD": "hiến pháp"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hiến pháp quy định quyền và nghĩa vụ của công dân.",
                   "example_translation": "The Constitution stipulates citizens' rights and obligations.",
                   "image_url": null,
@@ -1666,7 +1608,6 @@
                     "SOUTHERN": "xã hội",
                     "STANDARD": "xã hội"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Xã hội ngày càng đòi hỏi sự minh bạch từ chính quyền.",
                   "example_translation": "Society increasingly demands transparency from authorities.",
                   "image_url": null,
@@ -1685,7 +1626,6 @@
                     "SOUTHERN": "cải cách",
                     "STANDARD": "cải cách"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cải cách thể chế là ưu tiên hàng đầu.",
                   "example_translation": "Institutional reform is the top priority.",
                   "image_url": null,
@@ -1704,7 +1644,6 @@
                     "SOUTHERN": "chính sách",
                     "STANDARD": "chính sách"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Chính sách mới nhằm khuyến khích đầu tư nước ngoài.",
                   "example_translation": "The new policy aims to encourage foreign investment.",
                   "image_url": null,
@@ -1723,7 +1662,6 @@
                     "SOUTHERN": "công dân",
                     "STANDARD": "công dân"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Mỗi công dân có quyền và nghĩa vụ theo hiến pháp.",
                   "example_translation": "Every citizen has rights and obligations under the constitution.",
                   "image_url": null,
@@ -1747,7 +1685,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Chính là...mới' nhấn mạnh yếu tố then chốt.",
                   "options": {
@@ -1772,7 +1709,6 @@
                     "selectedChoice": "Ai lại đồng ý với quy định phi lý như vậy?",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "'Ai lại...?' là câu hỏi tu từ phủ định theo lẽ thường, hàm ý 'không ai'.",
                   "options": {
@@ -1793,7 +1729,6 @@
                     "translation": "Lẽ nào chúng ta lại im lặng trước bất công?",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "'Lẽ nào...?' là câu hỏi tu từ phủ định theo lẽ phải.",
                   "options": {
@@ -1817,7 +1752,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Đúng là' thể hiện xác nhận kèm cảm xúc.",
                   "options": {
@@ -1837,7 +1771,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "It is precisely the participation of the people that creates the strength for reform.",
@@ -1861,7 +1794,6 @@
                   "title": "Cấu trúc nhấn mạnh: chính là, mới là, đúng là"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "How can citizens not have the right to supervise?",
@@ -1987,7 +1919,6 @@
                     "SOUTHERN": "tham vấn",
                     "STANDARD": "tham vấn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chính phủ cần tham vấn người dân trước khi ban hành luật.",
                   "example_translation": "The government must consult the people before enacting laws.",
                   "image_url": null,
@@ -2006,7 +1937,6 @@
                     "SOUTHERN": "phi lý",
                     "STANDARD": "phi lý"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Quy định này hoàn toàn phi lý.",
                   "example_translation": "This regulation is completely irrational.",
                   "image_url": null,
@@ -2025,7 +1955,6 @@
                     "SOUTHERN": "bất công",
                     "STANDARD": "bất công"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Người dân không thể chấp nhận sự bất công.",
                   "example_translation": "The people cannot accept injustice.",
                   "image_url": null,
@@ -2046,7 +1975,6 @@
                     "translation": "Dù tôi đồng ý rằng công bằng xã hội quan trọng, nhưng tăng thuế không phải là cách duy nhất.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Cấu trúc nhượng bộ 'Dù...nhưng...' (although...but).",
                   "options": {
@@ -2073,7 +2001,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 3,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc bài nói: Nêu vấn đề → Trình bày quan điểm → Phản biện → Kết luận.",
                   "options": {
@@ -2094,7 +2021,6 @@
                     "selectedChoice": "Cải cách toàn diện mới là giải pháp thực sự.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "'Mới là' nhấn mạnh tính chân chính, duy nhất.",
                   "options": {
@@ -2204,7 +2130,6 @@
                     "SOUTHERN": "thuế",
                     "STANDARD": "thuế"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Thuế thu nhập cá nhân cần được điều chỉnh.",
                   "example_translation": "Personal income tax needs to be adjusted.",
                   "image_url": null,
@@ -2223,7 +2148,6 @@
                     "SOUTHERN": "công bằng",
                     "STANDARD": "công bằng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Công bằng xã hội là mục tiêu của mọi chính sách.",
                   "example_translation": "Social justice is the goal of every policy.",
                   "image_url": null,
@@ -2242,7 +2166,6 @@
                     "SOUTHERN": "chênh lệch",
                     "STANDARD": "chênh lệch"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Sự chênh lệch thu nhập ngày càng lớn.",
                   "example_translation": "The income disparity is growing larger.",
                   "image_url": null,
@@ -2263,7 +2186,6 @@
                     "selectedChoice": "Tập trung dân chủ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Hệ thống chính trị Việt Nam hoạt động theo nguyên tắc tập trung dân chủ.",
                   "options": {
@@ -2286,7 +2208,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Nguyên tắc mở rộng: Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng.",
                   "options": {
@@ -2321,7 +2242,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Các thuật ngữ chính trị Hán Việt thường gặp.",
                   "options": {
@@ -2393,7 +2313,6 @@
                     "SOUTHERN": "tập trung dân chủ",
                     "STANDARD": "tập trung dân chủ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nguyên tắc tập trung dân chủ là nền tảng của hệ thống chính trị.",
                   "example_translation": "The principle of centralized democracy is the foundation of the political system.",
                   "image_url": null,
@@ -2412,7 +2331,6 @@
                     "SOUTHERN": "giám sát",
                     "STANDARD": "giám sát"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Công dân có quyền giám sát hoạt động của cơ quan nhà nước.",
                   "example_translation": "Citizens have the right to supervise state agency activities.",
                   "image_url": null,
@@ -2431,7 +2349,6 @@
                     "SOUTHERN": "lập pháp",
                     "STANDARD": "lập pháp"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Quốc hội là cơ quan lập pháp cao nhất.",
                   "example_translation": "The National Assembly is the highest legislative body.",
                   "image_url": null,
@@ -2483,7 +2400,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 3,
                   "question_type": "matching",
                   "explanation": "Các thuật ngữ khoa học công nghệ phổ biến.",
                   "options": {
@@ -2522,7 +2438,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Trí tuệ nhân tạo' = artificial intelligence.",
                   "options": {
@@ -2544,7 +2459,6 @@
                     "selectedChoice": "Quyền riêng tư và an ninh mạng",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu: thu thập dữ liệu lớn đặt ra vấn đề về quyền riêng tư và an ninh mạng.",
                   "options": {
@@ -2565,7 +2479,6 @@
                     "translation": "Thuật toán mới giúp tăng tốc độ xử lý.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "'Thuật toán' = algorithm, 'tốc độ xử lý' = processing speed.",
                   "options": {
@@ -2671,7 +2584,6 @@
                     "SOUTHERN": "khoa học",
                     "STANDARD": "khoa học"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Khoa học đóng vai trò quan trọng trong phát triển đất nước.",
                   "example_translation": "Science plays an important role in national development.",
                   "image_url": null,
@@ -2690,7 +2602,6 @@
                     "SOUTHERN": "nghiên cứu",
                     "STANDARD": "nghiên cứu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Nhóm nghiên cứu công bố kết quả thí nghiệm mới.",
                   "example_translation": "The research team published new experimental results.",
                   "image_url": null,
@@ -2709,7 +2620,6 @@
                     "SOUTHERN": "thí nghiệm",
                     "STANDARD": "thí nghiệm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Thí nghiệm chứng minh giả thuyết là đúng.",
                   "example_translation": "The experiment proved the hypothesis correct.",
                   "image_url": null,
@@ -2728,7 +2638,6 @@
                     "SOUTHERN": "phát minh",
                     "STANDARD": "phát minh"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Phát minh này đã thay đổi cách chúng ta giao tiếp.",
                   "example_translation": "This invention changed the way we communicate.",
                   "image_url": null,
@@ -2747,7 +2656,6 @@
                     "SOUTHERN": "công nghệ",
                     "STANDARD": "công nghệ"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Công nghệ thông tin phát triển nhanh chóng.",
                   "example_translation": "Information technology is developing rapidly.",
                   "image_url": null,
@@ -2766,7 +2674,6 @@
                     "SOUTHERN": "trí tuệ nhân tạo",
                     "STANDARD": "trí tuệ nhân tạo"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Trí tuệ nhân tạo ứng dụng trong nhiều lĩnh vực.",
                   "example_translation": "AI is applied in many fields.",
                   "image_url": null,
@@ -2785,7 +2692,6 @@
                     "SOUTHERN": "dữ liệu",
                     "STANDARD": "dữ liệu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Dữ liệu lớn cần phương pháp xử lý hiệu quả.",
                   "example_translation": "Big data requires efficient processing methods.",
                   "image_url": null,
@@ -2804,7 +2710,6 @@
                     "SOUTHERN": "thuật toán",
                     "STANDARD": "thuật toán"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thuật toán mới giúp tăng tốc độ xử lý.",
                   "example_translation": "The new algorithm helps increase processing speed.",
                   "image_url": null,
@@ -2823,7 +2728,6 @@
                     "SOUTHERN": "vệ tinh",
                     "STANDARD": "vệ tinh"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Việt Nam đã phóng vệ tinh viễn thông thứ hai.",
                   "example_translation": "Vietnam launched its second telecommunications satellite.",
                   "image_url": null,
@@ -2842,7 +2746,6 @@
                     "SOUTHERN": "năng lượng",
                     "STANDARD": "năng lượng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Năng lượng tái tạo là xu hướng tất yếu.",
                   "example_translation": "Renewable energy is an inevitable trend.",
                   "image_url": null,
@@ -2861,7 +2764,6 @@
                     "SOUTHERN": "an ninh mạng",
                     "STANDARD": "an ninh mạng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "An ninh mạng là vấn đề cấp bách trong thời đại số.",
                   "example_translation": "Cybersecurity is an urgent issue in the digital age.",
                   "image_url": null,
@@ -2880,7 +2782,6 @@
                     "SOUTHERN": "quyền riêng tư",
                     "STANDARD": "quyền riêng tư"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thu thập dữ liệu phải tôn trọng quyền riêng tư.",
                   "example_translation": "Data collection must respect privacy.",
                   "image_url": null,
@@ -2899,7 +2800,6 @@
                     "SOUTHERN": "máy học",
                     "STANDARD": "máy học"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Máy học giúp phân tích dữ liệu lớn hiệu quả.",
                   "example_translation": "Machine learning helps analyze big data efficiently.",
                   "image_url": null,
@@ -2922,7 +2822,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Rút gọn: bỏ 'được', dùng 'tiến hành' trực tiếp sau danh từ.",
                   "options": {
@@ -2944,7 +2843,6 @@
                     "selectedChoice": "Nghiên cứu tiến hành tại phòng thí nghiệm quốc gia.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "Rút gọn mệnh đề quan hệ bị động: bỏ 'được', giữ động từ không thì.",
                   "options": {
@@ -2965,7 +2863,6 @@
                     "translation": "Sau khi phân tích dữ liệu, các nhà khoa học kết luận rằng mô hình đề xuất hiệu quả hơn.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Rút gọn mệnh đề trạng ngữ: 'Sau khi + V' với cùng chủ ngữ.",
                   "options": {
@@ -2993,7 +2890,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 4,
                   "question_type": "ordering",
                   "explanation": "Câu đúng: 'Dữ liệu thu thập từ 500 mẫu cho thấy kết quả tích cực.'",
                   "options": {
@@ -3013,7 +2909,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "Research conducted at the national laboratory showed positive results.",
@@ -3037,7 +2932,6 @@
                   "title": "Rút gọn mệnh đề quan hệ"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "When conducting the experiment, the research team discovered the new algorithm increased speed by 40%.",
@@ -3117,7 +3011,6 @@
                     "SOUTHERN": "giả thuyết",
                     "STANDARD": "giả thuyết"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Giả thuyết cần được kiểm chứng qua thí nghiệm.",
                   "example_translation": "The hypothesis must be verified through experiments.",
                   "image_url": null,
@@ -3136,7 +3029,6 @@
                     "SOUTHERN": "kiểm chứng",
                     "STANDARD": "kiểm chứng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Kết quả nghiên cứu cần được kiểm chứng độc lập.",
                   "example_translation": "Research results must be independently verified.",
                   "image_url": null,
@@ -3155,7 +3047,6 @@
                     "SOUTHERN": "mô hình",
                     "STANDARD": "mô hình"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Mô hình đề xuất hiệu quả hơn phương pháp cũ.",
                   "example_translation": "The proposed model is more effective than the old method.",
                   "image_url": null,
@@ -3176,7 +3067,6 @@
                     "selectedChoice": "30%",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu: thuật toán phát hiện ung thư gan sớm hơn 30%.",
                   "options": {
@@ -3199,7 +3089,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Kiểm chứng' = verify. Rút gọn: 'Sau khi + V' với cùng chủ ngữ.",
                   "options": {
@@ -3221,7 +3110,6 @@
                     "translation": "Dữ liệu thu thập từ hơn 10.000 bệnh nhân được phân tích bằng mô hình học sâu.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Văn phong khoa học: có thể bỏ 'được' trước 'phân tích'.",
                   "options": {
@@ -3286,7 +3174,6 @@
                     "SOUTHERN": "chẩn đoán",
                     "STANDARD": "chẩn đoán"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hệ thống AI giảm thời gian chẩn đoán đáng kể.",
                   "example_translation": "The AI system significantly reduced diagnosis time.",
                   "image_url": null,
@@ -3305,7 +3192,6 @@
                     "SOUTHERN": "học sâu",
                     "STANDARD": "học sâu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Mô hình học sâu đạt độ chính xác cao.",
                   "example_translation": "The deep learning model achieved high accuracy.",
                   "image_url": null,
@@ -3357,7 +3243,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 3,
                   "question_type": "matching",
                   "explanation": "Các thuật ngữ nghệ thuật và văn học.",
                   "options": {
@@ -3396,7 +3281,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Kiệt tác' = masterpiece.",
                   "options": {
@@ -3418,7 +3302,6 @@
                     "selectedChoice": "Cải lương",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Cải lương là hình thức sân khấu đặc sắc của miền Nam.",
                   "options": {
@@ -3439,7 +3322,6 @@
                     "translation": "Tác phẩm này được coi là kiệt tác của văn học hiện đại.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "'Kiệt tác' = masterpiece, 'văn học hiện đại' = modern literature.",
                   "options": {
@@ -3555,7 +3437,6 @@
                     "SOUTHERN": "nghệ thuật",
                     "STANDARD": "nghệ thuật"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Nghệ thuật phản ánh đời sống và tâm hồn con người.",
                   "example_translation": "Art reflects life and the human soul.",
                   "image_url": null,
@@ -3574,7 +3455,6 @@
                     "SOUTHERN": "hội họa",
                     "STANDARD": "hội họa"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Hội họa Việt Nam có bản sắc riêng.",
                   "example_translation": "Vietnamese painting has its own identity.",
                   "image_url": null,
@@ -3593,7 +3473,6 @@
                     "SOUTHERN": "âm nhạc",
                     "STANDARD": "âm nhạc"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Âm nhạc truyền thống Việt Nam phong phú và đa dạng.",
                   "example_translation": "Traditional Vietnamese music is rich and diverse.",
                   "image_url": null,
@@ -3612,7 +3491,6 @@
                     "SOUTHERN": "điêu khắc",
                     "STANDARD": "điêu khắc"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Điêu khắc chùa Bút Tháp là di sản nghệ thuật quý giá.",
                   "example_translation": "The sculptures of But Thap Pagoda are a precious artistic heritage.",
                   "image_url": null,
@@ -3631,7 +3509,6 @@
                     "SOUTHERN": "sân khấu",
                     "STANDARD": "sân khấu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Sân khấu cải lương là nét đặc sắc văn hóa miền Nam.",
                   "example_translation": "Cải lương theater is a distinctive cultural feature of the South.",
                   "image_url": null,
@@ -3650,7 +3527,6 @@
                     "SOUTHERN": "văn học",
                     "STANDARD": "văn học"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Văn học Việt Nam có truyền thống hàng ngàn năm.",
                   "example_translation": "Vietnamese literature has a tradition spanning thousands of years.",
                   "image_url": null,
@@ -3669,7 +3545,6 @@
                     "SOUTHERN": "tác phẩm",
                     "STANDARD": "tác phẩm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tác phẩm này được coi là kiệt tác của văn học hiện đại.",
                   "example_translation": "This work is considered a masterpiece of modern literature.",
                   "image_url": null,
@@ -3688,7 +3563,6 @@
                     "SOUTHERN": "sáng tác",
                     "STANDARD": "sáng tác"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Nhà thơ sáng tác bài thơ灵感 từ thành ngữ dân gian.",
                   "example_translation": "The poet composed a poem inspired by folk idioms.",
                   "image_url": null,
@@ -3707,7 +3581,6 @@
                     "SOUTHERN": "biểu diễn",
                     "STANDARD": "biểu diễn"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Nghệ sĩ biểu diễn xuất sắc trên sân khấu.",
                   "example_translation": "The artist performed excellently on stage.",
                   "image_url": null,
@@ -3726,7 +3599,6 @@
                     "SOUTHERN": "triển lãm",
                     "STANDARD": "triển lãm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Triển lãm nghệ thuật thu hút đông đảo người xem.",
                   "example_translation": "The art exhibition attracted a large audience.",
                   "image_url": null,
@@ -3745,7 +3617,6 @@
                     "SOUTHERN": "phê bình",
                     "STANDARD": "phê bình"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phê bình văn học đòi hỏi kiến thức sâu rộng.",
                   "example_translation": "Literary criticism requires deep and broad knowledge.",
                   "image_url": null,
@@ -3764,7 +3635,6 @@
                     "SOUTHERN": "điển cố",
                     "STANDARD": "điển cố"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Điển cố được dùng nhiều trong văn thơ cổ.",
                   "example_translation": "Classical allusions are widely used in classical poetry and prose.",
                   "image_url": null,
@@ -3783,7 +3653,6 @@
                     "SOUTHERN": "kiệt tác",
                     "STANDARD": "kiệt tác"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Truyện Kiều là kiệt tác của Nguyễn Du.",
                   "example_translation": "The Tale of Kieu is Nguyen Du's masterpiece.",
                   "image_url": null,
@@ -3802,7 +3671,6 @@
                     "SOUTHERN": "bản sắc",
                     "STANDARD": "bản sắc"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bản sắc văn hóa Việt Nam cần được bảo tồn.",
                   "example_translation": "Vietnam's cultural identity needs to be preserved.",
                   "image_url": null,
@@ -3821,7 +3689,6 @@
                     "SOUTHERN": "đương đại",
                     "STANDARD": "đương đại"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nghệ thuật đương đại Việt Nam đang phát triển mạnh.",
                   "example_translation": "Contemporary Vietnamese art is developing strongly.",
                   "image_url": null,
@@ -3842,7 +3709,6 @@
                     "selectedChoice": "Ảnh hưởng từ từ nhưng sâu sắc",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "'Mưa dầm thấm lâu' = ảnh hưởng từ từ nhưng sâu sắc, thấm sâu vào tâm hồn.",
                   "options": {
@@ -3866,7 +3732,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'vừa...vừa' diễn đạt hai đặc tính song hành.",
                   "options": {
@@ -3891,7 +3756,6 @@
                     "translation": "Tác phẩm vừa sâu sắc vừa tinh tế.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Dùng cấu trúc 'vừa...vừa' cho 'both...and'.",
                   "options": {
@@ -3915,7 +3779,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Nước đổ lá khoai' = vô tác dụng, phí công.",
                   "options": {
@@ -3935,7 +3798,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "The work carries the resonance of slow but profound influence.",
@@ -3959,7 +3821,6 @@
                   "title": "Thành ngữ trong văn phong trang trọng"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "This verse evokes the allusion of Truong Chi — a tragic unrequited love.",
@@ -3983,7 +3844,6 @@
                   "title": "Điển cố trong văn thơ Việt Nam"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "The work is both profound and subtle.",
@@ -4063,7 +3923,6 @@
                     "SOUTHERN": "âm hưởng",
                     "STANDARD": "âm hưởng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tác phẩm mang âm hưởng dân gian đậm đà.",
                   "example_translation": "The work carries a strong folk resonance.",
                   "image_url": null,
@@ -4082,7 +3941,6 @@
                     "SOUTHERN": "chiều sâu",
                     "STANDARD": "chiều sâu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tác phẩm có chiều sâu triết lý đáng kinh ngạc.",
                   "example_translation": "The work has astonishing philosophical depth.",
                   "image_url": null,
@@ -4101,7 +3959,6 @@
                     "SOUTHERN": "tinh tế",
                     "STANDARD": "tinh tế"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cách diễn đạt vừa tinh tế vừa sâu sắc.",
                   "example_translation": "The expression is both subtle and profound.",
                   "image_url": null,
@@ -4126,7 +3983,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 3,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc phê bình: Giới thiệu → Phân tích → Đánh giá.",
                   "options": {
@@ -4146,7 +4002,6 @@
                     "translation": "Tác phẩm vừa mang nét cổ điển vừa đậm chất dân gian.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Dùng 'vừa...vừa' cho 'both...and'.",
                   "options": {
@@ -4171,7 +4026,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Thành ngữ 'mưa dầm thấm lâu' = ảnh hưởng từ từ nhưng sâu sắc.",
                   "options": {
@@ -4239,7 +4093,6 @@
                     "SOUTHERN": "nét bút",
                     "STANDARD": "nét bút"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nét bút của nhà văn rất tài tình.",
                   "example_translation": "The writer's brushstroke is very skillful.",
                   "image_url": null,
@@ -4258,7 +4111,6 @@
                     "SOUTHERN": "khát vọng",
                     "STANDARD": "khát vọng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tác phẩm thể hiện khát vọng tự do.",
                   "example_translation": "The work expresses the aspiration for freedom.",
                   "image_url": null,
@@ -4279,7 +4131,6 @@
                     "selectedChoice": "Tương thân tương ái",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "'Lá lành đùm lá rách' = người khá giúp người khó, tương thân tương ái.",
                   "options": {
@@ -4303,7 +4154,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Ăn quả nhớ kẻ trồng cây' = lòng biết ơn người đi trước.",
                   "options": {
@@ -4341,7 +4191,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 4,
                   "question_type": "matching",
                   "explanation": "Các thành ngữ phản ánh giá trị văn hóa Việt Nam.",
                   "options": {
@@ -4413,7 +4262,6 @@
                     "SOUTHERN": "tục ngữ",
                     "STANDARD": "tục ngữ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Tục ngữ Việt Nam phản ánh trí tuệ dân gian.",
                   "example_translation": "Vietnamese proverbs reflect folk wisdom.",
                   "image_url": null,
@@ -4432,7 +4280,6 @@
                     "SOUTHERN": "ca dao",
                     "STANDARD": "ca dao"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Ca dao là kho tàng văn học dân gian.",
                   "example_translation": "Folk poetry is a treasure of folk literature.",
                   "image_url": null,
@@ -4451,7 +4298,6 @@
                     "SOUTHERN": "dân gian",
                     "STANDARD": "dân gian"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Văn học dân gian có giá trị vô giá.",
                   "example_translation": "Folk literature has invaluable worth.",
                   "image_url": null,
@@ -4503,7 +4349,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 3,
                   "question_type": "matching",
                   "explanation": "Các thuật ngữ môi trường phổ biến.",
                   "options": {
@@ -4542,7 +4387,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 3,
                   "question_type": "fill_blank",
                   "explanation": "'Ô nhiễm' = pollution.",
                   "options": {
@@ -4564,7 +4408,6 @@
                     "selectedChoice": "Biến đổi khí hậu",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Việt Nam là một trong những nước bị ảnh hưởng nặng nề nhất bởi biến đổi khí hậu.",
                   "options": {
@@ -4585,7 +4428,6 @@
                     "translation": "Tái chế rác thải giúp giảm ô nhiễm môi trường.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "'Tái chế' = recycle, 'ô nhiễm môi trường' = environmental pollution.",
                   "options": {
@@ -4686,7 +4528,6 @@
                     "SOUTHERN": "môi trường",
                     "STANDARD": "môi trường"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Bảo vệ môi trường là trách nhiệm của mọi người.",
                   "example_translation": "Environmental protection is everyone's responsibility.",
                   "image_url": null,
@@ -4705,7 +4546,6 @@
                     "SOUTHERN": "ô nhiễm",
                     "STANDARD": "ô nhiễm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Ô nhiễm không khí ở Hà Nội vượt mức cảnh báo.",
                   "example_translation": "Air pollution in Hanoi exceeded warning levels.",
                   "image_url": null,
@@ -4724,7 +4564,6 @@
                     "SOUTHERN": "khí hậu",
                     "STANDARD": "khí hậu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Biến đổi khí hậu ảnh hưởng đến đời sống người dân.",
                   "example_translation": "Climate change affects people's lives.",
                   "image_url": null,
@@ -4743,7 +4582,6 @@
                     "SOUTHERN": "phát triển bền vững",
                     "STANDARD": "phát triển bền vững"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Phát triển bền vững là mục tiêu của thế kỷ 21.",
                   "example_translation": "Sustainable development is the goal of the 21st century.",
                   "image_url": null,
@@ -4762,7 +4600,6 @@
                     "SOUTHERN": "tái chế",
                     "STANDARD": "tái chế"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tái chế rác thải giúp giảm ô nhiễm môi trường.",
                   "example_translation": "Recycling waste helps reduce environmental pollution.",
                   "image_url": null,
@@ -4781,7 +4618,6 @@
                     "SOUTHERN": "năng lượng tái tạo",
                     "STANDARD": "năng lượng tái tạo"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Năng lượng tái tạo thay thế dần nhiên liệu hóa thạch.",
                   "example_translation": "Renewable energy is gradually replacing fossil fuels.",
                   "image_url": null,
@@ -4800,7 +4636,6 @@
                     "SOUTHERN": "sinh thái",
                     "STANDARD": "sinh thái"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hệ sinh thái rừng ngập mặn Cần Giờ cần được bảo vệ.",
                   "example_translation": "The Can Gio mangrove forest ecosystem needs protection.",
                   "image_url": null,
@@ -4819,7 +4654,6 @@
                     "SOUTHERN": "bảo tồn",
                     "STANDARD": "bảo tồn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Bảo tồn đa dạng sinh học là ưu tiên hàng đầu.",
                   "example_translation": "Biodiversity conservation is a top priority.",
                   "image_url": null,
@@ -4838,7 +4672,6 @@
                     "SOUTHERN": "rừng",
                     "STANDARD": "rừng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Diện tích rừng tăng nhờ chương trình trồng rừng.",
                   "example_translation": "Forest area increased thanks to tree-planting programs.",
                   "image_url": null,
@@ -4857,7 +4690,6 @@
                     "SOUTHERN": "động vật hoang dã",
                     "STANDARD": "động vật hoang dã"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Nhiều loài động vật hoang dã đối mặt nguy cơ tuyệt chủng.",
                   "example_translation": "Many wildlife species face the risk of extinction.",
                   "image_url": null,
@@ -4876,7 +4708,6 @@
                     "SOUTHERN": "biến đổi khí hậu",
                     "STANDARD": "biến đổi khí hậu"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Biến đổi khí hậu gây ra thiên tai ngày càng nhiều.",
                   "example_translation": "Climate change causes increasingly frequent natural disasters.",
                   "image_url": null,
@@ -4895,7 +4726,6 @@
                     "SOUTHERN": "carbon",
                     "STANDARD": "carbon"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Mục tiêu trung hòa carbon vào năm 2050.",
                   "example_translation": "The carbon neutrality target by 2050.",
                   "image_url": null,
@@ -4914,7 +4744,6 @@
                     "SOUTHERN": "nhiên liệu hóa thạch",
                     "STANDARD": "nhiên liệu hóa thạch"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Giảm phụ thuộc vào nhiên liệu hóa thạch.",
                   "example_translation": "Reduce dependence on fossil fuels.",
                   "image_url": null,
@@ -4933,7 +4762,6 @@
                     "SOUTHERN": "đa dạng sinh học",
                     "STANDARD": "đa dạng sinh học"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đa dạng sinh học Việt Nam rất phong phú.",
                   "example_translation": "Vietnam's biodiversity is very rich.",
                   "image_url": null,
@@ -4952,7 +4780,6 @@
                     "SOUTHERN": "tuyệt chủng",
                     "STANDARD": "tuyệt chủng"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Voọc mông trán phẳng đang đối mặt nguy cơ tuyệt chủng.",
                   "example_translation": "The Tonkin snub-nosed monkey faces extinction risk.",
                   "image_url": null,
@@ -4975,7 +4802,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Tuy nhiên' = however, liên từ tương phản trang trọng.",
                   "options": {
@@ -4997,7 +4823,6 @@
                     "selectedChoice": "Ngoài ra",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 4,
                   "question_type": "multiple_choice",
                   "explanation": "'Ngoài ra' = besides/furthermore, bổ sung cùng hướng với câu trước.",
                   "options": {
@@ -5018,7 +4843,6 @@
                     "translation": "Không những giảm ô nhiễm mà còn tiết kiệm chi phí.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "Dùng cấu trúc 'Không những...mà còn' cho 'not only...but also'.",
                   "options": {
@@ -5042,7 +4866,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Thay vì' = instead of, diễn đạt sự thay thế.",
                   "options": {
@@ -5062,7 +4885,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "Vietnam is developing rapidly. However, there are still many environmental challenges.",
@@ -5086,7 +4908,6 @@
                   "title": "Liên từ tương phản và bổ sung: tuy nhiên, mặt khác, ngoài ra"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "Air pollution is increasing. Therefore, the government needs urgent measures.",
@@ -5110,7 +4931,6 @@
                   "title": "Liên từ nguyên nhân-kết quả: do đó, vì vậy"
                 },
                 {
-                  "difficulty_level": 4,
                   "examples": [
                     {
                       "en": "Instead of using plastic bags, use cloth bags.",
@@ -5226,7 +5046,6 @@
                     "SOUTHERN": "phát thải",
                     "STANDARD": "phát thải"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Giảm phát thải carbon là mục tiêu toàn cầu.",
                   "example_translation": "Reducing carbon emissions is a global goal.",
                   "image_url": null,
@@ -5245,7 +5064,6 @@
                     "SOUTHERN": "lộ trình",
                     "STANDARD": "lộ trình"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Cần lộ trình chuyển đổi năng lượng rõ ràng.",
                   "example_translation": "A clear energy transition roadmap is needed.",
                   "image_url": null,
@@ -5264,7 +5082,6 @@
                     "SOUTHERN": "sinh kế",
                     "STANDARD": "sinh kế"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đảm bảo sinh kế cho người lao động.",
                   "example_translation": "Ensure livelihoods for workers.",
                   "image_url": null,
@@ -5285,7 +5102,6 @@
                     "selectedChoice": "Vì bị ảnh hưởng nặng nề bởi biến đổi khí hậu",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Bài đọc nêu: Việt Nam bị ảnh hưởng nặng nề nhất bởi biến đổi khí hậu, do đó phát triển bền vững là bắt buộc.",
                   "options": {
@@ -5308,7 +5124,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "'Thay vì' = instead of, diễn đạt sự thay thế.",
                   "options": {
@@ -5330,7 +5145,6 @@
                     "translation": "Do đó, phát triển bền vững không chỉ là lựa chọn mà là yêu cầu bắt buộc.",
                     "type": "translation"
                   },
-                  "difficulty_level": 4,
                   "question_type": "translation",
                   "explanation": "'Do đó' = therefore, 'không chỉ...mà còn/là' = not only...but also.",
                   "options": {
@@ -5395,7 +5209,6 @@
                     "SOUTHERN": "ngập mặn",
                     "STANDARD": "ngập mặn"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Đồng bằng sông Cửu Long bị ngập mặn nghiêm trọng.",
                   "example_translation": "The Mekong Delta is severely affected by saltwater intrusion.",
                   "image_url": null,
@@ -5414,7 +5227,6 @@
                     "SOUTHERN": "bão lũ",
                     "STANDARD": "bão lũ"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Miền Trung hứng chịu bão lũ khắc nghiệt.",
                   "example_translation": "Central Vietnam suffers from severe storms and floods.",
                   "image_url": null,
@@ -5433,7 +5245,6 @@
                     "SOUTHERN": "tăng trưởng xanh",
                     "STANDARD": "tăng trưởng xanh"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Chiến lược tăng trưởng xanh đã được đề ra.",
                   "example_translation": "A green growth strategy has been established.",
                   "image_url": null,
@@ -5452,7 +5263,6 @@
                     "SOUTHERN": "trách nhiệm xã hội",
                     "STANDARD": "trách nhiệm xã hội"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Doanh nghiệp cần tích hợp trách nhiệm xã hội vào chiến lược.",
                   "example_translation": "Enterprises need to integrate social responsibility into their strategy.",
                   "image_url": null,
@@ -5473,7 +5283,6 @@
                     "transcript": "Việt Nam xếp thứ 6 trong bảng xếp hạng các quốc gia bị ảnh hưởng nặng nhất bởi thiên tai.",
                     "type": "listening"
                   },
-                  "difficulty_level": 3,
                   "question_type": "listening",
                   "explanation": "Bài nghe nêu rõ: Việt Nam xếp thứ 6.",
                   "options": {
@@ -5496,7 +5305,6 @@
                     "selectedChoice": "Đi xe buýt",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Bài nghe nêu: 'thay vì dùng xe cá nhân, hãy đi xe buýt'.",
                   "options": {
@@ -5520,7 +5328,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 4,
                   "question_type": "fill_blank",
                   "explanation": "Cấu trúc 'Không những...mà còn' = not only...but also.",
                   "options": {
@@ -5588,7 +5395,6 @@
                     "SOUTHERN": "thiên tai",
                     "STANDARD": "thiên tai"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Thiên tai ngày càng khắc nghiệt do biến đổi khí hậu.",
                   "example_translation": "Natural disasters are increasingly severe due to climate change.",
                   "image_url": null,
@@ -5607,7 +5413,6 @@
                     "SOUTHERN": "sụt lún",
                     "STANDARD": "sụt lún"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Sụt lún đất ở Đồng bằng sông Cửu Long rất nghiêm trọng.",
                   "example_translation": "Land subsidence in the Mekong Delta is very serious.",
                   "image_url": null,
@@ -5626,7 +5431,6 @@
                     "SOUTHERN": "hợp tác quốc tế",
                     "STANDARD": "hợp tác quốc tế"
                   },
-                  "difficulty_level": 4,
                   "example_sentence": "Hợp tác quốc tế cần thiết để ứng phó biến đổi khí hậu.",
                   "example_translation": "International cooperation is necessary to cope with climate change.",
                   "image_url": null,

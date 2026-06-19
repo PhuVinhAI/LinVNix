@@ -102,7 +102,6 @@ export class QuestionsController {
           question: '_____ là sinh viên.',
           options: ['Tôi', 'Bạn', 'Anh ấy', 'Cả 3 đều đúng'],
           orderIndex: 1,
-          difficultyLevel: 1,
           acceptsWithoutDiacritics: true,
         },
       ],
@@ -155,7 +154,6 @@ export class QuestionsController {
         options: ['Tôi', 'Bạn', 'Anh ấy', 'Cả 3 đều đúng'],
         explanation: 'Cả 3 đại từ đều có thể đứng trước "là sinh viên"',
         orderIndex: 1,
-        difficultyLevel: 1,
       },
     },
   })

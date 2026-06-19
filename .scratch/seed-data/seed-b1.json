@@ -22,7 +22,6 @@
                     "selectedChoice": "đồng nghiệp",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Đồng nghiệp là người làm cùng công ty, cùng phòng ban với mình.",
                   "options": {
@@ -45,7 +44,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 3,
                   "question_type": "fill_blank",
                   "explanation": "Ứng tuyển nghĩa là nộp hồ sơ xin việc vào một vị trí nào đó.",
                   "options": {
@@ -84,7 +82,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Các từ vựng quan trọng về công việc.",
                   "options": {
@@ -117,7 +114,6 @@
                     "translation": "Tôi đã ứng tuyển vào vị trí quản lý dự án.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Ứng tuyển vào vị trí là cách nói phổ biến khi xin việc.",
                   "options": {
@@ -145,7 +141,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc: Chủ ngữ + động từ + thời gian.",
                   "options": {
@@ -292,7 +287,6 @@
                     "SOUTHERN": "công việc",
                     "STANDARD": "công việc"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Công việc của tôi rất bận rộn tuần này.",
                   "example_translation": "My work is very busy this week.",
                   "image_url": null,
@@ -311,7 +305,6 @@
                     "SOUTHERN": "nghề",
                     "STANDARD": "nghề"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nghề giáo rất đáng kính trọng.",
                   "example_translation": "The teaching profession is very respectable.",
                   "image_url": null,
@@ -330,7 +323,6 @@
                     "SOUTHERN": "lương",
                     "STANDARD": "lương"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Lương tháng này được tăng thêm năm trăm đô.",
                   "example_translation": "This month's salary was increased by five hundred dollars.",
                   "image_url": null,
@@ -349,7 +341,6 @@
                     "SOUTHERN": "sếp",
                     "STANDARD": "sếp"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Sếp gọi tôi vào phòng họp chiều nay.",
                   "example_translation": "The boss called me into the meeting room this afternoon.",
                   "image_url": null,
@@ -368,7 +359,6 @@
                     "SOUTHERN": "đồng nghiệp",
                     "STANDARD": "đồng nghiệp"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Đồng nghiệp trong phòng ban rất hay giúp đỡ nhau.",
                   "example_translation": "Colleagues in the department often help each other.",
                   "image_url": null,
@@ -387,7 +377,6 @@
                     "SOUTHERN": "phòng ban",
                     "STANDARD": "phòng ban"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tôi thuộc phòng ban marketing.",
                   "example_translation": "I belong to the marketing department.",
                   "image_url": null,
@@ -406,7 +395,6 @@
                     "SOUTHERN": "họp",
                     "STANDARD": "họp"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Chiều nay chúng ta họp lúc ba giờ nhé.",
                   "example_translation": "Let's have a meeting at 3 PM this afternoon.",
                   "image_url": null,
@@ -425,7 +413,6 @@
                     "SOUTHERN": "dự án",
                     "STANDARD": "dự án"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Dự án này kéo dài ba tháng rồi.",
                   "example_translation": "This project has been going on for three months.",
                   "image_url": null,
@@ -444,7 +431,6 @@
                     "SOUTHERN": "ứng tuyển",
                     "STANDARD": "ứng tuyển"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tôi đã ứng tuyển vào vị trí kế toán trưởng.",
                   "example_translation": "I applied for the chief accountant position.",
                   "image_url": null,
@@ -463,7 +449,6 @@
                     "SOUTHERN": "phỏng vấn",
                     "STANDARD": "phỏng vấn"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Phỏng vấn diễn ra vào thứ Hai tới.",
                   "example_translation": "The interview takes place next Monday.",
                   "image_url": null,
@@ -482,7 +467,6 @@
                     "SOUTHERN": "hợp đồng",
                     "STANDARD": "hợp đồng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tôi mới ký hợp đồng lao động hai năm.",
                   "example_translation": "I just signed a two-year employment contract.",
                   "image_url": null,
@@ -501,7 +485,6 @@
                     "SOUTHERN": "kỹ sư",
                     "STANDARD": "kỹ sư"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh ấy là kỹ sư xây dựng.",
                   "example_translation": "He is a construction engineer.",
                   "image_url": null,
@@ -520,7 +503,6 @@
                     "SOUTHERN": "nhân viên",
                     "STANDARD": "nhân viên"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Công ty đang tuyển thêm nhân viên bán hàng.",
                   "example_translation": "The company is hiring more sales staff.",
                   "image_url": null,
@@ -539,7 +521,6 @@
                     "SOUTHERN": "tăng lương",
                     "STANDARD": "tăng lương"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Năm nay tôi được tăng lương mười phần trăm.",
                   "example_translation": "This year I got a ten percent raise.",
                   "image_url": null,
@@ -558,7 +539,6 @@
                     "SOUTHERN": "nghỉ việc",
                     "STANDARD": "nghỉ việc"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bạn ấy đã nghỉ việc tháng trước.",
                   "example_translation": "They quit their job last month.",
                   "image_url": null,
@@ -579,7 +559,6 @@
                     "selectedChoice": "được",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Vì khen là hậu quả tích cực nên dùng được.",
                   "options": {
@@ -602,7 +581,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Bị trộm là hậu quả tiêu cực nên dùng bị.",
                   "options": {
@@ -626,7 +604,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Được duyệt (được chấp thuận) là hậu quả tích cực.",
                   "options": {
@@ -648,7 +625,6 @@
                     "translation": "Tôi bị công ty sa thải.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Sa thải là hậu quả tiêu cực nên dùng bị.",
                   "options": {
@@ -676,7 +652,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc: Chủ ngữ + bị + người gây ra + động từ.",
                   "options": {
@@ -697,7 +672,6 @@
                     "selectedChoice": "Anh ấy được công ty tuyển dụng.",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Tuyển dụng là tích cực nên dùng được, không dùng bị.",
                   "options": {
@@ -716,7 +690,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I was scolded by the boss for being late to work.",
@@ -745,7 +718,6 @@
                   "title": "Câu bị động với bị — hậu quả tiêu cực"
                 },
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "I was rewarded by the company with three months' salary.",
@@ -774,7 +746,6 @@
                   "title": "Câu bị động với được — hậu quả tích cực"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "I was scolded by the boss. vs I was praised by the boss.",
@@ -890,7 +861,6 @@
                     "SOUTHERN": "bị",
                     "STANDARD": "bị"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tôi bị sếp mắng sáng nay.",
                   "example_translation": "I was scolded by the boss this morning.",
                   "image_url": null,
@@ -909,7 +879,6 @@
                     "SOUTHERN": "được",
                     "STANDARD": "được"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cô ấy được công ty thưởng tháng này.",
                   "example_translation": "She was rewarded by the company this month.",
                   "image_url": null,
@@ -928,7 +897,6 @@
                     "SOUTHERN": "phạt",
                     "STANDARD": "phạt"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh ta bị phạt vì vi phạm nội quy.",
                   "example_translation": "He was punished for violating the rules.",
                   "image_url": null,
@@ -947,7 +915,6 @@
                     "SOUTHERN": "thưởng",
                     "STANDARD": "thưởng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nhân viên xuất sắc được thưởng tiền mặt.",
                   "example_translation": "Outstanding employees are rewarded with cash.",
                   "image_url": null,
@@ -966,7 +933,6 @@
                     "SOUTHERN": "mắng",
                     "STANDARD": "mắng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Con bị mẹ mắng vì không chịu làm câu hỏi.",
                   "example_translation": "The child was scolded by mom for not doing homework.",
                   "image_url": null,
@@ -987,7 +953,6 @@
                     "selectedChoice": "xe máy",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Bài đọc nói rõ: xe máy là phương tiện đi lại phổ biến nhất.",
                   "options": {
@@ -1010,7 +975,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Được giao thêm dự án là tích cực nên dùng được.",
                   "options": {
@@ -1032,7 +996,6 @@
                     "translation": "Cô ấy bị yêu cầu nộp báo cáo sớm hơn dự kiến.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Bị yêu cầu (bắt buộc) là tiêu cực nên dùng bị.",
                   "options": {
@@ -1097,7 +1060,6 @@
                     "SOUTHERN": "làm thêm giờ",
                     "STANDARD": "làm thêm giờ"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tuần này tôi phải làm thêm giờ mỗi ngày.",
                   "example_translation": "This week I have to work overtime every day.",
                   "image_url": null,
@@ -1116,7 +1078,6 @@
                     "SOUTHERN": "xuất nhập khẩu",
                     "STANDARD": "xuất nhập khẩu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Công ty xuất nhập khẩu này làm ăn rất phát đạt.",
                   "example_translation": "This import-export company is doing very well.",
                   "image_url": null,
@@ -1135,7 +1096,6 @@
                     "SOUTHERN": "cơm trưa",
                     "STANDARD": "cơm trưa"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đi ăn cơm trưa không anh?",
                   "example_translation": "Want to go get lunch?",
                   "image_url": null,
@@ -1156,7 +1116,6 @@
                     "selectedChoice": "Gọi sếp hoặc anh/chị + tên",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Gọi sếp bằng tên trực tiếp bị coi là thiếu tôn trọng.",
                   "options": {
@@ -1179,7 +1138,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Đi làm muộn bị coi là thiếu tôn trọng trong văn hóa công sở Việt Nam.",
                   "options": {
@@ -1201,7 +1159,6 @@
                     "translation": "Người trẻ nên gọi sếp là sếp hoặc anh/chị + tên.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Cách xưng hô đúng trong môi trường công sở Việt Nam.",
                   "options": {
@@ -1302,7 +1259,6 @@
                     "SOUTHERN": "giám đốc",
                     "STANDARD": "giám đốc"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Giám đốc sẽ họp ban quản trị vào thứ Sáu.",
                   "example_translation": "The CEO will meet with the board on Friday.",
                   "image_url": null,
@@ -1321,7 +1277,6 @@
                     "SOUTHERN": "xưng hô",
                     "STANDARD": "xưng hô"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Ở Việt Nam, cách xưng hô rất quan trọng.",
                   "example_translation": "In Vietnam, how you address people is very important.",
                   "image_url": null,
@@ -1340,7 +1295,6 @@
                     "SOUTHERN": "thứ bậc",
                     "STANDARD": "thứ bậc"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Thứ bậc trong công ty rất rõ ràng.",
                   "example_translation": "The hierarchy in the company is very clear.",
                   "image_url": null,
@@ -1392,7 +1346,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Các từ vựng giáo dục quan trọng.",
                   "options": {
@@ -1431,7 +1384,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Nhận học bổng là tích cực nên dùng được.",
                   "options": {
@@ -1453,7 +1405,6 @@
                     "selectedChoice": "Khóa luận tốt nghiệp",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Sinh viên năm cuối phải làm khóa luận tốt nghiệp.",
                   "options": {
@@ -1474,7 +1425,6 @@
                     "translation": "Tôi phải thi lại môn Toán.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Thi lại là từ phổ biến chỉ việc thi lại môn rớt.",
                   "options": {
@@ -1575,7 +1525,6 @@
                     "SOUTHERN": "trường",
                     "STANDARD": "trường"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Trường em ở gần nhà lắm.",
                   "example_translation": "My school is very close to home.",
                   "image_url": null,
@@ -1594,7 +1543,6 @@
                     "SOUTHERN": "học",
                     "STANDARD": "học"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Em đang học tiếng Việt đã ba tháng rồi.",
                   "example_translation": "I've been studying Vietnamese for three months.",
                   "image_url": null,
@@ -1613,7 +1561,6 @@
                     "SOUTHERN": "thi",
                     "STANDARD": "thi"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tuần sau em phải thi môn Toán.",
                   "example_translation": "Next week I have to take a Math exam.",
                   "image_url": null,
@@ -1632,7 +1579,6 @@
                     "SOUTHERN": "điểm",
                     "STANDARD": "điểm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Điểm thi của em rất cao kỳ này.",
                   "example_translation": "My exam scores are very high this semester.",
                   "image_url": null,
@@ -1651,7 +1597,6 @@
                     "SOUTHERN": "bằng cấp",
                     "STANDARD": "bằng cấp"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Bằng cấp đại học giúp bạn dễ xin việc hơn.",
                   "example_translation": "A university degree helps you find jobs more easily.",
                   "image_url": null,
@@ -1670,7 +1615,6 @@
                     "SOUTHERN": "đại học",
                     "STANDARD": "đại học"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Em dự định thi vào đại học Quốc gia Hà Nội.",
                   "example_translation": "I plan to take the entrance exam for Hanoi National University.",
                   "image_url": null,
@@ -1689,7 +1633,6 @@
                     "SOUTHERN": "môn học",
                     "STANDARD": "môn học"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Môn học này rất khó nhưng cũng rất thú vị.",
                   "example_translation": "This subject is very hard but also very interesting.",
                   "image_url": null,
@@ -1708,7 +1651,6 @@
                     "SOUTHERN": "nghiên cứu",
                     "STANDARD": "nghiên cứu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Thầy đang nghiên cứu về lịch sử Việt Nam thời Lý.",
                   "example_translation": "The professor is researching Ly dynasty Vietnamese history.",
                   "image_url": null,
@@ -1727,7 +1669,6 @@
                     "SOUTHERN": "thầy cô",
                     "STANDARD": "thầy cô"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Thầy cô giáo rất quan tâm đến học sinh.",
                   "example_translation": "The teachers care a lot about the students.",
                   "image_url": null,
@@ -1746,7 +1687,6 @@
                     "SOUTHERN": "sinh viên",
                     "STANDARD": "sinh viên"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Sinh viên năm cuối phải làm khóa luận tốt nghiệp.",
                   "example_translation": "Final-year students have to write a graduation thesis.",
                   "image_url": null,
@@ -1765,7 +1705,6 @@
                     "SOUTHERN": "thi lại",
                     "STANDARD": "thi lại"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Em phải thi lại môn Anh văn vì điểm dưới trung bình.",
                   "example_translation": "I have to retake the English exam because the score was below average.",
                   "image_url": null,
@@ -1784,7 +1723,6 @@
                     "SOUTHERN": "tốt nghiệp",
                     "STANDARD": "tốt nghiệp"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Năm nay em tốt nghiệp đại học rồi.",
                   "example_translation": "I graduated from university this year.",
                   "image_url": null,
@@ -1803,7 +1741,6 @@
                     "SOUTHERN": "học bổng",
                     "STANDARD": "học bổng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Em được nhận học bổng toàn phần năm nay.",
                   "example_translation": "I received a full scholarship this year.",
                   "image_url": null,
@@ -1822,7 +1759,6 @@
                     "SOUTHERN": "khóa luận",
                     "STANDARD": "khóa luận"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Khóa luận của em về chủ đề giáo dục nông thôn.",
                   "example_translation": "My thesis is about rural education.",
                   "image_url": null,
@@ -1841,7 +1777,6 @@
                     "SOUTHERN": "lớp học",
                     "STANDARD": "lớp học"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Lớp học của em có ba mươi sinh viên.",
                   "example_translation": "My class has thirty students.",
                   "image_url": null,
@@ -1864,7 +1799,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Nếu bắt đầu vế điều kiện.",
                   "options": {
@@ -1886,7 +1820,6 @@
                     "selectedChoice": "thì",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Nếu...thì là cặp liên từ điều kiện cơ bản.",
                   "options": {
@@ -1916,7 +1849,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 3,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc: Nếu + S + V + thì + S + sẽ + V.",
                   "options": {
@@ -1941,7 +1873,6 @@
                     "translation": "Nếu bạn không nộp bài đúng hạn thì bị trừ điểm.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Cấu trúc điều kiện tiêu cực: Nếu + không + V + thì + bị + kết quả.",
                   "options": {
@@ -1966,7 +1897,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 3,
                   "question_type": "fill_blank",
                   "explanation": "Nếu không thì = otherwise.",
                   "options": {
@@ -1986,7 +1916,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "If you study hard, you will pass the exam.",
@@ -2015,7 +1944,6 @@
                   "title": "Câu điều kiện đơn: nếu...thì"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "You must study hard, otherwise you'll fail the exam.",
@@ -2039,7 +1967,6 @@
                   "title": "Câu điều kiện với nếu...không thì"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "We'll go on a picnic if it doesn't rain.",
@@ -2145,7 +2072,6 @@
                     "SOUTHERN": "nếu",
                     "STANDARD": "nếu"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nếu bạn cần giúp thì cứ gọi tôi nhé.",
                   "example_translation": "If you need help, just call me.",
                   "image_url": null,
@@ -2164,7 +2090,6 @@
                     "SOUTHERN": "thì",
                     "STANDARD": "thì"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Nếu mưa thì mình ở nhà nhé.",
                   "example_translation": "If it rains, let's stay home.",
                   "image_url": null,
@@ -2183,7 +2108,6 @@
                     "SOUTHERN": "thi đậu",
                     "STANDARD": "thi đậu"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Em đã thi đậu đại học rồi!",
                   "example_translation": "I passed the university entrance exam!",
                   "image_url": null,
@@ -2202,7 +2126,6 @@
                     "SOUTHERN": "rớt thi",
                     "STANDARD": "thi rớt"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bạn ấy thi rớt môn Toán nên phải thi lại.",
                   "example_translation": "They failed the Math exam so they have to retake it.",
                   "image_url": null,
@@ -2227,7 +2150,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Thứ tự đúng: mở bài → thân bài → kết bài.",
                   "options": {
@@ -2249,7 +2171,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Dùng Nếu để bắt đầu câu điều kiện.",
                   "options": {
@@ -2271,7 +2192,6 @@
                     "translation": "Nếu không có học bổng thì nhiều sinh viên không thể tiếp tục học được.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Câu điều kiện tiêu cực với Nếu không...thì không thể.",
                   "options": {
@@ -2336,7 +2256,6 @@
                     "SOUTHERN": "mở bài",
                     "STANDARD": "mở bài"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Mở bài nên ngắn gọn và thu hút người đọc.",
                   "example_translation": "The introduction should be concise and attract the reader.",
                   "image_url": null,
@@ -2355,7 +2274,6 @@
                     "SOUTHERN": "thân bài",
                     "STANDARD": "thân bài"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Thân bài trình bày các luận điểm chính.",
                   "example_translation": "The body presents the main arguments.",
                   "image_url": null,
@@ -2374,7 +2292,6 @@
                     "SOUTHERN": "kết bài",
                     "STANDARD": "kết bài"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Kết bài tóm tắt lại ý chính của bài.",
                   "example_translation": "The conclusion summarizes the main points of the essay.",
                   "image_url": null,
@@ -2422,7 +2339,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Từ vựng du lịch cơ bản.",
                   "options": {
@@ -2457,7 +2373,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Đặt vé = book a ticket.",
                   "options": {
@@ -2479,7 +2394,6 @@
                     "selectedChoice": "hướng dẫn viên",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Hướng dẫn viên là người dẫn khách đi tham quan.",
                   "options": {
@@ -2500,7 +2414,6 @@
                     "translation": "Tôi đặt phòng khách sạn trên mạng rồi.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Đặt phòng = book a room; trên mạng = online.",
                   "options": {
@@ -2601,7 +2514,6 @@
                     "SOUTHERN": "du lịch",
                     "STANDARD": "du lịch"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Gia đình em định đi du lịch Đà Lạt mùa hè này.",
                   "example_translation": "My family plans to travel to Da Lat this summer.",
                   "image_url": null,
@@ -2620,7 +2532,6 @@
                     "SOUTHERN": "khách sạn",
                     "STANDARD": "khách sạn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Khách sạn này có view nhìn ra biển rất đẹp.",
                   "example_translation": "This hotel has a beautiful ocean view.",
                   "image_url": null,
@@ -2639,7 +2550,6 @@
                     "SOUTHERN": "vé",
                     "STANDARD": "vé"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Em đã đặt vé máy bay đi Đà Nẵng rồi.",
                   "example_translation": "I've booked a plane ticket to Da Nang.",
                   "image_url": null,
@@ -2658,7 +2568,6 @@
                     "SOUTHERN": "sân bay",
                     "STANDARD": "sân bay"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Sân bay Tân Sơn Nhất rất đông đúc vào dịp Tết.",
                   "example_translation": "Tan Son Nhat Airport is very crowded during Tet.",
                   "image_url": null,
@@ -2677,7 +2586,6 @@
                     "SOUTHERN": "hộ chiếu",
                     "STANDARD": "hộ chiếu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Đừng quên mang hộ chiếu khi đi máy bay quốc tế nhé.",
                   "example_translation": "Don't forget to bring your passport when flying internationally.",
                   "image_url": null,
@@ -2696,7 +2604,6 @@
                     "SOUTHERN": "hành lý",
                     "STANDARD": "hành lý"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Hành lý xách tay không được quá bảy ký lô.",
                   "example_translation": "Carry-on luggage cannot exceed seven kilograms.",
                   "image_url": null,
@@ -2715,7 +2622,6 @@
                     "SOUTHERN": "tham quan",
                     "STANDARD": "tham quan"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Chúng tôi tham quan chùa Một Cột chiều nay.",
                   "example_translation": "We visited the One Pillar Pagoda this afternoon.",
                   "image_url": null,
@@ -2734,7 +2640,6 @@
                     "SOUTHERN": "điểm đến",
                     "STANDARD": "điểm đến"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Điểm đến yêu thích của tôi là Hội An.",
                   "example_translation": "My favorite destination is Hoi An.",
                   "image_url": null,
@@ -2753,7 +2658,6 @@
                     "SOUTHERN": "hướng dẫn viên",
                     "STANDARD": "hướng dẫn viên"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Hướng dẫn viên rất vui vẻ và hiểu biết.",
                   "example_translation": "The tour guide is very cheerful and knowledgeable.",
                   "image_url": null,
@@ -2772,7 +2676,6 @@
                     "SOUTHERN": "kỷ niệm",
                     "STANDARD": "kỷ niệm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Em mua được vài món kỷ niệm ở Hội An.",
                   "example_translation": "I bought some souvenirs in Hoi An.",
                   "image_url": null,
@@ -2791,7 +2694,6 @@
                     "SOUTHERN": "đặt phòng",
                     "STANDARD": "đặt phòng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Em đặt phòng khách sạn trên mạng rồi.",
                   "example_translation": "I've booked a hotel room online.",
                   "image_url": null,
@@ -2810,7 +2712,6 @@
                     "SOUTHERN": "thắng cảnh",
                     "STANDARD": "thắng cảnh"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Vịnh Hạ Long là thắng cảnh nổi tiếng nhất Việt Nam.",
                   "example_translation": "Ha Long Bay is the most famous scenic spot in Vietnam.",
                   "image_url": null,
@@ -2831,7 +2732,6 @@
                     "selectedChoice": "lên",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Lên tàu = get on a train/boat.",
                   "options": {
@@ -2854,7 +2754,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Xuống xe = get off the vehicle.",
                   "options": {
@@ -2882,7 +2781,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "S + khuynh hướng + O + TG.",
                   "options": {
@@ -2904,7 +2802,6 @@
                     "translation": "Ra khỏi sân bay rồi gọi taxi.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Ra khỏi = exit from; rồi = then.",
                   "options": {
@@ -2926,7 +2823,6 @@
                     "selectedChoice": "Đầu câu",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Trạng ngữ thời gian ở đầu câu nhấn mạnh nhất.",
                   "options": {
@@ -2945,7 +2841,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "Yesterday, I traveled to Da Lat.",
@@ -2969,7 +2864,6 @@
                   "title": "Trạng ngữ thời gian — vị trí linh hoạt"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "I'm staying at a hotel near the beach.",
@@ -2998,7 +2892,6 @@
                   "title": "Trạng ngữ nơi chốn & cách thức"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "We got on the train at six in the morning.",
@@ -3109,7 +3002,6 @@
                     "SOUTHERN": "lên",
                     "STANDARD": "lên"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Chúng tôi lên núi lúc sáng sớm.",
                   "example_translation": "We went up the mountain early in the morning.",
                   "image_url": null,
@@ -3128,7 +3020,6 @@
                     "SOUTHERN": "xuống",
                     "STANDARD": "xuống"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Lúc năm giờ thì chúng tôi xuống núi.",
                   "example_translation": "At five o'clock we came down the mountain.",
                   "image_url": null,
@@ -3147,7 +3038,6 @@
                     "SOUTHERN": "vào",
                     "STANDARD": "vào"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Chúng tôi vào thành phố lúc tối.",
                   "example_translation": "We entered the city at night.",
                   "image_url": null,
@@ -3166,7 +3056,6 @@
                     "SOUTHERN": "ra",
                     "STANDARD": "ra"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mình ra bến xe lúc hai giờ.",
                   "example_translation": "I go to the bus station at two o'clock.",
                   "image_url": null,
@@ -3187,7 +3076,6 @@
                     "transcript": "lên",
                     "type": "listening"
                   },
-                  "difficulty_level": 2,
                   "question_type": "listening",
                   "explanation": "Lên máy bay = board the plane.",
                   "options": {
@@ -3210,7 +3098,6 @@
                     "selectedChoice": "Cửa số 5",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Nhân viên nói: Quầy check-in ở cửa số năm.",
                   "options": {
@@ -3233,7 +3120,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Đóng cổng = the gate closes.",
                   "options": {
@@ -3339,7 +3225,6 @@
                     "SOUTHERN": "chuyến bay",
                     "STANDARD": "chuyến bay"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Chuyến bay VN212 cất cánh lúc ba giờ.",
                   "example_translation": "Flight VN212 takes off at three o'clock.",
                   "image_url": null,
@@ -3358,7 +3243,6 @@
                     "SOUTHERN": "cổng",
                     "STANDARD": "cổng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Cổng lên máy bay số B12 ở bên trái.",
                   "example_translation": "Boarding gate B12 is on the left.",
                   "image_url": null,
@@ -3377,7 +3261,6 @@
                     "SOUTHERN": "cất cánh",
                     "STANDARD": "cất cánh"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Chuyến bay cất cánh đúng giờ rồi.",
                   "example_translation": "The flight took off on time.",
                   "image_url": null,
@@ -3398,7 +3281,6 @@
                     "selectedChoice": "quẹo trái",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 3,
                   "question_type": "multiple_choice",
                   "explanation": "Ở miền Nam, người ta nói quẹo thay vì rẽ.",
                   "options": {
@@ -3424,7 +3306,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc chỉ đường: Đi thẳng + đường + rồi + rẽ hướng.",
                   "options": {
@@ -3445,7 +3326,6 @@
                     "translation": "Đi thẳng, qua ngã tư rồi rẽ phải.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "Câu chỉ đường tiêu chuẩn.",
                   "options": {
@@ -3556,7 +3436,6 @@
                     "SOUTHERN": "đi thẳng",
                     "STANDARD": "đi thẳng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đi thẳng khoảng hai trăm mét rồi rẽ trái.",
                   "example_translation": "Go straight about two hundred meters then turn left.",
                   "image_url": null,
@@ -3575,7 +3454,6 @@
                     "SOUTHERN": "quẹo trái",
                     "STANDARD": "rẽ trái"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đến ngã tư thì rẽ trái nhé.",
                   "example_translation": "Turn left at the intersection.",
                   "image_url": null,
@@ -3594,7 +3472,6 @@
                     "SOUTHERN": "ngã tư",
                     "STANDARD": "ngã tư"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Qua ngã tư rồi rẽ phải.",
                   "example_translation": "Pass the intersection then turn right.",
                   "image_url": null,
@@ -3613,7 +3490,6 @@
                     "SOUTHERN": "đi bộ",
                     "STANDARD": "đi bộ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đi bộ mười phút là đến.",
                   "example_translation": "It's a ten-minute walk.",
                   "image_url": null,
@@ -3661,7 +3537,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Từ vựng tình cảm quan trọng.",
                   "options": {
@@ -3696,7 +3571,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 3,
                   "question_type": "fill_blank",
                   "explanation": "Tin tưởng (trust) là nền tảng của tình yêu.",
                   "options": {
@@ -3718,7 +3592,6 @@
                     "selectedChoice": "bồ trai",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Miền Nam gọi bồ trai thay vì bạn trai.",
                   "options": {
@@ -3739,7 +3612,6 @@
                     "translation": "Bọn em hẹn hò đã ba năm rồi.",
                     "type": "translation"
                   },
-                  "difficulty_level": 2,
                   "question_type": "translation",
                   "explanation": "Hẹn hò = dating; Bọn em = we (intimate).",
                   "options": {
@@ -3841,7 +3713,6 @@
                     "SOUTHERN": "tình bạn",
                     "STANDARD": "tình bạn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tình bạn của chúng tôi đã kéo dài mười năm rồi.",
                   "example_translation": "Our friendship has lasted ten years.",
                   "image_url": null,
@@ -3860,7 +3731,6 @@
                     "SOUTHERN": "tình yêu",
                     "STANDARD": "tình yêu"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tình yêu cần sự tin tưởng và thấu hiểu.",
                   "example_translation": "Love needs trust and understanding.",
                   "image_url": null,
@@ -3879,7 +3749,6 @@
                     "SOUTHERN": "hẹn hò",
                     "STANDARD": "hẹn hò"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bọn em hẹn hò đã ba năm rồi.",
                   "example_translation": "We've been dating for three years.",
                   "image_url": null,
@@ -3898,7 +3767,6 @@
                     "SOUTHERN": "kết hôn",
                     "STANDARD": "kết hôn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Họ dự định kết hôn vào mùa thu năm nay.",
                   "example_translation": "They plan to get married this autumn.",
                   "image_url": null,
@@ -3917,7 +3785,6 @@
                     "SOUTHERN": "ly hôn",
                     "STANDARD": "ly hôn"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Họ ly hôn vì không còn thấu hiểu nhau.",
                   "example_translation": "They divorced because they no longer understood each other.",
                   "image_url": null,
@@ -3936,7 +3803,6 @@
                     "SOUTHERN": "yêu thương",
                     "STANDARD": "yêu thương"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Mẹ luôn yêu thương con không điều kiện.",
                   "example_translation": "A mother always loves her child unconditionally.",
                   "image_url": null,
@@ -3955,7 +3821,6 @@
                     "SOUTHERN": "tin tưởng",
                     "STANDARD": "tin tưởng"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tin tưởng là nền tảng của tình yêu.",
                   "example_translation": "Trust is the foundation of love.",
                   "image_url": null,
@@ -3974,7 +3839,6 @@
                     "SOUTHERN": "ghen",
                     "STANDARD": "ghen"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh ấy hay ghen khi bạn gái nói chuyện với người khác.",
                   "example_translation": "He gets jealous when his girlfriend talks to other people.",
                   "image_url": null,
@@ -3993,7 +3857,6 @@
                     "SOUTHERN": "chia sẻ",
                     "STANDARD": "chia sẻ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Tình bạn tốt là biết chia sẻ buồn vui với nhau.",
                   "example_translation": "A good friendship is knowing how to share joys and sorrows.",
                   "image_url": null,
@@ -4012,7 +3875,6 @@
                     "SOUTHERN": "thấu hiểu",
                     "STANDARD": "thấu hiểu"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Thấu hiểu nhau là điều quan trọng nhất trong tình yêu.",
                   "example_translation": "Understanding each other is the most important thing in love.",
                   "image_url": null,
@@ -4031,7 +3893,6 @@
                     "SOUTHERN": "bồ trai",
                     "STANDARD": "bạn trai"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bạn trai em làm ở công ty phần mềm.",
                   "example_translation": "My boyfriend works at a software company.",
                   "image_url": null,
@@ -4050,7 +3911,6 @@
                     "SOUTHERN": "bồ gái",
                     "STANDARD": "bạn gái"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Bạn gái anh rất xinh và hiền lành.",
                   "example_translation": "His girlfriend is very pretty and gentle.",
                   "image_url": null,
@@ -4069,7 +3929,6 @@
                     "SOUTHERN": "tử tế",
                     "STANDARD": "tử tế"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh ấy là người rất tử tế với mọi người.",
                   "example_translation": "He's a very kind person to everyone.",
                   "image_url": null,
@@ -4092,7 +3951,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Dù bắt đầu vế nhượng bộ.",
                   "options": {
@@ -4115,7 +3973,6 @@
                     "selectedChoice": "vẫn",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Dù...vẫn là cặp từ nhượng bộ phổ biến nhất.",
                   "options": {
@@ -4142,7 +3999,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc: Dù + điều kiện + S + vẫn + kết quả.",
                   "options": {
@@ -4164,7 +4020,6 @@
                     "translation": "Chính là tin tưởng mới giữ được tình yêu lâu dài.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Chính là + danh từ + mới + kết quả.",
                   "options": {
@@ -4188,7 +4043,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 3,
                   "question_type": "fill_blank",
                   "explanation": "Chính là cấu trúc nhấn mạnh.",
                   "options": {
@@ -4208,7 +4062,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "Even though it rains, I still go to work.",
@@ -4237,7 +4090,6 @@
                   "title": "Câu nhượng bộ: dù...vẫn"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "It is love that keeps them together.",
@@ -4261,7 +4113,6 @@
                   "title": "Cấu trúc nhấn mạnh: chính là"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "Even though it rains, I still go.",
@@ -4367,7 +4218,6 @@
                     "SOUTHERN": "dù",
                     "STANDARD": "dù"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Dù mưa vẫn đi học.",
                   "example_translation": "Even though it rains, still go to school.",
                   "image_url": null,
@@ -4386,7 +4236,6 @@
                     "SOUTHERN": "vẫn",
                     "STANDARD": "vẫn"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Anh ấy vẫn đến đúng giờ.",
                   "example_translation": "He still arrived on time.",
                   "image_url": null,
@@ -4405,7 +4254,6 @@
                     "SOUTHERN": "chính là",
                     "STANDARD": "chính là"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Chính là em đã giúp tôi lúc khó khăn nhất.",
                   "example_translation": "It was you who helped me when I was in the hardest time.",
                   "image_url": null,
@@ -4424,7 +4272,6 @@
                     "SOUTHERN": "mặc dù",
                     "STANDARD": "mặc dù"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Mặc dù trời mưa, chúng tôi vẫn đi picnic.",
                   "example_translation": "Although it was raining, we still went on a picnic.",
                   "image_url": null,
@@ -4445,7 +4292,6 @@
                     "selectedChoice": "Sự thấu hiểu",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Chính là sự thấu hiểu mới là điều quan trọng nhất.",
                   "options": {
@@ -4468,7 +4314,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Dù...vẫn chỉ kết quả không thay đổi dù điều kiện trái ngược.",
                   "options": {
@@ -4490,7 +4335,6 @@
                     "translation": "Chính là sự thấu hiểu mới là điều quan trọng nhất trong tình yêu.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Chính là cấu trúc nhấn mạnh.",
                   "options": {
@@ -4637,7 +4481,6 @@
                     "SOUTHERN": "cãi nhau",
                     "STANDARD": "cãi nhau"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Dù cãi nhau, họ vẫn yêu nhau.",
                   "example_translation": "Even though they argue, they still love each other.",
                   "image_url": null,
@@ -4656,7 +4499,6 @@
                     "SOUTHERN": "xin lỗi",
                     "STANDARD": "xin lỗi"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Biết lỗi và xin lỗi là điều quan trọng.",
                   "example_translation": "Knowing when you're wrong and apologizing is important.",
                   "image_url": null,
@@ -4675,7 +4517,6 @@
                     "SOUTHERN": "hạnh phúc",
                     "STANDARD": "hạnh phúc"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Dù không giàu, họ vẫn hạnh phúc.",
                   "example_translation": "Even though they're not rich, they're still happy.",
                   "image_url": null,
@@ -4727,7 +4568,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 2,
                   "question_type": "matching",
                   "explanation": "Từ vựng giao thông quan trọng.",
                   "options": {
@@ -4766,7 +4606,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Đậu xe = to park.",
                   "options": {
@@ -4788,7 +4627,6 @@
                     "selectedChoice": "xe máy",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Xe máy là phương tiện phổ biến nhất ở Việt Nam.",
                   "options": {
@@ -4809,7 +4647,6 @@
                     "translation": "Hãy đội mũ bảo hiểm khi đi xe máy.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Hãy + động từ = câu mệnh lệnh/khuyến cáo.",
                   "options": {
@@ -4910,7 +4747,6 @@
                     "SOUTHERN": "xe máy",
                     "STANDARD": "xe máy"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Xe máy là phương tiện phổ biến nhất ở Việt Nam.",
                   "example_translation": "Motorbikes are the most common vehicle in Vietnam.",
                   "image_url": null,
@@ -4929,7 +4765,6 @@
                     "SOUTHERN": "ô tô",
                     "STANDARD": "ô tô"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Ô tô ngày càng nhiều ở thành phố.",
                   "example_translation": "Cars are increasing in cities.",
                   "image_url": null,
@@ -4948,7 +4783,6 @@
                     "SOUTHERN": "xe đò",
                     "STANDARD": "xe buýt"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Xe buýt ở Hà Nội rất đông giờ cao điểm.",
                   "example_translation": "Buses in Hanoi are very crowded during rush hour.",
                   "image_url": null,
@@ -4967,7 +4801,6 @@
                     "SOUTHERN": "tàu hỏa",
                     "STANDARD": "tàu hỏa"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Đi tàu hỏa từ Hà Nội vào Đà Nẵng mất khoảng 15 tiếng.",
                   "example_translation": "Taking the train from Hanoi to Da Nang takes about 15 hours.",
                   "image_url": null,
@@ -4986,7 +4819,6 @@
                     "SOUTHERN": "tàu điện ngầm",
                     "STANDARD": "tàu điện ngầm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tuyến tàu điện ngầm đầu tiên ở TP.HCM đang xây dựng.",
                   "example_translation": "The first metro line in Ho Chi Minh City is under construction.",
                   "image_url": null,
@@ -5005,7 +4837,6 @@
                     "SOUTHERN": "đèn đỏ",
                     "STANDARD": "đèn đỏ"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đèn đỏ thì phải dừng, không được đi tiếp.",
                   "example_translation": "At a red light you must stop, you can't continue.",
                   "image_url": null,
@@ -5024,7 +4855,6 @@
                     "SOUTHERN": "đường",
                     "STANDARD": "đường"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đường này rất đông đúc giờ cao điểm.",
                   "example_translation": "This road is very crowded during rush hour.",
                   "image_url": null,
@@ -5043,7 +4873,6 @@
                     "SOUTHERN": "giao thông",
                     "STANDARD": "giao thông"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Giao thông Hà Nội rất hỗn loạn.",
                   "example_translation": "Hanoi traffic is very chaotic.",
                   "image_url": null,
@@ -5062,7 +4891,6 @@
                     "SOUTHERN": "tai nạn",
                     "STANDARD": "tai nạn"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Tai nạn giao thông xảy ra thường xuyên ở Việt Nam.",
                   "example_translation": "Traffic accidents happen frequently in Vietnam.",
                   "image_url": null,
@@ -5081,7 +4909,6 @@
                     "SOUTHERN": "đậu xe",
                     "STANDARD": "đậu xe"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đậu xe ở trung tâm rất khó và đắt.",
                   "example_translation": "Parking in the city center is very difficult and expensive.",
                   "image_url": null,
@@ -5100,7 +4927,6 @@
                     "SOUTHERN": "mũ bảo hiểm",
                     "STANDARD": "mũ bảo hiểm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Hãy đội mũ bảo hiểm khi đi xe máy nhé.",
                   "example_translation": "Please wear a helmet when riding a motorbike.",
                   "image_url": null,
@@ -5119,7 +4945,6 @@
                     "SOUTHERN": "giờ cao điểm",
                     "STANDARD": "giờ cao điểm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Giờ cao điểm đường rất đông.",
                   "example_translation": "During rush hour the roads are very crowded.",
                   "image_url": null,
@@ -5138,7 +4963,6 @@
                     "SOUTHERN": "đi chậm",
                     "STANDARD": "đi chậm"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Hãy đi chậm khi đường đông.",
                   "example_translation": "Go slowly when the road is crowded.",
                   "image_url": null,
@@ -5157,7 +4981,6 @@
                     "SOUTHERN": "kẹt xe",
                     "STANDARD": "kẹt xe"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Sáng nay kẹt xe suốt hai tiếng.",
                   "example_translation": "This morning there was a traffic jam for two hours.",
                   "image_url": null,
@@ -5178,7 +5001,6 @@
                     "selectedChoice": "Hãy",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Hãy + V = câu khuyến cáo.",
                   "options": {
@@ -5201,7 +5023,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Đừng + V = câu ngăn cấm.",
                   "options": {
@@ -5229,7 +5050,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 2,
                   "question_type": "ordering",
                   "explanation": "Cấu trúc: Hãy + V + khi + V.",
                   "options": {
@@ -5251,7 +5071,6 @@
                     "translation": "Đừng uống rượu khi lái xe!",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Đừng + V = prohibition.",
                   "options": {
@@ -5273,7 +5092,6 @@
                     "selectedChoice": "nhé",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Nhé/nha/đi làm mềm mệnh lệnh hãy.",
                   "options": {
@@ -5296,7 +5114,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Hãy + V + đi = yêu cầu nhẹ nhàng.",
                   "options": {
@@ -5316,7 +5133,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 2,
                   "examples": [
                     {
                       "en": "Please wear a helmet when riding a motorbike.",
@@ -5345,7 +5161,6 @@
                   "title": "Mệnh lệnh khuyến khích: hãy"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "Don't go too fast! It's very dangerous.",
@@ -5374,7 +5189,6 @@
                   "title": "Mệnh lệnh ngăn cấm: đừng"
                 },
                 {
-                  "difficulty_level": 3,
                   "examples": [
                     {
                       "en": "Please have a seat.",
@@ -5480,7 +5294,6 @@
                     "SOUTHERN": "hãy",
                     "STANDARD": "hãy"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Hãy đi chậm khi đường đông.",
                   "example_translation": "Go slowly when the road is crowded.",
                   "image_url": null,
@@ -5499,7 +5312,6 @@
                     "SOUTHERN": "đừng",
                     "STANDARD": "đừng"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đừng đi quá nhanh!",
                   "example_translation": "Don't go too fast!",
                   "image_url": null,
@@ -5518,7 +5330,6 @@
                     "SOUTHERN": "nha",
                     "STANDARD": "nhé"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đi chậm nhé.",
                   "example_translation": "Go slowly, okay.",
                   "image_url": null,
@@ -5537,7 +5348,6 @@
                     "SOUTHERN": "nha",
                     "STANDARD": "nha"
                   },
-                  "difficulty_level": 2,
                   "example_sentence": "Đi cẩn thận nha.",
                   "example_translation": "Go carefully, okay.",
                   "image_url": null,
@@ -5558,7 +5368,6 @@
                     "selectedChoice": "Hơn 60 triệu",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 2,
                   "question_type": "multiple_choice",
                   "explanation": "Bài đọc nói: hơn 60 triệu xe máy.",
                   "options": {
@@ -5581,7 +5390,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 2,
                   "question_type": "fill_blank",
                   "explanation": "Đội mũ bảo hiểm = wear a helmet.",
                   "options": {
@@ -5603,7 +5411,6 @@
                     "translation": "Đừng uống rượu khi lái xe, hãy tuân thủ luật giao thông.",
                     "type": "translation"
                   },
-                  "difficulty_level": 3,
                   "question_type": "translation",
                   "explanation": "Đừng ngăn cấm + hãy khuyến cáo.",
                   "options": {
@@ -5668,7 +5475,6 @@
                     "SOUTHERN": "tử vong",
                     "STANDARD": "tử vong"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Nhiều người tử vong vì tai nạn giao thông.",
                   "example_translation": "Many people die from traffic accidents.",
                   "image_url": null,
@@ -5687,7 +5493,6 @@
                     "SOUTHERN": "vi phạm",
                     "STANDARD": "vi phạm"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Nhiều người vi phạm luật giao thông.",
                   "example_translation": "Many people violate traffic laws.",
                   "image_url": null,
@@ -5706,7 +5511,6 @@
                     "SOUTHERN": "tuân thủ",
                     "STANDARD": "tuân thủ"
                   },
-                  "difficulty_level": 3,
                   "example_sentence": "Hãy tuân thủ luật giao thông.",
                   "example_translation": "Please obey traffic laws.",
                   "image_url": null,

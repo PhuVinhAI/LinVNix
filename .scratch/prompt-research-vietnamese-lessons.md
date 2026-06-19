@@ -93,7 +93,6 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | `dialect_variants` | jsonb | ❌ | Biến thể phương ngữ, cấu trúc: `{"STANDARD": "xin chào", "NORTHERN": "xin chào", "CENTRAL": "xin chào", "SOUTHERN": "xin chào"}` |
 | `audio_urls` | jsonb | ❌ | URL audio theo phương ngữ, cùng cấu trúc |
 | `region` | enum | ❌ | Một trong: `STANDARD`, `NORTHERN`, `CENTRAL`, `SOUTHERN` |
-| `difficulty_level` | int | ✅ | 1-5 (1=dễ nhất), default: 1 |
 | `lesson_id` | UUID | ✅ | FK → lessons.id, ON DELETE CASCADE |
 
 **Yêu cầu:**
@@ -106,7 +105,6 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
   - "ai" → `{"STANDARD": "ai", "NORTHERN": "ai", "CENTRAL": "mCustomAttributes", "SOUTHERN": "ai"}`
 - **`classifier` bắt buộc** cho danh từ chỉ vật/con người (vd: "con mèo", "cái bàn", "người bạn", "chiếc xe").
 - **`phonetic` bắt buộc** cho mọi từ (dùng hệ thống phiên âm dễ hiểu cho người Anh, vd: "xin chào" → "sin chow").
-- **`difficulty_level`** phù hợp cấp độ: A1→1, A2→1-2, B1→2-3, B2→3-4, C1→4, C2→4-5.
 
 ### 1.6 GrammarRule (bảng `grammar_rules`)
 
@@ -118,7 +116,6 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | `structure` | varchar | ❌ | Công thức cấu trúc (vd: "S + V + O") |
 | `examples` | jsonb | ✅ | Mảng JSON: `[{"vi": "Tôi ăn cơm", "en": "I eat rice", "note": "Câu đơn giản SVO"}]` — `note` là optional |
 | `notes` | text | ❌ | Lưu ý thêm |
-| `difficulty_level` | int | ✅ | 1-5, default: 1 |
 | `lesson_id` | UUID | ✅ | FK → lessons.id, ON DELETE CASCADE |
 
 **Yêu cầu:**
@@ -144,7 +141,6 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | `correct_answer` | jsonb | ✅ | Xem chi tiết bên dưới |
 | `explanation` | text | ❌ | Giải thích đáp án |
 | `order_index` | int | ✅ | Thứ tự trong lesson |
-| `difficulty_level` | int | ✅ | 1-5, default: 1 |
 | `lesson_id` | UUID | ✅ | FK → lessons.id, ON DELETE CASCADE |
 
 #### Chi tiết `options` (jsonb) — discriminated union theo `type`:
@@ -380,8 +376,7 @@ Trả về dữ liệu dưới dạng **JSON** theo cấu trúc cây lồng nhau
                     "CENTRAL": "xin chào",
                     "SOUTHERN": "xin chào"
                   },
-                  "region": "STANDARD",
-                  "difficulty_level": 1
+                  "region": "STANDARD"
                 }
               ],
               "grammar_rules": [],
@@ -398,8 +393,7 @@ Trả về dữ liệu dưới dạng **JSON** theo cấu trúc cây lồng nhau
                     "selectedChoice": "xin chào"
                   },
                   "explanation": "'Xin chào' là cách chào phổ biến nhất trong tiếng Việt.",
-                  "order_index": 1,
-                  "difficulty_level": 1
+                  "order_index": 1
                 }
               ]
             }
@@ -475,9 +469,8 @@ Trước khi trả output, tự kiểm tra:
 5. ✅ `classifier` có cho mọi danh từ vật/con người
 6. ✅ `phonetic` có cho mọi Vocabulary
 7. ✅ `part_of_speech` đúng loại từ (không nhầm "phrase" với "interjection")
-8. ✅ `difficulty_level` tăng dần theo cấp độ (A1=1, C2=4-5)
-9. ✅ Nội dung tiếng Việt tự nhiên, không phải Google Translate
-10. ✅ Không có `audio_url`, `image_url`, `video_url` thật (để null) — chưa có file media
+8. ✅ Nội dung tiếng Việt tự nhiên, không phải Google Translate
+9. ✅ Không có `audio_url`, `image_url`, `video_url` thật (để null) — chưa có file media
 11. ✅ `grammar_rules.examples` là mảng JSON đúng format `[{"vi": "...", "en": "...", "note": "..."}]`
 
 ---

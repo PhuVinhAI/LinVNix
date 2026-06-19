@@ -50,7 +50,6 @@ export class GrammarController {
             { vi: 'Anh ấy là giáo viên', en: 'He is a teacher' },
           ],
           notes: 'Lưu ý đặc biệt',
-          difficultyLevel: 1,
         },
       ],
     },
@@ -79,7 +78,6 @@ export class GrammarController {
           { vi: 'Tôi là sinh viên', en: 'I am a student', note: 'Câu cơ bản' },
         ],
         notes: 'Lưu ý đặc biệt',
-        difficultyLevel: 1,
       },
     },
   })

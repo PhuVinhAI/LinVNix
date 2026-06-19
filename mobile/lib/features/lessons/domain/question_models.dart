@@ -49,7 +49,6 @@ class Question {
     this.questionAudioUrl,
     this.explanation,
     this.orderIndex = 0,
-    this.difficultyLevel = 1,
     this.acceptsWithoutDiacritics = false,
   });
 
@@ -71,7 +70,6 @@ class Question {
       ),
       explanation: json['explanation'] as String?,
       orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
-      difficultyLevel: (json['difficultyLevel'] as num?)?.toInt() ?? 1,
       acceptsWithoutDiacritics: json['acceptsWithoutDiacritics'] as bool? ?? false,
     );
   }
@@ -86,7 +84,6 @@ class Question {
       'correctAnswer': correctAnswer.toJson(),
       'explanation': explanation,
       'orderIndex': orderIndex,
-      'difficultyLevel': difficultyLevel,
       'acceptsWithoutDiacritics': acceptsWithoutDiacritics,
     };
   }
@@ -99,7 +96,6 @@ class Question {
   final QuestionAnswer correctAnswer;
   final String? explanation;
   final int orderIndex;
-  final int difficultyLevel;
   final bool acceptsWithoutDiacritics;
 }
 

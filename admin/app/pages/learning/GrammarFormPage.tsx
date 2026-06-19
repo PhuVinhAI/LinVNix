@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { ArrowLeft, FileText, Gauge, Lightbulb, ListOrdered, Plus, Save, StickyNote, Trash2 } from 'lucide-react'
+import { ArrowLeft, FileText, Lightbulb, ListOrdered, Plus, Save, StickyNote, Trash2 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Textarea } from '../../components/ui/textarea'
@@ -9,7 +9,6 @@ import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { FormField, FormSection } from '../../components/admin/FormSection'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { GrammarRule } from '../../features/learning/types'
-import { DIFFICULTY_LABELS } from './authoring-ui'
 import { learningPath } from './route-utils'
 
 type ExampleItem = { vi: string; en: string; note?: string }
@@ -20,7 +19,6 @@ interface FormState {
   explanation: string
   examples: ExampleItem[]
   notes: string
-  difficultyLevel: number
 }
 
 const EMPTY: FormState = {
@@ -29,7 +27,6 @@ const EMPTY: FormState = {
   explanation: '',
   examples: [],
   notes: '',
-  difficultyLevel: 1,
 }
 
 function fromRule(r: GrammarRule): FormState {
@@ -39,7 +36,6 @@ function fromRule(r: GrammarRule): FormState {
     explanation: r.explanation ?? '',
     examples: Array.isArray(r.examples) ? r.examples : [],
     notes: r.notes ?? '',
-    difficultyLevel: Math.min(5, Math.max(1, r.difficultyLevel || 1)),
   }
 }
 
@@ -85,7 +81,6 @@ export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
         explanation: form.explanation.trim(),
         examples: form.examples.filter((ex) => ex.vi.trim() || ex.en.trim()),
         notes: form.notes.trim() || null,
-        difficultyLevel: form.difficultyLevel,
       }
       if (mode === 'edit' && id) {
         await mutations.updateLessonChild.mutateAsync({ kind: 'grammar', id, payload })
@@ -232,36 +227,6 @@ export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
                 Thêm ví dụ
               </button>
             </div>
-          </FormSection>
-
-          <FormSection icon={Gauge} title="Độ khó" description="Mức độ khó của quy tắc">
-            <FormField label="Mức độ">
-              <div className="grid grid-cols-5 gap-2">
-                {[1, 2, 3, 4, 5].map((lvl) => {
-                  const active = form.difficultyLevel === lvl
-                  return (
-                    <button
-                      key={lvl}
-                      type="button"
-                      onClick={() => set('difficultyLevel', lvl)}
-                      className={`flex items-center justify-center rounded-lg border-2 px-3 py-2.5 transition-colors ${
-                        active
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border bg-card hover:border-foreground/30'
-                      }`}
-                    >
-                      <span
-                        className={`text-xs font-bold ${
-                          active ? 'text-foreground' : 'text-muted-foreground'
-                        }`}
-                      >
-                        {DIFFICULTY_LABELS[lvl]}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </FormField>
           </FormSection>
 
           <FormSection icon={StickyNote} title="Ghi chú giảng dạy" description="Không hiện cho học viên">

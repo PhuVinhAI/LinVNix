@@ -320,20 +320,6 @@ describe('BookmarksRepository', () => {
       );
     });
 
-    it('sorts by difficulty (difficultyLevel ASC)', async () => {
-      mockQueryBuilder.getManyAndCount.mockResolvedValue([[], 0]);
-
-      await repository.findPaginated({
-        ...defaultArgs,
-        sort: BookmarkSort.DIFFICULTY,
-      });
-
-      expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(
-        'vocabulary.difficultyLevel',
-        'ASC',
-      );
-    });
-
     it('applies search filter on word and translation for both vocabulary and personalVocabulary', async () => {
       mockQueryBuilder.getManyAndCount.mockResolvedValue([[], 0]);
 

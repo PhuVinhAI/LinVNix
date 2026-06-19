@@ -25,8 +25,6 @@ Map<String, dynamic> bookmarkContextSummary(
     'word': displayedWord,
     'translation': bookmark.translation,
     if (bookmark.partOfSpeech != null) 'partOfSpeech': bookmark.partOfSpeech,
-    if (bookmark.difficultyLevel != null)
-      'difficultyLevel': bookmark.difficultyLevel,
     // Detail-sheet / flashcard-back fields. Only emitted when callers ask
     // for them so the bookmarks-list snapshot stays compact.
     if (includeStudyDetails && bookmark.classifier != null)

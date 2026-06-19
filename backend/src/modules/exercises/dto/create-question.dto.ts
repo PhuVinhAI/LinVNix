@@ -58,11 +58,6 @@ export class CreateQuestionDto {
   @IsNumber()
   orderIndex: number;
 
-  @ApiProperty({ example: 1, required: false })
-  @IsNumber()
-  @IsOptional()
-  difficultyLevel?: number;
-
   @ApiProperty({ example: 'uuid-of-exercise' })
   @IsUUID()
   exerciseId: string;

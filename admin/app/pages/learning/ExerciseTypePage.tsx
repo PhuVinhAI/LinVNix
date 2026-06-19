@@ -13,7 +13,7 @@ import { ErrorState, errorMessage } from '../../components/admin/ErrorState'
 import { useAdminExercise, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { Exercise, Question } from '../../features/learning/types'
 import { questionLabel, questionTypeMeta } from './authoring-meta'
-import { ConfirmDeleteDialog, DIFFICULTY_DOT, DIFFICULTY_LABELS, PageHero, SectionHeader, SortableItemRow } from './authoring-ui'
+import { ConfirmDeleteDialog, PageHero, SectionHeader, SortableItemRow } from './authoring-ui'
 import { learningPath } from './route-utils'
 
 /**
@@ -128,7 +128,6 @@ export function ExerciseTypePage() {
             <SortableContext items={questions.map((q) => q.id)} strategy={verticalListSortingStrategy}>
               <div className="space-y-2">
                 {questions.map((question) => {
-                  const level = Math.min(5, Math.max(1, question.difficultyLevel || 1))
                   return (
                     <SortableItemRow
                       key={question.id}
@@ -142,18 +141,12 @@ export function ExerciseTypePage() {
                       }
                       title={questionLabel(question)}
                       meta={
-                        <>
-                          <span className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-0.5 text-xs font-bold">
-                            <span className={`h-1.5 w-1.5 rounded-full ${DIFFICULTY_DOT[level]}`} />
-                            {DIFFICULTY_LABELS[level]}
+                        question.questionAudioUrl ? (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 text-primary px-2 py-0.5 text-xs font-bold">
+                            <Volume2 className="h-3 w-3" />
+                            audio
                           </span>
-                          {question.questionAudioUrl && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 text-primary px-2 py-0.5 text-xs font-bold">
-                              <Volume2 className="h-3 w-3" />
-                              audio
-                            </span>
-                          )}
-                        </>
+                        ) : null
                       }
                     />
                   )

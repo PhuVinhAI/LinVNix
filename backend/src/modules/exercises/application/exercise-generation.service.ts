@@ -881,7 +881,6 @@ export class ExerciseGenerationService {
         correctAnswer: ex.correctAnswer as QuestionAnswer,
         explanation: ex.explanation,
         orderIndex: i + 1,
-        difficultyLevel: 2,
         exerciseId: exercise.id,
       });
       questions.push(question);

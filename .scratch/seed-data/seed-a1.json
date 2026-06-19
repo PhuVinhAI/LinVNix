@@ -22,7 +22,6 @@
                     "selectedChoice": "Thank you",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -45,7 +44,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -84,7 +82,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -117,7 +114,6 @@
                     "translation": "Chào buổi sáng",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -139,7 +135,6 @@
                     "selectedChoice": "Xin lỗi",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -160,7 +155,6 @@
                     "transcript": "xin chào",
                     "type": "speaking"
                   },
-                  "difficulty_level": 1,
                   "question_type": "speaking",
                   "explanation": "Cụm từ cần nói là \"xin chào\".",
                   "options": {
@@ -266,7 +260,6 @@
                     "SOUTHERN": "xin chào",
                     "STANDARD": "xin chào"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Xin chào, tôi là Nam.",
                   "example_translation": "Hello, I am Nam.",
                   "image_url": null,
@@ -285,7 +278,6 @@
                     "SOUTHERN": "cảm ơn",
                     "STANDARD": "cảm ơn"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cảm ơn rất nhiều!",
                   "example_translation": "Thank you very much!",
                   "image_url": null,
@@ -304,7 +296,6 @@
                     "SOUTHERN": "tạm biệt",
                     "STANDARD": "tạm biệt"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tạm biệt bạn!",
                   "example_translation": "Goodbye!",
                   "image_url": null,
@@ -323,7 +314,6 @@
                     "SOUTHERN": "xin lỗi",
                     "STANDARD": "xin lỗi"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Xin lỗi, cho tôi hỏi đường.",
                   "example_translation": "Excuse me, let me ask for directions.",
                   "image_url": null,
@@ -342,7 +332,6 @@
                     "SOUTHERN": "xin mời",
                     "STANDARD": "xin mời"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Xin mời anh vào.",
                   "example_translation": "Please come in.",
                   "image_url": null,
@@ -361,7 +350,6 @@
                     "SOUTHERN": "chào buổi sáng",
                     "STANDARD": "chào buổi sáng"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chào buổi sáng, cô!",
                   "example_translation": "Good morning, ma'am!",
                   "image_url": null,
@@ -380,7 +368,6 @@
                     "SOUTHERN": "chào buổi chiều",
                     "STANDARD": "chào buổi chiều"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chào buổi chiều!",
                   "example_translation": "Good afternoon!",
                   "image_url": null,
@@ -399,7 +386,6 @@
                     "SOUTHERN": "chào buổi tối",
                     "STANDARD": "chào buổi tối"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chào buổi tối, anh!",
                   "example_translation": "Good evening, sir!",
                   "image_url": null,
@@ -423,7 +409,6 @@
                     "SOUTHERN": "dạ",
                     "STANDARD": "vâng"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Vâng, cháu biết rồi ạ.",
                   "example_translation": "Yes, I understand.",
                   "image_url": null,
@@ -442,7 +427,6 @@
                     "SOUTHERN": "không",
                     "STANDARD": "không"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Không, cảm ơn.",
                   "example_translation": "No, thank you.",
                   "image_url": null,
@@ -461,7 +445,6 @@
                     "SOUTHERN": "rất vui",
                     "STANDARD": "rất vui"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Rất vui được gặp bạn!",
                   "example_translation": "Very nice to meet you!",
                   "image_url": null,
@@ -480,7 +463,6 @@
                     "SOUTHERN": "hẹn gặp lại",
                     "STANDARD": "hẹn gặp lại"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hẹn gặp lại nhé!",
                   "example_translation": "See you again!",
                   "image_url": null,
@@ -499,7 +481,6 @@
                     "SOUTHERN": "được",
                     "STANDARD": "được"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Được, tôi đồng ý.",
                   "example_translation": "Okay, I agree.",
                   "image_url": null,
@@ -520,7 +501,6 @@
                     "transcript": "bạn",
                     "type": "listening"
                   },
-                  "difficulty_level": 1,
                   "question_type": "listening",
                   "explanation": "Lan nói: 'Chào bạn! Tôi là Lan.'",
                   "options": {
@@ -543,7 +523,6 @@
                     "selectedChoice": "Rất vui được gặp bạn",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": "Lan nói: 'Rất vui được gặp bạn.'",
                   "options": {
@@ -564,7 +543,6 @@
                     "transcript": "Cảm ơn",
                     "type": "listening"
                   },
-                  "difficulty_level": 1,
                   "question_type": "listening",
                   "explanation": "Nam đáp: 'Cảm ơn! Tôi cũng rất vui.'",
                   "options": {
@@ -650,7 +628,6 @@
                     "SOUTHERN": "xin chào",
                     "STANDARD": "xin chào"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Xin chào, tôi là Nam.",
                   "example_translation": "Hello, I am Nam.",
                   "image_url": null,
@@ -669,7 +646,6 @@
                     "SOUTHERN": "cảm ơn",
                     "STANDARD": "cảm ơn"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cảm ơn rất nhiều!",
                   "example_translation": "Thank you very much!",
                   "image_url": null,
@@ -688,7 +664,6 @@
                     "SOUTHERN": "rất vui",
                     "STANDARD": "rất vui"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Rất vui được gặp bạn!",
                   "example_translation": "Very nice to meet you!",
                   "image_url": null,
@@ -713,7 +688,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 1,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -733,7 +707,6 @@
                     "selectedChoice": "tôi",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -756,7 +729,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -778,7 +750,6 @@
                     "translation": "Tôi không hiểu",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -800,7 +771,6 @@
                     "selectedChoice": "Chị",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -823,7 +793,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -843,7 +812,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I eat rice.",
@@ -867,7 +835,6 @@
                   "title": "Cấu trúc câu cơ bản SVO"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "My name is Nam.",
@@ -891,7 +858,6 @@
                   "title": "Đại từ nhân xưng cơ bản"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I am a student.",
@@ -915,7 +881,6 @@
                   "title": "Giới thiệu bản thân: là và tên là"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I don't understand.",
@@ -1031,7 +996,6 @@
                     "SOUTHERN": "tôi",
                     "STANDARD": "tôi"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi là sinh viên.",
                   "example_translation": "I am a student.",
                   "image_url": null,
@@ -1050,7 +1014,6 @@
                     "SOUTHERN": "bạn",
                     "STANDARD": "bạn"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bạn tên gì?",
                   "example_translation": "What is your name?",
                   "image_url": null,
@@ -1069,7 +1032,6 @@
                     "SOUTHERN": "anh",
                     "STANDARD": "anh"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Anh tên gì?",
                   "example_translation": "What is your name? (to older male)",
                   "image_url": null,
@@ -1088,7 +1050,6 @@
                     "SOUTHERN": "chị",
                     "STANDARD": "chị"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chị từ đâu đến?",
                   "example_translation": "Where do you come from? (to older female)",
                   "image_url": null,
@@ -1107,7 +1068,6 @@
                     "SOUTHERN": "em",
                     "STANDARD": "em"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Em năm nay bao nhiêu tuổi?",
                   "example_translation": "How old are you? (to younger person)",
                   "image_url": null,
@@ -1126,7 +1086,6 @@
                     "SOUTHERN": "là",
                     "STANDARD": "là"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi là giáo viên.",
                   "example_translation": "I am a teacher.",
                   "image_url": null,
@@ -1145,7 +1104,6 @@
                     "SOUTHERN": "tên",
                     "STANDARD": "tên"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bạn tên gì?",
                   "example_translation": "What is your name?",
                   "image_url": null,
@@ -1164,7 +1122,6 @@
                     "SOUTHERN": "gì",
                     "STANDARD": "gì"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Đây là gì?",
                   "example_translation": "What is this?",
                   "image_url": null,
@@ -1185,7 +1142,6 @@
                     "selectedChoice": "6",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1223,7 +1179,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -1256,7 +1211,6 @@
                     "selectedChoice": "t trong top nhưng bật hơi mạnh",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1279,7 +1233,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -1354,7 +1307,6 @@
                     "SOUTHERN": "ba",
                     "STANDARD": "ba"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ba người.",
                   "example_translation": "Three people.",
                   "image_url": null,
@@ -1373,7 +1325,6 @@
                     "SOUTHERN": "bà",
                     "STANDARD": "bà"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bà rất tốt.",
                   "example_translation": "Grandmother is very kind.",
                   "image_url": null,
@@ -1392,7 +1343,6 @@
                     "SOUTHERN": "khỏe",
                     "STANDARD": "khỏe"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi khỏe, cảm ơn.",
                   "example_translation": "I'm well, thank you.",
                   "image_url": null,
@@ -1411,7 +1361,6 @@
                     "SOUTHERN": "năm",
                     "STANDARD": "năm"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Năm nay tôi hai mươi tuổi.",
                   "example_translation": "This year I am twenty years old.",
                   "image_url": null,
@@ -1432,7 +1381,6 @@
                     "selectedChoice": "Ông",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1453,7 +1401,6 @@
                     "selectedChoice": "dạ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1474,7 +1421,6 @@
                     "translation": "Cháu chào bà ạ",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -1540,7 +1486,6 @@
                     "SOUTHERN": "ông",
                     "STANDARD": "ông"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cháu chào ông ạ.",
                   "example_translation": "Hello, grandfather.",
                   "image_url": null,
@@ -1559,7 +1504,6 @@
                     "SOUTHERN": "dạ",
                     "STANDARD": "vâng"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Dạ, em nghe rồi ạ.",
                   "example_translation": "Yes, I hear you.",
                   "image_url": null,
@@ -1578,7 +1522,6 @@
                     "SOUTHERN": "ạ",
                     "STANDARD": "ạ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cháu chào cô ạ!",
                   "example_translation": "Hello, aunt! (respectful)",
                   "image_url": null,
@@ -1626,7 +1569,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -1659,7 +1601,6 @@
                     "selectedChoice": "25",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1680,7 +1621,6 @@
                     "translation": "bảy",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -1704,7 +1644,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -1726,7 +1665,6 @@
                     "selectedChoice": "ngàn",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -1826,7 +1764,6 @@
                     "SOUTHERN": "một",
                     "STANDARD": "một"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Một người.",
                   "example_translation": "One person.",
                   "image_url": null,
@@ -1845,7 +1782,6 @@
                     "SOUTHERN": "hai",
                     "STANDARD": "hai"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hai quyển sách.",
                   "example_translation": "Two books.",
                   "image_url": null,
@@ -1864,7 +1800,6 @@
                     "SOUTHERN": "ba",
                     "STANDARD": "ba"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ba quả cam.",
                   "example_translation": "Three oranges.",
                   "image_url": null,
@@ -1883,7 +1818,6 @@
                     "SOUTHERN": "bốn",
                     "STANDARD": "bốn"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bốn người bạn.",
                   "example_translation": "Four friends.",
                   "image_url": null,
@@ -1902,7 +1836,6 @@
                     "SOUTHERN": "năm",
                     "STANDARD": "năm"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Năm quyển sách.",
                   "example_translation": "Five books.",
                   "image_url": null,
@@ -1921,7 +1854,6 @@
                     "SOUTHERN": "sáu",
                     "STANDARD": "sáu"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Sáu cái bàn.",
                   "example_translation": "Six tables.",
                   "image_url": null,
@@ -1940,7 +1872,6 @@
                     "SOUTHERN": "bảy",
                     "STANDARD": "bảy"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bảy ngày.",
                   "example_translation": "Seven days.",
                   "image_url": null,
@@ -1959,7 +1890,6 @@
                     "SOUTHERN": "tám",
                     "STANDARD": "tám"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tám giờ sáng.",
                   "example_translation": "Eight in the morning.",
                   "image_url": null,
@@ -1978,7 +1908,6 @@
                     "SOUTHERN": "chín",
                     "STANDARD": "chín"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chín người.",
                   "example_translation": "Nine people.",
                   "image_url": null,
@@ -1997,7 +1926,6 @@
                     "SOUTHERN": "mười",
                     "STANDARD": "mười"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Mười học sinh.",
                   "example_translation": "Ten students.",
                   "image_url": null,
@@ -2016,7 +1944,6 @@
                     "SOUTHERN": "trăm",
                     "STANDARD": "trăm"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Một trăm người.",
                   "example_translation": "One hundred people.",
                   "image_url": null,
@@ -2035,7 +1962,6 @@
                     "SOUTHERN": "ngàn",
                     "STANDARD": "nghìn"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Năm nghìn đồng.",
                   "example_translation": "Five thousand dong.",
                   "image_url": null,
@@ -2054,7 +1980,6 @@
                     "SOUTHERN": "mươi",
                     "STANDARD": "mươi"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hai mươi lăm.",
                   "example_translation": "Twenty-five.",
                   "image_url": null,
@@ -2073,7 +1998,6 @@
                     "SOUTHERN": "nhiều",
                     "STANDARD": "nhiều"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Nhiều người ở đây.",
                   "example_translation": "Many people are here.",
                   "image_url": null,
@@ -2092,7 +2016,6 @@
                     "SOUTHERN": "ít",
                     "STANDARD": "ít"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ít nước thôi.",
                   "example_translation": "Just a little water.",
                   "image_url": null,
@@ -2115,7 +2038,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -2137,7 +2059,6 @@
                     "selectedChoice": "quyển",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2158,7 +2079,6 @@
                     "translation": "Ba quyển sách",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -2184,7 +2104,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 1,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -2204,7 +2123,6 @@
                     "selectedChoice": "trái",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2223,7 +2141,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Two cats.",
@@ -2247,7 +2164,6 @@
                   "title": "Lượng từ + Phân loại từ + Danh từ"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "How much is this book?",
@@ -2271,7 +2187,6 @@
                   "title": "Câu hỏi số lượng: bao nhiêu và mấy"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Twenty-one.",
@@ -2341,7 +2256,6 @@
                     "SOUTHERN": "cái",
                     "STANDARD": "cái"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hai cái bàn.",
                   "example_translation": "Two tables.",
                   "image_url": null,
@@ -2360,7 +2274,6 @@
                     "SOUTHERN": "con",
                     "STANDARD": "con"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ba con mèo.",
                   "example_translation": "Three cats.",
                   "image_url": null,
@@ -2379,7 +2292,6 @@
                     "SOUTHERN": "người",
                     "STANDARD": "người"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Năm người bạn.",
                   "example_translation": "Five friends.",
                   "image_url": null,
@@ -2398,7 +2310,6 @@
                     "SOUTHERN": "cuốn",
                     "STANDARD": "quyển"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hai quyển sách.",
                   "example_translation": "Two books.",
                   "image_url": null,
@@ -2417,7 +2328,6 @@
                     "SOUTHERN": "trái",
                     "STANDARD": "quả"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ba quả cam.",
                   "example_translation": "Three oranges.",
                   "image_url": null,
@@ -2436,7 +2346,6 @@
                     "SOUTHERN": "chiếc",
                     "STANDARD": "chiếc"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Một chiếc xe.",
                   "example_translation": "One vehicle.",
                   "image_url": null,
@@ -2455,7 +2364,6 @@
                     "SOUTHERN": "cây",
                     "STANDARD": "cây"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hai cây bút.",
                   "example_translation": "Two pens.",
                   "image_url": null,
@@ -2474,7 +2382,6 @@
                     "SOUTHERN": "bài",
                     "STANDARD": "bài"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Một bài hát.",
                   "example_translation": "One song.",
                   "image_url": null,
@@ -2493,7 +2400,6 @@
                     "SOUTHERN": "bữa",
                     "STANDARD": "bữa"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ba bữa cơm một ngày.",
                   "example_translation": "Three meals a day.",
                   "image_url": null,
@@ -2512,7 +2418,6 @@
                     "SOUTHERN": "bao nhiêu",
                     "STANDARD": "bao nhiêu"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bao nhiêu tiền?",
                   "example_translation": "How much money?",
                   "image_url": null,
@@ -2531,7 +2436,6 @@
                     "SOUTHERN": "mấy",
                     "STANDARD": "mấy"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Em có mấy người anh?",
                   "example_translation": "How many older brothers do you have?",
                   "image_url": null,
@@ -2569,7 +2473,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -2602,7 +2505,6 @@
                     "selectedChoice": "thanh huyền",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2625,7 +2527,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -2690,7 +2591,6 @@
                     "SOUTHERN": "giờ",
                     "STANDARD": "giờ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bây giờ mấy giờ rồi?",
                   "example_translation": "What time is it now?",
                   "image_url": null,
@@ -2709,7 +2609,6 @@
                     "SOUTHERN": "phút",
                     "STANDARD": "phút"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Mười phút nữa.",
                   "example_translation": "In ten minutes.",
                   "image_url": null,
@@ -2728,7 +2627,6 @@
                     "SOUTHERN": "ngày",
                     "STANDARD": "ngày"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hôm nay là thứ mấy?",
                   "example_translation": "What day is today?",
                   "image_url": null,
@@ -2747,7 +2645,6 @@
                     "SOUTHERN": "tuần",
                     "STANDARD": "tuần"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Một tuần có bảy ngày.",
                   "example_translation": "A week has seven days.",
                   "image_url": null,
@@ -2766,7 +2663,6 @@
                     "SOUTHERN": "tháng",
                     "STANDARD": "tháng"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tháng một.",
                   "example_translation": "January.",
                   "image_url": null,
@@ -2814,7 +2710,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -2847,7 +2742,6 @@
                     "selectedChoice": "ba",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -2870,7 +2764,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -2892,7 +2785,6 @@
                     "translation": "Mẹ tôi là bác sĩ",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -2914,7 +2806,6 @@
                     "selectedChoice": "Father's sister",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3029,7 +2920,6 @@
                     "SOUTHERN": "ba",
                     "STANDARD": "bố"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bố tôi là giáo viên.",
                   "example_translation": "My father is a teacher.",
                   "image_url": null,
@@ -3048,7 +2938,6 @@
                     "SOUTHERN": "má",
                     "STANDARD": "mẹ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Mẹ tôi làm bác sĩ.",
                   "example_translation": "My mother is a doctor.",
                   "image_url": null,
@@ -3067,7 +2956,6 @@
                     "SOUTHERN": "anh",
                     "STANDARD": "anh"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Anh trai tôi hai mươi tuổi.",
                   "example_translation": "My older brother is twenty years old.",
                   "image_url": null,
@@ -3086,7 +2974,6 @@
                     "SOUTHERN": "chị",
                     "STANDARD": "chị"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chị gái tôi đã lấy chồng.",
                   "example_translation": "My older sister is married.",
                   "image_url": null,
@@ -3105,7 +2992,6 @@
                     "SOUTHERN": "em",
                     "STANDARD": "em"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Em gái tôi học lớp năm.",
                   "example_translation": "My younger sister is in 5th grade.",
                   "image_url": null,
@@ -3124,7 +3010,6 @@
                     "SOUTHERN": "ông",
                     "STANDARD": "ông"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ông nội tôi bảy mươi tuổi.",
                   "example_translation": "My paternal grandfather is seventy years old.",
                   "image_url": null,
@@ -3143,7 +3028,6 @@
                     "SOUTHERN": "bà",
                     "STANDARD": "bà"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bà ngoại tôi nấu ăn rất ngon.",
                   "example_translation": "My maternal grandmother cooks very well.",
                   "image_url": null,
@@ -3162,7 +3046,6 @@
                     "SOUTHERN": "chú",
                     "STANDARD": "chú"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chú tôi ở Hà Nội.",
                   "example_translation": "My uncle (father's younger brother) lives in Hanoi.",
                   "image_url": null,
@@ -3181,7 +3064,6 @@
                     "SOUTHERN": "cô",
                     "STANDARD": "cô"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cô tôi là y tá.",
                   "example_translation": "My aunt (father's sister) is a nurse.",
                   "image_url": null,
@@ -3200,7 +3082,6 @@
                     "SOUTHERN": "dì",
                     "STANDARD": "dì"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Dì tôi sống ở Đà Nẵng.",
                   "example_translation": "My aunt (mother's sister) lives in Da Nang.",
                   "image_url": null,
@@ -3219,7 +3100,6 @@
                     "SOUTHERN": "cậu",
                     "STANDARD": "cậu"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cậu tôi làm kỹ sư.",
                   "example_translation": "My uncle (mother's brother) is an engineer.",
                   "image_url": null,
@@ -3238,7 +3118,6 @@
                     "SOUTHERN": "bác",
                     "STANDARD": "bác"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bác trai tôi ở Sài Gòn.",
                   "example_translation": "My uncle (parent's older brother) lives in Saigon.",
                   "image_url": null,
@@ -3257,7 +3136,6 @@
                     "SOUTHERN": "con",
                     "STANDARD": "con"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi có hai con.",
                   "example_translation": "I have two children.",
                   "image_url": null,
@@ -3276,7 +3154,6 @@
                     "SOUTHERN": "cháu",
                     "STANDARD": "cháu"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cháu tôi năm nay mười tuổi.",
                   "example_translation": "My nephew is ten years old this year.",
                   "image_url": null,
@@ -3295,7 +3172,6 @@
                     "SOUTHERN": "bà xã",
                     "STANDARD": "vợ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Vợ tôi tên Lan.",
                   "example_translation": "My wife's name is Lan.",
                   "image_url": null,
@@ -3316,7 +3192,6 @@
                     "selectedChoice": "con",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3339,7 +3214,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -3366,7 +3240,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 1,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -3387,7 +3260,6 @@
                     "translation": "Bạn có chị gái không?",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -3412,7 +3284,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -3432,7 +3303,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I (child) love you (mother).",
@@ -3456,7 +3326,6 @@
                   "title": "Xưng hô theo bậc gia đình"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Mother's house is very beautiful.",
@@ -3480,7 +3349,6 @@
                   "title": "Sở hữu cách với của"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Do you have an older brother?",
@@ -3550,7 +3418,6 @@
                     "SOUTHERN": "của",
                     "STANDARD": "của"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Đây là sách của tôi.",
                   "example_translation": "This is my book.",
                   "image_url": null,
@@ -3569,7 +3436,6 @@
                     "SOUTHERN": "nhà",
                     "STANDARD": "nhà"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Nhà tôi ở Hà Nội.",
                   "example_translation": "My home is in Hanoi.",
                   "image_url": null,
@@ -3588,7 +3454,6 @@
                     "SOUTHERN": "gia đình",
                     "STANDARD": "gia đình"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Gia đình tôi có bốn người.",
                   "example_translation": "My family has four people.",
                   "image_url": null,
@@ -3609,7 +3474,6 @@
                     "selectedChoice": "Cha của bố",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3647,7 +3511,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -3680,7 +3543,6 @@
                     "translation": "bà ngoại",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -3745,7 +3607,6 @@
                     "SOUTHERN": "nội",
                     "STANDARD": "nội"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Ông nội tôi bảy mươi tuổi.",
                   "example_translation": "My paternal grandfather is seventy years old.",
                   "image_url": null,
@@ -3764,7 +3625,6 @@
                     "SOUTHERN": "ngoại",
                     "STANDARD": "ngoại"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bà ngoại tôi nấu ăn ngon lắm.",
                   "example_translation": "My maternal grandmother cooks very well.",
                   "image_url": null,
@@ -3783,7 +3643,6 @@
                     "SOUTHERN": "truyền thống",
                     "STANDARD": "truyền thống"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Gia đình truyền thống Việt Nam.",
                   "example_translation": "Traditional Vietnamese family.",
                   "image_url": null,
@@ -3831,7 +3690,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -3864,7 +3722,6 @@
                     "selectedChoice": "Plain water",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -3885,7 +3742,6 @@
                     "translation": "Tôi muốn ăn phở",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -3909,7 +3765,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -3931,7 +3786,6 @@
                     "selectedChoice": "To like",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4046,7 +3900,6 @@
                     "SOUTHERN": "cơm",
                     "STANDARD": "cơm"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi ăn cơm trưa.",
                   "example_translation": "I eat lunch.",
                   "image_url": null,
@@ -4065,7 +3918,6 @@
                     "SOUTHERN": "phở",
                     "STANDARD": "phở"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi thích ăn phở bò.",
                   "example_translation": "I like eating beef pho.",
                   "image_url": null,
@@ -4084,7 +3936,6 @@
                     "SOUTHERN": "bún",
                     "STANDARD": "bún"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bún chả Hà Nội rất ngon.",
                   "example_translation": "Hanoi bun cha is very delicious.",
                   "image_url": null,
@@ -4103,7 +3954,6 @@
                     "SOUTHERN": "nước",
                     "STANDARD": "nước"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cho tôi một ly nước.",
                   "example_translation": "Give me a glass of water.",
                   "image_url": null,
@@ -4122,7 +3972,6 @@
                     "SOUTHERN": "trà",
                     "STANDARD": "trà"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi uống trà đá.",
                   "example_translation": "I drink iced tea.",
                   "image_url": null,
@@ -4141,7 +3990,6 @@
                     "SOUTHERN": "cà phê",
                     "STANDARD": "cà phê"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cho tôi một ly cà phê sữa đá.",
                   "example_translation": "Give me an iced coffee with milk.",
                   "image_url": null,
@@ -4160,7 +4008,6 @@
                     "SOUTHERN": "bánh mì",
                     "STANDARD": "bánh mì"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi ăn bánh mì sáng.",
                   "example_translation": "I eat bread for breakfast.",
                   "image_url": null,
@@ -4179,7 +4026,6 @@
                     "SOUTHERN": "thịt",
                     "STANDARD": "thịt"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi không ăn thịt.",
                   "example_translation": "I don't eat meat.",
                   "image_url": null,
@@ -4198,7 +4044,6 @@
                     "SOUTHERN": "cá",
                     "STANDARD": "cá"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cá kho rất ngon.",
                   "example_translation": "Braised fish is very delicious.",
                   "image_url": null,
@@ -4217,7 +4062,6 @@
                     "SOUTHERN": "rau",
                     "STANDARD": "rau"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi thích ăn rau.",
                   "example_translation": "I like eating vegetables.",
                   "image_url": null,
@@ -4236,7 +4080,6 @@
                     "SOUTHERN": "ngon",
                     "STANDARD": "ngon"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Phở này ngon quá!",
                   "example_translation": "This pho is so delicious!",
                   "image_url": null,
@@ -4255,7 +4098,6 @@
                     "SOUTHERN": "ăn",
                     "STANDARD": "ăn"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi ăn cơm.",
                   "example_translation": "I eat rice.",
                   "image_url": null,
@@ -4274,7 +4116,6 @@
                     "SOUTHERN": "uống",
                     "STANDARD": "uống"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi uống nước.",
                   "example_translation": "I drink water.",
                   "image_url": null,
@@ -4293,7 +4134,6 @@
                     "SOUTHERN": "muốn",
                     "STANDARD": "muốn"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi muốn ăn phở.",
                   "example_translation": "I want to eat pho.",
                   "image_url": null,
@@ -4312,7 +4152,6 @@
                     "SOUTHERN": "thích",
                     "STANDARD": "thích"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi thích cà phê.",
                   "example_translation": "I like coffee.",
                   "image_url": null,
@@ -4335,7 +4174,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -4359,7 +4197,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -4383,7 +4220,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -4405,7 +4241,6 @@
                     "translation": "Tôi thích phở",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -4427,7 +4262,6 @@
                     "selectedChoice": "Trước động từ",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4453,7 +4287,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 1,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -4472,7 +4305,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I like pho.",
@@ -4496,7 +4328,6 @@
                   "title": "Thích và không thích"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I ate rice.",
@@ -4520,7 +4351,6 @@
                   "title": "Thì quá khứ với đã"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I will eat pho.",
@@ -4544,7 +4374,6 @@
                   "title": "Thì tương lai với sẽ và thì tiếp diễn với đang"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Do you like pho?",
@@ -4675,7 +4504,6 @@
                     "SOUTHERN": "đã",
                     "STANDARD": "đã"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi đã ăn cơm.",
                   "example_translation": "I ate rice.",
                   "image_url": null,
@@ -4694,7 +4522,6 @@
                     "SOUTHERN": "sẽ",
                     "STANDARD": "sẽ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi sẽ đi chợ.",
                   "example_translation": "I will go to the market.",
                   "image_url": null,
@@ -4713,7 +4540,6 @@
                     "SOUTHERN": "đang",
                     "STANDARD": "đang"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi đang ăn.",
                   "example_translation": "I am eating.",
                   "image_url": null,
@@ -4732,7 +4558,6 @@
                     "SOUTHERN": "rất",
                     "STANDARD": "rất"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Phở rất ngon.",
                   "example_translation": "Pho is very delicious.",
                   "image_url": null,
@@ -4751,7 +4576,6 @@
                     "SOUTHERN": "hôm qua",
                     "STANDARD": "hôm qua"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Hôm qua tôi đã ăn phở.",
                   "example_translation": "Yesterday I ate pho.",
                   "image_url": null,
@@ -4772,7 +4596,6 @@
                     "translation": "Cho tôi một bát phở",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -4794,7 +4617,6 @@
                     "selectedChoice": "Tính tiền!",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -4819,7 +4641,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 1,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -4841,7 +4662,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -4998,7 +4818,6 @@
                     "SOUTHERN": "cho",
                     "STANDARD": "cho"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Cho tôi một bát phở.",
                   "example_translation": "Give me a bowl of pho.",
                   "image_url": null,
@@ -5017,7 +4836,6 @@
                     "SOUTHERN": "tính tiền",
                     "STANDARD": "tính tiền"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Anh chị ơi, tính tiền!",
                   "example_translation": "Check please!",
                   "image_url": null,
@@ -5036,7 +4854,6 @@
                     "SOUTHERN": "bát",
                     "STANDARD": "bát"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Một bát phở.",
                   "example_translation": "One bowl of pho.",
                   "image_url": null,
@@ -5055,7 +4872,6 @@
                     "SOUTHERN": "ly",
                     "STANDARD": "ly"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Một ly nước.",
                   "example_translation": "One glass of water.",
                   "image_url": null,
@@ -5074,7 +4890,6 @@
                     "SOUTHERN": "đây",
                     "STANDARD": "đây"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Đây ạ.",
                   "example_translation": "Here you are.",
                   "image_url": null,
@@ -5122,7 +4937,6 @@
                     ],
                     "type": "matching"
                   },
-                  "difficulty_level": 1,
                   "question_type": "matching",
                   "explanation": null,
                   "options": {
@@ -5155,7 +4969,6 @@
                     "selectedChoice": "xe máy",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -5176,7 +4989,6 @@
                     "translation": "Rẽ bên trái",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -5200,7 +5012,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -5226,7 +5037,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 1,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -5345,7 +5155,6 @@
                     "SOUTHERN": "đi",
                     "STANDARD": "đi"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi đi chợ.",
                   "example_translation": "I go to the market.",
                   "image_url": null,
@@ -5364,7 +5173,6 @@
                     "SOUTHERN": "đến",
                     "STANDARD": "đến"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi đến Hà Nội.",
                   "example_translation": "I arrive in Hanoi.",
                   "image_url": null,
@@ -5383,7 +5191,6 @@
                     "SOUTHERN": "từ",
                     "STANDARD": "từ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi từ Sài Gòn.",
                   "example_translation": "I am from Saigon.",
                   "image_url": null,
@@ -5402,7 +5209,6 @@
                     "SOUTHERN": "ở",
                     "STANDARD": "ở"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi ở Hà Nội.",
                   "example_translation": "I live in Hanoi.",
                   "image_url": null,
@@ -5421,7 +5227,6 @@
                     "SOUTHERN": "đây",
                     "STANDARD": "đây"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Đây là nhà tôi.",
                   "example_translation": "This is my house.",
                   "image_url": null,
@@ -5440,7 +5245,6 @@
                     "SOUTHERN": "đó",
                     "STANDARD": "đó"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bến xe ở đó.",
                   "example_translation": "The bus station is there.",
                   "image_url": null,
@@ -5459,7 +5263,6 @@
                     "SOUTHERN": "kia",
                     "STANDARD": "kia"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Nhà ga ở kia.",
                   "example_translation": "The train station is over there.",
                   "image_url": null,
@@ -5478,7 +5281,6 @@
                     "SOUTHERN": "bên trái",
                     "STANDARD": "bên trái"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Rẽ bên trái.",
                   "example_translation": "Turn left.",
                   "image_url": null,
@@ -5497,7 +5299,6 @@
                     "SOUTHERN": "bên phải",
                     "STANDARD": "bên phải"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Rẽ bên phải.",
                   "example_translation": "Turn right.",
                   "image_url": null,
@@ -5516,7 +5317,6 @@
                     "SOUTHERN": "thẳng",
                     "STANDARD": "thẳng"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Đi thẳng.",
                   "example_translation": "Go straight.",
                   "image_url": null,
@@ -5535,7 +5335,6 @@
                     "SOUTHERN": "xe máy",
                     "STANDARD": "xe máy"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi đi xe máy.",
                   "example_translation": "I ride a motorbike.",
                   "image_url": null,
@@ -5554,7 +5353,6 @@
                     "SOUTHERN": "ô tô",
                     "STANDARD": "ô tô"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Anh đi ô tô.",
                   "example_translation": "He drives a car.",
                   "image_url": null,
@@ -5573,7 +5371,6 @@
                     "SOUTHERN": "bến xe",
                     "STANDARD": "bến xe"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bến xe ở đâu?",
                   "example_translation": "Where is the bus station?",
                   "image_url": null,
@@ -5592,7 +5389,6 @@
                     "SOUTHERN": "chợ",
                     "STANDARD": "chợ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi đi chợ.",
                   "example_translation": "I go to the market.",
                   "image_url": null,
@@ -5611,7 +5407,6 @@
                     "SOUTHERN": "rẽ",
                     "STANDARD": "rẽ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Rẽ bên trái.",
                   "example_translation": "Turn left.",
                   "image_url": null,
@@ -5632,7 +5427,6 @@
                     "translation": "Chợ ở đâu?",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -5657,7 +5451,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -5685,7 +5478,6 @@
                     ],
                     "type": "ordering"
                   },
-                  "difficulty_level": 1,
                   "question_type": "ordering",
                   "explanation": null,
                   "options": {
@@ -5706,7 +5498,6 @@
                     "selectedChoice": "How far?",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -5727,7 +5518,6 @@
                     "translation": "Đi thẳng, rồi rẽ bên phải",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -5747,7 +5537,6 @@
               ],
               "grammar_rules": [
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "I go from Hanoi to Saigon.",
@@ -5771,7 +5560,6 @@
                   "title": "Cấu trúc đi từ A đến B"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Where is the bus station?",
@@ -5795,7 +5583,6 @@
                   "title": "Hỏi vị trí với ở đâu"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "Go straight 200 meters, then turn left.",
@@ -5819,7 +5606,6 @@
                   "title": "Chỉ đường với đi thẳng, rẽ trái/phải"
                 },
                 {
-                  "difficulty_level": 1,
                   "examples": [
                     {
                       "en": "How far is it from here to the bus station?",
@@ -5945,7 +5731,6 @@
                     "SOUTHERN": "đâu",
                     "STANDARD": "đâu"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bạn ở đâu?",
                   "example_translation": "Where do you live?",
                   "image_url": null,
@@ -5964,7 +5749,6 @@
                     "SOUTHERN": "đường",
                     "STANDARD": "đường"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Đi đường nào?",
                   "example_translation": "Which way?",
                   "image_url": null,
@@ -5983,7 +5767,6 @@
                     "SOUTHERN": "đi bộ",
                     "STANDARD": "đi bộ"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Tôi đi bộ.",
                   "example_translation": "I walk.",
                   "image_url": null,
@@ -6002,7 +5785,6 @@
                     "SOUTHERN": "xa",
                     "STANDARD": "xa"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Nhà tôi rất xa.",
                   "example_translation": "My house is very far.",
                   "image_url": null,
@@ -6021,7 +5803,6 @@
                     "SOUTHERN": "gần",
                     "STANDARD": "gần"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Chợ gần đây.",
                   "example_translation": "The market is near.",
                   "image_url": null,
@@ -6042,7 +5823,6 @@
                     "selectedChoice": "Bệnh viện",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -6063,7 +5843,6 @@
                     "selectedChoice": "Mười phút",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -6086,7 +5865,6 @@
                     ],
                     "type": "fill_blank"
                   },
-                  "difficulty_level": 1,
                   "question_type": "fill_blank",
                   "explanation": null,
                   "options": {
@@ -6108,7 +5886,6 @@
                     "translation": "Bến xe buýt gần nhất",
                     "type": "translation"
                   },
-                  "difficulty_level": 1,
                   "question_type": "translation",
                   "explanation": null,
                   "options": {
@@ -6130,7 +5907,6 @@
                     "selectedChoice": "Bên phải",
                     "type": "multiple_choice"
                   },
-                  "difficulty_level": 1,
                   "question_type": "multiple_choice",
                   "explanation": null,
                   "options": {
@@ -6271,7 +6047,6 @@
                     "SOUTHERN": "bệnh viện",
                     "STANDARD": "bệnh viện"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bệnh viện ở đâu?",
                   "example_translation": "Where is the hospital?",
                   "image_url": null,
@@ -6290,7 +6065,6 @@
                     "SOUTHERN": "gần nhất",
                     "STANDARD": "gần nhất"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Bến xe gần nhất.",
                   "example_translation": "The nearest bus station.",
                   "image_url": null,
@@ -6309,7 +6083,6 @@
                     "SOUTHERN": "mất",
                     "STANDARD": "mất"
                   },
-                  "difficulty_level": 1,
                   "example_sentence": "Mất mười phút.",
                   "example_translation": "It takes ten minutes.",
                   "image_url": null,

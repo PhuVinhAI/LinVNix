@@ -64,7 +64,6 @@ export interface Vocabulary {
   dialectVariants?: Record<string, string> | null
   audioUrls?: Record<string, string> | null
   region?: string | null
-  difficultyLevel: number
   orderIndex: number
   lessonId: string
 }
@@ -76,7 +75,6 @@ export interface GrammarRule {
   structure?: string | null
   examples: Array<{ vi: string; en: string; note?: string }>
   notes?: string | null
-  difficultyLevel: number
   orderIndex: number
   lessonId: string
 }
@@ -102,6 +100,5 @@ export interface Question {
   correctAnswer: unknown
   explanation?: string | null
   orderIndex: number
-  difficultyLevel: number
   exerciseId: string
 }

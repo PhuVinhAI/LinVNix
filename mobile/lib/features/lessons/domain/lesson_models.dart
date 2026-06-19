@@ -96,7 +96,6 @@ class LessonVocabulary {
     this.classifier,
     this.dialectVariants,
     this.audioUrls,
-    this.difficultyLevel,
     this.isBookmarked = false,
   });
 
@@ -115,7 +114,6 @@ class LessonVocabulary {
           ?.map((k, v) => MapEntry(k, v as String)),
       audioUrls: (json['audioUrls'] as Map<String, dynamic>?)
           ?.map((k, v) => MapEntry(k, v as String)),
-      difficultyLevel: json['difficultyLevel'] as int?,
       isBookmarked: json['isBookmarked'] as bool? ?? false,
     );
   }
@@ -131,7 +129,6 @@ class LessonVocabulary {
   final String? classifier;
   final Map<String, String>? dialectVariants;
   final Map<String, String>? audioUrls;
-  final int? difficultyLevel;
   final bool isBookmarked;
 }
 
@@ -143,7 +140,6 @@ class GrammarRule {
     this.structure,
     this.examples = const [],
     this.notes,
-    this.difficultyLevel,
   });
 
   factory GrammarRule.fromJson(Map<String, dynamic> json) {
@@ -157,7 +153,6 @@ class GrammarRule {
               .toList() ??
           const [],
       notes: json['notes'] as String?,
-      difficultyLevel: json['difficultyLevel'] as int?,
     );
   }
 
@@ -167,7 +162,6 @@ class GrammarRule {
   final String? structure;
   final List<GrammarExample> examples;
   final String? notes;
-  final int? difficultyLevel;
 }
 
 class GrammarExample {

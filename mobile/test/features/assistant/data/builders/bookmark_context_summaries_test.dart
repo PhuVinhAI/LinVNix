@@ -14,14 +14,12 @@ void main() {
           word: 'xin chào',
           translation: 'hello',
           partOfSpeech: 'phrase',
-          difficultyLevel: 2,
           bookmarkedAt: DateTime.utc(2026, 5, 1),
         ),
       );
 
       expect(summary['word'], 'xin chào');
       expect(summary['translation'], 'hello');
-      expect(summary['difficultyLevel'], 2);
     });
 
     test('resolves preferred dialect variant word', () {
@@ -32,7 +30,6 @@ void main() {
           word: 'xin chào',
           translation: 'hello',
           partOfSpeech: 'phrase',
-          difficultyLevel: 2,
           bookmarkedAt: DateTime.utc(2026, 5, 1),
           dialectVariants: const {
             'SOUTHERN': 'dô nè',
@@ -53,7 +50,6 @@ void main() {
           word: 'xin chào',
           translation: 'hello',
           partOfSpeech: 'phrase',
-          difficultyLevel: 2,
           bookmarkedAt: DateTime.utc(2026, 5, 1),
           dialectVariants: const {
             'NORTHERN': 'chào nhé',

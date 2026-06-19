@@ -14,8 +14,7 @@ enum BookmarkSort {
   newest('newest'),
   oldest('oldest'),
   az('az'),
-  za('za'),
-  difficulty('difficulty');
+  za('za');
 
   const BookmarkSort(this.value);
   final String value;
@@ -77,7 +76,6 @@ class BookmarkWithVocabulary {
     this.classifier,
     this.dialectVariants,
     this.audioUrls,
-    this.difficultyLevel,
     required this.bookmarkedAt,
   });
 
@@ -95,7 +93,6 @@ class BookmarkWithVocabulary {
   final String? classifier;
   final Map<String, String>? dialectVariants;
   final Map<String, String>? audioUrls;
-  final int? difficultyLevel;
   final DateTime bookmarkedAt;
 
   bool get isPersonal => type == BookmarkType.personal;
@@ -132,7 +129,6 @@ class BookmarkWithVocabulary {
       audioUrls: (vocab['audioUrls'] as Map<String, dynamic>?)?.map(
         (k, v) => MapEntry(k, v as String),
       ),
-      difficultyLevel: vocab['difficultyLevel'] as int?,
       bookmarkedAt: DateTime.parse(
         (json['bookmarkedAt'] ?? vocab['createdAt']) as String,
       ),

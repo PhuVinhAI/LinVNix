@@ -2,7 +2,7 @@ import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
 
 @Entity('grammar_rules')
-@Index(['lessonId', 'difficultyLevel'])
+@Index(['lessonId'])
 export class GrammarRule extends BaseEntity {
   @Column()
   title: string;
@@ -22,9 +22,6 @@ export class GrammarRule extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   notes?: string;
-
-  @Column({ name: 'difficulty_level', default: 1 })
-  difficultyLevel: number;
 
   @Column({ name: 'lesson_id' })
   lessonId: string;

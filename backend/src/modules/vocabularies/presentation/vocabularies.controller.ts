@@ -182,7 +182,6 @@ export class VocabulariesController {
           exampleTranslation: 'Hello, how are you?',
           audioUrl: 'https://example.com/audio.mp3',
           imageUrl: 'https://example.com/image.jpg',
-          difficultyLevel: 1,
           classifier: 'con',
           region: 'SOUTHERN',
         },

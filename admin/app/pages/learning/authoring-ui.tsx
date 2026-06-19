@@ -30,9 +30,6 @@ import {
 
 /* Khối UI dùng chung cho chuỗi wizard soạn bài (ADR 0002) — mỗi màn hình một việc. */
 
-export const DIFFICULTY_LABELS = ['', 'Rất dễ', 'Dễ', 'Trung bình', 'Khó', 'Rất khó']
-export const DIFFICULTY_DOT = ['', 'bg-emerald-500', 'bg-teal-500', 'bg-amber-500', 'bg-rose-500', 'bg-red-600']
-
 /**
  * Header của 1 section trong trang (vd "Bài học theo lộ trình" + nút Thêm).
  * Đứng giữa hero và list/grid bên dưới. Pattern y hệt ModuleDetailPage /
@@ -379,40 +376,6 @@ export function ConfirmDeleteDialog({
 }
 
 /* ── Field components (đặt trực tiếp trong body ComposerCard, không thanh nổi) ── */
-
-/** Bộ chọn độ khó 5 mức — hiển thị inline trong form như một field thường. */
-export function DifficultyRow({
-  value,
-  onChange,
-}: {
-  value: number
-  onChange: (v: number) => void
-}) {
-  return (
-    <div className="grid grid-cols-5 gap-2">
-      {[1, 2, 3, 4, 5].map((lvl) => {
-        const active = value === lvl
-        return (
-          <button
-            key={lvl}
-            type="button"
-            onClick={() => onChange(lvl)}
-            className={`flex flex-col items-center gap-1.5 rounded-xl border-2 px-3 py-3 transition-colors ${
-              active
-                ? 'border-primary bg-primary/10'
-                : 'border-border bg-card hover:border-foreground/30'
-            }`}
-          >
-            <span className={`h-2.5 w-2.5 rounded-full ${DIFFICULTY_DOT[lvl]}`} />
-            <span className={`text-xs font-bold ${active ? 'text-primary' : 'text-foreground'}`}>
-              {DIFFICULTY_LABELS[lvl]}
-            </span>
-          </button>
-        )
-      })}
-    </div>
-  )
-}
 
 /** Khung textarea cho ghi chú giảng dạy — không hiển thị cho học viên. */
 export function NotesField({

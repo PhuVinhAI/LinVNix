@@ -18,7 +18,6 @@ String _sortLabel(BuildContext context, BookmarkSort sort) {
     BookmarkSort.oldest => s.sortOldest,
     BookmarkSort.az => s.sortAZ,
     BookmarkSort.za => s.sortZA,
-    BookmarkSort.difficulty => s.difficultyLabel,
   };
 }
 

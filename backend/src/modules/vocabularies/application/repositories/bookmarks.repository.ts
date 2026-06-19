@@ -140,9 +140,6 @@ export class BookmarksRepository {
           'DESC',
         );
         break;
-      case BookmarkSort.DIFFICULTY:
-        qb.orderBy('vocabulary.difficultyLevel', 'ASC');
-        break;
       case BookmarkSort.NEWEST:
       default:
         qb.orderBy('bookmark.createdAt', 'DESC');

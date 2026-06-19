@@ -85,7 +85,6 @@ export class QuestionsService {
       correctAnswer: exercise.correctAnswer,
       explanation: exercise.explanation,
       orderIndex: exercise.orderIndex,
-      difficultyLevel: exercise.difficultyLevel,
       acceptsWithoutDiacritics,
     };
   }

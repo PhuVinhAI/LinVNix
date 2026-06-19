@@ -123,7 +123,6 @@ void main() {
           'SOUTHERN': 'con mèo',
           'NORTHERN': 'con mèo',
         },
-        'difficultyLevel': 1,
       };
 
       final vocab = LessonVocabulary.fromJson(json);
@@ -163,7 +162,6 @@ void main() {
           {'vi': 'Em là Mai', 'en': 'I am Mai', 'note': 'Younger speaker'},
         ],
         'notes': 'Pronouns are very important in Vietnamese',
-        'difficultyLevel': 1,
       };
 
       final rule = GrammarRule.fromJson(json);
