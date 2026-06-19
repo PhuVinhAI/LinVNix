@@ -556,7 +556,6 @@ class UserAchievement {
 
 **5. Nhắc nhở Thông minh**
 - Notification khi có > 10 lỗi chưa ôn
-- Gợi ý thời điểm tốt nhất để ôn (dựa trên spaced repetition)
 - Nhắc ôn lại lỗi sau 1 ngày, 3 ngày, 7 ngày
 
 #### UI/UX Design

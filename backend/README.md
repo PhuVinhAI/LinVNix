@@ -37,7 +37,7 @@ src/
 ├── config/                  # registerAs('app' | 'database' | 'jwt' | 'redis' | 'mail' | 'genai')
 ├── database/
 │   ├── base/                # BaseEntity (uuid id, createdAt, updatedAt, deletedAt)
-│   └── migrations/          # TypeORM migrations (FSRS, dialect, refresh tokens, partitioning…)
+│   └── migrations/          # TypeORM migrations (dialect, refresh tokens, partitioning…)
 │
 ├── infrastructure/          # Cross-cutting global modules
 │   ├── cache/               # cache-manager wrapper
@@ -172,7 +172,6 @@ Migrations đáng chú ý (`src/database/migrations/`):
 
 - `AddGoogleOAuth` — fields cho Google sign-in
 - `AddRefreshTokens` — bảng refresh token độc lập
-- `AddFSRSFields` — chuẩn bị spaced repetition (FSRS) trên user vocabularies
 - `AddDialectAndClassifier` — phương ngữ + danh từ phân loại trên từ vựng
 - `AddVocabularySearchIndex` — index full-text search
 - `AddPartitioning` — phân mảnh bảng log/heavy tables
