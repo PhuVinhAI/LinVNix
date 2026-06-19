@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { ArrowLeft, BookMarked, FileText, Lightbulb, Plus, Volume2 } from 'lucide-react'
+import { BookMarked, FileText, Lightbulb, Plus, Volume2 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
@@ -46,14 +46,6 @@ export function LessonSectionPage() {
         Icon={meta.Icon}
         title={meta.label}
         description={meta.description}
-        actions={
-          <Button asChild variant="outline">
-            <Link to={learningPath.lessonStageContent(lessonId)}>
-              <ArrowLeft className="h-4 w-4" />
-              Quay lại
-            </Link>
-          </Button>
-        }
       />
 
       {meta.value === 'materials' && <MaterialList lessonId={lessonId} lesson={lesson} />}

@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router'
-import { ArrowLeft, ClipboardList, Pencil } from 'lucide-react'
+import { ClipboardList, Pencil } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { VocabFlashcardSkeleton } from '../../components/admin/PageSkeletons'
@@ -24,10 +24,6 @@ export function ExerciseDetailPage() {
     return acc
   }, {})
 
-  const backPath = exercise?.lessonId
-    ? learningPath.lessonStageExercises(exercise.lessonId)
-    : learningPath.courses()
-
   return (
     <div className="space-y-6">
       <Breadcrumbs
@@ -43,7 +39,7 @@ export function ExerciseDetailPage() {
         eyebrow={exercise?.title ?? 'Bài tập'}
         title="Chọn loại câu hỏi"
         count={{ value: questions.length, label: 'câu hỏi' }}
-        description="Theo nguyên tắc sư phạm: ưu tiên Trắc nghiệm/Điền chỗ trống để củng cố ý nghĩa, rồi mở rộng sang Ghép cặp/Sắp xếp, cuối cùng là Dịch/Nghe/Nói cho tổng hợp kỹ năng."
+        description="Chọn loại câu hỏi để mở khu soạn riêng. Mỗi loại có form và thiết lập riêng."
         actions={
           exerciseId && exercise ? (
             <Button asChild variant="outline">
@@ -53,14 +49,6 @@ export function ExerciseDetailPage() {
               </Link>
             </Button>
           ) : undefined
-        }
-        footer={
-          <Button asChild variant="ghost" size="sm" className="-ml-2 h-8 text-muted-foreground hover:text-foreground">
-            <Link to={backPath}>
-              <ArrowLeft className="h-4 w-4" />
-              Chọn bài tập khác
-            </Link>
-          </Button>
         }
       />
 

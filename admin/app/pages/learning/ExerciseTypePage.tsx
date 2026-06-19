@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { ArrowLeft, Plus, Volume2 } from 'lucide-react'
+import { Plus, Volume2 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
@@ -87,14 +87,6 @@ export function ExerciseTypePage() {
         title={meta.label}
         count={{ value: questions.length, label: 'câu hỏi' }}
         description={meta.description}
-        actions={
-          <Button asChild variant="outline">
-            <Link to={learningPath.exercise(exerciseId)}>
-              <ArrowLeft className="h-4 w-4" />
-              Chọn loại khác
-            </Link>
-          </Button>
-        }
       />
 
       <div className="space-y-4">

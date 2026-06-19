@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { ArrowLeft, ClipboardList, Plus, TriangleAlert } from 'lucide-react'
+import { ClipboardList, Plus, TriangleAlert } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
@@ -69,14 +69,6 @@ export function LessonStageExercisesPage() {
         title="Bài tập"
         count={{ value: sortedExercises.length, label: 'bài tập' }}
         description="Chọn một bài tập để soạn câu hỏi bên trong, hoặc tạo bài tập mới."
-        actions={
-          <Button asChild variant="outline">
-            <Link to={learningPath.lesson(lessonId)}>
-              <ArrowLeft className="h-4 w-4" />
-              Về bài học
-            </Link>
-          </Button>
-        }
       />
 
       {contentTotal === 0 && (

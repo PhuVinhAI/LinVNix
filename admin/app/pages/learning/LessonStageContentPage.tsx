@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from 'react-router'
-import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react'
+import { ArrowRight, BookOpen } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { useAdminLesson } from '../../features/learning/api/use-learning-admin'
@@ -34,15 +34,7 @@ export function LessonStageContentPage() {
         Icon={BookOpen}
         title="Nội dung bài học"
         count={{ value: total, label: 'mục' }}
-        description="Theo thứ tự sư phạm: soạn nội dung bài trước, giới thiệu từ vựng, rồi chốt bằng quy tắc ngữ pháp."
-        actions={
-          <Button asChild variant="outline">
-            <Link to={learningPath.lesson(lessonId)}>
-              <ArrowLeft className="h-4 w-4" />
-              Về bài học
-            </Link>
-          </Button>
-        }
+        description="Chọn khu soạn: Nội dung bài, Từ vựng hoặc Quy tắc ngữ pháp."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
