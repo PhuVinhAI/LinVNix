@@ -109,12 +109,8 @@ erDiagram
     timestamp created_at
     timestamp updated_at
     timestamp deleted_at
-    enum content_type
     text vietnamese_text
     text translation
-    varchar audio_url
-    varchar image_url
-    varchar video_url
     int order_index
     text notes
     uuid lesson_id FK

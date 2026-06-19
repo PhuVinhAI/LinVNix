@@ -15,7 +15,6 @@ void main() {
         'contents': [
           {
             'id': 'content-1',
-            'contentType': 'text',
             'vietnameseText': 'Xin chào',
             'orderIndex': 0,
             'translation': 'Hello',
@@ -86,7 +85,6 @@ void main() {
     test('creates text content from JSON', () {
       final json = {
         'id': 'c1',
-        'contentType': 'text',
         'vietnameseText': 'Xin chào thế giới',
         'orderIndex': 0,
         'translation': 'Hello world',
@@ -95,124 +93,21 @@ void main() {
       final content = LessonContent.fromJson(json);
 
       expect(content.id, 'c1');
-      expect(content.contentType, 'text');
       expect(content.vietnameseText, 'Xin chào thế giới');
       expect(content.translation, 'Hello world');
     });
 
-    test('creates audio content from JSON payload', () {
+    test('handles missing translation', () {
       final json = {
         'id': 'c2',
-        'contentType': 'audio',
-        'vietnameseText': 'Nghe và nói',
+        'vietnameseText': 'Một mình tiếng Việt',
         'orderIndex': 1,
-        'payload': {
-          'url': 'https://example.com/audio.mp3',
-          'title': 'Bài nghe 1',
-          'transcript': 'Nghe và nói',
-          'durationSeconds': 42,
-          'speaker': 'Cô Lan',
-          'segments': [
-            {'startSeconds': 0, 'vi': 'Xin chào', 'en': 'Hello'},
-            {'startSeconds': 5.5, 'vi': 'Bạn khỏe không?'},
-          ],
-        },
       };
 
       final content = LessonContent.fromJson(json);
 
-      expect(content.contentType, 'audio');
-      expect(content.audioPayload, isNotNull);
-      expect(content.audioPayload!.url, 'https://example.com/audio.mp3');
-      expect(content.audioPayload!.title, 'Bài nghe 1');
-      expect(content.audioPayload!.speaker, 'Cô Lan');
-      expect(content.audioPayload!.durationSeconds, 42);
-      expect(content.audioPayload!.segments, hasLength(2));
-      expect(content.audioPayload!.segments[1].startSeconds, 5.5);
-    });
-
-    test('creates image content from JSON payload', () {
-      final json = {
-        'id': 'c4',
-        'contentType': 'image',
-        'vietnameseText': 'Phố cổ Hà Nội buổi sáng.',
-        'orderIndex': 1,
-        'translation': 'Hanoi old quarter in the morning.',
-        'payload': {
-          'url': '/uploads/image/hanoi.jpg',
-          'caption': 'Phố cổ Hà Nội buổi sáng.',
-          'captionEn': 'Hanoi old quarter in the morning.',
-          'aspectRatio': '16:9',
-          'source': 'Ảnh: VnExpress',
-        },
-      };
-
-      final content = LessonContent.fromJson(json);
-
-      expect(content.contentType, 'image');
-      expect(content.imagePayload, isNotNull);
-      expect(content.imagePayload!.url, '/uploads/image/hanoi.jpg');
-      expect(content.imagePayload!.caption, 'Phố cổ Hà Nội buổi sáng.');
-      expect(content.imagePayload!.aspectRatio, '16:9');
-      expect(content.imagePayload!.ratio, closeTo(16 / 9, 0.0001));
-      expect(content.imagePayload!.source, 'Ảnh: VnExpress');
-    });
-
-    test('creates video content with chapters from JSON payload', () {
-      final json = {
-        'id': 'c5',
-        'contentType': 'video',
-        'vietnameseText': 'Cách phát âm thanh điệu.',
-        'orderIndex': 2,
-        'payload': {
-          'url': '/uploads/video/tones.mp4',
-          'title': 'Cách phát âm thanh điệu',
-          'aspectRatio': '16:9',
-          'provider': 'self_hosted',
-          'durationSeconds': 180,
-          'chapters': [
-            {'startSeconds': 0, 'title': 'Mở đầu'},
-            {'startSeconds': 60, 'title': 'Thanh ngang'},
-          ],
-        },
-      };
-
-      final content = LessonContent.fromJson(json);
-
-      expect(content.contentType, 'video');
-      expect(content.videoPayload, isNotNull);
-      expect(content.videoPayload!.url, '/uploads/video/tones.mp4');
-      expect(content.videoPayload!.ratio, closeTo(16 / 9, 0.0001));
-      expect(content.videoPayload!.isYoutube, false);
-      expect(content.videoPayload!.chapters, hasLength(2));
-      expect(content.videoPayload!.chapters[1].title, 'Thanh ngang');
-    });
-
-    test('creates dialogue content from JSON', () {
-      final json = {
-        'id': 'c3',
-        'contentType': 'dialogue',
-        'vietnameseText': 'A: Xin chào\nB: Chào bạn',
-        'orderIndex': 2,
-        'translation': 'A: Hello\nB: Hi there',
-        'dialogueData': {
-          'characters': [
-            {'id': 'c1', 'name': 'A', 'side': 'left'},
-            {'id': 'c2', 'name': 'B', 'side': 'right'},
-          ],
-          'lines': [
-            {'characterId': 'c1', 'vi': 'Xin chào', 'en': 'Hello'},
-            {'characterId': 'c2', 'vi': 'Chào bạn', 'en': 'Hi'},
-          ],
-        },
-      };
-
-      final content = LessonContent.fromJson(json);
-
-      expect(content.contentType, 'dialogue');
-      expect(content.vietnameseText, contains('Xin chào'));
-      expect(content.dialogueData, isNotNull);
-      expect(content.dialogueData!.lines, hasLength(2));
+      expect(content.vietnameseText, 'Một mình tiếng Việt');
+      expect(content.translation, isNull);
     });
   });
 

@@ -6,7 +6,6 @@ import { QuestionsRepository } from './repositories/questions.repository';
 export interface LessonContext {
   lessonTitle: string;
   contents: Array<{
-    contentType: string;
     vietnameseText: string;
     translation?: string;
   }>;
@@ -81,7 +80,6 @@ export class ExerciseContextLoader {
     return {
       lessonTitle: lesson.title,
       contents: (lesson.contents || []).map((c: any) => ({
-        contentType: c.contentType,
         vietnameseText: c.vietnameseText,
         translation: c.translation,
       })),

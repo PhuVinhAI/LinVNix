@@ -182,7 +182,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
             },
             label: s.label,
             contentId: s.content?.id,
-            contentType: s.content?.contentType,
           ),
         )
         .toList(growable: false);
@@ -261,7 +260,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
     for (final content in lesson.contents) {
       steps.add(_WizardStep(
         type: _StepType.content,
-        label: _contentLabel(content.contentType, context),
+        label: S.of(context).readingStepLabel,
         content: content,
       ));
     }
@@ -409,7 +408,7 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
   Widget _buildStep(_WizardStep step) {
     switch (step.type) {
       case _StepType.content:
-        return _buildContentWidget(step.content!);
+        return TextContentWidget(content: step.content!);
       case _StepType.vocabulary:
         return VocabularyStepWidget(
           vocabularies: step.vocabularies ?? [],
@@ -418,34 +417,6 @@ class _LessonWizardScreenState extends ConsumerState<LessonWizardScreen>
       case _StepType.grammar:
         return GrammarStepWidget(grammarRules: step.grammarRules ?? []);
     }
-  }
-
-  Widget _buildContentWidget(LessonContent content) {
-    switch (content.contentType) {
-      case 'text':
-        return TextContentWidget(content: content);
-      case 'audio':
-        return AudioContentWidget(content: content);
-      case 'image':
-        return ImageContentWidget(content: content);
-      case 'video':
-        return VideoContentWidget(content: content);
-      case 'dialogue':
-        return DialogueContentWidget(content: content);
-      default:
-        return TextContentWidget(content: content);
-    }
-  }
-
-  String _contentLabel(String contentType, BuildContext context) {
-    return switch (contentType) {
-      'text' => S.of(context).readingStepLabel,
-      'audio' => S.of(context).listeningExercise,
-      'image' => S.of(context).imageStepLabel,
-      'video' => S.of(context).videoStepLabel,
-      'dialogue' => S.of(context).dialogueTitle,
-      _ => S.of(context).contentStepLabel,
-    };
   }
 }
 

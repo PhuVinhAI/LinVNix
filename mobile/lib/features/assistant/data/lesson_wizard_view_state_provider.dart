@@ -11,7 +11,6 @@ class LessonWizardStep {
     required this.type,
     required this.label,
     this.contentId,
-    this.contentType,
   });
 
   /// One of `content`, `vocabulary`, `grammar`.
@@ -23,15 +22,10 @@ class LessonWizardStep {
   /// Only set when [type] == 'content'.
   final String? contentId;
 
-  /// Only set when [type] == 'content'. Raw content type
-  /// (`text`/`audio`/`image`/`video`/`dialogue`).
-  final String? contentType;
-
   Map<String, dynamic> toJson() => <String, dynamic>{
         'type': type,
         'label': label,
         if (contentId != null) 'contentId': contentId,
-        if (contentType != null) 'contentType': contentType,
       };
 
   @override
@@ -40,11 +34,10 @@ class LessonWizardStep {
       other is LessonWizardStep &&
           type == other.type &&
           label == other.label &&
-          contentId == other.contentId &&
-          contentType == other.contentType;
+          contentId == other.contentId;
 
   @override
-  int get hashCode => Object.hash(type, label, contentId, contentType);
+  int get hashCode => Object.hash(type, label, contentId);
 }
 
 @immutable

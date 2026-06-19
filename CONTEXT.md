@@ -19,7 +19,7 @@ _Avoid_: Module, Unit
 _Avoid_: Lesson
 
 **Nội dung bài**:
-Tài liệu đa phương tiện (văn bản, âm thanh, hình ảnh, video, hội thoại) bên trong một **Bài học**.
+Đoạn văn tiếng Việt kèm bản dịch tiếng Anh bên trong một **Bài học**.
 
 **Từ vựng**:
 Một từ tiếng Việt kèm nghĩa Anh, phiên âm, từ loại, danh từ phân loại, và biến thể phương ngữ. Thuộc một **Bài học**.

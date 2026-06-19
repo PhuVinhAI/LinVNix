@@ -7,58 +7,6 @@ const SEED_DATA_PATH = path.resolve(
   '../../.scratch/seed-data/seed-all.json',
 );
 
-/**
- * Map record nội dung JSON cũ (audio_url / image_url / video_url phẳng) thành
- * payload có cấu trúc theo content_type. Nếu seed đã có khoá `payload` thì giữ
- * nguyên để tác giả mới có thể soạn payload đầy đủ.
- */
-function buildContentPayload(
-  c: Record<string, any>,
-): Record<string, unknown> | null {
-  if (c.payload && typeof c.payload === 'object') return c.payload;
-
-  const vi: string = c.vietnamese_text ?? '';
-  const en: string | null = c.translation ?? null;
-  switch (c.content_type) {
-    case 'text':
-      return stripNulls({ body: vi, translation: en });
-    case 'image':
-      return stripNulls({
-        url: c.image_url ?? '',
-        caption: vi,
-        captionEn: en,
-        aspectRatio: c.image_aspect_ratio ?? 'auto',
-      });
-    case 'audio':
-      return stripNulls({
-        url: c.audio_url ?? '',
-        title: c.audio_title ?? '',
-        transcript: vi,
-        translation: en,
-      });
-    case 'video':
-      return stripNulls({
-        url: c.video_url ?? '',
-        title: c.video_title ?? '',
-        aspectRatio: c.video_aspect_ratio ?? '16:9',
-        provider: c.video_provider ?? 'self_hosted',
-        transcript: vi,
-        translation: en,
-      });
-    case 'dialogue':
-    default:
-      return null;
-  }
-}
-
-function stripNulls<T extends Record<string, unknown>>(obj: T): T {
-  for (const k of Object.keys(obj)) {
-    const v = obj[k];
-    if (v === null || v === undefined || v === '') delete obj[k];
-  }
-  return obj;
-}
-
 async function main() {
   const url = process.env.DATABASE_URL;
   const useSSL =
@@ -80,7 +28,7 @@ async function main() {
   await client.connect();
   console.log('Connected to PostgreSQL\n');
 
-  const raw = fs.readFileSync(SEED_DATA_PATH, 'utf8').replace(/^\uFEFF/, '');
+  const raw = fs.readFileSync(SEED_DATA_PATH, 'utf8').replace(/^﻿/, '');
   const data = JSON.parse(raw);
 
   const existing = await client.query('SELECT COUNT(*) FROM courses');
@@ -162,22 +110,21 @@ async function main() {
         uuidMap.set(lessonFakeUuid, lessonId);
         totalLessons++;
 
+        // Chỉ giữ nội dung văn bản; bỏ qua dialogue / image / audio / video.
+        let nextOrder = 0;
         for (const contentData of lessonData.lesson_contents) {
-          const payload = buildContentPayload(contentData);
+          if (contentData.content_type && contentData.content_type !== 'text') {
+            continue;
+          }
           await client.query(
-            `INSERT INTO lesson_contents (content_type, vietnamese_text, translation, payload, order_index, notes, lesson_id, dialogue_data)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            `INSERT INTO lesson_contents (vietnamese_text, translation, order_index, notes, lesson_id)
+             VALUES ($1, $2, $3, $4, $5)`,
             [
-              contentData.content_type,
               contentData.vietnamese_text,
               contentData.translation || null,
-              payload ? JSON.stringify(payload) : null,
-              contentData.order_index,
+              nextOrder++,
               contentData.notes || null,
               lessonId,
-              contentData.dialogue_data
-                ? JSON.stringify(contentData.dialogue_data)
-                : null,
             ],
           );
           totalContents++;

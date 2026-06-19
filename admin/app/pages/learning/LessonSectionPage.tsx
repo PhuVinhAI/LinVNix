@@ -4,14 +4,14 @@ import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { ArrowLeft, BookMarked, Lightbulb, Plus, Volume2 } from 'lucide-react'
+import { ArrowLeft, BookMarked, FileText, Lightbulb, Plus, Volume2 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
 import { useAdminLesson, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
-import type { GrammarRule, Lesson, Vocabulary } from '../../features/learning/types'
-import { MATERIAL_TYPES, lessonSectionMeta } from './authoring-meta'
-import { ConfirmDeleteDialog, GateCard, PageHero, SectionHeader, SortableItemRow } from './authoring-ui'
+import type { GrammarRule, Lesson, LessonContent, Vocabulary } from '../../features/learning/types'
+import { lessonSectionMeta } from './authoring-meta'
+import { ConfirmDeleteDialog, PageHero, SectionHeader, SortableItemRow } from './authoring-ui'
 import { POS_OPTIONS } from '../../components/admin/lesson-editors/shared/PartOfSpeechPicker'
 import { learningPath } from './route-utils'
 
@@ -19,8 +19,8 @@ const POS_LABEL = Object.fromEntries(POS_OPTIONS.map((o) => [o.value, o.label]))
 
 /**
  * Khu soạn nội dung bài học — mỗi màn một việc duy nhất (ADR 0002):
- * - Nội dung bài: CHỌN LOẠI (văn bản/hội thoại/âm thanh/hình ảnh/video) → khu của loại.
- * - Từ vựng / Quy tắc ngữ pháp: CHỌN MỤC để mở form soạn riêng, hoặc thêm mục mới.
+ * - Nội dung bài / Từ vựng / Quy tắc ngữ pháp: CHỌN MỤC để mở form soạn riêng,
+ *   hoặc thêm mục mới.
  */
 export function LessonSectionPage() {
   const { lessonId, section } = useParams()
@@ -45,11 +45,7 @@ export function LessonSectionPage() {
       <PageHero
         Icon={meta.Icon}
         title={meta.label}
-        description={
-          meta.value === 'materials'
-            ? 'Chọn loại nội dung để vào không gian soạn riêng của loại đó.'
-            : meta.description
-        }
+        description={meta.description}
         actions={
           <Button asChild variant="outline">
             <Link to={learningPath.lessonStageContent(lessonId)}>
@@ -60,37 +56,114 @@ export function LessonSectionPage() {
         }
       />
 
-      {meta.value === 'materials' && <MaterialTypeGates lessonId={lessonId} lesson={lesson} />}
+      {meta.value === 'materials' && <MaterialList lessonId={lessonId} lesson={lesson} />}
       {meta.value === 'vocabulary' && <VocabularyList lessonId={lessonId} lesson={lesson} />}
       {meta.value === 'grammar' && <GrammarList lessonId={lessonId} lesson={lesson} />}
     </div>
   )
 }
 
-/* ── Nội dung bài: chọn LOẠI ─────────────────────────────────────────────── */
+/* ── Nội dung bài (văn bản tiếng Việt + bản dịch) ─────────────────────────── */
 
-function MaterialTypeGates({ lessonId, lesson }: { lessonId: string; lesson: Lesson | undefined }) {
-  const counts = (lesson?.contents ?? []).reduce<Record<string, number>>((acc, c) => {
-    const key = (c.contentType ?? '').toLowerCase()
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
+function MaterialList({ lessonId, lesson }: { lessonId: string; lesson: Lesson | undefined }) {
+  const navigate = useNavigate()
+  const qc = useQueryClient()
+  const mutations = useLearningAdminMutation()
+  const [pendingDelete, setPendingDelete] = useState<LessonContent | null>(null)
+
+  const lessonKey = ['admin-learning', 'lesson', lessonId] as const
+
+  const { sensors, handleDragEnd } = useAdminListReorder<LessonContent>({
+    getItems: () => qc.getQueryData<Lesson>(lessonKey)?.contents ?? [],
+    setItems: (next) =>
+      qc.setQueryData<Lesson>(lessonKey, (prev) => (prev ? { ...prev, contents: next } : prev)),
+    reorder: (items) => mutations.reorderContents.mutateAsync(items),
+    onError: () => toast.error('Không thể sắp xếp lại nội dung'),
+  })
+
+  const rows = [...(lesson?.contents ?? [])].sort((a, b) => a.orderIndex - b.orderIndex)
+
+  const confirmDelete = async () => {
+    if (!pendingDelete) return
+    try {
+      await mutations.deleteLessonChild.mutateAsync({ kind: 'contents', id: pendingDelete.id })
+      toast.success('Đã xóa nội dung')
+      setPendingDelete(null)
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Không thể xóa')
+    }
+  }
+
+  const addButton = (
+    <Button asChild>
+      <Link to={learningPath.materialNew(lessonId)}>
+        <Plus className="h-4 w-4" />
+        Thêm nội dung
+      </Link>
+    </Button>
+  )
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-      {MATERIAL_TYPES.map((type) => (
-        <GateCard
-          key={type.value}
-          to={learningPath.materialType(lessonId, type.value)}
-          Icon={type.Icon}
-          iconClass={`${type.bg} text-white`}
-          label={type.label}
-          description={type.description}
-          count={counts[type.value] ?? 0}
+    <div className="space-y-4">
+      <SectionHeader
+        title="Danh sách nội dung"
+        description="Kéo để sắp xếp lại thứ tự hiển thị cho học viên."
+        actions={addButton}
+      />
+
+      {rows.length === 0 ? (
+        <EmptySection
+          Icon={FileText}
+          title="Chưa có nội dung"
+          hint="Thêm đoạn văn đầu tiên cho bài học này"
+          cta={addButton}
         />
-      ))}
+      ) : (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
+            <div className="space-y-2">
+              {rows.map((row) => (
+                <SortableItemRow
+                  key={row.id}
+                  id={row.id}
+                  onOpen={() => navigate(learningPath.materialEdit(lessonId, row.id))}
+                  onDelete={() => setPendingDelete(row)}
+                  leading={
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-600 text-white">
+                      <FileText className="h-5 w-5" />
+                    </div>
+                  }
+                  title={materialRowTitle(row)}
+                  meta={
+                    row.translation ? (
+                      <span className="truncate">{row.translation}</span>
+                    ) : (
+                      <span className="italic text-muted-foreground/70">Chưa có bản dịch</span>
+                    )
+                  }
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
+
+      <ConfirmDeleteDialog
+        open={!!pendingDelete}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+        resource="nội dung"
+        label={materialRowTitle(pendingDelete ?? undefined) || 'Nội dung'}
+        onConfirm={confirmDelete}
+      />
     </div>
   )
+}
+
+function materialRowTitle(row: LessonContent | undefined): string {
+  if (!row) return ''
+  const text = row.vietnameseText?.trim() ?? ''
+  if (!text) return 'Chưa có nội dung'
+  return text.length > 80 ? `${text.slice(0, 80)}…` : text
 }
 
 /* ── Từ vựng: chọn MỤC ───────────────────────────────────────────────────── */

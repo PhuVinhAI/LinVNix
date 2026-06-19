@@ -40,91 +40,15 @@ export interface Lesson {
 }
 
 /**
- * LessonContent — schema gửi xuống admin từ backend.
- * Mỗi loại có payload riêng (xem 4 interface dưới); preview gồm
- * vietnameseText/translation do backend tự sinh, dùng cho list/search.
+ * LessonContent — nội dung bài học dạng văn bản: tiếng Việt + bản dịch.
  */
 export interface LessonContent {
   id: string
-  contentType: 'text' | 'image' | 'audio' | 'video' | 'dialogue'
   vietnameseText: string
   translation?: string | null
   orderIndex: number
   notes?: string | null
   lessonId: string
-  /** Khi contentType khác 'dialogue' — payload theo loại. */
-  payload?: LessonContentPayload | null
-  /** Chỉ dùng cho dialogue. */
-  dialogueData?: DialogueData | null
-}
-
-export type LessonContentPayload =
-  | TextContentPayload
-  | ImageContentPayload
-  | AudioContentPayload
-  | VideoContentPayload
-
-export type ImageAspectRatio = '1:1' | '4:3' | '3:4' | '16:9' | '9:16' | 'auto'
-export type VideoAspectRatio = '16:9' | '9:16' | '4:3' | '1:1'
-export type VideoProvider = 'self_hosted' | 'youtube'
-
-export interface TextContentPayload {
-  body: string
-  translation?: string | null
-  paragraphs?: Array<{ vi: string; en?: string | null }>
-  keyTerms?: Array<{ term: string; meaning: string }>
-}
-
-export interface ImageContentPayload {
-  url: string
-  caption: string
-  captionEn?: string | null
-  altText?: string | null
-  aspectRatio?: ImageAspectRatio
-  source?: string | null
-}
-
-export interface AudioContentPayload {
-  url: string
-  title: string
-  durationSeconds?: number | null
-  speaker?: string | null
-  coverImageUrl?: string | null
-  transcript: string
-  translation?: string | null
-  segments?: Array<{ startSeconds: number; vi: string; en?: string | null }>
-}
-
-export interface VideoContentPayload {
-  url: string
-  title: string
-  durationSeconds?: number | null
-  thumbnailUrl?: string | null
-  aspectRatio?: VideoAspectRatio
-  provider?: VideoProvider
-  transcript?: string | null
-  translation?: string | null
-  chapters?: Array<{ startSeconds: number; title: string }>
-}
-
-export type DialogueSide = 'left' | 'right'
-
-export interface DialogueCharacter {
-  id: string
-  name: string
-  side: DialogueSide
-}
-
-export interface DialogueLine {
-  characterId: string
-  vi: string
-  en?: string | null
-  audio?: string | null
-}
-
-export interface DialogueData {
-  characters: DialogueCharacter[]
-  lines: DialogueLine[]
 }
 
 export interface Vocabulary {

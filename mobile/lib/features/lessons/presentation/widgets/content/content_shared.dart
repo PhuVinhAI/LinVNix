@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/theme/app_theme.dart';
 
-/// Tag nhỏ uppercase đầu mỗi nội dung — "VĂN BẢN", "HÌNH ẢNH"...
+/// Tag nhỏ uppercase đầu mỗi nội dung — "VĂN BẢN".
 class ContentTypeBadge extends StatelessWidget {
   const ContentTypeBadge({
     super.key,
@@ -66,18 +66,4 @@ class TranslationEyebrow extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Định dạng mm:ss cho thời lượng (dùng cho audio / video).
-String formatDuration(Duration d) {
-  final mm = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-  final ss = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-  if (d.inHours > 0) {
-    return '${d.inHours}:$mm:$ss';
-  }
-  return '$mm:$ss';
-}
-
-String formatDurationSeconds(num seconds) {
-  return formatDuration(Duration(seconds: seconds.toInt()));
 }

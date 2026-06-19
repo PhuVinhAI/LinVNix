@@ -556,9 +556,7 @@ describe('AgentService', () => {
       // P1.6: agent.service now writes debug snapshots via fs.promises
       // (async, dev-only). Spy on the async path too so the snapshot test
       // below can assert the written content without touching disk.
-      mkdirSpy = jest
-        .spyOn(fs.promises, 'mkdir')
-        .mockResolvedValue(undefined);
+      mkdirSpy = jest.spyOn(fs.promises, 'mkdir').mockResolvedValue(undefined);
       writeFileSpy = jest
         .spyOn(fs.promises, 'writeFile')
         .mockResolvedValue(undefined);

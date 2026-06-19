@@ -40,14 +40,12 @@ void main() {
           contents: [
             LessonContent(
               id: 'c1',
-              contentType: 'phrase',
               vietnameseText: 'Xin chào!',
               orderIndex: 0,
               translation: 'Hello!',
             ),
             LessonContent(
               id: 'c2',
-              contentType: 'phrase',
               vietnameseText: 'Tạm biệt!',
               orderIndex: 1,
               translation: 'Goodbye!',

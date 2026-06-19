@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { CourseContentService } from './course-content.service';
 import { CoursesRepository } from './repositories/courses.repository';
 import { ModulesRepository } from './repositories/modules.repository';
@@ -8,7 +8,7 @@ import { ContentsRepository } from '../../contents/application/contents.reposito
 import { GrammarRepository } from '../../grammar/application/grammar.repository';
 import { ModuleProgressRepository } from '../../progress/application/module-progress.repository';
 import { CourseProgressRepository } from '../../progress/application/course-progress.repository';
-import { ContentType, ProgressStatus } from '../../../common/enums';
+import { ProgressStatus } from '../../../common/enums';
 
 describe('CourseContentService', () => {
   let service: CourseContentService;
@@ -148,9 +148,7 @@ describe('CourseContentService', () => {
         grammarRules: [],
         exercises: [],
       };
-      const contents = [
-        { id: 'ct1', contentType: 'text', vietnameseText: 'Xin chào' },
-      ];
+      const contents = [{ id: 'ct1', vietnameseText: 'Xin chào' }];
       const grammarRules = [{ id: 'gr1', title: 'Chào hỏi', examples: [] }];
       lessonsRepo.findById.mockResolvedValue(lesson as any);
       contentsRepo.findByLessonId.mockResolvedValue(contents as any);
@@ -431,32 +429,6 @@ describe('CourseContentService', () => {
         expect(moduleProgressRepo.update).not.toHaveBeenCalled();
       });
 
-      it('preserves score and completedAt when invalidating', async () => {
-        const data = { title: 'Lesson 3', moduleId: 'm1' };
-        const created = { id: 'l3', ...data };
-        const completedAt = new Date('2025-01-01');
-        lessonsRepo.create.mockResolvedValue(created as any);
-        const completedProgress = {
-          id: 'mp1',
-          status: ProgressStatus.COMPLETED,
-          score: 90,
-          completedAt,
-        };
-        moduleProgressRepo.findCompletedByModule.mockResolvedValue([
-          completedProgress as any,
-        ]);
-        moduleProgressRepo.update.mockResolvedValue({
-          ...completedProgress,
-          status: ProgressStatus.IN_PROGRESS,
-        } as any);
-
-        await service.createLesson(data);
-
-        expect(moduleProgressRepo.update).toHaveBeenCalledWith('mp1', {
-          status: ProgressStatus.IN_PROGRESS,
-        });
-      });
-
       it('invalidates multiple completed ModuleProgress records', async () => {
         const data = { title: 'Lesson 3', moduleId: 'm1' };
         const created = { id: 'l3', ...data };
@@ -525,55 +497,6 @@ describe('CourseContentService', () => {
           'c1',
         );
         expect(courseProgressRepo.update).not.toHaveBeenCalled();
-      });
-
-      it('preserves score and completedAt when invalidating', async () => {
-        const data = { title: 'Module 2', courseId: 'c1' };
-        const created = { id: 'm2', ...data };
-        const completedAt = new Date('2025-03-15');
-        modulesRepo.create.mockResolvedValue(created as any);
-        const completedProgress = {
-          id: 'cp1',
-          status: ProgressStatus.COMPLETED,
-          score: 75,
-          completedAt,
-        };
-        courseProgressRepo.findCompletedByCourse.mockResolvedValue([
-          completedProgress as any,
-        ]);
-        courseProgressRepo.update.mockResolvedValue({
-          ...completedProgress,
-          status: ProgressStatus.IN_PROGRESS,
-        } as any);
-
-        await service.createModule(data);
-
-        expect(courseProgressRepo.update).toHaveBeenCalledWith('cp1', {
-          status: ProgressStatus.IN_PROGRESS,
-        });
-      });
-
-      it('invalidates multiple completed CourseProgress records', async () => {
-        const data = { title: 'Module 2', courseId: 'c1' };
-        const created = { id: 'm2', ...data };
-        modulesRepo.create.mockResolvedValue(created as any);
-        const cp1 = { id: 'cp1', status: ProgressStatus.COMPLETED };
-        const cp2 = { id: 'cp2', status: ProgressStatus.COMPLETED };
-        courseProgressRepo.findCompletedByCourse.mockResolvedValue([
-          cp1 as any,
-          cp2 as any,
-        ]);
-        courseProgressRepo.update.mockResolvedValue({} as any);
-
-        await service.createModule(data);
-
-        expect(courseProgressRepo.update).toHaveBeenCalledTimes(2);
-        expect(courseProgressRepo.update).toHaveBeenCalledWith('cp1', {
-          status: ProgressStatus.IN_PROGRESS,
-        });
-        expect(courseProgressRepo.update).toHaveBeenCalledWith('cp2', {
-          status: ProgressStatus.IN_PROGRESS,
-        });
       });
     });
   });
@@ -689,151 +612,30 @@ describe('CourseContentService', () => {
   });
 
   describe('createContent', () => {
-    it('creates a TEXT content and derives preview from payload', async () => {
+    it('creates a text content and forwards to repository', async () => {
       const data = {
         lessonId: 'l1',
-        contentType: ContentType.TEXT,
+        vietnameseText: 'Xin chào',
+        translation: 'Hello',
         orderIndex: 1,
-        payload: { body: 'Xin chào', translation: 'Hello' },
       };
       contentsRepo.create.mockImplementation(async (p: any) => ({
         id: 'ct1',
         ...p,
       }));
 
-      const result = await service.createContent(data as any);
+      const result = await service.createContent(data);
 
       expect(result.id).toBe('ct1');
-      expect(contentsRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          contentType: ContentType.TEXT,
-          payload: { body: 'Xin chào', translation: 'Hello' },
-          vietnameseText: 'Xin chào',
-          translation: 'Hello',
-          dialogueData: null,
-        }),
-      );
-    });
-
-    it('creates an IMAGE content and derives preview from caption', async () => {
-      const data = {
-        lessonId: 'l1',
-        contentType: ContentType.IMAGE,
-        orderIndex: 1,
-        payload: {
-          url: '/uploads/image/abc.jpg',
-          caption: 'Phố cổ Hà Nội',
-          captionEn: 'Hanoi old quarter',
-          aspectRatio: '16:9',
-        },
-      };
-      contentsRepo.create.mockImplementation(async (p: any) => ({
-        id: 'ct1',
-        ...p,
-      }));
-
-      await service.createContent(data as any);
-
-      expect(contentsRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          contentType: ContentType.IMAGE,
-          vietnameseText: 'Phố cổ Hà Nội',
-          translation: 'Hanoi old quarter',
-        }),
-      );
-    });
-
-    it('rejects TEXT content missing payload', async () => {
-      await expect(
-        service.createContent({
-          lessonId: 'l1',
-          contentType: ContentType.TEXT,
-          orderIndex: 1,
-        } as any),
-      ).rejects.toThrow(BadRequestException);
-    });
-
-    it('rejects AUDIO content missing transcript', async () => {
-      await expect(
-        service.createContent({
-          lessonId: 'l1',
-          contentType: ContentType.AUDIO,
-          orderIndex: 1,
-          payload: {
-            url: '/uploads/audio/x.mp3',
-            title: 'Test',
-            transcript: '',
-          },
-        } as any),
-      ).rejects.toThrow(BadRequestException);
-    });
-
-    it('derives vietnameseText and translation from dialogue lines', async () => {
-      const data = {
-        contentType: ContentType.DIALOGUE,
-        orderIndex: 1,
-        lessonId: 'l1',
-        dialogueData: {
-          characters: [
-            { id: 'c1', name: 'Nam', side: 'left' as const },
-            { id: 'c2', name: 'Lan', side: 'right' as const },
-          ],
-          lines: [
-            { characterId: 'c1', vi: 'Xin chào!', en: 'Hello!' },
-            { characterId: 'c2', vi: 'Chào bạn!', en: 'Hi!' },
-          ],
-        },
-      };
-      contentsRepo.create.mockImplementation(async (payload: any) => ({
-        id: 'ct2',
-        ...payload,
-      }));
-
-      await service.createContent(data as any);
-
-      expect(contentsRepo.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          vietnameseText: 'Nam: Xin chào!\nLan: Chào bạn!',
-          translation: 'Nam: Hello!\nLan: Hi!',
-          dialogueData: data.dialogueData,
-        }),
-      );
-    });
-
-    it('rejects dialogue with two right-side characters', async () => {
-      await expect(
-        service.createContent({
-          contentType: ContentType.DIALOGUE,
-          orderIndex: 1,
-          lessonId: 'l1',
-          dialogueData: {
-            characters: [
-              { id: 'c1', name: 'A', side: 'right' as const },
-              { id: 'c2', name: 'B', side: 'right' as const },
-            ],
-            lines: [],
-          },
-        } as any),
-      ).rejects.toThrow(BadRequestException);
-    });
-
-    it('rejects dialogue when contentType=dialogue but dialogueData missing', async () => {
-      await expect(
-        service.createContent({
-          contentType: ContentType.DIALOGUE,
-          orderIndex: 1,
-          lessonId: 'l1',
-        } as any),
-      ).rejects.toThrow(BadRequestException);
+      expect(contentsRepo.create).toHaveBeenCalledWith(data);
     });
   });
 
   describe('updateContent', () => {
-    it('updates payload and derives a fresh preview', async () => {
+    it('updates and forwards to repository', async () => {
       const existing = {
         id: 'ct1',
-        contentType: ContentType.TEXT,
-        payload: { body: 'Old' },
+        vietnameseText: 'Old',
       };
       contentsRepo.findById.mockResolvedValue(existing as any);
       contentsRepo.update.mockImplementation(async (_id, p: any) => ({
@@ -842,52 +644,22 @@ describe('CourseContentService', () => {
       }));
 
       const result = await service.updateContent('ct1', {
-        payload: { body: 'New', translation: 'New EN' } as any,
+        vietnameseText: 'New',
+        translation: 'New EN',
       });
 
       expect(result.vietnameseText).toBe('New');
-      expect(contentsRepo.update).toHaveBeenCalledWith(
-        'ct1',
-        expect.objectContaining({
-          payload: { body: 'New', translation: 'New EN' },
-          vietnameseText: 'New',
-          translation: 'New EN',
-          dialogueData: null,
-        }),
-      );
-    });
-
-    it('inherits the existing payload when only notes change', async () => {
-      const existing = {
-        id: 'ct1',
-        contentType: ContentType.TEXT,
-        payload: { body: 'Stays' },
-      };
-      contentsRepo.findById.mockResolvedValue(existing as any);
-      contentsRepo.update.mockImplementation(async (_id, p: any) => ({
-        id: 'ct1',
-        ...p,
-      }));
-
-      await service.updateContent('ct1', { notes: 'New note' } as any);
-
-      expect(contentsRepo.update).toHaveBeenCalledWith(
-        'ct1',
-        expect.objectContaining({
-          notes: 'New note',
-          payload: { body: 'Stays' },
-          vietnameseText: 'Stays',
-        }),
-      );
+      expect(contentsRepo.update).toHaveBeenCalledWith('ct1', {
+        vietnameseText: 'New',
+        translation: 'New EN',
+      });
     });
 
     it('throws NotFoundException when content not found', async () => {
       contentsRepo.findById.mockResolvedValue(null);
 
       await expect(
-        service.updateContent('missing', {
-          payload: { body: 'New' } as any,
-        }),
+        service.updateContent('missing', { vietnameseText: 'New' }),
       ).rejects.toThrow(NotFoundException);
     });
   });

@@ -14,7 +14,6 @@ import { LessonFormPage } from '../pages/learning/LessonFormPage'
 import { LessonSectionPage } from '../pages/learning/LessonSectionPage'
 import { LessonStageContentPage } from '../pages/learning/LessonStageContentPage'
 import { LessonStageExercisesPage } from '../pages/learning/LessonStageExercisesPage'
-import { MaterialTypePage } from '../pages/learning/MaterialTypePage'
 import { MaterialFormPage } from '../pages/learning/MaterialFormPage'
 import { VocabularyFormPage } from '../pages/learning/VocabularyFormPage'
 import { GrammarFormPage } from '../pages/learning/GrammarFormPage'
@@ -106,10 +105,6 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.LESSON_SECTION,
         element: <LessonSectionPage />,
-      },
-      {
-        path: ROUTES.LESSON_MATERIAL_TYPE,
-        element: <MaterialTypePage />,
       },
       {
         path: ROUTES.LESSON_MATERIAL_NEW,

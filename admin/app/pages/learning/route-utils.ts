@@ -16,12 +16,10 @@ export const learningPath = {
     generatePath(ROUTES.LESSON_STAGE_EXERCISES, { lessonId }),
   lessonSection: (lessonId: string, section: string) =>
     generatePath(ROUTES.LESSON_SECTION, { lessonId, section }),
-  materialType: (lessonId: string, materialType: string) =>
-    generatePath(ROUTES.LESSON_MATERIAL_TYPE, { lessonId, materialType }),
-  materialNew: (lessonId: string, materialType: string) =>
-    generatePath(ROUTES.LESSON_MATERIAL_NEW, { lessonId, materialType }),
-  materialEdit: (lessonId: string, materialType: string, id: string) =>
-    generatePath(ROUTES.LESSON_MATERIAL_EDIT, { lessonId, materialType, id }),
+  materialNew: (lessonId: string) =>
+    generatePath(ROUTES.LESSON_MATERIAL_NEW, { lessonId }),
+  materialEdit: (lessonId: string, id: string) =>
+    generatePath(ROUTES.LESSON_MATERIAL_EDIT, { lessonId, id }),
   vocabNew: (lessonId: string) => generatePath(ROUTES.LESSON_VOCAB_NEW, { lessonId }),
   vocabEdit: (lessonId: string, id: string) => generatePath(ROUTES.LESSON_VOCAB_EDIT, { lessonId, id }),
   grammarNew: (lessonId: string) => generatePath(ROUTES.LESSON_GRAMMAR_NEW, { lessonId }),

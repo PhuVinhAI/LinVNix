@@ -825,7 +825,7 @@ export class ExerciseGenerationService {
       parts.push('### Lesson Content');
       for (const c of context.contents) {
         parts.push(
-          `- [${c.contentType}] ${c.vietnameseText}${c.translation ? ` = ${c.translation}` : ''}`,
+          `- ${c.vietnameseText}${c.translation ? ` = ${c.translation}` : ''}`,
         );
       }
     }

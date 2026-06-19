@@ -33,7 +33,7 @@ export class ContentsController {
   @ApiOperation({
     summary: 'Lấy nội dung theo lesson',
     description:
-      'Trả về danh sách nội dung học theo orderIndex. Mỗi nội dung mang payload theo content_type — xem schema riêng cho text/image/audio/video.',
+      'Trả về danh sách nội dung văn bản của bài học theo orderIndex.',
   })
   @ApiParam({ name: 'lessonId', description: 'ID của lesson' })
   @ApiResponse({
@@ -43,13 +43,8 @@ export class ContentsController {
       example: [
         {
           id: 'uuid-string',
-          contentType: 'text',
           vietnameseText: 'Xin chào! Tôi là Minh.',
           translation: 'Hello! I am Minh.',
-          payload: {
-            body: 'Xin chào! Tôi là Minh.',
-            translation: 'Hello! I am Minh.',
-          },
           orderIndex: 1,
           notes: null,
         },
@@ -73,15 +68,8 @@ export class ContentsController {
     schema: {
       example: {
         id: 'uuid-string',
-        contentType: 'image',
-        vietnameseText: 'Phố cổ Hà Nội buổi sáng.',
-        translation: 'Hanoi old quarter in the morning.',
-        payload: {
-          url: '/uploads/image/hanoi.jpg',
-          caption: 'Phố cổ Hà Nội buổi sáng.',
-          captionEn: 'Hanoi old quarter in the morning.',
-          aspectRatio: '16:9',
-        },
+        vietnameseText: 'Xin chào! Tôi là Minh.',
+        translation: 'Hello! I am Minh.',
         orderIndex: 1,
       },
     },
