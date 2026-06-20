@@ -541,7 +541,7 @@ function CharacterCard({
       }}
       className="group rounded-lg border-2 border-border bg-card p-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-lg font-bold">
           {initial}
         </div>

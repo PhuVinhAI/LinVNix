@@ -184,9 +184,9 @@ export function ModuleDetailPage() {
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') navigate(learningPath.lesson(lesson.id))
                           }}
-                          className="group relative flex items-start gap-3 rounded-lg border-2 border-border bg-card pl-3 pr-3 py-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+                          className="group relative flex items-center gap-3 rounded-lg border-2 border-border bg-card pl-3 pr-3 py-3 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
                         >
-                          <div onClick={stop} onKeyDown={stop} className="shrink-0 self-center">
+                          <div onClick={stop} onKeyDown={stop} className="shrink-0">
                             <DragHandle {...listeners} {...attributes} />
                           </div>
 

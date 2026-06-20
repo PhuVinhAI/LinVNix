@@ -197,7 +197,7 @@ function CategoryCard({
       onKeyDown={(e) => {
         if (e.key === 'Enter') onOpen()
       }}
-      className="group relative flex items-start gap-3 rounded-lg border-2 border-border bg-card p-4 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
+      className="group relative flex items-center gap-3 rounded-lg border-2 border-border bg-card p-4 cursor-pointer transition-colors hover:border-primary focus:outline-none focus:border-primary"
     >
       <div
         className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
