@@ -52,14 +52,11 @@ function DialogContent({
   children,
   showCloseButton = true,
   dimBackdrop = true,
-  variant = 'center',
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
   dimBackdrop?: boolean
-  variant?: 'center' | 'drop'
 }) {
-  const isDrop = variant === 'drop'
   return (
     <DialogPortal>
       {dimBackdrop && <DialogOverlay />}
@@ -67,9 +64,7 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           "fixed z-50 grid w-full max-w-[calc(100%-2rem)] gap-6 border-border bg-card text-card-foreground outline-none",
-          isDrop
-            ? "top-0 left-1/2 -translate-x-1/2 sm:max-w-2xl rounded-b-3xl border-x-2 border-b-2 p-6 pt-7 data-open:animate-in data-open:slide-in-from-top-12 data-open:fade-in-0 data-open:duration-250 data-closed:animate-out data-closed:slide-out-to-top-12 data-closed:fade-out-0 data-closed:duration-150"
-            : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:max-w-md rounded-xl border-2 p-6 duration-150 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:max-w-md rounded-xl border-2 p-6 duration-150 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
