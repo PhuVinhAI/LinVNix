@@ -33,6 +33,7 @@
     "mobile:build:ios": "cd mobile && flutter build ios",
     "mobile:pub:get": "cd mobile && flutter pub get",
     "mobile:test": "cd mobile && flutter test",
+    "mobile:ip": "node update-ip.js",
     "typecheck": "bun --filter '*' typecheck",
     "lint": "bun --filter '*' lint"
   },
