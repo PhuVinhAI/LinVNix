@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { BookMarked, FileText, Lightbulb, Plus, Volume2 } from 'lucide-react'
+import { BookMarked, FileText, Lightbulb, Plus, Volume2, FileSpreadsheet } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { useAdminListReorder } from '../../components/admin/hooks/use-admin-list-reorder'
@@ -14,6 +14,7 @@ import { lessonSectionMeta } from './authoring-meta'
 import { ConfirmDeleteDialog, PageHero, SectionHeader, SortableItemRow } from './authoring-ui'
 import { POS_OPTIONS } from '../../components/admin/lesson-editors/shared/PartOfSpeechPicker'
 import { learningPath } from './route-utils'
+import { BulkImportVocabDialog } from './BulkImportVocabDialog'
 
 const POS_LABEL = Object.fromEntries(POS_OPTIONS.map((o) => [o.value, o.label]))
 
@@ -165,6 +166,7 @@ function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson
   const qc = useQueryClient()
   const mutations = useLearningAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<Vocabulary | null>(null)
+  const [bulkOpen, setBulkOpen] = useState(false)
 
   const lessonKey = ['admin-learning', 'lesson', lessonId] as const
   const { sensors, handleDragEnd } = useAdminListReorder<Vocabulary>({
@@ -197,12 +199,26 @@ function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson
     </Button>
   )
 
+  const bulkButton = (
+    <Button variant="outline" onClick={() => setBulkOpen(true)}>
+      <FileSpreadsheet className="h-4 w-4" />
+      Nhập từ Excel
+    </Button>
+  )
+
+  const actionButtons = (
+    <div className="flex items-center gap-2">
+      {bulkButton}
+      {addButton}
+    </div>
+  )
+
   return (
     <div className="space-y-4">
       <SectionHeader
         title="Danh sách từ vựng"
         description="Kéo để sắp xếp lại thứ tự giới thiệu từ cho học viên."
-        actions={addButton}
+        actions={actionButtons}
       />
 
       {rows.length === 0 ? (
@@ -210,7 +226,7 @@ function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson
           Icon={BookMarked}
           title="Chưa có từ vựng"
           hint="Thêm từ đầu tiên cho bài học này"
-          cta={addButton}
+          cta={actionButtons}
         />
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -264,6 +280,22 @@ function VocabularyList({ lessonId, lesson }: { lessonId: string; lesson: Lesson
         resource="từ vựng"
         label={pendingDelete?.word ?? ''}
         onConfirm={confirmDelete}
+      />
+
+      <BulkImportVocabDialog
+        open={bulkOpen}
+        onOpenChange={setBulkOpen}
+        existingCount={rows.length}
+        onImport={async (items) => {
+          let nextOrderIndex = rows.length
+          for (const item of items) {
+            await mutations.createLessonChild.mutateAsync({
+              kind: 'vocabularies',
+              lessonId,
+              payload: { ...item, orderIndex: nextOrderIndex++ },
+            })
+          }
+        }}
       />
     </div>
   )
