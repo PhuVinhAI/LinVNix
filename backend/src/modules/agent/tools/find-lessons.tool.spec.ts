@@ -1,6 +1,6 @@
 import { FindLessonsTool } from './find-lessons.tool';
 import { CourseContentService } from '../../courses/application/course-content.service';
-import { UserLevel, Dialect, LessonType } from '../../../common/enums';
+import { UserLevel, Dialect } from '../../../common/enums';
 import type { ToolContext } from '@linvnix/shared';
 import type { User } from '../../users/domain/user.entity';
 
@@ -58,20 +58,17 @@ describe('FindLessonsTool', () => {
       const full = tool.parameters.parse({
         topic: 'family',
         level: UserLevel.A1,
-        type: LessonType.VOCABULARY,
         limit: 5,
       });
       expect(full).toEqual({
         topic: 'family',
         level: UserLevel.A1,
-        type: LessonType.VOCABULARY,
         limit: 5,
       });
     });
 
-    it('rejects invalid level and type values', () => {
+    it('rejects invalid level values', () => {
       expect(() => tool.parameters.parse({ level: 'Z9' })).toThrow();
-      expect(() => tool.parameters.parse({ type: 'not-a-type' })).toThrow();
     });
 
     it('caps `limit` to a sensible range (1..50)', () => {
@@ -88,7 +85,6 @@ describe('FindLessonsTool', () => {
         id: 'l1',
         title: 'Family members',
         level: UserLevel.A1,
-        type: LessonType.VOCABULARY,
         courseTitle: 'Beginner Vietnamese',
         moduleTitle: 'Family',
       },
@@ -111,7 +107,6 @@ describe('FindLessonsTool', () => {
         {
           topic: 'family',
           level: UserLevel.A1,
-          type: LessonType.VOCABULARY,
           limit: 10,
         },
         buildCtx(),
@@ -120,7 +115,6 @@ describe('FindLessonsTool', () => {
       expect(courseContent.findLessons).toHaveBeenCalledWith({
         topic: 'family',
         level: UserLevel.A1,
-        type: LessonType.VOCABULARY,
         limit: 10,
       });
     });

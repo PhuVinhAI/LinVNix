@@ -61,7 +61,6 @@ describe('GetLessonDetailTool', () => {
     const lesson = {
       id: 'l1',
       title: 'Family members',
-      lessonType: 'vocabulary',
       contents: [{ id: 'ct1' }],
       vocabularies: [{ id: 'v1' }],
       grammarRules: [{ id: 'gr1' }],

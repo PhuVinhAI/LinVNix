@@ -7,9 +7,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
  * thuật toán spaced-repetition đã bị bỏ. Per-user vocab giờ dùng
  * personal_vocabularies.
  */
-export class DropUserVocabulariesTable20260619140000
-  implements MigrationInterface
-{
+export class DropUserVocabulariesTable20260619140000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE IF EXISTS "user_vocabularies" CASCADE`);
   }

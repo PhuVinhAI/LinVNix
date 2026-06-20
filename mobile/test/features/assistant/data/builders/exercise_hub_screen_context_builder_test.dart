@@ -50,7 +50,6 @@ void main() {
         id: lessonId,
         title: 'Greetings',
         description: 'Say hello',
-        lessonType: 'vocabulary',
         orderIndex: 0,
         moduleId: 'mod-1',
       );

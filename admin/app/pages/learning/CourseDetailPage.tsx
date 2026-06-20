@@ -265,28 +265,6 @@ export function CourseDetailPage() {
   )
 }
 
-const lessonTypeLabels: Record<string, string> = {
-  vocabulary: 'Từ vựng',
-  grammar: 'Ngữ pháp',
-  reading: 'Đọc',
-  listening: 'Nghe',
-  speaking: 'Nói',
-  writing: 'Viết',
-  pronunciation: 'Phát âm',
-  culture: 'Văn hóa',
-}
-
-const lessonTypeColors: Record<string, string> = {
-  vocabulary: 'bg-emerald-500',
-  grammar: 'bg-blue-500',
-  reading: 'bg-indigo-500',
-  listening: 'bg-purple-500',
-  speaking: 'bg-rose-500',
-  writing: 'bg-amber-500',
-  pronunciation: 'bg-teal-500',
-  culture: 'bg-fuchsia-500',
-}
-
 function ModuleRow({
   module,
   onOpen,
@@ -381,18 +359,11 @@ function ModuleRow({
                   }`}
                 >
                   <div className="w-12 flex justify-center">
-                    <span
-                      className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white ${
-                        lessonTypeColors[lesson.lessonType] ?? 'bg-muted-foreground'
-                      }`}
-                    >
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-muted-foreground text-[10px] font-bold text-white">
                       {lesson.orderIndex}
                     </span>
                   </div>
                   <span className="flex-1 text-sm font-semibold truncate">{lesson.title}</span>
-                  <span className="text-xs text-muted-foreground shrink-0">
-                    {lessonTypeLabels[lesson.lessonType] ?? lesson.lessonType}
-                  </span>
                   {lesson.estimatedDuration && (
                     <span className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground shrink-0">
                       <Clock className="h-3 w-3" />

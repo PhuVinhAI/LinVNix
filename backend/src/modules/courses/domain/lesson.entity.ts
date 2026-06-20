@@ -7,7 +7,6 @@ import {
   Index,
 } from 'typeorm';
 import { BaseEntity } from '../../../database/base/base.entity';
-import { LessonType } from '../../../common/enums';
 
 @Entity('lessons')
 @Index(['moduleId', 'orderIndex'], {
@@ -20,13 +19,6 @@ export class Lesson extends BaseEntity {
 
   @Column({ type: 'text' })
   description: string;
-
-  @Column({
-    type: 'enum',
-    enum: LessonType,
-    name: 'lesson_type',
-  })
-  lessonType: LessonType;
 
   @Column({ name: 'order_index' })
   orderIndex: number;

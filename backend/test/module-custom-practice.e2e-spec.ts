@@ -96,7 +96,6 @@ describe('Module Custom Practice (e2e)', () => {
       const lesson1 = lessonRepo.create({
         title: 'Lesson 1',
         description: 'Test',
-        lessonType: 'VOCABULARY' as any,
         orderIndex: 1,
         moduleId: savedModule.id,
       });
@@ -106,7 +105,6 @@ describe('Module Custom Practice (e2e)', () => {
       const lesson2 = lessonRepo.create({
         title: 'Lesson 2',
         description: 'Test',
-        lessonType: 'GRAMMAR' as any,
         orderIndex: 2,
         moduleId: savedModule.id,
       });
@@ -225,7 +223,6 @@ describe('Module Custom Practice (e2e)', () => {
       const lesson1 = lessonRepo.create({
         title: 'Lesson 1',
         description: 'Test',
-        lessonType: 'VOCABULARY' as any,
         orderIndex: 1,
         moduleId: savedModule.id,
       });

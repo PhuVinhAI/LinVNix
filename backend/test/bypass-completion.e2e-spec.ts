@@ -90,14 +90,12 @@ describe('Bypass Completion & Onboarding (e2e)', () => {
       const lesson1 = lessonRepo.create({
         title: 'Lesson 1',
         description: 'Test lesson',
-        lessonType: 'VOCABULARY' as any,
         orderIndex: 1,
         moduleId: savedModule.id,
       });
       const lesson2 = lessonRepo.create({
         title: 'Lesson 2',
         description: 'Test lesson',
-        lessonType: 'GRAMMAR' as any,
         orderIndex: 2,
         moduleId: savedModule.id,
       });
@@ -161,7 +159,6 @@ describe('Bypass Completion & Onboarding (e2e)', () => {
       const lesson = lessonRepo.create({
         title: 'Lesson 1',
         description: 'Test lesson',
-        lessonType: 'VOCABULARY' as any,
         orderIndex: 1,
         moduleId: savedModule.id,
       });

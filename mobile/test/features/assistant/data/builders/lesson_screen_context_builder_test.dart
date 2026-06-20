@@ -34,7 +34,6 @@ void main() {
           id: lessonId,
           title: 'Greetings',
           description: 'Learn how to greet politely.',
-          lessonType: 'vocabulary',
           orderIndex: 0,
           moduleId: 'mod-1',
           contents: [

@@ -56,7 +56,6 @@ ScreenContext lessonScreenContextBuilder(Ref ref, RouteMatch match) {
     'lessonId': lessonId,
     'title': detail?.title ?? '',
     'description': detail?.description ?? '',
-    'lessonType': detail?.lessonType ?? '',
     'vocabularies': vocabularies
         .map((v) => vocabularyContextSummary(v, preferredDialect: preferredDialect))
         .toList(growable: false),

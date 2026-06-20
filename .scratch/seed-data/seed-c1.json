@@ -222,7 +222,6 @@
                   "vietnamese_text": "Từ Hán Việt theo cặp đối lập: duy vật—duy tâm, biện chứng—siêu hình, tự do—tất yếu. Mỗi âm tiết mang nghĩa riêng; kết hợp tạo thuật ngữ."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Triết học & Tư tưởng",
               "vocabularies": [
@@ -710,7 +709,6 @@
                   "vietnamese_text": "Trong văn viết trang trọng, mệnh đề phụ được rút gọn: (1) Bỏ 'mà' trong mệnh đề quan hệ; (2) Bỏ chủ ngữ mệnh đề trạng ngữ: 'khi nghiên cứu vấn đề này'; (3) Dùng liên từ rút gọn: 'mặc dù', 'trong khi', 'bằng cách'."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp văn viết — Bị động và phi nhân xưng",
               "vocabularies": [
@@ -932,7 +930,6 @@
                   "vietnamese_text": "Khi đọc: (1) Xác định luận điểm chính; (2) Nhận diện từ khóa Hán Việt; (3) Phân tích cấu trúc lập luận; (4) Chú ý biểu thức dự phòng — 'có thể nói', 'dường như'."
                 }
               ],
-              "lesson_type": "reading",
               "order_index": 3,
               "title": "Đọc hiểu — Trích đoạn triết học Việt Nam",
               "vocabularies": [
@@ -1159,7 +1156,6 @@
                   "vietnamese_text": "Theo quan điểm duy vật biện chứng, vật chất có trước, ý thức có sau. Tuy nhiên, ý thức không hoàn toàn thụ động. Hơn nữa, qua thực tiễn, con người không chỉ nhận thức mà còn cải tạo thế giới. Do đó, mối quan hệ là biện chứng. Tóm lại, hiểu đúng quan hệ này là điều kiện tiên quyết."
                 }
               ],
-              "lesson_type": "writing",
               "order_index": 4,
               "title": "Viết luận học thuật",
               "vocabularies": [
@@ -1392,7 +1388,6 @@
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Luật pháp & Hành chính",
               "vocabularies": [
@@ -1874,7 +1869,6 @@
                   "vietnamese_text": "Lỗi thường gặp khi dùng các mẫu ngữ pháp này trong văn viết học thuật. Chú ý phong cách và tính trang trọng."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Văn phong hành chính",
               "vocabularies": [
@@ -2075,7 +2069,6 @@
                   "vietnamese_text": "Thảo luận đoạn đọc. Diễn đạt phân tích bằng từ vựng và ngữ pháp của bài này."
                 }
               ],
-              "lesson_type": "reading",
               "order_index": 3,
               "title": "Đọc hiểu — Văn bản pháp lý",
               "vocabularies": [
@@ -2308,7 +2301,6 @@
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Y học",
               "vocabularies": [
@@ -2764,7 +2756,6 @@
                   "vietnamese_text": "Lỗi thường gặp khi dùng các mẫu ngữ pháp này trong văn viết học thuật. Chú ý phong cách và tính trang trọng."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Thuật ngữ chuyên ngành",
               "vocabularies": [
@@ -2930,7 +2921,6 @@
                   "vietnamese_text": "Thảo luận đoạn đọc. Diễn đạt phân tích bằng từ vựng và ngữ pháp của bài này."
                 }
               ],
-              "lesson_type": "reading",
               "order_index": 3,
               "title": "Đọc hiểu — Tài liệu y khoa",
               "vocabularies": [
@@ -3163,7 +3153,6 @@
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Lịch sử & Địa lý",
               "vocabularies": [
@@ -3617,7 +3606,6 @@
                   "vietnamese_text": "Lỗi thường gặp khi dùng các mẫu ngữ pháp này trong văn viết học thuật. Chú ý phong cách và tính trang trọng."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Điển cố lịch sử",
               "vocabularies": [
@@ -3848,7 +3836,6 @@
                   "vietnamese_text": "UNESCO công nhận: Vịnh Hạ Long, Hoàng Thành Thăng Long, Thành Nhà Hồ, Cố đô Huế, Phố cổ Hội An, Thánh địa Mỹ Sơn, Tràng An. Mỗi di sản phản ánh thời kỳ và văn minh riêng."
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 3,
               "title": "Văn hóa Việt Nam",
               "vocabularies": [
@@ -4014,7 +4001,6 @@
                   "vietnamese_text": "Thảo luận đoạn đọc. Diễn đạt phân tích bằng từ vựng và ngữ pháp của bài này."
                 }
               ],
-              "lesson_type": "reading",
               "order_index": 4,
               "title": "Đọc hiểu — Sử ký",
               "vocabularies": [
@@ -4247,7 +4233,6 @@
                   "vietnamese_text": "Thực hành dùng các thuật ngữ này trong ngữ cảnh. Tạo câu và ôn tập cùng bạn học."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Văn chương & Thơ ca",
               "vocabularies": [
@@ -4770,7 +4755,6 @@
                   "vietnamese_text": "Để nhận diện: (1) Tìm bất đồng nghĩa đen—nghĩa bóng; (2) Xác định cơ chế: so sánh, thay thế, gán ghép, phóng đại, giảm nhẹ; (3) Giải mã hàm ý; (4) Liên hệ bối cảnh."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Tu từ học",
               "vocabularies": [
@@ -4999,7 +4983,6 @@
                   "vietnamese_text": "Viết đoạn văn 5-7 câu, dùng ít nhất 3 loại tu từ. Chủ đề: mùa thu Hà Nội, quê hương, người thầy. Yêu cầu: 1 ẩn dụ, 1 hoán dụ/nhân hóa, 1 nói giảm/nói quá. Tu từ phải tự nhiên."
                 }
               ],
-              "lesson_type": "writing",
               "order_index": 3,
               "title": "Viết sáng tạo",
               "vocabularies": [
@@ -5221,7 +5204,6 @@
                   "vietnamese_text": "Từ 1930: Thơ Mới (Xuân Diệu, Hàn Mặc Tử), Tự Lực Văn Đoàn (Nhất Linh), hiện thực phê phán (Vũ Trọng Phụng, Nam Cao), văn học kháng chiến (Tố Hữu), Đổi Mới (Nguyễn Huy Thiệp, Bảo Ninh)."
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 4,
               "title": "Văn hóa văn chương",
               "vocabularies": [

@@ -95,12 +95,11 @@ async function main() {
       for (const lessonData of moduleData.lessons) {
         const lessonFakeUuid = lessonData.__uuid;
         const lRes = await client.query(
-          `INSERT INTO lessons (title, description, lesson_type, order_index, estimated_duration, module_id)
-           VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+          `INSERT INTO lessons (title, description, order_index, estimated_duration, module_id)
+           VALUES ($1, $2, $3, $4, $5) RETURNING id`,
           [
             lessonData.title,
             lessonData.description,
-            lessonData.lesson_type,
             lessonData.order_index,
             lessonData.estimated_duration || null,
             moduleId,

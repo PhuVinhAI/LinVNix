@@ -25,7 +25,6 @@ import {
   EmptyState,
   formatNumber,
   formatPercent,
-  LESSON_TYPE_LABEL,
   QUESTION_TYPE_LABEL,
   ROSE,
   SectionCard,
@@ -182,7 +181,7 @@ function GroupList({
               key={item.lessonId}
               to={learningPath.lessonStageContent(item.lessonId)}
               title={item.title}
-              meta={`${LESSON_TYPE_LABEL[item.lessonType] ?? item.lessonType} · ${item.courseTitle} › ${item.moduleTitle}`}
+              meta={`${item.courseTitle} › ${item.moduleTitle}`}
               badge={<NeutralBadge>chưa có nội dung</NeutralBadge>}
             />
           )}

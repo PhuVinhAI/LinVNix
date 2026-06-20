@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Lesson } from '../../domain/lesson.entity';
-import { LessonType, UserLevel } from '../../../../common/enums';
+import { UserLevel } from '../../../../common/enums';
 import {
   bulkReorder,
   ReorderItem,
@@ -11,7 +11,6 @@ import {
 export interface LessonFilterOptions {
   topic?: string;
   level?: UserLevel;
-  type?: LessonType;
   limit?: number;
 }
 
@@ -82,10 +81,9 @@ export class LessonsRepository {
    *   unit ("Family vocabulary", "Greetings"), so callers filter by the
    *   module title text.
    * - `level` — exact match against the owning `Course.level` (CEFR).
-   * - `type` — exact match against `Lesson.lessonType`.
    *
    * Returns hydrated lessons with `module.course` populated so the service
-   * can compose the summary shape `{ id, title, level, type, courseTitle,
+   * can compose the summary shape `{ id, title, level, courseTitle,
    * moduleTitle }`. Hard-capped at 50 rows.
    */
   async findByFilter(opts: LessonFilterOptions = {}): Promise<Lesson[]> {
@@ -100,10 +98,6 @@ export class LessonsRepository {
 
     if (opts.level) {
       qb.andWhere('course.level = :level', { level: opts.level });
-    }
-
-    if (opts.type) {
-      qb.andWhere('lesson.lesson_type = :type', { type: opts.type });
     }
 
     const requestedLimit = opts.limit ?? FIND_LESSONS_MAX_LIMIT;

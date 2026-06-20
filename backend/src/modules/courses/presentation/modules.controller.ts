@@ -76,7 +76,6 @@ export class ModulesController {
           {
             id: 'lesson-uuid',
             title: 'Bài 1: Từ vựng chào hỏi',
-            lessonType: 'vocabulary',
             orderIndex: 1,
           },
         ],

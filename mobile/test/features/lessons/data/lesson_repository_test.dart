@@ -31,7 +31,6 @@ void main() {
               'id': 'lesson-1',
               'title': 'Greetings',
               'description': 'Learn greetings',
-              'lessonType': 'vocabulary',
               'orderIndex': 1,
               'moduleId': 'module-1',
               'contents': [

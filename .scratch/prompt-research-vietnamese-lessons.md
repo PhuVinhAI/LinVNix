@@ -51,12 +51,11 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | `id` | UUID | Auto | PK |
 | `title` | varchar | ✅ | Tiếng Việt |
 | `description` | text | ✅ | Mô tả bài học |
-| `lesson_type` | enum | ✅ | Một trong: `vocabulary`, `grammar`, `reading`, `listening`, `speaking`, `writing`, `pronunciation`, `culture` |
 | `order_index` | int | ✅ | Thứ tự trong unit |
 | `estimated_duration` | int | ❌ | Nullable — ước lượng phút |
 | `module_id` | UUID | ✅ | FK → modules.id, ON DELETE CASCADE |
 
-**Yêu cầu:** Mỗi Module cần 2-4 Lesson, phân bổ các lesson_type phù hợp chủ đề. Ví dụ Module "Chào hỏi" có thể có: vocabulary lesson (từ vựng chào hỏi), grammar lesson (cấu trúc câu chào), pronunciation lesson (phát âm), culture lesson (văn hóa giao tiếp VN).
+**Yêu cầu:** Mỗi Module cần 2-4 Lesson, mỗi Lesson tập trung vào một khía cạnh của chủ đề (vd: từ vựng chào hỏi, cấu trúc câu chào, văn hóa giao tiếp VN).
 
 ### 1.4 LessonContent (bảng `lesson_contents`)
 
@@ -225,7 +224,6 @@ CSDL tổ chức theo cây 3 cấp: **Course → Module → Lesson**. Mỗi Less
 | Enum | Values |
 |---|---|
 | `UserLevel` | `A1`, `A2`, `B1`, `B2`, `C1`, `C2` |
-| `LessonType` | `vocabulary`, `grammar`, `reading`, `listening`, `speaking`, `writing`, `pronunciation`, `culture` |
 | `ContentType` | `text`, `audio`, `image`, `video`, `dialogue` |
 | `PartOfSpeech` | `noun`, `verb`, `adjective`, `adverb`, `pronoun`, `preposition`, `conjunction`, `phrase`, `interjection` |
 | `QuestionType` | `multiple_choice`, `fill_blank`, `matching`, `ordering`, `translation`, `listening` |
@@ -342,7 +340,6 @@ Trả về dữ liệu dưới dạng **JSON** theo cấu trúc cây lồng nhau
               "__uuid": "lesson-a1-001-001",
               "title": "Từ vựng Chào hỏi cơ bản",
               "description": "Các từ và cụm từ chào hỏi phổ biến nhất...",
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "estimated_duration": 20,
               "lesson_contents": [

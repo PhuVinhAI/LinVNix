@@ -252,7 +252,6 @@
                   }
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng chào hỏi cơ bản",
               "vocabularies": [
@@ -620,7 +619,6 @@
                   }
                 }
               ],
-              "lesson_type": "listening",
               "order_index": 2,
               "title": "Luyện nghe: Chào hỏi cơ bản",
               "vocabularies": [
@@ -1000,7 +998,6 @@
                   }
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 3,
               "title": "Ngữ pháp: Câu cơ bản SVO và đại từ nhân xưng",
               "vocabularies": [
@@ -1317,7 +1314,6 @@
                   "vietnamese_text": "Một số khác biệt lớn:\n- Miền Bắc: ch và tr phát âm giống nhau (/c/). s và x phát âm giống nhau (/s/). d, gi, r đều đọc là /z/.\n- Miền Nam: ch và tr phân biệt rõ hơn. d và gi đọc là /j/ (như y). r đọc là /r/ hoặc /ʐ/.\n- Miền Nam: v thường đọc là /j/ trong khẩu ngữ, giống d."
                 }
               ],
-              "lesson_type": "pronunciation",
               "order_index": 4,
               "title": "Phát âm cơ bản",
               "vocabularies": [
@@ -1496,7 +1492,6 @@
                   "vietnamese_text": "Người Việt thường cúi nhẹ đầu khi chào, đặc biệt với người lớn tuổi. Bắt tay phổ biến trong môi trường công sở, nhưng giữa nam và nữ, thường đợi nữ đưa tay ra trước. Trong gia đình, người nhỏ tuổi khoanh tay chào người lớn tuổi — phong tục gọi là 'chào lạy' hoặc 'thưa'."
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 5,
               "title": "Văn hóa: Cách chào hỏi của người Việt",
               "vocabularies": [
@@ -1780,7 +1775,6 @@
                   }
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng số đếm từ 1 đến 10",
               "vocabularies": [
@@ -2278,7 +2272,6 @@
                   "vietnamese_text": "'Bao nhiêu?' = how much/how many (trung lập). 'Mấy?' = how many (ít, thân mật). Cấu trúc: [danh từ] + bao nhiêu? hoặc mấy + classifier + [danh từ]?\nVí dụ: 'Cái bàn này bao nhiêu tiền?' (How much is this table?)\n'Em có mấy anh chị em?' (How many siblings do you have?)"
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp: Lượng từ và câu hỏi bao nhiêu",
               "vocabularies": [
@@ -2619,7 +2612,6 @@
                   "vietnamese_text": "Thanh hỏi (̉) và thanh ngã (~) rất dễ nhầm lẫn:\n- Thanh hỏi: giọng đi xuống rồi lên (như hỏi really?): bảy (7), mấy (how many)\n- Thanh ngã: giọng đi lên nhưng có bật hơi: bã (residue)\n\nMẹo: Thanh hỏi nghe như đang hỏi, thanh ngã nghe như bị nghẹn. Người miền Nam thường không phân biệt hai thanh này."
                 }
               ],
-              "lesson_type": "pronunciation",
               "order_index": 3,
               "title": "Phát âm: Thanh điệu trong từ vựng",
               "vocabularies": [
@@ -2954,7 +2946,6 @@
                   }
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng gia đình",
               "vocabularies": [
@@ -3464,7 +3455,6 @@
                   "vietnamese_text": "Để chỉ sở hữu, dùng của + người sở hữu: nhà của mẹ (mother's house), sách của anh (your book). Trong khẩu ngữ, thường bỏ của: nhà mẹ, sách anh."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp: Đại từ nhân xưng trong gia đình",
               "vocabularies": [
@@ -3653,7 +3643,6 @@
                   "vietnamese_text": "Người Việt dùng từ gia đình gọi người ngoài gia đình theo tuổi tác: gọi người lạ lớn tuổi là ông/bà, gọi người nhỏ tuổi là cháu, gọi người cùng trang lứa là anh/chị/em. Điều này tạo cảm giác gần gũi, nhưng cũng tạo áp lực phải xưng hô đúng!"
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 3,
               "title": "Văn hóa: Quan hệ gia đình Việt Nam",
               "vocabularies": [
@@ -3952,7 +3941,6 @@
                   "vietnamese_text": "Một số món ăn gọi khác nhau:\n- Bún bò (Nam) = Bún bò Huế (nói chung)\n- Cơm tấm (Nam) = Cơm (nói chung ở Nam)\n- Bánh cuốn (Bắc) = Bánh ướt (Nam, đôi khi)\n- Chè (tráng miệng ngọt) gọi giống nhau ba miền"
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng đồ ăn và đồ uống",
               "vocabularies": [
@@ -4574,7 +4562,6 @@
                   }
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp: Thích/Không thích và thì quá khứ, tương lai",
               "vocabularies": [
@@ -4894,7 +4881,6 @@
                   "vietnamese_text": "- Cho tôi + món: Cho tôi một bát phở (Give me a bowl of pho)\n- Anh chị muốn ăn gì?: What would you like to eat?\n- Uống gì không?: Would you like something to drink?\n- Tính tiền!: Check please!\n- Bao nhiêu tiền?: How much?\n- Đây ạ: Here you are (kèm đưa tiền)"
                 }
               ],
-              "lesson_type": "speaking",
               "order_index": 3,
               "title": "Hội thoại: Trong nhà hàng",
               "vocabularies": [
@@ -5237,7 +5223,6 @@
                   "vietnamese_text": "- đi + địa điểm: đi Hà Nội (go to Hanoi)\n- đến + địa điểm: đến nhà (arrive at home)\n- từ + địa điểm: từ Sài Gòn (from Saigon)\n- đi + từ + A + đến + B: đi từ Hà Nội đến Sài Gòn (go from Hanoi to Saigon)"
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng đi lại và hỏi đường",
               "vocabularies": [
@@ -5819,7 +5804,6 @@
                   }
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp: Động từ đi lại và chỉ đường",
               "vocabularies": [
@@ -6141,7 +6125,6 @@
                   "vietnamese_text": "- gần nhất = nearest\n- số (xe) = bus number: xe số năm = bus number 5\n- đường + tên = street name: đường Nguyễn Huệ = Nguyen Hue Street\n- đâu = where (đứng cuối câu)\n- không xa đâu = not far (đáp reassure)"
                 }
               ],
-              "lesson_type": "listening",
               "order_index": 3,
               "title": "Luyện nghe: Hội thoại hỏi đường",
               "vocabularies": [

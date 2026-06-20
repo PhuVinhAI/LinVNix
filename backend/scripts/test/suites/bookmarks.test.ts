@@ -16,7 +16,6 @@ import { Vocabulary } from '../../../src/modules/vocabularies/domain/vocabulary.
 import { Bookmark } from '../../../src/modules/vocabularies/domain/bookmark.entity';
 import { User } from '../../../src/modules/users/domain/user.entity';
 import {
-  LessonType,
   PartOfSpeech,
   UserLevel,
   Dialect,
@@ -93,7 +92,6 @@ async function setup(): Promise<void> {
     lessonRepo.create({
       title: `int-bookmarks-lesson-${suffix}`,
       description: 'integration test lesson',
-      lessonType: LessonType.VOCABULARY,
       orderIndex: 1,
       moduleId,
     }),

@@ -30,7 +30,6 @@ import { Lesson } from '../../../src/modules/courses/domain/lesson.entity';
 import { Vocabulary } from '../../../src/modules/vocabularies/domain/vocabulary.entity';
 import { User } from '../../../src/modules/users/domain/user.entity';
 import {
-  LessonType,
   PartOfSpeech,
   UserLevel,
   Dialect,
@@ -110,7 +109,6 @@ async function setup(): Promise<void> {
     lessonRepo.create({
       title: `int-search-vocab-lesson-a-${suffix}`,
       description: 'integration test lesson A',
-      lessonType: LessonType.VOCABULARY,
       orderIndex: 1,
       moduleId,
     }),
@@ -121,7 +119,6 @@ async function setup(): Promise<void> {
     lessonRepo.create({
       title: `int-search-vocab-lesson-b-${suffix}`,
       description: 'integration test lesson B',
-      lessonType: LessonType.VOCABULARY,
       orderIndex: 2,
       moduleId,
     }),

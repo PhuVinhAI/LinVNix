@@ -254,24 +254,21 @@ describe('CourseContentService', () => {
       await service.findLessons({
         topic: 'family',
         level: 'A1' as any,
-        type: 'vocabulary' as any,
         limit: 5,
       });
 
       expect(lessonsRepo.findByFilter).toHaveBeenCalledWith({
         topic: 'family',
         level: 'A1',
-        type: 'vocabulary',
         limit: 5,
       });
     });
 
-    it('returns lesson summary shape: id, title, level, type, courseTitle, moduleTitle', async () => {
+    it('returns lesson summary shape: id, title, level, courseTitle, moduleTitle', async () => {
       lessonsRepo.findByFilter.mockResolvedValue([
         {
           id: 'l1',
           title: 'Family members',
-          lessonType: 'vocabulary',
           module: {
             id: 'm1',
             title: 'Family',
@@ -287,7 +284,6 @@ describe('CourseContentService', () => {
           id: 'l1',
           title: 'Family members',
           level: 'A1',
-          type: 'vocabulary',
           courseTitle: 'Beginner Vietnamese',
           moduleTitle: 'Family',
         },

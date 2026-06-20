@@ -28,7 +28,6 @@ export interface Lesson {
   id: string
   title: string
   description: string
-  lessonType: string
   orderIndex: number
   estimatedDuration?: number | null
   moduleId: string

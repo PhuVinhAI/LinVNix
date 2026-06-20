@@ -3,7 +3,6 @@ class LessonDetail {
     required this.id,
     required this.title,
     required this.description,
-    required this.lessonType,
     required this.orderIndex,
     required this.moduleId,
     this.estimatedDuration,
@@ -18,7 +17,6 @@ class LessonDetail {
       id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      lessonType: json['lessonType'] as String,
       orderIndex: (json['orderIndex'] as num).toInt(),
       moduleId: json['moduleId'] as String,
       estimatedDuration: (json['estimatedDuration'] as num?)?.toInt(),
@@ -44,7 +42,6 @@ class LessonDetail {
   final String id;
   final String title;
   final String description;
-  final String lessonType;
   final int orderIndex;
   final String moduleId;
   final int? estimatedDuration;

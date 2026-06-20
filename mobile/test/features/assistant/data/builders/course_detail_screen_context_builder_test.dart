@@ -38,7 +38,6 @@ void main() {
                 id: 'lesson-1',
                 title: 'Hello',
                 description: 'Basic greeting',
-                lessonType: 'vocabulary',
                 orderIndex: 0,
                 moduleId: 'mod-1',
               ),

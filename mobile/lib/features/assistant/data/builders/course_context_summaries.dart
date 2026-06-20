@@ -70,7 +70,6 @@ Map<String, dynamic> lessonContextSummary(
     'id': lesson.id,
     'title': lesson.title,
     'description': lesson.description,
-    'lessonType': lesson.lessonType,
     'orderIndex': lesson.orderIndex,
     if (lesson.estimatedDuration != null)
       'estimatedDuration': lesson.estimatedDuration,

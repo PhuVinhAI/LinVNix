@@ -139,7 +139,6 @@ class Lesson {
     required this.id,
     required this.title,
     required this.description,
-    required this.lessonType,
     required this.orderIndex,
     required this.moduleId,
     this.estimatedDuration,
@@ -152,7 +151,6 @@ class Lesson {
       id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      lessonType: json['lessonType'] as String,
       orderIndex: (json['orderIndex'] as num).toInt(),
       moduleId: json['moduleId'] as String,
       estimatedDuration: (json['estimatedDuration'] as num?)?.toInt(),
@@ -168,7 +166,6 @@ class Lesson {
   final String id;
   final String title;
   final String description;
-  final String lessonType;
   final int orderIndex;
   final String moduleId;
   final int? estimatedDuration;
@@ -180,7 +177,6 @@ class Lesson {
       'id': id,
       'title': title,
       'description': description,
-      'lessonType': lessonType,
       'orderIndex': orderIndex,
       'moduleId': moduleId,
       'estimatedDuration': estimatedDuration,

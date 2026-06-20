@@ -66,7 +66,6 @@ export class LessonsController {
         id: 'uuid-string',
         title: 'Bài 1: Từ vựng chào hỏi',
         description: 'Học các từ vựng cơ bản về chào hỏi',
-        lessonType: 'vocabulary',
         orderIndex: 1,
         estimatedDuration: 30,
         contents: [],

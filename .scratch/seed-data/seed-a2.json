@@ -222,7 +222,6 @@
                   "vietnamese_text": "Tiền Việt Nam dùng đơn vị 'đồng'. Người ta thường nói 'nghìn' thay vì 'nghìn đồng'. Ví dụ: 20.000 đồng gọi là 'hai mươi nghìn'."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Chợ và Mua sắm",
               "vocabularies": [
@@ -784,7 +783,6 @@
                   }
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp So sánh hơn và nhất",
               "vocabularies": [
@@ -1045,7 +1043,6 @@
                   "vietnamese_text": "Lưu ý: Ở chợ Việt Nam, người ta hay dùng cân tay thay vì cân điện tử. Nhiều nơi cân không chuẩn, nên khách hàng hay kiểm tra lại. Ngày nay các chợ đã dần dùng cân điện tử nhiều hơn."
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 3,
               "title": "Hội thoại ở chợ",
               "vocabularies": [
@@ -1258,7 +1255,6 @@
                   }
                 }
               ],
-              "lesson_type": "writing",
               "order_index": 4,
               "title": "Đi chợ và Mua sắm - Tổng hợp",
               "vocabularies": [
@@ -1508,7 +1504,6 @@
                   "vietnamese_text": "Ở Việt Nam, người ta phân biệt 'phòng khám' (clinic) và 'bệnh viện' (hospital). Phòng khám nhỏ hơn, thường khám ngoại trú. Bệnh viện lớn hơn, có nội trú. 'Nhà thuốc' là pharmacy, không cần đơn bác sĩ vẫn mua được nhiều loại thuốc."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Sức khỏe và Bệnh viện",
               "vocabularies": [
@@ -1996,7 +1991,6 @@
                   }
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp 'bị' + động từ và 'phải'",
               "vocabularies": [
@@ -2239,7 +2233,6 @@
                   }
                 }
               ],
-              "lesson_type": "reading",
               "order_index": 3,
               "title": "Đọc hiểu: Chăm sóc sức khỏe",
               "vocabularies": [
@@ -2503,7 +2496,6 @@
                   "vietnamese_text": "Cách nói thời tiết trong tiếng Việt khác tiếng Anh. Thay vì 'It is raining', người Việt nói 'Trời đang mưa' hoặc ngắn hơn 'Đang mưa'. 'Trời' có nghĩa là sky/weather."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Thời tiết và Mùa",
               "vocabularies": [
@@ -2983,7 +2975,6 @@
                   }
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp 'đang' + động từ cho thời tiết",
               "vocabularies": [
@@ -3185,7 +3176,6 @@
                   }
                 }
               ],
-              "lesson_type": "listening",
               "order_index": 3,
               "title": "Nghe hiểu: Dự báo thời tiết",
               "vocabularies": [
@@ -3455,7 +3445,6 @@
                   "vietnamese_text": "Ở Việt Nam, nhà riêng thường hẹp nhưng dài, gọi là nhà ống. Chung cư thì tiện hơn vì có thang máy và chỗ để xe. Nhà trọ rẻ nhất nhưng nhỏ và ồn ào. Nhiều sinh viên ở thuê nhà trọ hoặc chung cư gần trường đại học."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Nhà ở và Sinh hoạt",
               "vocabularies": [
@@ -3928,7 +3917,6 @@
                   }
                 }
               ],
-              "lesson_type": "speaking",
               "order_index": 2,
               "title": "Ngữ pháp Trạng ngữ nơi chốn với 'ở'",
               "vocabularies": [
@@ -4202,7 +4190,6 @@
                   "vietnamese_text": "Lưu ý: trong tiếng Việt, 'chơi' có nghĩa rộng hơn 'play' trong tiếng Anh. 'Chơi' vừa là play (game/sport) vừa là hang out/socialize. Ví dụ: 'Cuối tuần mình đi chơi nhé' = Let's hang out this weekend."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Giải trí và Sở thích",
               "vocabularies": [
@@ -4711,7 +4698,6 @@
                   }
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp Câu ghép với và/nhưng/mà",
               "vocabularies": [
@@ -4957,7 +4943,6 @@
                   }
                 }
               ],
-              "lesson_type": "writing",
               "order_index": 3,
               "title": "Viết về Sở thích của bạn",
               "vocabularies": [

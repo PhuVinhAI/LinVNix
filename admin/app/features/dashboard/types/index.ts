@@ -62,7 +62,6 @@ export interface HighErrorQuestionItem {
 export interface EmptyLessonItem {
   lessonId: string
   title: string
-  lessonType: string
   moduleId: string
   moduleTitle: string
   courseTitle: string

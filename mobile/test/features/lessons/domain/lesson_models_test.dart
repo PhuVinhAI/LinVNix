@@ -8,7 +8,6 @@ void main() {
         'id': 'lesson-1',
         'title': 'Greetings',
         'description': 'Learn basic greetings',
-        'lessonType': 'vocabulary',
         'orderIndex': 1,
         'moduleId': 'module-1',
         'estimatedDuration': 15,
@@ -53,7 +52,6 @@ void main() {
 
       expect(lesson.id, 'lesson-1');
       expect(lesson.title, 'Greetings');
-      expect(lesson.lessonType, 'vocabulary');
       expect(lesson.estimatedDuration, 15);
       expect(lesson.contents, hasLength(1));
       expect(lesson.vocabularies, hasLength(1));
@@ -66,7 +64,6 @@ void main() {
         'id': 'lesson-1',
         'title': 'Empty',
         'description': 'Empty lesson',
-        'lessonType': 'grammar',
         'orderIndex': 0,
         'moduleId': 'module-1',
       };

@@ -16,7 +16,7 @@ import { ProgressStatus } from '../../../common/enums';
 import { Course } from '../domain/course.entity';
 import { Module } from '../domain/module.entity';
 import { Lesson } from '../domain/lesson.entity';
-import { LessonType, UserLevel } from '../../../common/enums';
+import { UserLevel } from '../../../common/enums';
 import { ReorderItem } from '../../../common/utils/bulk-reorder';
 import { LessonContent } from '../../contents/domain/lesson-content.entity';
 import { GrammarRule } from '../../grammar/domain/grammar-rule.entity';
@@ -31,7 +31,6 @@ export interface LessonSummary {
   id: string;
   title: string;
   level: UserLevel;
-  type: LessonType;
   courseTitle: string;
   moduleTitle: string;
 }
@@ -102,7 +101,6 @@ export class CourseContentService {
     const filter: LessonFilterOptions = {};
     if (opts.topic !== undefined) filter.topic = opts.topic;
     if (opts.level !== undefined) filter.level = opts.level;
-    if (opts.type !== undefined) filter.type = opts.type;
     if (opts.limit !== undefined) filter.limit = opts.limit;
 
     const lessons = await this.lessonsRepository.findByFilter(filter);
@@ -110,7 +108,6 @@ export class CourseContentService {
       id: lesson.id,
       title: lesson.title,
       level: lesson.module?.course?.level,
-      type: lesson.lessonType,
       courseTitle: lesson.module?.course?.title,
       moduleTitle: lesson.module?.title,
     }));

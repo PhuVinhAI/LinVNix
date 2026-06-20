@@ -98,7 +98,6 @@ erDiagram
     timestamp deleted_at
     varchar title
     text description
-    enum lesson_type
     int order_index
     int estimated_duration
     uuid module_id FK

@@ -7,9 +7,7 @@ import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   Plus, Pencil, BookOpen, Clock, MoreVertical, Trash2, Layers,
-  Lightbulb, Headphones, MessageCircle, Edit3, Mic, Globe, FileText,
 } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
 import { DragHandle } from '../../components/admin/shared/DragHandle'
@@ -36,17 +34,6 @@ import {
 import { useAdminModule, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
 import type { Lesson, Module } from '../../features/learning/types'
 import { learningPath } from './route-utils'
-
-const lessonTypes: Record<string, { Icon: LucideIcon; label: string; bg: string; color: string }> = {
-  vocabulary: { Icon: BookOpen, label: 'Từ vựng', bg: 'bg-emerald-500', color: 'text-emerald-700 dark:text-emerald-300' },
-  grammar: { Icon: Lightbulb, label: 'Ngữ pháp', bg: 'bg-blue-500', color: 'text-blue-700 dark:text-blue-300' },
-  reading: { Icon: FileText, label: 'Đọc', bg: 'bg-indigo-500', color: 'text-indigo-700 dark:text-indigo-300' },
-  listening: { Icon: Headphones, label: 'Nghe', bg: 'bg-purple-500', color: 'text-purple-700 dark:text-purple-300' },
-  speaking: { Icon: MessageCircle, label: 'Nói', bg: 'bg-rose-500', color: 'text-rose-700 dark:text-rose-300' },
-  writing: { Icon: Edit3, label: 'Viết', bg: 'bg-amber-500', color: 'text-amber-700 dark:text-amber-300' },
-  pronunciation: { Icon: Mic, label: 'Phát âm', bg: 'bg-teal-500', color: 'text-teal-700 dark:text-teal-300' },
-  culture: { Icon: Globe, label: 'Văn hóa', bg: 'bg-fuchsia-500', color: 'text-fuchsia-700 dark:text-fuchsia-300' },
-}
 
 export function ModuleDetailPage() {
   const { moduleId } = useParams()
@@ -85,12 +72,6 @@ export function ModuleDetailPage() {
   const stop = (e: MouseEvent | KeyboardEvent) => e.stopPropagation()
 
   const totalMinutes = module?.lessons?.reduce((sum, l) => sum + (l.estimatedDuration ?? 0), 0) ?? 0
-
-  // Group lessons by type for the type breakdown
-  const typeCounts = (module?.lessons ?? []).reduce<Record<string, number>>((acc, lesson) => {
-    acc[lesson.lessonType] = (acc[lesson.lessonType] ?? 0) + 1
-    return acc
-  }, {})
 
   return (
     <div className="space-y-6">
@@ -143,33 +124,6 @@ export function ModuleDetailPage() {
             </Button>
           )}
         </div>
-
-        {/* Lesson type distribution */}
-        {Object.keys(typeCounts).length > 0 && (
-          <div className="mt-4 pt-4 border-t-2 border-border">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
-              Phân bố kỹ năng
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {Object.entries(typeCounts).map(([type, count]) => {
-                const t = lessonTypes[type]
-                if (!t) return null
-                return (
-                  <div
-                    key={type}
-                    className="flex items-center gap-1.5 rounded-md border-2 border-border bg-card px-2 py-1"
-                  >
-                    <div className={`flex h-5 w-5 items-center justify-center rounded text-white ${t.bg}`}>
-                      <t.Icon className="h-3 w-3" />
-                    </div>
-                    <span className="text-xs font-semibold">{t.label}</span>
-                    <span className="text-xs font-bold tabular-nums text-muted-foreground">{count}</span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Lessons timeline */}
@@ -220,14 +174,7 @@ export function ModuleDetailPage() {
               strategy={verticalListSortingStrategy}
             >
               <div className="space-y-3">
-                {sortedLessons.map((lesson) => {
-                  const t = lessonTypes[lesson.lessonType] ?? {
-                    Icon: BookOpen,
-                    label: lesson.lessonType,
-                    bg: 'bg-muted',
-                    color: 'text-muted-foreground',
-                  }
-                  return (
+                {sortedLessons.map((lesson) => (
                     <SortableRow key={lesson.id} id={lesson.id}>
                       {({ listeners, attributes }) => (
                         <div
@@ -243,10 +190,8 @@ export function ModuleDetailPage() {
                             <DragHandle {...listeners} {...attributes} />
                           </div>
 
-                          <div
-                            className={`relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white text-sm font-bold ${t.bg}`}
-                          >
-                            <t.Icon className="h-4 w-4" />
+                          <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold tabular-nums">
+                            {lesson.orderIndex}
                           </div>
 
                           <div className="flex-1 min-w-0">
@@ -254,7 +199,6 @@ export function ModuleDetailPage() {
                               <h3 className="text-base font-bold text-foreground truncate">
                                 {lesson.title}
                               </h3>
-                              <span className={`text-xs font-bold ${t.color}`}>{t.label}</span>
                               {lesson.estimatedDuration && (
                                 <span className="flex items-center gap-1 text-xs text-muted-foreground">
                                   <Clock className="h-3 w-3" />

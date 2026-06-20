@@ -15,7 +15,7 @@ Nhóm bài học cùng chủ đề giao tiếp (vd: "Chào hỏi & Giới thiệ
 _Avoid_: Module, Unit
 
 **Bài học**:
-Đơn vị học liệu nhỏ nhất có kiểu xác định (từ vựng, ngữ pháp, nghe, nói, v.v.), thuộc một **Chủ đề**.
+Đơn vị học liệu nhỏ nhất, thuộc một **Chủ đề**.
 _Avoid_: Lesson
 
 **Nội dung bài**:

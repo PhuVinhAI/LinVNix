@@ -119,7 +119,6 @@ export class AdminAttentionService {
     return this.group<{
       lessonId: string;
       title: string;
-      lessonType: string;
       moduleId: string;
       moduleTitle: string;
       courseTitle: string;
@@ -129,7 +128,6 @@ export class AdminAttentionService {
       `
       SELECT l.id AS "lessonId",
              l.title AS "title",
-             l.lesson_type AS "lessonType",
              m.id AS "moduleId",
              m.title AS "moduleTitle",
              c.title AS "courseTitle",

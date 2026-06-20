@@ -947,7 +947,7 @@ class _LessonCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                _LessonTypeIcon(lessonType: lesson.lessonType),
+                _LessonOrderBadge(orderIndex: lesson.orderIndex),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
@@ -1018,9 +1018,9 @@ class _LessonCard extends StatelessWidget {
   }
 }
 
-class _LessonTypeIcon extends StatelessWidget {
-  const _LessonTypeIcon({required this.lessonType});
-  final String lessonType;
+class _LessonOrderBadge extends StatelessWidget {
+  const _LessonOrderBadge({required this.orderIndex});
+  final int orderIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -1033,22 +1033,16 @@ class _LessonTypeIcon extends StatelessWidget {
         color: c.primary.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
-      child: Icon(_getIcon(), size: 22, color: c.primary),
+      alignment: Alignment.center,
+      child: Text(
+        '$orderIndex',
+        style: GoogleFonts.inter(
+          fontSize: AppTypography.bodyLarge,
+          fontWeight: FontWeight.w700,
+          color: c.primary,
+        ),
+      ),
     );
-  }
-
-  IconData _getIcon() {
-    return switch (lessonType) {
-      'vocabulary' => Icons.abc,
-      'grammar' => Icons.menu_book,
-      'reading' => Icons.article,
-      'listening' => Icons.headphones,
-      'speaking' => Icons.mic,
-      'writing' => Icons.edit,
-      'pronunciation' => Icons.record_voice_over,
-      'culture' => Icons.public,
-      _ => Icons.school,
-    };
   }
 }
 

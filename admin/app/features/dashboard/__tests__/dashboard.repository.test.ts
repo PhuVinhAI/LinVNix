@@ -65,7 +65,6 @@ const mockAttention: DashboardAttention = {
       {
         lessonId: 'l1',
         title: 'Chao hoi co ban',
-        lessonType: 'vocabulary',
         moduleId: 'm1',
         moduleTitle: 'Chao hoi & Gioi thieu',
         courseTitle: 'Tieng Viet A1',

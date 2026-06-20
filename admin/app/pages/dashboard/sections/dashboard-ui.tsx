@@ -37,17 +37,6 @@ export const QUESTION_TYPE_LABEL: Record<string, string> = {
   speaking: 'Nói',
 }
 
-export const LESSON_TYPE_LABEL: Record<string, string> = {
-  vocabulary: 'Từ vựng',
-  grammar: 'Ngữ pháp',
-  reading: 'Đọc',
-  listening: 'Nghe',
-  speaking: 'Nói',
-  writing: 'Viết',
-  pronunciation: 'Phát âm',
-  culture: 'Văn hóa',
-}
-
 // ─── Định dạng ───────────────────────────────────────────────────────────────
 
 const numberFormatter = new Intl.NumberFormat('vi-VN')

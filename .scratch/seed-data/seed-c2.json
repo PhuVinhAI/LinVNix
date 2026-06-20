@@ -225,7 +225,6 @@
                   "vietnamese_text": "Người học bậc C2 cần nhận diện được khẩu âm vùng miền và linh hoạt chuyển đổi giữa các biến thể. Đây là kỹ năng chỉ người rất thành thạo mới có."
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng phương ngữ vùng miền",
               "vocabularies": [
@@ -756,7 +755,6 @@
                   "vietnamese_text": "Đại từ nhân xưng vùng miền:\n- Bắc: tôi, anh, chị, cụ, bác, cậu, mày → tao (thân mật)\n- Trung: tui (tôi), tau (tao), mi (mày), bển (bên ấy)\n- Nam: tui, mình, bây, nghen, cha nội, má bầm"
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Biến thể ngữ pháp vùng miền",
               "vocabularies": [
@@ -1017,7 +1015,6 @@
                   "vietnamese_text": "Đặc điểm nghe:\n- Bắc: thanh điệu rõ, phân biệt hỏi-ngã, tr và ch khác nhau\n- Trung: nói nhanh, gộp âm, r như gi, trộn từ rứa/mô/răng\n- Nam: thanh trầm, gộp hỏi-ngã, v và r như gi, nói ngắn"
                 }
               ],
-              "lesson_type": "listening",
               "order_index": 3,
               "title": "Nghe hiểu phương ngữ",
               "vocabularies": [
@@ -1213,7 +1210,6 @@
                   }
                 }
               ],
-              "lesson_type": "pronunciation",
               "order_index": 4,
               "title": "Phát âm vùng miền",
               "vocabularies": [
@@ -1432,7 +1428,6 @@
                   "vietnamese_text": "Một số từ Hán Việt có nghĩa khác tiếng Trung hiện đại:\n- bác sĩ (博士): Việt = bác sĩ y khoa, Trung = tiến sĩ\n- giáo sư (教師): Việt = giáo sư đại học, Trung = giáo viên\n- thư viện (書院): Việt = thư viện, Trung = trường học cổ"
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng Hán Việt",
               "vocabularies": [
@@ -1935,7 +1930,6 @@
                   "vietnamese_text": "Ghép phản nghĩa: hai tiết trái nghĩa tạo nghĩa mới:\n- thiên địa (天地): trời đất → vũ trụ\n- âm dương (陰陽): tối sáng → triết lý\n- hưng vong (興亡): thịnh suy → vận mệnh\n- tự tha (自他): mình người → mối quan hệ"
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Cấu trúc từ Hán Việt",
               "vocabularies": [
@@ -2107,7 +2101,6 @@
                   "vietnamese_text": "Bảng đối chiếu Hán Việt — Việt thuần:\n| Hán Việt | Việt thuần | Nghĩa |\n| đại hội | hội lớn | congress |\n| thông qua | bỏ phiếu chấp thuận | to pass |\n| ban hành | phát ra, công bố | to promulgate |\n| quy định | đặt ra quy tắc | to stipulate |\n| thi hành | làm theo, thực hiện | to implement |"
                 }
               ],
-              "lesson_type": "reading",
               "order_index": 3,
               "title": "Đọc hiểu văn bản Hán Việt",
               "vocabularies": [
@@ -2307,7 +2300,6 @@
                   "vietnamese_text": "Dịch âm tên nước qua Hán Việt:\n- Anh Cát Lợi → Anh (英): nước Anh\n- Pháp (法): nước Pháp\n- Mỹ Lợi Gia → Mỹ (美): nước Mỹ\n- Hà Lan (荷蘭): nước Hà Lan\n- Bồ Đào Nha (葡萄牙): nước Bồ Đào Nha"
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 4,
               "title": "Văn hóa Hán Việt & Từ mượn",
               "vocabularies": [
@@ -2514,7 +2506,6 @@
                   "vietnamese_text": "Các thể văn hành chính cổ:\n- Tấu (奏): bề tôi dâng lên vua\n- Chiếu (詔): vua ban xuống thần dân\n- Hịch (檄): lời kêu gọi chiến đấu\n- Sớ (疏): lời can gián vua\n- Cáo (誥): lời tuyên bố chính thức"
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng văn học cổ điển",
               "vocabularies": [
@@ -2860,7 +2851,6 @@
                   "vietnamese_text": "Câu văn cổ thường lược chủ ngữ, dùng đối ngẫu, vần điệu trong văn xuôi. Ví dụ Bình Ngô đại cáo:\n\"Dời non lấp biển / Nghiệp nhóm nên / Nắm cốt phay da / Oai thêm lớn.\"\n→ Câu đối ngẫu: động từ 2+2 / cụm 3 / động từ 2+2 / cụm 3."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Ngữ pháp cổ & Ảnh hưởng Hán Nôm",
               "vocabularies": [
@@ -3010,7 +3000,6 @@
                   "vietnamese_text": "Song thất lục bát: thêm hai câu thất (7 âm tiết) trước mỗi cặp lục bát.\nCấu trúc: Thất (7) + Thất (7) + Lục (6) + Bát (8)\n\nVí dụ Chinh phụ ngâm khúc mở đầu:\n\"Sao đành lòng thấy kẻ chinh phu\nThà đừng thà vắng biết chừng phu\nLệ rơi trên áo cờ đào\nĐêm ngày luống thẹn nhiệm nhặt nhối ao\""
                 }
               ],
-              "lesson_type": "reading",
               "order_index": 3,
               "title": "Đọc thơ lục bát & Song thất lục bát",
               "vocabularies": [
@@ -3160,7 +3149,6 @@
                   "vietnamese_text": "Vần giàu vs vần nghèo:\n- Vần giàu: cùng vần + cùng loại thanh (bằng hoặc trắc)\n  Ví dụ: \"xanh\" và \"cành\" — vần bằng giàu\n- Vần nghèo: gần giống vần + cùng loại thanh\n  Ví dụ: \"thêu\" và \"trèo\" — vần bằng nghèo\n\nLục bát yêu cầu chữ 6 và 8 phải là vần bằng (thanh ngang hoặc huyền)."
                 }
               ],
-              "lesson_type": "writing",
               "order_index": 4,
               "title": "Viết thơ truyền thống",
               "vocabularies": [
@@ -3376,7 +3364,6 @@
                   "vietnamese_text": "Thành ngữ hài hước:\n- \"Đánh trống bỏ dùi\": nói một đằng làm một nẻo\n- \"Mười voi không được bát cơm\": nhiều mà không có giá\n- \"Chưa đỗ ông nghè đã đe hàng tổng\": chưa thành công đã kiêu ngạo\n- \"Ăn cơm nhà vác tù và hàng tổng\": làm việc không công\n- \"Bà trzy bán lợn\": lộn xộn, không ngăn nắp"
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng hài hước & Lóng",
               "vocabularies": [
@@ -3739,7 +3726,6 @@
                   "vietnamese_text": "Ẩn dụ nâng cao trong thơ:\nHồ Xuân Hương dùng ẩn dụ hai nghĩa — bề ngoài tả đồ vật, bề trong ám chỉ thân phận phụ nữ:\n\"Bánh trôi nước\"\nThân em vừa trắng lại vừa tròn\nBảy nổi ba chìm với nước non\nRắn nát mặc dầu tay kẻ nặn\nEm vẫn giữ nguyên hương thói đời."
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Tu từ ẩn dụ & Nói lái",
               "vocabularies": [
@@ -3924,7 +3910,6 @@
                   "vietnamese_text": "Mẹo nghe hiểu hài hước:\n- Chú ý ngữ điệu: câu châm biếm thường có ngữ điệu ngược (nói ngược ý)\n- Nhận diện nói lái: nếu từ nghe lạ hoặc vô nghĩa, thử hoán đổi phụ âm đầu\n- Hiểu ngữ cảnh: nhiều câu hài chỉ buồn cười khi biết hoàn cảnh nói\n- Hỏi lại nếu không hiểu: Ê, nói lái hả? — người Việt không phiền khi được hỏi"
                 }
               ],
-              "lesson_type": "listening",
               "order_index": 3,
               "title": "Nghe hiểu hài hước",
               "vocabularies": [
@@ -4078,7 +4063,6 @@
                   "vietnamese_text": "Châm biếm xã hội qua ca dao:\n\"Quan trường phản lại dân thương\nLàm quan mà ăn của dân\nThì còn gì là quan?\"\n→ Châm biếm quan tham nhũng.\n\n\"Trèo lên cây bưởi hái hoa\nBao giờ dân giàu mới vừa lòng nhà?\"\n→ Châm biếm bất công xã hội."
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 4,
               "title": "Văn hóa hài hước Việt Nam",
               "vocabularies": [
@@ -4288,7 +4272,6 @@
                   "vietnamese_text": "Một số tục ngữ phổ biến:\n- \"Ăn quả nhớ kẻ trồng cây\": biết ơn\n- \"Một con ngựa đau cả tàu bỏ cỏ\": đoàn kết\n- \"Lá lành đùm lá rách\": tương thân tương ái\n- \"Tiền bạc là phù du\": tài sản không bền\n- \"Chữ đồng đục chua lẹm thì chua\": tài năng không thể che giấu"
                 }
               ],
-              "lesson_type": "vocabulary",
               "order_index": 1,
               "title": "Từ vựng tục ngữ & Ca dao",
               "vocabularies": [
@@ -4700,7 +4683,6 @@
                   "vietnamese_text": "Đối ngẫu trong ca dao:\n\"Công cha\" ↔ \"Nghĩa mẹ\"\n\"núi Thái Sơn\" ↔ \"nước trong nguồn\"\n\"Muốn sang\" ↔ \"Muốn con hay chữ\"\n\"bắc cầu kiều\" ↔ \"yêu lấy thầy\"\n→ Mỗi vế đối xứng: từ loại, số âm tiết, thanh điệu"
                 }
               ],
-              "lesson_type": "grammar",
               "order_index": 2,
               "title": "Cấu trúc ca dao & Vần điệu",
               "vocabularies": [
@@ -4832,7 +4814,6 @@
                   "vietnamese_text": "Cách nói tục ngữ tự nhiên:\n1. Không nói nguyên câu tục ngữ khô khan — lồng vào câu chuyện\n2. Dùng như câu kết thúc, tóm tắt ý chính\n3. Thêm \"như ông bà ta thường nói:\" trước tục ngữ\n4. Không dùng quá nhiều — chỉ dùng khi thật phù hợp"
                 }
               ],
-              "lesson_type": "speaking",
               "order_index": 3,
               "title": "Nói tục ngữ & Ca dao",
               "vocabularies": [
@@ -5003,7 +4984,6 @@
                   "vietnamese_text": "Dân ca và di sản thế giới:\n- Quan họ Bắc Ninh: UNESCO di sản văn hóa phi vật thể\n- Hò Nam Bộ: hát ru, hò chèo ghe trên sông nước\n- Ví dặm Nghệ Tĩnh: hát đối đáp nông thôn\n- Then Tày: hát nghi lễ dân tộc Tày\n- Nhã nhạc cung đình Huế: UNESCO di sản"
                 }
               ],
-              "lesson_type": "culture",
               "order_index": 4,
               "title": "Văn hóa dân gian Việt Nam",
               "vocabularies": [

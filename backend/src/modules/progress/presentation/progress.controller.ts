@@ -42,7 +42,6 @@ export class ProgressController {
           lessonId: 'lesson-uuid',
           lesson: {
             title: 'Bài 1: Từ vựng chào hỏi',
-            lessonType: 'VOCABULARY',
           },
           status: 'COMPLETED',
           score: 85,

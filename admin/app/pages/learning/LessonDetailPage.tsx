@@ -9,28 +9,6 @@ import { stageOneTotal } from './authoring-meta'
 import { StatusPill } from './authoring-ui'
 import { learningPath } from './route-utils'
 
-const lessonTypeColors: Record<string, string> = {
-  vocabulary: 'bg-emerald-500',
-  grammar: 'bg-blue-500',
-  reading: 'bg-indigo-500',
-  listening: 'bg-purple-500',
-  speaking: 'bg-rose-500',
-  writing: 'bg-amber-500',
-  pronunciation: 'bg-teal-500',
-  culture: 'bg-fuchsia-500',
-}
-
-const lessonTypeLabels: Record<string, string> = {
-  vocabulary: 'Từ vựng',
-  grammar: 'Ngữ pháp',
-  reading: 'Đọc',
-  listening: 'Nghe',
-  speaking: 'Nói',
-  writing: 'Viết',
-  pronunciation: 'Phát âm',
-  culture: 'Văn hóa',
-}
-
 /**
  * Cổng vào Giai đoạn soạn bài (ADR 0002). Màn hình này chỉ làm MỘT việc:
  * chọn giai đoạn. Soạn gì cũng phải đi sâu vào trong.
@@ -46,9 +24,6 @@ export function LessonDetailPage() {
     0,
   )
 
-  const typeBg = lessonTypeColors[lesson?.lessonType ?? ''] ?? 'bg-muted'
-  const typeLabel = lessonTypeLabels[lesson?.lessonType ?? ''] ?? lesson?.lessonType ?? '—'
-
   return (
     <div className="space-y-6">
       <Breadcrumbs
@@ -63,9 +38,6 @@ export function LessonDetailPage() {
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap text-xs mb-2">
-              <span className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-white font-bold ${typeBg}`}>
-                {typeLabel}
-              </span>
               {lesson?.estimatedDuration && (
                 <span className="inline-flex items-center gap-1 text-muted-foreground">
                   <Clock className="h-3 w-3" />
