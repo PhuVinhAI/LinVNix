@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Plus, Trash2, Target } from 'lucide-react'
-import { Button } from '../../ui/button'
+import { Plus, Trash2, Target, CheckCircle2 } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
-import { Slider } from '../../ui/slider'
+import { WeightInput } from './WeightInput'
+import { cn } from '@/lib/utils'
 
 export type ScoringCriterion = { name: string; description: string; weight: number }
 
@@ -23,6 +23,7 @@ export function ScoringCriteriaEditor({
   const totalWeight = items.reduce((sum, item) => sum + (Number(item.weight) || 0), 0)
   const remaining = TARGET_TOTAL - totalWeight
   const isBalanced = remaining === 0
+  const isOver = totalWeight > TARGET_TOTAL
 
   const sync = (next: ScoringCriterion[]) => {
     setItems(next)
@@ -43,9 +44,14 @@ export function ScoringCriteriaEditor({
 
   return (
     <div className="space-y-3">
+      {/* Tổng trọng số banner */}
       <div className="flex items-center justify-between gap-2 rounded-lg border-2 border-border bg-muted/30 px-4 py-2.5">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Target className="h-3.5 w-3.5" />
+          {isBalanced ? (
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+          ) : (
+            <Target className="h-3.5 w-3.5" />
+          )}
           <span>Tổng trọng số (phải đúng 100%)</span>
         </div>
         <span
@@ -57,83 +63,64 @@ export function ScoringCriteriaEditor({
         </span>
       </div>
 
+      {/* Danh sách tiêu chí */}
       <div className="space-y-2">
-        {items.map((item, index) => (
-          <div key={index} className="rounded-lg border-2 border-border bg-card overflow-hidden">
-            <div className="flex items-center justify-between gap-2 border-b-2 border-border bg-muted/20 px-3 py-2">
-              <div className="flex items-center gap-2">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                  {index + 1}
-                </span>
-                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Tiêu chí
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold tabular-nums text-muted-foreground">
-                  {Number(item.weight) || 0}%
-                </span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeAt(index)}
-                  disabled={items.length <= 1}
-                  className="h-7 w-7 text-muted-foreground hover:text-destructive disabled:opacity-30"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
-              </div>
-            </div>
-            <div className="p-3 space-y-3">
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Tên tiêu chí</label>
-                <Input
-                  value={item.name}
-                  onChange={(e) => updateAt(index, { name: e.target.value })}
-                  placeholder="VD: Phát âm chuẩn"
-                  className="mt-1"
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <label className="text-xs font-semibold text-muted-foreground">Trọng số</label>
-                  <Slider
-                    value={[Number(item.weight) || 0]}
-                    min={0}
-                    max={100}
-                    step={1}
-                    onValueChange={(v) => updateAt(index, { weight: v[0] ?? 0 })}
-                    className="mt-3"
-                    aria-label="Trọng số tiêu chí"
-                  />
+        {items.map((item, index) => {
+          const w = Number(item.weight) || 0
+          return (
+            <div key={index} className="rounded-lg border-2 border-border bg-card overflow-hidden">
+              {/* Header: số + label + trọng số + xoá */}
+              <div className="flex items-center justify-between gap-2 border-b-2 border-border bg-muted/20 px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                    {index + 1}
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Tiêu chí
+                  </span>
                 </div>
-                <div className="w-24 shrink-0">
+                <div className="flex items-center gap-2">
+                  <WeightInput
+                    value={w}
+                    onChange={(v) => updateAt(index, { weight: v })}
+                    step={5}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeAt(index)}
+                    disabled={items.length <= 1}
+                    className="h-7 w-7 shrink-0 rounded-full text-muted-foreground/40 hover:bg-destructive/10 hover:text-destructive disabled:pointer-events-none disabled:opacity-30 transition-colors"
+                    aria-label="Xóa tiêu chí"
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mx-auto" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Form fields */}
+              <div className="p-3 space-y-3">
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Tên tiêu chí</label>
                   <Input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={Number(item.weight) || 0}
-                    onChange={(e) => {
-                      const n = Number(e.target.value)
-                      updateAt(index, { weight: Number.isFinite(n) ? Math.min(100, Math.max(0, Math.round(n))) : 0 })
-                    }}
-                    className="mt-1 text-center font-bold tabular-nums"
+                    value={item.name}
+                    onChange={(e) => updateAt(index, { name: e.target.value })}
+                    placeholder="VD: Phát âm chuẩn"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Mô tả tiêu chí</label>
+                  <Textarea
+                    value={item.description}
+                    onChange={(e) => updateAt(index, { description: e.target.value })}
+                    placeholder="Mô tả cách đánh giá tiêu chí này"
+                    className="mt-1 min-h-16"
                   />
                 </div>
               </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Mô tả tiêu chí</label>
-                <Textarea
-                  value={item.description}
-                  onChange={(e) => updateAt(index, { description: e.target.value })}
-                  placeholder="Mô tả cách đánh giá tiêu chí này"
-                  className="mt-1 min-h-16"
-                />
-              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {!isBalanced && (
