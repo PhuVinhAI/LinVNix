@@ -245,9 +245,10 @@ export function ModuleDetailPage() {
                       )}
                     </SortableRow>
                   )
-                })}
+                )}
               </div>
             </SortableContext>
+
           </DndContext>
         )}
       </div>

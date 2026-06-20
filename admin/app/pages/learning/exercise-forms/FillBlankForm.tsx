@@ -240,16 +240,17 @@ export function FillBlankForm({ initial, onChange }: QuestionFormProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+      <div>
+        <label className="text-sm font-semibold text-foreground">
           Câu có chỗ trống
-        </p>
-        <p className="text-xs text-muted-foreground">
+          <span className="text-destructive ml-0.5">*</span>
+        </label>
+        <p className="text-xs text-muted-foreground mt-0.5">
           Gõ câu rồi bấm <span className="font-bold">+ Thêm chỗ trống</span> để chèn ô đáp án tại con trỏ
         </p>
       </div>
 
-      <div className="rounded-2xl border-2 border-border bg-card px-5 py-5">
+      <div className="rounded-lg border-2 border-border bg-card px-5 py-5">
         <div className="text-2xl font-semibold leading-relaxed text-foreground"
              style={{ wordBreak: 'break-word' }}>
           {state.parts.map((part, idx) =>
@@ -321,10 +322,10 @@ function WordBankEditor({
     setDraft('')
   }
   return (
-    <div className="rounded-2xl border-2 border-border bg-card p-4 space-y-3">
+    <div className="rounded-lg border-2 border-border bg-card p-4 space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-foreground">
+          <p className="text-sm font-semibold text-foreground">
             Kho từ — học viên bấm chọn để điền
           </p>
           <p className="text-xs text-muted-foreground mt-0.5">
@@ -352,14 +353,14 @@ function WordBankEditor({
                 key={w}
                 className={`inline-flex items-center gap-1.5 rounded-full border-2 px-3 py-1 text-sm font-bold ${
                   isCorrect
-                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300'
+                    ? 'border-primary bg-primary/10 text-primary'
                     : 'border-border bg-muted/50 text-foreground'
                 }`}
               >
                 {w}
                 {isCorrect ? (
                   <span
-                    className="text-[10px] uppercase font-bold tracking-wider text-emerald-700/70 dark:text-emerald-300/70"
+                    className="text-[10px] uppercase font-bold tracking-wider text-primary/70"
                     title="Đáp án — luôn nằm trong kho"
                   >
                     đáp án
@@ -493,8 +494,8 @@ function BlankInput({
   const measured = primary.length > 0 ? primary : 'đáp án'
 
   return (
-    <span className="mx-0.5 inline-flex items-baseline gap-1.5 rounded-lg border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 pl-2 pr-1.5 py-0.5 align-baseline">
-      <span className="self-center flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-[11px] font-bold text-white tabular-nums">
+    <span className="mx-0.5 inline-flex items-baseline gap-1.5 rounded-lg border-2 border-primary bg-primary/10 pl-2 pr-1.5 py-0.5 align-baseline">
+      <span className="self-center flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground tabular-nums">
         {index + 1}
       </span>
       <span
@@ -510,10 +511,10 @@ function BlankInput({
         onChange={(e) => onChange([e.target.value, ...variants])}
         placeholder="đáp án"
         style={{ width: inputWidth }}
-        className="inline bg-transparent border-none outline-none p-0 m-0 text-2xl font-bold leading-relaxed text-emerald-700 dark:text-emerald-300 placeholder:text-emerald-700/50 dark:placeholder:text-emerald-300/50 placeholder:italic placeholder:font-semibold"
+        className="inline bg-transparent border-none outline-none p-0 m-0 text-2xl font-bold leading-relaxed text-primary placeholder:text-primary/50 placeholder:italic placeholder:font-semibold"
       />
       {variants.length > 0 && (
-        <span className="self-center text-xs font-bold text-emerald-700/70 dark:text-emerald-300/70">
+        <span className="self-center text-xs font-bold text-primary/70">
           +{variants.length}
         </span>
       )}
@@ -521,7 +522,7 @@ function BlankInput({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="self-center h-6 w-6 rounded-full text-emerald-700/60 hover:bg-emerald-700/10 hover:text-emerald-700 dark:text-emerald-300/70 dark:hover:bg-emerald-300/10 dark:hover:text-emerald-200"
+            className="self-center h-6 w-6 rounded-full text-primary/60 hover:bg-primary/10 hover:text-primary"
             aria-label="Biến thể đáp án"
             title="Thêm biến thể đáp án"
           >
@@ -541,7 +542,7 @@ function BlankInput({
       <button
         type="button"
         onClick={onRemove}
-        className="self-center h-6 w-6 rounded-full text-emerald-700/60 hover:bg-emerald-700/10 hover:text-emerald-700 dark:text-emerald-300/70 dark:hover:bg-emerald-300/10 dark:hover:text-emerald-200"
+        className="self-center h-6 w-6 rounded-full text-primary/60 hover:bg-primary/10 hover:text-primary"
         aria-label="Xóa chỗ trống"
         title="Xóa chỗ trống"
       >

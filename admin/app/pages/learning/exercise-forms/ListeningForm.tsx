@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Plus, Trash2, Headphones, Check } from 'lucide-react'
-import { InlineEditable } from '../../../components/admin/InlineEditable'
+import { Plus, Trash2, Headphones } from 'lucide-react'
+import { Input } from '../../../components/ui/input'
+import { Textarea } from '../../../components/ui/textarea'
 import type { QuestionFormProps } from './types'
 import { getOptionsObject } from './types'
 
@@ -77,29 +78,27 @@ export function ListeningForm({ initial, onChange }: QuestionFormProps) {
     )
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3 inline-flex items-center gap-2">
-          <Headphones className="h-3.5 w-3.5" />
+        <label className="text-sm font-semibold text-foreground">
           Câu hỏi / Hướng dẫn
-        </p>
-        <InlineEditable
+          <span className="text-destructive ml-0.5">*</span>
+        </label>
+        <Textarea
           value={state.question}
-          onChange={(v) => setState((prev) => ({ ...prev, question: v }))}
+          onChange={(e) => setState((prev) => ({ ...prev, question: e.target.value }))}
           placeholder="Ví dụ: Nghe và viết lại câu vừa nghe..."
-          className="text-2xl sm:text-3xl font-bold leading-snug text-foreground py-1"
-          ariaLabel="Câu hỏi"
+          className="mt-1.5 min-h-20"
+          autoFocus
         />
         <p className="mt-2 text-xs text-muted-foreground">
-          Audio được cấu hình ở thanh công cụ phía trên (nút Audio)
+          Audio được cấu hình ở mục “Audio câu hỏi” phía trên
         </p>
       </div>
 
       <div>
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
-          Cách chấm điểm
-        </p>
-        <div className="flex gap-2">
+        <label className="text-sm font-semibold text-foreground">Cách chấm điểm</label>
+        <div className="mt-1.5 flex gap-2">
           <ModeChip
             active={state.transcriptType === 'exact'}
             onClick={() =>
@@ -120,31 +119,32 @@ export function ListeningForm({ initial, onChange }: QuestionFormProps) {
       </div>
 
       <div>
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
+        <label className="text-sm font-semibold text-foreground">
           {state.transcriptType === 'exact' ? 'Transcript chấp nhận' : 'Các từ khoá bắt buộc'}
-        </p>
-        <div className="space-y-2.5">
+          <span className="text-destructive ml-0.5">*</span>
+        </label>
+        <div className="mt-1.5 space-y-2.5">
           {state.keywords.map((kw, i) => (
             <div
               key={i}
-              className="group flex items-start gap-3 rounded-2xl border-2 border-border bg-card px-4 py-3.5 min-h-[64px]"
+              className="group flex items-center gap-3 rounded-lg border-2 border-border bg-card px-4 py-2.5"
             >
-              <Check className="h-5 w-5 text-emerald-500 shrink-0 mt-1.5" />
-              <InlineEditable
+              <Headphones className="h-4 w-4 text-muted-foreground shrink-0" />
+              <Input
                 value={kw}
-                onChange={(v) => setKw(i, v)}
+                onChange={(e) => setKw(i, e.target.value)}
                 placeholder={
                   state.transcriptType === 'exact'
                     ? 'Transcript đầy đủ...'
                     : 'Từ khoá...'
                 }
-                className="text-lg font-semibold flex-1"
+                className="flex-1 font-semibold"
               />
               <button
                 type="button"
                 onClick={() => removeKw(i)}
                 disabled={state.keywords.length <= 1}
-                className="h-9 w-9 rounded-full text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity disabled:pointer-events-none"
+                className="h-8 w-8 rounded-full text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity disabled:pointer-events-none disabled:opacity-30"
                 aria-label="Xóa"
               >
                 <Trash2 className="h-4 w-4 mx-auto" />
@@ -157,7 +157,7 @@ export function ListeningForm({ initial, onChange }: QuestionFormProps) {
           onClick={() =>
             setState((prev) => ({ ...prev, keywords: [...prev.keywords, ''] }))
           }
-          className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+          className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-transparent px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
         >
           <Plus className="h-4 w-4" />
           {state.transcriptType === 'exact' ? 'Thêm transcript' : 'Thêm từ khoá'}
@@ -182,7 +182,7 @@ function ModeChip({
     <button
       type="button"
       onClick={onClick}
-      className={`flex-1 rounded-2xl border-2 px-4 py-3 text-left transition-colors ${
+      className={`flex-1 rounded-lg border-2 px-4 py-3 text-left transition-colors ${
         active
           ? 'border-primary bg-primary/5'
           : 'border-border bg-card hover:border-foreground/30'

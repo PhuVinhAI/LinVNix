@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus, Trash2, ArrowUp, ArrowDown, Library } from 'lucide-react'
 import { useParams } from 'react-router'
-import { InlineEditable } from '../../../components/admin/InlineEditable'
+import { Input } from '../../../components/ui/input'
+import { Textarea } from '../../../components/ui/textarea'
 import { useAdminExercise } from '../../../features/learning/api/use-learning-admin'
 import type { QuestionFormProps } from './types'
 import { getCorrectAnswerObject, getOptionsObject } from './types'
@@ -121,26 +122,28 @@ export function OrderingForm({ initial, onChange }: QuestionFormProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
+        <label className="text-sm font-semibold text-foreground">
           Câu hỏi / Hướng dẫn
-        </p>
-        <InlineEditable
+          <span className="text-destructive ml-0.5">*</span>
+        </label>
+        <Textarea
           value={state.question}
-          onChange={(v) => setState((prev) => ({ ...prev, question: v }))}
+          onChange={(e) => setState((prev) => ({ ...prev, question: e.target.value }))}
           placeholder="Ví dụ: Sắp xếp các từ thành câu hoàn chỉnh..."
-          className="text-2xl sm:text-3xl font-bold leading-snug text-foreground py-1"
-          ariaLabel="Câu hỏi"
+          className="mt-1.5 min-h-20"
+          autoFocus
         />
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-foreground">
-              Thứ tự đúng — học viên sẽ bấm chọn từ kho dưới để xếp theo hàng ngang
-            </p>
+            <label className="text-sm font-semibold text-foreground">
+              Thứ tự đúng
+              <span className="text-destructive ml-0.5">*</span>
+            </label>
             <p className="text-xs text-muted-foreground mt-0.5">
               Mobile xáo trộn các từ thành kho, người học bấm để xếp vào hàng đúng
             </p>
@@ -161,24 +164,23 @@ export function OrderingForm({ initial, onChange }: QuestionFormProps) {
           {state.items.map((it, i) => (
             <div
               key={it.id}
-              className="group flex items-center gap-3 rounded-2xl border-2 border-border bg-card px-4 py-3 min-h-[64px]"
+              className="group flex items-center gap-3 rounded-lg border-2 border-border bg-card px-4 py-2.5"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary tabular-nums">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-bold text-muted-foreground tabular-nums">
                 {i + 1}
               </span>
-              <InlineEditable
+              <Input
                 value={it.value}
-                onChange={(v) => setItem(it.id, v)}
+                onChange={(e) => setItem(it.id, e.target.value)}
                 placeholder={`Từ ${i + 1}`}
-                className="text-lg font-semibold flex-1"
-                multiline={false}
+                className="flex-1 font-semibold"
               />
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
                 <button
                   type="button"
                   onClick={() => move(it.id, -1)}
                   disabled={i === 0}
-                  className="h-9 w-9 rounded-full text-muted-foreground/70 hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+                  className="h-8 w-8 rounded-full text-muted-foreground/70 hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
                   aria-label="Lên trên"
                 >
                   <ArrowUp className="h-4 w-4 mx-auto" />
@@ -187,7 +189,7 @@ export function OrderingForm({ initial, onChange }: QuestionFormProps) {
                   type="button"
                   onClick={() => move(it.id, 1)}
                   disabled={i === state.items.length - 1}
-                  className="h-9 w-9 rounded-full text-muted-foreground/70 hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+                  className="h-8 w-8 rounded-full text-muted-foreground/70 hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
                   aria-label="Xuống dưới"
                 >
                   <ArrowDown className="h-4 w-4 mx-auto" />
@@ -196,7 +198,7 @@ export function OrderingForm({ initial, onChange }: QuestionFormProps) {
                   type="button"
                   onClick={() => remove(it.id)}
                   disabled={state.items.length <= 2}
-                  className="h-9 w-9 rounded-full text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive disabled:pointer-events-none disabled:opacity-40"
+                  className="h-8 w-8 rounded-full text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive disabled:pointer-events-none disabled:opacity-40"
                   aria-label="Xóa"
                 >
                   <Trash2 className="h-4 w-4 mx-auto" />
@@ -208,7 +210,7 @@ export function OrderingForm({ initial, onChange }: QuestionFormProps) {
         <button
           type="button"
           onClick={() => addItem('')}
-          className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+          className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-transparent px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
         >
           <Plus className="h-4 w-4" />
           Thêm từ

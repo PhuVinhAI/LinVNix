@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Check, Plus, Trash2 } from 'lucide-react'
-import { InlineEditable } from '../../../components/admin/InlineEditable'
+import { Input } from '../../../components/ui/input'
+import { Textarea } from '../../../components/ui/textarea'
 import type { QuestionFormProps } from './types'
 import { getCorrectAnswerObject, getOptionsObject } from './types'
 
@@ -89,27 +90,29 @@ export function MultipleChoiceForm({ initial, onChange }: QuestionFormProps) {
     setState((prev) => ({ ...prev, correct: text }))
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
+        <label className="text-sm font-semibold text-foreground">
           Câu hỏi
-        </p>
-        <InlineEditable
+          <span className="text-destructive ml-0.5">*</span>
+        </label>
+        <Textarea
           value={state.question}
-          onChange={(v) => setState((prev) => ({ ...prev, question: v }))}
-          placeholder="Bấm để nhập câu hỏi..."
-          className="text-2xl sm:text-3xl font-bold leading-snug text-foreground py-1"
-          ariaLabel="Câu hỏi"
+          onChange={(e) => setState((prev) => ({ ...prev, question: e.target.value }))}
+          placeholder="Nhập câu hỏi..."
+          className="mt-1.5 min-h-20 text-lg font-semibold"
+          autoFocus
         />
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-3">
-          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Chọn đáp án đúng
-          </p>
+          <label className="text-sm font-semibold text-foreground">
+            Các lựa chọn
+            <span className="text-destructive ml-0.5">*</span>
+          </label>
           <p className="text-xs text-muted-foreground">
-            Bấm vào ô tròn bên trái để đánh dấu đúng
+            Bấm vào ô tròn bên trái để đánh dấu đáp án đúng
           </p>
         </div>
         <div className="space-y-2.5">
@@ -118,9 +121,9 @@ export function MultipleChoiceForm({ initial, onChange }: QuestionFormProps) {
             return (
               <div
                 key={i}
-                className={`group flex items-center gap-3 rounded-2xl border-2 px-4 py-3.5 min-h-[68px] transition-colors ${
+                className={`group flex items-center gap-3 rounded-2xl border-2 px-4 py-3 min-h-[60px] transition-colors ${
                   isCorrect
-                    ? 'border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/30'
+                    ? 'border-primary bg-primary/5'
                     : 'border-border bg-card hover:border-foreground/30'
                 }`}
               >
@@ -129,24 +132,23 @@ export function MultipleChoiceForm({ initial, onChange }: QuestionFormProps) {
                   onClick={() => pickCorrect(opt)}
                   disabled={!opt}
                   aria-label={isCorrect ? 'Đáp án đúng' : 'Đánh dấu là đáp án đúng'}
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
                     isCorrect
-                      ? 'border-emerald-500 bg-emerald-500 text-white'
-                      : 'border-border bg-muted/40 text-muted-foreground hover:border-emerald-400 hover:text-emerald-500 disabled:opacity-40'
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-border bg-muted/40 text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-40'
                   }`}
                 >
                   {isCorrect ? (
-                    <Check className="h-5 w-5" strokeWidth={3} />
+                    <Check className="h-4 w-4" strokeWidth={3} />
                   ) : (
-                    <span className="text-lg font-bold">{String.fromCharCode(65 + i)}</span>
+                    <span className="text-sm font-bold">{String.fromCharCode(65 + i)}</span>
                   )}
                 </button>
-                <InlineEditable
+                <Input
                   value={opt}
-                  onChange={(v) => setChoice(i, v)}
+                  onChange={(e) => setChoice(i, e.target.value)}
                   placeholder={`Lựa chọn ${String.fromCharCode(65 + i)}`}
-                  className="text-lg font-semibold flex-1"
-                  ariaLabel={`Lựa chọn ${String.fromCharCode(65 + i)}`}
+                  className="flex-1 font-semibold"
                 />
                 <button
                   type="button"

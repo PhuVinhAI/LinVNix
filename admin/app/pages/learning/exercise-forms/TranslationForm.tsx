@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus, Trash2, ArrowDown, Languages } from 'lucide-react'
+import { Input } from '../../../components/ui/input'
+import { Textarea } from '../../../components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../../components/ui/select'
 import type { QuestionFormProps } from './types'
-import { getOptionsObject } from './types'
+import { LANGUAGE_OPTIONS, getOptionsObject } from './types'
 
 interface DraftState {
   sourceText: string
@@ -89,86 +98,107 @@ export function TranslationForm({ initial, onChange }: QuestionFormProps) {
         : { ...prev, translations: prev.translations.filter((_, idx) => idx !== i) },
     )
 
-  const srcBadge = state.sourceLanguage.toUpperCase()
-  const tgtBadge = state.targetLanguage.toUpperCase()
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground inline-flex items-center gap-2">
-          <Languages className="h-3.5 w-3.5" />
-          Dịch {srcBadge} → {tgtBadge}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Học viên dịch từ văn bản gốc sang bản dịch
-        </p>
+      <div className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+        <Languages className="h-4 w-4" />
+        Dịch {state.sourceLanguage.toUpperCase()} → {state.targetLanguage.toUpperCase()}
       </div>
 
       {/* Source */}
-      <div className="rounded-2xl border-2 border-border bg-card overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-2.5 border-b-2 border-border bg-muted/30">
-          <span className="rounded-md bg-amber-100 dark:bg-amber-950/40 px-2 py-0.5 text-[11px] font-bold text-amber-700 dark:text-amber-300">
-            {srcBadge}
-          </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Văn bản gốc
-          </span>
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-semibold text-foreground">Ngôn ngữ gốc</label>
+            <Select
+              value={state.sourceLanguage}
+              onValueChange={(v) => setState((prev) => ({ ...prev, sourceLanguage: v }))}
+            >
+              <SelectTrigger className="mt-1.5 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {LANGUAGE_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <label className="text-sm font-semibold text-foreground">Ngôn ngữ đích</label>
+            <Select
+              value={state.targetLanguage}
+              onValueChange={(v) => setState((prev) => ({ ...prev, targetLanguage: v }))}
+            >
+              <SelectTrigger className="mt-1.5 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {LANGUAGE_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <textarea
-          value={state.sourceText}
-          onChange={(e) =>
-            setState((prev) => ({ ...prev, sourceText: e.target.value }))
-          }
-          rows={3}
-          placeholder="Nhập văn bản cần dịch..."
-          className="w-full bg-transparent px-5 py-4 text-xl font-semibold leading-relaxed outline-none resize-y"
-        />
+
+        <div>
+          <label className="text-sm font-semibold text-foreground">
+            Văn bản gốc
+            <span className="text-destructive ml-0.5">*</span>
+          </label>
+          <Textarea
+            value={state.sourceText}
+            onChange={(e) => setState((prev) => ({ ...prev, sourceText: e.target.value }))}
+            rows={3}
+            placeholder="Nhập văn bản cần dịch..."
+            className="mt-1.5 min-h-24 text-lg font-semibold"
+          />
+        </div>
       </div>
 
       {/* Arrow */}
       <div className="flex justify-center">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-          <ArrowDown className="h-5 w-5 text-muted-foreground" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
+          <ArrowDown className="h-4 w-4 text-muted-foreground" />
         </div>
       </div>
 
       {/* Target */}
-      <div className="rounded-2xl border-2 border-border bg-card overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-2.5 border-b-2 border-border bg-muted/30">
-          <span className="rounded-md bg-emerald-100 dark:bg-emerald-950/40 px-2 py-0.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
-            {tgtBadge}
-          </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <label className="text-sm font-semibold text-foreground">
             Bản dịch chấp nhận
-          </span>
-          <span className="text-xs text-muted-foreground">
-            · bản đầu tiên là đáp án chính
-          </span>
+            <span className="text-destructive ml-0.5">*</span>
+          </label>
+          <p className="text-xs text-muted-foreground">bản đầu tiên là đáp án chính</p>
         </div>
-        <div className="p-4 space-y-2">
+        <div className="space-y-2.5">
           {state.translations.map((t, i) => (
             <div
               key={i}
-              className={`group flex items-center gap-3 rounded-xl border-2 px-4 min-h-[56px] ${
-                i === 0
-                  ? 'border-emerald-500 bg-emerald-50/30 dark:bg-emerald-950/20'
-                  : 'border-border'
+              className={`group flex items-center gap-3 rounded-lg border-2 px-4 min-h-[52px] ${
+                i === 0 ? 'border-primary bg-primary/5' : 'border-border bg-card'
               }`}
             >
               <span
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                   i === 0
-                    ? 'bg-emerald-500 text-white'
+                    ? 'bg-primary text-primary-foreground'
                     : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {i === 0 ? '★' : i + 1}
               </span>
-              <input
+              <Input
                 value={t}
                 onChange={(e) => setTrans(i, e.target.value)}
                 placeholder={i === 0 ? 'Bản dịch chính...' : `Biến thể ${i}`}
-                className="flex-1 bg-transparent text-lg font-semibold leading-snug outline-none py-3"
+                className="flex-1 font-semibold"
               />
               {state.translations.length > 1 && (
                 <button
@@ -182,20 +212,20 @@ export function TranslationForm({ initial, onChange }: QuestionFormProps) {
               )}
             </div>
           ))}
-          <button
-            type="button"
-            onClick={() =>
-              setState((prev) => ({
-                ...prev,
-                translations: [...prev.translations, ''],
-              }))
-            }
-            className="w-full inline-flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border px-4 py-2.5 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            Thêm biến thể bản dịch
-          </button>
         </div>
+        <button
+          type="button"
+          onClick={() =>
+            setState((prev) => ({
+              ...prev,
+              translations: [...prev.translations, ''],
+            }))
+          }
+          className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-transparent px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          Thêm biến thể bản dịch
+        </button>
       </div>
     </div>
   )

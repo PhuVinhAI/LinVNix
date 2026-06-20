@@ -1,23 +1,21 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
-import {
-  Save, X, Volume2, Lightbulb, Sparkles,
-  CheckSquare, Edit3, Link2, ArrowDownUp, Languages, Headphones, Mic,
-  ChevronDown, FileAudio,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { ArrowLeft, Save, Volume2 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { Textarea } from '../../components/ui/textarea'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../../components/ui/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/popover'
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../components/ui/select'
+import { Breadcrumbs } from '../../components/admin/Breadcrumbs'
+import { FormField, FormSection } from '../../components/admin/FormSection'
 import { MediaUpload } from '../../components/admin/editors/MediaUpload'
 import { useAdminExercise, useLearningAdminMutation } from '../../features/learning/api/use-learning-admin'
+import { QUESTION_TYPES, questionTypeMeta } from './authoring-meta'
 import { learningPath } from './route-utils'
 import { MultipleChoiceForm } from './exercise-forms/MultipleChoiceForm'
 import { FillBlankForm } from './exercise-forms/FillBlankForm'
@@ -27,16 +25,6 @@ import { TranslationForm } from './exercise-forms/TranslationForm'
 import { ListeningForm } from './exercise-forms/ListeningForm'
 import { SpeakingForm } from './exercise-forms/SpeakingForm'
 import type { QuestionFormHandle } from './exercise-forms/types'
-
-const TYPES: Array<{ value: string; label: string; Icon: LucideIcon; tone: string }> = [
-  { value: 'multiple_choice', label: 'Trắc nghiệm', Icon: CheckSquare, tone: 'text-blue-600 dark:text-blue-400' },
-  { value: 'fill_blank', label: 'Điền chỗ trống', Icon: Edit3, tone: 'text-emerald-600 dark:text-emerald-400' },
-  { value: 'matching', label: 'Ghép cặp', Icon: Link2, tone: 'text-purple-600 dark:text-purple-400' },
-  { value: 'ordering', label: 'Sắp xếp', Icon: ArrowDownUp, tone: 'text-indigo-600 dark:text-indigo-400' },
-  { value: 'translation', label: 'Dịch thuật', Icon: Languages, tone: 'text-amber-600 dark:text-amber-400' },
-  { value: 'listening', label: 'Nghe hiểu', Icon: Headphones, tone: 'text-rose-600 dark:text-rose-400' },
-  { value: 'speaking', label: 'Nói', Icon: Mic, tone: 'text-cyan-600 dark:text-cyan-400' },
-]
 
 interface CommonState {
   questionType: string
@@ -62,12 +50,12 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const [submitting, setSubmitting] = useState(false)
 
   // Loại câu hỏi quyết định ở cổng Khu soạn (Bước 2.2) — form khóa loại (ADR 0002).
-  // Create: lấy từ ?type=...; Edit: loại của chính câu hỏi. Không có ngữ cảnh → fallback dropdown.
+  // Create: lấy từ ?type=...; Edit: loại của chính câu hỏi. Không có ngữ cảnh → fallback select.
   const typeParam = (searchParams.get('type') ?? '').toLowerCase()
   const lockedType =
     mode === 'edit'
       ? (question?.questionType?.toLowerCase() ?? null)
-      : TYPES.some((t) => t.value === typeParam)
+      : QUESTION_TYPES.some((t) => t.value === typeParam)
         ? typeParam
         : null
   const typeIsLocked = mode === 'edit' || lockedType !== null
@@ -85,7 +73,10 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question?.id])
 
-  const typeMeta = useMemo(() => TYPES.find((t) => t.value === common.questionType) ?? TYPES[0], [common.questionType])
+  const typeMeta = useMemo(
+    () => questionTypeMeta(common.questionType) ?? QUESTION_TYPES[0],
+    [common.questionType],
+  )
 
   const updateCommon = <K extends keyof CommonState>(key: K, value: CommonState[K]) => {
     setCommon((prev) => ({ ...prev, [key]: value }))
@@ -94,6 +85,8 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const handleFormChange = useCallback((handle: QuestionFormHandle) => {
     handleRef.current = handle
   }, [])
+
+  if (!exerciseId) return <Navigate to={learningPath.courses()} replace />
 
   const backPath = exerciseId
     ? typeIsLocked && common.questionType
@@ -104,7 +97,8 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const initialForForm = question as unknown as Record<string, unknown> | null
   const formKey = `${question?.id ?? 'new'}-${common.questionType}`
 
-  const save = async () => {
+  const submit = async (e: FormEvent) => {
+    e.preventDefault()
     const handle = handleRef.current
     if (!handle) {
       toast.error('Form chưa sẵn sàng')
@@ -137,7 +131,7 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
       if (mode === 'edit' && id) {
         await mutations.updateQuestion.mutateAsync({ id, payload: body })
         toast.success('Đã cập nhật câu hỏi')
-      } else if (exerciseId) {
+      } else {
         const nextOrderIndex =
           (exercise?.questions ?? []).reduce(
             (max, q) => Math.max(max, q.orderIndex ?? -1),
@@ -149,229 +143,133 @@ export function QuestionFormPage({ mode }: { mode: 'create' | 'edit' }) {
         })
         toast.success('Đã tạo câu hỏi')
       }
-      if (exerciseId) navigate(backPath)
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Không thể lưu')
+      navigate(backPath)
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Không thể lưu')
     } finally {
       setSubmitting(false)
     }
   }
 
+  const titleAction = mode === 'edit' ? 'Sửa câu hỏi' : 'Thêm câu hỏi'
+
   return (
-    <div className="flex min-h-full flex-col">
-      <div className="space-y-6 flex-1">
-        <Breadcrumbs
-          items={[
-            { label: exercise?.lesson?.title ?? 'Bài học', href: exercise?.lessonId ? learningPath.lesson(exercise.lessonId) : undefined },
-            { label: exercise?.title ?? 'Bài tập', href: exerciseId ? learningPath.exercise(exerciseId) : undefined },
-            ...(typeIsLocked && exerciseId
-              ? [{ label: typeMeta.label, href: learningPath.exerciseType(exerciseId, typeMeta.value) }]
-              : []),
-            { label: mode === 'edit' ? 'Sửa câu hỏi' : 'Thêm câu hỏi' },
-          ]}
-        />
+    <div className="space-y-6">
+      <Breadcrumbs
+        items={[
+          { label: exercise?.lesson?.title ?? 'Bài học', href: exercise?.lessonId ? learningPath.lesson(exercise.lessonId) : undefined },
+          { label: exercise?.title ?? 'Bài tập', href: exerciseId ? learningPath.exercise(exerciseId) : undefined },
+          ...(typeIsLocked && exerciseId
+            ? [{ label: typeMeta.label, href: learningPath.exerciseType(exerciseId, typeMeta.value) }]
+            : []),
+          { label: titleAction },
+        ]}
+      />
 
-        <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-border bg-card px-2 py-2">
-          {typeIsLocked ? (
-            <span className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 cursor-default">
-              <typeMeta.Icon className={`h-4 w-4 ${typeMeta.tone}`} />
-              <span className="text-sm font-bold">{typeMeta.label}</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Loại đã chọn
-              </span>
-            </span>
-          ) : (
-            <TypePicker value={common.questionType} onChange={(v) => updateCommon('questionType', v)} />
-          )}
-          <Divider />
-          <AudioPicker value={common.questionAudioUrl} onChange={(v) => updateCommon('questionAudioUrl', v)} />
-          <Divider />
-          <ExplanationPicker value={common.explanation} onChange={(v) => updateCommon('explanation', v)} />
-          <span className="ml-auto inline-flex items-center gap-1.5 px-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5" />
-            Bấm vào bất kỳ chữ nào để sửa
-          </span>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon" className="h-10 w-10 mt-0.5">
+            <Link to={backPath}>
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{titleAction}</h1>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              {mode === 'edit' ? 'Cập nhật nội dung câu hỏi' : 'Điền thông tin câu hỏi'}
+            </p>
+          </div>
         </div>
 
-        <div className="mx-auto max-w-3xl">
-          <div className="rounded-3xl border-2 border-border bg-card shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between gap-3 px-6 py-3 border-b-2 border-border bg-muted/30">
-              <div className="flex items-center gap-2">
-                <div className={`flex h-7 w-7 items-center justify-center rounded-md bg-muted ${typeMeta.tone}`}>
-                  <typeMeta.Icon className="h-4 w-4" />
-                </div>
-                <span className={`text-xs font-bold uppercase tracking-wider ${typeMeta.tone}`}>{typeMeta.label}</span>
-              </div>
-            </div>
+        <form id="question-form" onSubmit={submit} className="space-y-8">
+          <FormSection
+            icon={typeMeta.Icon}
+            title="Cấu hình câu hỏi"
+            description="Loại câu hỏi, audio và giải thích hiển thị sau khi trả lời"
+          >
+            <FormField label="Loại câu hỏi" required help="Loại quyết định cấu trúc đáp án của câu hỏi">
+              <Select
+                value={common.questionType}
+                onValueChange={(v) => updateCommon('questionType', v)}
+                disabled={typeIsLocked}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  {QUESTION_TYPES.map((t) => (
+                    <SelectItem key={t.value} value={t.value}>
+                      <t.Icon className={`h-4 w-4 ${t.tone}`} />
+                      {t.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormField>
 
-            <div className="px-6 py-8 sm:px-10 sm:py-12 space-y-8">
+            <FormField label="Audio câu hỏi" help="Âm thanh phát cùng câu hỏi (tùy chọn)">
+              <MediaUpload
+                kind="audio"
+                value={common.questionAudioUrl || null}
+                onChange={(url) => updateCommon('questionAudioUrl', url ?? '')}
+              />
               {common.questionAudioUrl && (
-                <div className="flex items-center gap-3 rounded-2xl border-2 border-border bg-muted/30 px-4 py-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Volume2 className="h-5 w-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Audio câu hỏi</p>
-                    <p className="text-sm truncate text-foreground">{common.questionAudioUrl}</p>
-                  </div>
-                </div>
+                <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Volume2 className="h-3.5 w-3.5" />
+                  {common.questionAudioUrl}
+                </p>
               )}
+            </FormField>
 
-              {common.questionType === 'multiple_choice' && (
-                <MultipleChoiceForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
-              )}
-              {common.questionType === 'fill_blank' && (
-                <FillBlankForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
-              )}
-              {common.questionType === 'matching' && (
-                <MatchingForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
-              )}
-              {common.questionType === 'ordering' && (
-                <OrderingForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
-              )}
-              {common.questionType === 'translation' && (
-                <TranslationForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
-              )}
-              {common.questionType === 'listening' && (
-                <ListeningForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
-              )}
-              {common.questionType === 'speaking' && (
-                <SpeakingForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
-              )}
+            <FormField label="Giải thích" help="Hiển thị với học viên sau khi trả lời">
+              <Textarea
+                value={common.explanation}
+                onChange={(e) => updateCommon('explanation', e.target.value)}
+                placeholder="Vì sao đáp án này đúng..."
+                className="min-h-24"
+              />
+            </FormField>
+          </FormSection>
 
-              {common.explanation && (
-                <div className="rounded-2xl border-2 border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30 px-4 py-3">
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200">
-                      <Lightbulb className="h-4 w-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 mb-0.5">
-                        Giải thích
-                      </p>
-                      <p className="text-sm leading-relaxed text-amber-900 dark:text-amber-100 whitespace-pre-wrap">
-                        {common.explanation}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="sticky bottom-[-2.5rem] -mx-10 -mb-10 mt-10 z-30 border-t-2 border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 px-10 py-3">
-        <div className="mx-auto max-w-3xl flex items-center justify-between gap-3">
-          <span className="text-xs text-muted-foreground">
-            {mode === 'edit' ? 'Đang chỉnh sửa câu hỏi' : 'Đang tạo câu hỏi mới'} ·{' '}
-            <span className="font-semibold text-foreground">{typeMeta.label}</span>
-          </span>
-          <div className="flex items-center gap-2">
-            <Button asChild variant="ghost">
-              <Link to={backPath}>
-                <X className="h-4 w-4" />
-                Hủy
-              </Link>
-            </Button>
-            <Button onClick={save} disabled={submitting}>
-              <Save className="h-4 w-4" />
-              {submitting ? 'Đang lưu...' : mode === 'edit' ? 'Cập nhật' : 'Tạo câu hỏi'}
-            </Button>
-          </div>
+          <FormSection
+            icon={typeMeta.Icon}
+            title={`Nội dung ${typeMeta.label.toLowerCase()}`}
+            description={typeMeta.description}
+          >
+            {common.questionType === 'multiple_choice' && (
+              <MultipleChoiceForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
+            )}
+            {common.questionType === 'fill_blank' && (
+              <FillBlankForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
+            )}
+            {common.questionType === 'matching' && (
+              <MatchingForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
+            )}
+            {common.questionType === 'ordering' && (
+              <OrderingForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
+            )}
+            {common.questionType === 'translation' && (
+              <TranslationForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
+            )}
+            {common.questionType === 'listening' && (
+              <ListeningForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
+            )}
+            {common.questionType === 'speaking' && (
+              <SpeakingForm key={formKey} initial={initialForForm} onChange={handleFormChange} />
+            )}
+          </FormSection>
+        </form>
+
+        <div className="flex items-center justify-end gap-2 pt-4 border-t-2 border-border">
+          <Button asChild variant="ghost">
+            <Link to={backPath}>Hủy</Link>
+          </Button>
+          <Button type="submit" form="question-form" disabled={submitting}>
+            <Save className="h-4 w-4" />
+            {submitting ? 'Đang lưu...' : mode === 'edit' ? 'Cập nhật' : 'Tạo câu hỏi'}
+          </Button>
         </div>
       </div>
     </div>
-  )
-}
-
-function Divider() {
-  return <span className="h-6 w-px bg-border" aria-hidden />
-}
-
-function TypePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const current = TYPES.find((t) => t.value === value) ?? TYPES[0]
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 hover:bg-muted transition-colors"
-        >
-          <current.Icon className={`h-4 w-4 ${current.tone}`} />
-          <span className="text-sm font-bold">{current.label}</span>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-56">
-        {TYPES.map((t) => (
-          <DropdownMenuItem
-            key={t.value}
-            onSelect={() => onChange(t.value)}
-            className={value === t.value ? 'bg-muted font-bold' : ''}
-          >
-            <t.Icon className={`h-4 w-4 ${t.tone}`} />
-            {t.label}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
-
-function AudioPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 transition-colors ${
-            value ? 'text-primary font-bold' : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          <FileAudio className="h-4 w-4" />
-          <span className="text-sm">{value ? 'Có audio' : 'Audio'}</span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-96 p-3 space-y-2">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          Audio câu hỏi
-        </label>
-        <MediaUpload
-          kind="audio"
-          value={value || null}
-          onChange={(url) => onChange(url ?? '')}
-        />
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-function ExplanationPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 transition-colors ${
-            value ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          <Lightbulb className="h-4 w-4" />
-          <span className="text-sm">{value ? 'Có giải thích' : 'Giải thích'}</span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-96 p-3 space-y-2">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          Giải thích hiển thị sau khi trả lời
-        </label>
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Vì sao đáp án này đúng..."
-          rows={5}
-          className="w-full rounded-lg border-2 border-input bg-card px-3 py-2 text-sm outline-none focus-visible:border-primary resize-y"
-        />
-      </PopoverContent>
-    </Popover>
   )
 }

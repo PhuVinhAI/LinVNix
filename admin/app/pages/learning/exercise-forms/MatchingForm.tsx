@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { InlineEditable } from '../../../components/admin/InlineEditable'
+import { Input } from '../../../components/ui/input'
 import type { QuestionFormProps } from './types'
 import { getCorrectAnswerObject, getOptionsObject } from './types'
 
@@ -77,47 +77,44 @@ export function MatchingForm({ initial, onChange }: QuestionFormProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          Các cặp ghép
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Mobile sẽ tự xáo vế phải khi học viên làm bài
-        </p>
-      </div>
+      <p className="text-xs text-muted-foreground">
+        Mobile sẽ tự xáo vế phải khi học viên làm bài
+      </p>
 
-      <div className="space-y-2.5">
+      <div className="space-y-3">
         {state.pairs.map((pair, i) => (
-          <div key={i} className="group flex items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-950/40 text-sm font-bold text-purple-700 dark:text-purple-300 tabular-nums">
-              {i + 1}
-            </span>
-            <div className="flex-1 grid grid-cols-[1fr_auto_1fr] gap-3 items-center rounded-2xl border-2 border-border bg-card px-5 py-3.5 min-h-[64px]">
-              <InlineEditable
+          <div
+            key={i}
+            className="group rounded-lg border-2 border-border bg-card p-4 space-y-3"
+          >
+            <div className="flex items-center justify-between">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-muted text-xs font-bold tabular-nums text-muted-foreground">
+                {i + 1}
+              </span>
+              <button
+                type="button"
+                onClick={() => remove(i)}
+                disabled={state.pairs.length <= 1}
+                className="h-8 w-8 rounded-full text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity disabled:pointer-events-none disabled:opacity-30"
+                aria-label="Xóa cặp"
+              >
+                <Trash2 className="h-4 w-4 mx-auto" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
+              <Input
                 value={pair.left}
-                onChange={(v) => setSide(i, 'left', v)}
+                onChange={(e) => setSide(i, 'left', e.target.value)}
                 placeholder="Vế trái"
-                className="text-lg font-semibold"
-                multiline={false}
               />
               <span className="text-muted-foreground/60 font-bold text-lg px-1">↔</span>
-              <InlineEditable
+              <Input
                 value={pair.right}
-                onChange={(v) => setSide(i, 'right', v)}
+                onChange={(e) => setSide(i, 'right', e.target.value)}
                 placeholder="Vế phải"
-                className="text-lg font-semibold"
-                multiline={false}
               />
             </div>
-            <button
-              type="button"
-              onClick={() => remove(i)}
-              disabled={state.pairs.length <= 1}
-              className="h-10 w-10 rounded-full text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity disabled:pointer-events-none"
-              aria-label="Xóa cặp"
-            >
-              <Trash2 className="h-4 w-4 mx-auto" />
-            </button>
           </div>
         ))}
       </div>
@@ -125,7 +122,7 @@ export function MatchingForm({ initial, onChange }: QuestionFormProps) {
       <button
         type="button"
         onClick={add}
-        className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+        className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-transparent px-4 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
       >
         <Plus className="h-4 w-4" />
         Thêm cặp ghép
