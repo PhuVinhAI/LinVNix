@@ -172,49 +172,53 @@ export function GrammarFormPage({ mode }: { mode: 'create' | 'edit' }) {
               {form.examples.map((ex, index) => (
                 <div
                   key={index}
-                  className="rounded-lg border-2 border-border bg-card p-4 space-y-3"
+                  className="rounded-lg border-2 border-border bg-card overflow-hidden"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 text-xs font-bold tabular-nums text-blue-700 dark:text-blue-300">
-                      {index + 1}
+                  <div className="flex items-center justify-between gap-2 border-b-2 border-border bg-muted/30 px-3 py-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      Ví dụ {index + 1}
                     </span>
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                      className="h-7 w-7 text-muted-foreground hover:text-destructive disabled:opacity-30"
                       onClick={() =>
                         set('examples', form.examples.filter((_, i) => i !== index))
                       }
+                      disabled={form.examples.length <= 1}
                       aria-label="Xóa ví dụ"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </div>
 
-                  <FormField label="Câu tiếng Việt">
-                    <Input
-                      value={ex.vi}
-                      onChange={(e) => updateExample(index, { vi: e.target.value })}
-                      placeholder="VD: Tôi là sinh viên."
-                    />
-                  </FormField>
+                  <div className="p-4 space-y-3">
+                    <FormField label="Câu tiếng Việt">
+                      <Input
+                        value={ex.vi}
+                        onChange={(e) => updateExample(index, { vi: e.target.value })}
+                        placeholder="VD: Tôi là sinh viên."
+                      />
+                    </FormField>
 
-                  <FormField label="Bản dịch">
-                    <Input
-                      value={ex.en}
-                      onChange={(e) => updateExample(index, { en: e.target.value })}
-                      placeholder="VD: I am a student."
-                    />
-                  </FormField>
+                    <FormField label="Bản dịch">
+                      <Input
+                        value={ex.en}
+                        onChange={(e) => updateExample(index, { en: e.target.value })}
+                        placeholder="VD: I am a student."
+                      />
+                    </FormField>
 
-                  <FormField label="Ghi chú" help="Không bắt buộc">
-                    <Input
-                      value={ex.note ?? ''}
-                      onChange={(e) => updateExample(index, { note: e.target.value })}
-                      placeholder="Ghi chú cho ví dụ này"
-                    />
-                  </FormField>
+                    <FormField label="Ghi chú" help="Không bắt buộc">
+                      <Textarea
+                        value={ex.note ?? ''}
+                        onChange={(e) => updateExample(index, { note: e.target.value })}
+                        placeholder="Ghi chú cho ví dụ này"
+                        className="min-h-16"
+                      />
+                    </FormField>
+                  </div>
                 </div>
               ))}
 
