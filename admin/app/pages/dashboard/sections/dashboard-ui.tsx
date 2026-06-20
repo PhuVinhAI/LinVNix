@@ -280,7 +280,46 @@ export function LevelBadge({ level }: { level: UserLevelCode }) {
   )
 }
 
-// ─── Skeleton tiện dụng ──────────────────────────────────────────────────────
+// ─── Mini stat card ────────────────────────────────────────────────────────────
+
+/**
+ * Card thống kê nhỏ với icon, label, số lớn. Dùng cho grid tổng quan hệ thống.
+ */
+export function MiniStatCard({
+  label,
+  value,
+  icon: Icon,
+  tint,
+  subtitle,
+}: {
+  label: string
+  value: number | string
+  icon: ComponentType<{ className?: string }>
+  tint: string
+  subtitle?: string
+}) {
+  return (
+    <div className="rounded-lg border-2 border-border bg-card p-4">
+      <div className="flex items-center gap-2.5">
+        <div
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+          style={{ backgroundColor: `${tint}1F`, color: tint }}
+        >
+          <Icon className="h-4 w-4" />
+        </div>
+        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+          {label}
+        </p>
+      </div>
+      <p className="mt-2.5 text-2xl font-bold tabular-nums tracking-tight">
+        {value}
+      </p>
+      {subtitle && (
+        <p className="mt-0.5 text-[10px] text-muted-foreground">{subtitle}</p>
+      )}
+    </div>
+  )
+}
 
 export function ListSkeleton({ rows = 5 }: { rows?: number }) {
   return (

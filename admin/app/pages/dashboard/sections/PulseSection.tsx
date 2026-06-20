@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import { BookOpenCheck, Bot, ListChecks } from 'lucide-react'
+import { BookOpen, BookOpenCheck, Bot, HelpCircle, ListChecks, MessageSquare, Sparkles } from 'lucide-react'
 import { Skeleton } from '../../../components/ui/skeleton'
 import { ErrorState } from '../../../components/admin/ErrorState'
 import {
@@ -8,13 +8,17 @@ import {
   type SystemTotals,
 } from '../../../features/dashboard'
 import {
+  AMBER,
+  BLUE,
   CYAN,
   DeltaBadge,
   formatNumber,
   formatPercent,
   GREEN,
+  MiniStatCard,
   Sparkline,
   TEAL,
+  VIOLET,
 } from './dashboard-ui'
 
 export function PulseSection() {
@@ -33,15 +37,8 @@ export function PulseSection() {
     )
   }
 
-  const accuracyHint = data
-    ? data.questionAttempts.accuracyToday == null
-      ? 'Chưa có lượt làm hôm nay'
-      : data.questionAttempts.accuracyYesterday == null
-        ? `Đúng ${formatPercent(data.questionAttempts.accuracyToday)}`
-        : `Đúng ${formatPercent(data.questionAttempts.accuracyToday)} — hôm qua ${formatPercent(
-            data.questionAttempts.accuracyYesterday,
-          )}`
-    : undefined
+  const accuracy = data?.questionAttempts.accuracyToday
+  const accuracyYesterday = data?.questionAttempts.accuracyYesterday
 
   return (
     <div className="space-y-4">
@@ -51,8 +48,9 @@ export function PulseSection() {
           metric={data?.questionAttempts}
           icon={ListChecks}
           tint={CYAN}
-          hint={accuracyHint}
           loading={isLoading}
+          accuracy={accuracy}
+          accuracyYesterday={accuracyYesterday}
         />
         <PulseTile
           label="Bài học hoàn thành"
@@ -72,7 +70,7 @@ export function PulseSection() {
         />
       </div>
 
-      <TotalsStrip totals={data?.totals} loading={isLoading} />
+      <TotalsGrid totals={data?.totals} loading={isLoading} />
     </div>
   )
 }
@@ -84,6 +82,8 @@ function PulseTile({
   tint,
   hint,
   loading,
+  accuracy,
+  accuracyYesterday,
 }: {
   label: string
   metric?: PulseMetric
@@ -91,6 +91,8 @@ function PulseTile({
   tint: string
   hint?: string
   loading: boolean
+  accuracy?: number | null
+  accuracyYesterday?: number | null
 }) {
   return (
     <div className="rounded-xl border-2 border-border bg-card p-5">
@@ -120,11 +122,18 @@ function PulseTile({
             </span>
             <DeltaBadge today={metric.today} yesterday={metric.yesterday} />
           </div>
-          {hint && (
+          {accuracy != null ? (
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              Đúng {formatPercent(accuracy)}
+              {accuracyYesterday != null && (
+                <span className="ml-1.5">— hôm qua {formatPercent(accuracyYesterday)}</span>
+              )}
+            </p>
+          ) : hint ? (
             <p className="mt-1.5 text-xs text-muted-foreground truncate">
               {hint}
             </p>
-          )}
+          ) : null}
           <div className="mt-3">
             <Sparkline points={metric.series} color={tint} />
             <p className="mt-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
@@ -137,19 +146,7 @@ function PulseTile({
   )
 }
 
-const TOTAL_ITEMS: {
-  key: keyof SystemTotals
-  label: string
-}[] = [
-  { key: 'courses', label: 'Khóa học' },
-  { key: 'lessons', label: 'Bài học' },
-  { key: 'questions', label: 'Câu hỏi' },
-  { key: 'vocabularies', label: 'Từ vựng' },
-  { key: 'simulations', label: 'Phiên mô phỏng' },
-  { key: 'conversations', label: 'Hội thoại AI' },
-]
-
-function TotalsStrip({
+export function TotalsGrid({
   totals,
   loading,
 }: {
@@ -157,28 +154,42 @@ function TotalsStrip({
   loading: boolean
 }) {
   if (loading || !totals) {
-    return <Skeleton className="h-20 w-full" />
+    return (
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {Array.from({ length: 4 }, (_, i) => (
+          <Skeleton key={i} className="h-28 w-full" />
+        ))}
+      </div>
+    )
   }
 
   return (
-    <div className="rounded-xl border-2 border-border bg-card px-2 py-4">
-      <div className="flex flex-wrap items-stretch divide-x-2 divide-border">
-        {TOTAL_ITEMS.map((item) => (
-          <div key={item.key} className="flex-1 min-w-28 px-4 py-1">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-              {item.label}
-            </p>
-            <p className="mt-1 text-xl font-bold tabular-nums tracking-tight">
-              {formatNumber(totals[item.key])}
-            </p>
-            {item.key === 'courses' && (
-              <p className="text-[10px] text-muted-foreground whitespace-nowrap">
-                {formatNumber(totals.publishedCourses)} đã xuất bản
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <MiniStatCard
+        label="Khóa học"
+        value={formatNumber(totals.courses)}
+        icon={BookOpen}
+        tint={BLUE}
+        subtitle={`${formatNumber(totals.publishedCourses)} đã xuất bản`}
+      />
+      <MiniStatCard
+        label="Bài học"
+        value={formatNumber(totals.lessons)}
+        icon={BookOpenCheck}
+        tint={GREEN}
+      />
+      <MiniStatCard
+        label="Câu hỏi"
+        value={formatNumber(totals.questions)}
+        icon={HelpCircle}
+        tint={VIOLET}
+      />
+      <MiniStatCard
+        label="Từ vựng"
+        value={formatNumber(totals.vocabularies)}
+        icon={Sparkles}
+        tint={AMBER}
+      />
     </div>
   )
 }

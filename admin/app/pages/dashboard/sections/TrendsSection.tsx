@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CalendarClock, TrendingUp } from 'lucide-react'
+import { TrendingUp } from 'lucide-react'
 import {
   Area,
   CartesianGrid,
@@ -16,7 +16,6 @@ import { ErrorState } from '../../../components/admin/ErrorState'
 import {
   useDashboardActivity,
   type ActivityWindow,
-  type HeatmapCell,
 } from '../../../features/dashboard'
 import {
   CYAN,
@@ -27,6 +26,8 @@ import {
   GREEN,
   INDIGO,
   SectionCard,
+  TEAL,
+  VIOLET,
 } from './dashboard-ui'
 
 const WINDOW_OPTIONS: { value: ActivityWindow; label: string }[] = [
@@ -37,10 +38,12 @@ const WINDOW_OPTIONS: { value: ActivityWindow; label: string }[] = [
 
 const SERIES_NAMES: Record<string, string> = {
   questionAttempts: 'Lượt trả lời',
-  lessonsCompleted: 'Bài học hoàn thành',
+  lessonsCompleted: 'Bài hoàn thành',
+  simulationsCompleted: 'Mô phỏng',
+  aiConversations: 'Hội thoại AI',
 }
 
-/** Xu hướng hoạt động: chart đa chuỗi theo cửa sổ ngày + heatmap giờ học. */
+/** Xu hướng hoạt động: chart đa chuỗi theo cửa sổ ngày. */
 export function TrendsSection() {
   const [days, setDays] = useState<ActivityWindow>(30)
   const { data, isLoading, isError, error, refetch, isFetching } =
@@ -52,6 +55,16 @@ export function TrendsSection() {
         ...point,
         label: formatDateShort(point.date),
       })),
+    [data?.series],
+  )
+
+  const totalSimulations = useMemo(
+    () => (data?.series ?? []).reduce((sum, p) => sum + p.simulationsCompleted, 0),
+    [data?.series],
+  )
+
+  const totalConversations = useMemo(
+    () => (data?.series ?? []).reduce((sum, p) => sum + p.aiConversations, 0),
     [data?.series],
   )
 
@@ -94,20 +107,29 @@ export function TrendsSection() {
         <div className="space-y-4">
           <Skeleton className="h-16 w-full" />
           <Skeleton className="h-72 w-full" />
-          <Skeleton className="h-48 w-full" />
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <WindowTotal
               label="Lượt trả lời"
               value={data.totals.questionAttempts}
               tint={CYAN}
             />
             <WindowTotal
-              label="Bài học hoàn thành"
+              label="Bài hoàn thành"
               value={data.totals.lessonsCompleted}
               tint={GREEN}
+            />
+            <WindowTotal
+              label="Mô phỏng"
+              value={totalSimulations}
+              tint={VIOLET}
+            />
+            <WindowTotal
+              label="Hội thoại AI"
+              value={totalConversations}
+              tint={TEAL}
             />
           </div>
 
@@ -165,12 +187,28 @@ export function TrendsSection() {
                     dot={false}
                     activeDot={{ r: 4 }}
                   />
+                  <Line
+                    yAxisId="counts"
+                    type="monotone"
+                    dataKey="simulationsCompleted"
+                    stroke={VIOLET}
+                    strokeWidth={2}
+                    dot={false}
+                    activeDot={{ r: 3 }}
+                  />
+                  <Line
+                    yAxisId="counts"
+                    type="monotone"
+                    dataKey="aiConversations"
+                    stroke={TEAL}
+                    strokeWidth={2}
+                    dot={false}
+                    activeDot={{ r: 3 }}
+                  />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
           )}
-
-          <PeakHoursHeatmap cells={data.heatmap} days={data.days} />
         </div>
       )}
     </SectionCard>
@@ -252,115 +290,5 @@ function TrendsTooltip({
         )}
       </div>
     </div>
-  )
-}
-
-// ─── Heatmap giờ học cao điểm ────────────────────────────────────────────────
-
-/** Thứ tự hàng: T2 → CN; backend trả DOW Postgres (0 = Chủ nhật). */
-const WEEKDAY_ROWS = [1, 2, 3, 4, 5, 6, 0]
-const WEEKDAY_LABEL: Record<number, string> = {
-  0: 'CN',
-  1: 'T2',
-  2: 'T3',
-  3: 'T4',
-  4: 'T5',
-  5: 'T6',
-  6: 'T7',
-}
-const HOURS = Array.from({ length: 24 }, (_, h) => h)
-
-function PeakHoursHeatmap({ cells, days }: { cells: HeatmapCell[]; days: number }) {
-  const { grid, max, peak } = useMemo(() => {
-    const grid = new Map<string, number>()
-    let max = 0
-    let peak: HeatmapCell | null = null
-    for (const cell of cells) {
-      grid.set(`${cell.weekday}:${cell.hour}`, cell.count)
-      if (cell.count > max) {
-        max = cell.count
-        peak = cell
-      }
-    }
-    return { grid, max, peak }
-  }, [cells])
-
-  return (
-    <div className="rounded-lg border-2 border-border bg-muted/20 p-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <CalendarClock className="h-4 w-4 text-muted-foreground" />
-          <h3 className="text-sm font-bold">Giờ học cao điểm</h3>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          {peak
-            ? `Đỉnh: ${WEEKDAY_LABEL[peak.weekday]} ${String(peak.hour).padStart(2, '0')}h — ${formatNumber(peak.count)} lượt trả lời`
-            : `Chưa có lượt trả lời trong ${days} ngày`}
-        </p>
-      </div>
-
-      {max > 0 && (
-        <div className="mt-3 overflow-x-auto">
-          <div className="min-w-[640px]">
-            <div
-              className="grid gap-[3px]"
-              style={{ gridTemplateColumns: `2.25rem repeat(24, minmax(0, 1fr))` }}
-            >
-              <div />
-              {HOURS.map((hour) => (
-                <div
-                  key={hour}
-                  className="text-center text-[9px] font-bold text-muted-foreground tabular-nums"
-                >
-                  {hour % 3 === 0 ? hour : ''}
-                </div>
-              ))}
-              {WEEKDAY_ROWS.map((weekday) => (
-                <HeatmapRow
-                  key={weekday}
-                  weekday={weekday}
-                  grid={grid}
-                  max={max}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function HeatmapRow({
-  weekday,
-  grid,
-  max,
-}: {
-  weekday: number
-  grid: Map<string, number>
-  max: number
-}) {
-  return (
-    <>
-      <div className="flex items-center text-[10px] font-bold text-muted-foreground">
-        {WEEKDAY_LABEL[weekday]}
-      </div>
-      {HOURS.map((hour) => {
-        const count = grid.get(`${weekday}:${hour}`) ?? 0
-        const intensity = count === 0 ? 0 : 0.15 + 0.85 * (count / max)
-        return (
-          <div
-            key={hour}
-            className="aspect-square rounded-[3px] border border-border/60"
-            style={{
-              backgroundColor:
-                count === 0 ? 'var(--muted)' : INDIGO,
-              opacity: count === 0 ? 0.4 : intensity,
-            }}
-            title={`${WEEKDAY_LABEL[weekday]} ${String(hour).padStart(2, '0')}h: ${formatNumber(count)} lượt trả lời`}
-          />
-        )
-      })}
-    </>
   )
 }

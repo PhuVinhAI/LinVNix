@@ -92,10 +92,13 @@ export function AttentionSection() {
           <Skeleton className="h-48 w-full" />
         </div>
       ) : totalIssues === 0 ? (
-        <EmptyState
-          icon={CircleCheck}
-          message="Tuyệt vời — không có vấn đề nội dung nào cần xử lý."
-        />
+        <div className="flex flex-col items-center justify-center gap-3 rounded-lg border-2 border-border bg-muted/30 px-6 py-12 text-center">
+          <CircleCheck className="h-10 w-10 text-success" />
+          <p className="text-sm font-semibold text-foreground">Tuyệt vời!</p>
+          <p className="text-sm text-muted-foreground">
+            Không có vấn đề nội dung nào cần xử lý.
+          </p>
+        </div>
       ) : (
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
@@ -300,7 +303,7 @@ function IssueRow({
   return (
     <Link
       to={to}
-      className="group flex items-center gap-3 rounded-lg border-2 border-border bg-card px-4 py-3 transition-colors hover:bg-muted/40"
+      className="group flex items-center gap-3 rounded-lg border-2 border-border bg-card px-4 py-3 transition-colors hover:bg-muted/40 hover:border-primary cursor-pointer"
     >
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold truncate">{title}</p>
