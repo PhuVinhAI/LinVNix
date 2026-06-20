@@ -2,9 +2,10 @@ import { useState } from 'react'
 import type { MouseEvent, KeyboardEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
-import { Plus, MessageSquare, Pencil, Trash2, MoreVertical, Users } from 'lucide-react'
+import { Plus, MessageSquare, Pencil, Trash2, MoreVertical, Users, Search } from 'lucide-react'
 import { getCategoryIcon } from '../../components/admin/editors/IconPicker'
 import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,6 +33,7 @@ export function ScenarioCategoriesPage() {
   const { data = [], isLoading, error, refetch, isFetching } = useAdminScenarioCategories()
   const mutations = useSimulationsAdminMutation()
   const [pendingDelete, setPendingDelete] = useState<ScenarioCategory | null>(null)
+  const [search, setSearch] = useState('')
 
   const confirmDelete = async () => {
     if (!pendingDelete) return
@@ -47,40 +49,57 @@ export function ScenarioCategoriesPage() {
   const stop = (e: MouseEvent | KeyboardEvent) => e.stopPropagation()
 
   const totalScenarios = data.reduce((sum, c) => sum + (c.scenarios?.length ?? 0), 0)
+  const filtered = search
+    ? data.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
+    : data
 
   return (
     <div className="space-y-6">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">
-            Mô phỏng hội thoại
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1.5">
-            Tổ chức tình huống và nhân vật cho mô phỏng AI.
-          </p>
+      {/* Hero card */}
+      <div className="rounded-xl border-2 border-border bg-card p-5">
+        <div className="flex items-start gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <MessageSquare className="h-7 w-7 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Mô phỏng hội thoại</h1>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-3xl">
+              Tổ chức tình huống và nhân vật cho mô phỏng AI.
+            </p>
+            {!isLoading && !error && data.length > 0 && (
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="font-bold text-foreground tabular-nums">{data.length}</span>
+                  danh mục
+                </span>
+                <span className="text-muted-foreground/60">•</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Users className="h-4 w-4" />
+                  <span className="font-bold text-foreground tabular-nums">{totalScenarios}</span>
+                  tình huống
+                </span>
+              </div>
+            )}
+          </div>
+          <Button asChild className="shrink-0">
+            <Link to={simulationPath.categoryNew()}>
+              <Plus className="h-4 w-4" />
+              Thêm danh mục
+            </Link>
+          </Button>
         </div>
-        <Button asChild>
-          <Link to={simulationPath.categoryNew()}>
-            <Plus className="h-4 w-4" />
-            Thêm danh mục
-          </Link>
-        </Button>
       </div>
 
       {!isLoading && !error && data.length > 0 && (
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-lg border-2 border-border bg-card p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Danh mục
-            </p>
-            <p className="mt-1 text-2xl font-bold tabular-nums">{data.length}</p>
-          </div>
-          <div className="rounded-lg border-2 border-border bg-card p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Tổng tình huống
-            </p>
-            <p className="mt-1 text-2xl font-bold tabular-nums">{totalScenarios}</p>
-          </div>
+        <div className="relative max-w-sm">
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Tìm danh mục..."
+            className="pl-9"
+          />
         </div>
       )}
 
@@ -106,9 +125,15 @@ export function ScenarioCategoriesPage() {
             </Link>
           </Button>
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 p-12 text-center">
+          <Search className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+          <h3 className="text-lg font-bold mb-1">Không tìm thấy danh mục</h3>
+          <p className="text-sm text-muted-foreground">Thử thay đổi từ khóa tìm kiếm</p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {data.map((category) => (
+          {filtered.map((category) => (
             <CategoryCard
               key={category.id}
               category={category}

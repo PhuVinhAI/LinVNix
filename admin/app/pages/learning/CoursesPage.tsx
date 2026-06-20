@@ -76,30 +76,45 @@ export function CoursesPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header with stats */}
-      <div className="flex items-end justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Học liệu</h1>
-          <p className="text-sm text-muted-foreground mt-1.5">
-            Quản lý khóa học, chủ đề và bài học.
-          </p>
+      {/* Hero card */}
+      <div className="rounded-xl border-2 border-border bg-card p-5">
+        <div className="flex items-start gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <BookOpen className="h-7 w-7 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Học liệu</h1>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-3xl">
+              Quản lý khóa học, chủ đề và bài học cho toàn bộ chương trình đào tạo.
+            </p>
+            {!isLoading && !error && data.length > 0 && (
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5">
+                  <BookOpen className="h-4 w-4" />
+                  <span className="font-bold text-foreground tabular-nums">{data.length}</span>
+                  khóa học
+                </span>
+                <span className="text-muted-foreground/60">•</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="font-bold text-foreground tabular-nums">{publishedCount}</span>
+                  đã xuất bản
+                </span>
+                <span className="text-muted-foreground/60">•</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="font-bold text-foreground tabular-nums">{data.length - publishedCount}</span>
+                  bản nháp
+                </span>
+              </div>
+            )}
+          </div>
+          <Button asChild className="shrink-0">
+            <Link to={learningPath.courseNew()}>
+              <Plus className="h-4 w-4" />
+              Thêm khóa học
+            </Link>
+          </Button>
         </div>
-        <Button asChild>
-          <Link to={learningPath.courseNew()}>
-            <Plus className="h-4 w-4" />
-            Thêm khóa học
-          </Link>
-        </Button>
       </div>
-
-      {/* Stats strip */}
-      {!isLoading && !error && data.length > 0 && (
-        <div className="grid grid-cols-3 gap-3">
-          <StatCard label="Tổng khóa học" value={data.length} />
-          <StatCard label="Đã xuất bản" value={publishedCount} tone="success" />
-          <StatCard label="Bản nháp" value={data.length - publishedCount} tone="muted" />
-        </div>
-      )}
 
       {/* Filters */}
       {!isLoading && !error && data.length > 0 && (
@@ -310,21 +325,6 @@ function CourseCard({
         </div>
       )}
     </SortableRow>
-  )
-}
-
-function StatCard({ label, value, tone = 'default' }: { label: string; value: number; tone?: 'default' | 'success' | 'muted' }) {
-  const toneClass =
-    tone === 'success'
-      ? 'text-emerald-600 dark:text-emerald-400'
-      : tone === 'muted'
-        ? 'text-muted-foreground'
-        : 'text-foreground'
-  return (
-    <div className="rounded-lg border-2 border-border bg-card p-4">
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className={`mt-1 text-2xl font-bold tabular-nums ${toneClass}`}>{value}</p>
-    </div>
   )
 }
 
