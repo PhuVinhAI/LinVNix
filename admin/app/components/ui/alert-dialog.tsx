@@ -50,11 +50,11 @@ function AlertDialogContent({
       <DialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(
-          "fixed top-0 left-1/2 z-50 -translate-x-1/2 w-full max-w-[calc(100%-2rem)] sm:max-w-lg",
-          "rounded-b-3xl border-x-2 border-b-2 border-border bg-card text-card-foreground p-6 pt-7",
+          "fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-[calc(100%-2rem)] sm:max-w-2xl",
+          "rounded-xl border-2 border-border bg-card text-card-foreground p-6",
           "flex flex-col gap-5 outline-none",
-          "data-open:animate-in data-open:slide-in-from-top-12 data-open:fade-in-0 data-open:duration-250",
-          "data-closed:animate-out data-closed:slide-out-to-top-12 data-closed:fade-out-0 data-closed:duration-150",
+          "duration-150 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95",
+          "data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
