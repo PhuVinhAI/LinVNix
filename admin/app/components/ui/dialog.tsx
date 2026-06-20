@@ -64,7 +64,7 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           "fixed z-50 grid w-full max-w-[calc(100%-2rem)] gap-6 border-border bg-card text-card-foreground outline-none",
-          "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:max-w-md rounded-xl border-2 p-6 duration-150 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:max-w-2xl rounded-xl border-2 p-6 duration-150 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
