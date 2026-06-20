@@ -76,7 +76,6 @@ erDiagram
     boolean is_published
     varchar thumbnail_url
     int estimated_hours
-    varchar vietnamese_level_name
   }
 
   modules {

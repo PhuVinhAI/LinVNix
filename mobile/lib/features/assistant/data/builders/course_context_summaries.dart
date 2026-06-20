@@ -10,8 +10,6 @@ Map<String, dynamic> courseContextSummary(Course course) {
     'title': course.title,
     'description': course.description,
     'level': course.level,
-    if (course.vietnameseLevelName != null)
-      'vietnameseLevelName': course.vietnameseLevelName,
     if (course.estimatedHours != null) 'estimatedHours': course.estimatedHours,
     'moduleCount': course.modules.length,
     'lessonCount': _courseLessonCount(course),

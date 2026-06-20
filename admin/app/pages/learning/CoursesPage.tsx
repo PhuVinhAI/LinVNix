@@ -221,7 +221,7 @@ function CourseCard({
   stop: (e: MouseEvent | KeyboardEvent) => void
 }) {
   const bg = levelBg(course.level)
-  const label = levelLabel(course.level, course.vietnameseLevelName)
+  const label = levelLabel(course.level)
   return (
     <SortableRow id={course.id} disabled={!canDrag}>
       {({ listeners, attributes }) => (

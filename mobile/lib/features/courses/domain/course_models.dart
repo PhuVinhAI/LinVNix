@@ -8,7 +8,6 @@ class Course {
     required this.isPublished,
     this.thumbnailUrl,
     this.estimatedHours,
-    this.vietnameseLevelName,
     this.modules = const [],
     this.createdAt,
     this.updatedAt,
@@ -24,7 +23,6 @@ class Course {
       isPublished: json['isPublished'] as bool? ?? true,
       thumbnailUrl: json['thumbnailUrl'] as String?,
       estimatedHours: (json['estimatedHours'] as num?)?.toInt(),
-      vietnameseLevelName: json['vietnameseLevelName'] as String?,
       modules: (json['modules'] as List<dynamic>?)
               ?.map((e) => CourseModule.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -46,7 +44,6 @@ class Course {
   final bool isPublished;
   final String? thumbnailUrl;
   final int? estimatedHours;
-  final String? vietnameseLevelName;
   final List<CourseModule> modules;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -61,7 +58,6 @@ class Course {
       'isPublished': isPublished,
       'thumbnailUrl': thumbnailUrl,
       'estimatedHours': estimatedHours,
-      'vietnameseLevelName': vietnameseLevelName,
       'modules': modules.map((e) => e.toJson()).toList(),
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),

@@ -16,9 +16,7 @@ const LEVEL_LABEL_FALLBACK: Record<string, string> = {
   C2: 'Thông thạo',
 }
 
-export function levelLabel(level: string | undefined | null, vietnameseLevelName?: string | null): string {
-  const override = vietnameseLevelName?.trim()
-  if (override) return override
+export function levelLabel(level: string | undefined | null): string {
   return LEVEL_LABEL_FALLBACK[level ?? ''] ?? '—'
 }
 

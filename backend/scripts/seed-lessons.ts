@@ -57,8 +57,8 @@ async function main() {
   for (const courseData of data.courses) {
     const fakeUuid = courseData.__uuid;
     const res = await client.query(
-      `INSERT INTO courses (title, description, level, order_index, is_published, estimated_hours, vietnamese_level_name, thumbnail_url)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+      `INSERT INTO courses (title, description, level, order_index, is_published, estimated_hours, thumbnail_url)
+       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
       [
         courseData.title,
         courseData.description,
@@ -66,7 +66,6 @@ async function main() {
         courseData.order_index,
         courseData.is_published,
         courseData.estimated_hours,
-        courseData.vietnamese_level_name,
         courseData.thumbnail_url || null,
       ],
     );

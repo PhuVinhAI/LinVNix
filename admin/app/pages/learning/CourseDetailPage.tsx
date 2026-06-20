@@ -86,7 +86,7 @@ export function CourseDetailPage() {
 
   const totalLessons = course?.modules?.reduce((sum, m) => sum + (m.lessons?.length ?? 0), 0) ?? 0
   const bg = levelBg(course?.level)
-  const label = levelLabel(course?.level, course?.vietnameseLevelName)
+  const label = levelLabel(course?.level)
 
   return (
     <div className="space-y-6">

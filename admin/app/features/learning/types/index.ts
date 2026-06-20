@@ -7,7 +7,6 @@ export interface Course {
   isPublished: boolean
   thumbnailUrl?: string | null
   estimatedHours?: number | null
-  vietnameseLevelName?: string | null
   modules?: Module[]
   createdAt: string
   updatedAt: string

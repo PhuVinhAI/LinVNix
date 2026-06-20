@@ -12,7 +12,6 @@ export interface CourseFormValues {
   description: string
   level: string
   estimatedHours?: number | null
-  vietnameseLevelName?: string | null
   thumbnailUrl?: string | null
 }
 
@@ -30,7 +29,6 @@ export function CourseForm({
     description: initialValue?.description ?? '',
     level: initialValue?.level ?? 'A1',
     estimatedHours: initialValue?.estimatedHours ?? null,
-    vietnameseLevelName: initialValue?.vietnameseLevelName ?? '',
     thumbnailUrl: initialValue?.thumbnailUrl ?? '',
   })
 
@@ -42,7 +40,6 @@ export function CourseForm({
     e.preventDefault()
     await onSubmit({
       ...values,
-      vietnameseLevelName: values.vietnameseLevelName || null,
       thumbnailUrl: values.thumbnailUrl || null,
       estimatedHours: values.estimatedHours || null,
     })
@@ -72,30 +69,20 @@ export function CourseForm({
       </FormSection>
 
       <FormSection icon={GraduationCap} title="Cấp độ và thời lượng" description="Phân loại khóa học theo cấp độ CEFR">
-        <FormField label="Cấp độ" required>
+        <FormField label="Cấp độ yêu cầu" required help="Trình độ tiếng Việt tối thiểu để luyện tập">
           <LevelPicker value={values.level} onChange={(v) => update('level', v)} />
         </FormField>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Tên cấp độ tiếng Việt" help="Tên hiển thị thân thiện cho học viên">
-            <Input
-              value={values.vietnameseLevelName ?? ''}
-              onChange={(e) => update('vietnameseLevelName', e.target.value)}
-              placeholder="VD: Sơ cấp"
-            />
-          </FormField>
-
-          <FormField label="Giờ học ước tính" help="Tổng thời lượng dự kiến để hoàn thành">
-            <NumberStepper
-              value={values.estimatedHours ?? null}
-              onChange={(v) => update('estimatedHours', v)}
-              nullable
-              suffix="h"
-              ariaLabelDecrement="Giảm giờ học"
-              ariaLabelIncrement="Tăng giờ học"
-            />
-          </FormField>
-        </div>
+        <FormField label="Giờ học ước tính" help="Tổng thời lượng dự kiến để hoàn thành">
+          <NumberStepper
+            value={values.estimatedHours ?? null}
+            onChange={(v) => update('estimatedHours', v)}
+            nullable
+            suffix="h"
+            ariaLabelDecrement="Giảm giờ học"
+            ariaLabelIncrement="Tăng giờ học"
+          />
+        </FormField>
       </FormSection>
 
       <FormSection icon={ImageIcon} title="Hình ảnh đại diện" description="Ảnh thumbnail hiển thị trên danh sách khóa học">

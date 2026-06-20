@@ -43,9 +43,4 @@ export class CreateCourseDto {
   @IsNumber()
   @IsOptional()
   estimatedHours?: number;
-
-  @ApiProperty({ example: 'Sơ cấp 1', required: false })
-  @IsString()
-  @IsOptional()
-  vietnameseLevelName?: string;
 }
