@@ -1,8 +1,8 @@
 # Database ERD
 
-Generated from the local PostgreSQL `public` schema after the dev reset on 2026-05-31.
+Generated from the local PostgreSQL `public` schema, verified against the running `linvnix-postgres` container on 2026-06-21.
 
-Current application table count: **25**.
+Current application table count: **27**.
 
 Notes:
 
@@ -13,6 +13,7 @@ Notes:
 - Token storage is intentionally split by lifecycle: `auth_tokens` for short-lived verification/reset codes, `refresh_tokens` for login sessions.
 - `bookmarks` is a polymorphic bookmark table: exactly one of `vocabulary_id` or `personal_vocabulary_id` should be set by application logic.
 - `exercises` has a self-reference via `replaces_exercise_id` (a regenerated exercise points to the one it replaces; `SET NULL` on delete) and an `owner_user_id` (`CASCADE`) for custom exercises.
+- `media_assets` stores uploaded media metadata; `uploaded_by` is a free-text varchar (not an FK), so it has no relation line in the diagram.
 
 ```mermaid
 erDiagram
@@ -159,6 +160,20 @@ erDiagram
     uuid personal_vocabulary_id FK
   }
 
+  media_assets {
+    uuid id PK
+    timestamp created_at
+    timestamp updated_at
+    timestamp deleted_at
+    enum kind
+    varchar filename
+    varchar original_name
+    varchar url
+    varchar mimetype
+    bigint size
+    varchar uploaded_by
+  }
+
   grammar_rules {
     uuid id PK
     timestamp created_at
@@ -234,7 +249,7 @@ erDiagram
     int time_taken
     int attempt_count
     int best_score
-    varchar last_attempt_id
+    uuid last_attempt_id FK
     uuid user_id FK
     uuid question_id FK
   }
@@ -397,7 +412,7 @@ erDiagram
     uuid speaker_character_id FK
     boolean is_learner
     text content
-    text content_en
+    text translation
     jsonb feedback
     int order_index
   }
@@ -417,11 +432,11 @@ erDiagram
 
   courses ||--o{ modules : "course_id CASCADE"
   courses ||--o{ conversations : "course_id SET_NULL"
-  courses ||--o{ exercises : "course_id SET_NULL"
+  courses ||--o{ exercises : "course_id CASCADE"
   courses ||--o{ learning_progress : "course_id CASCADE"
 
   modules ||--o{ lessons : "module_id CASCADE"
-  modules ||--o{ exercises : "module_id SET_NULL"
+  modules ||--o{ exercises : "module_id CASCADE"
   modules ||--o{ learning_progress : "module_id CASCADE"
 
   lessons ||--o{ lesson_contents : "lesson_id CASCADE"
@@ -436,8 +451,10 @@ erDiagram
 
   users ||--o{ exercises : "owner_user_id CASCADE"
   exercises ||--o{ exercises : "replaces_exercise_id SET_NULL"
-  exercises ||--o{ question_attempts : "question_id CASCADE"
-  exercises ||--o{ user_question_results : "question_id CASCADE"
+  exercises ||--o{ questions : "exercise_id CASCADE"
+  questions ||--o{ question_attempts : "question_id CASCADE"
+  questions ||--o{ user_question_results : "question_id CASCADE"
+  question_attempts ||--o{ user_question_results : "last_attempt_id SET_NULL"
 
   conversations ||--o{ conversation_messages : "conversation_id CASCADE"
 
@@ -445,6 +462,7 @@ erDiagram
   scenarios ||--o{ scenario_characters : "scenario_id CASCADE"
   scenarios ||--o{ simulation_sessions : "scenario_id CASCADE"
   scenario_characters ||--o{ simulation_sessions : "chosen_character_id RESTRICT"
+  scenario_characters ||--o{ simulation_sessions : "next_turn_character_id RESTRICT"
   scenario_characters ||--o{ simulation_messages : "speaker_character_id SET_NULL"
   simulation_sessions ||--o{ simulation_messages : "session_id CASCADE"
 ```
@@ -459,20 +477,22 @@ erDiagram
 6. `daily_goal_progress`
 7. `daily_goals`
 8. `daily_streaks`
-9. `question_attempts`
-10. `exercises`
-11. `grammar_rules`
-12. `learning_progress`
-13. `lesson_contents`
-14. `lessons`
+9. `exercises`
+10. `grammar_rules`
+11. `learning_progress`
+12. `lesson_contents`
+13. `lessons`
+14. `media_assets`
 15. `modules`
 16. `personal_vocabularies`
-17. `refresh_tokens`
-18. `scenario_categories`
-19. `scenario_characters`
-20. `scenarios`
-21. `simulation_messages`
-22. `simulation_sessions`
-23. `user_question_results`
-24. `users`
-25. `vocabularies`
+17. `question_attempts`
+18. `questions`
+19. `refresh_tokens`
+20. `scenario_categories`
+21. `scenario_characters`
+22. `scenarios`
+23. `simulation_messages`
+24. `simulation_sessions`
+25. `user_question_results`
+26. `users`
+27. `vocabularies`
