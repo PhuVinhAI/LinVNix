@@ -34,16 +34,6 @@ class TextContentWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ContentTypeBadge(
-            label: 'Văn bản',
-            icon: Icons.article_outlined,
-            color: c.foreground,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          if (translation != null && translation.trim().isNotEmpty) ...[
-            TranslationEyebrow(text: translation),
-            const SizedBox(height: AppSpacing.md),
-          ],
           if (paragraphs.isEmpty)
             Text(
               body,
@@ -68,6 +58,19 @@ class TextContentWidget extends StatelessWidget {
               if (i < paragraphs.length - 1)
                 const SizedBox(height: AppSpacing.lg),
             ],
+          if (translation != null && translation.trim().isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              translation,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.bodySmall,
+                fontWeight: FontWeight.w500,
+                fontStyle: FontStyle.italic,
+                color: c.mutedForeground,
+                height: 1.5,
+              ),
+            ),
+          ],
           if (content.notes != null && content.notes!.trim().isNotEmpty) ...[
             const SizedBox(height: AppSpacing.xl),
             Text(

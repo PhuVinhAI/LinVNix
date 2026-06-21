@@ -247,10 +247,11 @@ class _FillBlankInputState extends State<_FillBlankInput> {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_blankCount > 1) ...[
-          Container(
+        SizedBox(
+          width: double.infinity,
+          child: Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,
               vertical: AppSpacing.sm + 2,
@@ -267,15 +268,17 @@ class _FillBlankInputState extends State<_FillBlankInput> {
               children: [
                 Icon(
                   Icons.touch_app_rounded,
-                  size: 20,
+                  size: 18,
                   color: visuals.accent,
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
-                    S.of(context).fillBlanksCountParam(_blankCount),
+                    _blankCount > 1
+                        ? S.of(context).fillBlanksCountParam(_blankCount)
+                        : 'Tap a word to fill the blank',
                     style: GoogleFonts.inter(
-                      fontSize: AppTypography.bodyMedium,
+                      fontSize: AppTypography.bodySmall,
                       color: visuals.accent,
                       fontWeight: FontWeight.w600,
                     ),
@@ -284,22 +287,24 @@ class _FillBlankInputState extends State<_FillBlankInput> {
               ],
             ),
           ),
-          const SizedBox(height: AppSpacing.xl),
-        ],
-
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          decoration: BoxDecoration(
-            color: c.card,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            border: Border.all(color: c.border, width: 1),
-          ),
-          child: Wrap(
-            spacing: 6,
-            runSpacing: 10,
-            alignment: WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: inlineWidgets,
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        SizedBox(
+          width: double.infinity,
+          child: Container(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1),
+            ),
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 10,
+              alignment: WrapAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: inlineWidgets,
+            ),
           ),
         ),
 
@@ -307,15 +312,15 @@ class _FillBlankInputState extends State<_FillBlankInput> {
 
         // Word bank
         Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
           decoration: BoxDecoration(
-            color: c.muted.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(AppRadius.lg),
+            color: c.muted.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             border: Border.all(color: c.border, width: 1),
           ),
           child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: 8,
+            runSpacing: 6,
             alignment: WrapAlignment.center,
             children: [
               for (int i = 0; i < _bankWords.length; i++)
@@ -364,30 +369,32 @@ class _BlankSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filled = filledWord != null && filledWord!.isNotEmpty;
-    final label = filled ? filledWord! : '____';
-    final paddingH = filled ? 14.0 : 24.0;
-    return InkWell(
-      onTap: filled ? onTap : null,
-      borderRadius: BorderRadius.circular(AppRadius.md),
-      child: Container(
-        constraints: const BoxConstraints(minWidth: 80, minHeight: 42),
-        padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: 6),
-        decoration: BoxDecoration(
-          color: filled ? accent.withValues(alpha: 0.10) : fillColor,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(
-            color: filled ? accent : accent.withValues(alpha: 0.40),
-            width: filled ? 2 : 1.5,
+    final label = filled ? filledWord! : '___';
+    final paddingH = filled ? 10.0 : 12.0;
+    return IntrinsicWidth(
+      child: InkWell(
+        onTap: filled ? onTap : null,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: Container(
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 36),
+          padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: 4),
+          decoration: BoxDecoration(
+            color: filled ? accent.withValues(alpha: 0.10) : fillColor,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(
+              color: filled ? accent : accent.withValues(alpha: 0.40),
+              width: filled ? 2 : 1.5,
+            ),
           ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: AppTypography.titleSmall,
-              fontWeight: FontWeight.w700,
-              color: filled ? accent : foreground.withValues(alpha: 0.5),
-              height: 1.4,
+          child: Center(
+            child: Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: AppTypography.titleSmall,
+                fontWeight: FontWeight.w700,
+                color: filled ? accent : foreground.withValues(alpha: 0.5),
+                height: 1.4,
+              ),
             ),
           ),
         ),
@@ -424,7 +431,7 @@ class _BankChip extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppRadius.md),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
               color: background,
               borderRadius: BorderRadius.circular(AppRadius.md),
@@ -447,7 +454,7 @@ class _BankChip extends StatelessWidget {
             child: Text(
               label,
               style: GoogleFonts.inter(
-                fontSize: AppTypography.bodyLarge,
+                fontSize: AppTypography.bodyMedium,
                 fontWeight: FontWeight.w700,
                 color: foreground,
               ),

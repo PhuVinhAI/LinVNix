@@ -161,70 +161,76 @@ class _OrderingInputState extends State<_OrderingInput> {
     final visuals = getQuestionVisuals(context, QuestionType.ordering);
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Instruction header
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.sm + 2,
-          ),
-          decoration: BoxDecoration(
-            color: visuals.surface,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            border: Border.all(
-              color: visuals.accent.withValues(alpha: 0.20),
-              width: 1,
+        SizedBox(
+          width: double.infinity,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.sm + 2,
             ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.touch_app_rounded,
-                size: 18,
-                color: visuals.accent,
+            decoration: BoxDecoration(
+              color: visuals.surface,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(
+                color: visuals.accent.withValues(alpha: 0.20),
+                width: 1,
               ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  'Tap the words below to arrange them in the correct order',
-                  style: GoogleFonts.inter(
-                    fontSize: AppTypography.bodySmall,
-                    color: visuals.accent,
-                    fontWeight: FontWeight.w600,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.touch_app_rounded,
+                  size: 18,
+                  color: visuals.accent,
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    'Tap the words below to arrange them in the correct order',
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
+                      color: visuals.accent,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
 
         // Answer row (horizontal slots wrapping if too wide)
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: c.card,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            border: Border.all(color: c.border, width: 1),
-          ),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              for (int i = 0; i < _placement.length; i++)
-                _AnswerSlot(
-                  index: i,
-                  filledWord: _placement[i] >= 0
-                      ? _bankWords[_placement[i]]
-                      : null,
-                  accent: visuals.accent,
-                  background: c.muted,
-                  foreground: c.foreground,
-                  onTap: () => _clearSlot(i),
-                ),
-            ],
+        SizedBox(
+          width: double.infinity,
+          child: Container(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: c.border, width: 1),
+            ),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 10,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                for (int i = 0; i < _placement.length; i++)
+                  _AnswerSlot(
+                    index: i,
+                    filledWord: _placement[i] >= 0
+                        ? _bankWords[_placement[i]]
+                        : null,
+                    accent: visuals.accent,
+                    background: c.muted,
+                    foreground: c.foreground,
+                    onTap: () => _clearSlot(i),
+                  ),
+              ],
+            ),
           ),
         ),
 
@@ -232,15 +238,15 @@ class _OrderingInputState extends State<_OrderingInput> {
 
         // Word bank
         Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
           decoration: BoxDecoration(
-            color: c.muted.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(AppRadius.lg),
+            color: c.muted.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             border: Border.all(color: c.border, width: 1),
           ),
           child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: 8,
+            runSpacing: 6,
             alignment: WrapAlignment.center,
             children: [
               for (int i = 0; i < _bankWords.length; i++)
@@ -280,38 +286,41 @@ class _AnswerSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filled = filledWord != null && filledWord!.isNotEmpty;
-    return InkWell(
-      onTap: filled ? onTap : null,
-      borderRadius: BorderRadius.circular(AppRadius.md),
-      child: Container(
-        constraints: const BoxConstraints(minWidth: 64, minHeight: 48),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: filled ? accent.withValues(alpha: 0.10) : background,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(
-            color: filled ? accent : accent.withValues(alpha: 0.30),
-            width: filled ? 2 : 1.5,
-            style: filled ? BorderStyle.solid : BorderStyle.solid,
+    return IntrinsicWidth(
+      child: InkWell(
+        onTap: filled ? onTap : null,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: Container(
+          constraints: const BoxConstraints(minWidth: 44, minHeight: 36),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: filled ? accent.withValues(alpha: 0.10) : background,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(
+              color: filled ? accent : accent.withValues(alpha: 0.30),
+              width: filled ? 2 : 1.5,
+            ),
+          ),
+          child: Center(
+            child: filled
+                ? Text(
+                    filledWord!,
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodyMedium,
+                      fontWeight: FontWeight.w700,
+                      color: accent,
+                    ),
+                  )
+                : Text(
+                    '${index + 1}',
+                    style: GoogleFonts.inter(
+                      fontSize: AppTypography.bodySmall,
+                      fontWeight: FontWeight.w700,
+                      color: foreground.withValues(alpha: 0.35),
+                    ),
+                  ),
           ),
         ),
-        child: filled
-            ? Text(
-                filledWord!,
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyLarge,
-                  fontWeight: FontWeight.w700,
-                  color: accent,
-                ),
-              )
-            : Text(
-                '${index + 1}',
-                style: GoogleFonts.inter(
-                  fontSize: AppTypography.bodyMedium,
-                  fontWeight: FontWeight.w700,
-                  color: foreground.withValues(alpha: 0.35),
-                ),
-              ),
       ),
     );
   }
@@ -345,7 +354,7 @@ class _BankChip extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppRadius.md),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
               color: background,
               borderRadius: BorderRadius.circular(AppRadius.md),
@@ -368,7 +377,7 @@ class _BankChip extends StatelessWidget {
             child: Text(
               label,
               style: GoogleFonts.inter(
-                fontSize: AppTypography.bodyLarge,
+                fontSize: AppTypography.bodyMedium,
                 fontWeight: FontWeight.w700,
                 color: foreground,
               ),

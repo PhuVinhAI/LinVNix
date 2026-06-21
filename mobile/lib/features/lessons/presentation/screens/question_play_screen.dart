@@ -888,7 +888,7 @@ class QuestionHeader extends StatelessWidget {
                 ],
               ),
             ),
-            if (question.acceptsWithoutDiacritics) ...[
+            if (question.acceptsWithoutDiacritics && question.questionType != QuestionType.fillBlank) ...[
               const SizedBox(width: AppSpacing.sm),
               InkWell(
                 onTap: () => _showDiacriticsInfo(context),
