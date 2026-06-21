@@ -10,16 +10,28 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ENV_FILE = path.resolve(__dirname, "mobile", ".env");
 
 // --- Lấy IP local (IPv4, không phải loopback) ---
+// Bỏ qua adapter ảo (VMware, VirtualBox, Hyper-V, Docker, WSL...) vì trên
+// Windows chúng thường được liệt kê trước Wi-Fi/Ethernet vật lý và khiến
+// script chọn nhầm IP không reachable từ điện thoại cùng mạng Wi-Fi.
+const VIRTUAL_ADAPTER_RE =
+  /vmware|virtualbox|vbox|hyper-?v|vethernet|loopback|wsl|docker|vEthernet/i;
+const PHYSICAL_RE = /wi-?fi|wlan|ethernet|local\s*area\s*connection/i;
+
 function getLocalIP() {
   const nets = networkInterfaces();
+  const candidates = [];
   for (const name of Object.keys(nets)) {
+    if (VIRTUAL_ADAPTER_RE.test(name)) continue;
     for (const net of nets[name]) {
       if (net.family === "IPv4" && !net.internal) {
-        return net.address;
+        candidates.push({ name, address: net.address });
       }
     }
   }
-  return "127.0.0.1";
+  if (candidates.length === 0) return "127.0.0.1";
+  // Ưu tiên adapter vật lý rõ ràng (Wi-Fi / Ethernet)
+  const preferred = candidates.find((c) => PHYSICAL_RE.test(c.name));
+  return (preferred || candidates[0]).address;
 }
 
 // --- Regex match IP trong value ---

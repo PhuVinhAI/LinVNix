@@ -63,10 +63,12 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   const port = configService.get<number>('app.port') || 3000;
-  await app.listen(port);
+  // Bind 0.0.0.0 so LAN devices (phone/tablet on same Wi-Fi) can reach the API.
+  // Default NestJS listen only binds ::1/127.0.0.1 which blocks external traffic.
+  await app.listen(port, '0.0.0.0');
 
   loggingService.log(
-    `🚀 Application is running on: http://localhost:${port}`,
+    `🚀 Application is running on: http://0.0.0.0:${port}`,
     'Bootstrap',
   );
   loggingService.log(
