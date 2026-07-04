@@ -51,18 +51,19 @@ class QuestionThemeTokens extends ThemeExtension<QuestionThemeTokens> {
   final Color speakingSurface;
 
   // ── Light palette ──
+  // 600-level accents for crisp contrast on the pale -50 surfaces.
   static const light = QuestionThemeTokens(
-    multipleChoiceAccent: Color(0xFF6366F1), // Indigo-500
+    multipleChoiceAccent: Color(0xFF4F46E5), // Indigo-600
     multipleChoiceSurface: Color(0xFFEEF2FF), // Indigo-50
-    fillBlankAccent: Color(0xFFF59E0B), // Amber-500
+    fillBlankAccent: Color(0xFFD97706), // Amber-600
     fillBlankSurface: Color(0xFFFFFBEB), // Amber-50
-    matchingAccent: Color(0xFF14B8A6), // Teal-500
+    matchingAccent: Color(0xFF0D9488), // Teal-600
     matchingSurface: Color(0xFFF0FDFA), // Teal-50
-    orderingAccent: Color(0xFF10B981), // Emerald-500
+    orderingAccent: Color(0xFF059669), // Emerald-600
     orderingSurface: Color(0xFFECFDF5), // Emerald-50
-    translationAccent: Color(0xFF8B5CF6), // Violet-500
+    translationAccent: Color(0xFF7C3AED), // Violet-600
     translationSurface: Color(0xFFF5F3FF), // Violet-50
-    listeningAccent: Color(0xFF0EA5E9), // Sky-500
+    listeningAccent: Color(0xFF0284C7), // Sky-600
     listeningSurface: Color(0xFFF0F9FF), // Sky-50
     speakingAccent: Color(0xFFE11D48), // Rose-600
     speakingSurface: Color(0xFFFFF1F2), // Rose-50

@@ -164,70 +164,72 @@
 }
 
 :root {
-  /* Base colors - Light mode */
-  --background: #FAFAF9;
-  --foreground: #18181B;
+  /* Base colors - Light mode
+     Slate neutrals (cool, crisp) instead of the old warm stone/zinc ramp,
+     and 600-level brand colors for stronger contrast on white. */
+  --background: #F8FAFC;
+  --foreground: #0F172A;
 
   /* Card colors */
   --card: #FFFFFF;
-  --card-foreground: #18181B;
+  --card-foreground: #0F172A;
 
   /* Popover colors */
   --popover: #FFFFFF;
-  --popover-foreground: #18181B;
+  --popover-foreground: #0F172A;
 
   /* Primary - Indigo */
-  --primary: #6366F1;
+  --primary: #4F46E5;
   --primary-foreground: #FFFFFF;
 
   /* Secondary - Violet */
-  --secondary: #8B5CF6;
+  --secondary: #7C3AED;
   --secondary-foreground: #FFFFFF;
 
   /* Muted - Light gray */
-  --muted: #F4F4F5;
-  --muted-foreground: #71717A;
+  --muted: #F1F5F9;
+  --muted-foreground: #475569;
 
   /* Accent - Cyan */
-  --accent: #06B6D4;
+  --accent: #0891B2;
   --accent-foreground: #FFFFFF;
 
   /* Destructive - Red (Error) */
-  --destructive: #EF4444;
+  --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
 
   /* Semantic colors */
-  --success: #22C55E;
+  --success: #16A34A;
   --success-foreground: #FFFFFF;
-  --warning: #F59E0B;
+  --warning: #D97706;
   --warning-foreground: #FFFFFF;
-  --info: #3B82F6;
+  --info: #2563EB;
   --info-foreground: #FFFFFF;
 
   /* Border & Input */
-  --border: #E4E4E7;
-  --input: #D4D4D8;
-  --ring: #6366F1;
+  --border: #E2E8F0;
+  --input: #CBD5E1;
+  --ring: #4F46E5;
 
   /* Charts - Blue shades */
-  --chart-1: #6366F1;
-  --chart-2: #8B5CF6;
-  --chart-3: #06B6D4;
-  --chart-4: #22C55E;
-  --chart-5: #F59E0B;
+  --chart-1: #4F46E5;
+  --chart-2: #7C3AED;
+  --chart-3: #0891B2;
+  --chart-4: #16A34A;
+  --chart-5: #D97706;
 
   /* Radius */
   --radius: 0.625rem;
 
   /* Sidebar - Light */
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #18181B;
-  --sidebar-primary: #6366F1;
+  --sidebar-foreground: #0F172A;
+  --sidebar-primary: #4F46E5;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F4F4F5;
-  --sidebar-accent-foreground: #18181B;
-  --sidebar-border: #E4E4E7;
-  --sidebar-ring: #6366F1;
+  --sidebar-accent: #EEF2FF;
+  --sidebar-accent-foreground: #312E81;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #4F46E5;
 }
 
 .dark {

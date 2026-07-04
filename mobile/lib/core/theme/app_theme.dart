@@ -86,28 +86,30 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color info;
   final Color infoForeground;
 
+  /// Light palette — slate neutrals (cool, crisp) with 600-level brand
+  /// colors for stronger contrast on white. Mirrors admin/app/styles/globals.css.
   static const light = AppColors(
-    primary: Color(0xFF6366F1),
+    primary: Color(0xFF4F46E5), // Indigo-600
     primaryForeground: Color(0xFFFFFFFF),
-    secondary: Color(0xFF8B5CF6),
+    secondary: Color(0xFF7C3AED), // Violet-600
     secondaryForeground: Color(0xFFFFFFFF),
-    accent: Color(0xFF06B6D4),
+    accent: Color(0xFF0891B2), // Cyan-600
     accentForeground: Color(0xFFFFFFFF),
-    background: Color(0xFFFAFAF9),
-    foreground: Color(0xFF18181B),
+    background: Color(0xFFF8FAFC), // Slate-50
+    foreground: Color(0xFF0F172A), // Slate-900
     card: Color(0xFFFFFFFF),
-    cardForeground: Color(0xFF18181B),
-    muted: Color(0xFFF4F4F5),
-    mutedForeground: Color(0xFF71717A),
-    border: Color(0xFFE4E4E7),
-    inputBorder: Color(0xFFD4D4D8),
-    success: Color(0xFF22C55E),
+    cardForeground: Color(0xFF0F172A),
+    muted: Color(0xFFF1F5F9), // Slate-100
+    mutedForeground: Color(0xFF475569), // Slate-600
+    border: Color(0xFFE2E8F0), // Slate-200
+    inputBorder: Color(0xFFCBD5E1), // Slate-300
+    success: Color(0xFF16A34A), // Green-600
     successForeground: Color(0xFFFFFFFF),
-    warning: Color(0xFFF59E0B),
+    warning: Color(0xFFD97706), // Amber-600
     warningForeground: Color(0xFFFFFFFF),
-    error: Color(0xFFEF4444),
+    error: Color(0xFFDC2626), // Red-600
     errorForeground: Color(0xFFFFFFFF),
-    info: Color(0xFF3B82F6),
+    info: Color(0xFF2563EB), // Blue-600
     infoForeground: Color(0xFFFFFFFF),
   );
 
@@ -260,7 +262,7 @@ class VietnameseAccentTokens extends ThemeExtension<VietnameseAccentTokens> {
     toneHigh: Color(0xFFDC2626),
     toneMid: Color(0xFFD97706),
     toneLow: Color(0xFF16A34A),
-    diacriticColor: Color(0xFF6366F1),
+    diacriticColor: Color(0xFF4F46E5),
   );
 
   static const dark = VietnameseAccentTokens(
