@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/providers/assistant_bar_provider.dart';
 import '../../../core/providers/bottom_sheet_provider.dart';
 import '../../../core/router/app_router.dart';
+import '../../../core/theme/app_theme.dart';
 import '../application/assistant_state_machine.dart';
 import '../data/go_router_effective_route.dart';
 import '../data/route_match.dart' as assistant_route;
@@ -143,41 +144,45 @@ class _GlobalAssistantShellState extends ConsumerState<GlobalAssistantShell> {
     }
 
     final mq = MediaQuery.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          child: MediaQuery(
-            // Take ownership of the bottom safe-area inset so each route's
-            // Scaffold + AppNavBar stops drawing into the gesture-bar zone
-            // — the AssistantBar handles that with its own SafeArea below.
-            data: mq.copyWith(
-              padding: mq.padding.copyWith(bottom: 0),
-              viewPadding: mq.viewPadding.copyWith(bottom: 0),
-            ),
-            child: ScreenUiSnapshotHost(
-              key: _snapshotHostKey,
-              child: widget.child,
+    final c = AppTheme.colors(context);
+    return ColoredBox(
+      color: c.background,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: MediaQuery(
+              // Take ownership of the bottom safe-area inset so each route's
+              // Scaffold + AppNavBar stops drawing into the gesture-bar zone
+              // — the AssistantBar handles that with its own SafeArea below.
+              data: mq.copyWith(
+                padding: mq.padding.copyWith(bottom: 0),
+                viewPadding: mq.viewPadding.copyWith(bottom: 0),
+              ),
+              child: ScreenUiSnapshotHost(
+                key: _snapshotHostKey,
+                child: widget.child,
+              ),
             ),
           ),
-        ),
-        Visibility(
-          visible: showBar,
-          maintainState: true,
-          maintainAnimation: true,
-          maintainSize: false,
-          child: AssistantBar(
-            onOpen: () {
-              final match = ref.read(currentRouteMatchProvider);
-              if (match != null) {
-                _syncScreenUiSnapshotIfNeeded(match);
-              } else {
-                _syncScreenUiSnapshotNow();
-              }
-            },
+          Visibility(
+            visible: showBar,
+            maintainState: true,
+            maintainAnimation: true,
+            maintainSize: false,
+            child: AssistantBar(
+              onOpen: () {
+                final match = ref.read(currentRouteMatchProvider);
+                if (match != null) {
+                  _syncScreenUiSnapshotIfNeeded(match);
+                } else {
+                  _syncScreenUiSnapshotNow();
+                }
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
