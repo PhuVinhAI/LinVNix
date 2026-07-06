@@ -172,7 +172,8 @@ Nguồn: Mục 3.3, 3.3.1. Chi tiết 27 bảng để ở Phụ lục A, không 
 - Cục bộ: Docker Compose gồm PostgreSQL 16, Redis 7, Backend.
 - Production: Backend trên Hugging Face Spaces (Docker Space, HTTPS).
 - CSDL chuyển sang CockroachDB Serverless, cache/queue dùng Aiven for Valkey.
-- Admin build web tĩnh, di động biên dịch .apk cho Android.
+- Admin build web tĩnh deloy lên Cloudflare Pages, di động biên dịch file .apk cho Android.
+
 
 Hình ảnh: Hình 3.6 (media/image11.png), sơ đồ triển khai hạ tầng Production.
 
@@ -189,8 +190,9 @@ Cột trái, Kết quả đạt được:
 
 Cột phải, Hướng phát triển:
 - Mở rộng học liệu B1-C2, thêm tình huống mô phỏng gắn đời sống Việt Nam.
-- Đánh giá phát âm, tổng hợp giọng nói, gợi ý lộ trình học theo điểm yếu.
-- Học ngoại tuyến, biểu đồ thống kê cho quản trị, chuẩn bị phát hành lên kho ứng dụng.
+- Đánh giá phát âm, tổng hợp lỗi sai, gợi ý lộ trình học theo điểm yếu.
+- Học ngoại tuyến, biểu đồ thống kê cho quản trị.
+
 
 Nguồn: Mục 5.1, 5.2.
 
