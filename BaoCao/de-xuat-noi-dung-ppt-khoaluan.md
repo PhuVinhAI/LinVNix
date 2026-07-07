@@ -109,48 +109,46 @@ Hình ảnh: Hình 3.2 (media/image7.jpeg), sơ đồ Use-case, đặt giữa ho
 
 Nguồn: Mục 3.2.3, Bảng 3.1, Bảng 3.2.
 
-**Slide 8 - Quy trình Trợ lý AI** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
+**Slide 8 - Hệ thống Trợ lý AI** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
 
-- 9 công cụ hỗ trợ, tất cả chỉ đọc dữ liệu của đúng người đang hỏi.
-- AI chỉ được chọn dùng công cụ ở lượt gọi đầu tiên, tối đa 10 lượt.
-- Cần nhiều công cụ thì chạy lần lượt từng cái, không chạy cùng lúc.
-- Trả lời hiện dần từng chữ, kèm báo trạng thái khi đang dùng công cụ.
-- Bấm Dừng hủy thẳng yêu cầu đang gửi tới AI, giữ lại phần đã trả lời.
+- Học viên gõ câu hỏi, hệ thống gắn kèm ngữ cảnh màn hình đang xem vào AI.
+- Lượt AI đầu tiên tự quyết có gọi công cụ hay không, tối đa gọi liên tục 10 lượt.
+- 9 công cụ chỉ đọc, tự khóa theo đúng người đang hỏi: Báo trạng thái, Hồ sơ học viên, Tiến độ học, Kết quả bài tập gần đây, Từ đã lưu, Tra từ vựng, Tra ngữ pháp, Tìm bài học, Chi tiết bài học.
+- Nhiều công cụ chạy lần lượt, gộp hết kết quả rồi AI mới viết trả lời.
+- Đang làm bài tập, AI nhìn trạng thái để chọn cách hướng dẫn: chưa trả lời thì gợi ý cách nghĩ, trả lời sai thì nhận xét góp ý, không nói thẳng đáp án.
 
-Hình ảnh: Hình 3.3 (media/image8.jpeg), sơ đồ tuần tự một lượt hỏi Trợ lý AI.
+Hình ảnh: Hình 3.3 (media/image8.jpeg), sơ đồ tuần tự một lượt hỏi Trợ lý AI, đặt bên phải hoặc bên dưới khối 9 thẻ.
 
 Nguồn: Mục 3.2.4, cộng đọc trực tiếp mã nguồn phần xử lý Trợ lý AI ở backend.
 
-**Slide 9 - Quy trình Hội thoại mô phỏng** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
+**Slide 9 - Hệ thống Hội thoại mô phỏng** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
 
-- Có sẵn lời mở đầu thì hiện luôn, AI chỉ vào việc từ câu học viên gõ.
-- Mỗi lượt học viên nói, hệ thống chỉ gọi AI đúng một lần duy nhất.
-- AI chấm lỗi chính tả và ngữ pháp ngay trong câu, lưu kèm tin nhắn đó.
-- Kết thúc phiên vì 1 trong 4 lý do, mỗi lý do chấm điểm khác nhau.
-- Điểm từng tiêu chí do AI chấm, hệ thống đối chiếu lại trước khi tính tổng.
+- Mỗi lượt học viên nói, hệ thống gọi AI đúng một lần, AI tự chọn nhân vật nào cần trả lời theo đúng thứ tự hội thoại.
+- Ngay sau câu học viên, AI chấm lỗi chính tả và ngữ pháp ngay trong câu, ghi đoạn sai, đoạn sửa, loại lỗi và góp ý.
+- Phiên kết thúc vì 1 trong 4 lý do, mỗi lý do có hướng dẫn chấm điểm riêng: hoàn thành trọn vẹn, sai quá nhiều liên tục, dùng lời không phù hợp, dùng lời xúc phạm.
+- Điểm từng tiêu chí do AI chấm theo thang 0 đến 100, hệ thống đối chiếu lại tên tiêu chí rồi tính tổng theo trọng số.
 
 Hình ảnh: Hình 3.4 (media/image9.jpeg), sơ đồ tuần tự Hội thoại mô phỏng.
 
 Nguồn: Mục 3.2.4, cộng đọc trực tiếp mã nguồn phần xử lý Hội thoại mô phỏng ở backend.
 
-**Slide 10 - Quy trình Khám phá ảnh** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
+**Slide 10 - Hệ thống Khám phá ảnh** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
 
-- Học viên gửi tối đa 5 ảnh kèm một câu hỏi, có thể hỏi tiếp.
-- AI đọc cả ảnh và câu hỏi cùng lúc, trả lời trọn vẹn một lần.
-- Kết quả gồm lời giải thích và danh sách từ vựng: từ, nghĩa, ví dụ.
-- Từ vựng không tự lưu, học viên bấm chọn để đưa vào Yêu sách.
+- Học viên gửi 1 đến 5 ảnh kèm một câu hỏi, định dạng jpeg, png hoặc webp.
+- Ảnh chỉ đưa cho AI đọc và không lưu vào hệ thống.
+- Câu trả lời của AI đúng theo một khuôn định sẵn là buộc phải có danh sách từ vựng thấy được trong ảnh đi kèm và hiển thị ra giao diện cho học viên.
+- Từ vựng không tự lưu, học viên bấm chọn từng từ để lưu.
 
 Hình ảnh: sơ đồ luồng đơn giản tự vẽ, 3 khối nối tiếp: Ảnh và câu hỏi, AI đọc hiểu ảnh (Gemini), Câu trả lời và danh sách từ vựng.
 
 Nguồn: đọc trực tiếp mã nguồn phần xử lý ảnh ở backend, không suy đoán. Đây là slide mới, báo cáo docx không có sơ đồ tuần tự riêng cho tính năng này.
 
-**Slide 11 - Quy trình Sinh bài tập tùy chỉnh** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
+**Slide 11 - Hệ thống Sinh bài tập tùy chỉnh** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
 
-- Chọn số câu, dạng câu hỏi, trọng tâm ôn tập, và phạm vi ôn.
-- Phạm vi là một bài học, một chủ đề, hoặc cả một khóa học.
-- AI chỉ dựa vào phần đã học trong phạm vi đó để ra đề.
-- Màn hình báo đang tạo đề, xong thì chuyển sang sẵn sàng làm bài.
-- Muốn đổi đề, bấm tạo lại: có bộ mới rồi mới thay bộ cũ.
+- Học viên chọn tối đa 30 câu, chọn 1 hoặc nhiều dạng trong 5 dạng: trắc nghiệm, điền vào chỗ trống, ghép cặp, sắp xếp, dịch câu (không có dạng nghe và nói), chọn ôn từ vựng, ngữ pháp hay cả hai, ghi thêm yêu cầu riêng không quá 500 chữ.
+- Bắt buộc chọn đúng một phạm vi: một bài học, một chủ đề, hoặc cả một khóa học. Ôn theo chủ đề hoặc khóa học thì phải học xong ít nhất một phần trong đó.
+- Hệ thống tự gom từ vựng, ngữ pháp và nội dung học viên đã hoàn thành trong phạm vi đó, AI chỉ được ra đề trong phần này.
+- Mỗi câu AI soạn ra phải kiểm tra đủ đáp án và đúng định dạng trước khi lưu, sai thì tự tạo lại.
 
 Hình ảnh: sơ đồ luồng tự vẽ, 4 khối nối tiếp: Học viên chọn phạm vi và yêu cầu, Hệ thống gom nội dung đã học, AI soạn câu hỏi, Lưu vào ngân hàng câu hỏi.
 
@@ -158,12 +156,12 @@ Nguồn: đọc trực tiếp mã nguồn phần sinh bài tập ở backend, kh
 
 **Slide 12 - Thiết kế cơ sở dữ liệu** (nhãn nhỏ "02 · THIẾT KẾ HỆ THỐNG")
 
-- PostgreSQL, 27 bảng chia 6 nhóm nghiệp vụ.
-- 6 nhóm nghiệp vụ, chú thích màu riêng theo từng nhóm trên sơ đồ.
-- Mọi bảng đều có mã định danh riêng và thời điểm tạo, sửa, xóa mềm.
-- Dữ liệu linh hoạt như cấu hình bài tập, kết quả AI lưu dạng JSON.
+- PostgreSQL, 27 bảng, gom theo 6 nhóm nghiệp vụ.
+- 6 nhóm: Tài khoản và Xác thực, Học liệu, Luyện tập, Tiến trình và Mục tiêu, Tương tác AI, Hội thoại mô phỏng.
+- Bảng nào cũng có id, thời điểm tạo, sửa và cờ xóa mềm.
+- Cấu hình bài tập và kết quả AI lưu dạng JSON để thêm dạng câu hỏi mới mà không phải sửa lại cấu trúc bảng.
 
-Hình ảnh: Hình 3.5 (media/image10.jpeg), ERD toàn bộ hệ thống, làm nền lớn, chú thích màu theo 6 nhóm.
+Hình ảnh: Hình 3.5 (media/image10.jpeg), ERD toàn bộ hệ thống, các bảng bôi màu theo 6 nhóm ở trên.
 
 Nguồn: Mục 3.3, 3.3.1. Chi tiết 27 bảng để ở Phụ lục A, không đưa vào slide chính.
 
